@@ -134,8 +134,20 @@ book:
   # cookie-consent: true
   chapters:
     - index.qmd
-    - src/chap1.qmd
-    - src/chap2.qmd
-    - src/chap3.qmd
-    - src/chap4.qmd
-    - src/chap5.qmd
+    - part: "Measurement as Predictive Modeling"
+      chapters:
+        - src/chap1.qmd
+        - src/chap2.qmd
+        - src/chap3.qmd
+    - part: "Measurement Reliability and Validity"
+      chapters:
+        - src/chap4.qmd
+        - src/chap5.qmd
+        - src/chap6.qmd
+    - part: "Design, Governance, and Applications"
+      chapters:
+        - src/chap7.qmd
+        - src/chap8.qmd
+    - src/chap9.qmd
+  appendices:
+    - src/notation.qmd

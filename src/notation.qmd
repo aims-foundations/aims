@@ -1,0 +1,109 @@
+# Notation {#sec-notation .unnumbered}
+
+This appendix collects the notation used throughout the book. Symbols are grouped thematically; the **Introduced** column indicates the chapter where each symbol first appears.
+
+## General
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $N$ | Number of persons / models | $\mathbb{N}$ | @sec-foundations |
+| $M$ | Number of items / questions | $\mathbb{N}$ | @sec-foundations |
+| $Y_{ij}$ | Binary response of model $i$ to item $j$ (0 = incorrect, 1 = correct) | $\{0,1\}$ | @sec-foundations |
+| $S_i = \sum_j Y_{ij}$ | Sum score (total correct) for model $i$ | $\{0, 1, \ldots, M\}$ | @sec-foundations |
+| $\sigma(x) = \frac{1}{1+e^{-x}}$ | Logistic sigmoid function | $(0,1)$ | @sec-foundations |
+| $\Phi(x)$ | Standard normal CDF | $(0,1)$ | @sec-foundations |
+
+## Item Response Theory
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $\theta_i$ or $U_i$ | Latent ability of model $i$ | $\mathbb{R}$ | @sec-foundations |
+| $\beta_j$ or $V_j$ | Difficulty of item $j$ | $\mathbb{R}$ | @sec-foundations |
+| $a_j$ | Discrimination parameter of item $j$ | $\mathbb{R}^+$ | @sec-foundations |
+| $c_j$ | Guessing (pseudo-chance) parameter of item $j$ | $[0,1]$ | @sec-foundations |
+| $d_j$ | Discrimination parameter (alternative notation, as in 1PL/2PL) | $\mathbb{R}^+$ | @sec-foundations |
+| $z_j$ | Difficulty parameter (alternative notation) | $\mathbb{R}$ | @sec-foundations |
+| $I_j(\theta)$ | Fisher information for item $j$ at ability $\theta$ | $\mathbb{R}^+$ | @sec-efficient |
+| $\mathcal{I}(\theta)$ | Fisher information matrix | $\mathbb{R}^{K \times K}$ | @sec-efficient |
+
+## Learning and Estimation
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $\ell(\theta, \beta)$ | Log-likelihood function | $\mathbb{R}$ | @sec-learning |
+| $\nabla_\theta \ell$ | Gradient of log-likelihood w.r.t. ability parameters | $\mathbb{R}^N$ | @sec-learning |
+| $\pi(\theta)$ | Prior distribution over abilities | -- | @sec-learning |
+| $\pi(\beta)$ | Prior distribution over difficulties | -- | @sec-learning |
+| $\hat{\theta}_{\text{MLE}}$ | Maximum likelihood estimate of ability | $\mathbb{R}^N$ | @sec-learning |
+| $\hat{\theta}_{\text{MAP}}$ | Maximum a posteriori estimate of ability | $\mathbb{R}^N$ | @sec-learning |
+| $\eta$ | Learning rate | $\mathbb{R}^+$ | @sec-learning |
+
+## Reliability
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $X_{ij}$ | Observed score for model $i$ on occasion / item $j$ | $\mathbb{R}$ | @sec-reliability |
+| $T_i$ | True score for model $i$ (CTT) | $\mathbb{R}$ | @sec-reliability |
+| $E_{ij}$ | Error component (CTT) | $\mathbb{R}$ | @sec-reliability |
+| $\rho_{XX'}$ | Reliability coefficient | $[0,1]$ | @sec-reliability |
+| $\alpha$ | Cronbach's alpha | $(-\infty, 1]$ | @sec-reliability |
+| $\sigma^2_p, \sigma^2_i, \sigma^2_r$ | Variance components: person (model), item, rater | $\mathbb{R}^+$ | @sec-reliability |
+| $G$ | Generalizability coefficient | $[0,1]$ | @sec-reliability |
+| $n_r, n_i$ | Number of raters, items in a D-study design | $\mathbb{N}$ | @sec-reliability |
+| $\kappa$ | Cohen's kappa (inter-rater agreement) | $[-1, 1]$ | @sec-reliability |
+
+## Validity
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $g \in \{0,1\}$ | Group membership indicator (DIF analysis) | $\{0,1\}$ | @sec-validity |
+| $\alpha_{MH}$ | Mantel-Haenszel odds ratio | $\mathbb{R}^+$ | @sec-validity |
+| $\lambda_k$ | $k$-th eigenvalue of the correlation matrix | $\mathbb{R}$ | @sec-validity |
+| $\text{MNSQ}_i$ | Mean-square fit statistic for item $i$ | $\mathbb{R}^+$ | @sec-validity |
+| $r_{ij}$ | Correlation between trait $i$ measured by method $j$ (MTMM) | $[-1,1]$ | @sec-validity |
+
+## Causality and Distribution Shift
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $\text{do}(X = x)$ | Intervention setting variable $X$ to value $x$ | -- | @sec-causality |
+| $P^{(s)}, P^{(t)}$ | Source (benchmark) / target (deployment) distribution | -- | @sec-causality |
+| $\pi_0(a \mid x)$ | Logging (benchmark) policy | $[0,1]$ | @sec-causality |
+| $\pi(a \mid x)$ | Target (deployment) policy | $[0,1]$ | @sec-causality |
+| $w(x)$ | Importance weight $P^{(t)}(x)/P^{(s)}(x)$ | $\mathbb{R}^+$ | @sec-causality |
+| $\hat{r}(x, a)$ | Reward model (e.g., IRT prediction) | $[0,1]$ | @sec-causality |
+| $\hat{V}_{\text{DR}}$ | Doubly robust value estimator | $\mathbb{R}$ | @sec-causality |
+| $C_\alpha(x)$ | Conformal prediction set at level $\alpha$ | subset of $\mathcal{Y}$ | @sec-causality |
+
+## Information and Mechanism Design
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $F$ | Universe of tasks | finite set, $\|F\| = N$ | @sec-evaluation-game |
+| $F_E, F_M$ | Evaluator's / builder's task sets | $F_E, F_M \subseteq F$ | @sec-evaluation-game |
+| $\pi_E, \pi_M$ | Evaluator's / builder's sampling distributions | distributions on $F$ | @sec-evaluation-game |
+| $f(\theta)$ | Task performance function | $[0,1]$ | @sec-evaluation-game |
+| $u_E(\theta)$ | Evaluator's utility: $\sum_{f \in F} f(\theta)$ | $\mathbb{R}^+$ | @sec-evaluation-game |
+| $k$ | Number of sampled evaluation tasks per round | $\mathbb{N}$ | @sec-evaluation-game |
+| $\rho$ | Distribution correction rate | $(0,1]$ | @sec-evaluation-game |
+| $\gamma$ | Gaming penalty weight | $\mathbb{R}^+$ | @sec-evaluation-game |
+| $\Delta_t$ | Residual misalignment at round $t$ | $[0,1]$ | @sec-evaluation-game |
+| $C$ | Agent cost (principal-agent model) | $\mathbb{R}^+$ | @sec-evaluation-game |
+| $b$ | Principal's value from agent effort | $\mathbb{R}^+$ | @sec-evaluation-game |
+
+## Red-Teaming and Adversarial Evaluation
+
+| Symbol | Meaning | Domain | Introduced |
+|--------|---------|--------|------------|
+| $\theta_j^{(\text{adv})}$ | Adversarial robustness of model $j$ | $\mathbb{R}$ | @sec-redteaming |
+| $\theta_j^{(\text{std})}$ | Standard accuracy ability of model $j$ | $\mathbb{R}$ | @sec-redteaming |
+| $\beta_i^{(\text{atk})}$ | Attack strength (difficulty) of adversarial item $i$ | $\mathbb{R}$ | @sec-redteaming |
+| $\delta$ | Perturbation applied to an input | $\mathcal{B}_\epsilon$ | @sec-redteaming |
+| $\alpha_{s,\mathcal{D}}$ | Attack success probability under criterion $s$ and goal distribution $\mathcal{D}$ | $[0,1]$ | @sec-redteaming |
+| $J$ | Operational judge of attack success | $\{0,1\}$ | @sec-redteaming |
+| $s$ | Oracle (true) success criterion | $\{0,1\}$ | @sec-redteaming |
+| $K$ | Number of repeated samples in Top-1 aggregation | $\mathbb{N}$ | @sec-redteaming |
+| $\hat{\mu}_{\text{syn}}$ | Mean performance estimated from synthetic items | $[0,1]$ | @sec-redteaming |
+| $\hat{\mu}_{\text{human}}$ | Mean performance estimated from human-authored items | $[0,1]$ | @sec-redteaming |
+| $\hat{\mu}_{\text{PPI}}$ | Prediction-powered inference estimator | $[0,1]$ | @sec-redteaming |
+| $n$ | Number of human-evaluated items | $\mathbb{N}$ | @sec-redteaming |

@@ -1,23 +1,72 @@
-# Introduction {.unnumbered #sec-intro}
+# Preface {.unnumbered #sec-intro}
 
-Progress in artificial intelligence depends on knowing what our systems can do, how well they can do it, and under what conditions their behavior changes. Evaluation is therefore not an afterthought to AI development but its epistemic foundation. Every claim of progress—whether about improved reasoning, better alignment, or broader capability—rests on some act of measurement. Yet despite the centrality of evaluation, the field’s tools for measurement remain strikingly underdeveloped. Benchmarks proliferate faster than we can understand them, and leaderboards offer scores without scales, turning scientific assessment into a race of numbers detached from theory.
+Every claim about AI progress—better reasoning, broader capability, safer behavior—rests on some act of measurement. But how good are our measurements, really? Benchmarks multiply faster than anyone can understand them, leaderboards rank models on scores without scales, and a system's average accuracy tells us little about *why* it succeeds or *where* it breaks. We have plenty of numbers. What we lack is a science behind them.
 
-Contemporary evaluation practice in AI largely relies on finite collections of datasets and metrics—benchmarks that serve as de facto instruments of measurement. These instruments are often designed without formal notions of validity, reliability, or calibration. A model’s average accuracy across a dataset says little about why it succeeds, where it fails, or how its abilities generalize beyond the test. The result is an evaluation ecosystem that produces motion without understanding. Without a coherent measurement framework, we risk mistaking leaderboard ascent for scientific progress.
+This book introduces the foundations and practical tools of measurement science for AI evaluation. Instead of treating evaluation as a purely engineering task—collect a dataset, compute a metric, publish a number—we present it as an *inference* problem, drawing on ideas from psychometrics, statistics, and the broader science of measurement. Throughout, we emphasize not only the methods themselves but also their assumptions, limitations, and the conditions under which they can and cannot be applied—understanding when an evaluation fails is as important as understanding when it works. By the end of this book, readers will be equipped with the key concepts and tools needed to design evaluation systems that are reliable, valid, and interpretable.
 
-Other sciences have faced similar crises of interpretation and responded by formalizing the theory of measurement. Psychology turned to psychometrics, developing Item Response Theory (IRT) and latent variable modeling to distinguish true ability from test difficulty. Education systems built statistical foundations for comparing learners across tests, time, and populations. The physical sciences standardized their instruments and units to make measurement traceable and comparable across laboratories. Each of these fields transformed ad hoc evaluation into measurement science—a discipline grounded in inference, uncertainty, and calibration. AI now stands at a similar inflection point.
+The book is intended for researchers, practitioners, and students who work on or care about AI evaluation. We assume some background in probability, statistics, and machine learning, but provide sufficient context and references for readers to follow the main ideas. The book also includes interactive code examples and datasets. The science of AI measurement is a fast-moving area with many open challenges, and we hope this book will inspire readers to further explore and advance it.
 
-AI Measurement Sciences (AIMS) seeks to provide this missing foundation. It treats AI evaluation as an inferential problem: given observed responses of models to tasks, what can we infer about their latent capabilities, the properties of the tasks, and the conditions of generalization? It asks how to design evaluation systems that are reliable (stable under sampling and perturbation), valid (measuring intended constructs rather than artifacts), and interpretable (enabling meaningful comparison across time, domains, and model families). The central research questions are therefore not only empirical but epistemological:
+We hope with the present book to help the field move from ad hoc benchmarking toward principled measurement—so that our claims about AI systems rest on solid scientific ground.
 
-* How can we represent and estimate the latent constructs underlying AI performance?
+Stanford, 2025, Truong & Koyejo
 
-* How can we quantify uncertainty, bias, and contamination in existing evaluation systems?
+## Structure of this book {.unnumbered}
 
-* What are the statistical and organizational conditions under which measurement becomes trustworthy enough to guide AI development and governance?
+The book has three parts which introduce predictive measurement models, develop reliability and validity analysis, and discuss design, governance, and applications.
 
-This dissertation argues that answering these questions requires a probabilistic science of evaluation—one that unites methods from psychometrics, statistics, and machine learning. The goal is not merely to build better benchmarks but to establish a framework for scientific decision making about AI systems: when to trust, when to doubt, and how to act.
+**Part I: Measurement as Predictive Modeling**
+
+@sec-foundations lays the mathematical groundwork for the rest of the book. It covers probabilistic models for AI evaluation data—including Item Response Theory (Rasch, 2PL, 3PL), Bradley-Terry models for pairwise comparisons, and factor models for multidimensional ability. A central theme is the relationship between model assumptions and what they allow us to infer: sufficiency, specific objectivity, and the tradeoffs between model complexity and interpretability. The chapter also introduces generalization experiments with various masking schemes and the cold-start problem—predicting performance for unseen models or items—through prediction-powered evaluation.
+
+@sec-learning studies how to estimate latent parameters from evaluation data. It covers maximum likelihood estimation, gradient-based optimization, the EM algorithm, Bayesian inference, regularization, and model selection.
+
+@sec-efficient develops the statistical foundations for efficient evaluation design. It introduces Fisher information for item selection, Computerized Adaptive Testing (CAT), D-optimal design for constructing maximally informative item pools, and efficient paired-comparison schedules for model arenas.
+
+**Part II: Measurement Reliability and Validity**
+
+@sec-reliability addresses the question of signal versus noise in AI measurement. It covers Classical Test Theory, Generalizability Theory for decomposing multiple sources of error, and practical tools for assessing and improving the reliability of evaluation protocols—including LLM-as-a-judge designs and agentic measurement.
+
+@sec-validity asks whether our evaluations measure what they claim to measure. It covers content, criterion, and construct validity; diagnostic tools for detecting benchmark contamination, differential item functioning, and construct-irrelevant variance; and principled approaches to instrument construction and revision, including the use of synthetic data.
+
+@sec-causality examines the causal foundations of AI measurement. It covers structural causal models for evaluation data, distribution shift (covariate, label, and concept shift) and when benchmark results generalize across contexts, interventional and counterfactual reasoning for diagnosing construct-irrelevant variance, and methods for robust prediction under shift including conformal inference and data attribution.
+
+**Part III: Design, Governance, and Applications**
+
+@sec-design considers the strategic and economic dimensions of evaluation design. It introduces decision-making under ambiguity (Maxmin Expected Utility), Bayesian persuasion for optimal information disclosure, robust mechanism design, and the strategic considerations that arise when benchmark results influence development incentives.
+
+@sec-redteaming applies the measurement framework to adversarial evaluation: red-teaming as structured measurement, attack success rate as an estimand (and when comparisons are valid), adversarial robustness as a multidimensional latent trait, synthetic data for evaluation at scale, and prediction-powered inference for combining human and automated judgments.
+
+**Conclusion**
+
+@sec-conclusion synthesizes the book's themes, distills lessons from the field, identifies six open challenges (beyond binary responses, multidimensional ability, temporal dynamics, agentic evaluation, scalable oversight, and fairness in evaluation), presents ten capstone projects for the CS321M course, and offers a practitioner's checklist for designing rigorous AI evaluations.
+
+## How to engage with this book {.unnumbered}
+
+@sec-foundations is foundational to all of the book, so it is part of all reading pathways.
+
+For **practitioners and applied AI researchers**, we recommend @sec-foundations, @sec-learning, @sec-efficient, and @sec-design. This sequence covers the core modeling, estimation, and design methods needed to build and improve evaluation systems.
+
+For **researchers interested in evaluation quality**, we recommend @sec-foundations, @sec-reliability, @sec-validity, and @sec-causality. This pathway focuses on when and why evaluations fail, and how to diagnose and address those failures.
+
+For those interested in the **societal and governance dimensions** of AI evaluation, we recommend @sec-foundations, @sec-design, and @sec-redteaming.
+
+## Prior knowledge {.unnumbered}
+
+The book assumes knowledge of the fundamentals of statistics, linear algebra, and machine learning. Code examples are written in Python using PyTorch, scikit-learn, and pandas, so familiarity with Python is valuable for readers who wish to engage with the interactive examples.
+
+For readers seeking to strengthen their prerequisites or deepen their understanding of the fields this book draws from, we recommend the following companion texts:
+
+- @murphy2022probabilistic — A modern, comprehensive treatment of probabilistic modeling, Bayesian inference, and statistical learning. Excellent preparation for the latent variable models and estimation methods in Chapters 1–3.
+- @bishop2006pattern — Thorough coverage of factor analysis, EM algorithms, and Bayesian methods, all of which appear throughout this book.
+- @borsboom2005measuring — A philosophically rigorous account of what it means to measure a psychological attribute. Essential reading for the validity and construct modeling discussions in Chapters 4–5.
+- @lord1968statistical — The classical statistical theory of mental testing that underlies much of modern psychometrics. For readers wanting depth in reliability, item analysis, and test construction before the measurement chapters.
+
+## Citation {.unnumbered}
+
+Thanks for reading our book! We hope you find it useful in your research and teaching.
 
 ::: {.content-visible when-format="html"}
 ::: {.quarto-title-citeas .csl-entry}
-Truong, S. T., Koyejo, S. 2025. _AI Measurement Science: A Science of Knowing Where AI Thrives, Where It Breaks, and How to Respond_. Stanford University.
+Truong, S. T., Koyejo, S. 2026. _AI Measurement Science: A Science of Knowing Where AI Thrives, Where It Breaks, and How to Respond_. Stanford University.
 :::
 :::

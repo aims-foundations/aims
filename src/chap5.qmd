@@ -1,11 +1,1099 @@
 ---
-title: Conclusion
-format: html
+format:
+  html:
+    include-after-body:
+      text: |
+        <script>
+        // Auto-execute all pyodide cells after initialization
+        document.addEventListener('DOMContentLoaded', function() {
+          function waitForPyodide() {
+            if (typeof globalThis.mainPyodide !== 'undefined' && globalThis.mainPyodide) {
+              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {
+                globalThis.qpyodideCellDetails.forEach((cell, index) => {
+                  if (cell.options && cell.options.autorun === 'true') {
+                    setTimeout(() => {
+                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);
+                      if (runButton && !runButton.disabled) {
+                        runButton.click();
+                      }
+                    }, index * 1000);
+                  }
+                });
+              }
+            } else {
+              setTimeout(waitForPyodide, 500);
+            }
+          }
+          setTimeout(waitForPyodide, 2000);
+        });
+        </script>
 filters:
   - pyodide
-execute:
-  engine: pyodide
-  pyodide:
-    auto: true
+pyodide:
+  packages:
+    - numpy
+    - matplotlib
+    - scipy
 ---
 
+# Validity {#sec-validity}
+
+::: {.callout-note title="Intended Learning Outcomes"}
+By the end of this chapter, you will be able to:
+
+1. **Define** validity in the context of AI evaluation and explain why it cannot be reduced to a single statistic.
+2. **Distinguish** between content validity, criterion validity, construct validity, external validity, and consequential validity for AI benchmarks.
+3. **Apply** Borsboom's realist framework and Salaudeen et al.'s claim-centered framework to evaluate whether a benchmark measures what it claims to measure.
+4. **Identify** common threats to validity in AI evaluation: benchmark contamination, construct-irrelevant variance, construct underrepresentation, and differential item functioning.
+5. **Use** diagnostic tools (DIF analysis, dimensionality assessment, item-fit statistics) to detect validity threats.
+6. **Design** instrument construction and revision procedures, including the use of synthetic data for item generation.
+7. **Evaluate** the validity of existing AI benchmarks using the frameworks presented in this chapter.
+:::
+
+::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
+This chapter can be covered in **3 lectures** (75-90 minutes each):
+
+**Lecture 1: Validity Frameworks and Evidence**
+
+- From reliability to validity: motivating the distinction (15 min)
+- A taxonomy of validity evidence: content, criterion, construct, external, consequential (30 min)
+- Threats to validity in AI evaluation (25 min)
+- Discussion: case studies of validity failures (5 min)
+
+**Lecture 2: Diagnostic Tools**
+
+- Differential Item Functioning (DIF) analysis (25 min)
+- Dimensionality assessment and parallel analysis (25 min)
+- Item-fit statistics and contamination detection (20 min)
+- Hands-on: running diagnostics on simulated data (5 min)
+
+**Lecture 3: Building Valid Benchmarks**
+
+- The Multitrait-Multimethod matrix (25 min)
+- Principled item construction and revision (20 min)
+- Nomological networks and the claim-centered framework (15 min)
+- Design exercise: planning a valid evaluation (15 min)
+:::
+
+::: {.callout-note title="Notation"}
+This chapter introduces validity-specific notation: $g$ (group membership for DIF), $\alpha_{MH}$ (Mantel-Haenszel odds ratio), $\lambda_k$ (eigenvalues for dimensionality), $\text{MNSQ}_i$ (item fit statistics), and $r_{ij}$ (MTMM correlations). See @sec-notation for the complete notation reference.
+:::
+
+
+## From Reliability to Validity {#sec-reliability-to-validity}
+
+Consider a coding benchmark that produces highly consistent scores: every time you evaluate a model, it gets roughly the same accuracy. The split-half reliability is 0.95, Cronbach's alpha is 0.93, and the G-coefficient from @sec-reliability is excellent. You might conclude that the benchmark is working well.
+
+But suppose you investigate further and discover that the benchmark items were scraped from a popular programming tutorial site. The models with the highest scores turn out to be those whose training data included that site. The benchmark is not measuring *coding ability*---it is measuring *memorization of specific solutions*. The scores are perfectly consistent, but they do not mean what you think they mean.
+
+This is the validity problem. Reliability asks: *does the evaluation give the same answer twice?* Validity asks the deeper question: *does the evaluation measure what it claims to measure?* A perfectly reliable instrument can be completely invalid---like a bathroom scale that always reads 70 kg regardless of who steps on it. Conversely, validity *requires* reliability: if measurements fluctuate randomly, they cannot track any underlying attribute.
+
+In @sec-foundations, we introduced Borsboom's realist definition of validity: a test is valid for measuring an attribute if and only if (a) the attribute exists, and (b) variation in the attribute *causally produces* variation in test scores [@borsboom2005measuring]. This is a demanding standard. It requires not just statistical association between scores and the target construct, but a causal mechanism connecting the two.
+
+More recently, @salaudeen2025measurement proposed a *claim-centered* framework for AI evaluation validity. Their key insight is that benchmarks are not valid or invalid in the abstract---they are valid *for specific claims*. A benchmark might validly support the claim "Model A scores higher than Model B on these 500 multiple-choice questions" while failing to support the broader claim "Model A reasons better than Model B." Validity is about the relationship between the measurement instrument, the intended interpretation, and the population of systems being evaluated.
+
+::: {.callout-important title="Validity Is Not a Property of the Test Alone"}
+A benchmark is not "valid" or "invalid" in isolation. Validity depends on:
+
+- **The construct**: what attribute are we claiming to measure?
+- **The population**: which models or systems are being evaluated?
+- **The interpretation**: what conclusions are drawn from the scores?
+- **The context**: in what setting will the scores be used?
+
+The same benchmark may be valid for one purpose and invalid for another. Validity is a property of the *inference*, not the instrument.
+:::
+
+This chapter develops the theory and tools for assessing and building validity in AI evaluation. We begin with a taxonomy of validity evidence (@sec-validity-taxonomy), then examine the major threats to validity in AI benchmarks (@sec-validity-threats). We develop diagnostic tools for detecting these threats (@sec-validity-diagnostics) and close with methods for constructing valid evaluation instruments (@sec-building-valid).
+
+
+## A Taxonomy of Validity Evidence {#sec-validity-taxonomy}
+
+The modern view of validity, following @messick1995validity and the Standards for Educational and Psychological Testing, treats validity as a *unitary concept*: the degree to which evidence supports the intended interpretation of test scores. However, the evidence for validity comes in several distinguishable forms. Following @salaudeen2025measurement and the classical framework, we organize validity evidence into five categories.
+
+### Content Validity {#sec-content-validity}
+
+Content validity concerns whether the benchmark adequately *represents* the construct domain it claims to measure. The key questions are: Does the benchmark cover the full range of the construct? Are the items relevant? Are important aspects of the construct missing?
+
+For AI evaluation, content validity failures are pervasive. A benchmark labeled "reasoning" might contain only arithmetic word problems, missing logical reasoning, causal reasoning, analogical reasoning, and spatial reasoning entirely. A "coding ability" benchmark might test only Python function completion, neglecting debugging, system design, documentation, and code review.
+
+Content validity is established through *expert judgment* rather than statistical analysis. Domain experts review the construct definition, examine the item pool, and assess coverage. In AI evaluation, this step is frequently skipped: benchmarks are constructed from convenience samples of existing data rather than from principled domain specifications.
+
+**AI example.** Suppose a benchmark claims to measure "scientific reasoning." Content validity requires asking: Does it include hypothesis generation? Experimental design? Data interpretation? Statistical inference? Causal reasoning? If it tests only factual recall of scientific knowledge, it has poor content validity for the "reasoning" claim, regardless of how reliable the scores are.
+
+### Criterion Validity {#sec-criterion-validity}
+
+Criterion validity asks whether benchmark scores predict or correlate with an external criterion that independently captures the construct. There are two subtypes:
+
+- **Concurrent validity**: the benchmark correlates with a *currently available* gold standard. For example, an automated coding benchmark should correlate with expert human evaluation of the same code.
+- **Predictive validity**: the benchmark predicts *future outcomes* of interest. A benchmark for coding assistants should predict how useful the assistant is in actual developer workflows over time.
+
+Criterion validity provides some of the most compelling evidence, but it requires the existence of a trustworthy external criterion---which is often the fundamental problem. If we already had a perfect measure of "reasoning ability," we would not need the benchmark. The circularity of criterion validation is a recognized challenge in psychometrics [@cronbach1955construct] and becomes especially acute in AI evaluation, where the construct of interest (e.g., "general intelligence") may not have any agreed-upon gold standard.
+
+**AI example.** The Chatbot Arena [@zheng2023judging] collects pairwise human preferences as a criterion for model quality. A benchmark has concurrent criterion validity if its scores correlate with Arena Elo ratings. But the Arena itself has validity assumptions---are crowdworker preferences a valid criterion for "model quality"?
+
+### Construct Validity {#sec-construct-validity}
+
+Construct validity is the central and most encompassing form of validity evidence. It asks: does the benchmark actually measure the *theoretical construct* it claims to measure? This goes beyond content coverage and criterion correlation to the internal structure of the measurement.
+
+The classical approach to construct validity uses two kinds of evidence:
+
+- **Convergent validity**: scores on the benchmark should correlate *positively* with scores on other measures of the same or closely related constructs. If two different "reasoning" benchmarks produce uncorrelated scores, at least one of them has poor construct validity.
+- **Discriminant validity**: scores on the benchmark should *not* correlate strongly with measures of *different* constructs. If a "reasoning" benchmark correlates as highly with a "memorization" benchmark as with another reasoning benchmark, the construct is not well separated.
+
+The systematic study of convergent and discriminant validity was formalized by @campbell1959convergent through the **Multitrait-Multimethod (MTMM) matrix**, which we develop in @sec-mtmm.
+
+Under Borsboom's causal framework, construct validity requires a specific causal claim: variation in the latent attribute (reasoning ability) causally produces variation in benchmark scores. This is testable---if we could intervene to increase a model's reasoning ability while holding everything else constant, valid benchmark scores should increase. In practice, such clean interventions are rare, but the causal framing clarifies what we are asking.
+
+**AI example.** Consider two benchmarks that both claim to measure "mathematical reasoning": GSM8K (grade-school math word problems) and MATH (competition-level problems). If they measure the same construct, models that excel on one should tend to excel on the other (convergent validity). If "mathematical reasoning" is distinct from "commonsense knowledge," then GSM8K scores should correlate less with commonsense benchmarks than with MATH (discriminant validity).
+
+### External Validity {#sec-external-validity}
+
+External validity concerns the *generalizability* of benchmark results beyond the specific conditions of the evaluation. Does performance on the benchmark predict performance in other contexts, with other populations, or at other times?
+
+For AI systems, external validity questions include:
+
+- Does performance on English-language benchmarks predict multilingual performance?
+- Do results on curated, clean test items generalize to noisy, real-world inputs?
+- Do benchmark scores from today predict performance after the model is updated?
+- Do results generalize across deployment contexts (e.g., from research settings to production)?
+
+External validity connects closely to the problem of *distribution shift*, which we examine formally in @sec-causality. When the benchmark distribution differs from the target distribution, strong benchmark performance may not transfer.
+
+**AI example.** A model scores 95% on a medical question-answering benchmark derived from textbook questions. But in a clinical setting, the questions are noisier, contextually embedded, and may involve ambiguous information. The benchmark has poor external validity if the 95% score does not predict clinically useful performance.
+
+### Consequential Validity {#sec-consequential-validity}
+
+Consequential validity, introduced by @messick1995validity, asks whether the *social consequences* of using benchmark scores are appropriate. This is the most controversial form of validity evidence, as it extends validity beyond measurement science into ethics and policy.
+
+In AI evaluation, consequential validity is increasingly important:
+
+- **Goodhart's law**: When a benchmark becomes a target, models are optimized for it, and the benchmark ceases to measure the original construct. Training on benchmark-like data improves scores without improving capability.
+- **Development distortion**: Benchmarks that are easy to optimize attract disproportionate effort, even if they measure less important capabilities.
+- **Misuse of rankings**: Leaderboard positions are used to make deployment decisions, marketing claims, and policy arguments that go far beyond what the scores support.
+
+Consequential validity does not mean that benchmarks are "invalid" whenever they have negative consequences. Rather, it means that the consequences of score use are *relevant evidence* when evaluating whether the measurement system is serving its intended purpose.
+
+**AI example.** A safety benchmark becomes widely used for regulatory compliance. Model developers learn to optimize specifically for the benchmark items, achieving high scores while leaving genuine safety risks unaddressed. The consequential validity of the benchmark is undermined: the scores are being used to support claims ("this model is safe") that they do not actually support.
+
+### Summary
+
+@tbl-validity-taxonomy summarizes the five forms of validity evidence, their key questions, and how they manifest in AI evaluation.
+
+| Form | Key Question | AI Example | Typical Evidence |
+|------|-------------|------------|-----------------|
+| Content | Does the benchmark cover the construct domain? | "Reasoning" benchmark tests only arithmetic | Expert review, domain specification |
+| Criterion | Do scores predict an external criterion? | Benchmark vs. Arena Elo correlation | Correlation with gold standard |
+| Construct | Does the benchmark measure the intended construct? | Convergent/discriminant evidence across benchmarks | MTMM matrix, factor analysis |
+| External | Do results generalize beyond test conditions? | English benchmark → multilingual performance | Cross-context replication |
+| Consequential | Are the social consequences appropriate? | Goodhart's law on safety benchmarks | Impact analysis, misuse audit |
+
+: Five forms of validity evidence for AI evaluation {#tbl-validity-taxonomy}
+
+
+## Threats to Validity in AI Evaluation {#sec-validity-threats}
+
+Even well-designed benchmarks face systematic threats that can undermine the validity of the inferences they support. We identify four major categories.
+
+### Construct-Irrelevant Variance {#sec-civ}
+
+Construct-irrelevant variance (CIV) occurs when systematic factors *other than the target construct* influence benchmark scores. Unlike random noise (which reduces reliability), CIV is systematic and can inflate or deflate scores in predictable ways.
+
+Sources of CIV in AI evaluation include:
+
+- **Prompt formatting sensitivity**: The same question presented with different formatting (bullet points vs. paragraphs, numbered vs. lettered options) can change model responses substantially [@mizrahi2024state]. If the construct is "reasoning," but scores depend on formatting, the format contributes construct-irrelevant variance.
+- **Multiple-choice position bias**: Many language models show systematic preferences for certain answer positions (e.g., option A or the last option). This inflates scores for items where the correct answer happens to be in the preferred position.
+- **Tokenization artifacts**: Model performance can depend on how text is tokenized, which is an artifact of the model's vocabulary rather than its ability.
+- **Language and cultural bias**: Items that assume specific cultural knowledge or linguistic patterns may be easier for models trained predominantly on certain data, independent of the target construct.
+
+CIV is particularly insidious because it is *systematic*: unlike random error, it does not average out with more items. A benchmark full of items with position bias has high reliability (the bias is consistent) but poor validity (the scores reflect position preference, not just the target ability).
+
+### Construct Underrepresentation {#sec-construct-underrepresentation}
+
+Construct underrepresentation occurs when the benchmark is *too narrow*, sampling only a limited aspect of the construct it claims to measure. This is the content validity threat from @sec-content-validity viewed through a different lens.
+
+Examples in AI evaluation:
+
+- **Coding ability** tested only through function-completion tasks, missing debugging, architecture design, code review, documentation, and refactoring.
+- **Language understanding** tested only with formal, well-edited text, missing colloquial language, code-switching, and domain-specific jargon.
+- **Safety** tested only through adversarial prompts in English, missing multilingual attacks, multi-turn manipulation, and system-prompt override attempts.
+
+Construct underrepresentation is often a consequence of convenience sampling: benchmarks are built from data that is easy to collect and annotate, not from a principled specification of the construct domain.
+
+### Benchmark Contamination {#sec-contamination}
+
+Benchmark contamination occurs when evaluation items appear in the model's training data, allowing the model to retrieve memorized answers rather than demonstrating the target capability. This is arguably the most discussed validity threat in current AI evaluation.
+
+Contamination can be *direct* (exact match between training and test items) or *indirect* (paraphrases, derivatives, or items from the same source that share structural patterns). Detection approaches include:
+
+- **Canary strings**: Embedding unique identifiers in benchmark items and testing whether models can reproduce them [@jacovi2023stop].
+- **Membership inference**: Statistical tests for whether a model has seen specific items during training.
+- **Chronological splits**: Comparing performance on items created before vs. after the model's training data cutoff.
+- **Public/private splits**: Items released publicly tend to have inflated scores compared to held-out private items---the gap measures contamination effects.
+- **Performance discontinuities**: If a model's accuracy on "seen" items is dramatically higher than on matched "unseen" items, contamination is likely.
+
+Under Borsboom's causal framework, contamination is a validity threat because it introduces an alternative causal path: the model's response is caused by *memory* rather than by the target *ability*. The score no longer reflects the construct it claims to measure.
+
+### Differential Item Functioning {#sec-dif-theory}
+
+Differential Item Functioning (DIF) occurs when an item is systematically easier or harder for one subgroup of examinees than for another, *after controlling for the overall ability level*. In classical psychometrics, DIF analysis compares demographic groups; in AI evaluation, the "groups" might be model families, architectural types, or training paradigms.
+
+Formally, an item $i$ exhibits DIF if:
+
+$$
+P(X_{ij} = 1 \mid \theta_j, g = 1) \neq P(X_{ij} = 1 \mid \theta_j, g = 0)
+$$ {#eq-dif-definition}
+
+where $\theta_j$ is model $j$'s ability and $g$ is group membership. The conditioning on $\theta_j$ is critical: we are asking whether the item behaves differently for equally able models from different groups.
+
+DIF comes in two forms:
+
+- **Uniform DIF**: The item is consistently easier (or harder) for one group across all ability levels. The ICCs for the two groups are shifted but do not cross.
+- **Non-uniform DIF**: The item favors one group at some ability levels and the other group at different ability levels. The ICCs cross.
+
+The **Mantel-Haenszel (MH) procedure** [@holland1988differential] is the most widely used DIF detection method. It stratifies examinees by ability (using total score as a proxy), computes odds ratios at each stratum, and combines them into a summary statistic:
+
+$$
+\alpha_{MH} = \frac{\sum_k A_k D_k / N_k}{\sum_k B_k C_k / N_k}
+$$ {#eq-mh-statistic}
+
+where $A_k, B_k, C_k, D_k$ are the entries of the $2 \times 2$ table (correct/incorrect $\times$ group) at ability stratum $k$, and $N_k$ is the stratum size. An odds ratio of 1 indicates no DIF; values significantly different from 1 indicate DIF.
+
+**AI example.** Consider a mathematics benchmark comparing open-source and proprietary models. Some items might rely on LaTeX-formatted mathematical expressions that proprietary models handle better due to training data composition, independent of mathematical reasoning ability. These items would exhibit DIF: the formatting advantage inflates scores for one group without reflecting the target construct.
+
+
+## Diagnostic Tools for Validity {#sec-validity-diagnostics}
+
+This section develops three computational tools for detecting the validity threats described above.
+
+### DIF Analysis {#sec-dif-analysis}
+
+The Mantel-Haenszel procedure described in @sec-dif-theory provides a nonparametric DIF test. A complementary approach uses **logistic regression** [@zumbo1999handbook]:
+
+$$
+\log \frac{P(X_{ij}=1)}{P(X_{ij}=0)} = \beta_0 + \beta_1 \theta_j + \beta_2 g_j + \beta_3 (\theta_j \times g_j)
+$$ {#eq-logistic-dif}
+
+where $\theta_j$ is the ability proxy (total score), $g_j$ is group membership, and $\beta_3$ captures the interaction. Testing $\beta_2 = 0$ detects uniform DIF; testing $\beta_3 = 0$ detects non-uniform DIF.
+
+The following simulation demonstrates DIF analysis on a benchmark with planted DIF items.
+
+{{< include _plt_setup.qmd >}}
+
+```{pyodide-python}
+#| label: dif-analysis
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import expit
+from scipy.stats import chi2
+
+np.random.seed(42)
+
+# --- Simulation setup ---
+n_models = 200  # 100 per group
+n_items = 30
+n_dif_items = 5  # items with planted DIF
+
+# Model abilities: two groups with same ability distribution
+theta_g0 = np.random.normal(0, 1, 100)  # Group 0 (e.g., open-source)
+theta_g1 = np.random.normal(0, 1, 100)  # Group 1 (e.g., proprietary)
+theta = np.concatenate([theta_g0, theta_g1])
+group = np.array([0]*100 + [1]*100)
+
+# Item difficulties
+beta = np.linspace(-2, 2, n_items)
+
+# Generate responses: Rasch model with DIF on last 5 items
+# DIF items are 0.8 logits easier for Group 1
+dif_shift = np.zeros(n_items)
+dif_shift[-n_dif_items:] = -0.8  # negative = easier for Group 1
+
+X = np.zeros((n_models, n_items))
+for j in range(n_models):
+    for i in range(n_items):
+        shift = dif_shift[i] if group[j] == 1 else 0
+        p = expit(theta[j] - beta[i] + shift)
+        X[j, i] = np.random.binomial(1, p)
+
+# --- Mantel-Haenszel DIF detection ---
+total_scores = X.sum(axis=1)
+# Create 5 ability strata based on total score quintiles
+strata = np.digitize(total_scores, np.percentile(total_scores, [20, 40, 60, 80]))
+
+mh_odds_ratios = []
+mh_chi2 = []
+
+for i in range(n_items):
+    num = 0; den = 0
+    a_tot = 0; b_tot = 0; c_tot = 0; d_tot = 0
+    for k in range(5):
+        mask = (strata == k)
+        g0_mask = mask & (group == 0)
+        g1_mask = mask & (group == 1)
+
+        a = X[g0_mask, i].sum()  # Group 0, correct
+        b = g0_mask.sum() - a     # Group 0, incorrect
+        c = X[g1_mask, i].sum()  # Group 1, correct
+        d = g1_mask.sum() - c     # Group 1, incorrect
+
+        Nk = g0_mask.sum() + g1_mask.sum()
+        if Nk > 0:
+            num += (a * d) / Nk
+            den += (b * c) / Nk
+        a_tot += a; b_tot += b; c_tot += c; d_tot += d
+
+    alpha_mh = num / den if den > 0 else np.inf
+    mh_odds_ratios.append(alpha_mh)
+
+    # MH chi-square (simplified)
+    log_or = np.log(alpha_mh) if alpha_mh > 0 and alpha_mh < np.inf else 0
+    mh_chi2.append(log_or)
+
+mh_log_or = np.array([np.log(x) if 0 < x < np.inf else 0 for x in mh_odds_ratios])
+
+# --- Visualization ---
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Panel 1: MH log-odds ratios
+colors = ['#E8637A' if i >= n_items - n_dif_items else '#5B8DEE' for i in range(n_items)]
+axes[0].bar(range(n_items), mh_log_or, color=colors, alpha=0.8, edgecolor='white')
+axes[0].axhline(y=0, color='black', linewidth=0.8)
+axes[0].axhline(y=np.log(1.5), color='gray', linewidth=0.8, linestyle='--', label='|log OR| = 0.41 threshold')
+axes[0].axhline(y=-np.log(1.5), color='gray', linewidth=0.8, linestyle='--')
+axes[0].set_xlabel('Item Index')
+axes[0].set_ylabel('MH Log-Odds Ratio')
+axes[0].set_title('DIF Detection: Mantel-Haenszel')
+from matplotlib.patches import Patch
+axes[0].legend(handles=[
+    Patch(facecolor='#5B8DEE', label='Non-DIF items'),
+    Patch(facecolor='#E8637A', label='DIF items (planted)'),
+    plt.Line2D([0], [0], color='gray', linestyle='--', label='Detection threshold')
+])
+
+# Panel 2: ICC curves for a DIF item vs non-DIF item
+theta_range = np.linspace(-3, 3, 100)
+
+# Non-DIF item (item 10)
+p_g0_nondif = expit(theta_range - beta[10])
+p_g1_nondif = expit(theta_range - beta[10])
+
+# DIF item (item 28)
+p_g0_dif = expit(theta_range - beta[28])
+p_g1_dif = expit(theta_range - beta[28] + dif_shift[28])
+
+axes[1].plot(theta_range, p_g0_nondif, '#5B8DEE', linewidth=2, label='Non-DIF: Group 0')
+axes[1].plot(theta_range, p_g1_nondif, '#5B8DEE', linewidth=2, linestyle='--', label='Non-DIF: Group 1')
+axes[1].plot(theta_range, p_g0_dif, '#E8637A', linewidth=2, label='DIF: Group 0')
+axes[1].plot(theta_range, p_g1_dif, '#E8637A', linewidth=2, linestyle='--', label='DIF: Group 1')
+axes[1].set_xlabel(r'Ability ($\theta$)')
+axes[1].set_ylabel('P(Correct)')
+axes[1].set_title('ICC Comparison: DIF vs Non-DIF Item')
+axes[1].legend()
+axes[1].set_ylim(-0.05, 1.05)
+
+plt.tight_layout()
+plt.show()
+
+# Summary
+n_flagged = sum(1 for x in mh_log_or if abs(x) > np.log(1.5))
+print(f"\nDIF Analysis Summary:")
+print(f"  Items flagged (|log OR| > 0.41): {n_flagged} / {n_items}")
+print(f"  True DIF items: {n_dif_items}")
+dif_detected = sum(1 for i in range(n_items - n_dif_items, n_items) if abs(mh_log_or[i]) > np.log(1.5))
+print(f"  Correctly detected: {dif_detected} / {n_dif_items}")
+```
+
+The left panel shows the Mantel-Haenszel log-odds ratio for each item. Items near zero show no DIF; items with large absolute values are flagged. The planted DIF items (red) cluster at the extremes, while non-DIF items (blue) remain near zero. The right panel compares Item Characteristic Curves: for a non-DIF item, the two groups share the same ICC; for a DIF item, Group 1's curve is shifted leftward (the item is easier for them at every ability level), indicating uniform DIF.
+
+In practice, DIF analysis for AI benchmarks would compare model families (e.g., autoregressive vs. encoder-decoder), training paradigms (e.g., RLHF vs. base models), or architectural features (e.g., mixture-of-experts vs. dense transformers).
+
+
+### Dimensionality Assessment {#sec-dimensionality}
+
+A benchmark that claims to measure a single construct (e.g., "reasoning") should exhibit a unidimensional factor structure: a single latent factor should explain the bulk of the covariance among items. If multiple factors are needed, the benchmark is actually measuring multiple constructs, and a single summary score conflates them.
+
+The primary tool for dimensionality assessment is **eigenvalue analysis** of the item correlation matrix. In a unidimensional benchmark, the first eigenvalue should be substantially larger than the rest. However, raw eigenvalues can be misleading because even random data produces a non-trivial first eigenvalue.
+
+**Parallel analysis** [@horn1965rationale] addresses this by comparing the observed eigenvalues to those from random data of the same dimensions. A factor is retained only if its eigenvalue exceeds the corresponding random-data eigenvalue. This is connected to the factor models discussed in @sec-foundations: if the data require $k$ factors, the benchmark is measuring $k$ distinct constructs, not one.
+
+```{pyodide-python}
+#| label: dimensionality-analysis
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(123)
+
+# --- Simulate a 2-factor benchmark ---
+n_models = 300
+n_items = 20
+n_factor1 = 10  # "verbal reasoning" items
+n_factor2 = 10  # "quantitative reasoning" items
+
+# Two latent factors with moderate correlation
+factor_corr = 0.3
+cov_matrix = np.array([[1.0, factor_corr], [factor_corr, 1.0]])
+L = np.linalg.cholesky(cov_matrix)
+factors = np.random.normal(0, 1, (n_models, 2)) @ L.T
+
+# Factor loadings
+loadings = np.zeros((n_items, 2))
+loadings[:n_factor1, 0] = np.random.uniform(0.5, 0.9, n_factor1)  # Factor 1
+loadings[n_factor1:, 1] = np.random.uniform(0.5, 0.9, n_factor2)  # Factor 2
+
+# Generate continuous item scores (for eigenvalue analysis)
+noise_var = 0.4
+X = factors @ loadings.T + np.random.normal(0, np.sqrt(noise_var), (n_models, n_items))
+
+# --- Eigenvalue analysis ---
+corr_matrix = np.corrcoef(X.T)
+eigenvalues = np.linalg.eigvalsh(corr_matrix)[::-1]  # Descending
+
+# --- Parallel analysis (100 replications) ---
+n_reps = 100
+random_eigenvalues = np.zeros((n_reps, n_items))
+for rep in range(n_reps):
+    X_random = np.random.normal(0, 1, (n_models, n_items))
+    corr_random = np.corrcoef(X_random.T)
+    random_eigenvalues[rep] = np.linalg.eigvalsh(corr_random)[::-1]
+
+pa_threshold = np.percentile(random_eigenvalues, 95, axis=0)
+
+# --- Visualization ---
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Panel 1: Scree plot with parallel analysis
+components = np.arange(1, n_items + 1)
+axes[0].plot(components[:10], eigenvalues[:10], 'o-', color='#5B8DEE', linewidth=2,
+             markersize=8, label='Observed eigenvalues', zorder=3)
+axes[0].plot(components[:10], pa_threshold[:10], 's--', color='#E8637A', linewidth=2,
+             markersize=6, label='95th percentile (random)', zorder=3)
+axes[0].axhline(y=1, color='gray', linewidth=0.8, linestyle=':', label='Kaiser criterion')
+# Shade retained factors
+n_retained = sum(eigenvalues > pa_threshold)
+for k in range(min(n_retained, 10)):
+    axes[0].axvspan(k + 0.6, k + 1.4, alpha=0.1, color='#45BF7C')
+axes[0].set_xlabel('Component')
+axes[0].set_ylabel('Eigenvalue')
+axes[0].set_title('Scree Plot with Parallel Analysis')
+axes[0].legend()
+axes[0].set_xticks(components[:10])
+
+# Panel 2: Loading structure
+# Estimate loadings via PCA (first 2 components)
+X_centered = X - X.mean(axis=0)
+U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)
+pc_loadings = Vt[:2, :].T * S[:2] / np.sqrt(n_models - 1)
+
+colors = ['#5B8DEE'] * n_factor1 + ['#E8637A'] * n_factor2
+axes[1].scatter(pc_loadings[:, 0], pc_loadings[:, 1], c=colors, s=80,
+                edgecolors='white', linewidth=0.5, zorder=3)
+for i in range(n_items):
+    axes[1].annotate(f'{i+1}', (pc_loadings[i, 0] + 0.02, pc_loadings[i, 1] + 0.02),
+                     fontsize=7, color='gray')
+axes[1].axhline(y=0, color='gray', linewidth=0.5)
+axes[1].axvline(x=0, color='gray', linewidth=0.5)
+axes[1].set_xlabel('PC1 Loading (Factor 1: Verbal)')
+axes[1].set_ylabel('PC2 Loading (Factor 2: Quantitative)')
+axes[1].set_title('Item Loading Structure')
+from matplotlib.patches import Patch
+axes[1].legend(handles=[
+    Patch(facecolor='#5B8DEE', label='Verbal items (1-10)'),
+    Patch(facecolor='#E8637A', label='Quantitative items (11-20)')
+])
+
+plt.tight_layout()
+plt.show()
+
+print(f"\nDimensionality Assessment:")
+print(f"  First 5 eigenvalues: {', '.join(f'{e:.2f}' for e in eigenvalues[:5])}")
+print(f"  Parallel analysis threshold: {', '.join(f'{e:.2f}' for e in pa_threshold[:5])}")
+print(f"  Factors retained (parallel analysis): {n_retained}")
+print(f"  Variance explained by 2 factors: {eigenvalues[:2].sum() / eigenvalues.sum():.1%}")
+```
+
+The scree plot (left) shows two eigenvalues clearly exceeding the parallel analysis threshold (red dashed line), confirming two-dimensional structure. The loading plot (right) reveals the two-factor structure: verbal items (blue, 1--10) load on the first component, while quantitative items (red, 11--20) load on the second. A benchmark reporting a single "reasoning" score would conflate these two distinct abilities.
+
+This analysis connects directly to the factor models introduced in @sec-foundations. When dimensionality assessment reveals multiple factors, the appropriate response is to either (a) report subscores for each factor rather than a single composite, or (b) revise the benchmark to focus on a single construct.
+
+
+### Item Fit and Contamination Detection {#sec-item-fit}
+
+Item-fit statistics from Rasch modeling [@wright1982solving] measure how well individual items conform to the measurement model. Items that misfit---those whose response patterns deviate from model predictions---may indicate contamination, construct-irrelevant features, or other validity problems.
+
+The two standard fit statistics are:
+
+- **Infit** (information-weighted mean square): Sensitive to unexpected responses near an item's difficulty level. Infit emphasizes on-target responses and is less affected by extreme scores.
+- **Outfit** (unweighted mean square): Sensitive to unexpected responses far from an item's difficulty level. Large outfit values indicate that the item behaves erratically for very high- or very low-ability models.
+
+For a Rasch model with predicted probability $P_{ij} = \text{expit}(\theta_j - \beta_i)$, the standardized residual is:
+
+$$
+z_{ij} = \frac{X_{ij} - P_{ij}}{\sqrt{P_{ij}(1 - P_{ij})}}
+$$
+
+The outfit mean square for item $i$ is:
+
+$$
+\text{Outfit}_i = \frac{1}{N} \sum_{j=1}^{N} z_{ij}^2
+$$
+
+and infit weights by the variance:
+
+$$
+\text{Infit}_i = \frac{\sum_{j=1}^{N} (X_{ij} - P_{ij})^2}{\sum_{j=1}^{N} P_{ij}(1 - P_{ij})}
+$$
+
+Expected value under the model is 1.0. Values above 1.3 suggest underfit (more noise than the model predicts, possibly multidimensionality or noise). Values below 0.7 suggest overfit (too predictable, possibly item redundancy or dependency). Very high values (above 2.0) indicate serious misfit.
+
+Contamination leaves a distinctive item-fit signature: contaminated items become much easier for models that have memorized them (producing unexpectedly correct responses from low-ability models) while remaining at their true difficulty for uncontaminated models. This inflates outfit statistics because the misfitting responses come from models far from the item's difficulty.
+
+```{pyodide-python}
+#| label: item-fit-contamination
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import expit
+
+np.random.seed(321)
+
+# --- Simulation: Rasch benchmark with contaminated items ---
+n_models = 150
+n_items = 25
+n_contaminated = 5  # Items that some models have memorized
+
+theta = np.random.normal(0, 1, n_models)
+beta = np.linspace(-2, 2, n_items)
+
+# Mark 30 models as "contaminated" (saw some test items during training)
+contaminated_models = np.random.choice(n_models, 30, replace=False)
+contaminated_items = list(range(n_items - n_contaminated, n_items))
+
+# Generate responses
+X = np.zeros((n_models, n_items))
+for j in range(n_models):
+    for i in range(n_items):
+        p = expit(theta[j] - beta[i])
+        # Contaminated models get contaminated items right with high probability
+        if j in contaminated_models and i in contaminated_items:
+            p = 0.95  # Near-certain correct due to memorization
+        X[j, i] = np.random.binomial(1, p)
+
+# --- Estimate item parameters (simple MLE for Rasch) ---
+# Use proportion correct as rough difficulty proxy
+p_obs = X.mean(axis=0)
+beta_hat = -np.log(p_obs / (1 - p_obs + 1e-10))
+
+# Use total score as ability proxy
+total_scores = X.sum(axis=1)
+theta_hat = (total_scores - total_scores.mean()) / (total_scores.std() + 1e-10)
+
+# --- Compute infit and outfit ---
+infit = np.zeros(n_items)
+outfit = np.zeros(n_items)
+
+for i in range(n_items):
+    P = expit(theta_hat - beta_hat[i])
+    variance = P * (1 - P)
+    residual = X[:, i] - P
+    z_sq = residual**2 / (variance + 1e-10)
+
+    outfit[i] = z_sq.mean()
+    infit[i] = (residual**2).sum() / (variance.sum() + 1e-10)
+
+# --- Visualization ---
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Panel 1: Infit vs Outfit scatter
+colors = ['#E8637A' if i in contaminated_items else '#5B8DEE' for i in range(n_items)]
+axes[0].scatter(infit, outfit, c=colors, s=80, edgecolors='white', linewidth=0.5, zorder=3)
+for i in range(n_items):
+    axes[0].annotate(f'{i+1}', (infit[i] + 0.02, outfit[i] + 0.02), fontsize=7, color='gray')
+
+# Acceptable range
+axes[0].axhline(y=1.3, color='gray', linewidth=0.8, linestyle='--')
+axes[0].axhline(y=0.7, color='gray', linewidth=0.8, linestyle='--')
+axes[0].axvline(x=1.3, color='gray', linewidth=0.8, linestyle='--')
+axes[0].axvline(x=0.7, color='gray', linewidth=0.8, linestyle='--')
+axes[0].axhline(y=1, color='gray', linewidth=0.5, linestyle=':')
+axes[0].axvline(x=1, color='gray', linewidth=0.5, linestyle=':')
+
+from matplotlib.patches import Patch
+axes[0].legend(handles=[
+    Patch(facecolor='#5B8DEE', label='Clean items'),
+    Patch(facecolor='#E8637A', label='Contaminated items')
+], loc='upper left')
+axes[0].set_xlabel('Infit MNSQ')
+axes[0].set_ylabel('Outfit MNSQ')
+axes[0].set_title('Item Fit Statistics')
+
+# Panel 2: Observed vs expected ICC for a contaminated item
+item_idx = contaminated_items[2]  # Pick one contaminated item
+theta_sorted = np.argsort(theta_hat)
+theta_bins = np.array_split(theta_sorted, 10)
+
+obs_prop = []
+exp_prop = []
+theta_mid = []
+for bin_idx in theta_bins:
+    obs_prop.append(X[bin_idx, item_idx].mean())
+    exp_prop.append(expit(theta_hat[bin_idx] - beta_hat[item_idx]).mean())
+    theta_mid.append(theta_hat[bin_idx].mean())
+
+theta_smooth = np.linspace(-3, 3, 100)
+icc_expected = expit(theta_smooth - beta[item_idx])
+
+axes[1].plot(theta_smooth, icc_expected, '#5B8DEE', linewidth=2, label='Expected (Rasch)')
+axes[1].scatter(theta_mid, obs_prop, color='#E8637A', s=80, zorder=3,
+                edgecolors='white', linewidth=0.5, label='Observed proportions')
+axes[1].set_xlabel(r'Ability ($\theta$)')
+axes[1].set_ylabel('P(Correct)')
+axes[1].set_title(f'Item {item_idx + 1} (Contaminated): Observed vs Expected')
+axes[1].legend()
+axes[1].set_ylim(-0.05, 1.05)
+
+plt.tight_layout()
+plt.show()
+
+# Summary
+print(f"\nItem Fit Summary:")
+print(f"  Items with outfit > 1.3: {sum(1 for x in outfit if x > 1.3)}")
+print(f"  Items with infit > 1.3: {sum(1 for x in infit if x > 1.3)}")
+contaminated_flagged = sum(1 for i in contaminated_items if outfit[i] > 1.3 or infit[i] > 1.3)
+print(f"  Contaminated items flagged: {contaminated_flagged} / {n_contaminated}")
+print(f"\n  Contaminated item fit values:")
+for i in contaminated_items:
+    print(f"    Item {i+1}: infit={infit[i]:.2f}, outfit={outfit[i]:.2f}")
+```
+
+The left panel shows the infit-outfit scatter: clean items (blue) cluster near the expected value of 1.0, while contaminated items (red) show inflated fit statistics, especially outfit. This is because contaminated models produce unexpectedly correct responses on these items, creating large residuals. The right panel shows the ICC for a single contaminated item: the observed proportions (red dots) consistently exceed the Rasch-expected curve (blue line), particularly at lower ability levels where the memorization effect is most visible.
+
+Item-fit analysis is a powerful diagnostic because it does not require knowing *which* models are contaminated or *which* items are compromised. The Rasch model's prediction residuals reveal anomalies regardless of their source.
+
+
+## Building Valid Benchmarks {#sec-building-valid}
+
+The diagnostic tools above detect validity problems in existing benchmarks. This section turns to *constructing* benchmarks with validity built in from the start.
+
+### The Multitrait-Multimethod Matrix {#sec-mtmm}
+
+The Multitrait-Multimethod (MTMM) matrix, introduced by @campbell1959convergent, provides a systematic framework for assessing both convergent and discriminant validity simultaneously. The idea is to measure multiple *traits* (constructs) using multiple *methods* (measurement formats) and examine the resulting correlation structure.
+
+In AI evaluation:
+
+- **Traits** are the constructs of interest: reasoning, knowledge retrieval, creativity, instruction following, etc.
+- **Methods** are the benchmark formats: multiple-choice questions, open-ended generation, pairwise comparison, code completion, etc.
+
+The MTMM matrix organizes correlations into four blocks:
+
+1. **Monotrait-heteromethod** (same trait, different methods): These should be high---this is convergent validity. If "reasoning" measured by MCQ and by open-ended generation produces highly correlated scores, the construct is robust across methods.
+2. **Heterotrait-monomethod** (different traits, same method): These should be lower than monotrait-heteromethod correlations---this is discriminant validity. If "reasoning-MCQ" correlates as highly with "knowledge-MCQ" as with "reasoning-open-ended," then method variance dominates trait variance.
+3. **Heterotrait-heteromethod** (different traits, different methods): These should be lowest---neither shared trait nor shared method.
+4. **Reliability diagonals** (same trait, same method, repeated): These should be highest---they set the ceiling for validity.
+
+Campbell and Fiske's criteria for construct validity require:
+
+1. Convergent validity coefficients (monotrait-heteromethod) should be significantly different from zero and large enough to warrant further investigation.
+2. Convergent validity coefficients should be higher than the values in the same row and column of the heterotrait-heteromethod block.
+3. Convergent validity coefficients should be higher than the heterotrait-monomethod correlations.
+4. The pattern of trait intercorrelations should be consistent across method blocks.
+
+```{pyodide-python}
+#| label: mtmm-matrix
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(456)
+
+# --- Simulate MTMM data: 3 traits x 2 methods ---
+n_models = 200
+n_traits = 3
+n_methods = 2
+trait_names = ['Reasoning', 'Knowledge', 'Creativity']
+method_names = ['MCQ', 'Open-ended']
+
+# Latent trait scores (moderately correlated)
+trait_corr = np.array([
+    [1.0, 0.3, 0.2],
+    [0.3, 1.0, 0.25],
+    [0.2, 0.25, 1.0]
+])
+L_trait = np.linalg.cholesky(trait_corr)
+traits = np.random.normal(0, 1, (n_models, n_traits)) @ L_trait.T
+
+# Method effects (shared variance due to format)
+method_effects = np.random.normal(0, 0.5, (n_models, n_methods))
+
+# Observed scores: trait + method effect + noise
+scores = np.zeros((n_models, n_traits * n_methods))
+labels = []
+for t in range(n_traits):
+    for m in range(n_methods):
+        col = t * n_methods + m
+        trait_loading = 0.7 + np.random.uniform(-0.05, 0.05)
+        method_loading = 0.3 + np.random.uniform(-0.05, 0.05)
+        noise = np.random.normal(0, 0.3, n_models)
+        scores[:, col] = trait_loading * traits[:, t] + method_loading * method_effects[:, m] + noise
+        labels.append(f'{trait_names[t]}\n({method_names[m]})')
+
+# --- Compute MTMM correlation matrix ---
+corr = np.corrcoef(scores.T)
+
+# --- Visualization ---
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Panel 1: Full MTMM matrix as heatmap
+im = axes[0].imshow(corr, cmap='RdBu_r', vmin=-1, vmax=1, aspect='equal')
+axes[0].set_xticks(range(len(labels)))
+axes[0].set_yticks(range(len(labels)))
+axes[0].set_xticklabels(labels, rotation=45, ha='right')
+axes[0].set_yticklabels(labels)
+
+# Annotate values
+for i in range(len(labels)):
+    for j in range(len(labels)):
+        color = 'white' if abs(corr[i, j]) > 0.6 else 'black'
+        axes[0].text(j, i, f'{corr[i, j]:.2f}', ha='center', va='center',
+                     fontsize=6, color=color)
+
+# Draw block boundaries
+for k in range(1, n_traits):
+    pos = k * n_methods - 0.5
+    axes[0].axhline(y=pos, color='black', linewidth=1.5)
+    axes[0].axvline(x=pos, color='black', linewidth=1.5)
+
+axes[0].set_title('MTMM Correlation Matrix')
+plt.colorbar(im, ax=axes[0], fraction=0.046, pad=0.04)
+
+# Panel 2: Summary of validity coefficients
+# Extract convergent (monotrait-heteromethod) correlations
+convergent = []
+for t in range(n_traits):
+    i, j = t * n_methods, t * n_methods + 1
+    convergent.append(corr[i, j])
+
+# Extract discriminant (heterotrait-monomethod) correlations
+discriminant_mono = []
+for m in range(n_methods):
+    for t1 in range(n_traits):
+        for t2 in range(t1 + 1, n_traits):
+            i = t1 * n_methods + m
+            j = t2 * n_methods + m
+            discriminant_mono.append(corr[i, j])
+
+# Extract heterotrait-heteromethod correlations
+discriminant_hetero = []
+for t1 in range(n_traits):
+    for t2 in range(n_traits):
+        if t1 != t2:
+            for m1 in range(n_methods):
+                for m2 in range(n_methods):
+                    if m1 != m2:
+                        i = t1 * n_methods + m1
+                        j = t2 * n_methods + m2
+                        discriminant_hetero.append(corr[i, j])
+
+categories = ['Convergent\n(monotrait-\nheteromethod)',
+              'Discriminant\n(heterotrait-\nmonomethod)',
+              'Discriminant\n(heterotrait-\nheteromethod)']
+means = [np.mean(convergent), np.mean(discriminant_mono), np.mean(discriminant_hetero)]
+stds = [np.std(convergent) if len(convergent) > 1 else 0,
+        np.std(discriminant_mono), np.std(discriminant_hetero)]
+
+bar_colors = ['#45BF7C', '#F0A35C', '#E8637A']
+bars = axes[1].bar(categories, means, yerr=stds, color=bar_colors, alpha=0.8,
+                   edgecolor='white', capsize=5)
+axes[1].set_ylabel('Mean Correlation')
+axes[1].set_title('Validity Coefficient Summary')
+axes[1].set_ylim(0, 1)
+
+# Add value labels
+for bar, mean in zip(bars, means):
+    axes[1].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.03,
+                 f'{mean:.2f}', ha='center', fontweight='bold')
+
+plt.tight_layout()
+plt.show()
+
+print(f"\nMTMM Validity Check:")
+print(f"  Convergent validity (mean): {np.mean(convergent):.3f}")
+print(f"  Discriminant - monomethod (mean): {np.mean(discriminant_mono):.3f}")
+print(f"  Discriminant - heteromethod (mean): {np.mean(discriminant_hetero):.3f}")
+
+# Campbell-Fiske criteria
+cf1 = all(c > 0 for c in convergent)
+cf2 = np.mean(convergent) > np.mean(discriminant_hetero)
+cf3 = np.mean(convergent) > np.mean(discriminant_mono)
+print(f"\n  Campbell-Fiske Criteria:")
+print(f"    1. Convergent > 0: {'PASS' if cf1 else 'FAIL'}")
+print(f"    2. Convergent > heterotrait-heteromethod: {'PASS' if cf2 else 'FAIL'}")
+print(f"    3. Convergent > heterotrait-monomethod: {'PASS' if cf3 else 'FAIL'}")
+```
+
+The heatmap (left) shows the full MTMM correlation matrix with trait blocks separated by black lines. Strong convergent validity appears as high correlations along the off-diagonal within each trait block (same trait measured by different methods). The bar chart (right) confirms the expected ordering: convergent validity coefficients (green) are highest, discriminant-monomethod correlations (orange) are moderate (reflecting shared method variance), and discriminant-heteromethod correlations (red) are lowest. This ordering satisfies the Campbell-Fiske criteria for construct validity.
+
+For AI evaluation, constructing an MTMM study requires measuring the same constructs with genuinely different methods. If all benchmarks use the same multiple-choice format, discriminant validity cannot be assessed because method variance is confounded with trait variance.
+
+
+### Principled Item Construction and Revision {#sec-item-construction}
+
+Constructing a valid benchmark requires more than assembling a large set of items. The process should be systematic:
+
+1. **Define the construct**: Write an explicit construct definition specifying what the benchmark is intended to measure and what it is *not* intended to measure. This definition serves as the foundation for content validity.
+
+2. **Specify the domain**: Create a detailed content specification (sometimes called a "test blueprint" or "table of specifications") that enumerates the sub-domains, difficulty levels, and item types that should be represented.
+
+3. **Generate candidate items**: Items can be written by domain experts, sourced from existing materials, or generated synthetically using LLMs. For synthetic generation, the construct definition and difficulty targets serve as prompts.
+
+4. **Pilot and analyze**: Administer items to a representative sample of models. Compute item statistics: difficulty ($p$-value or IRT $\beta$), discrimination ($a$ parameter or point-biserial correlation), and fit (infit/outfit from @sec-item-fit).
+
+5. **Screen for validity threats**: Run DIF analysis (@sec-dif-analysis) to check for group bias. Run dimensionality analysis (@sec-dimensionality) to verify unidimensionality (if claimed). Check for contamination using fit statistics and public/private splits.
+
+6. **Revise and iterate**: Remove or revise items with poor statistics. Replace them with new items and re-pilot. This cycle continues until the item pool meets quality standards.
+
+The following simulation illustrates the pilot-and-analyze phase.
+
+```{pyodide-python}
+#| label: item-construction
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import expit
+
+np.random.seed(789)
+
+# --- Simulate item pool with varying quality ---
+n_models = 200
+n_candidate_items = 40
+
+theta = np.random.normal(0, 1, n_models)
+
+# Item parameters: some good, some problematic
+beta = np.random.uniform(-2.5, 2.5, n_candidate_items)  # Difficulty
+alpha = np.zeros(n_candidate_items)  # Discrimination
+
+# Good items: discrimination 0.8-1.5
+good_items = list(range(0, 30))
+alpha[good_items] = np.random.uniform(0.8, 1.5, len(good_items))
+
+# Poor items: very low discrimination (nearly random)
+poor_disc_items = list(range(30, 35))
+alpha[poor_disc_items] = np.random.uniform(0.05, 0.25, len(poor_disc_items))
+
+# Contaminated items: appear easy due to memorization
+contaminated = list(range(35, 40))
+alpha[contaminated] = np.random.uniform(0.8, 1.2, len(contaminated))
+# These items have artificially high correct rates
+
+# Generate responses (2PL model)
+X = np.zeros((n_models, n_candidate_items))
+for j in range(n_models):
+    for i in range(n_candidate_items):
+        p = expit(alpha[i] * (theta[j] - beta[i]))
+        # Contaminated items: 40% of models get them right regardless
+        if i in contaminated and np.random.random() < 0.4:
+            p = 0.95
+        X[j, i] = np.random.binomial(1, p)
+
+# --- Compute item statistics ---
+# Difficulty: proportion correct
+p_values = X.mean(axis=0)
+
+# Point-biserial correlation (discrimination proxy)
+total_scores = X.sum(axis=1)
+point_biserial = np.array([np.corrcoef(X[:, i], total_scores)[0, 1] for i in range(n_candidate_items)])
+
+# Infit (simplified Rasch-based)
+# Rough ability estimates from total score
+theta_hat = (total_scores - total_scores.mean()) / (total_scores.std() + 1e-10)
+beta_hat = -np.log(p_values / (1 - p_values + 1e-10))
+
+infit = np.zeros(n_candidate_items)
+for i in range(n_candidate_items):
+    P = expit(theta_hat - beta_hat[i])
+    variance = P * (1 - P)
+    residual = X[:, i] - P
+    infit[i] = (residual**2).sum() / (variance.sum() + 1e-10)
+
+# --- Flag items ---
+flags = []
+for i in range(n_candidate_items):
+    item_flags = []
+    if point_biserial[i] < 0.2:
+        item_flags.append('Low discrimination')
+    if infit[i] > 1.3:
+        item_flags.append('Misfit')
+    if infit[i] < 0.7:
+        item_flags.append('Overfit')
+    if p_values[i] > 0.95 or p_values[i] < 0.05:
+        item_flags.append('Extreme difficulty')
+    flags.append(item_flags)
+
+# --- Visualization ---
+fig, axes = plt.subplots(1, 3, figsize=(6, 2))
+
+# Assign colors based on item type
+def get_color(i):
+    if i in poor_disc_items: return '#E8637A'
+    if i in contaminated: return '#F0A35C'
+    return '#5B8DEE'
+
+item_colors = [get_color(i) for i in range(n_candidate_items)]
+
+# Panel 1: Difficulty vs Discrimination
+axes[0].scatter(p_values, point_biserial, c=item_colors, s=60,
+                edgecolors='white', linewidth=0.5, zorder=3)
+axes[0].axhline(y=0.2, color='gray', linewidth=0.8, linestyle='--', label='Min discrimination')
+axes[0].axvline(x=0.05, color='gray', linewidth=0.8, linestyle=':')
+axes[0].axvline(x=0.95, color='gray', linewidth=0.8, linestyle=':')
+axes[0].set_xlabel('Difficulty (Proportion Correct)')
+axes[0].set_ylabel('Point-Biserial Correlation')
+axes[0].set_title('Item Difficulty vs Discrimination')
+from matplotlib.patches import Patch
+axes[0].legend(handles=[
+    Patch(facecolor='#5B8DEE', label='Good items'),
+    Patch(facecolor='#E8637A', label='Low discrimination'),
+    Patch(facecolor='#F0A35C', label='Contaminated')
+], loc='lower left')
+
+# Panel 2: Infit distribution
+axes[1].bar(range(n_candidate_items), infit, color=item_colors, alpha=0.8, edgecolor='white')
+axes[1].axhline(y=1.0, color='black', linewidth=0.8)
+axes[1].axhline(y=1.3, color='gray', linewidth=0.8, linestyle='--')
+axes[1].axhline(y=0.7, color='gray', linewidth=0.8, linestyle='--')
+axes[1].fill_between(range(n_candidate_items), 0.7, 1.3, alpha=0.05, color='green')
+axes[1].set_xlabel('Item Index')
+axes[1].set_ylabel('Infit MNSQ')
+axes[1].set_title('Item Fit Statistics')
+
+# Panel 3: Summary of item screening
+n_good = sum(1 for f in flags if len(f) == 0)
+n_flagged = sum(1 for f in flags if len(f) > 0)
+categories = ['Accepted', 'Flagged']
+counts = [n_good, n_flagged]
+bar_colors_summary = ['#45BF7C', '#E8637A']
+bars = axes[2].bar(categories, counts, color=bar_colors_summary, alpha=0.8, edgecolor='white')
+for bar, count in zip(bars, counts):
+    axes[2].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.5,
+                 str(count), ha='center', fontweight='bold')
+axes[2].set_ylabel('Number of Items')
+axes[2].set_title('Item Screening Results')
+
+plt.tight_layout()
+plt.show()
+
+print(f"\nItem Screening Summary:")
+print(f"  Total candidate items: {n_candidate_items}")
+print(f"  Accepted (no flags): {n_good}")
+print(f"  Flagged for review: {n_flagged}")
+print(f"\n  Flag breakdown:")
+flag_counts = {}
+for f_list in flags:
+    for f in f_list:
+        flag_counts[f] = flag_counts.get(f, 0) + 1
+for flag, count in sorted(flag_counts.items()):
+    print(f"    {flag}: {count} items")
+```
+
+The three panels show the item screening workflow. The difficulty-discrimination plot (left) reveals that low-discrimination items (red) cluster below the 0.2 threshold, providing little measurement information, while contaminated items (orange) show inflated proportion-correct values. The infit plot (center) highlights items that deviate from model predictions. The summary (right) shows the yield: how many candidate items survive screening. Items that are flagged should be revised or replaced before the benchmark is finalized.
+
+
+### Nomological Networks {#sec-nomological-networks}
+
+The concept of the **nomological network** was introduced by @cronbach1955construct as the broader theoretical context in which a construct's validity is established. A construct does not exist in isolation---it is defined by its lawful relationships with other constructs, observable behaviors, and experimental outcomes.
+
+For AI evaluation, a nomological network specifies:
+
+- **What the construct should predict**: "Mathematical reasoning" should predict success on novel math problems, performance in tutoring scenarios, and ability to verify proofs.
+- **What should predict the construct**: Training on diverse mathematical data, chain-of-thought prompting, and model scale should all increase mathematical reasoning scores.
+- **What the construct should be distinct from**: Mathematical reasoning should be separable from memorization of specific problem-solution pairs, linguistic fluency, and pattern matching on surface features.
+
+@salaudeen2025measurement operationalize this through their claim-centered framework: each benchmark should be accompanied by explicit claims about what the scores mean, and validity evidence should be gathered for each claim. This is more practical than the full nomological network, which requires specifying all theoretical relationships, but serves the same purpose of grounding scores in a web of meaning.
+
+The MTMM analysis from @sec-mtmm provides empirical evidence for the nomological network by testing whether the expected convergent and discriminant relationships actually hold. Item-level diagnostics from @sec-dif-analysis and @sec-item-fit ensure that individual items function as predicted by the construct theory.
+
+::: {.callout-note title="From Borsboom to Salaudeen: Two Views of Validity"}
+Borsboom's realist framework asks: *does the attribute exist, and does it causally produce score variation?* This is a strong ontological claim that requires causal evidence.
+
+Salaudeen et al.'s claim-centered framework asks: *what specific claims does this benchmark support, and what evidence exists for each?* This is more pragmatic, acknowledging that validity comes in degrees and depends on use.
+
+The two frameworks are complementary. Borsboom's framework sets the philosophical standard; Salaudeen et al.'s framework operationalizes it for practical AI evaluation. Both agree that validity is not a binary property and that multiple forms of evidence are needed.
+:::
+
+
+## Designing Valid AI Evaluations {#sec-valid-design-principles}
+
+We close with six design principles that synthesize the concepts developed in this chapter.
+
+**1. Start with the construct, not the data.** Define what you are measuring before collecting items. Write an explicit construct definition and content specification. This prevents construct underrepresentation and makes content validity assessable.
+
+**2. Use multiple methods.** Measure each construct with at least two different formats (e.g., MCQ and open-ended). This enables MTMM analysis and separates trait variance from method variance. A construct that is robust across methods has stronger validity evidence.
+
+**3. Check dimensionality.** Before reporting a single composite score, verify that the benchmark is unidimensional (or report subscores for each dimension). Parallel analysis is cheap and can prevent misleading composites.
+
+**4. Screen for DIF.** Whenever the model population includes distinct subgroups (architectural families, training paradigms, model sizes), run DIF analysis to detect items that function differently across groups.
+
+**5. Monitor for contamination.** Maintain a held-out private item pool. Compare performance on public and private items. Use item-fit statistics to flag items where some models perform unexpectedly well.
+
+**6. Document validity evidence.** Follow the claim-centered approach: for each claim the benchmark is intended to support, document the available validity evidence and its limitations. This transparency allows users to judge whether the benchmark supports *their* intended interpretation.
+
+**Worked example: evaluating summarization ability.** Suppose you want to build a benchmark for evaluating how well language models summarize documents.
+
+- *Construct definition*: The ability to produce concise, accurate, and coherent summaries of source documents, preserving key information while omitting irrelevant details.
+- *Content specification*: Documents from 5 domains (news, scientific, legal, medical, conversational), 3 lengths (short, medium, long), 2 genres (informative, narrative).
+- *Multiple methods*: Evaluate summaries with (a) ROUGE against reference summaries, (b) LLM-as-judge on a rubric, (c) human expert ratings.
+- *Dimensionality check*: Factor analysis reveals two dimensions: factual accuracy and coherence. Report subscores for each.
+- *DIF analysis*: Compare models fine-tuned for summarization vs. general-purpose models. Flag items where domain-specific vocabulary creates an irrelevant advantage.
+- *Contamination check*: Use held-out documents not available online. Compare private vs. public document performance gaps.
+
+
+## Discussion Questions {#sec-validity-discussion}
+
+1. A coding benchmark produces scores with test-retest reliability of 0.95 and Cronbach's alpha of 0.93. Is this sufficient evidence for validity? What additional evidence would you want, and why?
+
+2. How does benchmark contamination differ from construct-irrelevant variance? Can you describe a scenario where training data overlap is actually *construct-relevant* rather than a validity threat?
+
+3. Design an MTMM study for evaluating "mathematical reasoning" in large language models. Specify the traits, methods, and the expected pattern of convergent and discriminant correlations.
+
+4. Goodhart's law suggests that any benchmark used as an optimization target will eventually lose validity. Does this make consequential validity fundamentally different from the other four forms? Or is it a special case of construct-irrelevant variance?
+
+5. DIF analysis identifies items that function differently across groups after controlling for ability. In AI evaluation, when should DIF be treated as a validity problem to be fixed, and when might it reflect a *genuine* group difference that the benchmark should capture?
+
+
+## Bibliographic Notes {#sec-validity-biblio}
+
+The conceptual foundations of validity have evolved substantially over the past century. @cronbach1955construct introduced the notion of construct validity and the nomological network, arguing that validity requires embedding a construct in a web of theoretical relationships. @messick1995validity unified the previously separate types of validity into a single framework, arguing that all validity is construct validity, with content, criterion, and consequential evidence as *facets* of a unified concept. @kane2006validation formalized the argument-based approach to validation, which requires specifying the chain of inferences from observed scores to intended interpretations and gathering evidence for each link.
+
+@borsboom2005measuring challenged the orthodox framework with a realist account: a test is valid if and only if the target attribute exists and causally produces score variation. This causal perspective connects validity to the structural causal models discussed in @sec-causality.
+
+The Multitrait-Multimethod matrix was introduced by @campbell1959convergent and remains one of the most systematic approaches to convergent and discriminant validity. Differential Item Functioning methods are covered comprehensively by @holland1988differential and @zumbo1999handbook. Item-fit statistics for Rasch models are developed by @wright1982solving. Parallel analysis for dimensionality assessment was proposed by @horn1965rationale.
+
+For AI-specific validity, @salaudeen2025measurement propose a claim-centered framework that adapts classical validity concepts for benchmark evaluation. @kiela2021dynabench argue for dynamic benchmarking to combat contamination and Goodhart's law. @jacovi2023stop address the contamination problem directly, proposing practical strategies for protecting test data. The broader challenges of AI evaluation validity are discussed by @shankar2024validates and @biderman2024lessons. @truong2025bugs demonstrate that item-level validity threats --- incorrect answer keys, ambiguous wording, grading bugs --- can be detected at scale using reliability diagnostics derived from the Rasch model's sufficiency property. Their framework achieves up to 84% precision at the top-50 flagged items across nine benchmarks, illustrating how measurement theory yields operational tools for benchmark quality assurance.
+
+The relationship between reliability and validity was previewed in @sec-reliability, where we established that reliability is a necessary but not sufficient condition for validity. The causal aspects of validity---particularly the relationship between Borsboom's causal definition and structural causal models---are developed further in @sec-causality.
+
+
+## Exercises {#sec-validity-exercises}
+
+**Theoretical**
+
+1. Prove that if an item exhibits uniform DIF between two groups (i.e., the item is uniformly easier for one group at all ability levels), the standard Rasch model $P(X_{ij}=1) = \text{expit}(\theta_j - \beta_i)$ cannot hold simultaneously for both groups with the same item parameter $\beta_i$. What does this imply about the meaning of "item difficulty" when DIF is present?
+
+2. Consider a 2-trait $\times$ 2-method MTMM design. Show that if all convergent validity coefficients equal 1 (perfect convergent validity) and all heterotrait correlations equal 0 (perfect discriminant validity), then the method factors contribute zero variance. What does this imply about the interpretability of scores in practice, where method variance is nonzero?
+
+3. Define infit mean square as $\text{Infit}_i = \sum_j (X_{ij} - P_{ij})^2 / \sum_j P_{ij}(1-P_{ij})$. Suppose a fraction $\gamma$ of models have memorized item $i$ and respond correctly with probability 1 regardless of ability. Derive the expected infit as a function of $\gamma$ and the item difficulty $\beta_i$. For what values of $\gamma$ does the infit exceed the conventional 1.3 threshold?
+
+4. Using Borsboom's causal definition of validity, argue whether "prompt sensitivity" (a model's score changes when the prompt template is varied, holding the question content constant) is a *validity* threat or a *reliability* threat. Under what conditions might it be both?
+
+**Computational**
+
+5. Download a publicly available AI benchmark dataset (e.g., MMLU, HellaSwag, or ARC). Divide the models into two groups (e.g., models above and below 7B parameters). Conduct a Mantel-Haenszel DIF analysis and report which items, if any, show significant DIF. Interpret the results: does the DIF reflect genuine ability differences or construct-irrelevant features?
+
+6. Simulate a benchmark with 3 underlying factors (e.g., verbal, quantitative, and spatial reasoning) using a factor model from @sec-foundations. Generate responses for 300 models on 30 items (10 per factor). Implement parallel analysis to determine the correct dimensionality. How does the accuracy of parallel analysis depend on the factor correlations and sample size?
+
+7. Using the MTMM simulation framework from @sec-mtmm, vary the relative strength of trait loadings vs. method loadings. At what ratio do the Campbell-Fiske criteria begin to fail? Plot the convergent and discriminant validity coefficients as a function of the trait-to-method variance ratio.
+
+**Discussion**
+
+8. @salaudeen2025measurement argue that validity should be assessed relative to specific claims rather than as a global property of the benchmark. @borsboom2005measuring argues that validity is fundamentally about whether the target attribute exists and causally produces score variation. Compare these two frameworks. Under what conditions do they agree? Under what conditions might they disagree? Which framework is more useful for guiding practical benchmark design, and why?

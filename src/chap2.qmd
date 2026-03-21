@@ -1,5 +1,4 @@
 ---
-title: "Learning"
 format:
   html:
     include-after-body:
@@ -81,17 +80,7 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 :::
 
 ::: {.callout-note title="Notation"}
-Building on Chapter 1, we use the following additional notation:
-
-| Symbol | Meaning | Domain |
-|--------|---------|--------|
-| $\ell(\theta, \beta)$ | Log-likelihood function | $\mathbb{R}$ |
-| $\nabla_\theta \ell$ | Gradient w.r.t. ability parameters | $\mathbb{R}^N$ |
-| $\pi(\theta)$ | Prior distribution over abilities | - |
-| $\pi(\beta)$ | Prior distribution over difficulties | - |
-| $\hat{\theta}_{\text{MLE}}$ | Maximum likelihood estimate | $\mathbb{R}^N$ |
-| $\hat{\theta}_{\text{MAP}}$ | Maximum a posteriori estimate | $\mathbb{R}^N$ |
-| $\eta$ | Learning rate | $\mathbb{R}^+$ |
+This chapter introduces estimation notation: $\ell(\theta, \beta)$ (log-likelihood), $\hat{\theta}_{\text{MLE}}$ and $\hat{\theta}_{\text{MAP}}$ (point estimates), $\pi(\theta)$ (priors), and $\eta$ (learning rate). See @sec-notation for the complete notation reference.
 :::
 
 ::: {.callout-tip title="Video Overview" collapse="false"}
@@ -1116,162 +1105,6 @@ print(f"\nBest regularization: lambda = {best_lambda}")
 ```
 
 
-## Generalization Experiments {#sec-generalization}
-
-To evaluate the robustness and transferability of learned factor models, we train and test them under various **masking schemes**, each representing a different notion of generalization. These masks determine which parts of the response matrix $Y$ are visible during training and which are held out for evaluation.
-
-### Masking Schemes for Evaluation {#sec-masking-schemes}
-
-| **Masking Type** | **Train Set** | **Test Set** | **Purpose** |
-|------------------|---------------|--------------|-------------|
-| Entry-wise random | 80% random entries | 20% random entries | Interpolation under missing-at-random |
-| Row holdout (random) | 80% of models, all items | 20% of models, all items | Generalization to unseen models |
-| Row holdout (shifted) | Slice of models (small→large) | Disjoint slice | Covariate-shift generalization |
-| Column holdout (random) | All models, 80% of items | All models, 20% of items | Generalization to unseen items |
-| Column holdout (shifted) | Subset of benchmarks | Held-out benchmarks | Cross-domain transfer |
-| Row-column block (L-mask) | $R_{tr} \times C_{tr}$ | $R_{te} \times C_{te}$ | Compositional generalization |
-| Temporal split | Models before cutoff | Models after cutoff | Temporal generalization |
-
-These settings parallel psychometric validation tests where new examinees, items, or contexts probe the invariance of latent constructs.
-
-### Implementation of Masking Functions
-
-```{python}
-#| eval: false
-
-import torch
-
-def random_mask(data_idtor, pct=0.8):
-    """Entry-wise random masking."""
-    train_idtor = torch.bernoulli(data_idtor * pct).int()
-    test_idtor = data_idtor.int() - train_idtor
-    return train_idtor, test_idtor
-
-def model_mask(data_idtor, pct_models=0.8, exposure_rate=0.3):
-    """Row holdout: hold out unseen models."""
-    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[train_row_mask, :] = data_idtor[train_row_mask, :]
-    train_idtor[~train_row_mask, :], _ = random_mask(data_idtor[~train_row_mask, :], pct=exposure_rate)
-    test_idtor = data_idtor - train_idtor
-    return train_idtor, test_idtor
-
-def item_mask(data_idtor, pct_items=0.8, exposure_rate=0.3):
-    """Column holdout: hold out unseen items."""
-    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[:, train_col_mask] = data_idtor[:, train_col_mask]
-    train_idtor[:, ~train_col_mask], _ = random_mask(data_idtor[:, ~train_col_mask], pct=exposure_rate)
-    test_idtor = data_idtor - train_idtor
-    return train_idtor, test_idtor
-
-def L_mask(data_idtor, pct_models=0.8, pct_items=0.8):
-    """Row-column block (L-mask): compositional generalization."""
-    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
-    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[train_row_mask][:, train_col_mask] = data_idtor[train_row_mask][:, train_col_mask]
-    test_idtor = data_idtor - train_idtor
-    test_idtor[train_row_mask, :] = 0
-    test_idtor[:, train_col_mask] = 0
-    return train_idtor, test_idtor
-```
-
-### Two-Stage Training for Holdout Generalization {#sec-two-stage}
-
-To avoid data contamination in row and column holdout experiments, we use a **two-stage training procedure**:
-
-#### Row Holdout: Estimating Parameters for Unseen Models
-
-When testing generalization to unseen models, we:
-
-1. **Stage 1:** Train on known models to learn item parameters $(V, Z)$
-2. **Stage 2:** Freeze $(V, Z)$ and estimate ability parameters $U$ for held-out models using their limited exposed responses
-
-This ensures item parameters are learned without information from test models.
-
-```{python}
-#| eval: false
-
-# Stage 1: Train on known models
-test_row = test_idtor.max(axis=1).values  # Identify held-out models
-model_stage1 = train_model(Y[~test_row, :], mask=train_idtor[~test_row, :])
-
-# Freeze V, Z from Stage 1
-V_frozen = model_stage1.V.detach()
-Z_frozen = model_stage1.Z.detach()
-
-# Stage 2: Estimate U for unseen models with frozen item parameters
-model_stage2 = train_model(Y[test_row, :], mask=train_idtor[test_row, :],
-                           V_fixed=V_frozen, Z_fixed=Z_frozen)
-```
-
-#### Column Holdout: Estimating Parameters for Unseen Items
-
-When testing generalization to unseen items, we:
-
-1. **Stage 1:** Train on known items to learn model parameters $U$
-2. **Stage 2:** Freeze $U$ and estimate item parameters $(V, Z)$ for held-out items
-
-```{python}
-#| eval: false
-
-# Stage 1: Train on known items
-test_col = test_idtor.max(axis=0).values  # Identify held-out items
-model_stage1 = train_model(Y[:, ~test_col], mask=train_idtor[:, ~test_col])
-
-# Freeze U from Stage 1
-U_frozen = model_stage1.U.detach()
-
-# Stage 2: Estimate V, Z for unseen items with frozen model parameters
-model_stage2 = train_model(Y[:, test_col], mask=train_idtor[:, test_col],
-                           U_fixed=U_frozen)
-```
-
-::: {.callout-note title="Why Two-Stage Training?"}
-The two-stage procedure prevents information leakage:
-
-- **Row holdout:** Item parameters learned from training models should not contain information about test models
-- **Column holdout:** Model parameters learned from training items should not contain information about test items
-
-This mirrors the real-world scenario where we want to evaluate new models on pre-calibrated items, or calibrate new items using established models.
-:::
-
-### Evaluation Across Masking Schemes
-
-For each masking scheme, we compute AUC on the held-out entries:
-
-```{python}
-#| eval: false
-
-from torchmetrics import AUROC
-
-masking_schemes = {
-    "entry_random": random_mask,
-    "row_holdout": model_mask,
-    "col_holdout": item_mask,
-    "L_mask": L_mask,
-}
-
-results = {}
-auroc = AUROC(task="binary")
-
-for name, mask_fn in masking_schemes.items():
-    train_mask, test_mask = mask_fn(data_idtor)
-
-    # Train model (with two-stage for row/col holdout)
-    model = train_with_appropriate_stages(Y, train_mask, test_mask, name)
-
-    # Evaluate on held-out entries
-    P_hat = model().detach()
-    auc = auroc(P_hat[test_mask.bool()], Y[test_mask.bool()])
-    results[name] = auc.item()
-    print(f"{name}: AUC = {auc:.3f}")
-```
-
-The factor model typically achieves AUC of 92-97% on random masking across benchmarks, demonstrating strong predictive power. Performance on row and column holdout tests the model's ability to generalize to new models and new items, respectively.
-
-
 ## Discussion Questions {#sec-discussion}
 
 1. **Identifiability and Interpretation:** In AI evaluation, should we anchor the ability scale by fixing one model (e.g., GPT-4 = 0) or by centering all models? What are the implications for interpreting ability scores over time as new models are released?
@@ -1303,6 +1136,10 @@ The general EM algorithm was formalized by @dempster1977maximum. Its application
 
 Bayesian approaches to IRT were pioneered by @swaminathan1982bayesian and advanced using Gibbs sampling by @albert1992bayesian. Modern references include @fox2010bayesian and the software documentation for Stan [@carpenter2017stan].
 
+### Beta-IRT and Continuous Responses
+
+Standard IRT models assume binary (correct/incorrect) responses, but language models provide richer signals: token probabilities in pre-training and empirical pass rates in repeated sampling. @truong2025irsl introduce Beta-IRT, which replaces the Bernoulli loss with a Beta loss parameterized by the IRT logistic mean $\sigma(d_j(\theta_i - z_j))$ and a precision parameter $\phi$. This achieves reliable calibration with as few as 2 test takers (30--60$\times$ fewer than Binary-IRT), making it practical for scaling law studies where the number of model checkpoints far exceeds what binary IRT requires. The connection between per-problem exponential scaling and aggregate power-law scaling is formalized by @schaeffer2025monkeys, who show the power-law exponent is controlled by the left-tail shape of the success probability distribution — precisely the item difficulty distribution in IRT terms.
+
 ### Optimization Methods
 
 L-BFGS is described in @nocedal2006numerical. For deep learning optimizers applied to psychometric models, see @kingma2015adam for Adam.
@@ -1333,6 +1170,8 @@ L-BFGS is described in @nocedal2006numerical. For deep learning optimizers appli
 Compare the posterior estimates to those from Metropolis-Hastings.
 
 **Exercise 2.8** ($\star\star\star$): Implement marginal MLE using numerical quadrature to integrate out the ability parameters. Compare convergence and parameter recovery to the EM approach from this chapter.
+
+**Exercise 2.9** ($\star\star$): Implement Beta-IRT estimation. Given a response matrix $P_{ij} \in [0, 1]$ of empirical probabilities (e.g., token probabilities or pass rates), maximize the Beta log-likelihood $\sum_{i,j} \log p(P_{ij}; \mu_{ij}, \phi)$ where $\mu_{ij} = \sigma(d_j(\theta_i - z_j))$ is the IRT-predicted mean and $\phi > 0$ is a precision parameter. (a) Derive the gradient with respect to $\theta_i$ and $z_j$. (b) Simulate data with $M = 50$ models and $N = 200$ items, where $P_{ij} \sim \text{Beta}(\mu_{ij} \phi, (1 - \mu_{ij})\phi)$ with $\phi = 10$. (c) Compare parameter recovery of Beta-IRT vs. binary IRT (where responses are thresholded at 0.5) as a function of $M$. Verify the finding of @truong2025irsl that Beta-IRT achieves reliable calibration with far fewer models than Binary-IRT.
 
 ### Discussion Exercises
 

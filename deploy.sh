@@ -5,7 +5,7 @@ set -e
 export HF_HOME=/lfs/local/0/sttruong/.cache/huggingface
 
 # Activate conda environment
-source /lfs/local/0/sttruong/miniconda3/etc/profile.d/conda.sh
+source /lfs/skampere2/0/sttruong/miniconda3/etc/profile.d/conda.sh
 conda activate aims
 
 # Navigate to project

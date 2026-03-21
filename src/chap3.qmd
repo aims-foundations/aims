@@ -1,5 +1,4 @@
 ---
-title: "Design"
 format:
   html:
     include-after-body:
@@ -37,97 +36,52 @@ pyodide:
     - scipy
 ---
 
+# Efficient Measurement {#sec-efficient}
+
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, you will be able to:
 
-1. **Formulate** the benchmark design problem as an optimization over item selection, scoring rules, and information disclosure.
+1. **Formulate** the benchmark design problem as an optimization over item selection and scoring rules.
 2. **Apply** Fisher information to select maximally informative items, and implement a Computerized Adaptive Testing procedure.
 3. **Construct** D-optimal item pools that maximize the precision of ability estimates.
-4. **Explain** the Maxmin Expected Utility framework and how ambiguity aversion leads to robust benchmark design.
-5. **Describe** Bayesian persuasion and apply the concavification technique to determine optimal information disclosure.
-6. **Analyze** when benchmark reporting granularity---sum scores versus subscores---affects downstream decisions.
-7. **Distinguish** ex post, interim, and dominant-strategy implementation in mechanism design, and explain when they coincide.
-8. **Model** AI evaluation as an agency game and characterize when developers prefer to reveal, conceal, or garble evaluation metrics.
-9. **Explain** how differential privacy in metric reporting can yield Pareto improvements for both evaluator and developer.
-10. **Synthesize** design principles spanning statistical optimality, robustness, and strategic alignment for AI benchmarks.
+4. **Design** efficient paired-comparison tournaments using information-theoretic principles.
+5. **Explain** stopping rules and practical constraints (cost, time, contamination) for adaptive AI evaluation.
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
-This chapter can be covered in **4-5 lectures** (75-90 minutes each):
+This chapter can be covered in **2 lectures** (75-90 minutes each):
 
-**Lecture 1: Optimal Experimental Design**
+**Lecture 1: Fisher Information and Adaptive Testing**
 
 - The benchmark design problem (15 min)
 - Fisher information for item selection (20 min)
 - Computerized Adaptive Testing (30 min)
 - Hands-on: CAT simulation (10 min)
 
-**Lecture 2: D-Optimal Design and Robust Decisions**
+**Lecture 2: Optimal Design and Paired Comparisons**
 
-- D-optimal design and item pool construction (25 min)
-- From risk to ambiguity: the Ellsberg paradox (15 min)
-- Maxmin Expected Utility framework (25 min)
-- Hands-on: robust item pool design (10 min)
-
-**Lecture 3: Information Design**
-
-- Bayesian persuasion framework (25 min)
-- Concavification and optimal signals (25 min)
-- Application: benchmark disclosure policy (20 min)
-
-**Lecture 4: Mechanism and Strategic Design**
-
-- Robust mechanism design (25 min)
-- The agency game for metric design (25 min)
-- Garbling, privacy, and Pareto improvements (20 min)
-- Hands-on: agency game simulation (10 min)
-
-**Lecture 5: Synthesis and Practice**
-
-- Design principles for AI benchmarks (30 min)
-- Case studies: HELM, Chatbot Arena, LMSYS (25 min)
-- Discussion and exercises (20 min)
+- D-optimal design and item pool construction (30 min)
+- Design for paired comparisons (20 min)
+- Stopping rules and practical considerations (15 min)
+- Hands-on: D-optimal design simulation (10 min)
 :::
 
 ::: {.callout-note title="Notation"}
-Building on Chapters 1 and 2, we use the following additional notation:
-
-| Symbol | Meaning | Domain |
-|--------|---------|--------|
-| $I_j(\theta)$ | Fisher information for item $j$ at ability $\theta$ | $\mathbb{R}^+$ |
-| $\mathcal{I}(\theta)$ | Fisher information matrix | $\mathbb{R}^{K \times K}$ |
-| $\mathcal{C}$ | Set of priors (ambiguity set) | Convex subset of $\Delta(\Omega)$ |
-| $\pi(\cdot \mid \omega)$ | Signal / information structure | $\Delta(\mathcal{S})$ for each state $\omega$ |
-| $v(\mu)$ | Sender's expected payoff at posterior belief $\mu$ | $\mathbb{R}$ |
-| $\text{cav}(v)$ | Concave closure (upper concave envelope) of $v$ | $\mathbb{R}$ |
-| $b$ | Principal's value for task completion | $\mathbb{R}^+$ |
-| $F(c)$ | CDF of agent's cost distribution | $[0, 1]$ |
-| $\varepsilon$ | Garbling parameter | $[0, 1]$ |
-| $\Pi, V, W$ | Principal's, agent's, and total welfare | $\mathbb{R}$ |
+This chapter introduces $I_j(\theta)$ (Fisher information for item $j$) and $\mathcal{I}(\theta)$ (Fisher information matrix). See @sec-notation for the complete notation reference.
 :::
 
 
 ## The Design Problem in AI Evaluation {#sec-design-problem}
 
-Chapter 1 introduced the measurement models---Rasch, 2PL, factor models, Bradley-Terry---that formalize how latent abilities generate observed responses. Chapter 2 showed how to estimate the parameters of these models from data. But both chapters took the response matrix $Y$ as given. In practice, someone must *design* the evaluation: choosing which items to include, how to score responses, and what information to report. These design decisions profoundly affect the quality, efficiency, and trustworthiness of the resulting measurements.
+Chapter 1 introduced the measurement models---Rasch, 2PL, factor models, Bradley-Terry---that formalize how latent abilities generate observed responses. Chapter 2 showed how to estimate the parameters of these models from data. But both chapters took the response matrix $Y$ as given. In practice, someone must *design* the evaluation: choosing which items to include and how to score responses. These design decisions profoundly affect the quality and efficiency of the resulting measurements.
 
-The benchmark designer faces three fundamental decisions:
+The benchmark designer faces two fundamental efficiency questions:
 
 1. **Item selection:** Which questions or tasks should the benchmark include? Given a pool of candidate items, how do we select a subset that maximizes the precision of our measurements?
 
 2. **Scoring rules:** How do we aggregate responses into scores? Sum scores, weighted scores, latent factor scores? The choice interacts with the measurement model (recall from Chapter 1 that sum scores are sufficient for the Rasch model but not for 2PL).
 
-3. **Information disclosure:** How much detail should benchmark results reveal? A single aggregate score, subscores by category, the full response matrix? More detail is not always better---it depends on who uses the information and how.
-
-These decisions operate at three progressively more challenging levels:
-
-- **Statistical design** (nature is passive): Maximize the information content of the benchmark, assuming test-takers respond honestly and the evaluator faces no strategic complications.
-
-- **Robust design** (nature is adversarial): Ensure the benchmark works well even under worst-case uncertainty---when we don't know the population of models that will be evaluated, or when our assumptions about item properties are wrong.
-
-- **Strategic design** (nature is rational): Account for the fact that the agents being evaluated---AI developers and the models they train---have incentives that interact with the evaluation design. They may game the benchmark, selectively disclose capabilities, or strategically choose which metrics to highlight.
-
-This chapter develops the theoretical foundations for each level, drawing on classical experimental design, decision theory under ambiguity, information design, and mechanism design. We apply each framework to the practical problem of designing AI evaluation benchmarks.
+This chapter develops the statistical foundations for efficient evaluation design, drawing on classical experimental design and information theory. We apply these frameworks to the practical problem of designing AI evaluation benchmarks that achieve high measurement precision with minimal cost.
 
 
 ## Optimal Experimental Design {#sec-optimal-design}
@@ -468,7 +422,7 @@ Traditional CAT assumes deterministic responses: a human test-taker gives the sa
 
 For deterministic evaluation (temperature = 0), CAT applies directly. For stochastic evaluation, we may need multiple samples per item, or methods that account for response variability.
 
-CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the *generalization* problem addressed in Chapter 4.
+CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in @sec-cold-start.
 :::
 
 
@@ -615,749 +569,18 @@ This is maximized when the models are evenly matched ($P_{ik} = 0.5$, i.e., $\th
 Classical solutions include **balanced incomplete block designs** (BIBDs), where each pair of models is compared equally often. For AI evaluation arenas, adaptive matchmaking algorithms serve the same role as CAT: they select matchups that are most informative given current rating estimates. This is precisely what the Chatbot Arena does when it pairs models with similar Elo ratings.
 
 
-## Decision-Making Under Ambiguity {#sec-ambiguity}
+## Discussion Questions {#sec-efficient-discussion}
 
-The optimal designs above assume we know (or can estimate) the distribution of abilities in the model population. But what if we don't? When designing a benchmark for models that don't yet exist, we face *ambiguity*---genuine uncertainty about the correct probability model. This section introduces a decision-theoretic framework for making robust design choices under such ambiguity.
+1. **Adaptive testing for AI.** What are the practical challenges in deploying CAT for AI evaluation? Consider: determinism of model responses, cost of API calls, benchmark contamination, and the need for pre-calibrated items.
 
-### From Risk to Uncertainty {#sec-risk-uncertainty}
+2. **Optimal vs. fixed design.** When is it better to use adaptive testing (CAT) versus a fixed D-optimal test? What factors determine this choice in practice?
 
-Classical decision theory distinguishes two types of uncertainty:
+3. **Paired comparison design.** The Chatbot Arena uses adaptive matchmaking to pair models with similar Elo ratings. What are the advantages and disadvantages of this approach compared to a balanced tournament design?
 
-- **Risk:** The probabilities of outcomes are known. A fair die has a $1/6$ chance of each face. Expected utility theory [@mas1995microeconomic] handles this case.
-- **Uncertainty (ambiguity):** The probabilities themselves are unknown. We may not even have a prior over them.
+4. **Evaluation budgets.** A team has a fixed budget of 10,000 API calls to evaluate 50 models on a benchmark with 500 items. Design an evaluation strategy that maximizes measurement precision under this constraint.
 
-Frank Knight [-@knight1921risk] first made this distinction, and it has profound implications for design. Under risk, the expected utility framework provides a complete guide to rational action. Under ambiguity, there is no single probability distribution to compute expectations over.
 
-### The Ellsberg Paradox {#sec-ellsberg}
-
-The Ellsberg paradox [@ellsberg1961risk] demonstrates that humans---and arguably rational designers---treat risk and ambiguity differently. Consider two urns:
-
-- **Urn A:** 50 red balls and 50 black balls (known composition)
-- **Urn B:** 100 balls, each red or black, in unknown proportions
-
-You win \$100 if you draw a red ball. Most people prefer Urn A, even though Urn B could have more red balls. This preference is *ambiguity aversion*---a preference for known risks over unknown ones.
-
-```{pyodide-python}
-#| label: ellsberg-paradox
-#| autorun: true
-#| fig-cap: "The Ellsberg paradox: an ambiguity-averse decision-maker evaluates bets differently depending on whether the urn composition is known (risk) or unknown (ambiguity). The maxmin criterion selects the action with the best worst-case payoff."
-
-fig, axes = plt.subplots(1, 2, figsize=(6, 2.5))
-
-# Left: Expected utility under different beliefs about Urn B
-p_red_B = np.linspace(0, 1, 100)
-eu_urn_B = 100 * p_red_B  # Expected value of Urn B
-
-axes[0].axhline(50, color='green', linewidth=2, linestyle='-', label='Urn A (known: 50)')
-axes[0].plot(p_red_B, eu_urn_B, 'b-', linewidth=2, label='Urn B (depends on p)')
-axes[0].fill_between(p_red_B, 0, eu_urn_B, alpha=0.1, color='blue')
-axes[0].axvline(0.5, color='gray', linestyle=':', alpha=0.5)
-axes[0].set_xlabel('Proportion of red balls in Urn B')
-axes[0].set_ylabel('Expected payoff ($)')
-axes[0].set_title('Expected Payoff Under Different Beliefs')
-axes[0].legend(fontsize=7)
-axes[0].grid(True, alpha=0.3)
-
-# Right: Maxmin evaluation
-# Under ambiguity, consider C = {all distributions over p_red}
-# Maxmin EU for Urn A: min over C of E[payoff] = 50 (constant)
-# Maxmin EU for Urn B: min over C of 100*p = 0 (worst case: p=0)
-# More realistically, C might be an interval [0.3, 0.7]
-
-c_lower = np.linspace(0, 0.5, 50)
-maxmin_A = np.full_like(c_lower, 50.0)
-maxmin_B = 100 * c_lower  # Worst case is lower bound of C
-
-axes[1].plot(c_lower, maxmin_A, 'g-', linewidth=2, label='Urn A (maxmin = 50)')
-axes[1].plot(c_lower, maxmin_B, 'b-', linewidth=2, label='Urn B (maxmin = 100·p_min)')
-axes[1].fill_between(c_lower, maxmin_B, maxmin_A,
-                     where=maxmin_A > maxmin_B, alpha=0.2, color='green',
-                     label='Prefer Urn A')
-axes[1].set_xlabel('Lower bound of ambiguity set (p_min)')
-axes[1].set_ylabel('Maxmin Expected Payoff ($)')
-axes[1].set_title('Maxmin Decision: Urn A Preferred')
-axes[1].legend(fontsize=7)
-axes[1].grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.show()
-```
-
-
-### Maxmin Expected Utility {#sec-maxmin-eu}
-
-@gilboa1989maxmin provide axiomatic foundations for decision-making under ambiguity. Their key result: if a decision-maker's preferences satisfy a set of natural axioms---including *uncertainty aversion* and *certainty-independence*---then their preferences can be represented by a **maxmin expected utility** functional:
-
-$$
-J(f) = \min_{P \in \mathcal{C}} \int u \circ f \, dP
-$$
-
-where $f$ is an act (mapping states to outcomes), $u$ is a von Neumann–Morgenstern utility function, and $\mathcal{C}$ is a closed, convex set of probability measures representing the decision-maker's ambiguity about the true state.
-
-::: {.callout-note title="Maxmin Expected Utility: Axioms and Representation"}
-**Axioms** (Gilboa and Schmeidler):
-
-1. **Weak order:** Preferences are complete and transitive
-2. **Certainty-independence:** $f \succ g \iff \alpha f + (1-\alpha)h \succ \alpha g + (1-\alpha)h$ for any constant act $h$ and $\alpha \in (0,1)$
-3. **Continuity:** Small perturbations don't flip strict preferences
-4. **Monotonicity:** If $f(s) \succeq g(s)$ for every state $s$, then $f \succeq g$
-5. **Uncertainty aversion:** $f \sim g \implies \alpha f + (1-\alpha) g \succeq f$
-
-**Representation:** Under these axioms, there exists a unique affine utility $u$ and a unique closed convex set $\mathcal{C}$ of priors such that:
-
-$$f \succeq g \iff \min_{P \in \mathcal{C}} \mathbb{E}_P[u(f)] \geq \min_{P \in \mathcal{C}} \mathbb{E}_P[u(g)]$$
-
-The set $\mathcal{C}$ captures the degree of ambiguity: a singleton $\mathcal{C} = \{P_0\}$ recovers standard expected utility, while a larger $\mathcal{C}$ represents greater ambiguity.
-:::
-
-The critical departure from classical expected utility is axiom 2: **certainty-independence** replaces the standard independence axiom. Full independence would require $f \succ g \iff \alpha f + (1-\alpha)h \succ \alpha g + (1-\alpha)h$ for *any* act $h$, not just constant ones. By weakening this to constant acts only, Gilboa and Schmeidler allow for ambiguity aversion while retaining tractability.
-
-
-### Application: Robust Benchmark Design {#sec-robust-benchmark}
-
-The MEU framework maps directly onto the benchmark design problem. Consider a designer who must choose an item pool $\mathcal{J}$ to evaluate future AI models, but does not know the distribution of model abilities:
-
-- **Acts:** Item pools $\mathcal{J} \subseteq \{1, \ldots, M\}$ with $|\mathcal{J}| = K$
-- **States:** The true ability distribution $\theta \sim F$
-- **Utility:** Measurement precision, e.g., average Fisher information
-- **Ambiguity set:** $\mathcal{C} = \{F : F \text{ is a distribution on } [-B, B]\}$
-
-The maxmin-optimal item pool solves:
-
-$$
-\mathcal{J}^* = \arg\max_{\mathcal{J}: |\mathcal{J}|=K} \min_{F \in \mathcal{C}} \mathbb{E}_{\theta \sim F}\left[\sum_{j \in \mathcal{J}} I_j(\theta)\right]
-$$
-
-This criterion selects items that provide good information *regardless* of where model abilities fall. In practice, this leads to **uniform coverage**: spreading item difficulties evenly across the plausible ability range, rather than concentrating them where we expect most models to be.
-
-```{pyodide-python}
-#| label: robust-design
-#| autorun: true
-#| fig-cap: "Robust (maxmin) design spreads items uniformly to ensure coverage under any ability distribution, while distribution-specific design concentrates items near the expected ability mean."
-
-def evaluate_pool(item_indices, beta_pool, theta_dist):
-    """Expected information under a specific ability distribution."""
-    total = 0
-    for theta_val, weight in theta_dist:
-        info = sum(sigmoid(theta_val - beta_pool[j]) * (1 - sigmoid(theta_val - beta_pool[j]))
-                   for j in item_indices)
-        total += weight * info
-    return total
-
-def worst_case_info(item_indices, beta_pool, theta_grid):
-    """Minimum information across theta grid (worst case)."""
-    infos = []
-    for theta_val in theta_grid:
-        info = sum(sigmoid(theta_val - beta_pool[j]) * (1 - sigmoid(theta_val - beta_pool[j]))
-                   for j in item_indices)
-        infos.append(info)
-    return min(infos)
-
-np.random.seed(42)
-M_pool = 200
-beta_pool = np.random.normal(0, 2, M_pool)
-K = 20
-theta_grid = np.linspace(-3, 3, 100)
-
-# Approach 1: Design optimized for N(0,1) population (Bayesian-optimal)
-# Weight theta_grid by N(0,1) density
-from scipy.stats import norm
-weights_normal = norm.pdf(theta_grid, 0, 1)
-weights_normal /= weights_normal.sum()
-
-def greedy_weighted(beta_pool, K, theta_grid, weights):
-    available = list(range(len(beta_pool)))
-    selected = []
-    for _ in range(K):
-        best_item, best_score = None, -np.inf
-        for j in available:
-            candidate = selected + [j]
-            score = sum(w * compute_test_information(candidate, beta_pool, [tg])[0]
-                       for tg, w in zip(theta_grid, weights))
-            if score > best_score:
-                best_score = score
-                best_item = j
-        selected.append(best_item)
-        available.remove(best_item)
-    return selected
-
-# Approach 2: Maxmin design (robust to ability distribution)
-weights_uniform = np.ones_like(theta_grid) / len(theta_grid)
-
-bayesian_items = greedy_weighted(beta_pool, K, theta_grid, weights_normal)
-robust_items = greedy_weighted(beta_pool, K, theta_grid, weights_uniform)
-
-# Compare
-bayes_info = compute_test_information(bayesian_items, beta_pool, theta_grid)
-robust_info = compute_test_information(robust_items, beta_pool, theta_grid)
-
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
-
-# Test information functions
-axes[0].plot(theta_grid, bayes_info, 'b-', linewidth=2, label='Bayesian (N(0,1))')
-axes[0].plot(theta_grid, robust_info, 'r-', linewidth=2, label='Robust (maxmin)')
-axes[0].set_xlabel('Ability (θ)')
-axes[0].set_ylabel('Test Information')
-axes[0].set_title('Information Under Each Design')
-axes[0].legend(fontsize=7)
-axes[0].grid(True, alpha=0.3)
-
-# Item difficulties
-axes[1].hist(beta_pool[bayesian_items], bins=10, alpha=0.6, color='blue',
-             label='Bayesian', density=True)
-axes[1].hist(beta_pool[robust_items], bins=10, alpha=0.6, color='red',
-             label='Robust', density=True)
-axes[1].set_xlabel('Item Difficulty (β)')
-axes[1].set_ylabel('Density')
-axes[1].set_title('Selected Difficulties')
-axes[1].legend(fontsize=7)
-axes[1].grid(True, alpha=0.3)
-
-# Worst-case comparison across shifted populations
-shifts = np.linspace(-2, 2, 20)
-bayes_perf = []
-robust_perf = []
-for shift in shifts:
-    weights_shifted = norm.pdf(theta_grid, shift, 1)
-    weights_shifted /= weights_shifted.sum()
-    bayes_perf.append(np.sum(weights_shifted * bayes_info))
-    robust_perf.append(np.sum(weights_shifted * robust_info))
-
-axes[2].plot(shifts, bayes_perf, 'b-', linewidth=2, label='Bayesian')
-axes[2].plot(shifts, robust_perf, 'r-', linewidth=2, label='Robust')
-axes[2].set_xlabel('Population Mean Shift')
-axes[2].set_ylabel('Expected Information')
-axes[2].set_title('Performance Under Population Shift')
-axes[2].legend(fontsize=7)
-axes[2].grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.show()
-
-print(f"Bayesian worst-case: {min(bayes_perf):.2f}")
-print(f"Robust worst-case: {min(robust_perf):.2f}")
-print(f"Robust advantage in worst case: {(min(robust_perf)/min(bayes_perf) - 1)*100:.1f}%")
-```
-
-The Bayesian design excels when the population matches its assumption (N(0,1)) but degrades rapidly under population shift. The robust design sacrifices peak performance for consistent quality across all populations---precisely the guarantee a benchmark designer wants when the future model landscape is uncertain.
-
-This connects to Chapter 1's discussion of *specific objectivity* in the Rasch model: the property that item parameters do not depend on the ability distribution. Rasch measurement is inherently robust in this sense, and the maxmin criterion formalizes the same intuition for general design problems.
-
-
-## Information Design and Bayesian Persuasion {#sec-information-design}
-
-We now move from designing what to *measure* to designing what to *reveal*. Once a benchmark has been administered and abilities estimated, the designer must decide how to report the results. This is a problem of **information design**: choosing the structure of information that is communicated to downstream decision-makers.
-
-### The Persuasion Problem {#sec-persuasion}
-
-@kamenica2011bayesian introduce a framework for analyzing strategic information disclosure. A **Sender** (the benchmark designer) commits to a signal structure---a rule mapping states of the world to observable signals---before the state is realized. A **Receiver** (the public, regulators, or AI users) observes the signal, updates their beliefs via Bayes' rule, and takes an action.
-
-The key elements are:
-
-- **State** $\omega \in \Omega$: The true quality of the AI model (drawn from a known prior $\mu_0$)
-- **Signal** $\pi(\cdot | \omega)$: A distribution over signal realizations for each state
-- **Receiver's action** $a^*(\mu)$: The optimal action given posterior belief $\mu$
-- **Sender's payoff** $v(\mu)$: The sender's expected utility given the receiver's action at belief $\mu$
-
-The sender chooses $\pi$ to maximize their expected payoff, knowing that the receiver will behave rationally given the signal.
-
-::: {.callout-note title="A Benchmark Designer's Persuasion Problem"}
-Consider a regulator deciding whether to certify an AI model for deployment. The regulator certifies if they believe the model is "safe" with probability at least $\tau = 0.7$.
-
-- **State:** $\omega \in \{\text{safe}, \text{unsafe}\}$, with prior $\mu_0 = P(\text{safe}) = 0.5$
-- **Sender (benchmark designer):** Prefers certification (the model is their client, or they are the developer)
-- **Receiver (regulator):** Certifies if posterior $P(\text{safe} | \text{signal}) \geq 0.7$
-
-Without any signal, $\mu_0 = 0.5 < 0.7$, so the regulator does not certify. Can the benchmark designer choose a testing protocol (signal) that increases the probability of certification?
-:::
-
-### The Concavification Technique {#sec-concavification}
-
-The fundamental insight of @kamenica2011bayesian is that the sender's problem reduces to finding the **concave closure** of the sender's value function $v(\mu)$.
-
-The sender's expected payoff from any signal is a weighted average of $v(\mu)$ across the posterior beliefs it induces. By the law of iterated expectations, the average posterior must equal the prior:
-
-$$
-\mathbb{E}[\mu_s] = \mu_0
-$$
-
-This is the key constraint: the sender can *spread* beliefs around the prior, but cannot shift their mean. The sender's problem becomes:
-
-$$
-\max_{\text{distributions of posteriors}} \mathbb{E}[v(\mu)] \quad \text{subject to} \quad \mathbb{E}[\mu] = \mu_0
-$$
-
-Geometrically, this is equivalent to evaluating the concave closure $\text{cav}(v)$ at the prior $\mu_0$:
-
-::: {.callout-note title="Theorem: Concavification (Kamenica and Gentzkow 2011)"}
-The sender's optimal expected payoff is $\text{cav}(v)(\mu_0)$, where $\text{cav}(v)$ is the smallest concave function that is everywhere at least as large as $v$.
-
-Persuasion strictly benefits the sender if and only if $\text{cav}(v)(\mu_0) > v(\mu_0)$.
-:::
-
-```{pyodide-python}
-#| label: concavification
-#| autorun: true
-#| fig-cap: "Bayesian persuasion via concavification. Left: the sender's value function and its concave closure. The gap between cav(v) and v at the prior represents the persuasion gain. Right: the optimal signal structure splits the prior into two posteriors."
-
-from scipy.spatial import ConvexHull
-
-fig, axes = plt.subplots(1, 2, figsize=(6, 2.5))
-
-# Binary state example: certification game
-mu = np.linspace(0, 1, 500)
-tau = 0.7  # Certification threshold
-
-# Sender's value function: v(mu) = 1 if mu >= tau, else 0
-v = np.where(mu >= tau, 1.0, 0.0)
-
-# Concave closure: line from (0, 0) to (tau, 1) extended, then 1 for mu >= tau
-# cav(v)(mu) = min(mu / tau, 1) for this step function
-cav_v = np.minimum(mu / tau, 1.0)
-
-mu_0 = 0.5  # Prior
-v_at_prior = 0.0  # v(mu_0) = 0 since 0.5 < 0.7
-cav_at_prior = mu_0 / tau  # cav(v)(mu_0)
-
-axes[0].plot(mu, v, 'b-', linewidth=2, label='v(μ): Sender value')
-axes[0].plot(mu, cav_v, 'r--', linewidth=2, label='cav(v): Concave closure')
-axes[0].axvline(mu_0, color='gray', linestyle=':', alpha=0.7)
-axes[0].plot(mu_0, v_at_prior, 'bo', markersize=8, zorder=5)
-axes[0].plot(mu_0, cav_at_prior, 'r^', markersize=10, zorder=5)
-
-# Annotate the persuasion gain
-axes[0].annotate('', xy=(mu_0 + 0.02, cav_at_prior), xytext=(mu_0 + 0.02, v_at_prior),
-                arrowprops=dict(arrowstyle='<->', color='green', lw=2))
-axes[0].text(mu_0 + 0.05, (cav_at_prior + v_at_prior) / 2,
-            f'Gain = {cav_at_prior:.2f}', fontsize=9, color='green')
-
-axes[0].set_xlabel('Posterior belief μ = P(safe)')
-axes[0].set_ylabel('Sender payoff')
-axes[0].set_title('Concavification')
-axes[0].legend(fontsize=7, loc='upper left')
-axes[0].set_xlim(-0.05, 1.05)
-axes[0].set_ylim(-0.1, 1.15)
-axes[0].grid(True, alpha=0.3)
-
-# Right: optimal signal structure
-# Optimal signal splits mu_0 = 0.5 into:
-# mu_low = 0 with probability (1 - mu_0/tau) and
-# mu_high = tau with probability mu_0/tau
-p_certify = mu_0 / tau
-mu_low = 0.0
-mu_high = tau
-
-axes[1].bar([0, 1], [1 - p_certify, p_certify], width=0.4,
-           color=['#E8637A', '#45BF7C'], alpha=0.8,
-           tick_label=['Reject\n(μ = 0)', f'Certify\n(μ = {tau})'])
-axes[1].set_ylabel('Probability')
-axes[1].set_title(f'Optimal Signal (prior μ₀ = {mu_0})')
-axes[1].set_ylim(0, 1)
-axes[1].grid(True, alpha=0.3, axis='y')
-
-for i, (val, label) in enumerate(zip([1 - p_certify, p_certify],
-                                      [f'{1-p_certify:.2f}', f'{p_certify:.2f}'])):
-    axes[1].text(i, val + 0.03, label, ha='center', fontsize=11, fontweight='bold')
-
-plt.tight_layout()
-plt.show()
-
-print(f"Prior probability of safety: {mu_0}")
-print(f"Without persuasion: certification probability = 0 (prior < threshold)")
-print(f"With optimal signal: certification probability = {p_certify:.2f}")
-print(f"The benchmark reveals definitive 'unsafe' evidence {1-p_certify:.0%} of the time,")
-print(f"  and just-sufficient 'safe' evidence {p_certify:.0%} of the time.")
-```
-
-The optimal benchmark design in this example is remarkably asymmetric. When the model is unsafe, the benchmark produces definitive evidence of this. When the model is safe, the benchmark produces just enough evidence to cross the certification threshold. This is not deception---the benchmark reports truthfully---but the choice of *which tests to run* is strategically designed.
-
-
-### Application: What Should Benchmarks Reveal? {#sec-benchmark-disclosure}
-
-The persuasion framework illuminates several practical design questions:
-
-**Granularity of reporting.** Should a benchmark report a single aggregate score, category subscores, or full per-item results? The answer depends on how downstream users process the information:
-
-- If users make a binary decision (deploy or not), detailed subscores may not change their action. By Chapter 1's sufficiency theorem, if the Rasch model holds, sum scores contain all the information about ability, and additional detail is redundant.
-
-- If users make nuanced decisions (deploy for some tasks but not others), subscores corresponding to different latent factors (from the factor model in Chapter 1) become valuable. The benchmark designer should report at the granularity matching the dimensionality of the decision space.
-
-**Information pooling.** When multiple benchmarks assess the same construct, should results be aggregated or reported separately? Persuasion theory shows that pooling can either help or hurt, depending on the concavity of the receiver's value function. If the receiver's decision is concave in belief (risk-averse regulator), pooling helps; if convex (threshold-based certification), strategic separation can be more effective.
-
-**Dynamic disclosure.** In practice, benchmark results are released over time as models are evaluated. The timing and sequencing of releases is itself an information design problem, connecting to the sequential persuasion literature.
-
-
-## Robust Mechanism Design {#sec-robust-mechanism}
-
-We now introduce a second dimension of robustness: the design of evaluation *mechanisms* that function correctly even when participants hold diverse and unknown beliefs about one another. This goes beyond the statistical robustness of the previous section to address the *strategic* setting where evaluated agents are rational actors.
-
-### Classical Mechanism Design {#sec-classical-mechanism}
-
-Mechanism design is often called "reverse game theory": instead of analyzing behavior in a given game, we design the game's rules to achieve a desired outcome. The foundational concepts include:
-
-- **The revelation principle:** Any outcome achievable by any mechanism can also be achieved by a *direct* mechanism where agents truthfully report their types [@myerson1981].
-- **Incentive compatibility:** A mechanism is incentive-compatible if truth-telling is optimal for each agent.
-- **The Vickrey–Clarke–Groves (VCG) mechanism:** A family of mechanisms that achieve efficient outcomes through dominant-strategy incentive compatibility [@vickrey1961].
-
-In the context of AI evaluation, the "mechanism" is the evaluation protocol---the rules governing how benchmarks are administered, how results are scored, and what actions follow from the scores. The "agents" are AI developers, and their "types" include private information about model capabilities, training data, and potential weaknesses.
-
-### The Wilson Critique {#sec-wilson-critique}
-
-The standard mechanism design framework assumes that the planner and all agents share *common knowledge* of the environment: the set of possible types, the prior distribution, and the structure of preferences. Robert Wilson [-@wilson1987game] argued that this is unrealistic:
-
-> Game theory has a great advantage in explicitly analyzing the consequences of trading rules that presumably are really common knowledge; it is deficient to the extent it assumes other features to be common knowledge, such as one player's probability assessment about another's preferences or information.
-
-This critique is especially sharp for AI evaluation. When designing a benchmark:
-
-- We do not know the distribution of model capabilities (the "type space")
-- Different developers have different beliefs about their competitors' models
-- The competitive landscape shifts rapidly as new models are released
-
-A benchmark that works correctly only under specific assumptions about the model population is fragile. We need mechanisms that are **robust** to the information structure.
-
-### Ex Post vs. Interim Implementation {#sec-ex-post}
-
-@bergemann2005robust formalize robustness by asking: when does a mechanism work for *all possible* beliefs that agents might hold?
-
-They distinguish three levels of incentive compatibility:
-
-1. **Interim (Bayesian) implementation:** Truth-telling is optimal given the agent's beliefs about others' types, for a specific common prior. This is the standard notion.
-
-2. **Ex post implementation:** Truth-telling is optimal regardless of what the agent believes about others' types---even after learning the true state. This is strictly stronger.
-
-3. **Dominant strategy implementation:** Truth-telling is optimal regardless of what *other agents do*---the strongest notion.
-
-::: {.callout-note title="Bergemann and Morris (2005): Key Result"}
-A payoff environment is **separable** if outcomes have a common component and private components for each agent, with agents caring only about their own private component and the common one.
-
-**Theorem:** In separable environments, interim implementation on all common prior type spaces implies ex post implementation. In particular, for *social choice functions* (not correspondences), interim implementation for all type spaces is equivalent to ex post implementation.
-
-This means that if a mechanism works for every possible belief structure (robust Bayesian implementation), it automatically satisfies the stronger ex post requirement.
-:::
-
-For AI evaluation, the practical implication is clear: **evaluation mechanisms should not rely on specific assumptions about what developers know or believe about each other.** A scoring system that is incentive-compatible only when all developers share a specific prior about model quality will fail when those assumptions don't hold. An ex post incentive-compatible system works regardless.
-
-
-### Bayes Correlated Equilibria {#sec-bce}
-
-@bergemann2013robust take a complementary approach: instead of designing mechanisms robust to all information structures, they characterize what *outcomes* are possible across all information structures for a given game.
-
-Given a basic game (action sets, payoff functions, payoff state distribution), the set of outcomes that can arise in Bayes Nash equilibrium for *some* information structure equals the set of **Bayes correlated equilibria** (BCE). This provides:
-
-- **Upper bounds** on what any information structure can achieve (what outcomes are robustly ruled out)
-- **Lower bounds** on welfare across all information structures (robust welfare predictions)
-- **Moment restrictions** on the joint distribution of actions and states
-
-For AI evaluation, BCE characterizes the range of possible benchmark outcomes across all possible information structures. If model developers have private information about their models' weaknesses, the set of BCE describes all the patterns of strategic behavior we might observe, without needing to know the exact information structure.
-
-
-### Application: Evaluation Mechanisms {#sec-eval-mechanisms}
-
-These concepts apply directly to the design of AI evaluation systems:
-
-**Arena matchmaking as mechanism design.** The Chatbot Arena (Chapter 1) pairs models for head-to-head comparison. The matchmaking algorithm is a mechanism that determines which comparisons occur. A robust design ensures the resulting ratings are meaningful regardless of which models choose to participate and what they know about each other.
-
-**Scoring rules and incentive compatibility.** If benchmark scores affect funding, deployment, or reputation, developers have incentives to optimize for the benchmark. A well-designed scoring rule should make honest capability development the dominant strategy, rather than benchmark-specific gaming.
-
-**Benchmark rotation and refreshment.** One practical approach to robustness is to regularly retire and replace benchmark items. This limits the value of benchmark-specific optimization, analogous to rotating questions on a standardized test. The design question is how often to rotate and how to maintain comparability of scores across versions.
-
-
-## Strategic Metric Design {#sec-strategic-metric}
-
-We now turn to the anchor paper for this chapter: @wang2024relying on "Relying on the Metrics of Evaluated Agents." This work directly addresses the AI benchmark design problem by modeling the interaction between an evaluator and the agents being evaluated as a strategic game.
-
-### The Evaluator's Dilemma {#sec-evaluator-dilemma}
-
-The core problem is **unknown unknowns**: evaluators cannot always anticipate which metrics are relevant. A benchmark designer might measure accuracy, calibration, and fairness, but miss metrics that the AI developers themselves know are important---computational efficiency, robustness to specific input distributions, or performance on niche but critical tasks.
-
-Those who know the most about an AI model's capabilities are the developers themselves. But developers have incentives that may not align with honest reporting. This creates an **information design problem in reverse**: instead of the designer choosing what to reveal (as in §3.4), the *evaluated agent* chooses what metrics to bring to the evaluator's attention.
-
-### The Agency Game {#sec-agency-game}
-
-@wang2024relying model this interaction as a principal-agent game:
-
-- **Principal (evaluator):** Contracts an agent to complete a task. Receives value $b$ if the task is completed, $0$ otherwise.
-- **Agent (AI developer/model):** Has a private cost $C \sim F$ for exerting effort. Observes both the proposed contract and their realized cost before deciding whether to exert effort.
-- **Metric $X$:** A variable correlated with $C$ that the agent knows about but the principal does not---an *unknown unknown* for the evaluator.
-
-Before the principal designs the contract, the agent can choose to **reveal** the existence and value of $X$, **conceal** it, or **garble** it (reveal a noisy version).
-
-**Concealed information contract.** Without knowledge of $X$, the principal offers a single price $p^*$ that maximizes their expected utility:
-
-$$
-\Pi_{\text{con}}(p) = F(p)(b - p)
-$$
-
-The agent accepts if $C \leq p$, so the agent's expected utility is $V_{\text{con}}(p) = \mathbb{E}[(p - C)\mathbf{1}(C < p)]$.
-
-**Revealed information contract.** If $X$ is revealed, the principal can condition the price on $X$, setting $\rho(x)$ for each value $x$:
-
-$$
-\Pi_{\text{rev}}(\rho) = \mathbb{E}[F_X(\rho(X))(b - \rho(X))]
-$$
-
-This is analogous to third-degree price discrimination---the principal can tailor the contract to the agent's type as indicated by $X$.
-
-### Revelation Incentives {#sec-revelation}
-
-When does the agent prefer to reveal $X$? The answer depends on what $X$ reveals about the cost:
-
-::: {.callout-note title="Revelation Theorems (Wang et al. 2024)"}
-Consider a family of *thresholding features* $X_t = \mathbf{1}(C \leq t)$, where $X_t = 1$ indicates low cost.
-
-**Theorem 1 (Agents reveal for high thresholds):** Under regularity conditions, there exists $\bar{t}$ such that for all $t > \bar{t}$, the agent prefers to reveal $X_t$. Features that identify *high-cost settings* are revealed.
-
-**Theorem 2 (Agents conceal for low thresholds):** Under regularity conditions, $\Delta'(0) < 0$, meaning the agent prefers to conceal features near $t = 0$. Features that identify *low-cost settings* are concealed.
-
-**Intuition:** Revealing a metric that says "this task is hard" leads the principal to offer higher compensation, benefiting the agent. Revealing a metric that says "this task is easy" leads to lower compensation, hurting the agent.
-:::
-
-For AI benchmarks, this has a striking interpretation: **AI developers have incentives to highlight metrics where their models struggle (high cost/difficulty) and to conceal metrics where their models perform easily.** This might seem counterintuitive, but the logic is clear---revealing difficulty leads to more generous scoring or adjusted expectations, while revealing ease leads to higher bars.
-
-
-### Garbling and Differential Privacy {#sec-garbling}
-
-The analysis becomes richer when agents can **garble**: reveal a noisy version of $X$ rather than the exact value. Define $Y = X$ with probability $1 - \varepsilon$ and $Y = \xi$ (random noise) with probability $\varepsilon$.
-
-@wang2024relying show that garbling can lead to **Pareto improvements**:
-
-::: {.callout-note title="The Value of Privacy in Evaluation"}
-Under regularity conditions:
-
-1. **Agent prefers garbling:** The agent can prefer to reveal a garbled metric over both full revelation and full concealment.
-2. **Total welfare increases:** $W_{\text{garb}}(\varepsilon^*) \geq W_{\text{garb}}(0) = W_{\text{con}}$---optimal garbling increases total welfare over concealment.
-3. **Connection to differential privacy:** The garbling mechanism satisfies $O(\varepsilon)$-local differential privacy with respect to $X$.
-
-The optimal amount of garbling chosen by the agent is *less* than the socially optimal amount: the agent under-garbles relative to the welfare maximum.
-:::
-
-This is remarkable: both the evaluator and the evaluated agent can benefit from the agent revealing a *noisy* metric. The noise prevents the principal from perfectly price-discriminating, leaving the agent with some surplus, while still providing enough information to improve contract efficiency.
-
-```{pyodide-python}
-#| label: agency-game
-#| autorun: true
-#| fig-cap: "The agency game: agent's utility under concealment, revelation, and optimal garbling. Garbling can Pareto-dominate both extremes."
-
-from scipy.optimize import minimize_scalar
-
-def principal_optimal_price(F_cdf, b, grid):
-    """Find price maximizing F(p)(b-p) over a grid."""
-    values = F_cdf(grid) * (b - grid)
-    best_idx = np.argmax(values)
-    return grid[best_idx]
-
-def agent_utility(p, F_cdf, f_pdf, c_grid):
-    """Agent's expected utility: E[(p - C) 1(C < p)]."""
-    mask = c_grid < p
-    if mask.sum() == 0:
-        return 0.0
-    dc = c_grid[1] - c_grid[0]
-    return np.sum((p - c_grid[mask]) * f_pdf(c_grid[mask])) * dc
-
-def compute_utilities(theta, b, F0_cdf, F1_cdf, f0_pdf, f1_pdf, c_grid, p_grid):
-    """Compute principal and agent utilities for concealed and revealed settings."""
-    # Mixture CDF and PDF
-    F_mix = lambda c: theta * F1_cdf(c) + (1 - theta) * F0_cdf(c)
-    f_mix = lambda c: theta * f1_pdf(c) + (1 - theta) * f0_pdf(c)
-
-    # Concealed: single price
-    p_con = principal_optimal_price(F_mix, b, p_grid)
-    V_con = agent_utility(p_con, F_mix, f_mix, c_grid)
-    Pi_con = F_mix(p_con) * (b - p_con)
-
-    # Revealed: separate prices for X=0 and X=1
-    p0 = principal_optimal_price(F0_cdf, b, p_grid)
-    p1 = principal_optimal_price(F1_cdf, b, p_grid)
-    V_rev = (1 - theta) * agent_utility(p0, F0_cdf, f0_pdf, c_grid) + \
-            theta * agent_utility(p1, F1_cdf, f1_pdf, c_grid)
-    Pi_rev = (1 - theta) * F0_cdf(p0) * (b - p0) + theta * F1_cdf(p1) * (b - p1)
-
-    return V_con, Pi_con, V_rev, Pi_rev, p_con, p0, p1
-
-# Setup: Mixture of exponentials
-b = 1.5  # Principal's value
-theta = 0.5  # P(X=1)
-lambda0 = 0.8  # Mean cost when X=0 (higher cost)
-lambda1 = 0.3  # Mean cost when X=1 (lower cost)
-
-from scipy.stats import expon
-c_grid = np.linspace(0.001, 4, 500)
-p_grid = np.linspace(0.001, b, 300)
-
-F0_cdf = lambda c: expon.cdf(c, scale=lambda0)
-F1_cdf = lambda c: expon.cdf(c, scale=lambda1)
-f0_pdf = lambda c: expon.pdf(c, scale=lambda0)
-f1_pdf = lambda c: expon.pdf(c, scale=lambda1)
-
-V_con, Pi_con, V_rev, Pi_rev, p_con, p0, p1 = compute_utilities(
-    theta, b, F0_cdf, F1_cdf, f0_pdf, f1_pdf, c_grid, p_grid)
-
-# Garbling: sweep epsilon from 0 (fully revealed) to 1 (concealed)
-# When garbling with parameter eps, effective CDFs become mixtures
-epsilons = np.linspace(0, 0.5, 50)
-V_garb = []
-Pi_garb = []
-W_garb = []
-
-for eps in epsilons:
-    # Garbled: Y=X with prob 1-eps, Y~Bernoulli(theta) with prob eps
-    # P(Y=1|X=1) = (1-eps) + eps*theta = 1 - eps*(1-theta)
-    # P(Y=1|X=0) = eps*theta
-    # P(Y=0|X=1) = eps*(1-theta)
-    # P(Y=0|X=0) = 1 - eps*theta
-
-    p_y1_x1 = 1 - eps * (1 - theta)
-    p_y1_x0 = eps * theta
-    p_y0_x1 = eps * (1 - theta)
-    p_y0_x0 = 1 - eps * theta
-
-    # P(Y=1) = theta * p_y1_x1 + (1-theta) * p_y1_x0
-    p_y1 = theta * p_y1_x1 + (1 - theta) * p_y1_x0
-
-    if p_y1 < 1e-10 or p_y1 > 1 - 1e-10:
-        V_garb.append(V_con)
-        Pi_garb.append(Pi_con)
-        W_garb.append(V_con + Pi_con)
-        continue
-
-    p_y0 = 1 - p_y1
-
-    # Conditional cost distributions given Y
-    # F(c|Y=1) = [theta * p_y1_x1 * F1(c) + (1-theta) * p_y1_x0 * F0(c)] / P(Y=1)
-    Fy1_cdf = lambda c, t=theta, a=p_y1_x1, bt=p_y1_x0, py=p_y1: \
-        (t * a * F1_cdf(c) + (1-t) * bt * F0_cdf(c)) / py
-    Fy0_cdf = lambda c, t=theta, a=p_y0_x1, bt=p_y0_x0, py=p_y0: \
-        (t * a * F1_cdf(c) + (1-t) * bt * F0_cdf(c)) / py
-    fy1_pdf = lambda c, t=theta, a=p_y1_x1, bt=p_y1_x0, py=p_y1: \
-        (t * a * f1_pdf(c) + (1-t) * bt * f0_pdf(c)) / py
-    fy0_pdf = lambda c, t=theta, a=p_y0_x1, bt=p_y0_x0, py=p_y0: \
-        (t * a * f1_pdf(c) + (1-t) * bt * f0_pdf(c)) / py
-
-    # Optimal prices for each Y value
-    pg1 = principal_optimal_price(Fy1_cdf, b, p_grid)
-    pg0 = principal_optimal_price(Fy0_cdf, b, p_grid)
-
-    v_g = p_y1 * agent_utility(pg1, Fy1_cdf, fy1_pdf, c_grid) + \
-          p_y0 * agent_utility(pg0, Fy0_cdf, fy0_pdf, c_grid)
-    pi_g = p_y1 * Fy1_cdf(pg1) * (b - pg1) + p_y0 * Fy0_cdf(pg0) * (b - pg0)
-
-    V_garb.append(v_g)
-    Pi_garb.append(pi_g)
-    W_garb.append(v_g + pi_g)
-
-fig, axes = plt.subplots(1, 3, figsize=(6, 2.5))
-
-# Agent utility across garbling levels
-axes[0].plot(epsilons, V_garb, 'b-', linewidth=2, label='Agent (garbled)')
-axes[0].axhline(V_con, color='gray', linestyle='--', linewidth=1.5, label='Concealed')
-axes[0].axhline(V_rev, color='orange', linestyle=':', linewidth=1.5, label='Fully revealed')
-if len(V_garb) > 0:
-    best_eps = epsilons[np.argmax(V_garb)]
-    axes[0].axvline(best_eps, color='green', linestyle=':', alpha=0.5)
-    axes[0].plot(best_eps, max(V_garb), 'g*', markersize=12, label=f'Optimal ε={best_eps:.2f}')
-axes[0].set_xlabel('Garbling parameter (ε)')
-axes[0].set_ylabel("Agent's utility")
-axes[0].set_title("Agent's Revelation Incentives")
-axes[0].legend(fontsize=6)
-axes[0].grid(True, alpha=0.3)
-
-# Total welfare
-axes[1].plot(epsilons, W_garb, 'purple', linewidth=2, label='Total welfare')
-axes[1].axhline(V_con + Pi_con, color='gray', linestyle='--', linewidth=1.5, label='Concealed')
-axes[1].axhline(V_rev + Pi_rev, color='orange', linestyle=':', linewidth=1.5, label='Revealed')
-axes[1].set_xlabel('Garbling parameter (ε)')
-axes[1].set_ylabel('Total welfare')
-axes[1].set_title('Welfare Effects of Garbling')
-axes[1].legend(fontsize=6)
-axes[1].grid(True, alpha=0.3)
-
-# Summary bar chart
-categories = ['Conceal', 'Reveal', 'Optimal\nGarble']
-agent_vals = [V_con, V_rev, max(V_garb)]
-principal_vals = [Pi_con, Pi_rev,
-                  Pi_garb[np.argmax(V_garb)] if len(Pi_garb) > 0 else Pi_con]
-
-x = np.arange(len(categories))
-width = 0.35
-axes[2].bar(x - width/2, agent_vals, width, label='Agent', alpha=0.8, color='#5B8DEE')
-axes[2].bar(x + width/2, principal_vals, width, label='Principal', alpha=0.8, color='#F0A35C')
-axes[2].set_xticks(x)
-axes[2].set_xticklabels(categories)
-axes[2].set_ylabel('Expected Utility')
-axes[2].set_title('Utility Comparison')
-axes[2].legend(fontsize=7)
-axes[2].grid(True, alpha=0.3, axis='y')
-
-plt.tight_layout()
-plt.show()
-
-print(f"Agent utility — Conceal: {V_con:.4f}, Reveal: {V_rev:.4f}, "
-      f"Optimal garble: {max(V_garb):.4f}")
-print(f"Principal utility — Conceal: {Pi_con:.4f}, Reveal: {Pi_rev:.4f}")
-print(f"Total welfare — Conceal: {V_con+Pi_con:.4f}, "
-      f"Optimal garble: {max(W_garb):.4f}")
-```
-
-
-### Application: AI Benchmark Design as a Principal-Agent Problem {#sec-benchmark-agent}
-
-The Wang et al. framework maps directly onto AI evaluation:
-
-| Agency Game Concept | AI Evaluation Analogy |
-|--------------------|-----------------------|
-| Principal | Benchmark designer, regulator, user |
-| Agent | AI developer, model provider |
-| Cost $C$ | True difficulty/limitation of the model |
-| Metric $X$ | Capability metric known to the developer but not the evaluator |
-| Task value $b$ | Social value of deploying a capable model |
-| Reveal | Developer shares internal evaluation results |
-| Conceal | Developer withholds unfavorable metrics |
-| Garble | Developer shares aggregate or noisy metrics |
-
-**Key implications for benchmark design:**
-
-1. **Developers reveal hard differentiators.** If a metric separates a model's hardest tasks from the rest, the developer benefits from sharing it---the evaluator will set more realistic expectations and offer more generous terms.
-
-2. **Developers conceal easy differentiators.** If a metric reveals that certain tasks are trivially easy for the model, the developer prefers to keep it hidden---otherwise, the evaluator will raise the bar for those tasks.
-
-3. **Privacy-preserving evaluation can help everyone.** When developers can add noise to shared metrics (garbling), both sides can benefit. This provides an economic rationale for differential privacy in AI evaluation, beyond the usual privacy-for-its-own-sake argument.
-
-4. **Benchmark contamination as strategic concealment.** When a model's training data includes benchmark items, the developer effectively conceals the true difficulty---items that should be hard become easy, distorting the measurement. The contamination problem can be understood as a strategic concealment of a cost-relevant metric.
-
-
-## Synthesis: Design Principles for AI Benchmarks {#sec-synthesis}
-
-This chapter has developed three layers of design theory for AI evaluation. The table below summarizes the key insights:
-
-| Layer | Framework | Key Principle | Design Implication |
-|-------|-----------|---------------|-------------------|
-| Statistical | Fisher information, D-optimality | Maximize information per evaluation | Use adaptive testing (CAT); select items with diverse difficulties matching the target ability range |
-| Robust | Maxmin Expected Utility | Prepare for worst-case uncertainty | Spread item difficulties uniformly; don't assume a fixed ability distribution |
-| Strategic | Mechanism & information design | Align incentives, choose optimal disclosure | Use dominant-strategy mechanisms; allow privacy-preserving metric sharing |
-
-**Connecting to the book's arc:**
-
-- **From Chapter 1:** The Rasch model's specific objectivity (item parameters independent of the population) is a natural robustness property. D-optimal design formalizes and extends this. The sufficiency of sum scores determines when coarse reporting loses no information.
-
-- **From Chapter 2:** Fisher information, introduced for understanding estimation precision, now serves as the objective function for design. The EM algorithm and Bayesian methods from Chapter 2 provide the tools for calibrating item parameters needed before CAT or D-optimal design can be applied.
-
-- **To Chapter 4:** Good design directly enables the generalization methods of Chapter 4. Factor model pretraining requires well-calibrated items with diverse loadings (D-optimal in the factor model sense). The cold-start prediction framework assumes honest reporting of model characteristics---a property that mechanism design helps ensure.
-
-
-## Discussion Questions {#sec-design-discussion}
-
-1. **Optimal vs. robust design.** When is it better to design a benchmark optimized for the current model population versus one that is robust to future changes? What information would you need to make this decision?
-
-2. **Strategic behavior in practice.** Give three concrete examples of how AI developers might behave strategically in response to benchmark design choices. For each, describe a design modification that would mitigate the strategic behavior.
-
-3. **Privacy and evaluation.** The garbling result suggests that adding noise to evaluation metrics can help both evaluators and developers. How would you implement this in practice? What are the limits of this approach?
-
-4. **Adaptive testing for AI.** What are the practical challenges in deploying CAT for AI evaluation? Consider: determinism of model responses, cost of API calls, benchmark contamination, and the need for pre-calibrated items.
-
-5. **Information granularity.** A new AI benchmark reports both an aggregate score and 12 subscores across capability categories. A regulator uses the aggregate score for certification. A researcher uses subscores for model comparison. Analyze the information design trade-offs from both perspectives.
-
-
-## Bibliographic Notes {#sec-design-bib}
+## Bibliographic Notes {#sec-efficient-bib}
 
 ### Optimal Experimental Design
 
@@ -1365,26 +588,10 @@ The theory of optimal experimental design originates with @kiefer1959optimum. D-
 
 ### Computerized Adaptive Testing
 
-CAT has a rich history beginning with @lord1970some. The Fisher information criterion for item selection was developed by @birnbaum1968some. For multidimensional CAT, see @segall1996multidimensional. Applications to AI evaluation are emerging; see @polo2024tinybenchmarks for recent work on efficient benchmark design.
-
-### Decision Theory Under Ambiguity
-
-The Ellsberg paradox was introduced by @ellsberg1961risk. The maxmin expected utility model was axiomatized by @gilboa1989maxmin, building on @schmeidler1989subjective. For a survey of ambiguity in decision theory, see @gilboa2009decision. The connection between ambiguity aversion and robust optimization is developed in @hansen2001robust.
-
-### Bayesian Persuasion and Information Design
-
-Bayesian persuasion was introduced by @kamenica2011bayesian. The broader field of information design is surveyed in @bergemann2019information. For applications to market design and price discrimination, see @bergemann2015limits.
-
-### Robust Mechanism Design
-
-The foundational paper is @bergemann2005robust; see also @bergemann2013robust for the characterization via Bayes correlated equilibria. @wilson1987game motivates the robustness program. For introductions to mechanism design, see Chapter 23 of @mas1995microeconomic or @borgers2015introduction.
-
-### Strategic Metric Design
-
-The agency game model for metric design is from @wang2024relying. Related work on information revelation in principal-agent settings includes @laffont1986using and @milgrom1986relying. The connection to price discrimination is explored in @bergemann2015limits and @varian1985price. For differential privacy foundations, see @dwork2006calibrating.
+CAT has a rich history beginning with @lord1970some. The Fisher information criterion for item selection was developed by @birnbaum1968some. For multidimensional CAT, see @segall1996multidimensional. Applications to AI evaluation are emerging; see @polo2024tinybenchmarks for recent work on efficient benchmark design. @truong2025irsl demonstrate the practical impact of adaptive testing in the scaling law setting: by combining IRT-calibrated item parameters with Elo-based adaptive item selection, they achieve comparable decision accuracy to full-scale evaluation using only 50 questions per benchmark — a 99.9% reduction in the query budget.
 
 
-## Exercises {#sec-design-exercises}
+## Exercises {#sec-efficient-exercises}
 
 ### Theoretical Exercises
 
@@ -1392,24 +599,12 @@ The agency game model for metric design is from @wang2024relying. Related work o
 
 **Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(a_j(\theta - \beta_j))$, derive the Fisher information and show that it equals $a_j^2 P_j(1 - P_j)$. How does discrimination $a_j$ affect optimal item selection?
 
-**Exercise 3.3** ($\star\star$): Prove that for the Gilboa-Schmeidler maxmin EU representation, if $\mathcal{C}$ is a singleton, the model reduces to standard expected utility.
-
-**Exercise 3.4** ($\star\star\star$): In the certification persuasion game with prior $\mu_0 < \tau$, show that the optimal signal achieves certification probability $\mu_0 / \tau$ and that this equals $\text{cav}(v)(\mu_0)$.
-
-**Exercise 3.5** ($\star\star$): In the agency game, show that the principal always benefits from the agent revealing $X$ (i.e., $\Pi_{\text{rev}} \geq \Pi_{\text{con}}$) under the monotone likelihood ratio property.
+**Exercise 3.3** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.
 
 ### Computational Exercises
 
-**Exercise 3.6** ($\star\star$): Extend the D-optimal design simulation to a 2-dimensional factor model with $K = 2$. Implement item selection using $j^* = \arg\max_j \det(\mathcal{I} + I_j)$ where $I_j = P_j(1 - P_j) V_j V_j^\top$. Compare the selected item loading vectors to random selection.
+**Exercise 3.4** ($\star\star$): Extend the D-optimal design simulation to a 2-dimensional factor model with $K = 2$. Implement item selection using $j^* = \arg\max_j \det(\mathcal{I} + I_j)$ where $I_j = P_j(1 - P_j) V_j V_j^\top$. Compare the selected item loading vectors to random selection.
 
-**Exercise 3.7** ($\star\star\star$): Implement the full agency game with garbling for a uniform cost distribution $C \sim \text{Unif}(0, 1)$ and a thresholding feature $X_t = \mathbf{1}(C \leq t)$. Reproduce Figure 5 from @wang2024relying showing the agent's utility difference as a function of $(b, t)$.
+**Exercise 3.5** ($\star\star$): Compare the convergence of CAT across models with different ability levels. Does CAT require more items for extreme abilities (very high or very low)? Why?
 
-**Exercise 3.8** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.
-
-### Discussion Exercises
-
-**Exercise 3.9:** Compare the convergence of CAT across models with different ability levels. Does CAT require more items for extreme abilities (very high or very low)? Why?
-
-**Exercise 3.10:** Investigate the sensitivity of CAT to misspecification of item parameters. If the calibration sample differs systematically from the test population, how does CAT performance degrade? Simulate this scenario.
-
-**Exercise 3.11:** A company claims their AI model achieves 95% accuracy on a benchmark. Analyze this claim through the lens of information design: What signal structure (benchmark design) would maximize vs. minimize the probability of this claim being true?
+**Exercise 3.6** ($\star\star$): Investigate the sensitivity of CAT to misspecification of item parameters. If the calibration sample differs systematically from the test population, how does CAT performance degrade? Simulate this scenario.

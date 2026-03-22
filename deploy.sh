@@ -1,15 +1,19 @@
 #!/bin/bash
 set -e
 
+# Derive paths from script location (works on any machine)
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+USER_DIR="$(dirname "$PROJECT_DIR")"
+
 # Set HuggingFace cache to writable location
 export HF_HOME=/lfs/local/0/sttruong/.cache/huggingface
 
 # Activate conda environment
-source /lfs/skampere2/0/sttruong/miniconda3/etc/profile.d/conda.sh
+source "$USER_DIR/miniconda3/etc/profile.d/conda.sh"
 conda activate aims
 
 # Navigate to project
-cd /lfs/skampere2/0/sttruong/aimslab/aims_textbook
+cd "$PROJECT_DIR"
 
 # Pull latest changes
 # git pull

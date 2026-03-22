@@ -1,0 +1,310 @@
+[
+  {
+    "benchmark": "MMLU-Pro",
+    "category": "Knowledge",
+    "n_items": 12032,
+    "x": 7.208,
+    "y": 8.535
+  },
+  {
+    "benchmark": "HLE",
+    "category": "Knowledge",
+    "n_items": 2500,
+    "x": 7.301,
+    "y": 8.607
+  },
+  {
+    "benchmark": "LiveBench",
+    "category": "Knowledge",
+    "n_items": 1436,
+    "x": 6.177,
+    "y": 6.366
+  },
+  {
+    "benchmark": "C-Eval",
+    "category": "Knowledge (Chinese)",
+    "n_items": 13948,
+    "x": 9.874,
+    "y": 16.687
+  },
+  {
+    "benchmark": "CMMLU",
+    "category": "Knowledge (Chinese)",
+    "n_items": 11917,
+    "x": 9.855,
+    "y": 16.698
+  },
+  {
+    "benchmark": "KMMLU",
+    "category": "Knowledge (Korean)",
+    "n_items": 243777,
+    "x": 15.623,
+    "y": 8.866
+  },
+  {
+    "benchmark": "AfriEval",
+    "category": "Knowledge (African)",
+    "n_items": 329383,
+    "x": 0.994,
+    "y": 3.171
+  },
+  {
+    "benchmark": "AsiaEval",
+    "category": "Knowledge (Asian)",
+    "n_items": 92043,
+    "x": 5.612,
+    "y": 6.872
+  },
+  {
+    "benchmark": "IberBench",
+    "category": "Knowledge (Iberian)",
+    "n_items": 27356,
+    "x": 4.629,
+    "y": 8.665
+  },
+  {
+    "benchmark": "BigCodeBench",
+    "category": "Code Generation",
+    "n_items": 1140,
+    "x": 7.078,
+    "y": 6.314
+  },
+  {
+    "benchmark": "EvalPlus",
+    "category": "Code Generation",
+    "n_items": 542,
+    "x": 7.236,
+    "y": 7.21
+  },
+  {
+    "benchmark": "LiveCodeBench",
+    "category": "Code Generation",
+    "n_items": 1055,
+    "x": 7.538,
+    "y": 8.691
+  },
+  {
+    "benchmark": "CRUXEval",
+    "category": "Code Reasoning",
+    "n_items": 800,
+    "x": 7.277,
+    "y": 7.016
+  },
+  {
+    "benchmark": "SWE-bench",
+    "category": "Software Engineering",
+    "n_items": 500,
+    "x": 7.106,
+    "y": 4.974
+  },
+  {
+    "benchmark": "SWE-bench Full",
+    "category": "Software Engineering",
+    "n_items": 2294,
+    "x": 6.963,
+    "y": 4.778
+  },
+  {
+    "benchmark": "SWE-bench Java",
+    "category": "Software Engineering",
+    "n_items": 390,
+    "x": 5.794,
+    "y": 5.739
+  },
+  {
+    "benchmark": "SWE-bench ML",
+    "category": "Software Engineering",
+    "n_items": 2684,
+    "x": 6.793,
+    "y": 4.917
+  },
+  {
+    "benchmark": "SWE-PolyBench",
+    "category": "Software Engineering",
+    "n_items": 2110,
+    "x": 2.913,
+    "y": 2.022
+  },
+  {
+    "benchmark": "MLE-bench",
+    "category": "ML Engineering",
+    "n_items": 75,
+    "x": 6.321,
+    "y": 5.37
+  },
+  {
+    "benchmark": "BFCL",
+    "category": "Tool Use",
+    "n_items": 4751,
+    "x": 6.277,
+    "y": 5.589
+  },
+  {
+    "benchmark": "ToolBench",
+    "category": "Tool Use",
+    "n_items": 765,
+    "x": 5.684,
+    "y": 5.12
+  },
+  {
+    "benchmark": "ARC-AGI",
+    "category": "Reasoning",
+    "n_items": 400,
+    "x": 10.847,
+    "y": -6.982
+  },
+  {
+    "benchmark": "MathArena",
+    "category": "Math",
+    "n_items": 665,
+    "x": 7.588,
+    "y": 6.534
+  },
+  {
+    "benchmark": "WebArena",
+    "category": "Web Agent",
+    "n_items": 812,
+    "x": 4.855,
+    "y": 3.814
+  },
+  {
+    "benchmark": "WorkArena",
+    "category": "Web Agent",
+    "n_items": 118,
+    "x": 5.131,
+    "y": 5.68
+  },
+  {
+    "benchmark": "AgentDojo",
+    "category": "Agent",
+    "n_items": 132,
+    "x": 4.063,
+    "y": 2.007
+  },
+  {
+    "benchmark": "GAIA",
+    "category": "Agent",
+    "n_items": 165,
+    "x": 5.699,
+    "y": 5.317
+  },
+  {
+    "benchmark": "OSWorld",
+    "category": "Desktop Agent",
+    "n_items": 369,
+    "x": 1.772,
+    "y": 9.23
+  },
+  {
+    "benchmark": "TheAgentCompany",
+    "category": "Agent",
+    "n_items": 349,
+    "x": 5.992,
+    "y": 4.666
+  },
+  {
+    "benchmark": "AppWorld",
+    "category": "Agent",
+    "n_items": 732,
+    "x": 6.671,
+    "y": 5.771
+  },
+  {
+    "benchmark": "AndroidWorld",
+    "category": "Mobile Agent",
+    "n_items": 116,
+    "x": 6.09,
+    "y": 4.788
+  },
+  {
+    "benchmark": "ClineBench",
+    "category": "Coding Agent",
+    "n_items": 12,
+    "x": 6.876,
+    "y": 5.253
+  },
+  {
+    "benchmark": "PaperBench",
+    "category": "Research Agent",
+    "n_items": 11,
+    "x": 5.042,
+    "y": 4.161
+  },
+  {
+    "benchmark": "AgentBench",
+    "category": "Agent",
+    "n_items": 8,
+    "x": 6.26,
+    "y": 5.31
+  },
+  {
+    "benchmark": "Terminal-Bench",
+    "category": "Terminal Agent",
+    "n_items": 89,
+    "x": 6.519,
+    "y": 6.22
+  },
+  {
+    "benchmark": "AlpacaEval",
+    "category": "Preference",
+    "n_items": 805,
+    "x": 5.065,
+    "y": 4.692
+  },
+  {
+    "benchmark": "WildBench",
+    "category": "Preference",
+    "n_items": 1024,
+    "x": 6.69,
+    "y": 5.886
+  },
+  {
+    "benchmark": "CORE-Bench",
+    "category": "Reproducibility",
+    "n_items": 270,
+    "x": 6.351,
+    "y": 5.303
+  },
+  {
+    "benchmark": "EditBench",
+    "category": "Code Editing",
+    "n_items": 540,
+    "x": 4.297,
+    "y": 10.147
+  },
+  {
+    "benchmark": "AfriMedQA",
+    "category": "Medical (African)",
+    "n_items": 15274,
+    "x": 8.43,
+    "y": 1.198
+  },
+  {
+    "benchmark": "CyBench",
+    "category": "Security",
+    "n_items": 10,
+    "x": 7.079,
+    "y": 8.683
+  },
+  {
+    "benchmark": "DPAI Arena",
+    "category": "Java SWE",
+    "n_items": 141,
+    "x": 8.762,
+    "y": 13.598
+  },
+  {
+    "benchmark": "SIB-200",
+    "category": "Multilingual",
+    "n_items": 41820,
+    "x": 3.163,
+    "y": 6.97
+  },
+  {
+    "benchmark": "HELM Multilingual",
+    "category": "Multilingual",
+    "n_items": 40273,
+    "x": -4.228,
+    "y": -3.2
+  }
+]

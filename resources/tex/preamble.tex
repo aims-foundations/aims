@@ -165,6 +165,10 @@
 \usepackage{imakeidx}
 \makeindex[intoc=true] %, columns=3, columnseprule=true, options=-s latex/indexstyles.ist]
 
+% use numeric footnotes to avoid "Counter too large" with links-as-notes
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\renewcommand{\thempfootnote}{\arabic{mpfootnote}}
+
 % temporary settings for copyediting
 % \setstretch{2}
 % \usepackage{lineno}

@@ -55,10 +55,10 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 
 **Lecture 1: Validity Frameworks and Evidence**
 
-- From reliability to validity: motivating the distinction (15 min)
-- A taxonomy of validity evidence: content, criterion, construct, external, consequential (30 min)
-- Threats to validity in AI evaluation (25 min)
-- Discussion: case studies of validity failures (5 min)
+- Borsboom's realist framework: validity as truth, warrant inference, semantic indeterminacy (20 min)
+- From reliability to validity: motivating the distinction (10 min)
+- A taxonomy of validity evidence: content, criterion, construct, external, consequential (25 min)
+- Threats to validity in AI evaluation (20 min)
 
 **Lecture 2: Diagnostic Tools**
 
@@ -80,6 +80,109 @@ This chapter introduces validity-specific notation: $g$ (group membership for DI
 :::
 
 
+## Borsboom's Warrant Inference Framework {#sec-borsboom}
+
+Before we can assess whether an evaluation is valid, we must understand what validity *means*. This seemingly philosophical question has profound practical implications. If we do not have a clear conception of validity, we cannot evaluate whether our benchmarks actually measure what we intend.
+
+The Dutch psychometrician Denny Borsboom has developed the most influential contemporary framework for understanding measurement validity. His approach, which we call the *realist framework*, provides the philosophical foundation for the AIMS approach to AI evaluation.
+
+### Validity as Truth, Not Evidence {#sec-validity-truth}
+
+Traditional approaches to validity, following Cronbach and Messick, treat validity as a matter of *evidence accumulation*. Under this view, a test is valid to the extent that we have gathered evidence supporting its intended interpretation. Validity becomes a matter of degree: more evidence means more validity.
+
+Borsboom rejects this view. He argues that validity is fundamentally about *truth*, not evidence:
+
+::: {.callout-note title="Borsboom's Definition of Validity"}
+A test is **valid** for measuring an attribute if and only if:
+
+1. The attribute **exists**, and
+2. Variations in the attribute **causally produce** variations in the measurement outcomes.
+
+This is a yes/no property: either the attribute causes the test responses, or it does not. Evidence is relevant to our *knowledge* of validity, but validity itself is about the causal structure of the world.
+:::
+
+This definition has several important implications:
+
+**Existence requirement.** The attribute being measured must actually exist. If we claim to measure "general intelligence" but there is no such thing---if intelligence is better understood as a collection of independent abilities---then no test can validly measure it. The existence question is empirical, not definitional.
+
+**Causation requirement.** The attribute must *cause* variation in test responses. It is not enough for test scores to be *correlated* with the attribute; the attribute must be the reason for the variation. This rules out tests that are merely predictive of outcomes without measuring the underlying construct.
+
+**Truth vs. evidence distinction.** We can have strong evidence that a test is valid and yet be wrong. Conversely, a test might be valid even if we have limited evidence. This distinction matters because it separates the epistemological question (what do we know?) from the ontological question (what is true?).
+
+### The Warrant Inference Problem {#sec-warrant-inference}
+
+Measurement involves an inference from observed data to latent constructs:
+
+$$
+\text{Observed: } Y_{ij} \quad \xrightarrow{\text{inference}} \quad \text{Latent: } \theta_i
+$$
+
+This inference requires a **warrant**: a justified belief that the test measures what it claims to measure. The warrant connects the measurement procedure (administering test items, recording responses) to the theoretical construct (ability, intelligence, reasoning).
+
+Following Toulmin's model of argumentation, a measurement argument has the structure:
+
+- **Claim:** "Model $i$ has ability $\theta_i = 2.3$"
+- **Data:** "Model $i$ answered 47 of 60 questions correctly"
+- **Warrant:** "The test measures the ability construct, and the scoring procedure accurately converts responses to ability estimates"
+- **Backing:** "The test items were written by domain experts, the psychometric model fits the data, ability estimates are stable across different item subsets"
+
+The warrant is the critical element. Without it, we have no basis for interpreting test scores as measurements of the intended construct. The backing provides evidence for the warrant but does not replace it.
+
+### Semantic Indeterminacy {#sec-semantic-indeterminacy}
+
+Borsboom identifies a fundamental problem in measurement: **semantic indeterminacy**. The meaning of a test score depends on which measurement system we adopt, but there is no compelling argument for any particular system.
+
+Consider three measurement frameworks:
+
+1. **Classical Test Theory (CTT):** A test score $X = T + E$ consists of a true score $T$ plus random error $E$. The true score is defined as the expected value of the test score over hypothetical replications.
+
+2. **Item Response Theory (IRT):** Test responses are generated by a latent ability $\theta$ through a probabilistic model $P(Y_{ij} = 1 | \theta_i, \beta_j)$. The ability parameter is a property of the person that exists independently of any particular test.
+
+3. **Network Models:** There is no latent variable. Test items are causally connected to each other, and correlations arise from these direct connections rather than a common cause.
+
+These frameworks make different claims about what test scores mean:
+
+| Framework | What does the score represent? |
+|-----------|-------------------------------|
+| CTT | Expected value over test replications |
+| IRT | Position on a latent continuum |
+| Network | Summary of a network state |
+
+The frameworks are not merely different parameterizations of the same model---they make different ontological commitments about what exists and what causes what. Yet we often cannot empirically distinguish between them.
+
+::: {.callout-note title="Implications for AI Evaluation"}
+When we say "GPT-4 has reasoning ability of 2.3 logits," what do we mean? The answer depends on our measurement framework:
+
+- **CTT interpretation:** If we tested GPT-4 many times on parallel forms, its average score would correspond to 2.3 logits.
+- **IRT interpretation:** GPT-4 possesses an underlying reasoning capacity that, when combined with item difficulties, generates the observed response pattern.
+- **Network interpretation:** GPT-4's responses to reasoning questions form a pattern that we summarize with the number 2.3, but there is no single "reasoning ability" being measured.
+
+These interpretations have different implications for how we should use and trust the measurement.
+:::
+
+### Construct Validity and the Nomological Network {#sec-nomological-network}
+
+If a construct cannot be directly observed, how do we know it exists? Cronbach and Meehl proposed that constructs are defined by their place in a **nomological network**---a web of theoretical relationships connecting the construct to other constructs and observable indicators.
+
+For example, "reasoning ability" might be defined by relationships like:
+
+- Higher reasoning ability $\to$ better performance on logic puzzles
+- Higher reasoning ability $\to$ better performance on mathematical proofs
+- Higher reasoning ability $\to$ correlation with general intelligence
+- Higher reasoning ability $\to$ development with education
+
+The construct gains meaning through these relationships. If a test score behaves as the theory predicts---if it correlates with the right things and not with the wrong things---we have evidence that it measures the intended construct.
+
+For AI evaluation, this suggests we need theoretical frameworks that specify:
+
+1. What capabilities should be related to benchmark performance
+2. What capabilities should be independent of benchmark performance
+3. How capabilities should develop with model scale or training
+4. How capabilities should transfer across domains
+
+Without such frameworks, we have benchmark scores without meaning.
+
+
 ## From Reliability to Validity {#sec-reliability-to-validity}
 
 Consider a coding benchmark that produces highly consistent scores: every time you evaluate a model, it gets roughly the same accuracy. The split-half reliability is 0.95, Cronbach's alpha is 0.93, and the G-coefficient from @sec-reliability is excellent. You might conclude that the benchmark is working well.
@@ -88,7 +191,7 @@ But suppose you investigate further and discover that the benchmark items were s
 
 This is the validity problem. Reliability asks: *does the evaluation give the same answer twice?* Validity asks the deeper question: *does the evaluation measure what it claims to measure?* A perfectly reliable instrument can be completely invalid---like a bathroom scale that always reads 70 kg regardless of who steps on it. Conversely, validity *requires* reliability: if measurements fluctuate randomly, they cannot track any underlying attribute.
 
-In @sec-foundations, we introduced Borsboom's realist definition of validity: a test is valid for measuring an attribute if and only if (a) the attribute exists, and (b) variation in the attribute *causally produces* variation in test scores [@borsboom2005measuring]. This is a demanding standard. It requires not just statistical association between scores and the target construct, but a causal mechanism connecting the two.
+In @sec-borsboom, we introduced Borsboom's realist definition of validity: a test is valid for measuring an attribute if and only if (a) the attribute exists, and (b) variation in the attribute *causally produces* variation in test scores [@borsboom2005measuring]. This is a demanding standard. It requires not just statistical association between scores and the target construct, but a causal mechanism connecting the two.
 
 More recently, @salaudeen2025measurement proposed a *claim-centered* framework for AI evaluation validity. Their key insight is that benchmarks are not valid or invalid in the abstract---they are valid *for specific claims*. A benchmark might validly support the claim "Model A scores higher than Model B on these 500 multiple-choice questions" while failing to support the broader claim "Model A reasons better than Model B." Validity is about the relationship between the measurement instrument, the intended interpretation, and the population of systems being evaluated.
 

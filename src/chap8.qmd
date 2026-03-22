@@ -240,6 +240,8 @@ This is a **content validity** failure in the sense of @sec-content-validity: th
 
 The following simulation demonstrates both the aggregation and judge error problems.
 
+{{< include _plt_setup.qmd >}}
+
 ```{pyodide-python}
 #| label: asr-comparison
 #| autorun: true
@@ -399,8 +401,6 @@ A random red-team evaluation that draws 100 attacks uniformly from an item bank 
 :::
 
 The following simulation demonstrates the key ideas: we generate adversarial and standard items, fit a two-dimensional model, and show that adversarial robustness is a distinct latent dimension from standard accuracy.
-
-{{< include _plt_setup.qmd >}}
 
 ```{pyodide-python}
 #| label: adversarial-irt

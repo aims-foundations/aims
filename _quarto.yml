@@ -134,6 +134,7 @@ book:
   # cookie-consent: true
   chapters:
     - index.qmd
+    - src/chap0.qmd
     - part: "Measurement as Predictive Modeling"
       chapters:
         - src/chap1.qmd

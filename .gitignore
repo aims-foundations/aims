@@ -80,6 +80,10 @@ renv/python/
 # Manim render cache
 media/
 
+# Large data files
+src/data/item_landscape_full.json
+src/data/curated_benchmarks/ultrafeedback_data/processed/item_content.csv
+
 # Claude Code config
 CLAUDE.md
 .claude/

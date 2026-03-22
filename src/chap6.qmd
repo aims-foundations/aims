@@ -140,7 +140,7 @@ When the benchmark is *valid* in Borsboom's sense, the primary path from $D$ and
 - **Differential item functioning** (@sec-dif-theory): An interaction $A \to Y$ that is not mediated by $\theta$. Certain architectures have advantages on certain items independent of their ability level.
 
 ::: {.callout-important title="Validity = No Unblocked Backdoor Paths"}
-Under Borsboom's causal framework, a benchmark is valid if and only if the *only* systematic path from the data-generating process to the observed score passes through the target construct $\theta$. Every unblocked non-$\theta$ path is a validity threat. The diagnostic tools from @sec-validity-diagnostics---DIF analysis, dimensionality assessment, item-fit statistics---are empirical tests for whether such paths exist.
+Under Borsboom's causal framework, a benchmark is valid if and only if the *only* systematic path from the data-generating process to the observed score passes through the target construct $\theta$. Every unblocked non-$\theta$ path is a validity threat. The diagnostic tools from @sec-validity-diagnostics — DIF analysis, dimensionality assessment, item-fit statistics — are empirical tests for whether such paths exist.
 :::
 
 

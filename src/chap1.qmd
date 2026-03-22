@@ -42,16 +42,15 @@ pyodide:
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, you will be able to:
 
-1. **Articulate** Borsboom's realist framework for validity and explain why measurement requires warrant inference about latent constructs.
-2. **Distinguish** between Item Response Theory, factor models, paired comparison systems (Elo, Bradley-Terry), and network models (GGM, Ising).
-3. **Explain** why the Rasch model holds a special status as "the measurement model" through the sufficiency of sum scores, specific objectivity, and test-free measurement.
-4. **Derive** the sufficiency theorem for the Rasch model and explain its implications for AI benchmark evaluation.
-5. **Compare** the prescriptive (Rasch school) and descriptive (general IRT) approaches to measurement and articulate when each is appropriate.
-6. **Trace** the historical development from Thurstone (1927) through Rasch (1960) to modern network psychometrics.
-7. **Connect** classical measurement concepts (reliability, validity, dimensionality) to contemporary AI benchmark evaluation.
-8. **Apply** measurement theory to analyze whether AI benchmarks satisfy the requirements for scientific measurement.
-9. **Implement** basic IRT models in Python and visualize item characteristic curves.
-10. **Evaluate** the assumptions underlying AI leaderboards and identify potential violations of measurement principles.
+1. **Distinguish** between Item Response Theory, factor models, paired comparison systems (Elo, Bradley-Terry), and network models (GGM, Ising).
+2. **Explain** why the Rasch model holds a special status as "the measurement model" through the sufficiency of sum scores, specific objectivity, and test-free measurement.
+3. **Derive** the sufficiency theorem for the Rasch model and explain its implications for AI benchmark evaluation.
+4. **Compare** the prescriptive (Rasch school) and descriptive (general IRT) approaches to measurement and articulate when each is appropriate.
+5. **Trace** the historical development from Thurstone (1927) through Rasch (1960) to modern network psychometrics.
+6. **Connect** classical measurement concepts (reliability, validity, dimensionality) to contemporary AI benchmark evaluation.
+7. **Apply** measurement theory to analyze whether AI benchmarks satisfy the requirements for scientific measurement.
+8. **Implement** basic IRT models in Python and visualize item characteristic curves.
+9. **Evaluate** the assumptions underlying AI leaderboards and identify potential violations of measurement principles.
 :::
 
 ::: {.callout-tip title="Video Overview" collapse="false"}
@@ -177,109 +176,6 @@ Throughout this book, we work with several large-scale evaluation corpora that r
 **Agent Leaderboard.** We include **Agent Leaderboard data** from Galileo AI, which evaluates the *agentic performance* of large language models across tool-use and reasoning scenarios. This dataset contains approximately **34,700 rows**, where each row corresponds to a question, the model's response, and a numerical score judged by GPT-4. The evaluation covers multiple agentic subjects with roughly 100 questions each, including approximately **40 distinct models** such as Gemini-2.5, Claude-3.5, GPT-4.1/4.5, Llama-4, and Qwen-2.5.
 
 Together, these four sources enable unified modeling of *accuracy*, *preference*, and *agency* within a shared latent-factor evaluation framework.
-
-
-## Borsboom's Warrant Inference Framework {#sec-borsboom}
-
-Before we can measure something, we must understand what measurement *means*. This seemingly philosophical question has profound practical implications. If we do not have a clear conception of validity, we cannot evaluate whether our benchmarks actually measure what we intend.
-
-The Dutch psychometrician Denny Borsboom has developed the most influential contemporary framework for understanding measurement validity. His approach, which we call the *realist framework*, provides the philosophical foundation for the AIMS approach to AI evaluation.
-
-### Validity as Truth, Not Evidence {#sec-validity-truth}
-
-Traditional approaches to validity, following Cronbach and Messick, treat validity as a matter of *evidence accumulation*. Under this view, a test is valid to the extent that we have gathered evidence supporting its intended interpretation. Validity becomes a matter of degree: more evidence means more validity.
-
-Borsboom rejects this view. He argues that validity is fundamentally about *truth*, not evidence:
-
-::: {.callout-note title="Borsboom's Definition of Validity"}
-A test is **valid** for measuring an attribute if and only if:
-
-1. The attribute **exists**, and
-2. Variations in the attribute **causally produce** variations in the measurement outcomes.
-
-This is a yes/no property: either the attribute causes the test responses, or it does not. Evidence is relevant to our *knowledge* of validity, but validity itself is about the causal structure of the world.
-:::
-
-This definition has several important implications:
-
-**Existence requirement.** The attribute being measured must actually exist. If we claim to measure "general intelligence" but there is no such thing---if intelligence is better understood as a collection of independent abilities---then no test can validly measure it. The existence question is empirical, not definitional.
-
-**Causation requirement.** The attribute must *cause* variation in test responses. It is not enough for test scores to be *correlated* with the attribute; the attribute must be the reason for the variation. This rules out tests that are merely predictive of outcomes without measuring the underlying construct.
-
-**Truth vs. evidence distinction.** We can have strong evidence that a test is valid and yet be wrong. Conversely, a test might be valid even if we have limited evidence. This distinction matters because it separates the epistemological question (what do we know?) from the ontological question (what is true?).
-
-### The Warrant Inference Problem {#sec-warrant-inference}
-
-Measurement involves an inference from observed data to latent constructs:
-
-$$
-\text{Observed: } Y_{ij} \quad \xrightarrow{\text{inference}} \quad \text{Latent: } \theta_i
-$$
-
-This inference requires a **warrant**: a justified belief that the test measures what it claims to measure. The warrant connects the measurement procedure (administering test items, recording responses) to the theoretical construct (ability, intelligence, reasoning).
-
-Following Toulmin's model of argumentation, a measurement argument has the structure:
-
-- **Claim:** "Model $i$ has ability $\theta_i = 2.3$"
-- **Data:** "Model $i$ answered 47 of 60 questions correctly"
-- **Warrant:** "The test measures the ability construct, and the scoring procedure accurately converts responses to ability estimates"
-- **Backing:** "The test items were written by domain experts, the psychometric model fits the data, ability estimates are stable across different item subsets"
-
-The warrant is the critical element. Without it, we have no basis for interpreting test scores as measurements of the intended construct. The backing provides evidence for the warrant but does not replace it.
-
-### Semantic Indeterminacy {#sec-semantic-indeterminacy}
-
-Borsboom identifies a fundamental problem in measurement: **semantic indeterminacy**. The meaning of a test score depends on which measurement system we adopt, but there is no compelling argument for any particular system.
-
-Consider three measurement frameworks:
-
-1. **Classical Test Theory (CTT):** A test score $X = T + E$ consists of a true score $T$ plus random error $E$. The true score is defined as the expected value of the test score over hypothetical replications.
-
-2. **Item Response Theory (IRT):** Test responses are generated by a latent ability $\theta$ through a probabilistic model $P(Y_{ij} = 1 | \theta_i, \beta_j)$. The ability parameter is a property of the person that exists independently of any particular test.
-
-3. **Network Models:** There is no latent variable. Test items are causally connected to each other, and correlations arise from these direct connections rather than a common cause.
-
-These frameworks make different claims about what test scores mean:
-
-| Framework | What does the score represent? |
-|-----------|-------------------------------|
-| CTT | Expected value over test replications |
-| IRT | Position on a latent continuum |
-| Network | Summary of a network state |
-
-The frameworks are not merely different parameterizations of the same model---they make different ontological commitments about what exists and what causes what. Yet we often cannot empirically distinguish between them.
-
-::: {.callout-note title="Implications for AI Evaluation"}
-When we say "GPT-4 has reasoning ability of 2.3 logits," what do we mean? The answer depends on our measurement framework:
-
-- **CTT interpretation:** If we tested GPT-4 many times on parallel forms, its average score would correspond to 2.3 logits.
-- **IRT interpretation:** GPT-4 possesses an underlying reasoning capacity that, when combined with item difficulties, generates the observed response pattern.
-- **Network interpretation:** GPT-4's responses to reasoning questions form a pattern that we summarize with the number 2.3, but there is no single "reasoning ability" being measured.
-
-These interpretations have different implications for how we should use and trust the measurement.
-:::
-
-### Construct Validity and the Nomological Network {#sec-nomological-network}
-
-If a construct cannot be directly observed, how do we know it exists? Cronbach and Meehl proposed that constructs are defined by their place in a **nomological network**---a web of theoretical relationships connecting the construct to other constructs and observable indicators.
-
-For example, "reasoning ability" might be defined by relationships like:
-
-- Higher reasoning ability $\to$ better performance on logic puzzles
-- Higher reasoning ability $\to$ better performance on mathematical proofs
-- Higher reasoning ability $\to$ correlation with general intelligence
-- Higher reasoning ability $\to$ development with education
-
-The construct gains meaning through these relationships. If a test score behaves as the theory predicts---if it correlates with the right things and not with the wrong things---we have evidence that it measures the intended construct.
-
-For AI evaluation, this suggests we need theoretical frameworks that specify:
-
-1. What capabilities should be related to benchmark performance
-2. What capabilities should be independent of benchmark performance
-3. How capabilities should develop with model scale or training
-4. How capabilities should transfer across domains
-
-Without such frameworks, we have benchmark scores without meaning.
 
 
 ## Probabilistic Models for Measurement {#sec-probabilistic-models}
@@ -1038,175 +934,11 @@ The Chatbot Arena (LMSYS) provides a concrete example of measurement concepts ap
 The Arena demonstrates both the power and limitations of measurement approaches. The Elo ratings provide a principled summary of human preferences, but interpreting what they mean requires the full apparatus of validity theory.
 
 
-## Generalization Experiments {#sec-generalization}
-
-To evaluate the robustness and transferability of learned factor models, we train and test them under various **masking schemes**, each representing a different notion of generalization. These masks determine which parts of the response matrix $Y$ are visible during training and which are held out for evaluation.
-
-### Masking Schemes for Evaluation {#sec-masking-schemes}
-
-| **Masking Type** | **Train Set** | **Test Set** | **Purpose** |
-|------------------|---------------|--------------|-------------|
-| Entry-wise random | 80% random entries | 20% random entries | Interpolation under missing-at-random |
-| Row holdout (random) | 80% of models, all items | 20% of models, all items | Generalization to unseen models |
-| Row holdout (shifted) | Slice of models (small→large) | Disjoint slice | Covariate-shift generalization |
-| Column holdout (random) | All models, 80% of items | All models, 20% of items | Generalization to unseen items |
-| Column holdout (shifted) | Subset of benchmarks | Held-out benchmarks | Cross-domain transfer |
-| Row-column block (L-mask) | $R_{tr} \times C_{tr}$ | $R_{te} \times C_{te}$ | Compositional generalization |
-| Temporal split | Models before cutoff | Models after cutoff | Temporal generalization |
-
-These settings parallel psychometric validation tests where new examinees, items, or contexts probe the invariance of latent constructs.
-
-### Implementation of Masking Functions
-
-```{python}
-#| eval: false
-
-import torch
-
-def random_mask(data_idtor, pct=0.8):
-    """Entry-wise random masking."""
-    train_idtor = torch.bernoulli(data_idtor * pct).int()
-    test_idtor = data_idtor.int() - train_idtor
-    return train_idtor, test_idtor
-
-def model_mask(data_idtor, pct_models=0.8, exposure_rate=0.3):
-    """Row holdout: hold out unseen models."""
-    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[train_row_mask, :] = data_idtor[train_row_mask, :]
-    train_idtor[~train_row_mask, :], _ = random_mask(data_idtor[~train_row_mask, :], pct=exposure_rate)
-    test_idtor = data_idtor - train_idtor
-    return train_idtor, test_idtor
-
-def item_mask(data_idtor, pct_items=0.8, exposure_rate=0.3):
-    """Column holdout: hold out unseen items."""
-    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[:, train_col_mask] = data_idtor[:, train_col_mask]
-    train_idtor[:, ~train_col_mask], _ = random_mask(data_idtor[:, ~train_col_mask], pct=exposure_rate)
-    test_idtor = data_idtor - train_idtor
-    return train_idtor, test_idtor
-
-def L_mask(data_idtor, pct_models=0.8, pct_items=0.8):
-    """Row-column block (L-mask): compositional generalization."""
-    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
-    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[train_row_mask][:, train_col_mask] = data_idtor[train_row_mask][:, train_col_mask]
-    test_idtor = data_idtor - train_idtor
-    test_idtor[train_row_mask, :] = 0
-    test_idtor[:, train_col_mask] = 0
-    return train_idtor, test_idtor
-```
-
-### Two-Stage Training for Holdout Generalization {#sec-two-stage}
-
-To avoid data contamination in row and column holdout experiments, we use a **two-stage training procedure**:
-
-#### Row Holdout: Estimating Parameters for Unseen Models
-
-When testing generalization to unseen models, we:
-
-1. **Stage 1:** Train on known models to learn item parameters $(V, Z)$
-2. **Stage 2:** Freeze $(V, Z)$ and estimate ability parameters $U$ for held-out models using their limited exposed responses
-
-This ensures item parameters are learned without information from test models.
-
-```{python}
-#| eval: false
-
-# Stage 1: Train on known models
-test_row = test_idtor.max(axis=1).values  # Identify held-out models
-model_stage1 = train_model(Y[~test_row, :], mask=train_idtor[~test_row, :])
-
-# Freeze V, Z from Stage 1
-V_frozen = model_stage1.V.detach()
-Z_frozen = model_stage1.Z.detach()
-
-# Stage 2: Estimate U for unseen models with frozen item parameters
-model_stage2 = train_model(Y[test_row, :], mask=train_idtor[test_row, :],
-                           V_fixed=V_frozen, Z_fixed=Z_frozen)
-```
-
-#### Column Holdout: Estimating Parameters for Unseen Items
-
-When testing generalization to unseen items, we:
-
-1. **Stage 1:** Train on known items to learn model parameters $U$
-2. **Stage 2:** Freeze $U$ and estimate item parameters $(V, Z)$ for held-out items
-
-```{python}
-#| eval: false
-
-# Stage 1: Train on known items
-test_col = test_idtor.max(axis=0).values  # Identify held-out items
-model_stage1 = train_model(Y[:, ~test_col], mask=train_idtor[:, ~test_col])
-
-# Freeze U from Stage 1
-U_frozen = model_stage1.U.detach()
-
-# Stage 2: Estimate V, Z for unseen items with frozen model parameters
-model_stage2 = train_model(Y[:, test_col], mask=train_idtor[:, test_col],
-                           U_fixed=U_frozen)
-```
-
-::: {.callout-note title="Why Two-Stage Training?"}
-The two-stage procedure prevents information leakage:
-
-- **Row holdout:** Item parameters learned from training models should not contain information about test models
-- **Column holdout:** Model parameters learned from training items should not contain information about test items
-
-This mirrors the real-world scenario where we want to evaluate new models on pre-calibrated items, or calibrate new items using established models.
-:::
-
-### Evaluation Across Masking Schemes
-
-For each masking scheme, we compute AUC on the held-out entries:
-
-```{python}
-#| eval: false
-
-from torchmetrics import AUROC
-
-masking_schemes = {
-    "entry_random": random_mask,
-    "row_holdout": model_mask,
-    "col_holdout": item_mask,
-    "L_mask": L_mask,
-}
-
-results = {}
-auroc = AUROC(task="binary")
-
-for name, mask_fn in masking_schemes.items():
-    train_mask, test_mask = mask_fn(data_idtor)
-
-    # Train model (with two-stage for row/col holdout)
-    model = train_with_appropriate_stages(Y, train_mask, test_mask, name)
-
-    # Evaluate on held-out entries
-    P_hat = model().detach()
-    auc = auroc(P_hat[test_mask.bool()], Y[test_mask.bool()])
-    results[name] = auc.item()
-    print(f"{name}: AUC = {auc:.3f}")
-```
-
-The factor model typically achieves AUC of 92-97% on random masking across benchmarks, demonstrating strong predictive power. Performance on row and column holdout tests the model's ability to generalize to new models and new items, respectively.
-
-::: {.callout-tip title="Application: Item Response Scaling Laws"}
-The separability of model ability from item difficulty — the core property of IRT — has a powerful application to scaling laws. @truong2025irsl show that by embedding IRT within the scaling law framework, one can factorize scaling law estimation from $O(M \times N)$ to $O(M + N)$, where $M$ is the number of models (or checkpoints) and $N$ is the number of questions.
-
-Their key finding is that the IRT ability parameter $\theta$ scales linearly with the logarithm of pre-training compute: $\theta \approx a \cdot \log(\text{FLOP}) + b$. Combined with calibrated item parameters, this yields per-question scaling predictions: $\hat{R}_{ij}(x) = \sigma(d_j(\theta_i(x) - z_j))$. Because item parameters transfer across benchmarks that share the same measurement objective, ability estimated on one benchmark can predict performance on another — a direct validation of the cross-benchmark transfer tested in the masking experiments above.
-
-In a study of 6,612 model checkpoints and 37,682 questions, this approach achieves comparable or superior decision accuracy to traditional scaling laws using only 50 questions per benchmark — a 99.9% reduction in queries. The approach uses Beta-IRT, which models empirical probability responses (token probabilities, pass rates) rather than binary correctness, capturing richer scaling signals (see @sec-learning for estimation methods).
-:::
-
-
 ## Cold-Start Prediction {#sec-cold-start}
 
-The generalization experiments above show that factor models can predict held-out entries in the response matrix. But what if we want to evaluate a *brand-new* model or benchmark item that has never been tested? This is the **cold-start problem**: predicting correctness without any observed responses for the target model or item.
+The factor models introduced in @sec-factor-models can predict held-out entries in the response matrix when trained with appropriate masking schemes (see @sec-generalization in @sec-learning). But what if we want to evaluate a *brand-new* model or benchmark item that has never been tested? This is the **cold-start problem**: predicting correctness without any observed responses for the target model or item.
 
-**Prediction-Powered Evaluation (PPE)** addresses this by learning mappings from external features (question embeddings, model metadata) to the latent parameters of a factor model, enabling zero-shot correctness prediction.
+**Prediction-Powered Evaluation (PPE)** addresses this by learning mappings from external features (question embeddings, model metadata) to the latent parameters of a factor model, enabling zero-shot correctness prediction. PPE is an *amortized* version of the factor model: instead of optimizing latent parameters per entity, it learns a function that maps observable features directly to the latent space.
 
 ### The Semantic–Behavioral Gap
 
@@ -1228,7 +960,7 @@ Even near-identical embeddings (cosine > 0.99) exhibit nearly random behavioral 
 
 The prediction-powered framework has three stages:
 
-**Stage 1 — Factor Model Pretraining.** We first learn latent behavioral factors $(U, V, Z)$ from observed response data $Y_{ij}$ using the factor model from @sec-learning:
+**Stage 1 — Factor Model Pretraining.** We first learn latent behavioral factors $(U, V, Z)$ from observed response data $Y_{ij}$ using the factor model from @sec-factor-models:
 
 $$
 p(Y_{ij}=1 \mid U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
@@ -1278,7 +1010,7 @@ This chapter has introduced the measurement science framework that underlies the
 
 1. **Measurement requires more than scoring.** Assigning numbers to models based on benchmark performance is scoring, not measuring. Measurement requires a theory connecting scores to latent constructs.
 
-2. **Validity is about truth, not evidence.** Following Borsboom, validity means that the attribute exists and causally produces variation in scores. Evidence supports validity claims but does not constitute validity.
+2. **Validity matters.** A benchmark measures a construct only if the construct exists and causally produces variation in scores. The philosophical and diagnostic foundations of validity are developed in @sec-validity.
 
 3. **The Rasch model has special properties.** Sufficiency of sum scores and specific objectivity make Rasch uniquely suitable for fundamental measurement. These properties justify treating sum scores as measurements.
 
@@ -1286,19 +1018,17 @@ This chapter has introduced the measurement science framework that underlies the
 
 5. **Psychology solved these problems decades ago.** The tools developed in psychometrics---reliability, validity, dimensionality analysis, adaptive testing---apply directly to AI evaluation.
 
-6. **Factor models generalize and predict.** Generalization experiments with various masking schemes show that learned factor models predict held-out entries with high accuracy. Cold-start prediction extends this to entirely unseen models and items via prediction-powered evaluation.
-
 ### Preview of Following Chapters
 
 The chapters that follow apply this framework to specific AI evaluation challenges:
 
-- **Chapter 2 (Learning):** Covers parameter estimation for IRT and factor models, including maximum likelihood, EM algorithms, Bayesian inference, regularization, and model selection.
+- **Chapter 2 (Learning):** Covers parameter estimation for IRT and factor models, including maximum likelihood, EM algorithms, Bayesian inference, regularization, and model selection. It also develops generalization experiments and the cold-start prediction problem --- predicting performance for unseen models and items.
 
 - **Chapter 3 (Design):** Applies measurement principles to benchmark design, addressing how to construct valid and reliable AI evaluations.
 
 - **Chapter 4 (Reliability):** Develops the theory of measurement precision, including classical and IRT-based reliability, standard errors, and information functions.
 
-The measurement concepts from this chapter recur throughout. When we ask whether a benchmark is "valid," we mean validity in Borsboom's sense. When we justify using sum scores, we appeal to sufficiency in the Rasch sense. When we analyze benchmark dimensionality, we apply the factor models introduced in this chapter and trained using methods from Chapter 2.
+The measurement concepts from this chapter recur throughout. When we justify using sum scores, we appeal to sufficiency in the Rasch sense. When we analyze benchmark dimensionality, we apply the factor models introduced in this chapter and trained using methods from Chapter 2. The question of whether benchmarks measure what they claim to measure --- validity --- is developed in @sec-validity.
 
 
 ## Exercises {#sec-exercises}
@@ -1448,7 +1178,7 @@ def andersen_lr_test(Y, n_groups=2):
 
 ### Discussion Questions
 
-**Discussion 1.1:** Borsboom argues that validity is about truth, not evidence. How does this change how we should think about AI benchmark validity? Can a benchmark be "valid enough" for practical purposes even if we cannot prove the underlying construct exists?
+**Discussion 1.1:** The Rasch model's sufficiency property justifies using sum scores as measurements. But most AI benchmarks use items with varying discriminations, which violates the Rasch assumption. Does this mean that current benchmark rankings are fundamentally flawed, or can they still be useful approximations? Under what conditions would adopting Rasch-based measurement change the ranking of frontier models?
 
 **Discussion 1.2:** The Rasch school argues that items not fitting the Rasch model should be discarded because they do not measure the same construct. What are the implications of this view for AI benchmark design? Should we design benchmarks to fit Rasch, or should we use more flexible models that accommodate heterogeneous items?
 
@@ -1458,10 +1188,6 @@ def andersen_lr_test(Y, n_groups=2):
 
 
 ## Bibliographic Notes {#sec-bib-notes}
-
-### Validity and Measurement Philosophy
-
-The realist framework for validity originates with Borsboom's influential paper "The Concept of Validity" (Borsboom, Mellenbergh, & van Heerden, 2004) and his book *Measuring the Mind* (2005). For a comprehensive treatment, see *Frontiers of Test Validity Theory* (Markus & Borsboom, 2013). The classic reference on validity as evidence accumulation is Messick's chapter in *Educational Measurement* (1989).
 
 ### Item Response Theory
 

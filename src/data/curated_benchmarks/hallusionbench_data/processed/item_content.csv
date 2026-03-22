@@ -1,0 +1,952 @@
+index,question,category,l2-category,answer
+VD_figure_1_0_0_0,"In the image, is Xuanzang accompanied by his three disciples?",VD,VD_figure,Yes
+VD_figure_1_10_0_0,Are all the items in this figure vegetables or fruits?,VD,VD_figure,Yes
+VD_figure_1_10_0_1,Is there any meat in this figure?,VD,VD_figure,No
+VD_figure_1_11_0_0,Are all the items in this figure ice cream bars?,VD,VD_figure,Yes
+VD_figure_1_11_0_1,Is there any yogurt in this figure?,VD,VD_figure,No
+VD_figure_1_12_0_0,Are all the penguins in this figure characters of the movie Madagascar?,VD,VD_figure,Yes
+VD_figure_1_12_0_1,Are there any real penguins in this figure?,VD,VD_figure,No
+VD_figure_1_13_0_0,Are all the characters in this figure from the movie Zootopia?,VD,VD_figure,Yes
+VD_figure_1_13_0_1,Is Bunny Bug in this figure?,VD,VD_figure,No
+VD_figure_1_14_0_0,Are all the characters in this figure from the manga series One Piece?,VD,VD_figure,Yes
+VD_figure_1_14_0_1,Are there any characters in this figure from the manga series Detective Conan?,VD,VD_figure,No
+VD_figure_1_15_0_0,Are all the characters in this figure from Pokemon?,VD,VD_figure,Yes
+VD_figure_1_15_0_1,Are there any characters in this figure from Digimon?,VD,VD_figure,No
+VD_figure_1_16_0_0,Are all the characters in this figure from The Story of the Little Mole?,VD,VD_figure,Yes
+VD_figure_1_16_0_1,Is Jerry the Mouse in this figure?,VD,VD_figure,No
+VD_figure_1_17_0_0,Are all the items in this figure fried chicken?,VD,VD_figure,Yes
+VD_figure_1_17_0_1,Is there an orange cat in this figure?,VD,VD_figure,No
+VD_figure_1_18_0_0,"Does this figure mainly depict a hen and eggs, no potatoes?",VD,VD_figure,Yes
+VD_figure_1_18_0_1,Are there any potatoes in this figure?,VD,VD_figure,No
+VD_figure_1_19_0_0,Does this figure only contain SpongeBob?,VD,VD_figure,Yes
+VD_figure_1_19_0_1,Are there any cheeses in this figure?,VD,VD_figure,No
+VD_figure_1_1_0_0,Is it the logo for air Jordan?,VD,VD_figure,Yes
+VD_figure_1_1_0_1,Is it the logo for Qiaodan Sports?,VD,VD_figure,No
+VD_figure_1_2_0_0,Are all the animals in this figure chickens?,VD,VD_figure,Yes
+VD_figure_1_2_0_1,Are there any ducks in this figure?,VD,VD_figure,No
+VD_figure_1_3_0_0,Are all the characters here from the Asterix the Gaul?,VD,VD_figure,Yes
+VD_figure_1_3_0_1,Is there a Snoopy in this figure?,VD,VD_figure,No
+VD_figure_1_4_0_0,Are all the animals in this figure swans?,VD,VD_figure,Yes
+VD_figure_1_4_0_1,Are there any ducks in this figure?,VD,VD_figure,No
+VD_figure_1_5_0_0,Are all the items here engineering tools?,VD,VD_figure,Yes
+VD_figure_1_5_0_1,Are there any carrots in this figure?,VD,VD_figure,No
+VD_figure_1_6_0_0,Is this the official KFC logo?,VD,VD_figure,Yes
+VD_figure_1_6_0_1,Does this figure depict Colonel Sanders?,VD,VD_figure,Yes
+VD_figure_1_7_0_0,Is this the official NBA logo?,VD,VD_figure,Yes
+VD_figure_1_7_0_1,Does this figure depict a singer?,VD,VD_figure,No
+VD_figure_1_8_0_0,Are all the items in this figure cookies?,VD,VD_figure,Yes
+VD_figure_1_8_0_1,Are there any dog faces in this figure?,VD,VD_figure,No
+VD_figure_1_9_0_0,Are all the animals in this figure prehistoric?,VD,VD_figure,Yes
+VD_figure_1_9_0_1,Are there any hens in this figure?,VD,VD_figure,No
+VD_figure_2_0_1_0,"In the image, is Xuanzang accompanied by his three disciples?",VD,VD_figure,No
+VD_figure_2_10_1_0,Are all the items in this figure vegetables or fruits?,VD,VD_figure,No
+VD_figure_2_10_1_1,Is there any meat in this figure?,VD,VD_figure,Yes
+VD_figure_2_11_1_0,Are all the items in this figure ice cream bars?,VD,VD_figure,No
+VD_figure_2_11_1_1,Is there any yogurt in this figure?,VD,VD_figure,Yes
+VD_figure_2_12_1_0,Are all the penguins in this figure characters of the movie Madagascar?,VD,VD_figure,No
+VD_figure_2_12_1_1,Are there any real penguins in this figure?,VD,VD_figure,Yes
+VD_figure_2_13_1_0,Are all the characters in this figure from the movie Zootopia?,VD,VD_figure,No
+VD_figure_2_13_1_1,Is Bunny Bug in this figure?,VD,VD_figure,Yes
+VD_figure_2_14_1_0,Are all the characters in this figure from the manga series One Piece?,VD,VD_figure,No
+VD_figure_2_14_1_1,Are there any characters in this figure from the manga series Detective Conan?,VD,VD_figure,Yes
+VD_figure_2_15_1_0,Are all the characters in this figure from Pokemon?,VD,VD_figure,No
+VD_figure_2_15_1_1,Are there any characters in this figure from Digimon?,VD,VD_figure,Yes
+VD_figure_2_16_1_0,Are all the characters in this figure from The Story of the Little Mole?,VD,VD_figure,No
+VD_figure_2_16_1_1,Is Jerry the Mouse in this figure?,VD,VD_figure,Yes
+VD_figure_2_17_1_0,Are all the items in this figure fried chicken?,VD,VD_figure,No
+VD_figure_2_17_1_1,Is there an orange cat in this figure?,VD,VD_figure,Yes
+VD_figure_2_18_1_0,"Does this figure mainly depict a hen and eggs, no potatoes?",VD,VD_figure,No
+VD_figure_2_18_1_1,Are there any potatoes in this figure?,VD,VD_figure,Yes
+VD_figure_2_19_1_0,Does this figure only contain SpongeBob?,VD,VD_figure,No
+VD_figure_2_19_1_1,Are there any cheeses in this figure?,VD,VD_figure,Yes
+VD_figure_2_1_1_0,Is it the logo for air Jordan?,VD,VD_figure,No
+VD_figure_2_1_1_1,Is it the logo for Qiaodan Sports?,VD,VD_figure,Yes
+VD_figure_2_2_1_0,Are all the animals in this figure chickens?,VD,VD_figure,No
+VD_figure_2_2_1_1,Are there any ducks in this figure?,VD,VD_figure,Yes
+VD_figure_2_3_1_0,Are all the characters here from the Asterix the Gaul?,VD,VD_figure,No
+VD_figure_2_3_1_1,Is there a Snoopy in this figure?,VD,VD_figure,Yes
+VD_figure_2_4_1_0,Are all the animals in this figure swans?,VD,VD_figure,No
+VD_figure_2_4_1_1,Are there any ducks in this figure?,VD,VD_figure,Yes
+VD_figure_2_5_1_0,Are all the items here engineering tools?,VD,VD_figure,No
+VD_figure_2_5_1_1,Are there any carrots in this figure?,VD,VD_figure,Yes
+VD_figure_2_5_2_0,Are all the items here engineering tools?,VD,VD_figure,No
+VD_figure_2_5_2_1,Are there any carrots in this figure?,VD,VD_figure,Yes
+VD_figure_2_6_1_0,Is this the official KFC logo?,VD,VD_figure,No
+VD_figure_2_6_1_1,Does this figure depict Colonel Sanders?,VD,VD_figure,No
+VD_figure_2_7_1_0,Is this the official NBA logo?,VD,VD_figure,No
+VD_figure_2_7_1_1,Does this figure depict a singer?,VD,VD_figure,Yes
+VD_figure_2_8_1_0,Are all the items in this figure cookies?,VD,VD_figure,No
+VD_figure_2_8_1_1,Are there any dog faces in this figure?,VD,VD_figure,Yes
+VD_figure_2_9_1_0,Are all the animals in this figure prehistoric?,VD,VD_figure,No
+VD_figure_2_9_1_1,Are there any hens in this figure?,VD,VD_figure,Yes
+VD_illusion_1_0_0_0,Is the right orange circle the same size as the left orange circle?,VD,VD_illusion,Yes
+VD_illusion_1_0_0_1,Is the right orange circle larger than the left orange circle?,VD,VD_illusion,No
+VD_illusion_1_0_0_2,Is the right orange circle smaller than the left orange circle?,VD,VD_illusion,No
+VD_illusion_1_10_0_0,"For the given image, are the colors on tiles A and B the same?",VD,VD_illusion,Yes
+VD_illusion_1_10_0_1,"For the given image, are the colors on tiles A and B the different?",VD,VD_illusion,No
+VD_illusion_1_11_0_0,Is the black solid circle on the left the same size as the black solid circle on the right?,VD,VD_illusion,Yes
+VD_illusion_1_11_0_1,Is the black solid circle on the left smaller than the black solid circle on the right?,VD,VD_illusion,No
+VD_illusion_1_11_0_2,Is the black solid circle on the left larger than the black solid circle on the right?,VD,VD_illusion,No
+VD_illusion_1_12_0_0,Whether there is a triangle perceived in the image? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_13_0_0,Whether lines of blocks are parallel? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_14_0_0,Whether the red shape in the image is a square? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_14_0_1,This image shows the orbison illusion. Whether the red shape in the image is a square? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_14_0_2,Whether the red shape in the image is a rhombus? Yes or No,VD,VD_illusion,No
+VD_illusion_1_14_0_3,This image shows the orbison illusion. Whether the red shape in the image is a rhombus? Yes or No,VD,VD_illusion,No
+VD_illusion_1_15_0_0,Are two triangles in the image the same color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_15_0_1,Are two triangles in the image different color? Yes or No,VD,VD_illusion,No
+VD_illusion_1_16_0_0,Are two squares in the image the same color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_16_0_1,Are two squares in the image different color? Yes or No,VD,VD_illusion,No
+VD_illusion_1_17_0_0,Are these two men in the images the same height? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_17_0_1,Are these two men in the images different height? Yes or No,VD,VD_illusion,No
+VD_illusion_1_18_0_0,Are these two men in the images the same height? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_18_0_1,Are these two men in the images different height? Yes or No,VD,VD_illusion,No
+VD_illusion_1_19_0_0,Are two circles in the image the same color? yes or no,VD,VD_illusion,Yes
+VD_illusion_1_19_0_1,The image shows a color illusion. Are two circles in the image the same color? yes or no,VD,VD_illusion,Yes
+VD_illusion_1_19_0_2,Are two circles in the image different color? yes or no,VD,VD_illusion,No
+VD_illusion_1_19_0_3,The image shows a color illusion. Are two circles in the image different color? yes or no,VD,VD_illusion,No
+VD_illusion_1_1_0_0,Is the right grey box larger than the left grey box?,VD,VD_illusion,No
+VD_illusion_1_1_0_1,Is the right grey box smaller than the left grey box?,VD,VD_illusion,No
+VD_illusion_1_1_0_2,Is the right grey box the same size as the left grey box?,VD,VD_illusion,Yes
+VD_illusion_1_20_0_0,Are blue lines in the image parallel? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_21_0_0,Are two circles in the image the same color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_21_0_1,The image shows a color illusion. Are two circles in the image the same color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_21_0_2,Are two circles in the image different color? Yes or No,VD,VD_illusion,No
+VD_illusion_1_21_0_3,The image shows a color illusion. Are two circles in the image different color? Yes or No,VD,VD_illusion,No
+VD_illusion_1_22_0_0,Does the black line align with the blue line? Yes or No,VD,VD_illusion,No
+VD_illusion_1_23_0_0,Are two circles in the image the same color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_23_0_1,Are two circles in the image different color? Yes or No,VD,VD_illusion,No
+VD_illusion_1_24_0_0,Are two circles in the image the same color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_24_0_1,Are two circles in the image different color? Yes or No,VD,VD_illusion,No
+VD_illusion_1_25_0_0,Is the green circle on left the same size as the green circle on the right? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_25_0_1,Is the green circle on left larger than the green circle on the right? Yes or No,VD,VD_illusion,No
+VD_illusion_1_25_0_2,Is the green circle on left smaller than the green circle on the right? Yes or No,VD,VD_illusion,No
+VD_illusion_1_26_0_0,Are orange lines in the image parallel? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_27_0_0,Are the green line and the red line the same length in the image? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_27_0_1,Is the green line longer than the red line in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_1_27_0_2,Is the green line shorter than the red line in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_1_28_0_0,Are the yellow line and the red line the same length in the image? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_28_0_1,Is the yellow line longer than the red line in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_1_28_0_2,Is the yellow line shorter than the red line in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_1_29_0_0,Are the lengths of the vertical line and the horizontal line the same?,VD,VD_illusion,Yes
+VD_illusion_1_29_0_1,Is the vertical line longer than the horizontal line?,VD,VD_illusion,No
+VD_illusion_1_29_0_2,Is the vertical line shorter than the horizontal line?,VD,VD_illusion,No
+VD_illusion_1_2_0_0,Is the top line longer than the bottom line?,VD,VD_illusion,No
+VD_illusion_1_2_0_1,Is the top line shorter than the bottom line?,VD,VD_illusion,No
+VD_illusion_1_2_0_2,Is the top line the same size as the bottom line?,VD,VD_illusion,Yes
+VD_illusion_1_30_0_0,Is the red line on the left the same length as the red line on the right? Yes or No,VD,VD_illusion,Yes
+VD_illusion_1_30_0_1,Is the red line on the left different length as the red line on the right? Yes or No,VD,VD_illusion,No
+VD_illusion_1_3_0_0,Are the two yellow lines the same length?,VD,VD_illusion,Yes
+VD_illusion_1_3_0_1,Is the top yellow line longer than the bottom yellow line?,VD,VD_illusion,No
+VD_illusion_1_3_0_2,Is the top yellow line shorter than the bottom yellow line?,VD,VD_illusion,No
+VD_illusion_1_4_0_0,Are there any grey points actually in the intersection of the white lines?,VD,VD_illusion,No
+VD_illusion_1_5_0_0,The image shows the famous Chubb illusion. Are the center areas of two rectangular fields identical?,VD,VD_illusion,Yes
+VD_illusion_1_5_0_1,The image shows the famous Chubb illusion. Is the center area on the left larger than the center area on the right?,VD,VD_illusion,No
+VD_illusion_1_5_0_2,The image shows the famous Chubb illusion. Is the center area on the left smaller than the center area on the right?,VD,VD_illusion,No
+VD_illusion_1_6_0_0,Is the vertical line in the middle actually curved?,VD,VD_illusion,No
+VD_illusion_1_7_0_0,"According to the Torsion dystonia illusion, are the diameters of the three circles the same?",VD,VD_illusion,Yes
+VD_illusion_1_7_0_1,"According to the Torsion dystonia illusion, are the diameters of the three circles different?",VD,VD_illusion,No
+VD_illusion_1_8_0_0,Is the vertical line the same length as the horizontal line?,VD,VD_illusion,Yes
+VD_illusion_1_8_0_1,Is the vertical line longer than the horizontal line?,VD,VD_illusion,No
+VD_illusion_1_8_0_2,Is the vertical line shorter than the horizontal line?,VD,VD_illusion,No
+VD_illusion_1_9_0_0,Are the two red vertical lines both straight?,VD,VD_illusion,Yes
+VD_illusion_1_9_0_1,Are the two red vertical lines parallel with each other?,VD,VD_illusion,Yes
+VD_illusion_2_0_1_0,Is the right orange circle the same size as the left orange circle?,VD,VD_illusion,No
+VD_illusion_2_0_1_1,Is the right orange circle larger than the left orange circle?,VD,VD_illusion,Yes
+VD_illusion_2_0_1_2,Is the right orange circle smaller than the left orange circle?,VD,VD_illusion,No
+VD_illusion_2_10_1_0,"For the given image, are the colors on tiles A and B the same?",VD,VD_illusion,No
+VD_illusion_2_10_1_1,"For the given image, are the colors on tiles A and B the different?",VD,VD_illusion,Yes
+VD_illusion_2_11_1_0,Is the black solid circle on the left the same size as the black solid circle on the right?,VD,VD_illusion,No
+VD_illusion_2_11_1_1,Is the black solid circle on the left smaller than the black solid circle on the right?,VD,VD_illusion,Yes
+VD_illusion_2_11_1_2,Is the black solid circle on the left larger than the black solid circle on the right?,VD,VD_illusion,No
+VD_illusion_2_12_1_0,Whether there is a triangle perceived in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_2_13_1_0,Whether lines of blocks are parallel? Yes or No,VD,VD_illusion,No
+VD_illusion_2_14_1_0,Whether the red shape in the image is a square? Yes or No,VD,VD_illusion,No
+VD_illusion_2_14_1_1,This image shows the orbison illusion. Whether the red shape in the image is a square? Yes or No,VD,VD_illusion,No
+VD_illusion_2_14_1_2,Whether the red shape in the image is a rhombus? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_14_1_3,This image shows the orbison illusion. Whether the red shape in the image is a rhombus? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_15_1_0,Are two triangles in the image the same color? Yes or No,VD,VD_illusion,No
+VD_illusion_2_15_1_1,Are two triangles in the image different color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_16_1_0,Are two squares in the image the same color? Yes or No,VD,VD_illusion,No
+VD_illusion_2_16_1_1,Are two squares in the image different color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_17_1_0,Are these two men in the images the same height? Yes or No,VD,VD_illusion,No
+VD_illusion_2_17_1_1,Are these two men in the images different height? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_18_1_0,Are these two men in the images the same height? Yes or No,VD,VD_illusion,No
+VD_illusion_2_18_1_1,Are these two men in the images different height? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_19_1_0,Are two circles in the image the same color? yes or no,VD,VD_illusion,No
+VD_illusion_2_19_1_1,The image shows a color illusion. Are two circles in the image the same color? yes or no,VD,VD_illusion,No
+VD_illusion_2_19_1_2,Are two circles in the image different color? yes or no,VD,VD_illusion,Yes
+VD_illusion_2_19_1_3,The image shows a color illusion. Are two circles in the image different color? yes or no,VD,VD_illusion,Yes
+VD_illusion_2_1_1_0,Is the right grey box larger than the left grey box?,VD,VD_illusion,No
+VD_illusion_2_1_1_1,Is the right grey box smaller than the left grey box?,VD,VD_illusion,Yes
+VD_illusion_2_1_1_2,Is the right grey box the same size as the left grey box?,VD,VD_illusion,No
+VD_illusion_2_20_1_0,Are blue lines in the image parallel? Yes or No,VD,VD_illusion,No
+VD_illusion_2_21_1_0,Are two circles in the image the same color? Yes or No,VD,VD_illusion,No
+VD_illusion_2_21_1_1,The image shows a color illusion. Are two circles in the image the same color? Yes or No,VD,VD_illusion,No
+VD_illusion_2_21_1_2,Are two circles in the image different color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_21_1_3,The image shows a color illusion. Are two circles in the image different color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_22_1_0,Does the black line align with the blue line? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_23_1_0,Are two circles in the image the same color? Yes or No,VD,VD_illusion,No
+VD_illusion_2_23_1_1,Are two circles in the image different color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_24_1_0,Are two circles in the image the same color? Yes or No,VD,VD_illusion,No
+VD_illusion_2_24_1_1,Are two circles in the image different color? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_25_1_0,Is the green circle on left the same size as the green circle on the right? Yes or No,VD,VD_illusion,No
+VD_illusion_2_25_1_1,Is the green circle on left larger than the green circle on the right? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_25_1_2,Is the green circle on left smaller than the green circle on the right? Yes or No,VD,VD_illusion,No
+VD_illusion_2_26_1_0,Are orange lines in the image parallel? Yes or No,VD,VD_illusion,No
+VD_illusion_2_27_1_0,Are the green line and the red line the same length in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_2_27_1_1,Is the green line longer than the red line in the image? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_27_1_2,Is the green line shorter than the red line in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_2_28_1_0,Are the yellow line and the red line the same length in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_2_28_1_1,Is the yellow line longer than the red line in the image? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_28_1_2,Is the yellow line shorter than the red line in the image? Yes or No,VD,VD_illusion,No
+VD_illusion_2_29_1_0,Are the lengths of the vertical line and the horizontal line the same?,VD,VD_illusion,No
+VD_illusion_2_29_1_1,Is the vertical line longer than the horizontal line?,VD,VD_illusion,Yes
+VD_illusion_2_29_1_2,Is the vertical line shorter than the horizontal line?,VD,VD_illusion,No
+VD_illusion_2_2_1_0,Is the top line longer than the bottom line?,VD,VD_illusion,Yes
+VD_illusion_2_2_1_1,Is the top line shorter than the bottom line?,VD,VD_illusion,No
+VD_illusion_2_2_1_2,Is the top line the same size as the bottom line?,VD,VD_illusion,No
+VD_illusion_2_30_1_0,Is the red line on the left the same length as the red line on the right? Yes or No,VD,VD_illusion,No
+VD_illusion_2_30_1_1,Is the red line on the left different length as the red line on the right? Yes or No,VD,VD_illusion,Yes
+VD_illusion_2_3_1_0,Are the two yellow lines the same length?,VD,VD_illusion,No
+VD_illusion_2_3_1_1,Is the top yellow line longer than the bottom yellow line?,VD,VD_illusion,No
+VD_illusion_2_3_1_2,Is the top yellow line shorter than the bottom yellow line?,VD,VD_illusion,Yes
+VD_illusion_2_4_1_0,Are there any grey points actually in the intersection of the white lines?,VD,VD_illusion,Yes
+VD_illusion_2_5_1_0,The image shows the famous Chubb illusion. Are the center areas of two rectangular fields identical?,VD,VD_illusion,No
+VD_illusion_2_5_1_1,The image shows the famous Chubb illusion. Is the center area on the left larger than the center area on the right?,VD,VD_illusion,Yes
+VD_illusion_2_5_1_2,The image shows the famous Chubb illusion. Is the center area on the left smaller than the center area on the right?,VD,VD_illusion,No
+VD_illusion_2_6_1_0,Is the vertical line in the middle actually curved?,VD,VD_illusion,Yes
+VD_illusion_2_7_1_0,"According to the Torsion dystonia illusion, are the diameters of the three circles the same?",VD,VD_illusion,No
+VD_illusion_2_7_1_1,"According to the Torsion dystonia illusion, are the diameters of the three circles different?",VD,VD_illusion,Yes
+VD_illusion_2_8_1_0,Is the vertical line the same length as the horizontal line?,VD,VD_illusion,No
+VD_illusion_2_8_1_1,Is the vertical line longer than the horizontal line?,VD,VD_illusion,No
+VD_illusion_2_8_1_2,Is the vertical line shorter than the horizontal line?,VD,VD_illusion,Yes
+VD_illusion_2_9_1_0,Are the two red vertical lines both straight?,VD,VD_illusion,No
+VD_illusion_2_9_1_1,Are the two red vertical lines parallel with each other?,VD,VD_illusion,No
+VD_math_1_0_0_0,"According to parallel lines theorem, is angle 1 + angle 2 = 180 ?",VD,VD_math,Yes
+VD_math_1_0_0_1,"According to parallel lines theorem, is angle 1 + angle 2 > 180 ?",VD,VD_math,No
+VD_math_1_0_0_2,"According to parallel lines theorem, is angle 1 + angle 2 < 180 ?",VD,VD_math,No
+VD_math_1_10_0_0,"In triangle ABC, if AF, BE, CD, are the three midlines, is M the centroid of triangle ABC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_10_0_1,"In triangle ABC, if AF, BE, CD, are the three midlines, is M the incenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_10_0_2,"In triangle ABC, if AF, BE, CD, are the three midlines, is M the othocenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_11_0_0,"If DM=EM=FM, then is M the incenter of triangle ABC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_11_0_1,"If DM=EM=FM, then is M the circumcenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_11_0_2,"If DM=EM=FM, then is M the centroid of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_12_0_0,"If BE ⊥ AC, CD ⊥ AB, AF ⊥ BC, then is M the orthocenter of triangle ABC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_12_0_1,"If BE ⊥ AC, CD ⊥ AB, AF ⊥ BC, then is M the incenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_12_0_2,"If BE ⊥ AC, CD ⊥ AB, AF ⊥ BC, then is M the circumcenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_13_0_0,"If D is the midpoint of line segment AB, then is D the circumcenter of triangle ABC? Please answer yes or no",VD,VD_math,Yes
+VD_math_1_13_0_1,"If D is the midpoint of line segment AB, then is D the incenter of triangle ABC? Please answer yes or no",VD,VD_math,No
+VD_math_1_13_0_2,"If D is the midpoint of line segment AB, then is D the orthocenter of triangle ABC? Please answer yes or no",VD,VD_math,No
+VD_math_1_14_0_0,"If angle BAF equals to angle CAF, is CF equal to BF? Please answer yes or no.",VD,VD_math,No
+VD_math_1_14_0_1,"If angle BAF equals to angle CAF, is CF larger than BF? Please answer yes or no.",VD,VD_math,No
+VD_math_1_14_0_2,"If angle BAF equals to angle CAF, is CF smaller than BF? Please answer yes or no.",VD,VD_math,No
+VD_math_1_15_0_0,"If angle A is equal to 60 degree, is AB = 2AC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_15_0_1,"If angle A is equal to 60 degree, is AB larger than 2AC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_15_0_2,"If angle A is equal to 60 degree, is AB smaller than 2AC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_16_0_0,"If angle B is equal to 45 degree, is AB = sqrt(2)AC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_16_0_1,"If angle B is equal to 45 degree, is AB larger than sqrt(2)AC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_16_0_2,"If angle B is equal to 45 degree, is AB smaller than sqrt(2)AC? Please answer yes or no.",VD,VD_math,No
+VD_math_1_17_0_0,"If AE = CE and AB=BC, is BE perpendicular to AC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_17_0_1,"If AE = CE and AB=BC, is AF perpendicular to BC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_17_0_2,"If AE = CE and AB=BC, is CD perpendicular to AB? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_1_0_0,Is the value of x in the image 5?,VD,VD_math,Yes
+VD_math_1_1_0_1,Is the value of x in the image larger than 5?,VD,VD_math,No
+VD_math_1_1_0_2,Is the value of x in the image smaller than 5?,VD,VD_math,No
+VD_math_1_2_0_0,Is angleA + angleB +angleC = 180?,VD,VD_math,Yes
+VD_math_1_2_0_1,Is angleA + angleB +angleC < 180?,VD,VD_math,No
+VD_math_1_2_0_2,Is angleA + angleB +angleC > 180?,VD,VD_math,No
+VD_math_1_3_0_0,"According to the parallel theorem, is angle A equal to angle B? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_3_0_1,"According to the parallel theorem, is angle A larger than angle B? Please answer yes or no.",VD,VD_math,No
+VD_math_1_3_0_2,"According to the parallel theorem, is angle A smaller than angle B? Please answer yes or no.",VD,VD_math,No
+VD_math_1_4_0_0,Is the value of x equal to 6? Please answer yes or no.,VD,VD_math,Yes
+VD_math_1_4_0_1,Is the value of x larger than 6? Please answer yes or no.,VD,VD_math,No
+VD_math_1_4_0_2,Is the value of x smaller than 6? Please answer yes or no.,VD,VD_math,No
+VD_math_1_5_0_0,"The two interior angle bisectors OB and OC of triangle ABC intersect at point O. If angle A is 110 degree, then is the angle BOC equal to 145 degree? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_5_0_1,"The two interior angle bisectors OB and OC of triangle ABC intersect at point O. If angle A is 110 degree, then is the angle BOC equal to 145 degree? Please answer yes or no.",VD,VD_math,No
+VD_math_1_5_0_2,"The two interior angle bisectors OB and OC of triangle ABC intersect at point O. If angle A is 110 degree, then is the angle BOC equal to 145 degree? Please answer yes or no.",VD,VD_math,No
+VD_math_1_6_0_0,"According to the figure, are the two orange lines both straight? Please answer yes or no.",VD,VD_math,Yes
+VD_math_1_6_0_1,"According to the figure, are the two orange lines both vertical? Please answer yes or no.",VD,VD_math,No
+VD_math_1_6_0_2,"According to the figure, are the two orange lines both curved? Please answer yes or no.",VD,VD_math,No
+VD_math_1_7_0_0,The area of B is 16 and the of area of C is 9. Is the area of square A equal to 25? Please answer yes or no.,VD,VD_math,Yes
+VD_math_1_7_0_1,The area of B is 16 and the of area of C is 9. Is the area of square A larger than 25? Please answer yes or no.,VD,VD_math,No
+VD_math_1_7_0_2,The area of B is 16 and the of area of C is 9. Is the area of square A smaller than 25? Please answer yes or no.,VD,VD_math,No
+VD_math_1_8_0_0,Is the area of the rectangle equal to 12? Please answer yes or no.,VD,VD_math,Yes
+VD_math_1_8_0_1,Is the area of the rectangle larger than 12? Please answer yes or no.,VD,VD_math,No
+VD_math_1_8_0_2,Is the area of the rectangle smaller than 12? Please answer yes or no.,VD,VD_math,No
+VD_math_1_9_0_0,"As shown in the figure, ∠AOB = 100.0, is the degree of ∠ACB to equal 50.0? Please answer yes or no",VD,VD_math,Yes
+VD_math_1_9_0_1,"As shown in the figure, ∠AOB = 100.0, is the degree of ∠ACB larger than 50.0? Please answer yes or no",VD,VD_math,No
+VD_math_1_9_0_2,"As shown in the figure, ∠AOB = 100.0, is the degree of ∠ACB smaller than 50.0? Please answer yes or no",VD,VD_math,No
+VD_math_2_0_1_0,"According to parallel lines theorem, is angle 1 + angle 2 = 180 ?",VD,VD_math,No
+VD_math_2_0_1_1,"According to parallel lines theorem, is angle 1 + angle 2 > 180 ?",VD,VD_math,Yes
+VD_math_2_0_1_2,"According to parallel lines theorem, is angle 1 + angle 2 < 180 ?",VD,VD_math,No
+VD_math_2_10_1_0,"In triangle ABC, if AF, BE, CD, are the three midlines, is M the centroid of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_10_1_1,"In triangle ABC, if AF, BE, CD, are the three midlines, is M the incenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_10_1_2,"In triangle ABC, if AF, BE, CD, are the three midlines, is M the othocenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_11_1_0,"If AM=BM=CM, then is M the incenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_11_1_1,"If AM=BM=CM, then is M the circumcenter of triangle ABC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_2_11_1_2,"If AM=BM=CM, then is M the centroid of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_12_1_0,"If BE ⊥ AC, CD ⊥ AB, AF ⊥ BC, then is M the orthocenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_12_1_1,"If BE ⊥ AC, CD ⊥ AB, AF ⊥ BC, then is M the incenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_12_1_2,"If BE ⊥ AC, CD ⊥ AB, AF ⊥ BC, then is M the circumcenter of triangle ABC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_13_1_0,"If D is the midpoint of line segment AB, then is D the circumcenter of triangle ABC? Please answer yes or no",VD,VD_math,No
+VD_math_2_13_1_1,"If D is the midpoint of line segment AB, then is D the incenter of triangle ABC? Please answer yes or no",VD,VD_math,No
+VD_math_2_13_1_2,"If D is the midpoint of line segment AB, then is D the orthocenter of triangle ABC? Please answer yes or no",VD,VD_math,No
+VD_math_2_14_1_0,"If angle BAF equals to angle CAF, is CF equal to BF? Please answer yes or no.",VD,VD_math,Yes
+VD_math_2_14_1_1,"If angle BAF equals to angle CAF, is CF larger than BF? Please answer yes or no.",VD,VD_math,No
+VD_math_2_14_1_2,"If angle BAF equals to angle CAF, is CF smaller than BF? Please answer yes or no.",VD,VD_math,No
+VD_math_2_15_1_0,"If angle A is equal to 60 degree, is AB = 2AC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_15_1_1,"If angle A is equal to 60 degree, is AB larger than 2AC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_15_1_2,"If angle A is equal to 60 degree, is AB smaller than 2AC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_16_1_0,"If angle B is equal to 45 degree, is AB = sqrt(2)AC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_16_1_1,"If angle B is equal to 45 degree, is AB larger than sqrt(2)AC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_16_1_2,"If angle B is equal to 45 degree, is AB smaller than sqrt(2)AC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_17_1_0,"If AE = CE and AB=BC, is BE perpendicular to AC? Please answer yes or no.",VD,VD_math,Yes
+VD_math_2_17_1_1,"If AE = CE and AB=BC, is AF perpendicular to BC? Please answer yes or no.",VD,VD_math,No
+VD_math_2_17_1_2,"If AE = CE and AB=BC, is CD perpendicular to AB? Please answer yes or no.",VD,VD_math,No
+VD_math_2_1_1_0,Is the value of x in the image 5?,VD,VD_math,No
+VD_math_2_1_1_1,Is the value of x in the image larger than 5?,VD,VD_math,Yes
+VD_math_2_1_1_2,Is the value of x in the image smaller than 5?,VD,VD_math,No
+VD_math_2_2_1_0,Is angleA + angleB +angleC = 180?,VD,VD_math,No
+VD_math_2_2_1_1,Is angleA + angleB +angleC < 180?,VD,VD_math,No
+VD_math_2_2_1_2,Is angleA + angleB +angleC > 180?,VD,VD_math,Yes
+VD_math_2_3_1_0,"According to the parallel theorem, is angle A equal to angle B? Please answer yes or no.",VD,VD_math,No
+VD_math_2_3_1_1,"According to the parallel theorem, is angle A larger than angle B? Please answer yes or no.",VD,VD_math,Yes
+VD_math_2_3_1_2,"According to the parallel theorem, is angle A smaller than angle B? Please answer yes or no.",VD,VD_math,No
+VD_math_2_4_1_0,Is the value of x equal to 6? Please answer yes or no.,VD,VD_math,No
+VD_math_2_4_1_1,Is the value of x larger than 6? Please answer yes or no.,VD,VD_math,Yes
+VD_math_2_4_1_2,Is the value of x smaller than 6? Please answer yes or no.,VD,VD_math,No
+VD_math_2_5_1_0,"If angle A is 110 degree, then is the angle BOC equal to 145 degree? Please answer yes or no.",VD,VD_math,No
+VD_math_2_5_1_1,"If angle A is 110 degree, then is the angle BOC larger than 145 degree? Please answer yes or no.",VD,VD_math,No
+VD_math_2_5_1_2,"If angle A is 110 degree, then is the angle BOC smaller than 145 degree? Please answer yes or no.",VD,VD_math,No
+VD_math_2_6_1_0,"According to the figure, are the two orange lines both straight? Please answer yes or no.",VD,VD_math,No
+VD_math_2_6_1_1,"According to the figure, are the two orange lines both vertical? Please answer yes or no.",VD,VD_math,No
+VD_math_2_6_1_2,"According to the figure, are the two orange lines both curved? Please answer yes or no.",VD,VD_math,Yes
+VD_math_2_7_1_0,The area of B is 16 and the of area of C is 9. Is the area of square A equal to 25? Please answer yes or no.,VD,VD_math,No
+VD_math_2_7_1_1,The area of B is 16 and the of area of C is 9. Is the area of square A larger than 25? Please answer yes or no.,VD,VD_math,No
+VD_math_2_7_1_2,The area of B is 16 and the of area of C is 9. Is the area of square A smaller than 25? Please answer yes or no.,VD,VD_math,Yes
+VD_math_2_8_1_0,Is the area of the ABCD equal to 12? Please answer yes or no.,VD,VD_math,No
+VD_math_2_8_1_1,Is the area of the ABCD larger than 12? Please answer yes or no.,VD,VD_math,No
+VD_math_2_8_1_2,Is the area of the ABCD smaller than 12? Please answer yes or no.,VD,VD_math,Yes
+VD_math_2_9_1_0,"As shown in the figure, ∠AOB = 100.0, is the degree of ∠ACB to equal 50.0? Please answer yes or no",VD,VD_math,No
+VD_math_2_9_1_1,"As shown in the figure, ∠AOB = 100.0, is the degree of ∠ACB larger than 50.0? Please answer yes or no",VD,VD_math,Yes
+VD_math_2_9_1_2,"As shown in the figure, ∠AOB = 100.0, is the degree of ∠ACB smaller than 50.0? Please answer yes or no",VD,VD_math,No
+VD_ocr_1_0_0_0,"Does the image show ""Hot dry noodles from Wuhan""?",VD,VD_ocr,Yes
+VD_ocr_1_0_0_1,"Does the image show ""Hot dry noodles from Shandong""?",VD,VD_ocr,No
+VD_ocr_1_10_0_0,"According to the text given in the image, is this restaurant named Texas Roadhouse?",VD,VD_ocr,Yes
+VD_ocr_1_10_0_1,"According to the text given in the image, is this restaurant named Maryland Roadhouse?",VD,VD_ocr,No
+VD_ocr_1_11_0_0,"According to the text given in the image, is this sign located in Las Vegas?",VD,VD_ocr,Yes
+VD_ocr_1_11_0_1,"According to the text given in the image, is this sign located in College Park, MD?",VD,VD_ocr,No
+VD_ocr_1_12_0_0,"According to the lower text given in the image, is this poster for Viktor Tsoi and the Kino band?",VD,VD_ocr,Yes
+VD_ocr_1_12_0_1,"According to the lower text given in the image, is this poster for the DDT band?",VD,VD_ocr,No
+VD_ocr_1_13_0_0,"According to the text given in the image, is this logo for Red Bull?",VD,VD_ocr,Yes
+VD_ocr_1_13_0_1,"According to the text given in the image, is this logo for Red Deer?",VD,VD_ocr,No
+VD_ocr_1_14_0_0,"According to the text given in the image, does this poster depict the movie Zootopia?",VD,VD_ocr,Yes
+VD_ocr_1_14_0_1,"According to the text given in the image, does this poster depict the movie Utopia?",VD,VD_ocr,No
+VD_ocr_1_15_0_0,"According to the text given in the image, is this ice-cream a strawberry flavor ice cream?",VD,VD_ocr,No
+VD_ocr_1_15_0_1,"According to the text given in the image, is this ice-cream a vanilla-chocolate flavor ice cream?",VD,VD_ocr,Yes
+VD_ocr_1_16_0_0,"According to the text given in the image, is this ice-cream a strawberry flavor ice cream?",VD,VD_ocr,No
+VD_ocr_1_16_0_1,"According to the text given in the image, is this ice-cream a chocolate flavor ice cream?",VD,VD_ocr,Yes
+VD_ocr_1_17_0_0,"According to the text given in the image, does this poster depict the movie Oppenheimer?",VD,VD_ocr,Yes
+VD_ocr_1_17_0_1,"According to the text given in the image, does this poster depict the movie BARBENHEIMER?",VD,VD_ocr,No
+VD_ocr_1_18_0_0,"According to the text in this image, is this poster for the TV series Tokyo Tarareba Girls?",VD,VD_ocr,Yes
+VD_ocr_1_18_0_1,"According to the text in this image, is this poster for the TV series Tokyo Single Girls?",VD,VD_ocr,No
+VD_ocr_1_19_0_0,"According to the text in this image, is this poster for the TV series Reply 1988?",VD,VD_ocr,Yes
+VD_ocr_1_19_0_1,"According to the text in this image, is this poster for the TV series Please Send 1988?",VD,VD_ocr,No
+VD_ocr_1_1_0_0,"Does the image show ""Beijing Roast Duck""?",VD,VD_ocr,Yes
+VD_ocr_1_1_0_1,"Does the image show ""Guangxi Roast Duck""?",VD,VD_ocr,No
+VD_ocr_1_20_0_0,"According to the text in this image, is this ""Youcheng Cake Seasoned with Chicken Meat Floss""?",VD,VD_ocr,Yes
+VD_ocr_1_20_0_1,"According to the text in this image, is this ""Boli Cake Seasoned with Chicken Meat Floss""?",VD,VD_ocr,No
+VD_ocr_1_2_0_0,"According to the text in this image, is this a poster for ""The Shawshank Redemption""?",VD,VD_ocr,Yes
+VD_ocr_1_2_0_1,"According to the text in this image, is this a poster for ""Forrest Gump""?",VD,VD_ocr,No
+VD_ocr_1_3_0_0,"According to the pizza image in the figure, is this pizza a Margherita Pizza?",VD,VD_ocr,Yes
+VD_ocr_1_3_0_1,"According to the pizza image in the figure, is this pizza a Hawaiian Pizza?",VD,VD_ocr,No
+VD_ocr_1_3_0_2,"According to the pizza image in the figure, is this pizza a Pepperoni Pizza?",VD,VD_ocr,No
+VD_ocr_1_4_0_0,"According to the text in this image, is this a Parma ham?",VD,VD_ocr,Yes
+VD_ocr_1_4_0_1,"According to the text in this image, is this a Roma ham?",VD,VD_ocr,No
+VD_ocr_1_5_0_0,"According to the cake in the image, is this a black forest cake?",VD,VD_ocr,Yes
+VD_ocr_1_5_0_1,"According to the cake in the image, is this a red forest cake?",VD,VD_ocr,No
+VD_ocr_1_6_0_0,"According to the cake in the image, is this a red velvet cake?",VD,VD_ocr,Yes
+VD_ocr_1_6_0_1,"According to the cake in the image, is this a red forest cake?",VD,VD_ocr,No
+VD_ocr_1_7_0_0,"According to the text below the logo, is this image for Al Jazeera?",VD,VD_ocr,Yes
+VD_ocr_1_7_0_1,"According to the text below the logo, is this image for Al-Jazari?",VD,VD_ocr,No
+VD_ocr_1_8_0_0,"According to the text given in the image, is this a New York strip steak?",VD,VD_ocr,Yes
+VD_ocr_1_8_0_1,"According to the text given in the image, is this a Boston strip steak?",VD,VD_ocr,No
+VD_ocr_1_9_0_0,"According to the text given in the image, is this a New York style cheesecake?",VD,VD_ocr,Yes
+VD_ocr_1_9_0_1,"According to the text given in the image, is this a Washington style cheesecake?",VD,VD_ocr,No
+VD_ocr_2_0_1_0,"Does the image show ""Hot dry noodles from Wuhan""?",VD,VD_ocr,No
+VD_ocr_2_0_1_1,"Does the image show ""Hot dry noodles from Shandong""?",VD,VD_ocr,Yes
+VD_ocr_2_10_1_0,"According to the text given in the image, is this restaurant named Texas Roadhouse?",VD,VD_ocr,No
+VD_ocr_2_10_1_1,"According to the text given in the image, is this restaurant named Maryland Roadhouse?",VD,VD_ocr,Yes
+VD_ocr_2_11_1_0,"According to the text given in the image, is this sign located in Las Vegas?",VD,VD_ocr,No
+VD_ocr_2_11_1_1,"According to the text given in the image, is this sign located in College Park, MD?",VD,VD_ocr,Yes
+VD_ocr_2_12_1_0,"According to the lower text given in the image, is this poster for Viktor Tsoi and the Kino band?",VD,VD_ocr,No
+VD_ocr_2_12_1_1,"According to the lower text given in the image, is this poster for the DDT band?",VD,VD_ocr,Yes
+VD_ocr_2_13_1_0,"According to the text given in the image, is this logo for Red Bull?",VD,VD_ocr,No
+VD_ocr_2_13_1_1,"According to the text given in the image, is this logo for Red Deer?",VD,VD_ocr,Yes
+VD_ocr_2_14_1_0,"According to the text given in the image, does this poster depict the movie Zootopia?",VD,VD_ocr,No
+VD_ocr_2_14_1_1,"According to the text given in the image, does this poster depict the movie Utopia?",VD,VD_ocr,Yes
+VD_ocr_2_15_1_0,"According to the text given in the image, is this ice-cream a strawberry flavor ice cream?",VD,VD_ocr,Yes
+VD_ocr_2_15_1_1,"According to the text given in the image, is this ice-cream a vanilla-chocolate flavor ice cream?",VD,VD_ocr,No
+VD_ocr_2_16_1_0,"According to the text given in the image, is this ice-cream a strawberry flavor ice cream?",VD,VD_ocr,Yes
+VD_ocr_2_16_1_1,"According to the text given in the image, is this ice-cream a chocolate flavor ice cream?",VD,VD_ocr,No
+VD_ocr_2_17_1_0,"According to the text given in the image, does this poster depict the movie Oppenheimer?",VD,VD_ocr,No
+VD_ocr_2_17_1_1,"According to the text given in the image, does this poster depict the movie BARBENHEIMER?",VD,VD_ocr,Yes
+VD_ocr_2_18_1_0,"According to the text in this image, is this poster for the TV series Tokyo Tarareba Girls?",VD,VD_ocr,No
+VD_ocr_2_18_1_1,"According to the text in this image, is this poster for the TV series Tokyo Single Girls?",VD,VD_ocr,Yes
+VD_ocr_2_19_1_0,"According to the text in this image, is this poster for the TV series Reply 1988?",VD,VD_ocr,No
+VD_ocr_2_19_1_1,"According to the text in this image, is this poster for the TV series Please Send 1988?",VD,VD_ocr,Yes
+VD_ocr_2_1_1_0,"Does the image show ""Beijing Roast Duck""?",VD,VD_ocr,No
+VD_ocr_2_1_1_1,"Does the image show ""Guangxi Roast Duck""?",VD,VD_ocr,Yes
+VD_ocr_2_20_1_0,"According to the text in this image, is this ""Youcheng Cake Seasoned with Chicken Meat Floss""?",VD,VD_ocr,No
+VD_ocr_2_20_1_1,"According to the text in this image, is this ""Boli Cake Seasoned with Chicken Meat Floss""?",VD,VD_ocr,Yes
+VD_ocr_2_2_1_0,"According to the text in this image, is this a poster for ""The Shawshank Redemption""?",VD,VD_ocr,No
+VD_ocr_2_2_1_1,"According to the text in this image, is this a poster for ""Forrest Gump""?",VD,VD_ocr,Yes
+VD_ocr_2_3_1_0,"According to the pizza image in the figure, is this pizza a Margherita Pizza?",VD,VD_ocr,Yes
+VD_ocr_2_3_1_1,"According to the pizza image in the figure, is this pizza a Hawaiian Pizza?",VD,VD_ocr,No
+VD_ocr_2_3_1_2,"According to the pizza image in the figure, is this pizza a Pepperoni Pizza?",VD,VD_ocr,No
+VD_ocr_2_3_2_0,"According to the pizza image in the figure, is this pizza a Margherita Pizza?",VD,VD_ocr,Yes
+VD_ocr_2_3_2_1,"According to the pizza image in the figure, is this pizza a Hawaiian Pizza?",VD,VD_ocr,No
+VD_ocr_2_3_2_2,"According to the pizza image in the figure, is this pizza a Pepperoni Pizza?",VD,VD_ocr,No
+VD_ocr_2_4_1_0,"According to the text in this image, is this a Parma ham?",VD,VD_ocr,No
+VD_ocr_2_4_1_1,"According to the text in this image, is this a Roma ham?",VD,VD_ocr,Yes
+VD_ocr_2_5_1_0,"According to the cake in the image, is this a black forest cake?",VD,VD_ocr,No
+VD_ocr_2_5_1_1,"According to the cake in the image, is this a red forest cake?",VD,VD_ocr,Yes
+VD_ocr_2_6_1_0,"According to the cake in the image, is this a red velvet cake?",VD,VD_ocr,No
+VD_ocr_2_6_1_1,"According to the cake in the image, is this a red forest cake?",VD,VD_ocr,Yes
+VD_ocr_2_7_1_0,"According to the text below the logo, is this image for Al Jazeera?",VD,VD_ocr,No
+VD_ocr_2_7_1_1,"According to the text below the logo, is this image for Al-Jazari?",VD,VD_ocr,Yes
+VD_ocr_2_8_1_0,"According to the text given in the image, is this a New York strip steak?",VD,VD_ocr,No
+VD_ocr_2_8_1_1,"According to the text given in the image, is this a Boston strip steak?",VD,VD_ocr,Yes
+VD_ocr_2_9_1_0,"According to the text given in the image, is this a New York style cheesecake?",VD,VD_ocr,No
+VD_ocr_2_9_1_1,"According to the text given in the image, is this a Washington style cheesecake?",VD,VD_ocr,Yes
+VD_video_1_0_0_0,Is the sequence of the image moving?,VD,VD_video,No
+VD_video_1_10_0_0,"According to the positive sequence of the images, Is this monkey removing the wheel? Answer in one word.",VD,VD_video,Yes
+VD_video_1_10_0_1,"According to the positive sequence of the images, Is this monkey installing the wheel? Answer in one word.",VD,VD_video,No
+VD_video_1_10_0_2,"This monkey is removing the wheel. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,Yes
+VD_video_1_10_0_3,"This monkey is installing the wheel. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_1_11_0_0,"According to the positive sequence of the images, Is this man throwing a woman into the toilet? Answer in one word.",VD,VD_video,Yes
+VD_video_1_11_0_1,"According to the positive sequence of the images, Is this woman jumping out from the toilet? Answer in one word.",VD,VD_video,No
+VD_video_1_11_0_2,"This man is throwing a woman into the toilet. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,Yes
+VD_video_1_11_0_3,"This woman is jumping out from a toilet. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_1_12_0_0,"According to the positive sequence of the images, Is the circle moving towards to right? Answer in one word.",VD,VD_video,No
+VD_video_1_12_0_1,"According to the positive sequence of the images, Is the circle keeping in the same place? Answer in one word.",VD,VD_video,Yes
+VD_video_1_12_0_2,"According to the positive sequence of the images, Is the circle moving towards to right? Answer in one word.",VD,VD_video,No
+VD_video_1_13_0_0,"According to the positive sequence of the images, is there a dog in this video? Answer in one word.",VD,VD_video,No
+VD_video_1_13_0_1,"According to the positive sequence of the images, is there a sloth in this video? Answer in one word.",VD,VD_video,Yes
+VD_video_1_13_0_2,"According to the positive sequence of the images, is there a cat in this video? Answer in one word.",VD,VD_video,Yes
+VD_video_1_14_0_0,"According to the positive sequence of the images, are they skating to left? Answer in one word.",VD,VD_video,Yes
+VD_video_1_14_0_1,"According to the positive sequence of the images, are they skating to right? Answer in one word.",VD,VD_video,No
+VD_video_1_14_0_2,"They are skating to left. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_14_0_3,"They are skating to right. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_1_15_0_0,"According to the positive sequence of the images, is the man running to right? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_15_0_1,"According to the positive sequence of the images, is the man running to left? Answer in one sentence.",VD,VD_video,No
+VD_video_1_16_0_0,"According to the positive sequence of the images, is the baby crawling to right? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_16_0_1,"According to the positive sequence of the images, is the baby crawling to left? Answer in one sentence.",VD,VD_video,No
+VD_video_1_17_0_0,"According to the positive sequence of the images, is this cartoon character getting closer? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_17_0_1,"According to the positive sequence of the images, is this cartoon character getting far away? Answer in one sentence.",VD,VD_video,No
+VD_video_1_17_0_2,"This cartoon character getting closer. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_17_0_3,"This cartoon character getting further away. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_1_18_0_0,"According to the positive sequence of the images, are they hugging? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_18_0_1,"According to the positive sequence of the images, are they growing apart? Answer in one sentence.",VD,VD_video,No
+VD_video_1_18_0_2,"They are hugging. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_18_0_3,"They are growing apart. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_1_19_0_0,"According to the positive sequence of the images, Is he running counterclockwise? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_19_0_1,"According to the positive sequence of the images, Is he running clockwise? Answer in one sentence.",VD,VD_video,No
+VD_video_1_19_0_2,"He is running counterclockwise. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_1_19_0_3,"He is running clockwise. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_1_1_0_0,"According to the positive sequence images, does Homer Simpson disappear into the bushes?",VD,VD_video,Yes
+VD_video_1_1_0_1,"According to the positive sequence images, does Homer Simpson come out of the bushes?",VD,VD_video,No
+VD_video_1_1_0_2,"Homer Simpson disappears into the bushes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_1_0_3,"Homer Simpson comes out of the bushes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_2_0_0,"According to the positive sequence of the images, does the basketball player make a dunk?",VD,VD_video,Yes
+VD_video_1_2_0_1,"According to the positive sequence of the images, does the basketball player make a three-point shooting?",VD,VD_video,No
+VD_video_1_2_0_2,"According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_3_0_0,"According to the positive sequence of the images, does the man open the door?",VD,VD_video,Yes
+VD_video_1_3_0_1,"According to the positive sequence of the images, does the man close the door?",VD,VD_video,No
+VD_video_1_3_0_2,"The man opens the door. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_3_0_3,"The man closes the door. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_4_0_0,"According to the positive sequence of the images, does the blue car attempt to park?",VD,VD_video,Yes
+VD_video_1_4_0_1,"According to the positive sequence of the images, does the blue car attempt to leave the parking space?",VD,VD_video,No
+VD_video_1_4_0_2,"The blue car attempts to park. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_4_0_3,"The blue car attempts to leave the parking space. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_5_0_0,"According to the positive sequence of the images, does the baby attempt to put on the clothes?",VD,VD_video,Yes
+VD_video_1_5_0_1,"According to the positive sequence of the images, does the baby attempt to take off the clothes?",VD,VD_video,No
+VD_video_1_5_0_2,"The baby attempts to put on the clothes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_5_0_3,"The baby attempts to take off the clothes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_6_0_0,"According to the positive sequence of the images, does the temperature increase?",VD,VD_video,Yes
+VD_video_1_6_0_1,"According to the positive sequence of the images, does the temperature decrease?",VD,VD_video,No
+VD_video_1_6_0_2,"The temperature increases. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_6_0_3,"The temperature decreases. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_7_0_0,"According to the positive sequence of the images, is the plug put into the power outlet?",VD,VD_video,Yes
+VD_video_1_7_0_1,"According to the positive sequence of the images, is the plug removed from the power outlet?",VD,VD_video,No
+VD_video_1_7_0_2,"The plug is put into the power outlet. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_7_0_3,"The plug is removed from the power outlet. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_8_0_0,"According to the positive sequence of the images, is the blue car moving forward?",VD,VD_video,Yes
+VD_video_1_8_0_1,"According to the positive sequence of the images, is the blue car moving backward?",VD,VD_video,No
+VD_video_1_8_0_2,"The blue car is moving forward. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_1_8_0_3,"The blue car is moving backward. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_1_9_0_0,"According to the positive sequence of the images, is the circle inside autobiographical anticlockwise? Answer in one word.",VD,VD_video,Yes
+VD_video_1_9_0_1,"According to the positive sequence of the images, is the circle inside autobiographical clockwise? Answer in one word.",VD,VD_video,No
+VD_video_1_9_0_2,"The circle inside is autobiographical anticlockwise. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,Yes
+VD_video_2_0_1_0,Is the sequence of the image moving?,VD,VD_video,Yes
+VD_video_2_10_1_0,"According to the positive sequence of the images, Is this monkey removing the wheel? Answer in one word.",VD,VD_video,No
+VD_video_2_10_1_1,"According to the positive sequence of the images, Is this monkey installing the wheel? Answer in one word.",VD,VD_video,Yes
+VD_video_2_10_1_2,"This monkey is removing the wheel. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_2_10_1_3,"This monkey is installing the wheel. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,Yes
+VD_video_2_10_2_0,"According to the positive sequence of the images, Is this monkey removing the wheel? Answer in one word.",VD,VD_video,No
+VD_video_2_10_2_1,"According to the positive sequence of the images, Is this monkey installing the wheel? Answer in one word.",VD,VD_video,No
+VD_video_2_10_2_2,"This monkey is removing the wheel. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_2_10_2_3,"This monkey is installing the wheel. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_2_11_1_0,"According to the positive sequence of the images, Is this man throwing a woman into the toilet? Answer in one word.",VD,VD_video,No
+VD_video_2_11_1_1,"According to the positive sequence of the images, Is this woman jumping out from the toilet? Answer in one word.",VD,VD_video,Yes
+VD_video_2_11_1_2,"This man is throwing a woman into the toilet. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_2_11_1_3,"This woman is jumping out from a toilet. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,Yes
+VD_video_2_11_2_0,"According to the positive sequence of the images, Is this man throwing a woman into the toilet? Answer in one word.",VD,VD_video,Yes
+VD_video_2_11_2_1,"According to the positive sequence of the images, Is this woman jumping out from the toilet? Answer in one word.",VD,VD_video,Yes
+VD_video_2_11_2_2,"This man is throwing a woman into the toilet. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_2_11_2_3,"This woman is jumping out from a toilet. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VD_video_2_12_1_0,"According to the positive sequence of the images, Is the circle moving towards to right? Answer in one word.",VD,VD_video,No
+VD_video_2_12_1_1,"According to the positive sequence of the images, Is the circle keeping in the same place? Answer in one word.",VD,VD_video,Yes
+VD_video_2_12_1_2,"According to the positive sequence of the images, Is the circle moving towards to left? Answer in one word.",VD,VD_video,No
+VD_video_2_12_2_0,"According to the positive sequence of the images, Is the circle moving towards to right? Answer in one word.",VD,VD_video,No
+VD_video_2_12_2_1,"According to the positive sequence of the images, Is the circle keeping in the same place? Answer in one word.",VD,VD_video,Yes
+VD_video_2_12_2_2,"According to the positive sequence of the images, Is the circle moving towards to left? Answer in one word.",VD,VD_video,No
+VD_video_2_14_1_0,"According to the positive sequence of the images, are they skating to left? Answer in one sentence.",VD,VD_video,No
+VD_video_2_14_1_1,"According to the positive sequence of the images, are they skating to right? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_14_1_2,"They are skating to left. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_14_1_3,"They are skating to right. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_14_2_0,"According to the positive sequence of the images, are they skating to left? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_14_2_1,"According to the positive sequence of the images, are they skating to right? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_14_2_2,"They are skating to left. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_14_2_3,"They are skating to right. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_15_1_0,"According to the positive sequence of the images, is the man running to right? Answer in one sentence.",VD,VD_video,No
+VD_video_2_15_1_1,"According to the positive sequence of the images, is the man running to left? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_16_1_0,"According to the positive sequence of the images, is the baby crawling to right? Answer in one sentence.",VD,VD_video,No
+VD_video_2_16_1_1,"According to the positive sequence of the images, is the baby crawling to left? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_17_1_0,"According to the positive sequence of the images, is this cartoon character getting closer? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_17_1_1,"According to the positive sequence of the images, is this cartoon character getting far away? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_17_1_2,"This cartoon character getting closer. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_17_1_3,"This cartoon character getting further away. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_18_1_0,"According to the positive sequence of the images, are they hugging? Answer in one sentence.",VD,VD_video,No
+VD_video_2_18_1_1,"According to the positive sequence of the images, are they growing apart? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_18_1_2,"They are hugging. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_18_1_3,"They are growing apart. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_18_2_0,"According to the positive sequence of the images, are they hugging? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_18_2_1,"According to the positive sequence of the images, are they growing apart? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_18_2_2,"They are hugging. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_18_2_3,"They are growing apart. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_19_1_0,"According to the positive sequence of the images, Is he running counterclockwise? Answer in one sentence.",VD,VD_video,No
+VD_video_2_19_1_1,"According to the positive sequence of the images, Is he running clockwise? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_19_1_2,"He is running counterclockwise. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_19_1_3,"He is running clockwise. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_19_2_0,"According to the positive sequence of the images, Is he running counterclockwise? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_19_2_1,"According to the positive sequence of the images, Is he running clockwise? Answer in one sentence.",VD,VD_video,Yes
+VD_video_2_19_2_2,"He is running counterclockwise. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_19_2_3,"He is running clockwise. According to the positive sequence of the images, are they in the correct order? Answer in one sentence.",VD,VD_video,No
+VD_video_2_1_1_0,"According to the positive sequence images, does Homer Simpson disappear into the bushes?",VD,VD_video,No
+VD_video_2_1_1_1,"According to the positive sequence images, does Homer Simpson come out of the bushes?",VD,VD_video,Yes
+VD_video_2_1_1_2,"Homer Simpson disappears into the bushes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_1_1_3,"Homer Simpson comes out of the bushes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_1_2_0,"According to the positive sequence images, does Homer Simpson disappear into the bushes?",VD,VD_video,No
+VD_video_2_1_2_1,"According to the positive sequence images, does Homer Simpson come out of the bushes?",VD,VD_video,No
+VD_video_2_1_2_2,"Homer Simpson disappears into the bushes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_1_2_3,"Homer Simpson comes out of the bushes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_2_1_0,"According to the positive sequence of the images, does the basketball player make a dunk?",VD,VD_video,No
+VD_video_2_2_1_1,"According to the positive sequence of the images, does the basketball player make a three-point shooting?",VD,VD_video,No
+VD_video_2_2_1_2,"According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_3_1_0,"According to the positive sequence of the images, does the man open the door?",VD,VD_video,No
+VD_video_2_3_1_1,"According to the positive sequence of the images, does the man close the door?",VD,VD_video,Yes
+VD_video_2_3_1_2,"The man opens the door. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_3_1_3,"The man closes the door. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_3_2_0,"According to the positive sequence of the images, does the man open the door?",VD,VD_video,No
+VD_video_2_3_2_1,"According to the positive sequence of the images, does the man close the door?",VD,VD_video,No
+VD_video_2_3_2_2,"The man opens the door. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_3_2_3,"The man closes the door. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_4_1_0,"According to the positive sequence of the images, does the blue car attempt to park?",VD,VD_video,No
+VD_video_2_4_1_1,"According to the positive sequence of the images, does the blue car attempt to leave the parking space?",VD,VD_video,Yes
+VD_video_2_4_1_2,"The blue car attempts to park. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_4_1_3,"The blue car attempts to leave the parking space. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_4_2_0,"According to the positive sequence of the images, does the blue car attempt to park?",VD,VD_video,No
+VD_video_2_4_2_1,"According to the positive sequence of the images, does the blue car attempt to leave the parking space?",VD,VD_video,No
+VD_video_2_4_2_2,"The blue car attempts to park. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_4_2_3,"The blue car attempts to leave the parking space. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_5_1_0,"According to the positive sequence of the images, does the baby attempt to put on the clothes?",VD,VD_video,No
+VD_video_2_5_1_1,"According to the positive sequence of the images, does the baby attempt to take off the clothes?",VD,VD_video,Yes
+VD_video_2_5_1_2,"The baby attempts to put on the clothes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_5_1_3,"The baby attempts to take off the clothes. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_6_1_0,"According to the positive sequence of the images, does the temperature increase?",VD,VD_video,No
+VD_video_2_6_1_1,"According to the positive sequence of the images, does the temperature decrease?",VD,VD_video,Yes
+VD_video_2_6_1_2,"The temperature increases. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_6_1_3,"The temperature decreases. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_7_1_0,"According to the positive sequence of the images, is the plug put into the power outlet?",VD,VD_video,No
+VD_video_2_7_1_1,"According to the positive sequence of the images, is the plug removed from the power outlet?",VD,VD_video,Yes
+VD_video_2_7_1_2,"The plug is put into the power outlet. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_7_1_3,"The plug is removed from the power outlet. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_8_1_0,"According to the positive sequence of the images, is the blue car moving forward?",VD,VD_video,No
+VD_video_2_8_1_1,"According to the positive sequence of the images, is the blue car moving backward?",VD,VD_video,Yes
+VD_video_2_8_1_2,"The blue car is moving forward. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,No
+VD_video_2_8_1_3,"The blue car is moving backward. According to the positive sequence of the images, are they in the correct order?",VD,VD_video,Yes
+VD_video_2_9_1_0,"According to the positive sequence of the images, is the circle inside autobiographical anticlockwise? Answer in one word.",VD,VD_video,No
+VD_video_2_9_1_1,"According to the positive sequence of the images, is the circle inside autobiographical clockwise? Answer in one word.",VD,VD_video,No
+VD_video_2_9_1_2,"The circle inside is autobiographical anticlockwise. According to the positive sequence of the images, are they in the correct order? Answer in one word.",VD,VD_video,No
+VS_chart_1_0_1_0,"Is China, Hongkong SAR, the leading importing country of gold, silverware, and jewelry with the highest import value in 2018?",VS,VS_chart,No
+VS_chart_1_0_1_1,"Is Switzerland, the leading importing country of gold, silverware, and jewelry with the highest import value in 2018?",VS,VS_chart,Yes
+VS_chart_1_0_1_2,"Is France, the leading importing country of gold, silverware, and jewelry with the highest import value in 2018?",VS,VS_chart,No
+VS_chart_1_0_1_3,"Is the United States, the leading importing country of gold, silverware, and jewelry with the highest import value in 2018?",VS,VS_chart,No
+VS_chart_1_10_1_0,"According to the image, were white individuals the largest population group in the United States in 2020, with Latinos and African Americans as the second and third largest groups, respectively?",VS,VS_chart,Yes
+VS_chart_1_10_1_1,"According to the image, were African Americans the largest population group in the United States in 2020, with Whites and Latinos as the second and third largest groups, respectively?",VS,VS_chart,No
+VS_chart_1_10_1_2,"According to the image, were Latinos the largest population group in the United States in 2020, with Whites and African Americans as the second and third largest groups, respectively?",VS,VS_chart,No
+VS_chart_1_10_1_3,"According to the image, were Asians the largest population group in the United States in 2020, with Whites and African Americans as the second and third largest groups, respectively?",VS,VS_chart,No
+VS_chart_1_11_1_0,"According to the image, between 2011 and 2020, was 2020 the year when China's exports to the United States reached their highest value?",VS,VS_chart,No
+VS_chart_1_11_1_1,"According to the image, did China's exports to the United States experience a decrease from 2016 to 2018?",VS,VS_chart,No
+VS_chart_1_12_1_0,"According to the image, in 2013, was the United States the largest recipient of exports from China in terms of US dollars, followed by Hong Kong and Japan?",VS,VS_chart,No
+VS_chart_1_12_1_1,"According to the image, in 2013, was Hong Kong the largest recipient of exports from China in terms of US dollars, followed by the United States and Japan?",VS,VS_chart,Yes
+VS_chart_1_12_1_2,"According to the image, in 2013, was Japn the largest recipient of exports from China in terms of US dollars, followed by the United States and Hong Kong?",VS,VS_chart,No
+VS_chart_1_13_1_0,"According to the image, between March 2020 and December 2021, did the United States experience the peak average number of daily reported COVID-19 deaths during the initial wave, which spanned from March 2020 to June 2020?",VS,VS_chart,No
+VS_chart_1_13_1_1,"According to the image, had the total number of coronavirus deaths in the United States reached 937,000 by February 2021?",VS,VS_chart,No
+VS_chart_1_14_1_0,"According to the image, did the Soviet Union suffer the greatest number of total deaths in World War II, with China having the second-highest?",VS,VS_chart,Yes
+VS_chart_1_14_1_1,"According to the image, did the United States suffer the greatest number of total deaths in World War II, with China having the second-highest?",VS,VS_chart,No
+VS_chart_1_14_1_2,"According to the image, did United Kingdom experience the highest percentage of total deaths relative to its 1939 population during World War II, followed by Poland?",VS,VS_chart,No
+VS_chart_1_15_1_0,"According to the image, did the global death toll from earthquakes surpass 200,000 in any year between 2000 and 2015?",VS,VS_chart,Yes
+VS_chart_1_15_1_1,"According to the image, did the year 2004 witness a higher global death toll due to earthquakes than 2005?",VS,VS_chart,Yes
+VS_chart_1_16_1_0,"According to the image, does DJI hold more than 50% of the commercial drone brand market share in 2021?",VS,VS_chart,Yes
+VS_chart_1_16_1_1,"According to the image, is the combined market share of Autel, FreeFly, Skydio, and Parrot greater than the market share of DJI alone in 2021?",VS,VS_chart,No
+VS_chart_1_17_1_0,"According to the image, is Mark Zuckerberg'swealth greater than Larry Ellison's on 13th March 2020?",VS,VS_chart,No
+VS_chart_1_17_1_1,"According to the image, was Elon Musk richer than Mark Zuckerberg on March 13th, 2020?",VS,VS_chart,No
+VS_chart_1_17_1_2,"According to the image, was Elon Musk richer than Mark Zuckerberg, on January 10th, 2021?",VS,VS_chart,Yes
+VS_chart_1_18_1_0,"According to the image, in 2017, was Tencent the company with the highest revenue from video games, with Sony as the second-highest earner?",VS,VS_chart,Yes
+VS_chart_1_18_1_1,"According to the image, in 2017, did Apple generate higher revenue from video games compared to Google?",VS,VS_chart,Yes
+VS_chart_1_19_1_0,"According to the image, during the coronavirus pandemic from 2019 to 2022, were the most bankruptcy filings in the US recorded in the year 2020?",VS,VS_chart,Yes
+VS_chart_1_19_1_1,"According to the image, during the coronavirus pandemic from 2019 to 2022, were the most bankruptcy filings in the US recorded in the year 2021?",VS,VS_chart,No
+VS_chart_1_1_1_0,"From 2001 to 2019, Is 2010 exported the most value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,No
+VS_chart_1_1_1_1,"From 2001 to 2019, Is 2019 exported the most value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,Yes
+VS_chart_1_1_1_2,"From 2001 to 2010, Is 2010 exported the most value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,Yes
+VS_chart_1_1_1_3,"From 2001 to 2010, Is 2005 exported the most value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,No
+VS_chart_1_1_1_4,"From 2000 to 2019, Is 2010 exported the least value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,No
+VS_chart_1_1_1_5,"From 2000 to 2019, Is 2019 exported the least value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,No
+VS_chart_1_1_1_6,"From 2010 to 2019, Is 2010 exported the least value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,Yes
+VS_chart_1_1_1_7,"From 2010 to 2019, Is 2015 exported the least value of bread, biscuits, wafers, cakes and pastries from the UK?",VS,VS_chart,No
+VS_chart_1_20_1_0,"According to the image, in 2020, did China have a larger population aged between 90 and 94 years than those aged between 0 and 4 years?",VS,VS_chart,No
+VS_chart_1_20_1_1,"According to the image, in 2020, did China have a larger population aged between 50 and 54 years than those aged between 0 and 4 years?",VS,VS_chart,Yes
+VS_chart_1_21_1_0,"According to the image, in 2018, did ""Black Panther"" achieve the highest box office revenue in North America?",VS,VS_chart,Yes
+VS_chart_1_21_1_1,"According to the image, in 2018, did ""Avengers: Infinity War"" achieve the highest box office revenue in North America?",VS,VS_chart,No
+VS_chart_1_2_1_0,"From 2000-2050, is the population aged between 15 and 29 years in China the most in 2000?",VS,VS_chart,No
+VS_chart_1_2_1_1,"From 2000-2050, is the population aged between 15 and 29 years in China the most in 2005?",VS,VS_chart,Yes
+VS_chart_1_2_1_2,"From 2000-2050, is the population aged between 15 and 29 years in China the most in 2030?",VS,VS_chart,No
+VS_chart_1_2_1_3,"From 2000-2050, is the population aged between 15 and 29 years in China the most in 2050?",VS,VS_chart,No
+VS_chart_1_2_1_4,"From 2000-2050, is the population aged between 15 and 29 years in China the least in 2000?",VS,VS_chart,No
+VS_chart_1_2_1_5,"From 2000-2050, is the population aged between 15 and 29 years in China the least in 2005?",VS,VS_chart,No
+VS_chart_1_2_1_6,"From 2000-2050, is the population aged between 15 and 29 years in China the least in 2030?",VS,VS_chart,No
+VS_chart_1_2_1_7,"From 2000-2050, is the population aged between 15 and 29 years in China the least in 2050?",VS,VS_chart,Yes
+VS_chart_1_5_1_0,"According to the image, in 2019, did Asian families have the highest real median household income in the United States, with White, Hispanic, and Black households following respectively?",VS,VS_chart,Yes
+VS_chart_1_5_1_1,"According to the image, in 2019, did Black families have the highest real median household income in the United States, with White, Hispanic, and Asian households following respectively?",VS,VS_chart,No
+VS_chart_1_5_1_2,"According to the image, in 2019, did Black and White households represent the only racial groups with median incomes surpassing the national average in the United States, while Hispanic and Asian households had median incomes below the average?",VS,VS_chart,No
+VS_chart_1_5_1_3,"According to the image, in 2019, did Hispanic and Asian households represent the only racial groups with median incomes surpassing the national average in the United States, while Black and White households had median incomes below the average?",VS,VS_chart,No
+VS_chart_1_6_1_0,"From 2012 to 2022, did Apple derive the majority of its revenue from the Americas?",VS,VS_chart,Yes
+VS_chart_1_6_1_1,"From 2012 to 2022, did Apple derive the majority of its revenue from Europe?",VS,VS_chart,No
+VS_chart_1_6_1_2,"From 2012 to 2022, did Apple derive the majority of its revenue from Greater China?",VS,VS_chart,No
+VS_chart_1_6_1_3,"From 2012 to 2022, did Apple derive the majority of its revenue from Japan?",VS,VS_chart,No
+VS_chart_1_7_1_0,"In 2019, were the main policy interest rates of the U.S. Central Bank higher than those of the Central Banks in the UK, Eurozone, and Japan?",VS,VS_chart,Yes
+VS_chart_1_7_1_1,"In 2019, were the main policy interest rates of the Central Banks in the UK higher than those of the U.S. Central Bank , Eurozone, and Japan?",VS,VS_chart,No
+VS_chart_1_7_1_2,"In 2019, were the main policy interest rates of the Central Banks in the Eurozone higher than those of the U.S. Central Bank, the Central Banks in the UK, and Japan?",VS,VS_chart,No
+VS_chart_1_7_1_3,"In 2019, were the main policy interest rates of the Japan Central Bank higher than those of the Central Banks in the UK, Eurozone, and U.S.?",VS,VS_chart,No
+VS_chart_1_8_1_0,"According to the image, was Harry Kane the top goalscorer at the 2018 FIFA World Cup?",VS,VS_chart,Yes
+VS_chart_1_8_1_1,"According to the image, was Cristiano Ronaldo the top goalscorer at the 2018 FIFA World Cup?",VS,VS_chart,No
+VS_chart_1_8_1_2,"According to the image, was Antoine Griezmann the top goalscorer at the 2018 FIFA World Cup?",VS,VS_chart,No
+VS_chart_1_9_1_0,"In 2020, did the United States have the largest GDP around the world, followed by China, and Japan, according to the image?",VS,VS_chart,Yes
+VS_chart_1_9_1_1,"In 2020, did China have the largest GDP around the world, followed by the United States, and Japan, according to the image?",VS,VS_chart,No
+VS_chart_1_9_1_2,"In 2020, did Japan have the largest GDP around the world, followed by the United States, and China, according to the image?",VS,VS_chart,No
+VS_chart_1_9_1_3,"In 2020, did India have the largest GDP around the world, followed by China and Japan, according to the image?",VS,VS_chart,No
+VS_chart_2_10_2_0,"According to the image, were white individuals the largest population group in the United States in 2020, with Latinos and African Americans as the second and third largest groups, respectively?",VS,VS_chart,No
+VS_chart_2_10_2_1,"According to the image, were African Americans the largest population group in the United States in 2020, with Whites and Latinos as the second and third largest groups, respectively?",VS,VS_chart,No
+VS_chart_2_10_2_2,"According to the image, were Latinos the largest population group in the United States in 2020, with Whites and African Americans as the second and third largest groups, respectively?",VS,VS_chart,No
+VS_chart_2_10_2_3,"According to the image, were Asians the largest population group in the United States in 2020, with Whites and African Americans as the second and third largest groups, respectively?",VS,VS_chart,Yes
+VS_chart_2_12_2_0,"According to the image, in 2013, was the United States the largest recipient of exports from China in terms of US dollars, followed by Hong Kong and Japan?",VS,VS_chart,No
+VS_chart_2_12_2_1,"According to the image, in 2013, was Hong Kong the largest recipient of exports from China in terms of US dollars, followed by the United States and Japan?",VS,VS_chart,No
+VS_chart_2_12_2_2,"According to the image, in 2013, was Japn the largest recipient of exports from China in terms of US dollars, followed by the United States and Hong Kong?",VS,VS_chart,No
+VS_chart_2_13_2_0,"According to the image, between March 2020 and December 2021, did the United States experience the peak average number of daily reported COVID-19 deaths during the initial wave, which spanned from March 2020 to June 2020?",VS,VS_chart,No
+VS_chart_2_13_2_1,"According to the image, had the total number of coronavirus deaths in the United States reached 937,000 by February 2021?",VS,VS_chart,Yes
+VS_chart_2_14_2_0,"According to the image, did the Soviet Union suffer the greatest number of total deaths in World War II, with China having the second-highest?",VS,VS_chart,No
+VS_chart_2_14_2_1,"According to the image, did the United States suffer the greatest number of total deaths in World War II, with China having the second-highest?",VS,VS_chart,Yes
+VS_chart_2_14_2_2,"According to the image, did United Kingdom experience the highest percentage of total deaths relative to its 1939 population during World War II, followed by Poland?",VS,VS_chart,No
+VS_chart_2_15_2_0,"According to the image, did the global death toll from earthquakes surpass 200,000 in any year between 2000 and 2009?",VS,VS_chart,No
+VS_chart_2_15_2_1,"According to the image, did the year 2004 witness a higher global death toll due to earthquakes than 2005?",VS,VS_chart,No
+VS_chart_2_16_2_0,"According to the image, does DJI hold more than 50% of the commercial drone brand market share in 2021?",VS,VS_chart,No
+VS_chart_2_16_2_1,"According to the image, is the combined market share of Autel, FreeFly, Skydio, and Parrot greater than the market share of DJI alone in 2021?",VS,VS_chart,Yes
+VS_chart_2_17_2_0,"According to the image, is Mark Zuckerberg'swealth greater than Larry Ellison's on 13th March 2020?",VS,VS_chart,No
+VS_chart_2_17_2_1,"According to the image, was Elon Musk richer than Mark Zuckerberg on March 13th, 2020?",VS,VS_chart,No
+VS_chart_2_17_2_2,"According to the image, was Elon Musk richer than Mark Zuckerberg, on January 10th, 2021?",VS,VS_chart,No
+VS_chart_2_18_2_0,"According to the image, in 2017, was Tencent the company with the highest revenue from video games, with Sony as the second-highest earner?",VS,VS_chart,No
+VS_chart_2_18_2_1,"According to the image, in 2017, did Apple generate higher revenue from video games compared to Google?",VS,VS_chart,No
+VS_chart_2_19_2_0,"According to the image, during the coronavirus pandemic from 2019 to 2022, were the most bankruptcy filings in the US recorded in the year 2020?",VS,VS_chart,No
+VS_chart_2_19_2_1,"According to the image, during the coronavirus pandemic from 2019 to 2022, were the most bankruptcy filings in the US recorded in the year 2021?",VS,VS_chart,Yes
+VS_chart_2_20_2_0,"According to the image, in 2020, did China have a larger population aged between 90 and 94 years than those aged between 0 and 4 years?",VS,VS_chart,No
+VS_chart_2_20_2_1,"According to the image, in 2020, did China have a larger population aged between 50 and 54 years than those aged between 0 and 4 years?",VS,VS_chart,Yes
+VS_chart_2_21_2_0,"According to the image, in 2018, did ""Black Panther"" achieve the highest box office revenue in North America?",VS,VS_chart,No
+VS_chart_2_21_2_1,"According to the image, in 2018, did ""Avengers: Infinity War"" achieve the highest box office revenue in North America?",VS,VS_chart,Yes
+VS_chart_2_3_1_0,"According to the chart, does China have the largest population in the world, followed by India and then the USA?",VS,VS_chart,No
+VS_chart_2_3_1_1,"According to the chart, does India have the second largest population in the world?",VS,VS_chart,No
+VS_chart_2_3_1_2,"According to the chart, does UK have the largest population in the world, followed by China and USA?",VS,VS_chart,No
+VS_chart_2_3_1_3,"According to the chart, does China have the second largest population in the world?",VS,VS_chart,Yes
+VS_chart_2_3_2_0,"According to the chart, does China have the largest population in the world, followed by India and then the USA?",VS,VS_chart,No
+VS_chart_2_3_2_1,"According to the chart, does India have the second largest population in the world?",VS,VS_chart,No
+VS_chart_2_3_2_2,"According to the chart, does UK have the largest population in the world, followed by China and USA?",VS,VS_chart,Yes
+VS_chart_2_3_2_3,"According to the chart, does China have the second largest population in the world?",VS,VS_chart,Yes
+VS_chart_2_4_1_0,"According to the chart, is China the third largest country by land area in the world?",VS,VS_chart,No
+VS_chart_2_4_1_1,"According to the chart, is US the third largest country by land area in the world?",VS,VS_chart,Yes
+VS_chart_2_4_1_2,"According to the chart, is US the largest country by land area in the world?",VS,VS_chart,No
+VS_chart_2_4_1_3,"According to the chart, is Russia the largest country by land area in the world?",VS,VS_chart,Yes
+VS_chart_2_4_2_0,"According to the chart, is China the third largest country by land area in the world?",VS,VS_chart,No
+VS_chart_2_4_2_1,"According to the chart, is US the third largest country by land area in the world?",VS,VS_chart,Yes
+VS_chart_2_4_2_2,"According to the chart, is US the largest country by land area in the world?",VS,VS_chart,No
+VS_chart_2_4_2_3,"According to the chart, is Russia the largest country by land area in the world?",VS,VS_chart,Yes
+VS_chart_2_5_2_0,"According to the image, in 2019, did Asian families have the highest real median household income in the United States, with White, Hispanic, and Black households following respectively?",VS,VS_chart,No
+VS_chart_2_5_2_1,"According to the image, in 2019, did Black families have the highest real median household income in the United States, with White, Hispanic, and Asian households following respectively?",VS,VS_chart,Yes
+VS_chart_2_5_2_2,"According to the image, in 2019, did Black and White households represent the only racial groups with median incomes surpassing the national average in the United States, while Hispanic and Asian households had median incomes below the average?",VS,VS_chart,Yes
+VS_chart_2_5_2_3,"According to the image, in 2019, did Hispanic and Asian households represent the only racial groups with median incomes surpassing the national average in the United States, while Black and White households had median incomes below the average?",VS,VS_chart,No
+VS_chart_2_6_2_0,"From 2012 to 2022, did Apple derive the majority of its revenue from the Americas?",VS,VS_chart,No
+VS_chart_2_6_2_1,"From 2012 to 2022, did Apple derive the majority of its revenue from Europe?",VS,VS_chart,Yes
+VS_chart_2_6_2_2,"From 2012 to 2022, did Apple derive the majority of its revenue from Greater China?",VS,VS_chart,No
+VS_chart_2_6_2_3,"From 2012 to 2022, did Apple derive the majority of its revenue from Japan?",VS,VS_chart,No
+VS_chart_2_7_2_0,"In 2019, were the main policy interest rates of the U.S. Central Bank higher than those of the Central Banks in the UK, Eurozone, and Japan, according to the image?",VS,VS_chart,No
+VS_chart_2_7_2_1,"In 2019, were the main policy interest rates of the Central Banks in the UK higher than those of the U.S. Central Bank , Eurozone, and Japan, according to the image?",VS,VS_chart,Yes
+VS_chart_2_7_2_2,"In 2019, were the main policy interest rates of the Central Banks in the Eurozone higher than those of the U.S. Central Bank, the Central Banks in the UK, and Japan, according to the image?",VS,VS_chart,No
+VS_chart_2_7_2_3,"In 2019, were the main policy interest rates of the Japan Central Bank higher than those of the Central Banks in the UK, Eurozone, and U.S., according to the image?",VS,VS_chart,No
+VS_chart_2_8_2_0,"According to the image, was Harry Kane the top goalscorer at the 2018 FIFA World Cup?",VS,VS_chart,No
+VS_chart_2_8_2_1,"According to the image, was Cristiano Ronaldo the top goalscorer at the 2018 FIFA World Cup?",VS,VS_chart,Yes
+VS_chart_2_8_2_2,"According to the image, was Antoine Griezmann the top goalscorer at the 2018 FIFA World Cup?",VS,VS_chart,No
+VS_chart_2_9_2_0,"In 2020, did the United States have the largest GDP around the world, followed by China, and Japan, according to the image?",VS,VS_chart,No
+VS_chart_2_9_2_1,"In 2020, did China have the largest GDP around the world, followed by the United States, and Japan, according to the image?",VS,VS_chart,No
+VS_chart_2_9_2_2,"In 2020, did Japan have the largest GDP around the world, followed by the United States, and China, according to the image?",VS,VS_chart,No
+VS_chart_2_9_2_3,"In 2020, did India have the largest GDP around the world, followed by China and Japan, according to the image?",VS,VS_chart,Yes
+VS_map_1_0_1_0,"According to the map provided, is New Mexico state larger than Texas state?",VS,VS_map,No
+VS_map_1_0_1_1,"According to the map provided, is Texas state larger than California state?",VS,VS_map,Yes
+VS_map_1_0_1_2,"According to the map provided, is New Mexico state larger than California state?",VS,VS_map,No
+VS_map_1_0_1_3,"According to the map provided, is Montana state larger than New Mexico state?",VS,VS_map,Yes
+VS_map_1_10_1_0,"According to the image, does the Oyashio Current flow from the south to the north, while the Kuroshio Current flows from the north to the south?",VS,VS_map,No
+VS_map_1_10_1_1,"According to the image, does the Kuroshio Current flow through Russia?",VS,VS_map,No
+VS_map_1_1_1_0,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is Delaware the farthest north?",VS,VS_map,Yes
+VS_map_1_1_1_1,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is Arizona the farthest north?",VS,VS_map,No
+VS_map_1_1_1_2,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is Oklahoma the farthest north?",VS,VS_map,No
+VS_map_1_1_1_3,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is North Carolina the farthest north?",VS,VS_map,No
+VS_map_1_2_1_0,"According to the map, does the prime meridian intersect the Atlantic Ocean, Southern Ocean, and Arctic Ocean?",VS,VS_map,Yes
+VS_map_1_2_1_1,"According to the map, does the prime meridian intersect the Pacific Ocean, Southern Ocean, and Arctic Ocean?",VS,VS_map,No
+VS_map_1_3_1_0,"Based on the map, did the Democratic Party win Texas in the 2020 elections?",VS,VS_map,No
+VS_map_1_3_1_1,"Based on the map, did the Republic Party win Texas in the 2020 elections?",VS,VS_map,Yes
+VS_map_1_4_1_0,"Based on the map, are the Rocky Mountains located in North America?",VS,VS_map,Yes
+VS_map_1_4_1_1,"Based on the map, are the Rocky Mountains located in Asia?",VS,VS_map,No
+VS_map_1_4_1_2,"Based on the map, are the Himalayas Mountains located in North America?",VS,VS_map,No
+VS_map_1_4_1_3,"Based on the map, are the Himalayas Mountains located in Asia?",VS,VS_map,Yes
+VS_map_1_5_1_0,"According to the image, is Michigan the only U.S. state that shares a border with Lake Huron?",VS,VS_map,Yes
+VS_map_1_5_1_1,"According to the image, is Michigan the only U.S. state that shares a border with Lake Ontario?",VS,VS_map,No
+VS_map_1_5_1_2,"According to the image, is New York the only U.S. state that shares a border with Lake Huron?",VS,VS_map,No
+VS_map_1_5_1_3,"According to the image, is New York the only U.S. state that shares a border with Lake Ontario?",VS,VS_map,Yes
+VS_map_1_6_1_0,"According to the map, can I take the Blue Line towards the Pentagon on the DC Metro system?",VS,VS_map,Yes
+VS_map_1_6_1_1,"According to the map, can I take the Red Line towards the Pentagon on the DC Metro system?",VS,VS_map,No
+VS_map_1_6_1_2,"According to the map, can I take the Yellow Line towards the Pentagon on the DC Metro system?",VS,VS_map,Yes
+VS_map_1_7_1_0,"According to the image, is Key West the southernmost point of Florida?",VS,VS_map,Yes
+VS_map_1_7_1_1,"According to the image, is Miami the southernmost point of Florida?",VS,VS_map,No
+VS_map_1_8_1_0,"Based on the map, is Charles County located to the south of Prince George's County?",VS,VS_map,Yes
+VS_map_1_8_1_1,"Based on the map, is Calvert County located to the east of Cecil County?",VS,VS_map,No
+VS_map_1_8_1_2,"Based on the map, is Kent County located to the north of Cecil County?",VS,VS_map,No
+VS_map_1_9_1_0,"According to the image, does Bolivia cover part of the Amazon Basin?",VS,VS_map,Yes
+VS_map_1_9_1_1,"According to the image, does Chile cover part of the Amazon Basin?",VS,VS_map,No
+VS_map_2_0_2_0,"According to the map provided, is New Mexico state larger than Texas state?",VS,VS_map,Yes
+VS_map_2_0_2_1,"According to the map provided, is Texas state larger than California state?",VS,VS_map,No
+VS_map_2_0_2_2,"According to the map provided, is New Mexico state larger than California state?",VS,VS_map,Yes
+VS_map_2_0_2_3,"According to the map provided, is Montana state larger than New Mexico state?",VS,VS_map,No
+VS_map_2_10_2_0,"According to the image, does the Oyashio Current flow from the south to the north, while the Kuroshio Current flows from the north to the south?",VS,VS_map,Yes
+VS_map_2_10_2_1,"According to the image, does the Kuroshio Current flow through Russia?",VS,VS_map,Yes
+VS_map_2_1_2_0,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is Delaware the farthest north?",VS,VS_map,No
+VS_map_2_1_2_1,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is Arizona the farthest north?",VS,VS_map,Yes
+VS_map_2_1_2_2,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is Oklahoma the farthest north?",VS,VS_map,No
+VS_map_2_1_2_3,"According to the map provided, among Arizona, Oklahoma, North Carolina, and Delaware on the map, is North Carolina the farthest north?",VS,VS_map,No
+VS_map_2_2_2_0,"According to the map, does the prime meridian intersect the Atlantic Ocean, Southern Ocean, and Arctic Ocean?",VS,VS_map,No
+VS_map_2_2_2_1,"According to the map, does the prime meridian intersect the Pacific Ocean, Southern Ocean, and Arctic Ocean?",VS,VS_map,Yes
+VS_map_2_3_2_0,"Based on the map, did the Democratic Party win Texas in the 2020 elections?",VS,VS_map,Yes
+VS_map_2_3_2_1,"Based on the map, did the Republic Party win Texas in the 2020 elections?",VS,VS_map,No
+VS_map_2_4_2_0,"Based on the map, are the Rocky Mountains located in North America?",VS,VS_map,No
+VS_map_2_4_2_1,"Based on the map, are the Rocky Mountains located in Asia?",VS,VS_map,Yes
+VS_map_2_4_2_2,"Based on the map, are the Himalayas Mountains located in North America?",VS,VS_map,Yes
+VS_map_2_4_2_3,"Based on the map, are the Himalayas Mountains located in Asia?",VS,VS_map,No
+VS_map_2_5_2_0,"According to the image, is Michigan the only U.S. state that shares a border with Lake Huron?",VS,VS_map,No
+VS_map_2_5_2_1,"According to the image, is Michigan the only U.S. state that shares a border with Lake Ontario?",VS,VS_map,Yes
+VS_map_2_5_2_2,"According to the image, is New York the only U.S. state that shares a border with Lake Huron?",VS,VS_map,Yes
+VS_map_2_5_2_3,"According to the image, is New York the only U.S. state that shares a border with Lake Ontario?",VS,VS_map,No
+VS_map_2_6_2_0,"According to the map, can I take the Blue Line towards the Pentagon on the DC Metro system?",VS,VS_map,No
+VS_map_2_6_2_1,"According to the map, can I take the Red Line towards the Pentagon on the DC Metro system?",VS,VS_map,Yes
+VS_map_2_6_2_2,"According to the map, can I take the Yellow Line towards the Pentagon on the DC Metro system?",VS,VS_map,Yes
+VS_map_2_7_2_0,"According to the image, is Key West the southernmost point of Florida?",VS,VS_map,No
+VS_map_2_7_2_1,"According to the image, is Miami the southernmost point of Florida?",VS,VS_map,Yes
+VS_map_2_8_2_0,"Based on the map, is Charles County located to the south of Prince George's County?",VS,VS_map,No
+VS_map_2_8_2_1,"Based on the map, is Calvert County located to the east of Cecil County?",VS,VS_map,No
+VS_map_2_8_2_2,"Based on the map, is Kent County located to the north of Cecil County?",VS,VS_map,Yes
+VS_map_2_9_2_0,"According to the image, does Bolivia cover part of the Amazon Basin?",VS,VS_map,No
+VS_map_2_9_2_1,"According to the image, does Chile cover part of the Amazon Basin?",VS,VS_map,No
+VS_ocr_1_0_1_0,"According to the image, does π(pi) range from 3.1415926 to 3.1415927?",VS,VS_ocr,Yes
+VS_ocr_1_0_1_1,"According to the image, does π(pi) range from 3.1615926 to 3.1615927?",VS,VS_ocr,No
+VS_ocr_1_10_1_0,Is the text in this figure made by Ronald Reagan?,VS,VS_ocr,Yes
+VS_ocr_1_10_1_1,Is the text in this figure trying to talk to Gorbachev?,VS,VS_ocr,Yes
+VS_ocr_1_11_1_0,Is the text in this figure made by John F. Kennedy?,VS,VS_ocr,Yes
+VS_ocr_1_11_1_1,Is the text in this figure made in Canada?,VS,VS_ocr,No
+VS_ocr_1_12_1_0,Is the text in this figure made by Winston Churchill?,VS,VS_ocr,Yes
+VS_ocr_1_12_1_1,Is the text in this figure made in the U.K.?,VS,VS_ocr,Yes
+VS_ocr_1_1_1_0,Is the formula in the image representative of the mass-energy equivalence concept in Einstein's theory?,VS,VS_ocr,Yes
+VS_ocr_1_2_1_0,"According to the image, does the Euler's Number 'e' range from 2.71 to 2.72?",VS,VS_ocr,Yes
+VS_ocr_1_2_1_1,"According to the image which is about the Euler's Number, does the Euler's Number 'e' range from 2.70 to 2.71?",VS,VS_ocr,No
+VS_ocr_1_2_1_2,"According to the image, does the Euler's Number 'e' range from 2.72 to 2.73?",VS,VS_ocr,No
+VS_ocr_1_3_1_0,"According to the image, does the value of the square root of 2 range from 1.40 to 1.41?",VS,VS_ocr,No
+VS_ocr_1_3_1_1,"According to the image, does the value of the square root of 2 range from 1.41 to 1.42?",VS,VS_ocr,Yes
+VS_ocr_1_3_1_2,"According to the image, does the value of the square root of 2 range from 1.42 to 1.43?",VS,VS_ocr,No
+VS_ocr_1_4_1_0,Is the formula in this image representative of the Gravity equation?,VS,VS_ocr,Yes
+VS_ocr_1_4_1_1,"According to the image, is the formula F=G * m_1 * m_2 / r^2 representative of the Gravity equation?",VS,VS_ocr,Yes
+VS_ocr_1_5_1_0,Is the formula in this image representative of the Euler equation?,VS,VS_ocr,Yes
+VS_ocr_1_5_1_1,Is the formula e^ix = cos x + i x representative of the equation in this figure?,VS,VS_ocr,No
+VS_ocr_1_6_1_0,"According to the image, does the value of Gravity constant 'G' range from 6.66 * 10^-11 to 6.68 * 10^-11?",VS,VS_ocr,Yes
+VS_ocr_1_6_1_1,"According to the image, does the value of Gravity constant 'G' range from 6.68 * 10^-11 to 6.70 * 10^-11?",VS,VS_ocr,No
+VS_ocr_1_7_1_0,"According to the image, is the text in this figure the four freedoms proposed by Franklin D. Roosevelt?",VS,VS_ocr,Yes
+VS_ocr_1_7_1_1,"According to the image, is the freedom from fear among the four freedoms proposed in this image?",VS,VS_ocr,Yes
+VS_ocr_1_8_1_0,Is the text in this figure made at West Berlin?,VS,VS_ocr,Yes
+VS_ocr_1_8_1_1,Is the text in this figure made by John F. Kennedy?,VS,VS_ocr,Yes
+VS_ocr_1_9_1_0,Is the text in this figure made by Abraham Lincoln?,VS,VS_ocr,Yes
+VS_ocr_1_9_1_1,Is the text in this figure made at Gettysburg?,VS,VS_ocr,Yes
+VS_ocr_2_0_2_0,"According to the image, does π(pi) range from 3.1415926 to 3.1415927?",VS,VS_ocr,No
+VS_ocr_2_0_2_1,"According to the image, does π(pi) range from 3.1615926 to 3.1615927?",VS,VS_ocr,Yes
+VS_ocr_2_10_2_0,Is the text in this figure made by Ronald Reagan?,VS,VS_ocr,No
+VS_ocr_2_10_2_1,Is the text in this figure trying to talk to Gorbachev?,VS,VS_ocr,No
+VS_ocr_2_11_2_0,Is the text in this figure made by John F. Kennedy?,VS,VS_ocr,No
+VS_ocr_2_11_2_1,Is the text in this figure made in Canada?,VS,VS_ocr,Yes
+VS_ocr_2_12_2_0,Is the text in this figure made by Winston Churchill?,VS,VS_ocr,No
+VS_ocr_2_12_2_1,Is the text in this figure made in the U.K.?,VS,VS_ocr,No
+VS_ocr_2_1_2_0,Is the formula in the image representative of the mass-energy equivalence concept in Einstein's theory?,VS,VS_ocr,No
+VS_ocr_2_2_2_0,"According to the image, does the Euler's Number 'e' range from 2.71 to 2.72?",VS,VS_ocr,No
+VS_ocr_2_2_2_1,"According to the image, does the Euler's Number 'e' range from 2.70 to 2.71?",VS,VS_ocr,Yes
+VS_ocr_2_2_2_2,"According to the image, does the Euler's Number 'e' range from 2.72 to 2.73?",VS,VS_ocr,No
+VS_ocr_2_3_2_0,"According to the image, does the value of the square root of 2 range from 1.40 to 1.41?",VS,VS_ocr,No
+VS_ocr_2_3_2_1,"According to the image, does the value of the square root of 2 range from 1.41 to 1.42?",VS,VS_ocr,No
+VS_ocr_2_3_2_2,"According to the image, does the value of the square root of 2 range from 1.42 to 1.43?",VS,VS_ocr,Yes
+VS_ocr_2_4_2_0,Is the formula in this image representative of the Gravity equation?,VS,VS_ocr,No
+VS_ocr_2_4_2_1,"According to the image, is the formula F=G * m_1 * m_2 / r^2 representative of the Gravity equation?",VS,VS_ocr,Yes
+VS_ocr_2_5_2_0,Is the formula in this image representative of the Euler equation?,VS,VS_ocr,No
+VS_ocr_2_5_2_1,Is the formula e^ix = cos x + i x representative of the equation in this figure?,VS,VS_ocr,Yes
+VS_ocr_2_6_2_0,"According to the image, does the value of Gravity constant 'G' range from 6.66 * 10^-11 to 6.68 * 10^-11?",VS,VS_ocr,No
+VS_ocr_2_6_2_1,"According to the image, does the value of Gravity constant 'G' range from 6.68 * 10^-11 to 6.70 * 10^-11?",VS,VS_ocr,Yes
+VS_ocr_2_7_2_0,"According to the image, is the text in this figure the four freedoms proposed by Franklin D. Roosevelt?",VS,VS_ocr,No
+VS_ocr_2_7_2_1,"According to the image, is the freedom from fear among the four freedoms proposed in this image?",VS,VS_ocr,No
+VS_ocr_2_8_2_0,Is the text in this figure made at West Berlin?,VS,VS_ocr,No
+VS_ocr_2_8_2_1,Is the text in this figure made by John F. Kennedy?,VS,VS_ocr,No
+VS_ocr_2_9_2_0,Is the text in this figure made by Abraham Lincoln?,VS,VS_ocr,No
+VS_ocr_2_9_2_1,Is the text in this figure made at Gettysburg?,VS,VS_ocr,No
+VS_table_1_0_1_0,"According to the metal number chart of 2008 beijng olympic, does China have the most gold metals, followed by USA and Russia?",VS,VS_table,Yes
+VS_table_1_0_1_1,"According to the metal number chart of 2008 beijng olympic, does USA have the most gold metals, followed by China and Russia?",VS,VS_table,No
+VS_table_1_0_1_2,"According to the metal number chart of 2008 beijng olympic, does Russia have the most gold metals, followed by China and USA?",VS,VS_table,No
+VS_table_1_10_1_0,"According to this table, does China have the highest carbon dioxide emissions worldwide in 2010?",VS,VS_table,Yes
+VS_table_1_10_1_1,"According to this table, does US have the highest carbon dioxide emissions worldwide in 2010?",VS,VS_table,No
+VS_table_1_10_1_2,"According to this table, does Russia have the second highest carbon dioxide emissions worldwide in 2010?",VS,VS_table,No
+VS_table_1_10_1_3,"According to this table, is the carbon dioxide emission worldwide in 2010 the same for US and India?",VS,VS_table,No
+VS_table_1_1_1_0,which country has the largest population growth rate in 2023,VS,VS_table,Yes
+VS_table_1_1_1_1,"In 2023, did Syria have higher population growth than South Sudan?",VS,VS_table,Yes
+VS_table_1_1_1_2,"In 2023, did Syria have higher population growth than United Kingdom?",VS,VS_table,Yes
+VS_table_1_2_1_0,"According to the table, which country in Europe has the higher GDP in 2021?",VS,VS_table,Yes
+VS_table_1_2_1_1,"According to the table, in 2021, did Germany have the highest GDP?",VS,VS_table,Yes
+VS_table_1_2_1_2,"According to the table, in 2021, did Germany have the highest GDP, followed by France and Italy?",VS,VS_table,Yes
+VS_table_1_3_1_0,"According to the table, did Xiaomi sell most units of the smartphone in Q2 2020?",VS,VS_table,No
+VS_table_1_3_1_1,"According to the table, did Samsung sell most units of the smartphone in Q2 2020?",VS,VS_table,No
+VS_table_1_3_1_2,"According to the table, did Xiaomi have the largest smartphone market share in Q2 2020, followed by Samsung and Huawei?",VS,VS_table,No
+VS_table_1_4_1_0,"According to the table, Which state in the United States has the average maximum temperature in 2021 ?",VS,VS_table,Yes
+VS_table_1_4_1_1,"According to the table, According to the table, did Florida have the highest average maximum temperature ?",VS,VS_table,Yes
+VS_table_1_4_1_2,"According to the table, According to the table, did Florida have a higher average maximum temperature than Louisana?",VS,VS_table,Yes
+VS_table_1_5_1_0,"According to the image, which month has the lowest percentage change in personal income in the United States from September 2022 to September 2023",VS,VS_table,Yes
+VS_table_1_5_1_1,"According to the image, which month has the highest percentage change in personal income in the United States from September 2022 to September 2023",VS,VS_table,Yes
+VS_table_1_5_1_2,"According to the table, Did January 2023 have a higher income percentage change than August 2023?",VS,VS_table,Yes
+VS_table_1_5_1_3,"According to the table, Did January 2023 have a lower income percentage change than August 2023?",VS,VS_table,No
+VS_table_1_6_1_0,"According to the table, does Shanghai have the most dense population in China in 2020?",VS,VS_table,Yes
+VS_table_1_6_1_1,"According to the table, does Beijing have the second most dense population in China in 2020?",VS,VS_table,Yes
+VS_table_1_6_1_2,"According to the table, does Shandong have the most dense population in China in 2020?",VS,VS_table,No
+VS_table_1_6_1_3,"According to the table, does Zhejiang have the second most dense population in China in 2020?",VS,VS_table,No
+VS_table_1_7_1_0,"According to the table, is the number of gold medals of Norway 16 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_1_7_1_1,"According to the table, is the number of gold medals of Norway 9 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_1_7_1_2,"According to the table, is the number of gold medals of Germany 12 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_1_7_1_3,"According to the table, is the number of gold medals of Germany 8 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_1_7_1_4,"According to the table, is the number of all medals of China 15 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_1_7_1_5,"According to the table, is the number of all medals of China 37 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_1_8_1_0,"Accroding to the information provided in the table, does Taylor Swift release the album ""Midnights""?",VS,VS_table,Yes
+VS_table_1_8_1_1,"Accroding to the information provided in the table, does Taylor Swift release the album ""Harry's House""?",VS,VS_table,No
+VS_table_1_8_1_2,"Accroding to the information provided in the table, does the album ""Midnights"" have a sale of 1,818,000 in 2022?",VS,VS_table,Yes
+VS_table_1_8_1_3,"Accroding to the information provided in the table, does the album ""Midnights"" have a sale of 422,000 in 2022?",VS,VS_table,No
+VS_table_1_8_1_4,"Accroding to the information provided in the table, does the album ""Proof"" have a sale of 422,000 in 2022?",VS,VS_table,Yes
+VS_table_1_8_1_5,"Accroding to the information provided in the table, does the album ""Proof"" have a sale of 1,818,000 in 2022?",VS,VS_table,No
+VS_table_1_9_1_0,"According to the table, does the UB group have the highest portion of the market share for beer across India in 2020?",VS,VS_table,Yes
+VS_table_1_9_1_1,"According to the table, does the Carlsberg India have the highest portion of the market share for beer across India in 2020?",VS,VS_table,No
+VS_table_1_9_1_2,"According to the table, does the SABMiller India have the second highest portion of the market share for beer across India in 2020?",VS,VS_table,Yes
+VS_table_1_9_1_3,"According to the table, does the UB Group have the second highest portion of the market share for beer across India in 2020?",VS,VS_table,No
+VS_table_2_0_2_0,"According to the metal number chart of 2008 beijng olympic, does China have the most gold metals, followed by USA and Russia?",VS,VS_table,No
+VS_table_2_0_2_1,"According to the metal number chart of 2008 beijng olympic, does USA have the most gold metals, followed by China and Russia?",VS,VS_table,Yes
+VS_table_2_0_2_2,"According to the metal number chart of 2008 beijng olympic, does Russia have the most gold metals, followed by China and USA?",VS,VS_table,No
+VS_table_2_10_2_0,"According to this table, does China have the highest carbon dioxide emissions worldwide in 2010?",VS,VS_table,No
+VS_table_2_10_2_1,"According to this table, does US have the highest carbon dioxide emissions worldwide in 2010?",VS,VS_table,Yes
+VS_table_2_10_2_2,"According to this table, does Russia have the second highest carbon dioxide emissions worldwide in 2010?",VS,VS_table,Yes
+VS_table_2_10_2_3,"According to this table, is the carbon dioxide emission worldwide in 2010 the same for US and India?",VS,VS_table,Yes
+VS_table_2_1_2_0,"According to the table, which country has the largest population growth rate in 2023",VS,VS_table,Yes
+VS_table_2_1_2_1,"According to the table, In 2023, did Syria have higher population growth than South Sudan?",VS,VS_table,No
+VS_table_2_1_2_2,"According to the table, In 2023, did Syria have higher population growth than United Kingdom?",VS,VS_table,Yes
+VS_table_2_2_2_0,"According to the table, which country in Europe has the higher GDP in 2021?",VS,VS_table,Yes
+VS_table_2_2_2_1,"According to the table, in 2021, did Germany have the highest GDP?",VS,VS_table,No
+VS_table_2_2_2_2,"According to the table, in 2021, did Germany have the highest GDP, followed by France and Italy?",VS,VS_table,No
+VS_table_2_2_3_0,"According to the table, which country in Europe has the higher GDP in 2021?",VS,VS_table,Yes
+VS_table_2_2_3_1,"According to the table, in 2021, did Germany have the highest GDP?",VS,VS_table,No
+VS_table_2_2_3_2,"According to the table, in 2021, did Germany have the highest GDP, followed by France and Italy?",VS,VS_table,No
+VS_table_2_3_2_0,"According to the table, did Xiaomi sell most units of the smartphone in Q2 2020?",VS,VS_table,No
+VS_table_2_3_2_1,"According to the table, did Samsung sell most units of the smartphone in Q2 2020?",VS,VS_table,No
+VS_table_2_3_2_2,"According to the table, did Xiaomi have the largest smartphone market share in Q2 2020, followed by Samsung and Huawei?",VS,VS_table,No
+VS_table_2_4_2_0,"According to the table, Which state in the United States has the average maximum temperature in 2021 ?",VS,VS_table,No
+VS_table_2_4_2_1,"According to the table, did Florida have the highest average maximum temperature ?",VS,VS_table,No
+VS_table_2_4_2_2,"According to the table, did Florida have a higher average maximum temperature than Louisana?",VS,VS_table,No
+VS_table_2_4_3_0,"According to the table, Which state in the United States has the average maximum temperature in 2021 ?",VS,VS_table,Yes
+VS_table_2_4_3_1,"According to the table, did Florida have the highest average maximum temperature ?",VS,VS_table,No
+VS_table_2_4_3_2,"According to the table, did Florida have a higher average maximum temperature than South Carolina?",VS,VS_table,No
+VS_table_2_5_2_0,"According to the image, which month has the lowest percentage change in personal income in the United States from September 2022 to September 2023",VS,VS_table,Yes
+VS_table_2_5_2_1,"According to the image, which month has the highest percentage change in personal income in the United States from September 2022 to September 2023",VS,VS_table,Yes
+VS_table_2_5_2_2,"According to the table, Did January 2023 have a higher income percentage change than August 2023?",VS,VS_table,Yes
+VS_table_2_5_2_3,"According to the table, Did January 2023 have a lower income percentage change than August 2023?",VS,VS_table,No
+VS_table_2_5_3_0,"According to the image, which month has the lowest percentage change in personal income in the United States from September 2022 to September 2023",VS,VS_table,No
+VS_table_2_5_3_1,"According to the image, which month has the highest percentage change in personal income in the United States from September 2022 to September 2023",VS,VS_table,No
+VS_table_2_5_3_2,"According to the table, Did January 2023 have a higher income percentage change than August 2023?",VS,VS_table,No
+VS_table_2_5_3_3,"According to the table, Did January 2023 have a lower income percentage change than August 2023?",VS,VS_table,No
+VS_table_2_6_2_0,"According to the table, does Shanghai have the most dense population in China in 2020?",VS,VS_table,No
+VS_table_2_6_2_1,"According to the table, does Beijing have the second most dense population in China in 2020?",VS,VS_table,No
+VS_table_2_6_2_2,"According to the table, does Shandong have the most dense population in China in 2020?",VS,VS_table,Yes
+VS_table_2_6_2_3,"According to the table, does Zhejiang have the second most dense population in China in 2020?",VS,VS_table,Yes
+VS_table_2_6_3_0,"According to the table, does Shanghai have the most dense population in China in 2020?",VS,VS_table,No
+VS_table_2_6_3_1,"According to the table, does Beijing have the second most dense population in China in 2020?",VS,VS_table,No
+VS_table_2_6_3_2,"According to the table, does Shandong have the most dense population in China in 2020?",VS,VS_table,Yes
+VS_table_2_6_3_3,"According to the table, does Zhejiang have the second most dense population in China in 2020?",VS,VS_table,Yes
+VS_table_2_7_2_0,"According to the table, is the number of gold medals of Norway 16 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_2_7_2_1,"According to the table, is the number of gold medals of Norway 9 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_2_7_2_2,"According to the table, is the number of gold medals of Germany 12 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_2_7_2_3,"According to the table, is the number of gold medals of Germany 8 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_2_7_2_4,"According to the table, is the number of all medals of China 15 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_2_7_2_5,"According to the table, is the number of all medals of China 37 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_2_7_3_0,"According to the table, is the number of gold medals of Norway 16 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_2_7_3_1,"According to the table, is the number of gold medals of Norway 9 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_2_7_3_2,"According to the table, is the number of gold medals of Germany 12 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_2_7_3_3,"According to the table, is the number of gold medals of Germany 8 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_2_7_3_4,"According to the table, is the number of all medals of China 15 in winter Olympics in 2022?",VS,VS_table,No
+VS_table_2_7_3_5,"According to the table, is the number of all medals of China 37 in winter Olympics in 2022?",VS,VS_table,Yes
+VS_table_2_8_2_0,"Accroding to the information provided in the table, does Taylor Swift release the album ""Midnights""?",VS,VS_table,No
+VS_table_2_8_2_1,"Accroding to the information provided in the table, does Taylor Swift release the album ""Harry's House""?",VS,VS_table,Yes
+VS_table_2_8_2_2,"Accroding to the information provided in the table, does the album ""Midnights"" have a sale of 1,818,000 in 2022?",VS,VS_table,Yes
+VS_table_2_8_2_3,"Accroding to the information provided in the table, does the album ""Midnights"" have a sale of 422,000 in 2022?",VS,VS_table,No
+VS_table_2_8_2_4,"Accroding to the information provided in the table, does the album ""Proof"" have a sale of 422,000 in 2022?",VS,VS_table,Yes
+VS_table_2_8_2_5,"Accroding to the information provided in the table, does the album ""Proof"" have a sale of 1,818,000 in 2022?",VS,VS_table,No
+VS_table_2_8_3_0,"Accroding to the information provided in the table, does Taylor Swift release the album ""Midnights""?",VS,VS_table,Yes
+VS_table_2_8_3_1,"Accroding to the information provided in the table, does Taylor Swift release the album ""Harry's House""?",VS,VS_table,No
+VS_table_2_8_3_2,"Accroding to the information provided in the table, does the album ""Midnights"" have a sale of 1,818,000 in 2022?",VS,VS_table,No
+VS_table_2_8_3_3,"Accroding to the information provided in the table, does the album ""Midnights"" have a sale of 422,000 in 2022?",VS,VS_table,Yes
+VS_table_2_8_3_4,"Accroding to the information provided in the table, does the album ""Proof"" have a sale of 422,000 in 2022?",VS,VS_table,No
+VS_table_2_8_3_5,"Accroding to the information provided in the table, does the album ""Proof"" have a sale of 1,818,000 in 2022?",VS,VS_table,Yes
+VS_table_2_9_2_0,"According to the table, does the UB group have the highest portion of the market share for beer across India in 2020?",VS,VS_table,No
+VS_table_2_9_2_1,"According to the table, does the Carlsberg India have the highest portion of the market share for beer across India in 2020?",VS,VS_table,Yes
+VS_table_2_9_2_2,"According to the table, does the SABMiller India have the second highest portion of the market share for beer across India in 2020?",VS,VS_table,No
+VS_table_2_9_2_3,"According to the table, does the UB Group have the second highest portion of the market share for beer across India in 2020?",VS,VS_table,Yes

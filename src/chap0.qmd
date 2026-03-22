@@ -1,0 +1,601 @@
+---
+format:
+  html:
+    include-after-body:
+      text: |
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          function waitForPyodide() {
+            if (typeof globalThis.mainPyodide !== 'undefined' && globalThis.mainPyodide) {
+              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {
+                globalThis.qpyodideCellDetails.forEach((cell, index) => {
+                  if (cell.options && cell.options.autorun === 'true') {
+                    setTimeout(() => {
+                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);
+                      if (runButton && !runButton.disabled) {
+                        runButton.click();
+                      }
+                    }, index * 1000);
+                  }
+                });
+              }
+            } else {
+              setTimeout(waitForPyodide, 500);
+            }
+          }
+          setTimeout(waitForPyodide, 2000);
+        });
+        </script>
+filters:
+  - pyodide
+pyodide:
+  packages:
+    - numpy
+    - matplotlib
+---
+
+# The Data Landscape {#sec-data-landscape}
+
+::: {.callout-note title="Intended Learning Outcomes"}
+By the end of this chapter, you will be able to:
+
+1. **Describe** the response matrix $Y_{ij}$ as the universal data structure underlying AI evaluation and identify what constitutes a "subject" and an "item" across different evaluation paradigms.
+2. **Classify** AI benchmarks along multiple axes: domain, response type, evaluation structure, and cultural scope.
+3. **Articulate** how design choices in benchmark construction --- item selection, scoring rubrics, response format --- shape the resulting response matrix and constrain downstream analysis.
+4. **Identify** practical data quality issues in AI evaluation: sparsity, missing data, inconsistent scoring, and benchmark contamination.
+5. **Use** the `torch_measure` toolkit to load, inspect, and visualize response matrices from real benchmarks.
+:::
+
+::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
+This chapter can be covered in **1 lecture** (75--90 minutes):
+
+- The response matrix abstraction (15 min)
+- A taxonomy of AI benchmarks (20 min)
+- Multilingual, multicultural, and domain-specific evaluation (15 min)
+- Preference data and pairwise comparisons (10 min)
+- Data quality and practical issues (10 min)
+- Hands-on: loading and exploring benchmarks with `torch_measure` (15 min)
+:::
+
+
+## The Response Matrix {#sec-response-matrix}
+
+Every AI evaluation, no matter how complex, ultimately produces a table: rows are the systems being evaluated (models, agents, model--scaffold combinations), columns are the evaluation items (questions, tasks, prompts), and entries record how each system performed on each item. This is the **response matrix**.
+
+::: {.callout-note title="Definition: Response Matrix"}
+A **response matrix** $Y \in \mathbb{R}^{N \times M}$ records the performance of $N$ subjects (models) on $M$ items (tasks). The entry $Y_{ij}$ can be:
+
+- **Binary**: $Y_{ij} \in \{0, 1\}$ (correct/incorrect, pass/fail, resolved/unresolved)
+- **Continuous**: $Y_{ij} \in [0, 1]$ (pass@1 rate, partial credit score, token probability)
+- **Missing**: $Y_{ij} = \texttt{NaN}$ (model not evaluated on this item)
+
+The response matrix is the fundamental data structure for measurement science. All of the models in this book --- IRT, factor models, Bradley-Terry --- operate on response matrices or transformations thereof.
+:::
+
+The simplicity of this abstraction is deceptive. The same $N \times M$ matrix structure accommodates radically different evaluation paradigms:
+
+| Evaluation Type | Rows (Subjects) | Columns (Items) | Values | Example |
+|----------------|-----------------|-----------------|--------|---------|
+| Knowledge QA | LLMs | Multiple-choice questions | Binary | MMLU-Pro (48 × 12,257) |
+| Code generation | LLMs | Programming problems | Binary or pass@1 | BigCodeBench (153 × 1,140) |
+| Agent tasks | Agent + scaffold | Multi-step episodes | Binary | SWE-bench (134 × 500) |
+| Function calling | LLMs | API call specifications | Binary | BFCL (93 × 4,751) |
+| Web navigation | Agent + scaffold | Web interaction tasks | Binary | WebArena (14 × 812) |
+| Terminal tasks | Agent + scaffold | System admin tasks | Continuous | Terminal-Bench (128 × 89) |
+| Code reasoning | LLMs | Input/output prediction | Continuous | CRUXEval (38 × 800) |
+
+The key design decision is what counts as a "subject." For knowledge benchmarks, a subject is typically a single LLM. For agentic benchmarks, a subject is a model--scaffold combination (e.g., SWE-Agent + Claude Sonnet 4), because the scaffold's search strategy, tool use, and error recovery contribute substantially to performance. This distinction matters for measurement: if the scaffold contributes variance, a model's "ability" as estimated by IRT partially reflects the scaffold, not the model alone.
+
+### Shape and Sparsity
+
+Response matrices in AI evaluation are often surprisingly sparse or oddly shaped. A benchmark with 500 items evaluated on 134 model--scaffold combinations (SWE-bench Verified) produces a dense matrix. But a benchmark ecosystem where models are evaluated on different subsets of items --- because benchmarks evolve over time, or because compute constraints limit which models run on which items --- produces a matrix with systematic missing data.
+
+LiveCodeBench illustrates this: its 72 models × 1,055 problems matrix is only 88.8% filled, because older models were evaluated on earlier problem sets (713 or 880 problems) while newer models have the full 1,055. This is not missing-at-random --- it is missing-by-design, and the missingness pattern carries information (newer models tend to be more capable).
+
+Understanding the shape and sparsity of the response matrix is a prerequisite for choosing the right model. Dense, rectangular matrices support standard IRT and factor models. Sparse or systematically incomplete matrices require models that handle missing data explicitly, or imputation strategies that account for the missingness mechanism.
+
+
+## A Taxonomy of AI Benchmarks {#sec-taxonomy}
+
+The AI evaluation landscape has grown rapidly. To make sense of it, we organize benchmarks along four axes: **domain**, **response type**, **evaluation structure**, and **cultural scope**.
+
+### By Domain {#sec-domain-taxonomy}
+
+Benchmarks cluster into broad capability domains, each with distinct item characteristics and validity considerations.
+
+**Knowledge and reasoning.** Benchmarks like MMLU-Pro (12,257 items across 14 domains), LiveBench, and HLE test factual knowledge and reasoning through multiple-choice or short-answer questions. Items are typically self-contained, automatically scored, and drawn from existing exams or expert-written question banks. The primary validity concern is construct underrepresentation: a "reasoning" benchmark that tests only factual recall does not measure reasoning.
+
+**Code generation and software engineering.** This is the largest and most diverse category, spanning basic function completion (EvalPlus: HumanEval+ and MBPP+), competitive programming (LiveCodeBench: 1,055 problems from AtCoder, LeetCode, and CodeForces), library-aware code generation (BigCodeBench: 1,140 tasks using 139 APIs), code reasoning (CRUXEval: 800 input/output prediction problems), code editing (EditBench: 540 editing tasks), and full software engineering (SWE-bench: resolving real GitHub issues). The progression from function completion to issue resolution represents increasing ecological validity --- and increasing difficulty of automated scoring.
+
+**Agentic tasks.** A rapidly growing category where the "subject" is not a bare model but a model--scaffold combination operating in an interactive environment. Examples include web navigation (WebArena: 812 tasks across e-commerce, forums, and CMS sites), mobile device automation (AndroidWorld: 116 tasks), desktop interaction (OSWorld), multi-app coordination (AppWorld: 24 tasks), terminal operations (Terminal-Bench: 89 system administration tasks), and security challenges (CyBench: 40 CTF tasks). Agentic benchmarks pose unique measurement challenges: the "item" is a multi-step episode, performance depends on the scaffold as much as the model, and scoring may require environment rollback and verification.
+
+**Tool use and function calling.** BFCL (4,751 items across 22 categories) and ToolBench test whether models can correctly invoke APIs, parse schemas, and handle multi-turn tool interactions. These benchmarks sit between pure language tasks and agentic tasks --- they test a specific capability (structured output generation) rather than end-to-end task completion.
+
+**Safety and security.** Benchmarks like CyBench (CTF challenges), AgentDojo (security evaluation of tool-using agents with 949 security items), and the red-teaming frameworks discussed in @sec-redteaming test adversarial robustness and safety properties. These benchmarks are distinctive because the "correct" response is often a refusal, and the construct (safety) is inherently adversarial.
+
+**Preference and reward modeling.** Benchmarks like RewardBench, AlpacaEval (805 instructions), MT-Bench, Arena Hard, WildBench, and the Chatbot Arena (140K+ comparisons) evaluate model quality through human or automated preference judgments. The response matrix structure differs: instead of $Y_{ij} \in \{0,1\}$, entries may represent win rates, Elo ratings, or pairwise comparison outcomes. We discuss this structure separately in @sec-preference-data.
+
+### By Response Type {#sec-response-types}
+
+The granularity of the response determines which measurement models are appropriate.
+
+**Binary responses** ($Y_{ij} \in \{0,1\}$) are the simplest and most common. Standard IRT models (Rasch, 2PL, 3PL) are designed for binary data. Most code generation and knowledge benchmarks use binary scoring: the answer is correct or it is not.
+
+**Continuous responses** ($Y_{ij} \in [0,1]$) arise from partial credit scoring, pass@$k$ estimation (where $Y_{ij}$ is the empirical pass rate over $k$ samples), or rubric-based evaluation. Terminal-Bench scores tasks on a 0--100 scale; CRUXEval reports pass@1 from 10 samples. Continuous responses carry richer information than binary responses and motivate extensions like Beta-IRT (@sec-learning).
+
+**Ordinal responses** ($Y_{ij} \in \{1, 2, \ldots, L\}$) arise from Likert-scale rubrics (e.g., 1--5 quality ratings). The graded response model and partial credit model extend IRT to ordinal data, but these are less common in current AI evaluation.
+
+**Preference data** ($Y_{ij} \in \{A, B, \text{tie}\}$) from pairwise comparisons have a fundamentally different structure, discussed in @sec-preference-data.
+
+### By Evaluation Structure {#sec-eval-structure}
+
+**Static benchmarks** have a fixed item set evaluated once per model. Most existing benchmarks are static. The advantage is reproducibility; the disadvantage is vulnerability to contamination and saturation.
+
+**Dynamic benchmarks** add new items over time (LiveBench, LiveCodeBench) or generate items adversarially (DynaBench). LiveCodeBench draws from ongoing programming competitions, ensuring that items postdate model training cutoffs. The measurement challenge is maintaining scale comparability: if the item pool changes, ability estimates from different time periods are not directly comparable without equating procedures.
+
+**Interactive benchmarks** require multi-turn interaction between the model and an environment or human evaluator. Chatbot Arena, WebArena, and Terminal-Bench are interactive. The "item" is not a static question but a dynamic episode whose difficulty depends on the model's earlier actions. Standard IRT assumes item parameters are fixed and independent of the subject --- an assumption that interactive benchmarks may violate.
+
+
+### Complete Benchmark Inventory {#sec-benchmark-inventory}
+
+The following tables enumerate all 70 benchmarks curated in the `torch_measure` collection, organized by domain and sorted by release date. Together they span over 1.2 million unique evaluation items and over 6,700 model/agent entries, with 55 benchmarks providing full per-item response matrices.
+
+::: {.callout-note title="Benchmark Inventory (70 benchmarks, 1.2M+ items, 6,700+ test-takers)" collapse="true"}
+
+**Knowledge and Reasoning**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 1 | ARC-AGI v1 | 52 × 400 | Bin | Grid output match; visual abstract reasoning | 2019-11 | [arXiv:1911.01547](https://arxiv.org/abs/1911.01547) |
+| 2 | MMLU-Pro | 48 × 12,257 | Bin | MCQ; exact match on 10-choice questions | 2024-06 | [arXiv:2406.01574](https://arxiv.org/abs/2406.01574) |
+| 3 | LiveBench | 195 × 494 | Con | Rubric-scored; monthly-refreshed, automated grading | 2024-06 | [arXiv:2406.19314](https://arxiv.org/abs/2406.19314) |
+| 4 | ARC-AGI v2 | 28 × 120 | Bin | Grid output match; harder visual reasoning | 2024-12 | [arcprize](https://huggingface.co/arcprize) |
+| 5 | HLE | 19 × 1,792 | Bin | MCQ + open-ended; expert-authored, LLM-graded | 2025-01 | [arXiv:2501.14249](https://arxiv.org/abs/2501.14249) |
+| 6 | MathArena | 68 × 336 | Con | Exact match; competition problems (AIME, AMC) | 2025-03 | [matharena.ai](https://matharena.ai/) |
+
+**Code Generation and Software Engineering**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 7 | EvalPlus | 31 × 542 | Bin | Unit tests; augmented test suites | 2023-05 | [arXiv:2305.01210](https://arxiv.org/abs/2305.01210) |
+| 8 | SWE-bench Verified | 134 × 500 | Bin | Repo test suite; GitHub issue resolution | 2023-10 | [arXiv:2310.06770](https://arxiv.org/abs/2310.06770) |
+| 9 | SWE-bench Full | 24 × 2,294 | Bin | Repo test suite; full instance set | 2023-10 | [arXiv:2310.06770](https://arxiv.org/abs/2310.06770) |
+| 10 | CRUXEval | 38 × 800 | Con | Exact match; I/O prediction | 2024-01 | [arXiv:2401.03065](https://arxiv.org/abs/2401.03065) |
+| 11 | LiveCodeBench | 72 × 1,055 | Con | Unit tests; pass@1, contest problems | 2024-03 | [arXiv:2403.07974](https://arxiv.org/abs/2403.07974) |
+| 12 | BigCodeBench | 153 × 1,140 | Bin | Unit tests; sandbox, 139 library APIs | 2024-06 | [arXiv:2406.15877](https://arxiv.org/abs/2406.15877) |
+| 13 | SWE-bench Java | 52 × 170 | Bin | Repo test suite; Java issues | 2024-08 | [multi-swe-bench](https://github.com/multi-swe-bench) |
+| 14 | SWE-bench Multi | 13 × 301 | Bin | Repo test suite; multi-language | 2024-08 | [multi-swe-bench](https://github.com/multi-swe-bench) |
+| 15 | MLE-bench | 30 × 75 | Con | Kaggle scoring; competition submission | 2024-10 | [arXiv:2410.07095](https://arxiv.org/abs/2410.07095) |
+| 16 | DPAI Arena | 9 × 141 | Con | Test suite + rubric; dual evaluation | 2025-01 | [dpaia.dev](https://dpaia.teamcity.com) |
+| 17 | ClineBench | 3 × 12 | Con | Harbor framework; coding agent | 2025-01 | [cline/cline](https://github.com/cline/cline) |
+| 18 | SWE-PolyBench | — × 2,110 | Bin | Repo test suite; polyglot SWE | 2025-01 | [arXiv:2501.14798](https://arxiv.org/abs/2501.14798) |
+| 19 | EditBench | 44 × 540 | Con | Unit tests; code editing, multilingual | 2025-02 | [waynchi/editbench](https://github.com/waynchi/editbench) |
+
+**Tool Use and Function Calling**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 20 | BFCL v3 | 93 × 4,751 | Bin | AST match + exec; function call validation | 2024-02 | [arXiv:2402.15671](https://arxiv.org/abs/2402.15671) |
+| 21 | ToolBench | 10 × 765 | Bin | StableToolBench; cached API eval | 2024-03 | [arXiv:2403.07714](https://arxiv.org/abs/2403.07714) |
+
+**Agentic Tasks**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 22 | WebArena | 14 × 812 | Bin | Browser env; live websites | 2023-07 | [arXiv:2307.13854](https://arxiv.org/abs/2307.13854) |
+| 23 | AgentBench | 29 × 8 | Con | Multi-env; OS, DB, web, game | 2023-08 | [arXiv:2308.03688](https://arxiv.org/abs/2308.03688) |
+| 24 | GAIA | 32 × 165 | Bin | Exact match; web + tool-use | 2023-11 | [arXiv:2311.12983](https://arxiv.org/abs/2311.12983) |
+| 25 | VisualWebArena | 6 × 910 | Con | Browser env; multimodal web | 2024-01 | [arXiv:2401.13649](https://arxiv.org/abs/2401.13649) |
+| 26 | WorkArena | 4 × 118 | Con | ServiceNow env; enterprise | 2024-03 | [arXiv:2403.07718](https://arxiv.org/abs/2403.07718) |
+| 27 | OSWorld | 77 × 369 | Con | VM env; desktop automation | 2024-04 | [arXiv:2404.07972](https://arxiv.org/abs/2404.07972) |
+| 28 | AndroidWorld | 3 × 116 | Bin | Emulator; mobile automation | 2024-05 | [arXiv:2405.14573](https://arxiv.org/abs/2405.14573) |
+| 29 | AgentDojo | 29 × 132 | Bin | Sandbox; tool-use + security | 2024-06 | [arXiv:2406.13352](https://arxiv.org/abs/2406.13352) |
+| 30 | AgentDojo (Sec.) | 28 × 949 | Bin | Sandbox; attack success | 2024-06 | [arXiv:2406.13352](https://arxiv.org/abs/2406.13352) |
+| 31 | TAU-bench | 32 × 329 | Con | Simulated env; customer service | 2024-06 | [arXiv:2406.12045](https://arxiv.org/abs/2406.12045) |
+| 32 | AppWorld | 18 × 31 | Con | API env; multi-app interaction | 2024-07 | [arXiv:2407.18901](https://arxiv.org/abs/2407.18901) |
+| 33 | CORE-Bench | 15 × 270 | Bin | Docker env; reproducibility | 2024-09 | [arXiv:2409.11353](https://arxiv.org/abs/2409.11353) |
+| 34 | BrowserGym | 18 × 8 | Con | Browser env; aggregate scores | 2024-12 | [arXiv:2412.05467](https://arxiv.org/abs/2412.05467) |
+| 35 | TheAgentCompany | 19 × 175 | Con | Simulated enterprise; workplace | 2024-12 | [arXiv:2412.14161](https://arxiv.org/abs/2412.14161) |
+| 36 | Terminal-Bench | 128 × 89 | Con | Docker env; CLI task resolution | 2025-02 | [arXiv:2502.10996](https://arxiv.org/abs/2502.10996) |
+| 37 | PaperBench | 9 × 20 | Con | Rubric; reproduce ML papers | 2025-02 | [arXiv:2504.01848](https://arxiv.org/abs/2504.01848) |
+
+**Safety and Security**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 38 | CyBench | 8 × 40 | Bin | CTF env; flag capture | 2024-08 | [arXiv:2408.08926](https://arxiv.org/abs/2408.08926) |
+
+**Domain-Specific (Legal, Finance, Medical)**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 39 | IgakuQA | 5 × 1,471 | Bin | MCQ; Japanese medical licensing exams (2018--2022) | 2023-03 | [jungokasai/IgakuQA](https://github.com/jungokasai/IgakuQA) |
+| 40 | LawBench | 51 × 9,000 | Bin | Exact match; 20 Chinese legal tasks, zero-shot | 2023-09 | [open-compass/LawBench](https://github.com/open-compass/LawBench) |
+| 41 | FinanceBench | 16 × 150 | Bin | Expert-graded; SEC filing QA | 2023-11 | [patronus-ai/financebench](https://github.com/patronus-ai/financebench) |
+| 42 | LexEval | 38 × 14,147 | Con | Rubric; 23 Chinese legal tasks (NeurIPS 2024) | 2024-09 | [CSHaitao/LexEval](https://github.com/CSHaitao/LexEval) |
+| 43 | AfriMedQA | 30 × 6,910 | Bin | MCQ; Pan-African medical, 20 specialties | 2024-09 | [arXiv:2409.15290](https://arxiv.org/abs/2409.15290) |
+
+**Preference and Reward Modeling**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 44 | AlpacaEval | 221 × 805 | Bin | LLM judge; win/loss vs GPT-4 | 2023-05 | [tatsu-lab/alpaca_eval](https://github.com/tatsu-lab/alpaca_eval) |
+| 45 | MT-Bench | — × 80 | — | GPT-4 + human pairwise; multi-turn | 2023-06 | [lm-sys/FastChat](https://github.com/lm-sys/FastChat) |
+| 46 | UltraFeedback | 17 × 63,966 | Con | GPT-4 judge; overall score (1--10) | 2023-10 | [OpenBMB/UltraFeedback](https://github.com/OpenBMB/UltraFeedback) |
+| 47 | RewardBench | 149 × 2,985 | Bin | Score comparison; chosen vs rejected | 2024-03 | [arXiv:2403.13787](https://arxiv.org/abs/2403.13787) |
+| 48 | WildBench | 63 × 1,024 | Con | LLM judge; checklist scoring | 2024-06 | [arXiv:2406.04770](https://arxiv.org/abs/2406.04770) |
+
+**Multilingual and Cultural Evaluation**
+
+| # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
+|:--|-----------|:---:|:---:|-------------------|:---:|-----------|
+| 49 | MasakhaNER v2 | — × — | Bin | NER; 20 African languages | 2022-10 | [arXiv:2210.12391](https://arxiv.org/abs/2210.12391) |
+| 50 | HELM African | — × — | Con | HELM harness; African language tasks | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
+| 51 | HELM CLEVA | — × — | Con | HELM harness; Chinese language eval | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
+| 52 | HELM ThaiExam | — × — | Con | HELM harness; Thai examination tasks | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
+| 53 | C-Eval | — × 12,342 | Bin | MCQ; Chinese educational system | 2023-05 | [arXiv:2305.08322](https://arxiv.org/abs/2305.08322) |
+| 54 | CMMLU | — × 11,582 | Bin | MCQ; Chinese 67 subjects | 2023-06 | [arXiv:2306.09212](https://arxiv.org/abs/2306.09212) |
+| 55 | Rakuda | 141 × 40 | Con | LLM judge; Japanese open-ended QA | 2023-06 | [shisa-ai/shaberi](https://github.com/shisa-ai/shaberi) |
+| 56 | SIB-200 | 2 × 41,820 | Bin | Classification; 205 languages | 2023-09 | [arXiv:2309.07445](https://arxiv.org/abs/2309.07445) |
+| 57 | OALL Arabic MMLU | — × — | Bin | MCQ; native Arabic knowledge questions | 2024-02 | [OALL](https://huggingface.co/blog/leaderboard-arabic-v2) |
+| 58 | OALL Arabic Exams | — × — | Bin | MCQ; Arabic exam questions | 2024-02 | [OALL](https://huggingface.co/blog/leaderboard-arabic-v2) |
+| 59 | KMMLU | — × 35,030 | Bin | MCQ; Korean exams | 2024-02 | [arXiv:2402.11548](https://arxiv.org/abs/2402.11548) |
+| 60 | Tengu-Bench | 141 × 120 | Con | LLM judge; Japanese multi-category | 2024-04 | [shisa-ai/shaberi](https://github.com/shisa-ai/shaberi) |
+| 61 | AfriEval | — × 469,210 | Bin | MCQ + NLI + QA; African languages | 2024 | HuggingFace |
+| 62 | AsiaEval | — × 398,263 | Bin | MCQ + NLI; Asian languages | 2024 | HuggingFace |
+| 63 | CulturalEval | — × 82,996 | Bin | MCQ; cross-cultural values | 2024 | HuggingFace |
+| 64 | IberBench | — × 32,797 | Bin | MCQ + NLI; Iberian languages | 2024 | HuggingFace |
+| 65 | Bridging Gap | 1,767 × 36 | Bin | MCQ; Winogrande × 12 languages | 2024 | HuggingFace |
+| 66 | Ko Leaderboard | 1,159 × 9 | Con | lm-eval-harness; Korean tasks | 2024 | [Open Ko-LLM](https://huggingface.co/spaces/upstage/open-ko-llm-leaderboard) |
+| 67 | La Leaderboard | 69 × 108 | Con | lm-eval-harness; Iberian tasks | 2024 | HuggingFace |
+| 68 | PT Leaderboard | 1,148 × 10 | Con | lm-eval-harness; Portuguese | 2024 | HuggingFace |
+| 69 | Thai Leaderboard | 72 × 19 | Con | lm-eval-harness; Thai tasks | 2024 | HuggingFace |
+| 70 | TUMLU | 30 × 7,486 | Bin | MCQ; 9 Turkic languages, CoT + non-CoT | 2024-12 | [ceferisbarov/TUMLU](https://github.com/ceferisbarov/TUMLU) |
+
+**Legend.** $N$ = models/agents; $M$ = items/tasks; "—" = item-only data. **Type**: Bin = binary; Con = continuous $[0,1]$. **Released**: earliest public availability (arXiv, GitHub, or HuggingFace). **Evaluation Method**: MCQ = multiple-choice exact match; unit tests = code execution; LLM judge = automated preference judgment; env = interactive environment.
+
+**Scoring variants.** The 70 entries above correspond to 101 dataset variants on HuggingFace (`aims-foundation/torch-measure-data`). Many benchmarks are released with multiple **scoring conditions** that produce different response matrices from the same items — a measurement choice that affects downstream analysis. For example:
+
+| Benchmark | Variants | Scoring conditions |
+|-----------|:---:|-----|
+| CRUXEval | 6 | Continuous / binary × combined / input-only / output-only |
+| TAU-bench | 6 | Combined + 5 domain splits (airline v1/v2, HAL, retail, telecom) |
+| EvalPlus | 5 | Combined + HumanEval / MBPP × base / augmented test suites |
+| BigCodeBench | 4 | Complete / instruct × full / hard subset |
+| DPAI Arena | 4 | Total / blind / informed scoring + binary threshold |
+| MLE-bench | 4 | Continuous / binary / above-median / raw Kaggle scores |
+| CyBench | 3 | Unguided / subtask-guided / subtask completion scores |
+| SWE-PolyBench | 2 | Full (1 model) / verified (3 models) |
+| 13 others | 2 each | Binary vs. continuous rescoring of same items |
+
+These variants represent different *testing conditions* in the sense of @sec-reliability: the same items administered under different scoring rubrics, prompt formats, or subset selections. A model's measured ability can change substantially across conditions — BigCodeBench "instruct" scores differ from "complete" scores for the same model on the same items, because the prompt format changes what capability is being measured. This is why Generalizability Theory (@sec-reliability) decomposes variance across conditions: the scoring condition is a facet of measurement, not just a data processing choice.
+:::
+
+
+### Visualizing the Landscape {#sec-landscape-viz}
+
+To see the structure of the evaluation landscape at a glance, we embed the item text from 19 benchmarks using a sentence transformer, then project benchmark centroids to 2D with UMAP. Each point represents one benchmark, positioned by the semantic content of its items.
+
+{{< include _plt_setup.qmd >}}
+
+```{pyodide-python}
+#| label: landscape-scatter
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Pre-computed UMAP coordinates (sentence-transformer embeddings of sampled items)
+data = {"x": [9.83, 10.16, 10.43, 8.61, 8.97, 8.29, 9.37, 8.64, 8.7, 10.74, 11.07, 10.46, 7.17, 7.24, 6.42, 6.6, 9.24, 11.09, 11.24], "y": [4.02, 3.49, 4.35, 2.86, 2.23, 2.27, 1.11, 1.55, 0.85, 6.12, 5.26, 5.53, 9.26, 8.68, 9.42, 8.89, 0.36, 3.78, 4.64], "category": ["Knowledge", "Knowledge", "Knowledge", "Knowledge (Chinese)", "Knowledge (Chinese)", "Knowledge (Korean)", "Knowledge (African)", "Knowledge (Asian)", "Knowledge (Iberian)", "Code Generation", "Code Generation", "Code Reasoning", "Software Engineering", "Software Engineering", "Software Engineering", "Software Engineering", "Software Engineering", "ML Engineering", "Tool Use"], "benchmark": ["MMLU-Pro", "HLE", "LiveBench", "C-Eval", "CMMLU", "KMMLU", "AfriEval", "AsiaEval", "IberBench", "BigCodeBench", "EvalPlus", "CRUXEval", "SWE-bench", "SWE-bench Full", "SWE-bench Java", "SWE-bench ML", "SWE-PolyBench", "MLE-bench", "BFCL"]}
+
+# Color map by coarse category
+cat_colors = {
+    "Knowledge": "#5B8DEE",
+    "Knowledge (Chinese)": "#45BF7C",
+    "Knowledge (Korean)": "#45BF7C",
+    "Knowledge (African)": "#B07CD8",
+    "Knowledge (Asian)": "#B07CD8",
+    "Knowledge (Iberian)": "#B07CD8",
+    "Code Generation": "#F0A35C",
+    "Code Reasoning": "#F0A35C",
+    "Software Engineering": "#E8637A",
+    "ML Engineering": "#F0A35C",
+    "Tool Use": "#888888",
+}
+# Coarse legend labels
+coarse_map = {
+    "Knowledge": "Knowledge (English)",
+    "Knowledge (Chinese)": "Knowledge (CJK)",
+    "Knowledge (Korean)": "Knowledge (CJK)",
+    "Knowledge (African)": "Knowledge (Other Lang)",
+    "Knowledge (Asian)": "Knowledge (Other Lang)",
+    "Knowledge (Iberian)": "Knowledge (Other Lang)",
+    "Code Generation": "Code",
+    "Code Reasoning": "Code",
+    "Software Engineering": "Software Engineering",
+    "ML Engineering": "Code",
+    "Tool Use": "Tool Use",
+}
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+# Plot points
+for i in range(len(data["x"])):
+    cat = data["category"][i]
+    ax.scatter(data["x"][i], data["y"][i], c=cat_colors[cat], s=60,
+               edgecolors="white", linewidths=0.5, zorder=3)
+    # Label
+    offset = (5, 5)
+    if data["benchmark"][i] in ("SWE-bench Full", "SWE-bench Java"):
+        offset = (5, -10)
+    elif data["benchmark"][i] == "CMMLU":
+        offset = (-35, -12)
+    elif data["benchmark"][i] == "EvalPlus":
+        offset = (5, -10)
+    ax.annotate(data["benchmark"][i], (data["x"][i], data["y"][i]),
+                fontsize=5.5, xytext=offset, textcoords="offset points",
+                color="#333333")
+
+# Legend (coarse categories)
+from matplotlib.lines import Line2D
+legend_items = {
+    "Knowledge (English)": "#5B8DEE",
+    "Knowledge (CJK)": "#45BF7C",
+    "Knowledge (Other Lang)": "#B07CD8",
+    "Code": "#F0A35C",
+    "Software Engineering": "#E8637A",
+    "Tool Use": "#888888",
+}
+handles = [Line2D([0], [0], marker='o', color='w', markerfacecolor=c,
+                  markersize=6, label=l) for l, c in legend_items.items()]
+ax.legend(handles=handles, loc="lower left", framealpha=0.9)
+
+ax.set_xlabel("UMAP 1")
+ax.set_ylabel("UMAP 2")
+ax.set_title("AI Evaluation Landscape (benchmark centroids)")
+ax.grid(True, alpha=0.2)
+plt.tight_layout()
+plt.show()
+
+print("19 benchmarks from torch_measure, embedded with all-MiniLM-L6-v2, projected with UMAP.")
+print("Knowledge benchmarks (blue/green/purple) cluster by language family.")
+print("Code benchmarks (orange) form a distinct region.")
+print("SWE-bench variants (red) cluster tightly — similar issue descriptions across languages.")
+```
+
+The scatter plot reveals several structural features of the evaluation landscape. **Knowledge benchmarks** form a broad cluster, with English-language benchmarks (MMLU-Pro, HLE, LiveBench) grouping together and multilingual benchmarks (C-Eval, CMMLU, KMMLU, AfriEval, IberBench) spreading along a language axis. **Code benchmarks** (BigCodeBench, EvalPlus, CRUXEval) occupy a distinct region, reflecting the semantic difference between natural language questions and programming tasks. **Software engineering benchmarks** (SWE-bench and variants) cluster tightly because their items are GitHub issue descriptions, which share a distinctive technical register regardless of the programming language. The separation between clusters suggests that these benchmark categories measure genuinely different constructs --- a hypothesis we can test formally using the factor models in @sec-foundations.
+
+
+## Multilingual and Cultural Evaluation {#sec-multilingual}
+
+A striking feature of the current evaluation landscape is the effort to extend measurement beyond English and Western cultural contexts. This creates both opportunities and challenges for measurement science.
+
+### Regional Leaderboards and Benchmarks
+
+Multiple evaluation efforts target specific linguistic and cultural communities:
+
+| Benchmark | Focus | Coverage |
+|-----------|-------|----------|
+| C-Eval, CMMLU | Chinese language and culture | Mandarin, Chinese educational system |
+| KMMLU | Korean language and knowledge | Korean educational and professional domains |
+| Thai Leaderboard | Thai language evaluation | Thai language tasks |
+| IberBench | Iberian languages | Spanish, Portuguese, Catalan, and related languages |
+| AfriEval | African languages | Multiple African languages and cultural contexts |
+| AfriMedQA | African healthcare | Medical QA in African healthcare contexts |
+| AsiaEval | Asian languages and culture | Cross-Asian evaluation |
+| CulturalEval | Cultural knowledge | Cross-cultural knowledge and values |
+| SIB-200 | Massively multilingual | 200+ languages, topic classification |
+| HELM Multilingual | Multilingual model evaluation | Standardized multilingual evaluation |
+
+These benchmarks reveal a fundamental validity question: does "reasoning ability" --- or any other construct we measure --- mean the same thing across languages and cultures? A model that excels at English-language reasoning may fail in Korean not because it lacks reasoning ability, but because the items embed cultural knowledge (Korean history, legal system, social norms) that is construct-irrelevant for a non-Korean audience but construct-relevant for Korean users.
+
+In measurement theory terms, this is a **differential item functioning** (DIF) problem at the cultural level. Items that are "fair" in one cultural context may be systematically harder or easier in another, not because of ability differences but because of construct-irrelevant cultural loading. The DIF analysis tools developed in @sec-validity are directly applicable.
+
+### Multilingual Software Engineering
+
+The multilingual dimension extends beyond language tasks. SWE-bench Multilingual and SWE-bench Java test software engineering in languages other than Python, revealing that "coding ability" as measured by Python-only benchmarks may not transfer. SWE-PolyBench tests across multiple programming languages simultaneously. These benchmarks provide natural settings for studying the dimensionality of coding ability: is there a single "software engineering" construct, or are Python ability, Java ability, and JavaScript ability partially independent dimensions?
+
+
+## Preference Data and Pairwise Comparisons {#sec-preference-data}
+
+A significant fraction of AI evaluation data comes not from item-level scoring but from **pairwise comparisons**: a human or automated judge compares two model outputs and declares a winner. The Chatbot Arena (140K+ comparisons), AlpacaEval, MT-Bench, Arena Hard, WildBench, and preference datasets (HH-RLHF, UltraFeedback, HelpSteer2, Nectar, SHP-2) all produce comparison data.
+
+### From Comparisons to Response Matrices
+
+Pairwise comparison data has a different structure from standard response matrices. Instead of "model $i$ on item $j$," we observe "model $A$ preferred over model $B$ on prompt $k$." The natural data structure is a **comparison tensor** $C_{ABk} \in \{A, B, \text{tie}\}$.
+
+The Bradley-Terry model (@sec-paired-comparison) connects this structure to the response matrix framework. Under Bradley-Terry, the probability that model $A$ is preferred over model $B$ is:
+
+$$
+P(A \succ B) = \frac{\exp(\theta_A)}{\exp(\theta_A) + \exp(\theta_B)} = \sigma(\theta_A - \theta_B)
+$$
+
+This is formally equivalent to a Rasch model where the "subject" is the comparison pair $(A, B)$, the "item difficulty" is $\theta_B$, and the "ability" is $\theta_A$. The Elo rating system implements online maximum likelihood estimation for this model.
+
+### Reward Model Benchmarks
+
+RewardBench and RewardBench 2 evaluate *reward models* --- the models that score outputs in RLHF pipelines. Here the "subject" is a reward model and the "item" is a (prompt, chosen response, rejected response) triplet. The response is binary: does the reward model assign a higher score to the chosen response? This is a standard response matrix, but the items have rich internal structure (two full-text responses per item) that simple IRT models do not capture.
+
+Preference Dissection and BigGen go further, decomposing preference judgments into multiple criteria (helpfulness, safety, coherence, creativity), producing multi-trait response data suitable for multidimensional measurement models.
+
+
+## Gaps in the Landscape {#sec-landscape-gaps}
+
+The benchmark inventory above is extensive, but the broader landscape is far richer. Understanding what exists *outside* our current collection --- and what is genuinely missing --- helps identify both curation opportunities and true blind spots.
+
+### Domain Coverage
+
+The `torch_measure` collection now spans multiple specialized domains beyond general knowledge and coding. In each domain, we note what is curated, what exists but is not yet curated, and where genuine gaps remain.
+
+**Legal.** LawBench (51 models × 9,000 Chinese legal items) is now curated with full per-question per-model predictions. LegalBench (162 English legal reasoning tasks, 12K+ items), LEXTREME (24 European languages), and CaseHOLD (53K US case law items) have public question datasets but no cross-model prediction matrices. Legal evaluation poses unique measurement challenges: jurisdictional dependence, defensible alternative answers, and multi-faceted constructs spanning statutory interpretation, case analysis, and procedural knowledge.
+
+**Finance.** FinanceBench (16 model configurations × 150 SEC filing questions) is now curated. FinBen/PIXIU covers 36 datasets across 24 tasks using the `lm-evaluation-harness` framework. FinQA (8,281 numerical reasoning questions), ConvFinQA (multi-turn financial QA), and TAT-QA (hybrid tabular + textual QA) have public datasets but no cross-model prediction data.
+
+**Healthcare.** AfriMedQA (Pan-African, 30 models × 6,910 items) is curated. MedQA (12,723 USMLE-style questions), MedMCQA (194K Indian medical exam questions), and PubMedQA (1,000 expert-labeled questions) all have public question datasets. Multilingual medical benchmarks include CMB/CMExam (Chinese), KorMedMCQA (Korean), JMedBench/IgakuQA (Japanese), MedExpQA (4 languages), and IMB (Italian, 25K+ items). The main barrier is that most leaderboards publish only aggregate accuracy, not per-model per-item response matrices.
+
+**Preference and reward modeling.** RewardBench (149 reward models × 2,985 items), UltraFeedback (17 models × 64K prompts), AlpacaEval, and WildBench are curated. MT-Bench (80 questions) has item content but only pairwise human judgments, not per-model absolute scores. The Chatbot Arena (33K conversations with pairwise preferences) is available on HuggingFace for pairwise analysis.
+
+**Vision-language and multimodal.** The OpenVLMRecords dataset on HuggingFace provides per-question raw model responses for 220+ vision-language models across 80+ benchmarks (MMBench, SEED-Bench, MME, POPE, MM-Vet, MMMU, MathVista, Video-MME, and many more). This is effectively a massive collection of response matrices for multimodal evaluation, ready for IRT analysis. The `lmms-eval` framework produces per-item predictions that could be curated similarly. Our collection's limited multimodal coverage (only VisualWebArena) is a curation gap, not a data availability gap.
+
+### Missing Languages and Cultures
+
+The multilingual benchmark landscape is richer than what our collection currently covers:
+
+| Region | In our collection | Per-item data available (not yet curated) | Questions only (no per-model predictions) |
+|--------|------------------|------------------------------------------|------------------------------------------|
+| East Asia | C-Eval, CMMLU, KMMLU, Thai LB, HELM CLEVA/ThaiExam | Rakuda (~557 models), Tengu-Bench (~558 models), IgakuQA (5 models) — via [Shaberi](https://github.com/shisa-ai/shaberi) | JGLUE, JMMLU (7,536 MCQs) |
+| Africa | AfriEval, AfriMedQA, HELM African, MasakhaNER v2, Bridging the Gap, SIB-200 | — | — (good coverage) |
+| Middle East | OALL Arabic Exams, OALL Arabic MMLU | — | AlGhafa (22,977), ACVA, ORCA |
+| South Asia | Partial via SIB-200, AsiaEval | — | MILU (79,617 MCQs, 11 Indic langs, gated) |
+| Turkic | — | TUMLU (14 models × 38K items × 9 languages, full JSON) | TurkishMMLU (10K) |
+| Eastern Europe | — | — | MERA (19,739 Russian, submissions private), Russian SuperGLUE (101K, private), LLMzSzL (19K Polish), ZNO (3,814 Ukrainian) |
+| Latin America | IberBench, PT LB, La LB | — | — (mostly classification) |
+| Indigenous | — | — | AmericasNLI (10 languages, 14K NLI items) |
+
+Three patterns emerge. First, several benchmarks with per-item per-model data exist but are not yet curated in our collection: **TUMLU** (9 Turkic languages, 14 models, structured JSON with question + model output per item), **Rakuda** and **Tengu-Bench** (Japanese, ~558 models via the Shaberi framework), and **IgakuQA** (Japanese medical, 5 baselines). These are ready for immediate curation.
+
+Second, many benchmarks publish questions but not model predictions. JMMLU (Japanese), MILU (11 Indic languages), TurkishMMLU, LLMzSzL (Polish), and ZNO (Ukrainian) all have public item sets, but would require re-running models through `lm-evaluation-harness` with `--log_samples` to generate per-item response matrices. Some leaderboards (MERA, Russian SuperGLUE) collect per-item submissions but keep them private.
+
+Third, *cultural validity* remains the deeper issue. Most multilingual benchmarks are translations of English-centric constructs. Culturally grounded benchmarks --- designed around local educational systems, professional standards, and cultural knowledge --- remain rare. KMMLU (Korean), ArabicMMLU (native Arabic questions sourced from regional exams), LawBench (Chinese legal system), and TUMLU (Turkic cultural knowledge) are positive examples; translated MMLU variants are not.
+
+### Structural Gaps
+
+Some evaluation challenges are genuinely underserved, not just under-curated.
+
+**Long-horizon and multi-session evaluation.** Current benchmarks evaluate models on isolated tasks. No benchmark evaluates sustained performance over hours or days, despite this being the primary use case for coding assistants and enterprise agents. The response matrix formulation assumes independent items; long-horizon evaluation introduces temporal dependencies that violate this assumption.
+
+**Education as a domain (not just a test source).** While many benchmarks use educational exam questions as *items* (MMLU, C-Eval, KMMLU), few evaluate AI *in educational settings*. MathTutorBench, TutorBench, and MRBench are emerging efforts, but they are small-scale (under 200 conversations) and focus on pedagogical quality scoring rather than binary correctness. Evaluating tutoring effectiveness, adaptive explanation quality, or long-term learning outcomes requires longitudinal, interactive designs that do not fit the standard response matrix format.
+
+**Embodied AI and robotics.** Despite substantial work in simulation-based robotics benchmarks (BEHAVIOR-100, RLBench, Meta-World), none provide the kind of cross-model response matrices used in this book. The "item" in robotics (a task specification + environment configuration) and the "response" (a trajectory success/failure) could in principle be formalized as a response matrix, but this has not been done at scale.
+
+**Evaluation of evaluation.** Meta-evaluation --- assessing whether evaluation methods themselves are reliable and valid --- is growing. RewardBench (149 reward models × 2,985 items, now in our collection) evaluates reward models, and the PSN-IRT project (AAAI 2026) constructs a response matrix across 12 models and 41,871 items with full IRT parameter estimation. But systematic studies of whether LLM judges, reward models, and evaluation pipelines are measurement-valid in the sense of @sec-validity remain rare. Applying the reliability and validity tools from @sec-reliability and @sec-validity to evaluation methods themselves --- not just the systems being evaluated --- is an important frontier.
+
+
+## Data Quality in Practice {#sec-data-quality}
+
+Real-world evaluation data is messy. Before fitting measurement models, practitioners must understand and address several recurring data quality issues.
+
+### Inconsistent Scoring
+
+Different benchmarks use different scoring conventions, even for similar tasks. Pass@1 may be computed from 1 sample (making it binary), 10 samples (giving 11 discrete values), or 200 samples (approximating a continuous probability). Some benchmarks report accuracy, others report error rate. Some benchmarks score partial credit on multi-step tasks, others use all-or-nothing scoring. Standardizing these into a coherent response matrix requires careful attention to what each score means.
+
+### The Subject Identity Problem
+
+For agentic benchmarks, "who is the test-taker?" is not straightforward. Terminal-Bench has 128 agent--model combinations from 31 unique scaffolds and 42 unique models. SWE-bench has entries like "SWE-Agent + Claude Sonnet 4" and "OpenHands + Claude Sonnet 4" --- same model, different scaffolds, substantially different performance. When we estimate "Claude Sonnet 4's ability," which rows do we use? The answer depends on what construct we are measuring: if we want *model* ability, we should somehow average over scaffolds; if we want *system* ability, each model--scaffold combination is its own subject.
+
+### Benchmark Contamination and Temporal Validity
+
+Static benchmarks face an inevitable lifecycle: they are released, adopted by the community, potentially memorized by models trained on web data, and eventually saturated. LiveCodeBench addresses this by drawing problems from ongoing competitions, ensuring items postdate training cutoffs. But this introduces a new challenge: the item pool changes over time, making longitudinal comparisons difficult without equating procedures.
+
+### Missing Data Patterns
+
+Missing data in AI evaluation is rarely random. Common patterns include:
+
+- **Temporal missingness**: older models evaluated on fewer items (LiveCodeBench)
+- **Cost-driven missingness**: expensive models evaluated on fewer benchmarks
+- **Availability missingness**: closed-source models not evaluated on benchmarks requiring local execution
+- **Selection missingness**: models not evaluated on benchmarks where they are expected to perform poorly
+
+Each pattern violates the missing-at-random assumption that most imputation methods require. The masking schemes developed in @sec-generalization provide a framework for testing how well models handle different missingness patterns.
+
+
+## The `torch_measure` Toolkit {#sec-torch-measure}
+
+The `torch_measure` library provides a PyTorch-native toolkit for loading, inspecting, and analyzing response matrices from real benchmarks. It is the companion software for this book.
+
+### Loading Benchmarks
+
+```{python}
+#| eval: false
+
+from torch_measure.datasets import load, list_datasets
+
+# See all available benchmarks
+list_datasets("bench")
+
+# Load a response matrix
+rm = load("bench/swebench")
+print(f"Shape: {rm.shape}")          # (134, 500)
+print(f"Density: {rm.density:.1%}")  # 100.0%
+print(f"Mean: {rm.subject_means.mean():.3f}")
+```
+
+### Inspecting the Response Matrix
+
+```{python}
+#| eval: false
+
+# Per-subject (model) statistics
+print(f"Best model: {rm.subject_means.max():.1%}")
+print(f"Worst model: {rm.subject_means.min():.1%}")
+
+# Per-item statistics
+print(f"Easiest item: {rm.item_means.max():.1%}")
+print(f"Hardest item: {rm.item_means.min():.1%}")
+print(f"Items solved by no model: {(rm.item_means == 0).sum()}")
+
+# Missing data
+print(f"Missing entries: {(~rm.observed_mask).sum()}")
+```
+
+### Fitting a Measurement Model
+
+```{python}
+#| eval: false
+
+from torch_measure.models import Rasch
+
+# Fit a Rasch model to the response matrix
+model = Rasch(n_subjects=rm.n_subjects, n_items=rm.n_items)
+model.fit(rm.data, method="mle")
+
+# Estimated parameters
+abilities = model.ability          # (134,) subject abilities
+difficulties = model.difficulty    # (500,) item difficulties
+
+# Predict response probabilities
+P_hat = model.predict()            # (134, 500)
+```
+
+### Comparing Benchmarks
+
+```{python}
+#| eval: false
+
+# Load multiple benchmarks
+benchmarks = {
+    "SWE-bench": load("bench/swebench"),
+    "BigCodeBench": load("bench/bigcodebench"),
+    "BFCL": load("bench/bfcl"),
+    "MMLU-Pro": load("bench/mmlupro"),
+}
+
+for name, rm in benchmarks.items():
+    print(f"{name:15s}: {rm.n_subjects:4d} subjects × {rm.n_items:5d} items, "
+          f"density={rm.density:.1%}, mean={rm.subject_means.mean():.3f}")
+```
+
+The response matrices loaded by `torch_measure` are the raw material for everything that follows. @sec-foundations introduces the probabilistic models that decompose these matrices into interpretable latent parameters. @sec-learning shows how to estimate those parameters. The rest of the book develops the tools for assessing whether the resulting measurements are reliable, valid, and useful.
+
+
+## Discussion Questions {#sec-data-discussion}
+
+1. **The subject identity problem.** For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How would you design a study to decompose these contributions? What does this imply for the dimensionality of the response matrix?
+
+2. **Cultural validity of benchmarks.** AfriMedQA evaluates medical knowledge in African healthcare contexts. A model trained primarily on US/European medical data might score poorly not because it lacks medical reasoning but because it lacks knowledge of local disease prevalence, treatment protocols, and healthcare infrastructure. Is this a validity threat (construct-irrelevant variance) or a genuine measurement of the construct (medical reasoning *in context*)? How does the answer depend on the intended use?
+
+3. **Dynamic vs. static benchmarks.** LiveCodeBench adds new problems from ongoing competitions to avoid contamination. But this means a model's "ability" is estimated from different items at different points in time. Under what conditions is this a problem? How would you use IRT equating procedures to maintain a common scale?
+
+4. **Preference data and transitivity.** The Bradley-Terry model assumes transitive preferences: if $A \succ B$ and $B \succ C$, then $A \succ C$. But human preferences often violate transitivity. How would you detect and quantify transitivity violations in Chatbot Arena data? What are the implications for using Elo ratings as a measure of model quality?
+
+5. **The missing data problem.** In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density) while others have systematic gaps (LiveCodeBench: 88.8%). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions would you trust ability estimates from a sparse matrix?
+
+
+## Bibliographic Notes {#sec-data-bib}
+
+The response matrix formulation for AI evaluation draws on the extensive psychometric literature on item analysis and test construction [@lord1968statistical; @hambleton1985irt]. The systematic curation of response matrices from AI benchmarks is a more recent effort; the `torch_measure` toolkit and its benchmark collection follow the standardized approach described in this chapter.
+
+Individual benchmarks have their own lineages. SWE-bench [@jimenez2023swe] established the paradigm of evaluating agents on real GitHub issues. MMLU [@hendrycks2021measuring] and its successors (MMLU-Pro) standardized knowledge evaluation across domains. The Chatbot Arena [@zheng2023judging] pioneered crowdsourced pairwise evaluation at scale. LiveCodeBench [@jain2024livecodebench] introduced temporal freshness as a design principle for contamination-resistant evaluation.
+
+The multilingual and cultural evaluation efforts respond to a recognized gap in AI measurement. C-Eval [@huang2023ceval] and CMMLU [@li2023cmmlu] provide Chinese-language evaluation. KMMLU provides Korean-language evaluation. IberBench covers Iberian languages. AfriEval and AfriMedQA address African languages and healthcare contexts. SIB-200 provides classification across 200+ languages. HELM Multilingual [@bommasani2024holistic] standardizes evaluation across languages. These efforts collectively demonstrate that the AI evaluation landscape cannot be understood through English-only benchmarks.
+
+For preference data, the Bradley-Terry model dates to @bradley1952rank. The Elo rating system, widely used in the Chatbot Arena, implements online Bradley-Terry estimation. RewardBench [@lambert2024rewardbench] standardizes reward model evaluation. The relationship between preference models and measurement theory is developed in the companion text *Machine Learning from Human Preferences* (Truong & Koyejo, 2026).

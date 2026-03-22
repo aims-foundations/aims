@@ -12,13 +12,15 @@ Stanford, 2025, Truong & Koyejo
 
 ## Structure of this book {.unnumbered}
 
-The book has three parts which introduce predictive measurement models, develop reliability and validity analysis, and discuss design, governance, and applications.
+The book opens with a survey of the evaluation data landscape, followed by three parts which introduce predictive measurement models, develop reliability and validity analysis, and discuss design, governance, and applications.
+
+@sec-data-landscape surveys the AI evaluation data landscape: the response matrix abstraction, a taxonomy of 70+ benchmarks spanning knowledge, coding, agentic, multilingual, cultural, and preference evaluation, and the practical data quality issues that arise in real-world evaluation. It introduces the `torch_measure` toolkit for loading and analyzing benchmark data.
 
 **Part I: Measurement as Predictive Modeling**
 
-@sec-foundations lays the mathematical groundwork for the rest of the book. It covers probabilistic models for AI evaluation data—including Item Response Theory (Rasch, 2PL, 3PL), Bradley-Terry models for pairwise comparisons, and factor models for multidimensional ability. A central theme is the relationship between model assumptions and what they allow us to infer: sufficiency, specific objectivity, and the tradeoffs between model complexity and interpretability. The chapter also introduces generalization experiments with various masking schemes and the cold-start problem—predicting performance for unseen models or items—through prediction-powered evaluation.
+@sec-foundations lays the mathematical groundwork for the rest of the book. It covers probabilistic models for AI evaluation data—including Item Response Theory (Rasch, 2PL, 3PL), Bradley-Terry models for pairwise comparisons, and factor models for multidimensional ability. A central theme is the relationship between model assumptions and what they allow us to infer: sufficiency, specific objectivity, and the tradeoffs between model complexity and interpretability. The chapter also introduces prediction-powered evaluation—an amortized factor model that maps external features to latent parameters for cold-start prediction of unseen models and items.
 
-@sec-learning studies how to estimate latent parameters from evaluation data. It covers maximum likelihood estimation, gradient-based optimization, the EM algorithm, Bayesian inference, regularization, and model selection.
+@sec-learning studies how to estimate latent parameters from evaluation data. It covers maximum likelihood estimation, gradient-based optimization, the EM algorithm, Bayesian inference, regularization, and model selection. It also develops generalization experiments with various masking schemes to evaluate the robustness and transferability of learned factor models.
 
 @sec-efficient develops the statistical foundations for efficient evaluation design. It introduces Fisher information for item selection, Computerized Adaptive Testing (CAT), D-optimal design for constructing maximally informative item pools, and efficient paired-comparison schedules for model arenas.
 

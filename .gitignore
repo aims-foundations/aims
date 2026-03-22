@@ -89,3 +89,9 @@ CLAUDE.md
 .claude/
 .claude.json
 .claude.json.backup
+
+# Hub site build outputs
+site/_site/
+site/vendor/
+site/.bundle/
+_deploy/

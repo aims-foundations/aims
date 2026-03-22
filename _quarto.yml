@@ -4,6 +4,8 @@ project:
   preview:
     port: 4200
 
+site-url: https://aimslab.stanford.edu/textbook
+
 resources:
   - CNAME
   - "*.pdf"
@@ -127,6 +129,10 @@ book:
   repo-url: https://github.com/sangttruong/aims
   repo-actions: [source, issue]
   downloads: [pdf]
+  navbar:
+    left:
+      - text: "AIMS Lab Home"
+        href: https://aimslab.stanford.edu/
   sidebar:
     style: "docked"
     footer: license.qmd

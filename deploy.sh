@@ -9,7 +9,7 @@ source /lfs/skampere2/0/sttruong/miniconda3/etc/profile.d/conda.sh
 conda activate aims
 
 # Navigate to project
-cd /lfs/skampere2/0/sttruong/aims
+cd /lfs/skampere2/0/sttruong/aimslab/aims_textbook
 
 # Pull latest changes
 # git pull
@@ -25,8 +25,8 @@ quarto render --to pdf --profile pdf
 echo "Building HTML..."
 quarto render --to html --profile html --no-clean
 
-# Deploy book to www
-echo "Deploying to www..."
-rsync -av --delete --no-perms --no-owner --no-group _book/ /afs/cs/group/aimslab/www/
+# Deploy textbook to www/textbook/
+echo "Deploying textbook to www/textbook/..."
+rsync -av --delete --no-perms --no-owner --no-group _book/ /afs/cs/group/aimslab/www/textbook/
 
-echo "Deployed successfully!"
+echo "Textbook deployed successfully!"

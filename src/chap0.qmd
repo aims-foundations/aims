@@ -418,6 +418,71 @@ RewardBench and RewardBench 2 evaluate *reward models* --- the models that score
 Preference Dissection and BigGen go further, decomposing preference judgments into multiple criteria (helpfulness, safety, coherence, creativity), producing multi-trait response data suitable for multidimensional measurement models.
 
 
+## Beyond Benchmarks: Intervention Data {#sec-intervention-data}
+
+The data landscape above measures AI systems directly: present items to models and record responses. But a growing body of AI evaluation asks a different question: *what happens when humans use AI?* Red teaming, deployment RCTs, uplift studies, and human-AI collaboration experiments all produce structured data that complements the benchmark paradigm.
+
+### The Intervention Matrix
+
+These studies share a common data structure that extends the response matrix with a treatment dimension. Where the standard response matrix records:
+
+$$
+Y_{ij} \in \{0, 1\} \quad \text{(subject } i \text{ on item } j\text{)}
+$$
+
+the **intervention matrix** records:
+
+$$
+Y_{ij}^{(t)} \in \{0, 1\} \quad \text{(subject } i \text{ on item } j \text{ under condition } t\text{)}
+$$
+
+where $t \in \{\text{control}, \text{treatment}\}$ (or multiple treatment arms). The subjects are now *humans* --- radiologists, developers, students --- and the measurement target is the **causal effect** of AI on human performance, not the AI system's capability in isolation.
+
+This structure connects naturally to many-facet measurement models (@sec-many-facet). In the many-facet Rasch framework, the treatment condition is simply another facet alongside person ability and item difficulty:
+
+$$
+\log \frac{P(Y_{ij}^{(t)} = 1)}{P(Y_{ij}^{(t)} = 0)} = \theta_i - \beta_j + \tau_t
+$$
+
+where $\tau_t$ is the treatment effect facet. The interaction $\theta_i \times \tau_t$ captures *heterogeneous treatment effects* --- the degree to which AI assistance helps some people more than others.
+
+### An Inventory of Intervention Data {#sec-intervention-inventory}
+
+We curate five publicly available intervention datasets spanning medicine, software engineering, classification, and education. These are the first datasets in the `torch_measure` collection where the subjects are humans rather than AI systems.
+
+::: {.callout-note collapse="true"}
+## Intervention Dataset Inventory
+
+| Dataset | Domain | Subjects | Items | Conditions | Outcome | Source |
+|---------|--------|----------|-------|------------|---------|--------|
+| Collab-CXR | Radiology | 336 radiologists | 324 CXR cases | 4 (image only, +history, +AI, +AI+history) | Diagnostic probability | [OSF](https://osf.io/z7apq/) |
+| METR Early-2025 | Coding | 16 developers | 246 issues | {AI allowed, AI disallowed} | Completion time (min) | [GitHub](https://github.com/METR/Measuring-Early-2025-AI-on-Exp-OSS-Devs) |
+| METR Late-2025 | Coding | 57 developers | 1,134 issues | {AI allowed, AI disallowed} | Completion time (min) | [GitHub](https://github.com/METR/Measuring-Late-2025-AI-on-OSS-Devs) |
+| HAIID | Classification | 1,125 participants | 152 items (5 domains) | Pre/post advice x {AI, human label} | Binary correct | [GitHub](https://github.com/kailas-v/human-ai-interactions) |
+| GenAI Learning | Education (math) | 943 students | 57 practice + 48 exam | {control, vanilla GPT, augmented GPT} | Binary score | [GitHub](https://github.com/obastani/GenAICanHarmLearning) |
+:::
+
+**Collab-CXR** [@yu2024collabcxr] is the largest and cleanest dataset. 227 radiologists each read a subset of 324 chest X-ray cases under four conditions (with/without AI predictions, with/without clinical history), providing probabilistic assessments for 104 pathologies per case. The within-subject, crossed design makes it ideal for many-facet analysis. AI assistance improves mean diagnostic accuracy from 96.5% to 97.1%, but the effect is heterogeneous across radiologists and pathologies.
+
+**METR Developer Productivity** [@metr2025productivity] is a within-subject RCT where each developer's issues are randomly assigned to AI-allowed or AI-disallowed conditions. The early study (16 developers, 246 tasks) found that AI-allowed tasks took *longer* (119.5 vs. 90.9 minutes) --- a counterintuitive result driven by context-switching costs and AI-induced scope expansion. The late study (57 developers, 1,134 tasks) found a smaller and reversed effect (151 vs. 169 minutes), though with severe selection effects. A key limitation for IRT analysis: items are developer-specific (not shared across subjects), producing a block-diagonal matrix.
+
+**HAIID** [@vodrahalli2022haiid] measures whether labeling advice as "from AI" versus "from a human" changes how people use it. Across five classification domains (art, census, cities, sarcasm, dermatology), the label has minimal effect: AI-labeled advice improves accuracy by +5--9%, and human-labeled advice improves accuracy by nearly the same amount. The advice *content*, not its provenance, drives the effect.
+
+**GenAI Learning** [@bastani2025genai] demonstrates a measurement paradox: students practicing math with ChatGPT score dramatically higher during practice (0.69 vs. 0.34 for controls), but score *no better* on a subsequent exam without AI (0.36 vs. 0.36). Students using a pedagogically designed GPT tutor also fail to outperform controls on the exam (0.35). AI inflates apparent performance without producing durable learning --- a finding with implications for any evaluation that measures human-AI teams without separating the human's contribution.
+
+### What Intervention Data Enables
+
+Intervention matrices open measurement questions that standard benchmarks cannot address:
+
+1. **Heterogeneous treatment effects.** Does AI help all users equally, or does it preferentially help experts, novices, or specific subgroups? Many-facet Rasch models and DIF analysis (@sec-dif) can decompose the treatment effect by person characteristics.
+
+2. **Measurement validity of human-AI teams.** If a human-AI team scores 90% on a task, how much is the human contributing? The GenAI Learning result shows this is not a trivial decomposition --- apparent team performance can be entirely attributable to the AI, with the human learning nothing.
+
+3. **Linking pre-deployment to post-deployment.** Safety benchmarks measure AI capabilities in isolation; intervention matrices measure what happens when humans interact with those capabilities. The relationship between the two is the empirical question of *ecological validity* --- and it is almost entirely unstudied.
+
+4. **Psychometric linking across safety frameworks.** Different AI labs use incompatible safety evaluation frameworks (Anthropic's ASL levels, OpenAI's Preparedness thresholds, DeepMind's Critical Capability Levels). IRT linking methodology could place these on a common scale, but only if item-level data from uplift studies becomes available. Currently, no CBRN uplift study releases item-level data.
+
+
 ## Gaps in the Landscape {#sec-landscape-gaps}
 
 The benchmark inventory above is extensive, but the broader landscape is far richer. Understanding what exists *outside* our current collection --- and what is genuinely missing --- helps identify both curation opportunities and true blind spots.
@@ -574,6 +639,30 @@ for name, rm in benchmarks.items():
           f"density={rm.density:.1%}, mean={rm.subject_means.mean():.3f}")
 ```
 
+### Loading Intervention Data
+
+```{python}
+#| eval: false
+
+# List intervention datasets
+list_datasets("intervention")
+
+# Load paired matrices from Collab-CXR (radiology)
+rm_no_ai = load("intervention/collab_cxr_accuracy_no_ai")
+rm_with_ai = load("intervention/collab_cxr_accuracy_with_ai")
+
+print(f"No AI:   {rm_no_ai.n_subjects} radiologists × {rm_no_ai.n_items} cases, "
+      f"mean accuracy={rm_no_ai.subject_means.mean():.3f}")
+print(f"With AI: {rm_with_ai.n_subjects} radiologists × {rm_with_ai.n_items} cases, "
+      f"mean accuracy={rm_with_ai.subject_means.mean():.3f}")
+
+# Load GenAI Learning exam data across conditions
+for arm in ["control", "augmented", "vanilla"]:
+    rm = load(f"intervention/genai_learning_exam_{arm}")
+    print(f"Exam ({arm:10s}): {rm.n_subjects} students × {rm.n_items} problems, "
+          f"mean={rm.subject_means.mean():.3f}")
+```
+
 The response matrices loaded by `torch_measure` are the raw material for everything that follows. @sec-foundations introduces the probabilistic models that decompose these matrices into interpretable latent parameters. @sec-learning shows how to estimate those parameters. The rest of the book develops the tools for assessing whether the resulting measurements are reliable, valid, and useful.
 
 
@@ -589,12 +678,16 @@ The response matrices loaded by `torch_measure` are the raw material for everyth
 
 5. **The missing data problem.** In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density) while others have systematic gaps (LiveCodeBench: 88.8%). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions would you trust ability estimates from a sparse matrix?
 
+6. **Intervention matrices and causal inference.** The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam --- the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How would you design an evaluation framework that distinguishes AI-augmented performance from durable human capability? Consider the implications for domains beyond education --- for instance, would a doctor's diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?
+
 
 ## Bibliographic Notes {#sec-data-bib}
 
 The response matrix formulation for AI evaluation draws on the extensive psychometric literature on item analysis and test construction [@lord1968statistical; @hambleton1985irt]. The systematic curation of response matrices from AI benchmarks is a more recent effort; the `torch_measure` toolkit and its benchmark collection follow the standardized approach described in this chapter.
 
 Individual benchmarks have their own lineages. SWE-bench [@jimenez2023swe] established the paradigm of evaluating agents on real GitHub issues. MMLU [@hendrycks2021measuring] and its successors (MMLU-Pro) standardized knowledge evaluation across domains. The Chatbot Arena [@zheng2023judging] pioneered crowdsourced pairwise evaluation at scale. LiveCodeBench [@jain2024livecodebench] introduced temporal freshness as a design principle for contamination-resistant evaluation.
+
+The intervention matrix framework connects to a broader literature on AI evaluation beyond benchmarks. Deployment RCTs for AI coding assistants include the GitHub Copilot studies [@peng2023copilot; @cui2024copilot] and the METR developer productivity study [@metr2025productivity], which produced the surprising finding that experienced developers were slower with AI assistance. The Collab-CXR dataset [@yu2024collabcxr] is the largest public reader study with AI-assisted and unassisted conditions. Bastani et al. [@bastani2025genai] demonstrate that AI can inflate apparent performance without producing learning. The HAIID study [@vodrahalli2022haiid] contributes to the literature on algorithmic aversion and appreciation by showing that advice source labels minimally affect human behavior. For CBRN uplift evaluation, the RAND biosecurity study and OpenAI's early warning system evaluation are the most prominent, though neither releases item-level data. Salaudeen, Koyejo et al. [-@salaudeen2025measurement] provide a validity-centered theoretical framework for AI evaluation that motivates the psychometric approach to intervention data taken here.
 
 The multilingual and cultural evaluation efforts respond to a recognized gap in AI measurement. C-Eval [@huang2023ceval] and CMMLU [@li2023cmmlu] provide Chinese-language evaluation. KMMLU provides Korean-language evaluation. IberBench covers Iberian languages. AfriEval and AfriMedQA address African languages and healthcare contexts. SIB-200 provides classification across 200+ languages. HELM Multilingual [@bommasani2024holistic] standardizes evaluation across languages. These efforts collectively demonstrate that the AI evaluation landscape cannot be understood through English-only benchmarks.
 

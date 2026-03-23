@@ -111,7 +111,7 @@ Benchmarks cluster into broad capability domains, each with distinct item charac
 
 **Tool use and function calling.** BFCL (4,751 items across 22 categories) and ToolBench test whether models can correctly invoke APIs, parse schemas, and handle multi-turn tool interactions. These benchmarks sit between pure language tasks and agentic tasks --- they test a specific capability (structured output generation) rather than end-to-end task completion.
 
-**Safety and security.** Benchmarks like CyBench (CTF challenges), AgentDojo (security evaluation of tool-using agents with 949 security items), and the red-teaming frameworks discussed in @sec-redteaming test adversarial robustness and safety properties. These benchmarks are distinctive because the "correct" response is often a refusal, and the construct (safety) is inherently adversarial.
+**Safety, security, and red teaming.** {#sec-redteaming} This category spans cybersecurity challenges (CyBench: 40 CTF tasks), security of tool-using agents (AgentDojo: 949 security items), and red teaming --- adversarial evaluation of whether models can be induced to produce harmful outputs. Red teaming data has a natural response matrix structure: rows are models, columns are attack prompts, and values are binary (safe/unsafe). HarmBench (400 prompts across 7 harm categories) provides a standardized red teaming benchmark; BeaverTails (334K prompts with fine-grained safety annotations) and DecodingTrust (243K prompts across 8 trustworthiness dimensions) offer larger-scale evaluation. SafetyBench (11,435 MCQs across 7 safety categories) tests safety knowledge in a traditional MCQ format, while WMDP (3,668 MCQs on biosecurity, cybersecurity, and chemical security) evaluates hazardous knowledge as a proxy for CBRN risk. These benchmarks are distinctive because the "correct" response is often a *refusal*, and the construct (safety) is inherently adversarial --- a model that scores perfectly on a safety benchmark today may fail tomorrow against novel attacks.
 
 **Preference and reward modeling.** Benchmarks like RewardBench, AlpacaEval (805 instructions), MT-Bench, Arena Hard, WildBench, and the Chatbot Arena (140K+ comparisons) evaluate model quality through human or automated preference judgments. The response matrix structure differs: instead of $Y_{ij} \in \{0,1\}$, entries may represent win rates, Elo ratings, or pairwise comparison outcomes. We discuss this structure separately in @sec-preference-data.
 
@@ -138,7 +138,7 @@ The granularity of the response determines which measurement models are appropri
 
 ### Complete Benchmark Inventory {#sec-benchmark-inventory}
 
-The following tables enumerate all 70 benchmarks curated in the `torch_measure` collection, organized by domain and sorted by release date. Together they span over 1.2 million unique evaluation items and over 6,700 model/agent entries, with 55 benchmarks providing full per-item response matrices.
+The following tables enumerate all 75 benchmarks curated in the `torch_measure` collection, organized by domain and sorted by release date. Together they span over 1.5 million unique evaluation items and over 6,700 model/agent entries, with 60 benchmarks providing full per-item response matrices.
 
 ::: {.callout-note title="Benchmark Inventory (70 benchmarks, 1.2M+ items, 6,700+ test-takers)" collapse="true"}
 
@@ -199,62 +199,67 @@ The following tables enumerate all 70 benchmarks curated in the `torch_measure` 
 | 36 | Terminal-Bench | 128 × 89 | Con | Docker env; CLI task resolution | 2025-02 | [arXiv:2502.10996](https://arxiv.org/abs/2502.10996) |
 | 37 | PaperBench | 9 × 20 | Con | Rubric; reproduce ML papers | 2025-02 | [arXiv:2504.01848](https://arxiv.org/abs/2504.01848) |
 
-**Safety and Security**
+**Safety, Security, and Red Teaming**
 
 | # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
 |:--|-----------|:---:|:---:|-------------------|:---:|-----------|
 | 38 | CyBench | 8 × 40 | Bin | CTF env; flag capture | 2024-08 | [arXiv:2408.08926](https://arxiv.org/abs/2408.08926) |
+| 39 | HarmBench | 33 × 400 | Bin | Classifier judge; 7 harm categories | 2024-02 | [arXiv:2402.04249](https://arxiv.org/abs/2402.04249) |
+| 40 | BeaverTails | 25+ × 334K | Bin | Safety annotations; 14 harm categories | 2023-07 | [PKU-Alignment/beavertails](https://github.com/PKU-Alignment/beavertails) |
+| 41 | DecodingTrust | 8 × 243K | Con | Multi-dimensional; 8 trustworthiness axes | 2023-06 | [NeurIPS 2023](https://decodingtrust.github.io/) |
+| 42 | SafetyBench | 25 × 11,435 | Bin | MCQ; 7 safety categories (Chinese + English) | 2024-06 | [thu-coai/SafetyBench](https://github.com/thu-coai/SafetyBench) |
+| 43 | WMDP | 10+ × 3,668 | Bin | MCQ; biosecurity, cybersecurity, chemical security | 2024-03 | [wmdp.ai](https://www.wmdp.ai/) |
 
 **Domain-Specific (Legal, Finance, Medical)**
 
 | # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
 |:--|-----------|:---:|:---:|-------------------|:---:|-----------|
-| 39 | IgakuQA | 5 × 1,471 | Bin | MCQ; Japanese medical licensing exams (2018--2022) | 2023-03 | [jungokasai/IgakuQA](https://github.com/jungokasai/IgakuQA) |
-| 40 | LawBench | 51 × 9,000 | Bin | Exact match; 20 Chinese legal tasks, zero-shot | 2023-09 | [open-compass/LawBench](https://github.com/open-compass/LawBench) |
-| 41 | FinanceBench | 16 × 150 | Bin | Expert-graded; SEC filing QA | 2023-11 | [patronus-ai/financebench](https://github.com/patronus-ai/financebench) |
-| 42 | LexEval | 38 × 14,147 | Con | Rubric; 23 Chinese legal tasks (NeurIPS 2024) | 2024-09 | [CSHaitao/LexEval](https://github.com/CSHaitao/LexEval) |
-| 43 | AfriMedQA | 30 × 6,910 | Bin | MCQ; Pan-African medical, 20 specialties | 2024-09 | [arXiv:2409.15290](https://arxiv.org/abs/2409.15290) |
+| 44 | IgakuQA | 5 × 1,471 | Bin | MCQ; Japanese medical licensing exams (2018--2022) | 2023-03 | [jungokasai/IgakuQA](https://github.com/jungokasai/IgakuQA) |
+| 45 | LawBench | 51 × 9,000 | Bin | Exact match; 20 Chinese legal tasks, zero-shot | 2023-09 | [open-compass/LawBench](https://github.com/open-compass/LawBench) |
+| 46 | FinanceBench | 16 × 150 | Bin | Expert-graded; SEC filing QA | 2023-11 | [patronus-ai/financebench](https://github.com/patronus-ai/financebench) |
+| 47 | LexEval | 38 × 14,147 | Con | Rubric; 23 Chinese legal tasks (NeurIPS 2024) | 2024-09 | [CSHaitao/LexEval](https://github.com/CSHaitao/LexEval) |
+| 48 | AfriMedQA | 30 × 6,910 | Bin | MCQ; Pan-African medical, 20 specialties | 2024-09 | [arXiv:2409.15290](https://arxiv.org/abs/2409.15290) |
 
 **Preference and Reward Modeling**
 
 | # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
 |:--|-----------|:---:|:---:|-------------------|:---:|-----------|
-| 44 | AlpacaEval | 221 × 805 | Bin | LLM judge; win/loss vs GPT-4 | 2023-05 | [tatsu-lab/alpaca_eval](https://github.com/tatsu-lab/alpaca_eval) |
-| 45 | MT-Bench | — × 80 | — | GPT-4 + human pairwise; multi-turn | 2023-06 | [lm-sys/FastChat](https://github.com/lm-sys/FastChat) |
-| 46 | UltraFeedback | 17 × 63,966 | Con | GPT-4 judge; overall score (1--10) | 2023-10 | [OpenBMB/UltraFeedback](https://github.com/OpenBMB/UltraFeedback) |
-| 47 | RewardBench | 149 × 2,985 | Bin | Score comparison; chosen vs rejected | 2024-03 | [arXiv:2403.13787](https://arxiv.org/abs/2403.13787) |
-| 48 | WildBench | 63 × 1,024 | Con | LLM judge; checklist scoring | 2024-06 | [arXiv:2406.04770](https://arxiv.org/abs/2406.04770) |
+| 49 | AlpacaEval | 221 × 805 | Bin | LLM judge; win/loss vs GPT-4 | 2023-05 | [tatsu-lab/alpaca_eval](https://github.com/tatsu-lab/alpaca_eval) |
+| 50 | MT-Bench | — × 80 | — | GPT-4 + human pairwise; multi-turn | 2023-06 | [lm-sys/FastChat](https://github.com/lm-sys/FastChat) |
+| 51 | UltraFeedback | 17 × 63,966 | Con | GPT-4 judge; overall score (1--10) | 2023-10 | [OpenBMB/UltraFeedback](https://github.com/OpenBMB/UltraFeedback) |
+| 52 | RewardBench | 149 × 2,985 | Bin | Score comparison; chosen vs rejected | 2024-03 | [arXiv:2403.13787](https://arxiv.org/abs/2403.13787) |
+| 53 | WildBench | 63 × 1,024 | Con | LLM judge; checklist scoring | 2024-06 | [arXiv:2406.04770](https://arxiv.org/abs/2406.04770) |
 
 **Multilingual and Cultural Evaluation**
 
 | # | Benchmark | $N \times M$ | Type | Evaluation Method | Released | Reference |
 |:--|-----------|:---:|:---:|-------------------|:---:|-----------|
-| 49 | MasakhaNER v2 | — × — | Bin | NER; 20 African languages | 2022-10 | [arXiv:2210.12391](https://arxiv.org/abs/2210.12391) |
-| 50 | HELM African | — × — | Con | HELM harness; African language tasks | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
-| 51 | HELM CLEVA | — × — | Con | HELM harness; Chinese language eval | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
-| 52 | HELM ThaiExam | — × — | Con | HELM harness; Thai examination tasks | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
-| 53 | C-Eval | — × 12,342 | Bin | MCQ; Chinese educational system | 2023-05 | [arXiv:2305.08322](https://arxiv.org/abs/2305.08322) |
-| 54 | CMMLU | — × 11,582 | Bin | MCQ; Chinese 67 subjects | 2023-06 | [arXiv:2306.09212](https://arxiv.org/abs/2306.09212) |
-| 55 | Rakuda | 141 × 40 | Con | LLM judge; Japanese open-ended QA | 2023-06 | [shisa-ai/shaberi](https://github.com/shisa-ai/shaberi) |
-| 56 | SIB-200 | 2 × 41,820 | Bin | Classification; 205 languages | 2023-09 | [arXiv:2309.07445](https://arxiv.org/abs/2309.07445) |
-| 57 | OALL Arabic MMLU | — × — | Bin | MCQ; native Arabic knowledge questions | 2024-02 | [OALL](https://huggingface.co/blog/leaderboard-arabic-v2) |
-| 58 | OALL Arabic Exams | — × — | Bin | MCQ; Arabic exam questions | 2024-02 | [OALL](https://huggingface.co/blog/leaderboard-arabic-v2) |
-| 59 | KMMLU | — × 35,030 | Bin | MCQ; Korean exams | 2024-02 | [arXiv:2402.11548](https://arxiv.org/abs/2402.11548) |
-| 60 | Tengu-Bench | 141 × 120 | Con | LLM judge; Japanese multi-category | 2024-04 | [shisa-ai/shaberi](https://github.com/shisa-ai/shaberi) |
-| 61 | AfriEval | — × 469,210 | Bin | MCQ + NLI + QA; African languages | 2024 | HuggingFace |
-| 62 | AsiaEval | — × 398,263 | Bin | MCQ + NLI; Asian languages | 2024 | HuggingFace |
-| 63 | CulturalEval | — × 82,996 | Bin | MCQ; cross-cultural values | 2024 | HuggingFace |
-| 64 | IberBench | — × 32,797 | Bin | MCQ + NLI; Iberian languages | 2024 | HuggingFace |
-| 65 | Bridging Gap | 1,767 × 36 | Bin | MCQ; Winogrande × 12 languages | 2024 | HuggingFace |
-| 66 | Ko Leaderboard | 1,159 × 9 | Con | lm-eval-harness; Korean tasks | 2024 | [Open Ko-LLM](https://huggingface.co/spaces/upstage/open-ko-llm-leaderboard) |
-| 67 | La Leaderboard | 69 × 108 | Con | lm-eval-harness; Iberian tasks | 2024 | HuggingFace |
-| 68 | PT Leaderboard | 1,148 × 10 | Con | lm-eval-harness; Portuguese | 2024 | HuggingFace |
-| 69 | Thai Leaderboard | 72 × 19 | Con | lm-eval-harness; Thai tasks | 2024 | HuggingFace |
-| 70 | TUMLU | 30 × 7,486 | Bin | MCQ; 9 Turkic languages, CoT + non-CoT | 2024-12 | [ceferisbarov/TUMLU](https://github.com/ceferisbarov/TUMLU) |
+| 54 | MasakhaNER v2 | — × — | Bin | NER; 20 African languages | 2022-10 | [arXiv:2210.12391](https://arxiv.org/abs/2210.12391) |
+| 55 | HELM African | — × — | Con | HELM harness; African language tasks | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
+| 56 | HELM CLEVA | — × — | Con | HELM harness; Chinese language eval | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
+| 57 | HELM ThaiExam | — × — | Con | HELM harness; Thai examination tasks | 2022-11 | [HELM](https://crfm.stanford.edu/helm/) |
+| 58 | C-Eval | — × 12,342 | Bin | MCQ; Chinese educational system | 2023-05 | [arXiv:2305.08322](https://arxiv.org/abs/2305.08322) |
+| 59 | CMMLU | — × 11,582 | Bin | MCQ; Chinese 67 subjects | 2023-06 | [arXiv:2306.09212](https://arxiv.org/abs/2306.09212) |
+| 60 | Rakuda | 141 × 40 | Con | LLM judge; Japanese open-ended QA | 2023-06 | [shisa-ai/shaberi](https://github.com/shisa-ai/shaberi) |
+| 61 | SIB-200 | 2 × 41,820 | Bin | Classification; 205 languages | 2023-09 | [arXiv:2309.07445](https://arxiv.org/abs/2309.07445) |
+| 62 | OALL Arabic MMLU | — × — | Bin | MCQ; native Arabic knowledge questions | 2024-02 | [OALL](https://huggingface.co/blog/leaderboard-arabic-v2) |
+| 63 | OALL Arabic Exams | — × — | Bin | MCQ; Arabic exam questions | 2024-02 | [OALL](https://huggingface.co/blog/leaderboard-arabic-v2) |
+| 64 | KMMLU | — × 35,030 | Bin | MCQ; Korean exams | 2024-02 | [arXiv:2402.11548](https://arxiv.org/abs/2402.11548) |
+| 65 | Tengu-Bench | 141 × 120 | Con | LLM judge; Japanese multi-category | 2024-04 | [shisa-ai/shaberi](https://github.com/shisa-ai/shaberi) |
+| 66 | AfriEval | — × 469,210 | Bin | MCQ + NLI + QA; African languages | 2024 | HuggingFace |
+| 67 | AsiaEval | — × 398,263 | Bin | MCQ + NLI; Asian languages | 2024 | HuggingFace |
+| 68 | CulturalEval | — × 82,996 | Bin | MCQ; cross-cultural values | 2024 | HuggingFace |
+| 69 | IberBench | — × 32,797 | Bin | MCQ + NLI; Iberian languages | 2024 | HuggingFace |
+| 70 | Bridging Gap | 1,767 × 36 | Bin | MCQ; Winogrande × 12 languages | 2024 | HuggingFace |
+| 71 | Ko Leaderboard | 1,159 × 9 | Con | lm-eval-harness; Korean tasks | 2024 | [Open Ko-LLM](https://huggingface.co/spaces/upstage/open-ko-llm-leaderboard) |
+| 72 | La Leaderboard | 69 × 108 | Con | lm-eval-harness; Iberian tasks | 2024 | HuggingFace |
+| 73 | PT Leaderboard | 1,148 × 10 | Con | lm-eval-harness; Portuguese | 2024 | HuggingFace |
+| 74 | Thai Leaderboard | 72 × 19 | Con | lm-eval-harness; Thai tasks | 2024 | HuggingFace |
+| 75 | TUMLU | 30 × 7,486 | Bin | MCQ; 9 Turkic languages, CoT + non-CoT | 2024-12 | [ceferisbarov/TUMLU](https://github.com/ceferisbarov/TUMLU) |
 
 **Legend.** $N$ = models/agents; $M$ = items/tasks; "—" = item-only data. **Type**: Bin = binary; Con = continuous $[0,1]$. **Released**: earliest public availability (arXiv, GitHub, or HuggingFace). **Evaluation Method**: MCQ = multiple-choice exact match; unit tests = code execution; LLM judge = automated preference judgment; env = interactive environment.
 
-**Scoring variants.** The 70 entries above correspond to 101 dataset variants on HuggingFace (`aims-foundation/torch-measure-data`). Many benchmarks are released with multiple **scoring conditions** that produce different response matrices from the same items — a measurement choice that affects downstream analysis. For example:
+**Scoring variants.** The 75 entries above correspond to 106 dataset variants on HuggingFace (`aims-foundation/torch-measure-data`). Many benchmarks are released with multiple **scoring conditions** that produce different response matrices from the same items — a measurement choice that affects downstream analysis. For example:
 
 | Benchmark | Variants | Scoring conditions |
 |-----------|:---:|-----|

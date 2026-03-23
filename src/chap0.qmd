@@ -418,11 +418,11 @@ RewardBench and RewardBench 2 evaluate *reward models* --- the models that score
 Preference Dissection and BigGen go further, decomposing preference judgments into multiple criteria (helpfulness, safety, coherence, creativity), producing multi-trait response data suitable for multidimensional measurement models.
 
 
-## Beyond Benchmarks: Intervention Data {#sec-intervention-data}
+## Paired Response Matrices {#sec-paired-response-matrix}
 
-The data landscape above measures AI systems directly: present items to models and record responses. But a growing body of AI evaluation asks a different question: *what happens when humans use AI?* Red teaming, deployment RCTs, uplift studies, and human-AI collaboration experiments all produce structured data that complements the benchmark paradigm.
+The response matrices above have one matrix per benchmark. But a growing body of AI evaluation produces *paired* matrices: the same (or comparable) subjects respond to items under multiple conditions --- typically with and without AI assistance. Deployment RCTs, uplift studies, and human-AI collaboration experiments all produce this structure.
 
-### The Intervention Matrix
+### The Paired Response Matrix
 
 These studies share a common data structure that extends the response matrix with a treatment dimension. Where the standard response matrix records:
 
@@ -430,7 +430,7 @@ $$
 Y_{ij} \in \{0, 1\} \quad \text{(subject } i \text{ on item } j\text{)}
 $$
 
-the **intervention matrix** records:
+the **paired response matrix** records:
 
 $$
 Y_{ij}^{(t)} \in \{0, 1\} \quad \text{(subject } i \text{ on item } j \text{ under condition } t\text{)}
@@ -446,12 +446,12 @@ $$
 
 where $\tau_t$ is the treatment effect facet. The interaction $\theta_i \times \tau_t$ captures *heterogeneous treatment effects* --- the degree to which AI assistance helps some people more than others.
 
-### An Inventory of Intervention Data {#sec-intervention-inventory}
+### An Inventory of Paired Response Matrices {#sec-paired-inventory}
 
 We curate five publicly available intervention datasets spanning medicine, software engineering, classification, and education. These are the first datasets in the `torch_measure` collection where the subjects are humans rather than AI systems.
 
 ::: {.callout-note collapse="true"}
-## Intervention Dataset Inventory
+## Paired Response Matrix Inventory
 
 | Dataset | Domain | Subjects | Items | AI System | Conditions | Outcome | Source |
 |---------|--------|----------|-------|-----------|------------|---------|--------|
@@ -469,15 +469,15 @@ We curate five publicly available intervention datasets spanning medicine, softw
 
 **HAIID** [@vodrahalli2022haiid] measures whether labeling advice as "from AI" versus "from a human" changes how people use it. The AI systems are **trained classifiers** for each domain (art style, city population, sarcasm detection, census income, dermatology). Across five classification domains, the label has minimal effect: AI-labeled advice improves accuracy by +5--9%, and human-labeled advice improves accuracy by nearly the same amount. The advice *content*, not its provenance, drives the effect.
 
-![Paired intervention matrices from the HAIID art classification domain. Each panel shows a participant $\times$ item response matrix (green = correct, red = incorrect) under a different condition. **Left:** Pre-advice responses (558 participants $\times$ 32 items, mean accuracy 0.658). **Center:** Post-advice responses where advice was labeled as "from AI" (278 participants, accuracy 0.746). **Right:** Post-advice responses where advice was labeled as "from a human" (280 participants, accuracy 0.735). The near-identical density of green cells in the center and right panels illustrates that the advice source label has minimal effect on human behavior.](Figures/intervention/haiid_art_heatmap.png){#fig-haiid-matrix width="95%"}
+![Paired response matrices from the HAIID art classification domain. Each panel shows a participant $\times$ item response matrix (green = correct, red = incorrect) under a different condition. **Left:** Pre-advice responses (558 participants $\times$ 32 items, mean accuracy 0.658). **Center:** Post-advice responses where advice was labeled as "from AI" (278 participants, accuracy 0.746). **Right:** Post-advice responses where advice was labeled as "from a human" (280 participants, accuracy 0.735). The near-identical density of green cells in the center and right panels illustrates that the advice source label has minimal effect on human behavior.](Figures/intervention/haiid_art_heatmap.png){#fig-haiid-matrix width="95%"}
 
 **GenAI Learning** [@bastani2025genai] demonstrates a measurement paradox. The AI system is **GPT-4** in two configurations: a vanilla ChatGPT interface and a pedagogically designed tutor with guardrails that encourages step-by-step reasoning rather than giving answers directly. Students practicing math with ChatGPT score dramatically higher during practice (0.69 vs. 0.34 for controls), but score *no better* on a subsequent exam without AI (0.36 vs. 0.36). Students using the guardrailed GPT tutor also fail to outperform controls on the exam (0.35). AI inflates apparent performance without producing durable learning --- a finding with implications for any evaluation that measures human-AI teams without separating the human's contribution.
 
-![Paired intervention matrices from the GenAI Learning study, practice phase. Each panel shows a student $\times$ problem response matrix (green = correct, red = incorrect) under a different treatment arm. **Left:** Control group (349 students, mean 0.335). **Center:** GPT Tutor with pedagogical guardrails (312 students, mean 0.692). **Right:** Vanilla GPT Base (282 students, mean 0.468). The dramatically higher density of green cells in the GPT Tutor panel reflects AI-inflated performance during practice.](Figures/intervention/genai_practice_heatmap.png){#fig-genai-practice width="95%"}
+![Paired response matrices from the GenAI Learning study, practice phase. Each panel shows a student $\times$ problem response matrix (green = correct, red = incorrect) under a different treatment arm. **Left:** Control group (349 students, mean 0.335). **Center:** GPT Tutor with pedagogical guardrails (312 students, mean 0.692). **Right:** Vanilla GPT Base (282 students, mean 0.468). The dramatically higher density of green cells in the GPT Tutor panel reflects AI-inflated performance during practice.](Figures/intervention/genai_practice_heatmap.png){#fig-genai-practice width="95%"}
 
 ![The same three treatment arms on a subsequent exam taken *without AI assistance*. **Left:** Control (mean 0.362). **Center:** GPT Tutor (mean 0.357). **Right:** GPT Base (mean 0.293). The visual similarity of the control and GPT Tutor panels --- and the increased red in the GPT Base panel --- shows that AI-inflated practice performance did not transfer to durable learning.](Figures/intervention/genai_exam_heatmap.png){#fig-genai-exam width="95%"}
 
-### What Intervention Data Enables
+### What Paired Response Matrices Enable
 
 Intervention matrices open measurement questions that standard benchmarks cannot address:
 
@@ -485,7 +485,7 @@ Intervention matrices open measurement questions that standard benchmarks cannot
 
 2. **Measurement validity of human-AI teams.** If a human-AI team scores 90% on a task, how much is the human contributing? The GenAI Learning result shows this is not a trivial decomposition --- apparent team performance can be entirely attributable to the AI, with the human learning nothing.
 
-3. **Linking pre-deployment to post-deployment.** Safety benchmarks measure AI capabilities in isolation; intervention matrices measure what happens when humans interact with those capabilities. The relationship between the two is the empirical question of *ecological validity* --- and it is almost entirely unstudied.
+3. **Linking pre-deployment to post-deployment.** Safety benchmarks measure AI capabilities in isolation; paired response matrices measure what happens when humans interact with those capabilities. The relationship between the two is the empirical question of *ecological validity* --- and it is almost entirely unstudied.
 
 4. **Psychometric linking across safety frameworks.** Different AI labs use incompatible safety evaluation frameworks (Anthropic's ASL levels, OpenAI's Preparedness thresholds, DeepMind's Critical Capability Levels). IRT linking methodology could place these on a common scale, but only if item-level data from uplift studies becomes available. Currently, no CBRN uplift study releases item-level data.
 
@@ -646,7 +646,7 @@ for name, rm in benchmarks.items():
           f"density={rm.density:.1%}, mean={rm.subject_means.mean():.3f}")
 ```
 
-### Loading Intervention Data
+### Loading Paired Response Matrices
 
 ```{python}
 #| eval: false
@@ -694,7 +694,7 @@ The response matrix formulation for AI evaluation draws on the extensive psychom
 
 Individual benchmarks have their own lineages. SWE-bench [@jimenez2023swe] established the paradigm of evaluating agents on real GitHub issues. MMLU [@hendrycks2021measuring] and its successors (MMLU-Pro) standardized knowledge evaluation across domains. The Chatbot Arena [@zheng2023judging] pioneered crowdsourced pairwise evaluation at scale. LiveCodeBench [@jain2024livecodebench] introduced temporal freshness as a design principle for contamination-resistant evaluation.
 
-The intervention matrix framework connects to a broader literature on AI evaluation beyond benchmarks. Deployment RCTs for AI coding assistants include the GitHub Copilot studies [@peng2023copilot; @cui2024copilot] and the METR developer productivity study [@metr2025productivity], which produced the surprising finding that experienced developers were slower with AI assistance. The Collab-CXR dataset [@yu2024collabcxr] is the largest public reader study with AI-assisted and unassisted conditions. Bastani et al. [@bastani2025genai] demonstrate that AI can inflate apparent performance without producing learning. The HAIID study [@vodrahalli2022haiid] contributes to the literature on algorithmic aversion and appreciation by showing that advice source labels minimally affect human behavior. For CBRN uplift evaluation, the RAND biosecurity study and OpenAI's early warning system evaluation are the most prominent, though neither releases item-level data. Salaudeen, Koyejo et al. [-@salaudeen2025measurement] provide a validity-centered theoretical framework for AI evaluation that motivates the psychometric approach to intervention data taken here.
+The paired response matrix framework connects to a broader literature on AI evaluation beyond benchmarks. Deployment RCTs for AI coding assistants include the GitHub Copilot studies [@peng2023copilot; @cui2024copilot] and the METR developer productivity study [@metr2025productivity], which produced the surprising finding that experienced developers were slower with AI assistance. The Collab-CXR dataset [@yu2024collabcxr] is the largest public reader study with AI-assisted and unassisted conditions. Bastani et al. [@bastani2025genai] demonstrate that AI can inflate apparent performance without producing learning. The HAIID study [@vodrahalli2022haiid] contributes to the literature on algorithmic aversion and appreciation by showing that advice source labels minimally affect human behavior. For CBRN uplift evaluation, the RAND biosecurity study and OpenAI's early warning system evaluation are the most prominent, though neither releases item-level data. Salaudeen, Koyejo et al. [-@salaudeen2025measurement] provide a validity-centered theoretical framework for AI evaluation that motivates the psychometric approach to paired response data taken here.
 
 The multilingual and cultural evaluation efforts respond to a recognized gap in AI measurement. C-Eval [@huang2023ceval] and CMMLU [@li2023cmmlu] provide Chinese-language evaluation. KMMLU provides Korean-language evaluation. IberBench covers Iberian languages. AfriEval and AfriMedQA address African languages and healthcare contexts. SIB-200 provides classification across 200+ languages. HELM Multilingual [@bommasani2024holistic] standardizes evaluation across languages. These efforts collectively demonstrate that the AI evaluation landscape cannot be understood through English-only benchmarks.
 

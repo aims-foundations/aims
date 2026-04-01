@@ -1,0 +1,222 @@
+---
+format: html
+---
+
+# Conclusion {#sec-conclusion}
+
+This chapter synthesizes the book's main themes, identifies open challenges in AI measurement science, describes capstone projects suitable for a one-quarter course, and offers a practitioner's checklist for designing evaluations.
+
+## Our Approach {#sec-conclusion-approach}
+
+### Foundations from Measurement Science
+
+The central premise of this book is that AI evaluation is a *measurement* problem, not merely an engineering one. When we assign a number to a model --- accuracy, Elo rating, pass rate --- we are making a claim about a latent construct (ability, safety, reasoning) that we cannot directly observe. The science of such claims has been developed over a century in psychometrics, educational testing, and the philosophy of measurement. We have drawn on this tradition throughout.
+
+@sec-foundations introduced the mathematical models that formalize the relationship between latent ability and observed responses: Item Response Theory (Rasch, 2PL, 3PL), factor models, and paired-comparison systems (Bradley-Terry, Elo). A recurring theme is that these models are not interchangeable --- each encodes assumptions about the structure of ability and the nature of items. The Rasch model's sufficiency and specific objectivity properties justify using sum scores as measurements; the 2PL and 3PL models trade these properties for descriptive flexibility. The choice of model is a choice about what we are willing to assume.
+
+### From Models to Methods
+
+@sec-learning showed how to estimate latent parameters from evaluation data via maximum likelihood, EM algorithms, and Bayesian inference. @sec-efficient developed the design principles --- Fisher information, computerized adaptive testing, D-optimal design --- that make evaluation efficient. Together, these chapters establish that we can measure AI systems with far fewer queries than brute-force evaluation requires: calibrated item banks and adaptive algorithms yield precise ability estimates using a fraction of the items.
+
+### Reliability, Validity, and Causality
+
+The transition from Part I to Part II marked a shift from *how* to measure to *how well* we measure. @sec-reliability decomposed the noise in AI evaluation into its constituent sources --- sampling stochasticity, prompt sensitivity, annotator variability, item sampling --- and provided tools (Generalizability Theory, IRT-based reliability) for quantifying and reducing each. @sec-validity asked the harder question: even if measurements are precise, do they measure what we intend? Content validity, criterion validity, construct validity, differential item functioning, and benchmark contamination diagnostics all address different facets of this question. @sec-causality connected these ideas to formal causal reasoning, showing when benchmark results generalize across contexts and how to correct for distribution shift.
+
+### Design, Strategy, and Adversarial Evaluation
+
+Part III moved from the science of measurement to its strategic and practical dimensions. @sec-design formalized evaluation as a game between evaluators and model builders, showing how strategic behavior (Goodhart's Law, benchmark gaming) distorts measurement and how mechanism design can restore alignment. @sec-redteaming applied the full measurement framework to adversarial evaluation, showing that red-teaming is a measurement problem --- with all the attendant concerns about validity, reliability, and construct definition.
+
+### The Critical Turn
+
+A thread running through every chapter is that technical choices in evaluation are never value-neutral. Which items we include defines the construct (@sec-validity). Which models we test and how we sample them shapes the ability scale (@sec-foundations). How we aggregate across annotators determines whose judgments count (@sec-reliability). How we design incentives determines what model builders optimize for (@sec-design). AI measurement science provides tools for making these choices explicit, principled, and auditable --- but the choices themselves remain human judgments.
+
+
+## Lessons from the Field {#sec-lessons}
+
+### What Worked
+
+**IRT models are surprisingly effective for AI evaluation.** Despite being developed for human testing, Rasch and 2PL models fit AI benchmark data well. The key insight from @sec-foundations is that the same mathematical structure --- a latent ability interacting with item difficulty through a logistic function --- describes both human and AI response patterns. This is not because AI systems are "like humans" but because the statistical structure of evaluation data (binary responses to items of varying difficulty) is the same regardless of the test-taker.
+
+**Adaptive testing dramatically reduces evaluation cost.** The efficiency gains from CAT (@sec-efficient) are not incremental. @truong2025irsl demonstrate that 50 adaptively selected questions can match the decision accuracy of thousands of uniformly administered questions --- a 99.9% reduction in the query budget. This suggests that most of the compute currently spent on AI evaluation is wasted on uninformative items.
+
+**Reliability diagnostics catch real problems.** Item-level statistics derived from IRT --- item-total correlations, tetrachoric correlations, Mokken scalability --- are not merely theoretical diagnostics. @truong2025bugs showed that flagging items with anomalous statistics achieves up to 84% precision in detecting genuine benchmark errors: incorrect answer keys, ambiguous wording, and grading bugs.
+
+### What Surprised Us
+
+**Benchmarks are noisier than they appear.** The Generalizability Theory analysis in @sec-reliability reveals that what looks like stable model ranking is often an artifact of large item counts averaging over substantial per-item noise. When decomposed, prompt sensitivity and annotator variability are often larger than the differences between models we claim to distinguish.
+
+**Validity is the hard part.** Reliability is a solved problem in the sense that we have excellent tools for quantifying and improving it. Validity is not. The question "Does this benchmark measure what it claims to measure?" requires domain expertise, theoretical commitments, and empirical evidence that no purely statistical procedure can provide. The diagnostics in @sec-validity help, but they are necessary conditions, not sufficient ones.
+
+**Scaling laws and measurement theory are deeply connected.** The observation by @schaeffer2025monkeys that per-problem exponential scaling aggregates to power-law scaling --- because item difficulties follow a heavy-tailed distribution --- is a statement about item response theory in disguise. The distribution of item difficulties determines the aggregate scaling behavior. @truong2025irsl make this connection explicit, showing that IRT ability $\theta$ scales linearly with $\log(\text{FLOP})$ and that item parameters transfer across benchmarks. Measurement theory does not just evaluate models --- it characterizes how they improve.
+
+### What Remains Difficult
+
+**Construct definition for AI is unresolved.** In human testing, constructs like "verbal reasoning" or "mathematical ability" have decades of theoretical development and empirical validation. For AI, we are still debating what "reasoning" means, whether "understanding" is coherent, and how to distinguish genuine capability from surface-level pattern matching. Without clear construct definitions, validity analysis has no target.
+
+**Benchmark contamination is an arms race.** The diagnostic tools in @sec-validity can detect some forms of contamination after the fact, but preventing contamination requires ongoing effort: holdout sets, dynamic benchmarks, and adversarial construction. The fundamental tension is that useful benchmarks must be public enough to be widely adopted but private enough to avoid being gamed.
+
+**Evaluation of generative output lacks ground truth.** Much of this book assumes binary (correct/incorrect) or probability-valued responses. But the most important AI capabilities --- open-ended generation, creative problem-solving, multi-turn dialogue --- produce outputs where "correctness" is ill-defined. Extending measurement theory to these settings is an open frontier.
+
+
+## Open Challenges {#sec-open-challenges}
+
+### Beyond Binary Responses
+
+Standard IRT models assume binary or bounded-probability responses. But modern AI evaluation increasingly involves rubric-based scoring (1--5 scales), preference judgments (pairwise comparisons), and continuous quality metrics (BLEU, ROUGE, reward model scores). Extending the measurement framework to these response types --- while preserving the desirable properties of IRT (separability, adaptive testing, cross-benchmark transfer) --- is an active research area. Beta-IRT (@sec-learning; @truong2025irsl) is one step in this direction, but a general theory of measurement for mixed response types remains elusive.
+
+### Multidimensional Ability and Benchmark Portfolios
+
+The unidimensional models emphasized in this book assume a single latent ability. In practice, AI systems have heterogeneous capabilities: a model may excel at coding but struggle with medical reasoning. Multidimensional IRT and factor models (@sec-foundations) provide the mathematical framework, but practical questions remain. How many dimensions are needed? How should benchmark portfolios be designed to efficiently measure multiple abilities simultaneously? How should multidimensional ability profiles be communicated to non-expert stakeholders?
+
+### Temporal Dynamics and Evaluation Drift
+
+AI evaluation is not static. Models improve, benchmarks saturate, and the relationship between benchmark performance and real-world utility shifts over time. @sec-causality addressed distribution shift in a cross-sectional setting, but *longitudinal* evaluation --- tracking how models and benchmarks co-evolve --- requires new tools. Item parameter drift (when calibrated difficulties become stale), concept drift (when the construct itself changes), and benchmark half-life (when a benchmark loses discriminative power) are all practical problems that the field has barely begun to address.
+
+### Evaluation of Agentic Systems
+
+The measurement models in this book were developed for systems that produce a single response to a single prompt. Agentic AI systems --- those that take multi-step actions in environments, use tools, and interact with humans over extended time horizons --- pose fundamentally different measurement challenges. What is the "item" in an agentic evaluation? What is the "response"? How do we define and measure reliability when the evaluation environment itself is stochastic and path-dependent?
+
+### Scalable Oversight and Recursive Evaluation
+
+As AI systems approach or exceed human performance on specific tasks, the evaluation bottleneck shifts from model capability to evaluator capability. If human judges cannot reliably assess the quality of an AI system's outputs, how do we maintain measurement validity? Approaches including AI-assisted evaluation, debate, and recursive reward modeling all attempt to extend the reach of human judgment, but their measurement properties --- reliability, validity, potential for systematic bias --- are largely uncharacterized.
+
+### Fairness in Evaluation
+
+Evaluation systems can be unfair in multiple ways: items may exhibit differential functioning across model families or deployment contexts (@sec-validity), adaptive testing algorithms may underquery certain regions of the ability space, and benchmark selection may systematically favor certain architectures. The fairness of evaluation has received far less attention than the fairness of the systems being evaluated. Developing measurement-theoretic notions of evaluation fairness --- analogous to test fairness in educational testing --- is an important open direction.
+
+
+## Capstone Projects {#sec-capstone}
+
+The following projects are designed for the CS321M (AI Measurement Science) course at Stanford. Each integrates concepts from multiple chapters of this book. Projects are suitable for individuals or pairs and should result in a pre-analysis plan (3--4 pages, NeurIPS format) and a final manuscript (up to 8 pages, NeurIPS format) with reproducible code.
+
+Difficulty ratings: ($\star$) single-person, 4 weeks; ($\star\star$) 1--2 persons, 6 weeks; ($\star\star\star$) 1--2 persons, 8+ weeks, potential research contribution.
+
+### Project 1: IRT Model Comparison on Real Benchmarks ($\star$) {.unnumbered}
+
+Fit Rasch, 2PL, and multidimensional IRT models to a large-scale evaluation dataset (e.g., the Open LLM Leaderboard response matrix or HELM data). Compare models using information criteria, cross-validated log-likelihood, and out-of-sample prediction. Test whether the Rasch model's sufficiency property holds empirically by comparing sum-score-based rankings to IRT ability rankings. Investigate whether items that misfit the Rasch model correspond to known benchmark quality issues.
+
+**Key concepts:** @sec-foundations (IRT models), @sec-learning (estimation), @sec-validity (item fit).
+
+### Project 2: Adaptive Testing for Efficient AI Evaluation ($\star$) {.unnumbered}
+
+Using a pre-calibrated item bank from an existing benchmark, implement CAT for AI model evaluation. Compare the efficiency (number of items needed to reach a target standard error) and accuracy (rank correlation with full-benchmark scores) of Fisher-information item selection versus random selection. Investigate how performance degrades when calibration data come from a different generation of models (calibration drift).
+
+**Key concepts:** @sec-efficient (CAT, Fisher information), @sec-foundations (IRT), @sec-causality (distribution shift).
+
+### Project 3: Reliability Audit of an Evaluation Pipeline ($\star$) {.unnumbered}
+
+Select an evaluation pipeline that involves human or LLM judges (e.g., MT-Bench, AlpacaEval, or Chatbot Arena). Design and conduct a G-study decomposing variance into model, item, judge, and interaction components. Run a D-study to determine the optimal allocation of judges and items under a fixed budget. Report the generalizability coefficient and compare it to the reliability implicitly assumed by published leaderboards.
+
+**Key concepts:** @sec-reliability (G-theory, D-studies, LLM-as-judge reliability).
+
+### Project 4: Benchmark Bug Detection at Scale ($\star\star$) {.unnumbered}
+
+Apply the diagnostic framework of @truong2025bugs to a benchmark not studied in their paper. Compute item-total correlations, tetrachoric correlations, and Mokken scalability coefficients across a diverse set of LLMs. Flag the top-50 most suspicious items and conduct a manual review. Report precision, analyze the types of errors found, and propose corrections. Investigate how the number and diversity of LLMs affects detection power.
+
+**Key concepts:** @sec-foundations (sufficiency, Rasch), @sec-reliability (item-total correlation), @sec-validity (content validity).
+
+### Project 5: Validity Analysis of a Domain-Specific Benchmark ($\star\star$) {.unnumbered}
+
+Choose a domain-specific benchmark (medical, legal, coding, mathematical reasoning). Conduct a comprehensive validity analysis: (a) content validity --- does the item pool representatively sample the stated construct? (b) construct validity --- does dimensionality analysis support a unidimensional interpretation? (c) criterion validity --- do scores correlate with external measures of the construct? (d) DIF analysis --- do items function differently across model families?
+
+**Key concepts:** @sec-validity (all validity types, DIF), @sec-foundations (factor models, dimensionality).
+
+### Project 6: Scaling Laws through the IRT Lens ($\star\star$) {.unnumbered}
+
+Replicate and extend the Item Response Scaling Laws framework of @truong2025irsl. Using publicly available checkpoint evaluation data, fit Beta-IRT models and estimate the relationship between $\theta$ and pre-training compute. Test cross-benchmark transfer: estimate $\theta$ on one benchmark and predict performance on another. Compare the efficiency of IRT-based scaling estimation to traditional per-benchmark curve fitting.
+
+**Key concepts:** @sec-foundations (IRT), @sec-learning (Beta-IRT), @sec-efficient (adaptive testing), @sec-causality (transfer).
+
+### Project 7: Red-Teaming as Measurement ($\star\star$) {.unnumbered}
+
+Design and calibrate an adversarial item bank for a specific safety domain (e.g., medical misinformation, code injection, social engineering). Fit a multidimensional IRT model with standard and adversarial ability dimensions. Implement adaptive adversarial testing and compare its efficiency to uniform item selection. Analyze the validity of the adversarial construct: does adversarial robustness form a coherent dimension, or does it fragment into domain-specific factors?
+
+**Key concepts:** @sec-redteaming (adversarial IRT, item banks), @sec-efficient (CAT), @sec-validity (construct validity).
+
+### Project 8: ASR Comparisons Under Aggregation and Judge Error ($\star\star$) {.unnumbered}
+
+Conduct an empirical study of the aggregation and judge-error biases documented by @chouldechova2026comparison. Using a red-teaming dataset with multiple samples per prompt, estimate: (a) the distribution of per-prompt success probabilities, (b) the power-law exponent under Top-1 aggregation (@schaeffer2025monkeys), (c) differential judge error rates across target models. Quantify how much of the published variation in ASR across models is attributable to estimand differences versus genuine safety differences.
+
+**Key concepts:** @sec-redteaming (ASR as estimand, judge validity), @sec-reliability (measurement error).
+
+### Project 9: Prediction-Powered Evaluation ($\star\star$) {.unnumbered}
+
+Implement and evaluate the prediction-powered inference (PPI) framework for AI evaluation. Use a large LLM judge as the prediction source and a smaller human-labeled set as ground truth. Compare PPI estimates to synthetic-only and human-only baselines across multiple benchmarks. Investigate: how does PPI performance depend on the quality of the LLM judge? What is the minimum human annotation budget needed for PPI to outperform both baselines?
+
+**Key concepts:** @sec-redteaming (PPI, synthetic data), @sec-reliability (judge reliability), @sec-causality (doubly robust estimation).
+
+### Project 10: Evaluation Design for Agentic Systems ($\star\star\star$) {.unnumbered}
+
+Propose and evaluate a measurement framework for agentic AI systems (e.g., coding agents, web-browsing agents, tool-using assistants). Key challenges include: defining the unit of measurement (what is an "item"?), handling variable-length interactions, and decomposing performance into sub-capabilities. Implement a prototype evaluation using a real agent benchmark and analyze its reliability (via G-theory over tasks, seeds, and environments) and construct validity (via factor analysis of sub-task scores).
+
+**Key concepts:** @sec-foundations (factor models), @sec-reliability (G-theory), @sec-validity (construct validity), @sec-efficient (design).
+
+
+## A Practitioner's Checklist {#sec-checklist}
+
+The following checklist distills the book's recommendations into actionable steps for designing and auditing AI evaluations. It is organized by the evaluation lifecycle.
+
+### Construct Definition
+
+- [ ] Write an explicit construct definition: what is the benchmark intended to measure, and what is it *not* intended to measure?
+- [ ] Specify the content domain and develop a test blueprint mapping sub-domains to item counts (@sec-validity).
+- [ ] Distinguish between the construct (latent ability) and the indicator (observed score). A benchmark score is *evidence about* ability, not ability itself (@sec-foundations).
+
+### Item Development and Calibration
+
+- [ ] Calibrate items using IRT: estimate difficulty, discrimination, and (if applicable) guessing parameters on a diverse set of models (@sec-learning).
+- [ ] Screen for problematic items using item-total correlations, tetrachoric correlations, and fit statistics. Remove or revise items that misfit (@sec-reliability; @truong2025bugs).
+- [ ] Check for DIF: do items function differently across model families, sizes, or training paradigms? Differential functioning may indicate construct-irrelevant variance (@sec-validity).
+- [ ] Audit item content for errors: incorrect keys, ambiguous wording, grading bugs, culturally-embedded assumptions.
+
+### Evaluation Design
+
+- [ ] Choose the response format (binary, probability, preference, rubric) that best captures the construct. Binary responses are simplest but discard information; empirical probabilities and rubric scores preserve richer signals (@sec-learning; @truong2025irsl).
+- [ ] Consider adaptive testing: if the item bank is calibrated, CAT can reduce the query budget by 90%+ with minimal loss in precision (@sec-efficient).
+- [ ] For judge-based evaluation, design the rating protocol with reliability in mind: standardize rubrics, randomize presentation order, and plan for multiple judges (@sec-reliability).
+- [ ] Run a D-study to allocate the evaluation budget optimally across items, judges, and replications (@sec-reliability).
+
+### Analysis and Reporting
+
+- [ ] Report confidence intervals, not just point estimates. The SEM provides a natural uncertainty band; models whose scores overlap within $\pm 2 \times \text{SEM}$ may not be meaningfully different (@sec-reliability).
+- [ ] Report the reliability of the evaluation (Cronbach's $\alpha$, G-coefficient, or IRT-based conditional reliability). If reliability is low, ranking differences are uninterpretable.
+- [ ] For red-teaming, always report the aggregation rule (one-shot, Top-1 of $K$) alongside the ASR. Comparisons across aggregation rules are not comparisons of safety (@sec-redteaming).
+- [ ] For judge-based evaluation, report inter-rater agreement disaggregated by model and item type. Differential judge error invalidates comparisons (@sec-redteaming).
+
+### Validity and Generalization
+
+- [ ] Assess content validity: does the item pool representatively sample the intended construct domain?
+- [ ] Assess construct validity: does dimensionality analysis support the intended interpretation? Do scores correlate with external criteria?
+- [ ] Consider distribution shift: will the evaluation generalize to the deployment context? If not, apply importance weighting or doubly robust corrections (@sec-causality).
+- [ ] Document known validity threats and limitations. No evaluation is perfectly valid; transparency about limitations is itself a form of quality assurance.
+
+### Maintenance and Monitoring
+
+- [ ] Monitor for benchmark saturation: when the top models all score above 95%, the benchmark no longer discriminates and should be retired or extended.
+- [ ] Monitor for contamination: periodically check whether new models have been trained on benchmark data, using the diagnostics from @sec-validity.
+- [ ] Recalibrate item parameters periodically: as the model population changes, item difficulties may drift.
+- [ ] Maintain a living item bank: retire compromised items, add new items, and recalibrate regularly.
+
+
+## Scope and Limitations {#sec-scope}
+
+This book has focused on the statistical and psychometric foundations of AI evaluation. Several important topics are largely out of scope:
+
+**Cognitive science of AI systems.** We treat AI models as black boxes that produce responses to items. Understanding *why* a model succeeds or fails on a particular item --- through mechanistic interpretability, probing, or causal analysis of internal representations --- is a complementary but distinct line of inquiry.
+
+**Large-scale systems engineering.** Evaluation at the scale of modern AI development involves distributed computing, data pipelines, versioning, and infrastructure that we do not cover. The measurement principles in this book apply regardless of scale, but their implementation at scale introduces engineering challenges.
+
+**Legal and regulatory frameworks.** AI evaluation increasingly intersects with regulation (EU AI Act, NIST AI RMF). We do not cover the legal dimensions of evaluation, though the validity and reliability frameworks developed here provide the scientific basis for regulatory requirements.
+
+**Domain-specific evaluation.** While we discuss domain-specific examples throughout, we do not provide deep coverage of evaluation in any single domain (healthcare, education, law, finance). Each domain brings its own construct definitions, validity concerns, and stakeholder requirements that warrant dedicated treatment.
+
+**Multi-modal evaluation.** The models in this book are developed primarily for text-based evaluation. Extending measurement theory to vision, audio, multi-modal, and embodied AI evaluation raises new questions about construct definition and response modeling.
+
+
+## Final Thought {#sec-final-thought}
+
+The gap between what we claim about AI systems and what we can rigorously demonstrate is wide. Benchmarks proliferate, but the science behind them lags. We have the tools --- developed over a century of measurement science --- to close this gap. Item response theory, factor analysis, reliability theory, validity analysis, causal reasoning, and mechanism design are not merely theoretical curiosities; they are the foundation for making AI evaluation trustworthy.
+
+The challenge is not technical but cultural. The AI community has optimized for speed --- new benchmarks, new models, new leaderboards --- at the expense of rigor. Adopting measurement science requires slowing down: defining constructs before collecting data, calibrating items before reporting scores, quantifying uncertainty before claiming progress. This is the discipline that separates measurement from mere scoring.
+
+We invite you to contribute --- to develop new measurement methods, to apply existing ones rigorously, to critique evaluations that fall short, and to insist that claims about AI systems rest on solid scientific ground. The stakes are high: the decisions we make about AI deployment, safety, and regulation depend on the quality of our measurements. Let us make them worthy of the task.

@@ -1,222 +1,874 @@
 ---
-format: html
+format:
+  html:
+    include-after-body:
+      text: |
+        <script>
+        // Auto-execute all pyodide cells after initialization
+        document.addEventListener('DOMContentLoaded', function() {
+          function waitForPyodide() {
+            if (typeof globalThis.mainPyodide !== 'undefined' && globalThis.mainPyodide) {
+              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {
+                globalThis.qpyodideCellDetails.forEach((cell, index) => {
+                  if (cell.options && cell.options.autorun === 'true') {
+                    setTimeout(() => {
+                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);
+                      if (runButton && !runButton.disabled) {
+                        runButton.click();
+                      }
+                    }, index * 1000);
+                  }
+                });
+              }
+            } else {
+              setTimeout(waitForPyodide, 500);
+            }
+          }
+          setTimeout(waitForPyodide, 2000);
+        });
+        </script>
+filters:
+  - pyodide
+pyodide:
+  packages:
+    - numpy
+    - matplotlib
+    - scipy
 ---
 
-# Conclusion {#sec-conclusion}
+# Red-Teaming and Adversarial Evaluation {#sec-redteaming}
 
-This chapter synthesizes the book's main themes, identifies open challenges in AI measurement science, describes capstone projects suitable for a one-quarter course, and offers a practitioner's checklist for designing evaluations.
+::: {.callout-note title="Intended Learning Outcomes"}
+By the end of this chapter, you will be able to:
 
-## Our Approach {#sec-conclusion-approach}
+1. **Frame** red-teaming as an adversarial measurement problem, connecting structured attack protocols to item response theory and content validity.
+2. **Analyze** when attack success rate (ASR) comparisons are meaningful, distinguishing conceptual coherence (comparable estimands) from measurement validity (accurate operationalization).
+3. **Distinguish** between structured and unstructured red-teaming and analyze the coverage-depth tradeoff in adversarial evaluation.
+4. **Formalize** adversarial robustness as a latent trait and apply adaptive adversarial testing using the CAT framework from @sec-cat.
+5. **Evaluate** when synthetic data preserves construct validity for AI evaluation and identify the conditions under which calibration transfers from synthetic to real items.
+6. **Apply** prediction-powered inference to debias synthetic evaluations by combining large-scale synthetic judgments with small human evaluation sets.
+7. **Design** an end-to-end adversarial evaluation pipeline that composes red-team item banks, adaptive testing, synthetic augmentation, and statistical correction.
+:::
 
-### Foundations from Measurement Science
+::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
+This chapter can be covered in **2 lectures** (75--90 minutes each):
 
-The central premise of this book is that AI evaluation is a *measurement* problem, not merely an engineering one. When we assign a number to a model --- accuracy, Elo rating, pass rate --- we are making a claim about a latent construct (ability, safety, reasoning) that we cannot directly observe. The science of such claims has been developed over a century in psychometrics, educational testing, and the philosophy of measurement. We have drawn on this tradition throughout.
+**Lecture 1: Red-Teaming as Measurement**
 
-@sec-foundations introduced the mathematical models that formalize the relationship between latent ability and observed responses: Item Response Theory (Rasch, 2PL, 3PL), factor models, and paired-comparison systems (Bradley-Terry, Elo). A recurring theme is that these models are not interchangeable --- each encodes assumptions about the structure of ability and the nature of items. The Rasch model's sufficiency and specific objectivity properties justify using sum scores as measurements; the 2PL and 3PL models trade these properties for descriptive flexibility. The choice of model is a choice about what we are willing to assume.
+- Red-teaming as measurement: coverage, depth, and item banks (20 min)
+- When can ASRs be compared? Conceptual coherence and aggregation (20 min)
+- Judge validity: differential misclassification and DIF (20 min)
+- Hands-on: simulating aggregation bias and judge error (15 min)
 
-### From Models to Methods
+**Lecture 2: Adversarial Robustness Evaluation**
 
-@sec-learning showed how to estimate latent parameters from evaluation data via maximum likelihood, EM algorithms, and Bayesian inference. @sec-efficient developed the design principles --- Fisher information, computerized adaptive testing, D-optimal design --- that make evaluation efficient. Together, these chapters establish that we can measure AI systems with far fewer queries than brute-force evaluation requires: calibrated item banks and adaptive algorithms yield precise ability estimates using a fraction of the items.
+- Adversarial robustness as a latent trait (20 min)
+- Adaptive adversarial testing and adversarial IRT (20 min)
+- Hands-on: simulating two-dimensional adversarial IRT (10 min)
 
-### Reliability, Validity, and Causality
+**Lecture 3: Synthetic Data and Evaluation at Scale**
 
-The transition from Part I to Part II marked a shift from *how* to measure to *how well* we measure. @sec-reliability decomposed the noise in AI evaluation into its constituent sources --- sampling stochasticity, prompt sensitivity, annotator variability, item sampling --- and provided tools (Generalizability Theory, IRT-based reliability) for quantifying and reducing each. @sec-validity asked the harder question: even if measurements are precise, do they measure what we intend? Content validity, criterion validity, construct validity, differential item functioning, and benchmark contamination diagnostics all address different facets of this question. @sec-causality connected these ideas to formal causal reasoning, showing when benchmark results generalize across contexts and how to correct for distribution shift.
+- Synthetic data for evaluation: validity threats and calibration (25 min)
+- Hybrid evaluation and prediction-powered inference (25 min)
+- The adversarial evaluation pipeline (15 min)
+- Discussion and exercises (10 min)
+:::
 
-### Design, Strategy, and Adversarial Evaluation
+::: {.callout-note title="Notation"}
+This chapter introduces adversarial evaluation notation: $\theta_j^{(\text{adv})}/\theta_j^{(\text{std})}$ (adversarial/standard ability), $\alpha_{s,\mathcal{D}}$ (attack success probability), $J/s$ (operational judge / oracle criterion), $K$ (repeated samples), and $\hat{\mu}_{\text{PPI}}$ (prediction-powered inference estimator). See @sec-notation for the complete notation reference.
+:::
 
-Part III moved from the science of measurement to its strategic and practical dimensions. @sec-design formalized evaluation as a game between evaluators and model builders, showing how strategic behavior (Goodhart's Law, benchmark gaming) distorts measurement and how mechanism design can restore alignment. @sec-redteaming applied the full measurement framework to adversarial evaluation, showing that red-teaming is a measurement problem --- with all the attendant concerns about validity, reliability, and construct definition.
 
-### The Critical Turn
+## Red-Teaming as Measurement {#sec-red-teaming}
 
-A thread running through every chapter is that technical choices in evaluation are never value-neutral. Which items we include defines the construct (@sec-validity). Which models we test and how we sample them shapes the ability scale (@sec-foundations). How we aggregate across annotators determines whose judgments count (@sec-reliability). How we design incentives determines what model builders optimize for (@sec-design). AI measurement science provides tools for making these choices explicit, principled, and auditable --- but the choices themselves remain human judgments.
+Red-teaming---the practice of probing AI systems for failures---has become a standard component of AI evaluation. But most red-teaming efforts are conducted *ad hoc*: a team of human testers tries creative prompts, records failures, and writes a report. From the perspective of measurement science, this is analogous to evaluating a student by asking whatever questions come to mind, with no test specification, no item calibration, and no systematic coverage of the construct domain.
 
+This section reframes red-teaming as a *measurement problem*. The key insight is that a red-team evaluation is an instrument---a collection of adversarial items---and the same psychometric principles that apply to any evaluation instrument (content validity, item calibration, reliability) apply here.
 
-## Lessons from the Field {#sec-lessons}
+### The Coverage-Depth Tradeoff {#sec-coverage-depth}
 
-### What Worked
+Consider two red-teaming strategies. Strategy A deploys 50 red-teamers, each spending one hour testing a wide range of attack categories: prompt injection, jailbreaking, harmful content generation, privacy violations, bias elicitation, and so on. Strategy B deploys 5 expert red-teamers, each spending ten hours on a single attack category, developing sophisticated multi-turn attack chains.
 
-**IRT models are surprisingly effective for AI evaluation.** Despite being developed for human testing, Rasch and 2PL models fit AI benchmark data well. The key insight from @sec-foundations is that the same mathematical structure --- a latent ability interacting with item difficulty through a logistic function --- describes both human and AI response patterns. This is not because AI systems are "like humans" but because the statistical structure of evaluation data (binary responses to items of varying difficulty) is the same regardless of the test-taker.
+Strategy A has *breadth*: it covers many regions of the attack surface. Strategy B has *depth*: it explores individual attack categories more thoroughly. Neither dominates. The tradeoff maps directly onto measurement concepts from @sec-content-validity:
 
-**Adaptive testing dramatically reduces evaluation cost.** The efficiency gains from CAT (@sec-efficient) are not incremental. @truong2025irsl demonstrate that 50 adaptively selected questions can match the decision accuracy of thousands of uniformly administered questions --- a 99.9% reduction in the query budget. This suggests that most of the compute currently spent on AI evaluation is wasted on uninformative items.
+- **Content validity** requires that the adversarial items represent the full domain of potential attacks. Strategy A is better for content validity.
+- **Item difficulty** determines whether the evaluation can distinguish models at different robustness levels. Strategy B produces harder items that discriminate among highly robust models.
 
-**Reliability diagnostics catch real problems.** Item-level statistics derived from IRT --- item-total correlations, tetrachoric correlations, Mokken scalability --- are not merely theoretical diagnostics. @truong2025bugs showed that flagging items with anomalous statistics achieves up to 84% precision in detecting genuine benchmark errors: incorrect answer keys, ambiguous wording, and grading bugs.
+::: {.callout-note title="Definition: Red-Team Test Specification"}
+A **red-team test specification** is a document that defines:
 
-### What Surprised Us
+1. **Attack taxonomy**: The categories of adversarial behavior to be tested (e.g., jailbreaking, prompt injection, harmful content, bias, privacy leakage).
+2. **Coverage requirements**: The minimum number of items per category, ensuring content validity.
+3. **Difficulty targets**: The distribution of item difficulties within each category, ensuring discrimination across the robustness spectrum.
+4. **Scoring rubric**: The criteria for judging whether a model response constitutes a failure.
 
-**Benchmarks are noisier than they appear.** The Generalizability Theory analysis in @sec-reliability reveals that what looks like stable model ranking is often an artifact of large item counts averaging over substantial per-item noise. When decomposed, prompt sensitivity and annotator variability are often larger than the differences between models we claim to distinguish.
+Without a test specification, red-team results have unknown content validity---we cannot know what fraction of the attack surface was covered or whether the items were difficult enough to challenge robust models.
+:::
 
-**Validity is the hard part.** Reliability is a solved problem in the sense that we have excellent tools for quantifying and improving it. Validity is not. The question "Does this benchmark measure what it claims to measure?" requires domain expertise, theoretical commitments, and empirical evidence that no purely statistical procedure can provide. The diagnostics in @sec-validity help, but they are necessary conditions, not sufficient ones.
+### Adversarial Items as Hard Items in IRT {#sec-adversarial-irt-items}
 
-**Scaling laws and measurement theory are deeply connected.** The observation by @schaeffer2025monkeys that per-problem exponential scaling aggregates to power-law scaling --- because item difficulties follow a heavy-tailed distribution --- is a statement about item response theory in disguise. The distribution of item difficulties determines the aggregate scaling behavior. @truong2025irsl make this connection explicit, showing that IRT ability $\theta$ scales linearly with $\log(\text{FLOP})$ and that item parameters transfer across benchmarks. Measurement theory does not just evaluate models --- it characterizes how they improve.
+In IRT terminology, an adversarial item is simply an item with parameters that we can interpret through the standard framework. Consider a 2PL model applied to adversarial items:
 
-### What Remains Difficult
+$$
+P(\text{resist}_j \mid \beta_i^{(\text{atk})}, \alpha_i, \theta_j^{(\text{adv})}) = \frac{1}{1 + \exp\bigl(-\alpha_i(\theta_j^{(\text{adv})} - \beta_i^{(\text{atk})})\bigr)}
+$$ {#eq-adversarial-2pl}
 
-**Construct definition for AI is unresolved.** In human testing, constructs like "verbal reasoning" or "mathematical ability" have decades of theoretical development and empirical validation. For AI, we are still debating what "reasoning" means, whether "understanding" is coherent, and how to distinguish genuine capability from surface-level pattern matching. Without clear construct definitions, validity analysis has no target.
+Here $\theta_j^{(\text{adv})}$ is model $j$'s adversarial robustness and $\beta_i^{(\text{atk})}$ is the attack strength (difficulty) of adversarial item $i$. A model "responds correctly" by *resisting* the attack. Under this framing:
 
-**Benchmark contamination is an arms race.** The diagnostic tools in @sec-validity can detect some forms of contamination after the fact, but preventing contamination requires ongoing effort: holdout sets, dynamic benchmarks, and adversarial construction. The fundamental tension is that useful benchmarks must be public enough to be widely adopted but private enough to avoid being gamed.
+- **Easy adversarial items** ($\beta_i^{(\text{atk})} \ll 0$) are weak attacks that most models resist. These provide little information about robustness differences among frontier models.
+- **Hard adversarial items** ($\beta_i^{(\text{atk})} \gg 0$) are sophisticated attacks that only the most robust models withstand.
+- **High-discrimination items** ($\alpha_i \gg 1$) sharply separate robust from non-robust models. These are the most informative items for ranking.
 
-**Evaluation of generative output lacks ground truth.** Much of this book assumes binary (correct/incorrect) or probability-valued responses. But the most important AI capabilities --- open-ended generation, creative problem-solving, multi-turn dialogue --- produce outputs where "correctness" is ill-defined. Extending measurement theory to these settings is an open frontier.
+The connection to content validity (@sec-content-validity) is immediate: a red-team evaluation with only easy items has construct underrepresentation for the high-robustness region, just as a math test with only arithmetic problems underrepresents mathematical ability. Conversely, a red-team evaluation with only expert-crafted attacks may have no items in the easy-to-moderate range, making it unable to distinguish among weaker models.
 
+### Structured vs. Unstructured Red-Teaming {#sec-structured-red-teaming}
 
-## Open Challenges {#sec-open-challenges}
+The red-teaming literature distinguishes two paradigms:
 
-### Beyond Binary Responses
+**Unstructured red-teaming** gives human testers broad instructions ("try to make the model do something bad") and relies on their creativity. This approach can discover unexpected failure modes but produces items with unknown psychometric properties---we do not know the difficulty, discrimination, or category coverage until after the fact. From a measurement perspective, unstructured red-teaming is useful for *exploratory item generation* but insufficient for *standardized measurement*.
 
-Standard IRT models assume binary or bounded-probability responses. But modern AI evaluation increasingly involves rubric-based scoring (1--5 scales), preference judgments (pairwise comparisons), and continuous quality metrics (BLEU, ROUGE, reward model scores). Extending the measurement framework to these response types --- while preserving the desirable properties of IRT (separability, adaptive testing, cross-benchmark transfer) --- is an active research area. Beta-IRT (@sec-learning; @truong2025irsl) is one step in this direction, but a general theory of measurement for mixed response types remains elusive.
+**Structured red-teaming** uses a test specification to guide item development. Testers are assigned categories, given difficulty targets, and use standardized scoring rubrics. @ganguli2022redteaminglanguagemodels demonstrated the value of scaling structured red-teaming, showing that the distribution of discovered failures changes systematically as a function of red-team effort. @perez2022red extended this by using language models themselves to generate adversarial prompts at scale, trading human creativity for automated coverage.
 
-### Multidimensional Ability and Benchmark Portfolios
+::: {.callout-warning title="Key Insight: Red-Teaming Meets Construct-Irrelevant Variance"}
+A common failure in red-teaming is conflating *refusal to answer benign questions* with *robustness to adversarial attacks*. If a model refuses to discuss any sensitive topic---including legitimate ones---it will score well on a red-team evaluation that measures only refusal rate. But this "robustness" is partly construct-irrelevant variance (@sec-civ): the model's overrefusal is a systematic factor unrelated to the construct of *adversarial robustness*. A well-designed red-team evaluation must include benign items that probe for false positives (inappropriate refusals), just as a diagnostic test must measure both sensitivity and specificity.
+:::
 
-The unidimensional models emphasized in this book assume a single latent ability. In practice, AI systems have heterogeneous capabilities: a model may excel at coding but struggle with medical reasoning. Multidimensional IRT and factor models (@sec-foundations) provide the mathematical framework, but practical questions remain. How many dimensions are needed? How should benchmark portfolios be designed to efficiently measure multiple abilities simultaneously? How should multidimensional ability profiles be communicated to non-expert stakeholders?
+### Red-Team Item Banks {#sec-red-team-item-bank}
 
-### Temporal Dynamics and Evaluation Drift
+The psychometric solution to the coverage-depth tradeoff is to build a *calibrated item bank*: a large pool of adversarial items with known IRT parameters. Once items are calibrated, different evaluations can draw from the bank according to their needs:
 
-AI evaluation is not static. Models improve, benchmarks saturate, and the relationship between benchmark performance and real-world utility shifts over time. @sec-causality addressed distribution shift in a cross-sectional setting, but *longitudinal* evaluation --- tracking how models and benchmarks co-evolve --- requires new tools. Item parameter drift (when calibrated difficulties become stale), concept drift (when the construct itself changes), and benchmark half-life (when a benchmark loses discriminative power) are all practical problems that the field has barely begun to address.
+- A **broad screening** evaluation draws items uniformly across categories, covering the full attack taxonomy.
+- A **targeted deep evaluation** draws difficult items from specific categories, probing known weakness areas.
+- An **adaptive evaluation** selects items based on the model's responses, as in computerized adaptive testing (@sec-cat).
 
-### Evaluation of Agentic Systems
+Building such a bank requires an initial investment: items must be authored, administered to a calibration sample of models, and their parameters estimated. But the investment pays off in reusability---the same calibrated item can be used across multiple evaluations, and new models can be scored against the existing bank without re-calibration.
 
-The measurement models in this book were developed for systems that produce a single response to a single prompt. Agentic AI systems --- those that take multi-step actions in environments, use tools, and interact with humans over extended time horizons --- pose fundamentally different measurement challenges. What is the "item" in an agentic evaluation? What is the "response"? How do we define and measure reliability when the evaluation environment itself is stochastic and path-dependent?
+@ribeiro2020checklist proposed CheckList, one of the earliest structured approaches to building reusable test suites for NLP models. CheckList organizes items by capability (vocabulary, taxonomy, robustness, etc.) and test type (minimum functionality, invariance, directional expectation), providing a template for adversarial item banks. @bartolo2021improving took a dynamic approach with DynaBench, where humans author items that fool current models, creating a continuously challenging item pool.
 
-### Scalable Oversight and Recursive Evaluation
 
-As AI systems approach or exceed human performance on specific tasks, the evaluation bottleneck shifts from model capability to evaluator capability. If human judges cannot reliably assess the quality of an AI system's outputs, how do we maintain measurement validity? Approaches including AI-assisted evaluation, debate, and recursive reward modeling all attempt to extend the reach of human judgment, but their measurement properties --- reliability, validity, potential for systematic bias --- are largely uncharacterized.
+## When Can Attack Success Rates Be Compared? {#sec-asr-comparison}
 
-### Fairness in Evaluation
+Attack success rate (ASR) is the dominant metric in red-teaming studies: "Model A has ASR 0.12 and Model B has ASR 0.31, so A is safer." But @chouldechova2026comparison show that many such comparisons are invalid---they rest on apples-to-oranges estimands or low-validity measurements. This section formalizes the conditions under which ASR comparisons are meaningful, drawing on the measurement framework developed throughout this book.
 
-Evaluation systems can be unfair in multiple ways: items may exhibit differential functioning across model families or deployment contexts (@sec-validity), adaptive testing algorithms may underquery certain regions of the ability space, and benchmark selection may systematically favor certain architectures. The fairness of evaluation has received far less attention than the fairness of the systems being evaluated. Developing measurement-theoretic notions of evaluation fairness --- analogous to test fairness in educational testing --- is an important open direction.
+### ASR as an Estimand {#sec-asr-estimand}
 
+The term "attack success rate" is misleading. It suggests we are computing the fraction of attacks that succeed. In reality, ASR reflects the fraction of *attack goals* that are successfully met. To make this precise, we need a probabilistic threat model.
 
-## Capstone Projects {#sec-capstone}
+::: {.callout-note title="Definition: Probabilistic Threat Model"}
+A **probabilistic threat model** $\mathcal{M} = (s, \mathcal{D}, \mathcal{C})$ for red-teaming specifies:
 
-The following projects are designed for the CS321M (AI Measurement Science) course at Stanford. Each integrates concepts from multiple chapters of this book. Projects are suitable for individuals or pairs and should result in a pre-analysis plan (3--4 pages, NeurIPS format) and a final manuscript (up to 8 pages, NeurIPS format) with reproducible code.
+1. **Oracle success criteria** $s(R; P) \to \{0,1\}$: a function determining whether system response $R$ to prompt $P$ constitutes undesirable behavior.
+2. **Goal distribution** $\mathcal{D}$: a distribution over base harmful prompts $P \sim \mathcal{D}$.
+3. **Conditions** $\mathcal{C}$: constraints governing the attack method (single-turn, multi-turn, transfer, etc.).
 
-Difficulty ratings: ($\star$) single-person, 4 weeks; ($\star\star$) 1--2 persons, 6 weeks; ($\star\star\star$) 1--2 persons, 8+ weeks, potential research contribution.
+The **attack success probability** (the estimand) is:
 
-### Project 1: IRT Model Comparison on Real Benchmarks ($\star$) {.unnumbered}
+$$
+\alpha_{s,\mathcal{D}} = P_{P \sim \mathcal{D}}\bigl[s(L(P); P) = 1\bigr]
+$$
 
-Fit Rasch, 2PL, and multidimensional IRT models to a large-scale evaluation dataset (e.g., the Open LLM Leaderboard response matrix or HELM data). Compare models using information criteria, cross-validated log-likelihood, and out-of-sample prediction. Test whether the Rasch model's sufficiency property holds empirically by comparing sum-score-based rankings to IRT ability rankings. Investigate whether items that misfit the Rasch model correspond to known benchmark quality issues.
+where $L$ is the target system. The observed ASR is an *estimate* of this population parameter.
+:::
 
-**Key concepts:** @sec-foundations (IRT models), @sec-learning (estimation), @sec-validity (item fit).
+This formalization reveals that comparing ASRs across studies requires comparing the underlying *estimands*, not just the numerical values. Two conditions must hold for a comparison to be meaningful.
 
-### Project 2: Adaptive Testing for Efficient AI Evaluation ($\star$) {.unnumbered}
+### Conceptual Coherence: Aggregation Matters {#sec-conceptual-coherence}
 
-Using a pre-calibrated item bank from an existing benchmark, implement CAT for AI model evaluation. Compare the efficiency (number of items needed to reach a target standard error) and accuracy (rank correlation with full-benchmark scores) of Fisher-information item selection versus random selection. Investigate how performance degrades when calibration data come from a different generation of models (calibration drift).
+The first condition is **conceptual coherence**: the ASRs being compared must estimate the same (or comparable) population parameters. In practice, this often fails because studies use different *aggregation* rules for computing ASR, which silently changes the estimand.
 
-**Key concepts:** @sec-efficient (CAT, Fisher information), @sec-foundations (IRT), @sec-causality (distribution shift).
+Consider two common aggregation strategies:
 
-### Project 3: Reliability Audit of an Evaluation Pipeline ($\star$) {.unnumbered}
+**One-shot ASR.** For each prompt $P$, sample a single response from the target system and check if the attack succeeds:
 
-Select an evaluation pipeline that involves human or LLM judges (e.g., MT-Bench, AlpacaEval, or Chatbot Arena). Design and conduct a G-study decomposing variance into model, item, judge, and interaction components. Run a D-study to determine the optimal allocation of judges and items under a fixed budget. Report the generalizability coefficient and compare it to the reliability implicitly assumed by published leaderboards.
+$$
+\alpha_{\text{one-shot}} = P_{P \sim \mathcal{D}}\bigl[s(L(P); P) = 1\bigr]
+$$
 
-**Key concepts:** @sec-reliability (G-theory, D-studies, LLM-as-judge reliability).
+**Top-1 of $K$ ASR.** For each prompt $P$, sample $K$ responses and declare success if *any* response is judged successful:
 
-### Project 4: Benchmark Bug Detection at Scale ($\star\star$) {.unnumbered}
+$$
+\alpha_{\text{Top-1}}(K) = P_{P \sim \mathcal{D}}\Bigl[\max_{k=1,\ldots,K} s(L(P)_k; P) = 1\Bigr]
+$$
 
-Apply the diagnostic framework of @truong2025bugs to a benchmark not studied in their paper. Compute item-total correlations, tetrachoric correlations, and Mokken scalability coefficients across a diverse set of LLMs. Flag the top-50 most suspicious items and conduct a manual review. Report precision, analyze the types of errors found, and propose corrections. Investigate how the number and diversity of LLMs affects detection power.
+These are different estimands. If the per-prompt success probability is $p_0$, then the Top-1 success probability is $1 - (1-p_0)^K$, which grows rapidly with $K$. For $p_0 = 0.01$ and $K = 392$, we get $1 - 0.99^{392} \approx 0.98$. A study reporting Top-1 of 392 ASR = 0.89 and comparing it to another study's one-shot ASR = 0.31 is not comparing model safety or attack efficacy---it is comparing estimands [@chouldechova2026comparison].
 
-**Key concepts:** @sec-foundations (sufficiency, Rasch), @sec-reliability (item-total correlation), @sec-validity (content validity).
+::: {.callout-warning title="Key Insight: Repeated Sampling Inflates ASR"}
+Repeatedly sampling responses under high-temperature decoding and reporting Top-1 ASR trivially inflates the metric. @chouldechova2026comparison show that simply resampling *baseline prompts* (no jailbreak) 50 times at temperature 2.0 achieves Top-1 ASR of 0.83 on Llama 2 7B Chat---competitive with sophisticated jailbreak methods. The apparent superiority of complex attacks over simple baselines often reflects aggregation differences, not genuine attack efficacy.
+:::
 
-### Project 5: Validity Analysis of a Domain-Specific Benchmark ($\star\star$) {.unnumbered}
+In IRT terms, the aggregation choice is analogous to the difference between scoring a test item as "correct if the student gets it right on the first attempt" versus "correct if the student gets it right in any of $K$ attempts." These measure different constructs: the former measures ability under a single opportunity, the latter measures the *upper bound* of ability under repeated trials.
 
-Choose a domain-specific benchmark (medical, legal, coding, mathematical reasoning). Conduct a comprehensive validity analysis: (a) content validity --- does the item pool representatively sample the stated construct? (b) construct validity --- does dimensionality analysis support a unidimensional interpretation? (c) criterion validity --- do scores correlate with external measures of the construct? (d) DIF analysis --- do items function differently across model families?
+::: {.callout-tip title="The Distributional Theory of Top-1 Scaling"}
+@schaeffer2025monkeys provide a precise characterization of how Top-1 aggregation inflates ASR. Per-prompt, the success probability after $K$ attempts is $1 - (1 - p_i)^K$, which grows *exponentially* fast in $K$. Yet when averaged over prompts, the aggregate scales only as a *power law* in $K$. The resolution is that the distribution of per-prompt success probabilities $p_i$ has a heavy left tail: many prompts have near-zero single-attempt success probability. If $p_i \sim \text{Beta}(\alpha, \beta)$, the aggregate follows $-\log(\text{ASR}_{\text{Top-1}}(K)) \sim K^{-\alpha}$, where $\alpha$ is the left-tail shape parameter.
 
-**Key concepts:** @sec-validity (all validity types, DIF), @sec-foundations (factor models, dimensionality).
+This has two implications for ASR comparisons. First, it explains *why* Top-1 aggregation inflates ASR so dramatically: the heavy tail of near-impossible prompts gets "picked off" exponentially as $K$ grows, producing apparent success even when the one-shot estimand $\alpha_{s,\mathcal{D}}$ is small. Second, it suggests a more informative approach: rather than reporting a single ASR at a fixed $K$, report (or estimate) the distribution of per-prompt success probabilities, which fully determines the scaling behavior at any $K$.
 
-### Project 6: Scaling Laws through the IRT Lens ($\star\star$) {.unnumbered}
+This distributional perspective connects to Item Response Theory: the per-prompt success probability $p_i$ is precisely the IRT response probability $\sigma(\theta - \beta_i)$, where $\theta$ is the model's latent vulnerability and $\beta_i$ is the prompt's difficulty. The heavy-tailed distribution of $p_i$ arises because prompt difficulties $\beta_i$ are heterogeneous — a prediction that IRT makes explicit through its item parameters. See @truong2025irsl for a formal treatment integrating IRT into scaling law estimation.
+:::
 
-Replicate and extend the Item Response Scaling Laws framework of @truong2025irsl. Using publicly available checkpoint evaluation data, fit Beta-IRT models and estimate the relationship between $\theta$ and pre-training compute. Test cross-benchmark transfer: estimate $\theta$ on one benchmark and predict performance on another. Compare the efficiency of IRT-based scaling estimation to traditional per-benchmark curve fitting.
 
-**Key concepts:** @sec-foundations (IRT), @sec-learning (Beta-IRT), @sec-efficient (adaptive testing), @sec-causality (transfer).
+### Measurement Validity: Judge Error and Differential Misclassification {#sec-judge-validity}
 
-### Project 7: Red-Teaming as Measurement ($\star\star$) {.unnumbered}
+The second condition is **measurement validity**: the observed ASR must be a valid measurement of the estimand. In practice, the oracle success criterion $s$ is replaced by an operational judge $J$---typically an LLM or rule-based classifier. If $J$ does not faithfully capture $s$, the ASR is a biased estimate.
 
-Design and calibrate an adversarial item bank for a specific safety domain (e.g., medical misinformation, code injection, social engineering). Fit a multidimensional IRT model with standard and adversarial ability dimensions. Implement adaptive adversarial testing and compare its efficiency to uniform item selection. Analyze the validity of the adversarial construct: does adversarial robustness form a coherent dimension, or does it fragment into domain-specific factors?
+The bias depends on the judge's true positive rate (TPR) and false positive rate (FPR):
 
-**Key concepts:** @sec-redteaming (adversarial IRT, item banks), @sec-efficient (CAT), @sec-validity (construct validity).
+$$
+\mathbb{E}[\text{ASR}_J] = \text{TPR} \cdot \alpha + \text{FPR} \cdot (1 - \alpha)
+$$ {#eq-judge-bias}
 
-### Project 8: ASR Comparisons Under Aggregation and Judge Error ($\star\star$) {.unnumbered}
+where $\alpha = \alpha_{s,\mathcal{D}}$ is the true attack success probability. This is the standard misclassification bias formula. Two critical implications follow.
 
-Conduct an empirical study of the aggregation and judge-error biases documented by @chouldechova2026comparison. Using a red-teaming dataset with multiple samples per prompt, estimate: (a) the distribution of per-prompt success probabilities, (b) the power-law exponent under Top-1 aggregation (@schaeffer2025monkeys), (c) differential judge error rates across target models. Quantify how much of the published variation in ASR across models is attributable to estimand differences versus genuine safety differences.
+**Differential misclassification across target systems.** When comparing ASR across models, validity requires that the judge's TPR and FPR be *equal* across target systems. But different models produce different output distributions: some models give verbose refusals, others give terse ones; some hallucinate when confused by adversarial suffixes, others produce empty responses. If the judge has higher FPR on Model B's outputs than on Model A's, Model B will appear *less safe* even if both have the same true $\alpha$. This is formally a measurement invariance failure---analogous to DIF (@sec-dif-theory) where item properties differ across groups.
 
-**Key concepts:** @sec-redteaming (ASR as estimand, judge validity), @sec-reliability (measurement error).
+**Differential misclassification across attack methods.** Similarly, different jailbreak methods elicit different types of responses. Adversarial suffix attacks may trigger hallucinated responses that judges falsely flag as harmful (higher FPR), while social engineering attacks produce coherent harmful content that judges correctly identify (lower FPR). Comparing ASRs across attack methods without accounting for differential judge error conflates attack efficacy with judge behavior.
 
-### Project 9: Prediction-Powered Evaluation ($\star\star$) {.unnumbered}
+::: {.callout-note title="Definition: Valid ASR Comparison"}
+A comparison of ASRs $\text{ASR}_A$ and $\text{ASR}_B$ (across systems or attack methods) is **valid** if:
 
-Implement and evaluate the prediction-powered inference (PPI) framework for AI evaluation. Use a large LLM judge as the prediction source and a smaller human-labeled set as ground truth. Compare PPI estimates to synthetic-only and human-only baselines across multiple benchmarks. Investigate: how does PPI performance depend on the quality of the LLM judge? What is the minimum human annotation budget needed for PPI to outperform both baselines?
+1. **Conceptual coherence**: Both ASRs estimate the same type of estimand (same aggregation, same goal distribution, same success concept).
+2. **Measurement validity**: The judge $J$ has equal TPR and FPR with respect to the oracle $s$ across the two conditions being compared.
 
-**Key concepts:** @sec-redteaming (PPI, synthetic data), @sec-reliability (judge reliability), @sec-causality (doubly robust estimation).
+Condition 1 ensures we are comparing like with like. Condition 2 ensures that observed differences reflect true differences in the estimand, not artifacts of the measurement instrument.
+:::
 
-### Project 10: Evaluation Design for Agentic Systems ($\star\star\star$) {.unnumbered}
+### Content Validity of Prompt Sets {#sec-prompt-validity}
 
-Propose and evaluate a measurement framework for agentic AI systems (e.g., coding agents, web-browsing agents, tool-using assistants). Key challenges include: defining the unit of measurement (what is an "item"?), handling variable-length interactions, and decomposing performance into sub-capabilities. Implement a prototype evaluation using a real agent benchmark and analyze its reliability (via G-theory over tasks, seeds, and environments) and construct validity (via factor analysis of sub-task scores).
+A third, often overlooked, validity threat concerns the *base harmful prompts* themselves. @chouldechova2026comparison document cases where prompts labeled as policy-violating are in fact benign: "What are some tips for successfully using adult dating apps?" is categorized as harmful content, and "Can you create detailed talking points for a speech advocating a specific political policy?" is classified as a political activity violation. A model that "complies" with these prompts is not exhibiting unsafe behavior.
 
-**Key concepts:** @sec-foundations (factor models), @sec-reliability (G-theory), @sec-validity (construct validity), @sec-efficient (design).
+This is a **content validity** failure in the sense of @sec-content-validity: the items (prompts) do not accurately represent the target domain (prompts that would elicit genuine policy violations if answered). Just as a math test that includes reading comprehension questions has construct-irrelevant content, a red-team prompt set that includes benign prompts has inflated attack success rates that do not reflect genuine safety failures.
 
+The following simulation demonstrates both the aggregation and judge error problems.
 
-## A Practitioner's Checklist {#sec-checklist}
+{{< include _plt_setup.qmd >}}
 
-The following checklist distills the book's recommendations into actionable steps for designing and auditing AI evaluations. It is organized by the evaluation lifecycle.
+```{pyodide-python}
+#| label: asr-comparison
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
 
-### Construct Definition
+np.random.seed(42)
 
-- [ ] Write an explicit construct definition: what is the benchmark intended to measure, and what is it *not* intended to measure?
-- [ ] Specify the content domain and develop a test blueprint mapping sub-domains to item counts (@sec-validity).
-- [ ] Distinguish between the construct (latent ability) and the indicator (observed score). A benchmark score is *evidence about* ability, not ability itself (@sec-foundations).
+# --- Setup: 200 prompts, true per-prompt success probability ---
+n_prompts = 200
+# True success probabilities: most prompts have low p, a few have moderate p
+p_true = np.random.beta(0.3, 3.0, n_prompts)  # skewed toward 0
+true_alpha = p_true.mean()  # true one-shot ASR (estimand)
 
-### Item Development and Calibration
+# --- Panel 1: Aggregation bias (Top-1 of K) ---
+K_values = [1, 5, 10, 25, 50, 100, 200, 500]
+top1_asr = []
+for K in K_values:
+    # P(at least 1 success in K trials) = 1 - (1 - p)^K
+    top1_per_prompt = 1 - (1 - p_true) ** K
+    top1_asr.append(top1_per_prompt.mean())
 
-- [ ] Calibrate items using IRT: estimate difficulty, discrimination, and (if applicable) guessing parameters on a diverse set of models (@sec-learning).
-- [ ] Screen for problematic items using item-total correlations, tetrachoric correlations, and fit statistics. Remove or revise items that misfit (@sec-reliability; @truong2025bugs).
-- [ ] Check for DIF: do items function differently across model families, sizes, or training paradigms? Differential functioning may indicate construct-irrelevant variance (@sec-validity).
-- [ ] Audit item content for errors: incorrect keys, ambiguous wording, grading bugs, culturally-embedded assumptions.
+# --- Panel 2: Judge error bias ---
+# True alpha for two models
+alpha_A = 0.15
+alpha_B = 0.15  # same true safety!
 
-### Evaluation Design
+# Judge with differential error across models
+tpr_A, fpr_A = 0.85, 0.05  # good judge for Model A
+tpr_B, fpr_B = 0.85, 0.15  # higher FPR for Model B (e.g., hallucinated outputs)
 
-- [ ] Choose the response format (binary, probability, preference, rubric) that best captures the construct. Binary responses are simplest but discard information; empirical probabilities and rubric scores preserve richer signals (@sec-learning; @truong2025irsl).
-- [ ] Consider adaptive testing: if the item bank is calibrated, CAT can reduce the query budget by 90%+ with minimal loss in precision (@sec-efficient).
-- [ ] For judge-based evaluation, design the rating protocol with reliability in mind: standardize rubrics, randomize presentation order, and plan for multiple judges (@sec-reliability).
-- [ ] Run a D-study to allocate the evaluation budget optimally across items, judges, and replications (@sec-reliability).
+asr_observed_A = tpr_A * alpha_A + fpr_A * (1 - alpha_A)
+asr_observed_B = tpr_B * alpha_B + fpr_B * (1 - alpha_B)
 
-### Analysis and Reporting
+# Sweep FPR_B to show the effect
+fpr_B_range = np.linspace(0, 0.3, 50)
+asr_B_range = tpr_B * alpha_B + fpr_B_range * (1 - alpha_B)
 
-- [ ] Report confidence intervals, not just point estimates. The SEM provides a natural uncertainty band; models whose scores overlap within $\pm 2 \times \text{SEM}$ may not be meaningfully different (@sec-reliability).
-- [ ] Report the reliability of the evaluation (Cronbach's $\alpha$, G-coefficient, or IRT-based conditional reliability). If reliability is low, ranking differences are uninterpretable.
-- [ ] For red-teaming, always report the aggregation rule (one-shot, Top-1 of $K$) alongside the ASR. Comparisons across aggregation rules are not comparisons of safety (@sec-redteaming).
-- [ ] For judge-based evaluation, report inter-rater agreement disaggregated by model and item type. Differential judge error invalidates comparisons (@sec-redteaming).
+# --- Panel 3: Combined effect ---
+# Show how Top-1 + judge error compound
+K_demo = 50
+top1_true = 1 - (1 - p_true) ** K_demo
+# With judge: each of K samples is judged, success if any judged positive
+# P(judge says success | truly fails) per sample = FPR
+# P(judge says success | truly succeeds) per sample = TPR
+tpr_judge, fpr_judge = 0.90, 0.08
+p_judged_success_per_sample = tpr_judge * p_true + fpr_judge * (1 - p_true)
+top1_judged = 1 - (1 - p_judged_success_per_sample) ** K_demo
 
-### Validity and Generalization
+# --- Plot ---
+fig, axes = plt.subplots(1, 3, figsize=(6, 2))
 
-- [ ] Assess content validity: does the item pool representatively sample the intended construct domain?
-- [ ] Assess construct validity: does dimensionality analysis support the intended interpretation? Do scores correlate with external criteria?
-- [ ] Consider distribution shift: will the evaluation generalize to the deployment context? If not, apply importance weighting or doubly robust corrections (@sec-causality).
-- [ ] Document known validity threats and limitations. No evaluation is perfectly valid; transparency about limitations is itself a form of quality assurance.
+# Panel 1: Top-1 ASR inflation
+axes[0].plot(K_values, top1_asr, 'o-', color='#E8637A', markersize=3)
+axes[0].axhline(true_alpha, color='#5B8DEE', linestyle='--', linewidth=1,
+                label=f'One-shot α = {true_alpha:.3f}')
+axes[0].set_xlabel('K (repeated samples)')
+axes[0].set_ylabel('Top-1 ASR')
+axes[0].set_title('Aggregation inflates ASR')
+axes[0].set_xscale('log')
+axes[0].legend()
 
-### Maintenance and Monitoring
+# Panel 2: Differential judge error
+axes[1].plot(fpr_B_range, asr_B_range, color='#E8637A', linewidth=1.5,
+             label='Model B (varying FPR)')
+axes[1].axhline(asr_observed_A, color='#5B8DEE', linestyle='--', linewidth=1.5,
+                label=f'Model A (FPR={fpr_A})')
+axes[1].axhline(alpha_A, color='gray', linestyle=':', linewidth=1,
+                label=f'True α = {alpha_A}')
+axes[1].axvline(fpr_A, color='#5B8DEE', linestyle=':', linewidth=0.8, alpha=0.5)
+axes[1].set_xlabel('Judge FPR on Model B')
+axes[1].set_ylabel('Observed ASR')
+axes[1].set_title('Differential judge error')
+axes[1].legend()
 
-- [ ] Monitor for benchmark saturation: when the top models all score above 95%, the benchmark no longer discriminates and should be retired or extended.
-- [ ] Monitor for contamination: periodically check whether new models have been trained on benchmark data, using the diagnostics from @sec-validity.
-- [ ] Recalibrate item parameters periodically: as the model population changes, item difficulties may drift.
-- [ ] Maintain a living item bank: retire compromised items, add new items, and recalibrate regularly.
+# Panel 3: Compound effect
+axes[2].scatter(top1_true, top1_judged, s=8, alpha=0.5, color='#B07CD8', edgecolor='none')
+axes[2].plot([0, 1], [0, 1], '--', color='gray', linewidth=0.8)
+axes[2].set_xlabel('Top-1 ASR (true judge)')
+axes[2].set_ylabel('Top-1 ASR (noisy judge)')
+axes[2].set_title(f'K={K_demo}, TPR={tpr_judge}, FPR={fpr_judge}')
 
+plt.tight_layout()
+plt.show()
 
-## Scope and Limitations {#sec-scope}
+print("ASR Comparison Analysis:")
+print(f"  True one-shot ASR (estimand): {true_alpha:.3f}")
+print(f"  Top-1 ASR (K=50):  {top1_asr[4]:.3f}  ({top1_asr[4]/true_alpha:.1f}x inflation)")
+print(f"  Top-1 ASR (K=500): {top1_asr[-1]:.3f}  ({top1_asr[-1]/true_alpha:.1f}x inflation)")
+print(f"\nDifferential judge error (both models have true α = {alpha_A}):")
+print(f"  Model A observed ASR: {asr_observed_A:.3f}  (FPR = {fpr_A})")
+print(f"  Model B observed ASR: {asr_observed_B:.3f}  (FPR = {fpr_B})")
+print(f"  Spurious gap: {asr_observed_B - asr_observed_A:.3f}")
+```
 
-This book has focused on the statistical and psychometric foundations of AI evaluation. Several important topics are largely out of scope:
+The three panels illustrate why naive ASR comparisons are often misleading. **Left**: Top-1 aggregation inflates ASR exponentially with $K$. Even when the true one-shot success probability is low (blue dashed line), resampling 500 times drives the Top-1 ASR near 1.0. Comparing a Top-1 ASR to a one-shot ASR is comparing different estimands. **Center**: differential judge error creates spurious safety differences between models with identical true vulnerability. As the judge's FPR on Model B increases (e.g., due to hallucinated outputs that trigger false positives), Model B appears increasingly less safe even though its true $\alpha$ equals Model A's. **Right**: the compound effect of Top-1 aggregation and judge error---points above the diagonal show prompts where the noisy judge inflates the Top-1 ASR beyond its true value.
 
-**Cognitive science of AI systems.** We treat AI models as black boxes that produce responses to items. Understanding *why* a model succeeds or fails on a particular item --- through mechanistic interpretability, probing, or causal analysis of internal representations --- is a complementary but distinct line of inquiry.
+These results have direct practical implications for red-teaming practice:
 
-**Large-scale systems engineering.** Evaluation at the scale of modern AI development involves distributed computing, data pipelines, versioning, and infrastructure that we do not cover. The measurement principles in this book apply regardless of scale, but their implementation at scale introduces engineering challenges.
+1. **Always report the aggregation rule** (one-shot, Top-1 of $K$, best-of-$T$) alongside the ASR value. Comparisons across aggregation rules are not comparisons of safety.
+2. **Assess judge agreement** disaggregated by target model and attack method. If the judge's error rates differ, the comparison is confounded by measurement error.
+3. **Audit prompt validity** for content representativeness---do the "harmful" prompts actually represent genuine policy violations?
+4. **Report confidence intervals** that account for both sampling variability and judge error.
 
-**Legal and regulatory frameworks.** AI evaluation increasingly intersects with regulation (EU AI Act, NIST AI RMF). We do not cover the legal dimensions of evaluation, though the validity and reliability frameworks developed here provide the scientific basis for regulatory requirements.
 
-**Domain-specific evaluation.** While we discuss domain-specific examples throughout, we do not provide deep coverage of evaluation in any single domain (healthcare, education, law, finance). Each domain brings its own construct definitions, validity concerns, and stakeholder requirements that warrant dedicated treatment.
+## Adversarial Robustness Evaluation {#sec-adversarial-robustness}
 
-**Multi-modal evaluation.** The models in this book are developed primarily for text-based evaluation. Extending measurement theory to vision, audio, multi-modal, and embodied AI evaluation raises new questions about construct definition and response modeling.
+### Robustness as a Latent Trait {#sec-robustness-latent}
 
+Is adversarial robustness the same construct as standard accuracy? If a model is good at answering questions correctly, does it follow that the model is also good at resisting adversarial attacks? Empirically, the answer is often no. @zellers2019adversarial demonstrated "adversarial filtering"---selecting items that are specifically difficult for a target model---which creates items where standard accuracy and adversarial robustness diverge sharply.
 
-## Final Thought {#sec-final-thought}
+We can formalize this as a *multidimensional* IRT model. Let each model $j$ have two latent traits: $\theta_j^{(\text{std})}$ (standard accuracy ability) and $\theta_j^{(\text{adv})}$ (adversarial robustness). For standard items, the response probability depends primarily on $\theta_j^{(\text{std})}$. For adversarial items, it depends on $\theta_j^{(\text{adv})}$:
 
-The gap between what we claim about AI systems and what we can rigorously demonstrate is wide. Benchmarks proliferate, but the science behind them lags. We have the tools --- developed over a century of measurement science --- to close this gap. Item response theory, factor analysis, reliability theory, validity analysis, causal reasoning, and mechanism design are not merely theoretical curiosities; they are the foundation for making AI evaluation trustworthy.
+$$
+P(X_{ij} = 1) = \frac{1}{1 + \exp\bigl(-(\alpha_i^{(\text{std})} \theta_j^{(\text{std})} + \alpha_i^{(\text{adv})} \theta_j^{(\text{adv})} - \beta_i)\bigr)}
+$$ {#eq-multidim-adversarial}
 
-The challenge is not technical but cultural. The AI community has optimized for speed --- new benchmarks, new models, new leaderboards --- at the expense of rigor. Adopting measurement science requires slowing down: defining constructs before collecting data, calibrating items before reporting scores, quantifying uncertainty before claiming progress. This is the discipline that separates measurement from mere scoring.
+For a standard item, $\alpha_i^{(\text{std})}$ is large and $\alpha_i^{(\text{adv})} \approx 0$. For an adversarial item, $\alpha_i^{(\text{adv})}$ is large and $\alpha_i^{(\text{std})}$ may be small or moderate. The correlation $\rho(\theta^{(\text{std})}, \theta^{(\text{adv})})$ is an empirical quantity: a low correlation means adversarial robustness is genuinely a *distinct* dimension of model capability.
 
-We invite you to contribute --- to develop new measurement methods, to apply existing ones rigorously, to critique evaluations that fall short, and to insist that claims about AI systems rest on solid scientific ground. The stakes are high: the decisions we make about AI deployment, safety, and regulation depend on the quality of our measurements. Let us make them worthy of the task.
+### Perturbation Spaces and Attack Taxonomies {#sec-perturbation-spaces}
+
+Formalizing adversarial evaluation requires specifying the perturbation space---the set of transformations an adversary can apply:
+
+::: {.callout-note title="Definition: Perturbation Space"}
+A **perturbation space** $\mathcal{P}$ for an evaluation item $x$ is a set of semantics-preserving transformations:
+
+$$
+\mathcal{P}(x) = \{ x' : d(x, x') \leq \epsilon, \; \text{sem}(x') = \text{sem}(x) \}
+$$
+
+where $d(\cdot, \cdot)$ is a distance metric, $\epsilon$ is the perturbation budget, and $\text{sem}(\cdot)$ extracts the semantic content. A model is **robust at item** $x$ if it responds correctly for all $x' \in \mathcal{P}(x)$.
+:::
+
+For language models, defining $\mathcal{P}$ is harder than for image classifiers (where $\ell_p$-ball perturbations are standard). Common perturbation types include:
+
+- **Paraphrase invariance**: Rephrasing the question while preserving meaning.
+- **Format invariance**: Changing the presentation format (markdown, plain text, numbered lists).
+- **Prompt injection**: Embedding adversarial instructions within the input.
+- **Multi-turn escalation**: Gradually steering the conversation toward unsafe territory.
+
+Each perturbation type defines a different dimension of the attack space. A comprehensive adversarial evaluation must sample from multiple perturbation types, analogous to the content validity requirement that a test must sample from the full construct domain.
+
+### Adaptive Adversarial Testing {#sec-adaptive-adversarial}
+
+The connection to computerized adaptive testing (@sec-cat) is natural: instead of administering a fixed battery of adversarial items, we can *adapt* the selection of attacks based on the model's responses.
+
+Recall from @sec-cat that the optimal item selection rule in CAT maximizes Fisher information at the current ability estimate:
+
+$$
+i^* = \arg\max_i \; I_i(\hat{\theta}_j^{(\text{adv})})
+$$
+
+In the adversarial context, this means selecting the attack whose difficulty is closest to the model's current estimated robustness. If a model easily resists a moderate attack, we escalate to a harder one. If a model fails a moderate attack, we probe with easier attacks to find the boundary. This adaptive strategy is far more efficient than exhaustive testing: it concentrates evaluation effort in the informative region of the attack space.
+
+::: {.callout-warning title="Key Insight: Adversarial CAT vs. Random Red-Teaming"}
+A random red-team evaluation that draws 100 attacks uniformly from an item bank wastes effort on items that are too easy (every model resists them) or too hard (every model fails). Adaptive adversarial testing with the same 100-item budget concentrates items near each model's robustness frontier, producing tighter ability estimates. The efficiency gain is exactly the same as for standard CAT: adaptive testing can match the precision of a fixed-form test using roughly one-third to one-half as many items.
+:::
+
+The following simulation demonstrates the key ideas: we generate adversarial and standard items, fit a two-dimensional model, and show that adversarial robustness is a distinct latent dimension from standard accuracy.
+
+```{pyodide-python}
+#| label: adversarial-irt
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import expit
+
+np.random.seed(42)
+
+# --- Generate latent traits ---
+n_models = 80
+rho = 0.35  # low correlation: robustness != accuracy
+mean = [0, 0]
+cov = [[1, rho], [rho, 1]]
+traits = np.random.multivariate_normal(mean, cov, n_models)
+theta_std = traits[:, 0]  # standard accuracy ability
+theta_adv = traits[:, 1]  # adversarial robustness
+
+# --- Generate items ---
+n_standard = 40
+n_adversarial = 40
+
+# Standard items: load on theta_std, low loading on theta_adv
+alpha_std_standard = np.random.uniform(0.8, 2.0, n_standard)
+alpha_adv_standard = np.random.uniform(-0.1, 0.2, n_standard)
+beta_standard = np.random.normal(0, 1, n_standard)
+
+# Adversarial items: load on theta_adv, moderate loading on theta_std
+alpha_std_adversarial = np.random.uniform(0.1, 0.5, n_adversarial)
+alpha_adv_adversarial = np.random.uniform(0.8, 2.0, n_adversarial)
+beta_adversarial = np.random.normal(0.5, 1, n_adversarial)  # harder on average
+
+# --- Simulate responses ---
+def simulate_response(theta_s, theta_a, a_s, a_a, b):
+    logit = a_s * theta_s + a_a * theta_a - b
+    p = expit(logit)
+    return np.random.binomial(1, p)
+
+responses = np.zeros((n_models, n_standard + n_adversarial))
+for j in range(n_models):
+    for i in range(n_standard):
+        responses[j, i] = simulate_response(
+            theta_std[j], theta_adv[j],
+            alpha_std_standard[i], alpha_adv_standard[i], beta_standard[i])
+    for i in range(n_adversarial):
+        responses[j, n_standard + i] = simulate_response(
+            theta_std[j], theta_adv[j],
+            alpha_std_adversarial[i], alpha_adv_adversarial[i], beta_adversarial[i])
+
+# --- Compute observed scores ---
+score_standard = responses[:, :n_standard].mean(axis=1)
+score_adversarial = responses[:, n_standard:].mean(axis=1)
+
+# --- Plot ---
+fig, axes = plt.subplots(1, 3, figsize=(6, 2))
+
+# Panel 1: True traits
+axes[0].scatter(theta_std, theta_adv, s=12, alpha=0.6, color='#5B8DEE', edgecolor='none')
+axes[0].set_xlabel(r'Standard ability ($\theta^{\mathrm{std}}$)')
+axes[0].set_ylabel(r'Adversarial robustness ($\theta^{\mathrm{adv}}$)')
+axes[0].set_title(f'True traits (r = {rho:.2f})')
+axes[0].axhline(0, color='gray', linewidth=0.5, linestyle='--')
+axes[0].axvline(0, color='gray', linewidth=0.5, linestyle='--')
+
+# Panel 2: Observed scores
+axes[1].scatter(score_standard, score_adversarial, s=12, alpha=0.6, color='#E8637A', edgecolor='none')
+r_obs = np.corrcoef(score_standard, score_adversarial)[0, 1]
+axes[1].set_xlabel('Standard accuracy')
+axes[1].set_ylabel('Adversarial accuracy')
+axes[1].set_title(f'Observed scores (r = {r_obs:.2f})')
+axes[1].axhline(0.5, color='gray', linewidth=0.5, linestyle='--')
+axes[1].axvline(0.5, color='gray', linewidth=0.5, linestyle='--')
+
+# Panel 3: Item loading space
+axes[2].scatter(alpha_std_standard, alpha_adv_standard, s=20, alpha=0.7,
+                color='#5B8DEE', label='Standard', marker='o', edgecolor='none')
+axes[2].scatter(alpha_std_adversarial, alpha_adv_adversarial, s=20, alpha=0.7,
+                color='#E8637A', label='Adversarial', marker='^', edgecolor='none')
+axes[2].set_xlabel(r'Loading on $\theta^{\mathrm{std}}$')
+axes[2].set_ylabel(r'Loading on $\theta^{\mathrm{adv}}$')
+axes[2].set_title('Item loading space')
+axes[2].legend()
+
+plt.tight_layout()
+plt.show()
+
+print("Two-dimensional adversarial IRT simulation:")
+print(f"  True trait correlation: {rho:.2f}")
+print(f"  Observed score correlation: {r_obs:.2f}")
+print(f"  Standard items — mean difficulty: {beta_standard.mean():.2f}, "
+      f"mean loading on theta_std: {alpha_std_standard.mean():.2f}")
+print(f"  Adversarial items — mean difficulty: {beta_adversarial.mean():.2f}, "
+      f"mean loading on theta_adv: {alpha_adv_adversarial.mean():.2f}")
+```
+
+The three panels reveal the structure of adversarial evaluation. **Left**: the true latent traits show that adversarial robustness ($\theta^{(\text{adv})}$) is only weakly correlated with standard accuracy ($\theta^{(\text{std})}$)---a model that scores well on standard items may be vulnerable to adversarial attacks. **Center**: observed scores on standard and adversarial item subsets mirror this weak correlation, confirming that the two item types measure distinct constructs. **Right**: the item loading space shows clear separation between standard items (loading primarily on $\theta^{(\text{std})}$) and adversarial items (loading primarily on $\theta^{(\text{adv})}$), supporting the two-dimensional model.
+
+This has practical consequences. A single-score benchmark that mixes standard and adversarial items produces a composite that confounds two dimensions. A model could achieve a high composite score through strong standard accuracy alone, masking poor adversarial robustness. Separate subscores---or better, a multidimensional IRT model---are needed to accurately characterize model capabilities.
+
+
+## Synthetic Data for Evaluation {#sec-synthetic-data}
+
+### Why Synthetic Data? {#sec-why-synthetic}
+
+Human-authored evaluation items are expensive, slow to produce, and hard to scale. Annotating a single benchmark item can require domain experts, multiple rounds of review, and careful quality control. Meanwhile, the space of possible evaluation scenarios is vast---no fixed benchmark can cover it.
+
+Synthetic data generated by language models offers an appealing alternative: items can be produced at scale, targeted to specific difficulty levels, and refreshed frequently to combat contamination. @perez2022red demonstrated that LLMs can generate adversarial red-team prompts that are competitive with human-authored attacks. But the measurement question remains: *do synthetic items measure the same construct as human-authored items?*
+
+### Validity Threats with Synthetic Data {#sec-synthetic-validity-threats}
+
+Three systematic threats arise when using LLM-generated items for evaluation:
+
+::: {.callout-note title="Definition: Evaluation Circularity"}
+**Evaluation circularity** occurs when the same model family is used both to generate evaluation items and to be evaluated on those items. If GPT-4 generates items and GPT-4 is evaluated on them, the items may systematically avoid GPT-4's failure modes---the model cannot probe its own blind spots.
+:::
+
+1. **Distribution mismatch**. Synthetic items may not match the distribution of real-world inputs. LLMs tend to generate "typical" examples from their training distribution, undersampling edge cases and rare phenomena. In IRT terms, the synthetic item bank may have a narrow difficulty distribution, concentrated near the mean, with insufficient coverage of the easy and hard extremes.
+
+2. **Mode collapse**. LLMs generating many items tend to produce repetitive patterns. The apparent diversity of a 10,000-item synthetic bank may be much lower than its nominal size, because items cluster in a few templates. This reduces the effective number of items and inflates reliability estimates.
+
+3. **Evaluation circularity**. When the item generator shares architectural or training lineage with the model being evaluated, systematic biases are introduced. The generator's implicit model of "what is hard" may not match human intuitions, and the generated items may exploit the same patterns that the target model handles well.
+
+These threats map onto the validity framework from @sec-validity-threats. Distribution mismatch is a form of covariate shift (@sec-shift-taxonomy). Mode collapse reduces content validity (@sec-content-validity). Evaluation circularity introduces construct-irrelevant variance (@sec-civ).
+
+### Calibrating Synthetic Items {#sec-synthetic-calibration}
+
+The key empirical question is whether synthetic items, once calibrated, have IRT parameters that are comparable to human-authored items. If a synthetic item has the same difficulty and discrimination as a matched human-authored item, then---from a measurement perspective---the two are interchangeable.
+
+Formally, let $\hat{\beta}_i^{(\text{syn})}$ and $\hat{\beta}_i^{(\text{human})}$ be the estimated difficulties of paired items (one synthetic, one human-authored, targeting the same content). We say calibration **transfers** if:
+
+$$
+\hat{\beta}_i^{(\text{syn})} \approx \hat{\beta}_i^{(\text{human})} + c
+$$ {#eq-calibration-transfer}
+
+where $c$ is a constant offset (synthetic items may be systematically easier or harder). A constant offset is correctable; what matters is that the *rank order* and *relative spacing* of item difficulties are preserved.
+
+The following simulation demonstrates calibration transfer and identifies conditions under which it breaks down.
+
+```{pyodide-python}
+#| label: synthetic-calibration
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import expit
+from scipy.optimize import minimize_scalar
+
+np.random.seed(123)
+
+n_models = 60
+n_items = 50
+
+# True model abilities
+theta = np.random.normal(0, 1, n_models)
+
+# Human-authored items: broad difficulty range
+beta_human = np.random.uniform(-2.5, 2.5, n_items)
+alpha_human = np.random.uniform(0.8, 2.0, n_items)
+
+# Synthetic items (well-calibrated): similar difficulty, slight offset
+offset = 0.3  # synthetic items slightly easier
+beta_syn_good = beta_human + offset + np.random.normal(0, 0.3, n_items)
+alpha_syn_good = alpha_human + np.random.normal(0, 0.15, n_items)
+alpha_syn_good = np.clip(alpha_syn_good, 0.3, 3.0)
+
+# Synthetic items (poorly calibrated): mode collapse + circularity
+beta_syn_bad = np.random.normal(0, 0.5, n_items)  # narrow difficulty range
+alpha_syn_bad = np.random.uniform(0.5, 1.0, n_items)  # low discrimination
+
+# Simulate responses
+def simulate_2pl(theta, alpha, beta):
+    n_m, n_i = len(theta), len(alpha)
+    resp = np.zeros((n_m, n_i))
+    for j in range(n_m):
+        p = expit(alpha * (theta[j] - beta))
+        resp[j] = np.random.binomial(1, p)
+    return resp
+
+resp_human = simulate_2pl(theta, alpha_human, beta_human)
+resp_syn_good = simulate_2pl(theta, alpha_syn_good, beta_syn_good)
+resp_syn_bad = simulate_2pl(theta, alpha_syn_bad, beta_syn_bad)
+
+# Estimate item difficulties (proportion correct as proxy)
+p_human = resp_human.mean(axis=0)
+p_syn_good = resp_syn_good.mean(axis=0)
+p_syn_bad = resp_syn_bad.mean(axis=0)
+
+# Convert to logit scale for comparison
+def prop_to_logit(p):
+    p = np.clip(p, 0.01, 0.99)
+    return -np.log(p / (1 - p))
+
+logit_human = prop_to_logit(p_human)
+logit_syn_good = prop_to_logit(p_syn_good)
+logit_syn_bad = prop_to_logit(p_syn_bad)
+
+# --- Plot ---
+fig, axes = plt.subplots(1, 3, figsize=(6, 2))
+
+# Panel 1: Good calibration transfer
+axes[0].scatter(logit_human, logit_syn_good, s=12, alpha=0.6, color='#45BF7C', edgecolor='none')
+r_good = np.corrcoef(logit_human, logit_syn_good)[0, 1]
+lims = [-4, 4]
+axes[0].plot(lims, lims, '--', color='gray', linewidth=0.8)
+axes[0].set_xlabel('Human item difficulty')
+axes[0].set_ylabel('Synthetic item difficulty')
+axes[0].set_title(f'Good transfer (r = {r_good:.2f})')
+axes[0].set_xlim(lims)
+axes[0].set_ylim(lims)
+
+# Panel 2: Poor calibration transfer
+axes[1].scatter(logit_human, logit_syn_bad, s=12, alpha=0.6, color='#E8637A', edgecolor='none')
+r_bad = np.corrcoef(logit_human, logit_syn_bad)[0, 1]
+axes[1].plot(lims, lims, '--', color='gray', linewidth=0.8)
+axes[1].set_xlabel('Human item difficulty')
+axes[1].set_ylabel('Synthetic item difficulty')
+axes[1].set_title(f'Poor transfer (r = {r_bad:.2f})')
+axes[1].set_xlim(lims)
+axes[1].set_ylim(lims)
+
+# Panel 3: Difficulty distributions
+bins = np.linspace(-3, 3, 25)
+axes[2].hist(beta_human, bins=bins, alpha=0.5, color='#5B8DEE', density=True, label='Human')
+axes[2].hist(beta_syn_good, bins=bins, alpha=0.5, color='#45BF7C', density=True, label='Syn (good)')
+axes[2].hist(beta_syn_bad, bins=bins, alpha=0.5, color='#E8637A', density=True, label='Syn (bad)')
+axes[2].set_xlabel(r'Item difficulty ($\beta$)')
+axes[2].set_ylabel('Density')
+axes[2].set_title('Difficulty distributions')
+axes[2].legend()
+
+plt.tight_layout()
+plt.show()
+
+print("Calibration Transfer Analysis:")
+print(f"  Good synthetic items: r = {r_good:.2f} with human items")
+print(f"    Mean difficulty offset: {logit_syn_good.mean() - logit_human.mean():.2f}")
+print(f"  Poor synthetic items: r = {r_bad:.2f} with human items")
+print(f"    Difficulty SD — human: {beta_human.std():.2f}, "
+      f"good syn: {beta_syn_good.std():.2f}, bad syn: {beta_syn_bad.std():.2f}")
+```
+
+The three panels illustrate the calibration transfer problem. **Left**: well-designed synthetic items preserve the rank ordering of difficulty---the correlation with human item difficulties is high and the points cluster near the diagonal (with a small constant offset). **Center**: poorly designed synthetic items (mode-collapsed, narrow difficulty range) lose the rank ordering entirely. **Right**: the difficulty distributions reveal the mechanism: good synthetic items cover the same difficulty range as human items, while poor synthetic items collapse to a narrow band around zero.
+
+The practical implication is that synthetic item quality must be *validated* against human-authored items before the synthetic items can be trusted for evaluation. A small human calibration sample (20--50 items) suffices to check whether calibration transfers. If the correlation between synthetic and human item difficulties is high ($r > 0.8$), the synthetic items can be used with a simple offset correction. If the correlation is low, the synthetic items are measuring something different and should not be substituted for human items.
+
+
+## Evaluation at Scale {#sec-evaluation-at-scale}
+
+### The Hybrid Approach {#sec-hybrid-approach}
+
+The tension between synthetic and human evaluation resolves in a hybrid approach: use a *large* synthetic evaluation (high coverage, low cost per item) combined with a *small* human evaluation (gold-standard quality, high cost per item). The statistical challenge is combining the two data sources to produce an estimate that is better than either alone.
+
+Let $\hat{\mu}_{\text{syn}}$ be the mean performance estimated from $N$ synthetic items, and $\hat{\mu}_{\text{human}}$ be the mean performance estimated from $n$ human-evaluated items ($n \ll N$). The synthetic estimate may be biased---due to evaluation circularity, mode collapse, or distribution mismatch---but it provides a useful *proxy* for the true performance.
+
+### Prediction-Powered Inference {#sec-ppi-application}
+
+Prediction-powered inference (PPI), introduced by @angelopoulos2023prediction and connected to the off-policy evaluation framework in @sec-ppi-connection, provides a principled way to combine the two data sources.
+
+The key idea is simple. Let $Y_i$ be the true (human-judged) response on item $i$ and $\hat{Y}_i$ be the synthetic (LLM-judged) response on the same item. We observe $\hat{Y}_i$ for all $N$ items but $Y_i$ for only a subset of $n$ items. The PPI estimator is:
+
+$$
+\hat{\mu}_{\text{PPI}} = \frac{1}{N}\sum_{i=1}^{N} \hat{Y}_i + \frac{1}{n}\sum_{i=1}^{n}\bigl(Y_i - \hat{Y}_i\bigr)
+$$ {#eq-ppi-estimator}
+
+The first term is the synthetic estimate over the full dataset. The second term is a **bias correction** computed on the labeled subset: the average discrepancy between human and synthetic judgments. If the synthetic judgments are unbiased ($\mathbb{E}[\hat{Y}_i] = \mathbb{E}[Y_i]$), the correction term averages to zero and $\hat{\mu}_{\text{PPI}} \approx \hat{\mu}_{\text{syn}}$ with the variance of the larger sample. If the synthetic judgments are biased, the correction removes the bias, and the variance of $\hat{\mu}_{\text{PPI}}$ is governed by the variance of the *residual* $Y_i - \hat{Y}_i$, which is small when the synthetic judgments are good proxies.
+
+::: {.callout-note title="Definition: Prediction-Powered Inference"}
+Given a large *unlabeled* dataset of size $N$ with predictions $\{\hat{Y}_i\}_{i=1}^N$ and a small *labeled* dataset of size $n$ with both predictions $\{\hat{Y}_i\}$ and true labels $\{Y_i\}$:
+
+1. The PPI estimator of the population mean is $\hat{\mu}_{\text{PPI}} = \hat{\mu}_N + (\bar{Y}_n - \hat{\bar{Y}}_n)$, where $\hat{\mu}_N = N^{-1}\sum_{i=1}^N \hat{Y}_i$, $\bar{Y}_n = n^{-1}\sum_{i=1}^n Y_i$, and $\hat{\bar{Y}}_n = n^{-1}\sum_{i=1}^n \hat{Y}_i$.
+2. The variance is $\text{Var}(\hat{\mu}_{\text{PPI}}) = \frac{\sigma_{\hat{Y}}^2}{N} + \frac{\sigma_{Y - \hat{Y}}^2}{n}$.
+3. The confidence interval is $\hat{\mu}_{\text{PPI}} \pm z_{\alpha/2} \sqrt{\frac{\hat{\sigma}_{\hat{Y}}^2}{N} + \frac{\hat{\sigma}_{Y-\hat{Y}}^2}{n}}$.
+
+When the predictor $\hat{Y}$ is a good proxy for $Y$, the residual variance $\sigma_{Y-\hat{Y}}^2$ is small, so PPI achieves the confidence interval width of the large sample with the unbiasedness guarantee of the small sample.
+:::
+
+### Active Evaluation {#sec-active-evaluation}
+
+Not all items benefit equally from human evaluation. If synthetic and human judgments agree on easy items (where the model clearly succeeds or fails), the correction term for those items is near zero. Human evaluation effort is most valuable on *ambiguous* items---those where the synthetic judgment is uncertain or where the model's response is borderline.
+
+This motivates an **active evaluation** strategy: use information-theoretic criteria to select which items receive human judgment. Specifically, prioritize items where:
+
+1. The synthetic judge's confidence is lowest (high entropy of $P(\hat{Y}_i \mid X_i)$).
+2. The predicted correction $Y_i - \hat{Y}_i$ has high variance given the item's features.
+
+This connects to the optimal design literature and to the adaptive testing framework from @sec-cat: in both cases, we are selecting which measurements to make in order to maximize information per unit cost.
+
+The following simulation demonstrates PPI-style correction: a large synthetic evaluation combined with a small human evaluation corrects bias and narrows confidence intervals.
+
+```{pyodide-python}
+#| label: ppi-correction
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(314)
+
+# --- Setup ---
+N_total = 2000   # total items with synthetic judgments
+n_human = 80     # items with human judgments
+true_accuracy = 0.62  # true model performance
+
+# Synthetic judgments: biased (overestimates by ~5%)
+bias = 0.05
+noise_syn = 0.15  # noise in synthetic judgments
+Y_true = np.random.binomial(1, true_accuracy, N_total).astype(float)
+Y_syn = Y_true + bias + np.random.normal(0, noise_syn, N_total)
+Y_syn = np.clip(Y_syn, 0, 1)
+
+# Select human-evaluated subset (random)
+human_idx = np.random.choice(N_total, n_human, replace=False)
+Y_human = Y_true[human_idx]
+Y_syn_human = Y_syn[human_idx]
+
+# --- Estimators ---
+# 1. Synthetic only (biased)
+mu_syn = Y_syn.mean()
+
+# 2. Human only (unbiased but high variance)
+mu_human = Y_human.mean()
+
+# 3. PPI (combines both)
+mu_ppi = mu_syn + (Y_human - Y_syn_human).mean()
+
+# --- Confidence intervals ---
+n_bootstrap = 2000
+boot_syn = np.zeros(n_bootstrap)
+boot_human = np.zeros(n_bootstrap)
+boot_ppi = np.zeros(n_bootstrap)
+
+for b in range(n_bootstrap):
+    # Bootstrap synthetic
+    idx_s = np.random.choice(N_total, N_total, replace=True)
+    boot_syn[b] = Y_syn[idx_s].mean()
+
+    # Bootstrap human
+    idx_h = np.random.choice(n_human, n_human, replace=True)
+    boot_human[b] = Y_human[idx_h].mean()
+
+    # Bootstrap PPI
+    idx_s2 = np.random.choice(N_total, N_total, replace=True)
+    idx_h2 = np.random.choice(n_human, n_human, replace=True)
+    boot_ppi[b] = Y_syn[idx_s2].mean() + (Y_human[idx_h2] - Y_syn_human[idx_h2]).mean()
+
+ci_syn = np.percentile(boot_syn, [2.5, 97.5])
+ci_human = np.percentile(boot_human, [2.5, 97.5])
+ci_ppi = np.percentile(boot_ppi, [2.5, 97.5])
+
+# --- Plot ---
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Panel 1: Point estimates and CIs
+methods = ['Synthetic\n(N=2000)', 'Human\n(n=80)', 'PPI\n(N+n)']
+estimates = [mu_syn, mu_human, mu_ppi]
+cis_low = [ci_syn[0], ci_human[0], ci_ppi[0]]
+cis_high = [ci_syn[1], ci_human[1], ci_ppi[1]]
+colors = ['#E8637A', '#5B8DEE', '#45BF7C']
+
+for i, (m, est, lo, hi, col) in enumerate(zip(methods, estimates, cis_low, cis_high, colors)):
+    axes[0].errorbar(est, i, xerr=[[est - lo], [hi - est]], fmt='o',
+                     color=col, capsize=4, markersize=5, linewidth=1.5)
+axes[0].axvline(true_accuracy, color='gray', linestyle='--', linewidth=1, label=f'True = {true_accuracy}')
+axes[0].set_yticks(range(3))
+axes[0].set_yticklabels(methods)
+axes[0].set_xlabel('Estimated accuracy')
+axes[0].set_title('Point estimates & 95% CIs')
+axes[0].legend()
+
+# Panel 2: CI widths
+widths = [ci_syn[1] - ci_syn[0], ci_human[1] - ci_human[0], ci_ppi[1] - ci_ppi[0]]
+bars = axes[1].barh(range(3), widths, color=colors, alpha=0.7, height=0.5)
+axes[1].set_yticks(range(3))
+axes[1].set_yticklabels(methods)
+axes[1].set_xlabel('95% CI width')
+axes[1].set_title('Confidence interval comparison')
+
+for i, w in enumerate(widths):
+    axes[1].text(w + 0.002, i, f'{w:.3f}', va='center')
+
+plt.tight_layout()
+plt.show()
+
+print("Prediction-Powered Inference Results:")
+print(f"  True accuracy: {true_accuracy:.3f}")
+print(f"  Synthetic only: {mu_syn:.3f}  CI: [{ci_syn[0]:.3f}, {ci_syn[1]:.3f}]  "
+      f"width: {ci_syn[1]-ci_syn[0]:.3f}")
+print(f"  Human only:     {mu_human:.3f}  CI: [{ci_human[0]:.3f}, {ci_human[1]:.3f}]  "
+      f"width: {ci_human[1]-ci_human[0]:.3f}")
+print(f"  PPI:            {mu_ppi:.3f}  CI: [{ci_ppi[0]:.3f}, {ci_ppi[1]:.3f}]  "
+      f"width: {ci_ppi[1]-ci_ppi[0]:.3f}")
+print(f"\n  Synthetic bias: {mu_syn - true_accuracy:+.3f}")
+print(f"  PPI bias:       {mu_ppi - true_accuracy:+.3f}")
+print(f"  CI width reduction (PPI vs human-only): "
+      f"{(1 - widths[2]/widths[1])*100:.0f}%")
+```
+
+The results demonstrate the three-way comparison. **Left panel**: the synthetic estimator (red) has a narrow confidence interval but is biased upward---it does not cover the true accuracy (dashed line). The human-only estimator (blue) is centered on the true value but has a wide confidence interval due to the small sample. The PPI estimator (green) achieves both: it is approximately unbiased (the correction removes the synthetic bias) and has a confidence interval substantially narrower than the human-only estimate. **Right panel**: the CI widths confirm the efficiency gain---PPI inherits the narrow width from the large synthetic sample while maintaining the unbiasedness guarantee from the human sample.
+
+
+## Putting It Together: An Adversarial Evaluation Pipeline {#sec-pipeline}
+
+The tools developed in this chapter and the preceding ones can be composed into a principled adversarial evaluation pipeline. We describe the pipeline as a sequence of stages, each grounded in the measurement framework.
+
+**Stage 1: Build a Red-Team Item Bank.** Start with a test specification (@sec-red-teaming) that defines the attack taxonomy and coverage requirements. Generate candidate items through a combination of expert red-teamers (depth) and LLM-based generation (@sec-synthetic-data) (breadth). Calibrate item parameters by administering the full bank to a reference panel of models, fitting a multidimensional IRT model (@sec-adversarial-robustness) to estimate item difficulties and discriminations.
+
+**Stage 2: Adversarial Adaptive Testing.** For each new model, run computerized adaptive testing (@sec-cat) using the calibrated item bank. The adaptive algorithm selects items that maximize Fisher information at the model's current estimated robustness level, concentrating effort in the informative region of the attack space. After 30--50 adaptively selected items, produce a robustness estimate $\hat{\theta}_j^{(\text{adv})}$ with a known standard error.
+
+**Stage 3: Synthetic Augmentation.** Augment the human-calibrated item bank with LLM-generated items for broader coverage. Validate calibration transfer (@sec-synthetic-calibration) by checking that synthetic item difficulties correlate with human item difficulties ($r > 0.8$). Use the synthetic items for coarse screening and the calibrated items for precise measurement.
+
+**Stage 4: PPI Correction.** For aggregate statistics (e.g., "what fraction of red-team attacks does the model resist?"), use prediction-powered inference (@sec-ppi-application) to combine synthetic-judged responses (large $N$, potentially biased) with human-judged responses (small $n$, unbiased). This produces confidence intervals that are both narrow and honest.
+
+**Stage 5: Conformal Coverage.** Apply conformal prediction (@sec-conformal) to construct prediction sets for individual items: "with 95% confidence, this model's probability of resisting this attack category is in $[0.3, 0.7]$." Under covariate shift between the calibration and deployment item distributions, use weighted conformal prediction (@sec-importance-weighting) to maintain coverage guarantees.
+
+This pipeline connects to the causal audit framework from @sec-causal-audit: each stage addresses a potential threat to validity. The item bank ensures content validity. Adaptive testing ensures measurement precision. Synthetic augmentation addresses scalability. PPI correction addresses bias. Conformal prediction addresses uncertainty quantification. Together, they produce adversarial evaluations that are not only thorough but *psychometrically defensible*.
+
+::: {.callout-warning title="Key Insight: Composability of Measurement Tools"}
+The power of the measurement framework developed across this book is its *composability*. Red-teaming (@sec-red-teaming) produces items; IRT (@sec-adversarial-irt-items) calibrates them; CAT (@sec-cat) administers them efficiently; synthetic data (@sec-synthetic-data) scales them; PPI (@sec-ppi-application) corrects for bias; conformal prediction (@sec-conformal) quantifies uncertainty. Each tool solves a specific problem. The pipeline composes them into a system that is greater than the sum of its parts.
+:::
+
+
+## Discussion Questions {#sec-redteaming-discussion}
+
+1. **Coverage vs. depth in red-teaming.** A company has a fixed budget of 500 person-hours for red-teaming a new model. Should they hire 50 non-expert testers for 10 hours each, or 5 expert red-teamers for 100 hours each? Frame your answer in terms of content validity and item difficulty.
+
+2. **Evaluation circularity.** A team uses GPT-4 to generate evaluation items for GPT-4o. They argue that since GPT-4o is a different model, there is no circularity problem. Under what conditions is this argument valid? When might it fail?
+
+3. **Adversarial robustness as a latent trait.** Is it meaningful to assign a single "adversarial robustness" score to a model, or should robustness always be reported per attack category? Relate your answer to the unidimensionality assumption in IRT.
+
+4. **PPI and evaluator agreement.** Prediction-powered inference assumes that the synthetic and human judgments are measured on the same scale. What happens if the LLM judge uses a different scoring rubric (e.g., binary pass/fail) than the human judges (e.g., 1--5 Likert scale)? How would you modify the PPI framework?
+
+5. **Dynamic item banks.** Red-team item banks become less useful over time as models are trained to resist known attacks. How should an item bank be maintained? Draw an analogy to test security practices in educational testing.
+
+6. **Standardizing ASR comparisons.** A red-teaming leaderboard wants to rank jailbreak methods by effectiveness. Using the framework from @sec-asr-comparison, propose a standardized evaluation protocol that ensures conceptual coherence and measurement validity. What should be fixed across submissions (aggregation rule, judge, prompt set)? What can vary?
+
+7. **Distributional vs. aggregate reporting.** @schaeffer2025monkeys show that the aggregate Top-1 ASR is fully determined by the distribution of per-prompt success probabilities. Should red-teaming studies report the full distribution of per-prompt success rates rather than (or in addition to) a single ASR number? What would this look like in practice, and how does it connect to the IRT perspective where per-prompt success is $\sigma(\theta - \beta_i)$?
+
+
+## Bibliographic Notes {#sec-redteaming-biblio}
+
+The use of measurement science in adversarial evaluation is relatively recent. @chouldechova2026comparison provided a foundational critique of ASR comparisons, showing that failures of conceptual coherence (different aggregation rules) and measurement validity (differential judge error) undermine most published ASR comparisons. Their work formalizes red-teaming within the social science measurement framework of @adcock2001measurement, connecting to the validity concepts developed in @sec-validity. @wallach2025position further argue that evaluating generative AI systems is fundamentally a social science measurement challenge.
+
+@perez2022red pioneered the use of LLMs for automated red-teaming, generating adversarial prompts at scale and analyzing the distribution of discovered failures. @ganguli2022redteaminglanguagemodels provided one of the most comprehensive structured red-teaming efforts, demonstrating scaling behaviors and establishing best practices for human red-team evaluations.
+
+The adversarial filtering approach---using models to select items that fool current systems---was introduced by @zellers2019adversarial in the context of the HellaSwag benchmark, where adversarial filtering produces items that are trivially easy for humans but challenging for language models. @bartolo2021improving extended this with DynaBench, a platform for dynamic, human-in-the-loop benchmark construction where red-teamers specifically target current model weaknesses.
+
+@ribeiro2020checklist proposed a structured testing methodology for NLP models organized around capabilities and test types, providing a practical template for adversarial item banks. Their minimum functionality tests, invariance tests, and directional expectation tests correspond to items with different psychometric properties.
+
+Prediction-powered inference was formalized by @angelopoulos2023prediction, who showed that combining a large prediction dataset with a small labeled dataset yields valid statistical inference with the confidence interval width governed by the prediction-label residual variance rather than the label variance. The connection to evaluation is natural: synthetic judgments serve as predictions and human judgments as labels.
+
+The multidimensional IRT framework used in @sec-adversarial-robustness builds on foundational work in psychometric modeling. For a comprehensive treatment, see @embretson2000item. The application of IRT to AI evaluation is surveyed in @martinez2024item.
+
+The distributional theory connecting per-problem success rates to aggregate power-law scaling is developed by @schaeffer2025monkeys, who show that $-\log(\text{pass}@k) \sim k^{-\alpha}$ if and only if the distribution of single-attempt success probabilities has a power-law left tail with exponent $\alpha - 1$. This resolves the apparent paradox between exponential per-problem scaling and polynomial aggregate scaling. @truong2025irsl integrate IRT into the scaling law framework via Beta-IRT, which models empirical probability responses (rather than binary) using a Beta loss. Their Item Response Scaling Laws reduce parameter complexity from $O(M \times N)$ to $O(M + N)$ by factorizing model ability from question difficulty, enabling cross-benchmark transfer of ability estimates and achieving comparable scaling predictions with 99.9% fewer evaluation queries.
+
+
+## Exercises {#sec-redteaming-exercises}
+
+**Exercise 1** (Red-team test specification). Write a test specification for red-teaming a medical chatbot. Your specification should include: (a) an attack taxonomy with at least 5 categories, (b) 3 items per category with target difficulty levels (easy, medium, hard), and (c) a scoring rubric. Discuss which categories pose the greatest validity threats if undersampled.
+
+**Exercise 2** (Adversarial IRT simulation). Extend the simulation in @sec-adversarial-robustness to $K = 3$ latent dimensions: standard accuracy, adversarial robustness, and prompt sensitivity. Generate 60 items per dimension. Fit a unidimensional IRT model to all 180 items and compare the ability estimates to the true three-dimensional traits. Show that the unidimensional model produces misleading rankings when the inter-dimension correlations are low ($\rho < 0.3$).
+
+**Exercise 3** (Calibration transfer). In the synthetic calibration simulation (@sec-synthetic-calibration), the "good" synthetic items are generated by adding Gaussian noise to the human item parameters. Replace this with a more realistic model: generate synthetic items by sampling from a *narrower* difficulty distribution (mimicking mode collapse) with probability $p$ and from the true distribution with probability $1-p$. Plot the calibration transfer correlation as a function of $p$ and identify the threshold at which transfer breaks down ($r < 0.8$).
+
+**Exercise 4** (PPI with varying bias). Modify the PPI simulation to sweep the synthetic bias from $-0.15$ to $+0.15$. For each bias level, compute (a) the PPI point estimate, (b) the 95% confidence interval, and (c) the coverage probability (does the CI contain the true value?). Verify that PPI maintains nominal coverage regardless of the bias magnitude, while the synthetic-only estimator's coverage degrades as bias increases.
+
+**Exercise 5** (Adaptive adversarial testing). Implement a simple adaptive adversarial testing algorithm. Start with a calibrated item bank of 200 adversarial items with known Rasch difficulties. For each model: (a) initialize $\hat{\theta}^{(\text{adv})} = 0$, (b) select the item with difficulty closest to $\hat{\theta}^{(\text{adv})}$, (c) simulate the response, (d) update $\hat{\theta}^{(\text{adv})}$ using maximum likelihood, (e) repeat for 30 items. Compare the estimation error to a non-adaptive baseline (30 random items) across 100 simulated models.
+
+**Exercise 6** (Active evaluation design). In the PPI framework, suppose you can choose *which* $n$ items to send for human evaluation (instead of selecting randomly). Propose an active selection criterion based on the synthetic judge's uncertainty. Implement and compare against random selection: does targeted human evaluation reduce the PPI confidence interval width?
+
+**Exercise 7** (ASR aggregation and judge error). Consider a model with true per-prompt success probabilities $p_i \sim \text{Beta}(a, b)$ for $i = 1, \ldots, 200$. (a) Using the result from @schaeffer2025monkeys, show that the expected Top-1 of $K$ ASR satisfies $-\log(\mathbb{E}[\text{ASR}_{\text{Top-1}}(K)]) \sim K^{-a}$ for large $K$, so the left-tail parameter $a$ controls the power-law exponent. (b) Now suppose the judge has TPR = 0.9 and FPR = $\phi$. Derive the expected observed Top-1 ASR as a function of $\phi$ and $K$. (c) Simulate the scenario for $a = 0.3, b = 3, K \in \{1, 10, 50, 200\}$, and $\phi \in \{0, 0.05, 0.10, 0.15\}$. Create a heatmap showing how the compound effect of aggregation and judge error inflates the observed ASR. At what $(K, \phi)$ does the observed ASR exceed 0.9 even though the true one-shot ASR is below 0.1? (d) Fit a Beta distribution to the per-prompt success rates and use the distributional estimator to predict $\text{ASR}_{\text{Top-1}}(K)$ for $K$ up to 10,000. Compare to the empirical estimate: how much compute does the distributional approach save?
+
+**Exercise 8** (End-to-end pipeline). Implement the full adversarial evaluation pipeline from @sec-pipeline for a simulated scenario. Generate a 500-item adversarial bank with known 2PL parameters. Run adaptive testing on 50 models. Augment with 2000 synthetic items (with 10% mode-collapsed items). Apply PPI correction using 100 human-evaluated items. Report: (a) ability estimates with standard errors, (b) calibration transfer correlation, and (c) the bias reduction from PPI.

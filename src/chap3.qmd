@@ -6,8 +6,10 @@ format:
         <script>
         // Auto-execute all pyodide cells after initialization
         document.addEventListener('DOMContentLoaded', function() {
+          // Wait for pyodide to be fully ready (mainPyodide is set after loading)
           function waitForPyodide() {
             if (typeof globalThis.mainPyodide !== 'undefined' && globalThis.mainPyodide) {
+              // Pyodide is ready, execute all cells with autorun=true
               if (typeof globalThis.qpyodideCellDetails !== 'undefined') {
                 globalThis.qpyodideCellDetails.forEach((cell, index) => {
                   if (cell.options && cell.options.autorun === 'true') {
@@ -16,7 +18,7 @@ format:
                       if (runButton && !runButton.disabled) {
                         runButton.click();
                       }
-                    }, index * 1000);
+                    }, index * 1000); // Stagger execution by 1 second each
                   }
                 });
               }
@@ -24,7 +26,7 @@ format:
               setTimeout(waitForPyodide, 500);
             }
           }
-          setTimeout(waitForPyodide, 2000);
+          setTimeout(waitForPyodide, 2000); // Start checking after 2 seconds
         });
         </script>
 filters:
@@ -36,84 +38,145 @@ pyodide:
     - scipy
 ---
 
-# Efficient Measurement {#sec-efficient}
+# Learning {#sec-learning}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, you will be able to:
 
-1. **Formulate** the benchmark design problem as an optimization over item selection and scoring rules.
-2. **Apply** Fisher information to select maximally informative items, and implement a Computerized Adaptive Testing procedure.
-3. **Construct** D-optimal item pools that maximize the precision of ability estimates.
-4. **Design** efficient paired-comparison tournaments using information-theoretic principles.
-5. **Explain** stopping rules and practical constraints (cost, time, contamination) for adaptive AI evaluation.
+1. **Derive** the log-likelihood function for the Rasch model and explain the role of person and item parameters.
+2. **Implement** maximum likelihood estimation (MLE) for IRT models using gradient descent and L-BFGS optimization.
+3. **Explain** the identifiability problem in IRT and describe standard solutions (sum-to-zero, fixed anchor).
+4. **Distinguish** between joint MLE, conditional MLE, and marginal MLE, and articulate when each is appropriate.
+5. **Implement** the Expectation-Maximization (EM) algorithm for Rasch model estimation and explain the E-step and M-step.
+6. **Describe** Bayesian inference for IRT models and specify appropriate priors for ability and item parameters.
+7. **Implement** MAP estimation and MCMC sampling for IRT models.
+8. **Explain** regularization in IRT as a Bayesian prior and apply cross-validation for hyperparameter selection.
+9. **Apply** MLE and Bayesian methods to real AI benchmark data and compare their efficiency.
+10. **Evaluate** the generalization of learned factor models under various masking schemes (entry-wise, row holdout, column holdout).
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
-This chapter can be covered in **2 lectures** (75-90 minutes each):
+This chapter can be covered in **3 lectures** (75-90 minutes each):
 
-**Lecture 1: Fisher Information and Adaptive Testing**
+**Lecture 1: Foundations of Estimation**
 
-- The benchmark design problem (15 min)
-- Fisher information for item selection (20 min)
-- Computerized Adaptive Testing (30 min)
-- Hands-on: CAT simulation (10 min)
+- Why learning matters for AI measurement (15 min)
+- Likelihood and log-likelihood for Rasch model (20 min)
+- Gradient derivation and interpretation (20 min)
+- Hands-on: MLE with synthetic data (20 min)
 
-**Lecture 2: Optimal Design and Paired Comparisons**
+**Lecture 2: Advanced Estimation Methods**
 
-- D-optimal design and item pool construction (30 min)
-- Design for paired comparisons (20 min)
-- Stopping rules and practical considerations (15 min)
-- Hands-on: D-optimal design simulation (10 min)
+- Identifiability and conditional vs marginal MLE (20 min)
+- EM algorithm for IRT (30 min)
+- Hands-on: EM implementation (25 min)
+
+**Lecture 3: Bayesian Approaches and Generalization**
+
+- Prior specification for IRT (15 min)
+- MAP estimation and MCMC (30 min)
+- Regularization and cross-validation (15 min)
+- Generalization experiments and masking schemes (15 min)
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces $I_j(\theta)$ (Fisher information for item $j$) and $\mathcal{I}(\theta)$ (Fisher information matrix). See @sec-notation for the complete notation reference.
+This chapter introduces estimation notation: $\ell(\theta, \beta)$ (log-likelihood), $\hat{\theta}_{\text{MLE}}$ and $\hat{\theta}_{\text{MAP}}$ (point estimates), $\pi(\theta)$ (priors), and $\eta$ (learning rate). See @sec-notation for the complete notation reference.
+:::
+
+::: {.callout-tip title="Video Overview" collapse="false"}
+A visual tour of the key concepts in this chapter — from maximum likelihood estimation and the EM algorithm to Bayesian inference and generalization.
+
+{{< video ../animations/ch2/chapter2_narrated.mp4 >}}
+:::
+
+## Why Learning Matters for AI Measurement {#sec-why-learning}
+
+Chapter 1 introduced the measurement models---Rasch, 2PL, factor models---that describe how latent abilities generate observed responses. But knowing the *form* of a model is not enough. To actually *use* these models for AI evaluation, we must estimate their parameters from data.
+
+::: {.callout-important title="The Central Learning Problem in AI Measurement"}
+Given a response matrix $Y \in \{0,1\}^{N \times M}$ where $Y_{ij} = 1$ indicates model $i$ answered question $j$ correctly:
+
+$$
+\text{Find } \hat{\theta}, \hat{\beta} = \arg\max_{\theta, \beta} P(Y \mid \theta, \beta)
+$$
+
+This optimization problem underlies all psychometric estimation and forms the foundation for trustworthy AI evaluation.
+:::
+
+Parameter estimation serves several critical purposes in AI measurement:
+
+1. **Fair comparison:** Calibrated item difficulties allow us to compare models tested on different question subsets. If we know that question A is harder than question B, we can appropriately weight their contributions to the final score.
+
+2. **Uncertainty quantification:** Estimation procedures provide not just point estimates but standard errors, telling us how confident we should be in our measurements.
+
+3. **Adaptive testing:** Once we have calibrated item parameters, we can select the most informative questions for each model, dramatically reducing evaluation costs (see Chapter 3 for a full treatment of Computerized Adaptive Testing).
+
+4. **Prediction:** With learned parameters, we can predict how a model will perform on questions it has never seen, enabling efficient evaluation of new benchmarks.
+
+This chapter focuses on **passive learning**: given a fixed dataset, estimate all parameters simultaneously. This includes maximum likelihood estimation (MLE), expectation-maximization (EM), and Bayesian inference. We also introduce generalization experiments that evaluate how well learned models transfer to unseen data. The design of *which* items to include in a benchmark, including active item selection, is the subject of Chapter 3.
+
+
+## Maximum Likelihood Estimation {#sec-mle}
+
+Maximum likelihood estimation is the foundation of parameter estimation in IRT. The principle is simple: find the parameter values that make the observed data most probable.
+
+### The Likelihood Function {#sec-likelihood}
+
+Recall from Chapter 1 that the Rasch model specifies the probability of a correct response as:
+
+$$
+P(Y_{ij} = 1 \mid \theta_i, \beta_j) = \sigma(\theta_i - \beta_j) = \frac{1}{1 + e^{-(\theta_i - \beta_j)}}
+$$ {#eq-rasch-prob}
+
+where $\theta_i$ is the ability of model $i$ and $\beta_j$ is the difficulty of item $j$.
+
+Under the assumption of *local independence*---that responses are conditionally independent given the latent parameters---the likelihood of the entire response matrix is:
+
+$$
+L(\theta, \beta \mid Y) = \prod_{i=1}^N \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j)^{Y_{ij}} [1 - P(Y_{ij} \mid \theta_i, \beta_j)]^{1-Y_{ij}}
+$$ {#eq-likelihood}
+
+Taking the logarithm (for computational stability and mathematical convenience):
+
+$$
+\ell(\theta, \beta) = \sum_{i=1}^N \sum_{j=1}^M \left[ Y_{ij}(\theta_i - \beta_j) - \log(1 + e^{\theta_i - \beta_j}) \right]
+$$ {#eq-log-likelihood}
+
+This is the objective function we want to maximize.
+
+
+### Gradient Derivation {#sec-gradient}
+
+To optimize the log-likelihood, we need its gradients. Taking partial derivatives:
+
+$$
+\frac{\partial \ell}{\partial \theta_i} = \sum_{j=1}^M \left[ Y_{ij} - \sigma(\theta_i - \beta_j) \right]
+$$ {#eq-gradient-theta}
+
+$$
+\frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^N \left[ \sigma(\theta_i - \beta_j) - Y_{ij} \right]
+$$ {#eq-gradient-beta}
+
+::: {.callout-note title="Intuitive Interpretation of the Gradient"}
+The gradient $\frac{\partial \ell}{\partial \theta_i} = \sum_j [Y_{ij} - P_{ij}]$ has a beautiful interpretation:
+
+- $Y_{ij}$ is the **observed** response (0 or 1)
+- $P_{ij} = \sigma(\theta_i - \beta_j)$ is the **predicted** probability
+
+The gradient is simply the sum of **residuals**: observed minus predicted. If model $i$ performs better than expected (more correct answers than predicted), the residuals are positive, and we increase $\theta_i$. If it performs worse than expected, we decrease $\theta_i$. This is the essence of gradient ascent.
 :::
 
 
-## The Design Problem in AI Evaluation {#sec-design-problem}
+### Implementation with Gradient Descent {#sec-gd-implementation}
 
-Chapter 1 introduced the measurement models---Rasch, 2PL, factor models, Bradley-Terry---that formalize how latent abilities generate observed responses. Chapter 2 showed how to estimate the parameters of these models from data. But both chapters took the response matrix $Y$ as given. In practice, someone must *design* the evaluation: choosing which items to include and how to score responses. These design decisions profoundly affect the quality and efficiency of the resulting measurements.
-
-The benchmark designer faces two fundamental efficiency questions:
-
-1. **Item selection:** Which questions or tasks should the benchmark include? Given a pool of candidate items, how do we select a subset that maximizes the precision of our measurements?
-
-2. **Scoring rules:** How do we aggregate responses into scores? Sum scores, weighted scores, latent factor scores? The choice interacts with the measurement model (recall from Chapter 1 that sum scores are sufficient for the Rasch model but not for 2PL).
-
-This chapter develops the statistical foundations for efficient evaluation design, drawing on classical experimental design and information theory. We apply these frameworks to the practical problem of designing AI evaluation benchmarks that achieve high measurement precision with minimal cost.
-
-
-## Optimal Experimental Design {#sec-optimal-design}
-
-We begin with the simplest setting: the evaluator wants to measure model abilities as precisely as possible, and the models respond honestly. This is the classical problem of *optimal experimental design* applied to measurement.
-
-### Fisher Information for Item Selection {#sec-fisher-design}
-
-Recall from Chapter 2 that the Fisher information for item $j$ at ability $\theta$ in the Rasch model is:
-
-$$
-I_j(\theta) = P_j(\theta) \cdot (1 - P_j(\theta))
-$$ {#eq-fisher-info}
-
-where $P_j(\theta) = \sigma(\theta - \beta_j)$ is the probability of a correct response. This quantity measures how much observing a response to item $j$ tells us about $\theta$.
-
-Fisher information is maximized when $P_j(\theta) = 0.5$, which occurs when $\theta = \beta_j$---the item difficulty matches the model's ability. Intuitively, a question that a model gets right 99% of the time or wrong 99% of the time reveals almost nothing about the model's ability. The most informative questions are those where the outcome is uncertain.
-
-For a test consisting of items $\{j_1, \ldots, j_K\}$, the total information is additive under local independence:
-
-$$
-I_{\text{total}}(\theta) = \sum_{k=1}^K I_{j_k}(\theta)
-$$
-
-This additivity is the foundation of optimal item selection: we want to choose items that collectively maximize the total information across the range of abilities we care about.
+Let us implement MLE via gradient descent on synthetic data. First, we generate a response matrix from known parameters:
 
 {{< include _plt_setup.qmd >}}
 
 ```{pyodide-python}
-#| label: fisher-information-design
+#| label: synthetic-data
 #| autorun: true
-#| fig-cap: "Fisher information curves illustrate the key design principle: items are most informative when their difficulty matches the test-taker's ability."
+#| fig-cap: "Synthetic response matrix generated from known Rasch model parameters."
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -124,487 +187,1160 @@ def sigmoid(x):
                     1 / (1 + np.exp(-x)),
                     np.exp(x) / (1 + np.exp(x)))
 
-theta_range = np.linspace(-4, 4, 200)
+# Set seed for reproducibility
+np.random.seed(42)
 
+# True parameters
+N, M = 100, 50  # 100 models, 50 questions
+theta_true = np.random.normal(0, 1, N)  # True abilities
+beta_true = np.random.normal(0, 1.5, M)  # True difficulties
+
+# Generate response matrix via Rasch model
+prob_matrix = sigmoid(theta_true[:, None] - beta_true[None, :])
+Y = (np.random.random((N, M)) < prob_matrix).astype(int)
+
+print(f"Response matrix shape: {Y.shape}")
+print(f"Overall accuracy: {Y.mean():.3f}")
+print(f"Model accuracies range: [{Y.mean(axis=1).min():.3f}, {Y.mean(axis=1).max():.3f}]")
+print(f"Item difficulties range: [{Y.mean(axis=0).min():.3f}, {Y.mean(axis=0).max():.3f}]")
+
+# Visualize
 fig, axes = plt.subplots(1, 2, figsize=(6, 2))
 
-# Information curves for different item difficulties
-difficulties = [-2, -1, 0, 1, 2]
-colors = plt.cm.viridis(np.linspace(0, 1, len(difficulties)))
+# Raw response matrix
+axes[0].imshow(Y, aspect='auto', cmap='Blues')
+axes[0].set_xlabel('Questions')
+axes[0].set_ylabel('Models')
+axes[0].set_title('Raw Response Matrix')
 
-for beta_j, color in zip(difficulties, colors):
-    P = sigmoid(theta_range - beta_j)
-    info = P * (1 - P)
-    axes[0].plot(theta_range, info, color=color, linewidth=2,
-                 label=f'Item difficulty = {beta_j}')
-
-axes[0].set_xlabel('Ability (θ)')
-axes[0].set_ylabel('Fisher Information')
-axes[0].set_title('Item Information Curves')
-axes[0].legend(fontsize=7)
-axes[0].grid(True, alpha=0.3)
-
-# Cumulative information: adaptive vs random
-np.random.seed(42)
-N, M = 100, 50
-theta_true = np.random.normal(0, 1, N)
-beta_true = np.random.normal(0, 1.5, M)
-
-theta_test = 0.5
-n_items = 20
-
-# Adaptive: choose items closest to current estimate
-beta_available = beta_true.copy()
-adaptive_info = [0]
-theta_estimate = 0
-
-for t in range(n_items):
-    distances = np.abs(beta_available - theta_estimate)
-    best_idx = np.argmin(distances)
-    beta_selected = beta_available[best_idx]
-    P = sigmoid(theta_test - beta_selected)
-    info = P * (1 - P)
-    adaptive_info.append(adaptive_info[-1] + info)
-    beta_available = np.delete(beta_available, best_idx)
-    theta_estimate = theta_test
-
-# Random selection
-random_order = np.random.permutation(len(beta_true))[:n_items]
-random_info = [0]
-for j in random_order:
-    P = sigmoid(theta_test - beta_true[j])
-    info = P * (1 - P)
-    random_info.append(random_info[-1] + info)
-
-axes[1].plot(range(n_items + 1), adaptive_info, 'g-', linewidth=2, label='Adaptive')
-axes[1].plot(range(n_items + 1), random_info, 'b-', linewidth=2, label='Random')
-axes[1].set_xlabel('Number of Items')
-axes[1].set_ylabel('Cumulative Fisher Information')
-axes[1].set_title(f'Information Accumulation (θ = {theta_test})')
-axes[1].legend()
-axes[1].grid(True, alpha=0.3)
+# Sorted by ability and difficulty
+row_order = np.argsort(Y.mean(axis=1))[::-1]
+col_order = np.argsort(Y.mean(axis=0))[::-1]
+Y_sorted = Y[row_order][:, col_order]
+axes[1].imshow(Y_sorted, aspect='auto', cmap='Blues')
+axes[1].set_xlabel('Questions (sorted by difficulty)')
+axes[1].set_ylabel('Models (sorted by ability)')
+axes[1].set_title('Sorted Response Matrix')
 
 plt.tight_layout()
 plt.show()
 ```
 
-
-### Computerized Adaptive Testing {#sec-cat}
-
-Computerized Adaptive Testing (CAT) is the sequential application of optimal item selection. Rather than administering a fixed test to all models, CAT adapts the test in real time: after each response, it selects the next item that would be most informative given what we have learned so far.
-
-The CAT procedure iterates four steps:
-
-1. **Select** the most informative item given the current ability estimate
-2. **Administer** the item and observe the response
-3. **Update** the ability estimate using the new data
-4. **Check** a stopping criterion; if not met, return to step 1
-
-::: {.callout-important title="Why Fisher Information for Item Selection?"}
-Fisher information measures how much a response to item $j$ tells us about $\theta$:
-
-- **High information**: The item difficulty is well-matched to the ability level
-- **Low information**: The item is too easy or too hard
-
-Asking a frontier model to answer $1 + 1$ or a small model to prove the Riemann hypothesis provides almost no information. The most informative items are those where the model has roughly a 50% chance of success.
-:::
-
-
-### CAT Implementation {#sec-cat-implementation}
+Now we implement MLE via gradient descent:
 
 ```{pyodide-python}
-#| label: cat-simulation
+#| label: mle-gradient-descent
 #| autorun: true
-#| fig-cap: "CAT achieves the same measurement precision as random testing with substantially fewer items."
+#| fig-cap: "Convergence of gradient descent for Rasch model MLE."
 
-# Generate synthetic data for CAT simulation
-np.random.seed(42)
-N, M = 100, 50
-theta_true = np.random.normal(0, 1, N)
-beta_true = np.random.normal(0, 1.5, M)
+def rasch_log_likelihood(theta, beta, Y):
+    """Compute Rasch model log-likelihood."""
+    logits = theta[:, None] - beta[None, :]
+    ll = (Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500)))).sum()
+    return ll
 
-def cat_simulation(theta_true_i, beta, n_items_max=30, reliability_threshold=0.95):
-    """
-    Simulate CAT for a single test-taker.
+def rasch_gradients(theta, beta, Y):
+    """Compute gradients for theta and beta."""
+    P = sigmoid(theta[:, None] - beta[None, :])
+    grad_theta = (Y - P).sum(axis=1)
+    grad_beta = (P - Y).sum(axis=0)
+    return grad_theta, grad_beta
 
-    Parameters
-    ----------
-    theta_true_i : float
-        True ability of the test-taker
-    beta : ndarray
-        Item difficulties (pre-calibrated)
-    n_items_max : int
-        Maximum number of items to administer
-    reliability_threshold : float
-        Stop when reliability exceeds this threshold
+# Initialize parameters at zero
+theta_hat = np.zeros(N)
+beta_hat = np.zeros(M)
 
-    Returns
-    -------
-    dict with theta_hat, n_items, reliability_history, etc.
-    """
-    M = len(beta)
-    administered = []
-    responses = []
+# Gradient ascent
+learning_rate = 0.01
+n_iterations = 500
+ll_history = []
 
-    # Prior: theta ~ N(0, 1)
-    theta_hat = 0.0
-    prior_var = 1.0
+for iteration in range(n_iterations):
+    # Compute gradients
+    grad_theta, grad_beta = rasch_gradients(theta_hat, beta_hat, Y)
 
-    theta_history = [theta_hat]
-    reliability_history = [0.0]
-    se_history = [1.0]
-    available_items = list(range(M))
+    # Update parameters
+    theta_hat = theta_hat + learning_rate * grad_theta
+    beta_hat = beta_hat + learning_rate * grad_beta
 
-    for t in range(min(n_items_max, M)):
-        # Select item with maximum Fisher information at current estimate
-        best_item = None
-        best_info = -np.inf
+    # Re-center for identification (sum-to-zero constraint)
+    theta_hat = theta_hat - theta_hat.mean()
+    beta_hat = beta_hat - beta_hat.mean()
 
-        for j in available_items:
-            P_j = sigmoid(theta_hat - beta[j])
-            info_j = P_j * (1 - P_j)
-            if info_j > best_info:
-                best_info = info_j
-                best_item = j
+    # Track log-likelihood
+    ll = rasch_log_likelihood(theta_hat, beta_hat, Y)
+    ll_history.append(ll)
 
-        # Administer item (simulate response from true ability)
-        P_true = sigmoid(theta_true_i - beta[best_item])
-        response = int(np.random.random() < P_true)
-
-        administered.append(best_item)
-        responses.append(response)
-        available_items.remove(best_item)
-
-        # Update ability estimate via MAP (Newton-Raphson)
-        for _ in range(10):
-            P_vec = sigmoid(theta_hat - np.array([beta[j] for j in administered]))
-            grad = np.sum(np.array(responses) - P_vec) - theta_hat / prior_var
-            hess = -np.sum(P_vec * (1 - P_vec)) - 1 / prior_var
-            if abs(hess) > 1e-10:
-                theta_hat = theta_hat - grad / hess
-
-        # Posterior variance and reliability
-        total_info = np.sum([sigmoid(theta_hat - beta[j]) * (1 - sigmoid(theta_hat - beta[j]))
-                           for j in administered])
-        posterior_var = 1 / (1/prior_var + total_info)
-        reliability = 1 - posterior_var / prior_var
-
-        theta_history.append(theta_hat)
-        reliability_history.append(reliability)
-        se_history.append(np.sqrt(posterior_var))
-
-        if reliability >= reliability_threshold:
-            break
-
-    return {
-        'theta_hat': theta_hat, 'n_items': len(administered),
-        'reliability_history': reliability_history,
-        'theta_history': theta_history, 'se_history': se_history,
-        'final_reliability': reliability_history[-1]
-    }
-
-def random_selection_simulation(theta_true_i, beta, n_items_max=30, reliability_threshold=0.95):
-    """Simulate random item selection for comparison."""
-    M = len(beta)
-    item_order = list(np.random.permutation(M)[:n_items_max])
-
-    theta_hat = 0.0
-    prior_var = 1.0
-    administered = []
-    responses = []
-    reliability_history = [0.0]
-    theta_history = [theta_hat]
-
-    for j in item_order:
-        P_true = sigmoid(theta_true_i - beta[j])
-        response = int(np.random.random() < P_true)
-        administered.append(j)
-        responses.append(response)
-
-        for _ in range(10):
-            P_vec = sigmoid(theta_hat - np.array([beta[k] for k in administered]))
-            grad = np.sum(np.array(responses) - P_vec) - theta_hat / prior_var
-            hess = -np.sum(P_vec * (1 - P_vec)) - 1 / prior_var
-            if abs(hess) > 1e-10:
-                theta_hat = theta_hat - grad / hess
-
-        total_info = np.sum([sigmoid(theta_hat - beta[k]) * (1 - sigmoid(theta_hat - beta[k]))
-                           for k in administered])
-        posterior_var = 1 / (1/prior_var + total_info)
-        reliability = 1 - posterior_var / prior_var
-        reliability_history.append(reliability)
-        theta_history.append(theta_hat)
-
-        if reliability >= reliability_threshold:
-            break
-
-    return {'n_items': len(administered), 'reliability_history': reliability_history,
-            'theta_history': theta_history, 'theta_hat': theta_hat,
-            'final_reliability': reliability_history[-1]}
-
-# Run simulations
-np.random.seed(42)
-n_test_takers = 100
-theta_test_sample = np.random.normal(0, 1, n_test_takers)
-
-cat_results = []
-random_results = []
-for theta_i in theta_test_sample:
-    cat_results.append(cat_simulation(theta_i, beta_true))
-    random_results.append(random_selection_simulation(theta_i, beta_true))
-
-cat_items = [r['n_items'] for r in cat_results]
-random_items = [r['n_items'] for r in random_results]
-
-# Plot comparison
+# Plot convergence
 fig, axes = plt.subplots(1, 3, figsize=(6, 2))
 
-# Bar chart
-methods = ['Random', 'CAT']
-means = [np.mean(random_items), np.mean(cat_items)]
-stds = [np.std(random_items), np.std(cat_items)]
-bars = axes[0].bar(methods, means, yerr=stds, capsize=5, alpha=0.7,
-                   color=['#1f77b4', '#2ca02c'])
-axes[0].set_ylabel('Items to reach 95% reliability')
-axes[0].set_title('Efficiency: CAT vs Random')
-axes[0].grid(True, alpha=0.3, axis='y')
-for bar, mean, std in zip(bars, means, stds):
-    axes[0].text(bar.get_x() + bar.get_width()/2, bar.get_height() + std + 0.5,
-                f'{mean:.1f}', ha='center', va='bottom', fontsize=11)
+# Convergence curve
+axes[0].plot(ll_history)
+axes[0].set_xlabel('Iteration')
+axes[0].set_ylabel('Log-likelihood')
+axes[0].set_title('Gradient Ascent Convergence')
+axes[0].grid(True, alpha=0.3)
 
-# Reliability trajectory
-example_idx = 50
-axes[1].plot(random_results[example_idx]['reliability_history'], 'b-', linewidth=2, label='Random')
-axes[1].plot(cat_results[example_idx]['reliability_history'], 'g-', linewidth=2, label='CAT')
-axes[1].axhline(0.95, color='r', linestyle='--', linewidth=1.5, label='Threshold')
-axes[1].set_xlabel('Items administered')
-axes[1].set_ylabel('Reliability')
-axes[1].set_title(f'Reliability Growth (θ = {theta_test_sample[example_idx]:.2f})')
-axes[1].legend(fontsize=7)
+# Compare ability estimates to true values
+theta_true_centered = theta_true - theta_true.mean()
+axes[1].scatter(theta_true_centered, theta_hat, alpha=0.6)
+axes[1].plot([-3, 3], [-3, 3], 'k--', alpha=0.5, label='y=x')
+axes[1].set_xlabel('True ability (centered)')
+axes[1].set_ylabel('Estimated ability')
+axes[1].set_title('Recovery of Abilities')
+axes[1].legend()
 axes[1].grid(True, alpha=0.3)
 
-# Histogram
-axes[2].hist(random_items, bins=15, alpha=0.6, label='Random', color='#1f77b4')
-axes[2].hist(cat_items, bins=15, alpha=0.6, label='CAT', color='#2ca02c')
-axes[2].set_xlabel('Number of items')
-axes[2].set_ylabel('Frequency')
-axes[2].set_title('Distribution of Test Lengths')
+# Compare difficulty estimates to true values
+beta_true_centered = beta_true - beta_true.mean()
+axes[2].scatter(beta_true_centered, beta_hat, alpha=0.6, color='orange')
+axes[2].plot([-4, 4], [-4, 4], 'k--', alpha=0.5, label='y=x')
+axes[2].set_xlabel('True difficulty (centered)')
+axes[2].set_ylabel('Estimated difficulty')
+axes[2].set_title('Recovery of Difficulties')
 axes[2].legend()
 axes[2].grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.show()
 
-efficiency_gain = (np.mean(random_items) - np.mean(cat_items)) / np.mean(random_items) * 100
-print(f"Random: {np.mean(random_items):.1f} ± {np.std(random_items):.1f} items")
-print(f"CAT: {np.mean(cat_items):.1f} ± {np.std(cat_items):.1f} items")
-print(f"Efficiency gain: {efficiency_gain:.1f}% fewer items with CAT")
+# Correlation with true values
+corr_theta = np.corrcoef(theta_true_centered, theta_hat)[0, 1]
+corr_beta = np.corrcoef(beta_true_centered, beta_hat)[0, 1]
+print(f"Correlation with true abilities: {corr_theta:.4f}")
+print(f"Correlation with true difficulties: {corr_beta:.4f}")
 ```
 
 
-### Stopping Rules and Practical Considerations {#sec-stopping}
+### The Identifiability Problem {#sec-identifiability}
 
-CAT requires a stopping criterion. Common choices include:
+::: {.callout-warning title="The Identifiability Problem"}
+The Rasch model has a fundamental identifiability issue: if we add a constant $c$ to all abilities and all difficulties, the likelihood is unchanged:
 
-1. **Reliability threshold:** Stop when $R = 1 - \sigma^2_{\text{post}} / \sigma^2_{\text{prior}} \geq 0.95$
-2. **Standard error threshold:** Stop when $\text{SE}(\hat{\theta}) \leq 0.3$
-3. **Fixed length:** Administer exactly $K$ items
-4. **Information threshold:** Stop when additional items provide negligible information
+$$
+P(Y_{ij}=1 \mid \theta_i + c, \beta_j + c) = \sigma((\theta_i + c) - (\beta_j + c)) = \sigma(\theta_i - \beta_j)
+$$
 
-For AI evaluation, practical constraints interact with statistical criteria:
+The parameters are only identified up to an additive constant. This means infinitely many parameter values produce the same likelihood.
 
-- **Cost:** Each API call has a monetary cost; the stopping rule should account for evaluation budgets.
-- **Time:** Evaluations must complete within deadlines.
-- **Contamination:** Administering too many items from the same pool risks benchmark leakage into training data.
+**Common Solutions:**
 
-::: {.callout-note title="CAT for AI Evaluation"}
-Traditional CAT assumes deterministic responses: a human test-taker gives the same answer if asked the same question twice. AI models may or may not satisfy this depending on temperature and sampling settings.
+1. **Sum-to-zero constraint:** Set $\sum_i \theta_i = 0$ or $\sum_j \beta_j = 0$
+2. **Fixed anchor:** Set one parameter (e.g., $\beta_1 = 0$) as reference
+3. **Prior constraint:** Use Bayesian priors centered at zero
 
-For deterministic evaluation (temperature = 0), CAT applies directly. For stochastic evaluation, we may need multiple samples per item, or methods that account for response variability.
+For AI benchmarks, we typically use sum-to-zero: a model with $\theta = 0$ has "average" ability relative to the calibration sample.
+:::
 
-CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in @sec-cold-start.
+Without addressing identifiability, gradient descent may drift indefinitely. The re-centering step in our implementation ensures parameters remain anchored.
+
+
+### L-BFGS Optimization {#sec-lbfgs}
+
+While gradient descent is intuitive, quasi-Newton methods like L-BFGS converge much faster by approximating second-order information:
+
+```{pyodide-python}
+#| label: lbfgs-optimization
+#| autorun: true
+#| fig-cap: "L-BFGS achieves faster convergence than gradient descent."
+
+from scipy.optimize import minimize
+
+def negative_log_likelihood(params, Y):
+    """Negative log-likelihood (for minimization)."""
+    N, M = Y.shape
+    theta = params[:N]
+    beta = params[N:]
+
+    logits = theta[:, None] - beta[None, :]
+    nll = -(Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500)))).sum()
+    return nll
+
+def gradient(params, Y):
+    """Gradient of negative log-likelihood."""
+    N, M = Y.shape
+    theta = params[:N]
+    beta = params[N:]
+
+    P = sigmoid(theta[:, None] - beta[None, :])
+    grad_theta = -(Y - P).sum(axis=1)
+    grad_beta = -(P - Y).sum(axis=0)
+
+    return np.concatenate([grad_theta, grad_beta])
+
+# Initial parameters
+params0 = np.zeros(N + M)
+
+# L-BFGS optimization
+result = minimize(
+    negative_log_likelihood,
+    params0,
+    args=(Y,),
+    jac=gradient,
+    method='L-BFGS-B',
+    options={'maxiter': 200, 'disp': False}
+)
+
+theta_lbfgs = result.x[:N]
+beta_lbfgs = result.x[N:]
+
+# Center for comparison
+theta_lbfgs = theta_lbfgs - theta_lbfgs.mean()
+beta_lbfgs = beta_lbfgs - beta_lbfgs.mean()
+
+print(f"L-BFGS converged: {result.success}")
+print(f"Final log-likelihood: {-result.fun:.2f}")
+print(f"Iterations: {result.nit}")
+
+# Compare to gradient descent
+print(f"\nCorrelation with GD estimates:")
+print(f"  Abilities: {np.corrcoef(theta_hat, theta_lbfgs)[0,1]:.6f}")
+print(f"  Difficulties: {np.corrcoef(beta_hat, beta_lbfgs)[0,1]:.6f}")
+```
+
+
+## Joint, Conditional, and Marginal MLE {#sec-mle-variants}
+
+The MLE approach we have discussed so far is called *joint maximum likelihood estimation* (JMLE). It treats both person parameters $\theta$ and item parameters $\beta$ as fixed unknowns to be estimated. However, JMLE has theoretical limitations that motivate alternative approaches.
+
+### Joint MLE (JMLE) {#sec-jmle}
+
+JMLE simultaneously estimates all parameters by maximizing @eq-log-likelihood. While intuitive, JMLE suffers from the *incidental parameter problem*: as the number of items $M$ remains fixed and the number of persons $N$ grows, the item parameter estimates $\hat{\beta}$ are inconsistent---they do not converge to the true values.
+
+This happens because each person parameter $\theta_i$ is estimated from only $M$ observations (their responses to $M$ items), and these "incidental" person parameters introduce bias into the item estimates.
+
+For AI benchmarks with many items (typically $M > 100$), this bias is small in practice. But for smaller tests, JMLE can be problematic.
+
+### Conditional MLE (CMLE) {#sec-cmle}
+
+Georg Rasch discovered an elegant solution to the incidental parameter problem. For the Rasch model specifically, the sum score $S_i = \sum_j Y_{ij}$ is a *sufficient statistic* for $\theta_i$. This means all information about $\theta_i$ in the data $Y_i$ is captured by $S_i$.
+
+By conditioning on the sufficient statistics, we can eliminate the person parameters entirely:
+
+$$
+P(Y_i \mid S_i, \beta) = \frac{\exp(-\sum_j Y_{ij}\beta_j)}{\gamma_{S_i}(\beta)}
+$$ {#eq-cmle}
+
+where $\gamma_r(\beta) = \sum_{A: |A|=r} \exp(-\sum_{j \in A} \beta_j)$ is the elementary symmetric function of order $r$, summing over all subsets $A$ of items of size $r$.
+
+The conditional likelihood depends only on $\beta$, so we can estimate item parameters without any person parameters. This produces consistent estimates of $\beta$ regardless of how $N$ grows.
+
+::: {.callout-note title="Rasch's Insight"}
+The sufficiency of sum scores is unique to the Rasch model. For the 2PL or 3PL models, sum scores are not sufficient, and CMLE cannot be applied. This mathematical property is one reason the Rasch model holds special status in measurement theory.
+:::
+
+### Marginal MLE (MMLE) {#sec-mmle}
+
+An alternative approach is to treat person parameters as random variables from a population distribution:
+
+$$
+\theta_i \sim \mathcal{N}(\mu_\theta, \sigma^2_\theta)
+$$
+
+The marginal likelihood integrates out the person parameters:
+
+$$
+L(\beta) = \prod_{i=1}^N \int P(Y_i \mid \theta, \beta) \, p(\theta) \, d\theta
+$$ {#eq-mmle}
+
+This approach:
+
+- Treats item parameters as fixed and person parameters as random
+- Produces consistent estimates of $\beta$ as $N \to \infty$
+- Naturally extends to more complex IRT models (2PL, 3PL)
+- Forms the basis for the EM algorithm (next section)
+
+::: {.callout-note title="Comparison of MLE Approaches"}
+| Method | Person Parameters | Item Parameters | Consistency | Applicability |
+|--------|------------------|-----------------|-------------|---------------|
+| JMLE | Estimated directly | Estimated directly | Inconsistent for fixed M | Any IRT model |
+| CMLE | Conditioned out | Consistent | Consistent | Rasch only |
+| MMLE | Integrated out | Consistent | Consistent | Any IRT model |
+
+For AI benchmarks with many questions ($M > 100$), JMLE works well in practice. For smaller tests or when statistical properties are important, CMLE or MMLE is preferred.
 :::
 
 
-### D-Optimal Design {#sec-d-optimal}
+## The EM Algorithm {#sec-em}
 
-CAT is *sequential* optimal design---it selects one item at a time. But sometimes we need to design a fixed test: selecting $K$ items from a pool of $M$ candidates to administer to all models at once. This is the classical problem of *optimal experimental design*.
+The Expectation-Maximization (EM) algorithm is a general method for maximum likelihood estimation with latent variables. In IRT, the latent variables are the person abilities $\theta$.
 
-For a $K$-dimensional factor model with ability vector $U_i \in \mathbb{R}^K$, the Fisher information matrix from administering a set of items $\mathcal{J}$ is:
+### The EM Framework {#sec-em-framework}
+
+The EM algorithm iterates between two steps:
+
+**E-step (Expectation):** Compute the expected value of the complete-data log-likelihood, given the observed data and current parameter estimates:
 
 $$
-\mathcal{I}(\theta; \mathcal{J}) = \sum_{j \in \mathcal{J}} P_j(\theta)(1 - P_j(\theta)) \, V_j V_j^\top
+Q(\beta \mid \beta^{(t)}) = \mathbb{E}_{\theta \mid Y, \beta^{(t)}} \left[ \log P(Y, \theta \mid \beta) \right]
 $$
 
-where $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$. Different optimality criteria lead to different item selection strategies:
+**M-step (Maximization):** Find the parameter values that maximize the expected log-likelihood:
 
-- **D-optimal:** Maximize $\det(\mathcal{I})$---the volume of the confidence ellipsoid. This minimizes the generalized variance of the ability estimates.
-- **A-optimal:** Minimize $\text{tr}(\mathcal{I}^{-1})$---the average variance of individual ability components.
-- **E-optimal:** Maximize $\lambda_{\min}(\mathcal{I})$---the smallest eigenvalue. This ensures no ability dimension is poorly estimated.
+$$
+\beta^{(t+1)} = \arg\max_\beta Q(\beta \mid \beta^{(t)})
+$$
+
+The EM algorithm guarantees that the marginal likelihood increases (or stays the same) at each iteration, converging to a local maximum.
+
+### EM for the Rasch Model {#sec-em-rasch}
+
+For the Rasch model with a standard normal prior on abilities, the EM algorithm takes a specific form:
+
+**E-step:** For each person $i$, compute the posterior distribution of $\theta_i$ given their responses $Y_i$ and current item parameters $\beta^{(t)}$:
+
+$$
+p(\theta_i \mid Y_i, \beta^{(t)}) \propto p(Y_i \mid \theta_i, \beta^{(t)}) \cdot p(\theta_i)
+$$
+
+This posterior is not available in closed form, so we use numerical integration (Gauss-Hermite quadrature).
+
+**M-step:** Update each item parameter by solving:
+
+$$
+\sum_{i=1}^N \mathbb{E}_{\theta_i}[\sigma(\theta_i - \beta_j)] = \sum_{i=1}^N Y_{ij}
+$$
+
+The left side is the expected number of correct responses to item $j$; the right side is the observed number. We equate these.
 
 ```{pyodide-python}
-#| label: d-optimal-design
+#| label: em-algorithm
 #| autorun: true
-#| fig-cap: "D-optimal item selection chooses items with diverse difficulties covering the target ability range, yielding substantially higher total information than random selection."
+#| fig-cap: "EM algorithm convergence for Rasch model estimation."
 
-from scipy.optimize import minimize as sp_minimize
+from numpy.polynomial.hermite import hermgauss
 
-def compute_test_information(item_indices, beta_pool, theta_grid):
-    """Compute total Fisher information of a test across an ability grid."""
-    total_info = np.zeros_like(theta_grid)
-    for j in item_indices:
-        P = sigmoid(theta_grid - beta_pool[j])
-        total_info += P * (1 - P)
-    return total_info
-
-def d_optimal_greedy(beta_pool, K, theta_grid):
-    """Greedy D-optimal item selection for the Rasch model.
-
-    Selects K items from the pool to maximize total information
-    integrated over the theta grid (approximating D-optimality
-    for the unidimensional case).
+def em_rasch(Y, n_iterations=50, n_quadrature=21, verbose=True):
     """
-    available = list(range(len(beta_pool)))
-    selected = []
+    EM algorithm for Rasch model using Gauss-Hermite quadrature.
 
-    for _ in range(K):
-        best_item = None
-        best_score = -np.inf
+    Parameters
+    ----------
+    Y : ndarray (N, M)
+        Binary response matrix
+    n_iterations : int
+        Number of EM iterations
+    n_quadrature : int
+        Number of quadrature points
+    verbose : bool
+        Print progress
 
-        for j in available:
-            candidate = selected + [j]
-            info = compute_test_information(candidate, beta_pool, theta_grid)
-            # D-optimal criterion: product of information values
-            # (log-determinant in 1D = log of information)
-            score = np.sum(np.log(info + 1e-10))
-            if score > best_score:
-                best_score = score
-                best_item = j
+    Returns
+    -------
+    theta_hat : ndarray (N,)
+        Estimated abilities (posterior means)
+    beta_hat : ndarray (M,)
+        Estimated difficulties
+    ll_history : list
+        Marginal log-likelihood at each iteration
+    """
+    N, M = Y.shape
 
-        selected.append(best_item)
-        available.remove(best_item)
+    # Initialize item difficulties
+    beta = np.zeros(M)
 
-    return selected
+    # Gauss-Hermite quadrature points and weights
+    # These approximate the integral over theta ~ N(0, 1)
+    nodes, weights = hermgauss(n_quadrature)
+    nodes = nodes * np.sqrt(2)  # Scale for standard normal
+    weights = weights / np.sqrt(np.pi)  # Normalize
 
-# Large item pool
-np.random.seed(42)
-M_pool = 200
-beta_pool = np.random.normal(0, 2, M_pool)
-K = 20  # Select 20 items
+    ll_history = []
 
-theta_grid = np.linspace(-3, 3, 100)
+    for iteration in range(n_iterations):
+        # E-step: Compute posterior distributions over theta
+        # P(theta | Y_i, beta) for each person at each quadrature point
 
-# D-optimal selection
-d_optimal_items = d_optimal_greedy(beta_pool, K, theta_grid)
+        # Compute log-likelihood at each quadrature point for each person
+        # log P(Y_i | theta_q, beta) for all i, q
+        log_L = np.zeros((N, n_quadrature))
+        for q, theta_q in enumerate(nodes):
+            logits = theta_q - beta  # (M,)
+            # log P(Y_i | theta_q) = sum_j [Y_ij * logit_j - log(1 + exp(logit_j))]
+            log_probs = Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500)))
+            log_L[:, q] = log_probs.sum(axis=1)
 
-# Random selection (multiple draws for comparison)
-random_infos = []
-for trial in range(50):
-    random_items = np.random.choice(M_pool, K, replace=False)
-    info = compute_test_information(random_items, beta_pool, theta_grid)
-    random_infos.append(info)
+        # Compute posterior weights: P(theta_q | Y_i, beta) ∝ P(Y_i | theta_q) * P(theta_q)
+        # The weights already incorporate P(theta_q) from Gauss-Hermite
+        log_posterior = log_L + np.log(weights + 1e-300)
 
-d_opt_info = compute_test_information(d_optimal_items, beta_pool, theta_grid)
-random_mean = np.mean(random_infos, axis=0)
-random_std = np.std(random_infos, axis=0)
+        # Normalize to get posterior probabilities
+        log_posterior_max = log_posterior.max(axis=1, keepdims=True)
+        posterior = np.exp(log_posterior - log_posterior_max)
+        posterior = posterior / posterior.sum(axis=1, keepdims=True)
 
-# Visualization
+        # Expected ability for each person (posterior mean)
+        E_theta = (posterior * nodes).sum(axis=1)
+
+        # M-step: Update beta
+        # For each item j, solve: sum_i E[P(Y_ij=1 | theta_i)] = sum_i Y_ij
+        for j in range(M):
+            # Expected probability at each quadrature point
+            for _ in range(5):  # Newton-Raphson iterations
+                E_prob_j = np.zeros(N)
+                E_deriv_j = np.zeros(N)
+                for q, theta_q in enumerate(nodes):
+                    p_q = sigmoid(theta_q - beta[j])
+                    E_prob_j += posterior[:, q] * p_q
+                    E_deriv_j += posterior[:, q] * p_q * (1 - p_q)
+
+                # Newton-Raphson update
+                residual = E_prob_j.sum() - Y[:, j].sum()
+                hessian = -E_deriv_j.sum()
+                if abs(hessian) > 1e-10:
+                    beta[j] = beta[j] - residual / hessian
+
+        # Center beta for identification
+        beta = beta - beta.mean()
+
+        # Compute marginal log-likelihood for monitoring
+        ll = (log_posterior_max.flatten() +
+              np.log(np.exp(log_L - log_posterior_max) @ weights + 1e-300)).sum()
+        ll_history.append(ll)
+
+        if verbose and (iteration + 1) % 10 == 0:
+            print(f"Iteration {iteration + 1}: LL = {ll:.2f}")
+
+    # Final E-step to get ability estimates
+    log_L = np.zeros((N, n_quadrature))
+    for q, theta_q in enumerate(nodes):
+        logits = theta_q - beta
+        log_probs = Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500)))
+        log_L[:, q] = log_probs.sum(axis=1)
+
+    log_posterior = log_L + np.log(weights + 1e-300)
+    log_posterior_max = log_posterior.max(axis=1, keepdims=True)
+    posterior = np.exp(log_posterior - log_posterior_max)
+    posterior = posterior / posterior.sum(axis=1, keepdims=True)
+    theta_hat = (posterior * nodes).sum(axis=1)
+
+    return theta_hat, beta, ll_history
+
+# Run EM algorithm
+theta_em, beta_em, ll_em = em_rasch(Y, n_iterations=50)
+
+# Plot results
 fig, axes = plt.subplots(1, 3, figsize=(6, 2))
 
-# Test information functions
-axes[0].plot(theta_grid, d_opt_info, 'g-', linewidth=2, label='D-optimal')
-axes[0].plot(theta_grid, random_mean, 'b-', linewidth=2, label='Random (mean)')
-axes[0].fill_between(theta_grid, random_mean - random_std, random_mean + random_std,
-                     alpha=0.2, color='blue')
-axes[0].set_xlabel('Ability (θ)')
-axes[0].set_ylabel('Test Information')
-axes[0].set_title('Test Information Function')
-axes[0].legend(fontsize=7)
+# Convergence
+axes[0].plot(ll_em)
+axes[0].set_xlabel('Iteration')
+axes[0].set_ylabel('Marginal Log-likelihood')
+axes[0].set_title('EM Algorithm Convergence')
 axes[0].grid(True, alpha=0.3)
 
-# Selected item difficulties
-axes[1].hist(beta_pool[d_optimal_items], bins=12, alpha=0.7, color='green',
-             label='D-optimal', density=True)
-axes[1].hist(beta_pool, bins=30, alpha=0.3, color='gray',
-             label='Full pool', density=True)
-axes[1].set_xlabel('Item Difficulty (β)')
-axes[1].set_ylabel('Density')
-axes[1].set_title('Selected Item Difficulties')
-axes[1].legend(fontsize=7)
+# Ability recovery
+axes[1].scatter(theta_true_centered, theta_em, alpha=0.6)
+axes[1].plot([-3, 3], [-3, 3], 'k--', alpha=0.5)
+axes[1].set_xlabel('True ability (centered)')
+axes[1].set_ylabel('EM estimate')
+axes[1].set_title('Ability Recovery (EM)')
 axes[1].grid(True, alpha=0.3)
 
-# Integrated information comparison
-d_opt_total = np.trapz(d_opt_info, theta_grid)
-random_totals = [np.trapz(ri, theta_grid) for ri in random_infos]
-
-axes[2].hist(random_totals, bins=15, alpha=0.6, color='blue', label='Random')
-axes[2].axvline(d_opt_total, color='green', linewidth=2, linestyle='--',
-                label=f'D-optimal ({d_opt_total:.1f})')
-axes[2].set_xlabel('Integrated Information')
-axes[2].set_ylabel('Frequency')
-axes[2].set_title('Total Information Comparison')
-axes[2].legend(fontsize=7)
+# Difficulty recovery
+axes[2].scatter(beta_true_centered, beta_em, alpha=0.6, color='orange')
+axes[2].plot([-4, 4], [-4, 4], 'k--', alpha=0.5)
+axes[2].set_xlabel('True difficulty (centered)')
+axes[2].set_ylabel('EM estimate')
+axes[2].set_title('Difficulty Recovery (EM)')
 axes[2].grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.show()
 
-print(f"D-optimal integrated info: {d_opt_total:.1f}")
-print(f"Random integrated info: {np.mean(random_totals):.1f} ± {np.std(random_totals):.1f}")
-print(f"D-optimal advantage: {(d_opt_total / np.mean(random_totals) - 1) * 100:.1f}% more information")
+print(f"Correlation (abilities): {np.corrcoef(theta_true_centered, theta_em)[0,1]:.4f}")
+print(f"Correlation (difficulties): {np.corrcoef(beta_true_centered, beta_em)[0,1]:.4f}")
 ```
 
-D-optimal design produces item pools with difficulties spread across the target ability range, ensuring high information everywhere. Random selection tends to cluster items near the center of the pool's difficulty distribution, leaving the tails poorly covered.
 
-### Design for Paired Comparisons {#sec-paired-design}
+### Multidimensional Extension: The Logistic Factor Model {#sec-logistic-fm}
 
-When evaluation is based on paired comparisons (as in the Chatbot Arena from Chapter 1), the design problem takes a different form. Instead of selecting items, we must decide which pairs of models to compare. Under the Bradley-Terry model, the information from comparing models $i$ and $k$ about their strength difference $\theta_i - \theta_k$ is:
+The methods above focused on the Rasch model, which assumes a single latent dimension. For AI benchmarks that measure multiple capabilities, we extend to the **Logistic Factor Model**:
 
 $$
-I_{ik}(\theta) = P_{ik}(1 - P_{ik}), \quad P_{ik} = \sigma(\theta_i - \theta_k)
+P(Y_{ij} = 1 \mid U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
 $$
 
-This is maximized when the models are evenly matched ($P_{ik} = 0.5$, i.e., $\theta_i = \theta_k$). The design problem is to choose a tournament schedule---which pairs to compare, and how often---that maximizes the precision of the estimated ratings.
+where:
 
-Classical solutions include **balanced incomplete block designs** (BIBDs), where each pair of models is compared equally often. For AI evaluation arenas, adaptive matchmaking algorithms serve the same role as CAT: they select matchups that are most informative given current rating estimates. This is precisely what the Chatbot Arena does when it pairs models with similar Elo ratings.
+- $U_i \in \mathbb{R}^K$ is the $K$-dimensional latent ability vector for model $i$
+- $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$
+- $Z_j \in \mathbb{R}$ is the item intercept (capturing overall difficulty)
+
+When $K=1$ and $V_j = 1$ for all $j$, this reduces to the Rasch model.
+
+#### Implementation
+
+```{python}
+#| eval: false
+
+import torch
+import torch.nn as nn
+from torch.optim import LBFGS
+import torch.nn.functional as F
+
+class LogisticFM(nn.Module):
+    """Logistic Factor Model for binary response data."""
+    def __init__(self, N, M, K):
+        super().__init__()
+        self.U = nn.Parameter(torch.randn(N, K))  # Model abilities
+        self.V = nn.Parameter(torch.randn(M, K))  # Item loadings
+        self.Z = nn.Parameter(torch.randn(M, 1))  # Item intercepts
+
+    def forward(self):
+        return torch.sigmoid(self.U @ self.V.T + self.Z.T)
+```
+
+::: {.callout-note title="Interpretation"}
+- $U_i$: latent ability vector of model $i$ (position in $K$-dimensional capability space)
+- $V_j$: latent property vector of item $j$ (which capabilities the item measures)
+- $Z_j$: overall item difficulty (independent of capability dimensions)
+- $\sigma$: sigmoid function ensuring probabilities in $[0,1]$
+:::
+
+#### Training with LBFGS
+
+We train the model by minimizing binary cross-entropy loss:
+
+```{python}
+#| eval: false
+
+# Training setup
+N, M = Y.shape
+K = 2  # Number of latent dimensions
+model = LogisticFM(N, M, K)
+
+opt = LBFGS(
+    model.parameters(),
+    lr=0.1,
+    max_iter=20,
+    history_size=10,
+    line_search_fn="strong_wolfe"
+)
+
+def closure():
+    opt.zero_grad()
+    probs = model()
+    loss = F.binary_cross_entropy(probs[train_mask], Y[train_mask].float())
+    loss.backward()
+    return loss
+
+# Training loop
+for iteration in range(20):
+    loss = opt.step(closure)
+```
+
+The model learns to decompose the response matrix into latent factors that capture the underlying structure of model capabilities and item characteristics.
 
 
-## Discussion Questions {#sec-efficient-discussion}
+## Bayesian Inference {#sec-bayesian}
 
-1. **Adaptive testing for AI.** What are the practical challenges in deploying CAT for AI evaluation? Consider: determinism of model responses, cost of API calls, benchmark contamination, and the need for pre-calibrated items.
+Bayesian inference provides an alternative to maximum likelihood that naturally incorporates prior information and quantifies uncertainty. Instead of finding a single point estimate, we characterize the entire posterior distribution over parameters.
 
-2. **Optimal vs. fixed design.** When is it better to use adaptive testing (CAT) versus a fixed D-optimal test? What factors determine this choice in practice?
+### Prior Specification {#sec-priors}
 
-3. **Paired comparison design.** The Chatbot Arena uses adaptive matchmaking to pair models with similar Elo ratings. What are the advantages and disadvantages of this approach compared to a balanced tournament design?
+The first step in Bayesian inference is specifying prior distributions that encode our beliefs before seeing the data:
 
-4. **Evaluation budgets.** A team has a fixed budget of 10,000 API calls to evaluate 50 models on a benchmark with 500 items. Design an evaluation strategy that maximizes measurement precision under this constraint.
+::: {.callout-note title="Standard Priors for IRT"}
+**For abilities (persons/models):**
+$$\theta_i \sim \mathcal{N}(0, \sigma^2_\theta), \quad \sigma_\theta = 1 \text{ (standard choice)}$$
+
+**For difficulties (items/questions):**
+$$\beta_j \sim \mathcal{N}(0, \sigma^2_\beta), \quad \sigma_\beta = 1\text{-}2 \text{ (depending on expected range)}$$
+
+**For discrimination (2PL model):**
+$$a_j \sim \text{LogNormal}(0, 0.5) \text{ or } a_j \sim \text{Gamma}(2, 0.5)$$
+
+These priors are **weakly informative**: they regularize estimates without dominating the data. They encode the belief that most abilities and difficulties are within a few units of zero, which is appropriate when the scale is defined by convention.
+:::
+
+### Posterior Computation {#sec-posterior}
+
+Bayes' theorem gives us the posterior distribution:
+
+$$
+p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(\beta)
+$$ {#eq-posterior}
+
+The posterior combines the likelihood (data) with the priors (beliefs). Unfortunately, this posterior is not available in closed form---we need computational methods.
+
+### MAP Estimation {#sec-map}
+
+The simplest Bayesian approach is *maximum a posteriori* (MAP) estimation, which finds the mode of the posterior:
+
+$$
+\hat{\theta}_{\text{MAP}}, \hat{\beta}_{\text{MAP}} = \arg\max_{\theta, \beta} \left[ \ell(\theta, \beta \mid Y) + \log p(\theta) + \log p(\beta) \right]
+$$ {#eq-map}
+
+With Gaussian priors, this is equivalent to L2-regularized MLE:
+
+$$
+\hat{\theta}_{\text{MAP}}, \hat{\beta}_{\text{MAP}} = \arg\max_{\theta, \beta} \left[ \ell(\theta, \beta) - \frac{1}{2\sigma^2_\theta}\sum_i \theta_i^2 - \frac{1}{2\sigma^2_\beta}\sum_j \beta_j^2 \right]
+$$
+
+```{pyodide-python}
+#| label: map-estimation
+#| autorun: true
+#| fig-cap: "Comparison of MLE and MAP estimates showing Bayesian shrinkage."
+
+def map_objective(params, Y, sigma_theta=1.0, sigma_beta=1.5):
+    """Negative log-posterior (to minimize)."""
+    N, M = Y.shape
+    theta = params[:N]
+    beta = params[N:]
+
+    # Log-likelihood
+    logits = theta[:, None] - beta[None, :]
+    ll = (Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500)))).sum()
+
+    # Log-prior (Gaussian)
+    log_prior_theta = -0.5 * (theta**2 / sigma_theta**2).sum()
+    log_prior_beta = -0.5 * (beta**2 / sigma_beta**2).sum()
+
+    return -(ll + log_prior_theta + log_prior_beta)
+
+def map_gradient(params, Y, sigma_theta=1.0, sigma_beta=1.5):
+    """Gradient of negative log-posterior."""
+    N, M = Y.shape
+    theta = params[:N]
+    beta = params[N:]
+
+    P = sigmoid(theta[:, None] - beta[None, :])
+    grad_theta = -(Y - P).sum(axis=1) + theta / sigma_theta**2
+    grad_beta = -(P - Y).sum(axis=0) + beta / sigma_beta**2
+
+    return np.concatenate([grad_theta, grad_beta])
+
+# MAP estimation
+params0 = np.zeros(N + M)
+result_map = minimize(
+    map_objective, params0, args=(Y,),
+    jac=map_gradient,
+    method='L-BFGS-B',
+    options={'maxiter': 200}
+)
+
+theta_map = result_map.x[:N]
+beta_map = result_map.x[N:]
+
+# Center for comparison
+theta_map = theta_map - theta_map.mean()
+beta_map = beta_map - beta_map.mean()
+
+# Compare MLE vs MAP
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Abilities
+axes[0].scatter(theta_true_centered, theta_lbfgs, alpha=0.5, label='MLE', s=30)
+axes[0].scatter(theta_true_centered, theta_map, alpha=0.5, label='MAP', s=30)
+axes[0].plot([-3, 3], [-3, 3], 'k--', alpha=0.5)
+axes[0].set_xlabel('True ability')
+axes[0].set_ylabel('Estimated ability')
+axes[0].set_title('Ability Estimates: MLE vs MAP')
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+
+# Difficulties
+axes[1].scatter(beta_true_centered, beta_lbfgs, alpha=0.5, label='MLE', s=30)
+axes[1].scatter(beta_true_centered, beta_map, alpha=0.5, label='MAP', s=30)
+axes[1].plot([-4, 4], [-4, 4], 'k--', alpha=0.5)
+axes[1].set_xlabel('True difficulty')
+axes[1].set_ylabel('Estimated difficulty')
+axes[1].set_title('Difficulty Estimates: MLE vs MAP')
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Shrinkage demonstration
+print("Shrinkage effect (standard deviations):")
+print(f"  MLE abilities: {theta_lbfgs.std():.3f}, MAP abilities: {theta_map.std():.3f}")
+print(f"  MLE difficulties: {beta_lbfgs.std():.3f}, MAP difficulties: {beta_map.std():.3f}")
+```
+
+::: {.callout-tip title="Bayesian Shrinkage"}
+Notice that MAP estimates have smaller variance than MLE estimates. This is **shrinkage** toward the prior mean (zero).
+
+For extreme scores---models that answer all questions correctly or incorrectly---MLE gives infinite or very large estimates. MAP regularizes these to finite, sensible values. This is crucial for AI benchmarks where some models may achieve near-perfect scores on easy subsets.
+
+The amount of shrinkage is controlled by the prior variance: smaller $\sigma^2$ means stronger shrinkage toward zero.
+:::
+
+### MCMC Sampling {#sec-mcmc}
+
+To characterize the full posterior distribution (not just its mode), we use Markov Chain Monte Carlo (MCMC) sampling. The Metropolis-Hastings algorithm is a simple but effective approach:
+
+```{pyodide-python}
+#| label: mcmc-sampling
+#| autorun: true
+#| fig-cap: "MCMC trace plots and posterior distributions for selected parameters."
+
+def log_posterior(theta, beta, Y, sigma_theta=1.0, sigma_beta=1.5):
+    """Compute log-posterior (up to normalizing constant)."""
+    logits = theta[:, None] - beta[None, :]
+    ll = (Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500)))).sum()
+    log_prior = -0.5 * ((theta**2).sum() / sigma_theta**2 +
+                        (beta**2).sum() / sigma_beta**2)
+    return ll + log_prior
+
+def metropolis_hastings_rasch(Y, n_samples=2000, n_warmup=500,
+                              proposal_sd=0.05, thin=2, verbose=True):
+    """
+    Metropolis-Hastings sampler for Rasch model.
+
+    Uses a random-walk proposal for all parameters jointly.
+    """
+    N, M = Y.shape
+
+    # Initialize at MAP estimate
+    theta = theta_map.copy()
+    beta = beta_map.copy()
+
+    # Storage for samples
+    n_stored = n_samples // thin
+    theta_samples = np.zeros((n_stored, N))
+    beta_samples = np.zeros((n_stored, M))
+
+    current_lp = log_posterior(theta, beta, Y)
+    n_accept = 0
+    sample_idx = 0
+
+    total_iterations = n_warmup + n_samples
+
+    for s in range(total_iterations):
+        # Propose new theta (random walk)
+        theta_prop = theta + np.random.normal(0, proposal_sd, N)
+        theta_prop = theta_prop - theta_prop.mean()  # Maintain centering
+
+        # Propose new beta (random walk)
+        beta_prop = beta + np.random.normal(0, proposal_sd, M)
+        beta_prop = beta_prop - beta_prop.mean()  # Maintain centering
+
+        # Compute acceptance probability
+        prop_lp = log_posterior(theta_prop, beta_prop, Y)
+        log_alpha = prop_lp - current_lp
+
+        # Accept or reject
+        if np.log(np.random.random()) < log_alpha:
+            theta = theta_prop
+            beta = beta_prop
+            current_lp = prop_lp
+            if s >= n_warmup:
+                n_accept += 1
+
+        # Store sample (after warmup, with thinning)
+        if s >= n_warmup and (s - n_warmup) % thin == 0:
+            theta_samples[sample_idx] = theta
+            beta_samples[sample_idx] = beta
+            sample_idx += 1
+
+    acceptance_rate = n_accept / n_samples
+    if verbose:
+        print(f"Acceptance rate: {acceptance_rate:.3f}")
+
+    return theta_samples, beta_samples, acceptance_rate
+
+# Run MCMC
+np.random.seed(123)
+theta_samples, beta_samples, acc_rate = metropolis_hastings_rasch(
+    Y, n_samples=4000, n_warmup=1000, proposal_sd=0.03, thin=2
+)
+
+# Visualization
+fig, axes = plt.subplots(2, 3, figsize=(6, 2))
+
+# Trace plots for selected ability parameters
+for i, idx in enumerate([0, 49, 99]):
+    axes[0, i].plot(theta_samples[:, idx], alpha=0.7, linewidth=0.5)
+    axes[0, i].axhline(theta_true_centered[idx], color='r', linestyle='--',
+                       linewidth=1.5, label='True')
+    axes[0, i].axhline(theta_samples[:, idx].mean(), color='g', linestyle='-',
+                       linewidth=1.5, label='Post. mean')
+    axes[0, i].set_xlabel('Sample')
+    axes[0, i].set_ylabel(f'$\\theta_{{{idx}}}$')
+    axes[0, i].set_title(f'Trace: Ability {idx}')
+    if i == 0:
+        axes[0, i].legend(fontsize=8)
+
+# Posterior distributions for selected difficulty parameters
+for i, idx in enumerate([0, 24, 49]):
+    axes[1, i].hist(beta_samples[:, idx], bins=30, density=True, alpha=0.7)
+    axes[1, i].axvline(beta_true_centered[idx], color='r', linestyle='--',
+                       linewidth=2, label='True')
+    axes[1, i].axvline(beta_samples[:, idx].mean(), color='g', linestyle='-',
+                       linewidth=2, label='Post. mean')
+    axes[1, i].set_xlabel(f'$\\beta_{{{idx}}}$')
+    axes[1, i].set_ylabel('Density')
+    axes[1, i].set_title(f'Posterior: Difficulty {idx}')
+    if i == 0:
+        axes[1, i].legend(fontsize=8)
+
+plt.tight_layout()
+plt.show()
+
+# Posterior summary statistics
+theta_post_mean = theta_samples.mean(axis=0)
+theta_post_std = theta_samples.std(axis=0)
+beta_post_mean = beta_samples.mean(axis=0)
+beta_post_std = beta_samples.std(axis=0)
+
+print(f"\nPosterior summary:")
+print(f"  Mean posterior std for abilities: {theta_post_std.mean():.3f}")
+print(f"  Mean posterior std for difficulties: {beta_post_std.mean():.3f}")
+print(f"  Correlation with true abilities: {np.corrcoef(theta_true_centered, theta_post_mean)[0,1]:.4f}")
+print(f"  Correlation with true difficulties: {np.corrcoef(beta_true_centered, beta_post_mean)[0,1]:.4f}")
+```
+
+The posterior standard deviations quantify our uncertainty about each parameter. Parameters with more information (e.g., items answered by many models, models who answered many questions) have smaller posterior uncertainty.
 
 
-## Bibliographic Notes {#sec-efficient-bib}
+## Regularization and Model Selection {#sec-regularization}
 
-### Optimal Experimental Design
+### L2 Regularization as Bayesian Prior {#sec-l2-reg}
 
-The theory of optimal experimental design originates with @kiefer1959optimum. D-optimal design is covered in @atkinson2007optimum. For the connection between Fisher information and test design in IRT, see @van2006optimal and @chang2009nonlinear. @wright1979best provides an accessible introduction to test design under the Rasch model.
+We have seen that MAP estimation with Gaussian priors is equivalent to L2 regularization. The regularization strength $\lambda$ relates to the prior variance as $\lambda = 1/\sigma^2$.
 
-### Computerized Adaptive Testing
+The regularized objective is:
 
-CAT has a rich history beginning with @lord1970some. The Fisher information criterion for item selection was developed by @birnbaum1968some. For multidimensional CAT, see @segall1996multidimensional. Applications to AI evaluation are emerging; see @polo2024tinybenchmarks for recent work on efficient benchmark design. @truong2025irsl demonstrate the practical impact of adaptive testing in the scaling law setting: by combining IRT-calibrated item parameters with Elo-based adaptive item selection, they achieve comparable decision accuracy to full-scale evaluation using only 50 questions per benchmark — a 99.9% reduction in the query budget.
+$$
+\ell_{\text{reg}}(\theta, \beta) = \ell(\theta, \beta) - \frac{\lambda_\theta}{2}\|\theta\|^2 - \frac{\lambda_\beta}{2}\|\beta\|^2
+$$
+
+Regularization prevents overfitting, especially when:
+
+- Some persons have few responses (sparse data)
+- Some items have extreme difficulty (near 0% or 100% pass rates)
+- The model is complex (many parameters relative to data)
+
+### Cross-Validation for Hyperparameter Selection {#sec-cv}
+
+How do we choose the regularization strength? Cross-validation provides a principled answer: we hold out some data, train on the rest, and evaluate prediction performance.
+
+```{pyodide-python}
+#| label: cross-validation
+#| autorun: true
+#| fig-cap: "Cross-validation for selecting regularization strength."
+
+def fit_and_evaluate(Y_train_mask, Y, lambda_param, sigma_theta=None, sigma_beta=None):
+    """Fit model on training data, evaluate on held-out data."""
+    N, M = Y.shape
+
+    # Convert lambda to prior std
+    if sigma_theta is None:
+        sigma_theta = 1 / np.sqrt(lambda_param + 1e-10)
+    if sigma_beta is None:
+        sigma_beta = 1 / np.sqrt(lambda_param + 1e-10)
+
+    # Fit on training data
+    def objective(params):
+        theta = params[:N]
+        beta = params[N:]
+        logits = theta[:, None] - beta[None, :]
+
+        # Only include training observations in likelihood
+        ll = (Y_train_mask * (Y * logits - np.log(1 + np.exp(np.clip(logits, -500, 500))))).sum()
+        log_prior = -0.5 * ((theta**2).sum() / sigma_theta**2 +
+                           (beta**2).sum() / sigma_beta**2)
+        return -(ll + log_prior)
+
+    params0 = np.zeros(N + M)
+    result = minimize(objective, params0, method='L-BFGS-B', options={'maxiter': 100})
+
+    theta_fit = result.x[:N]
+    beta_fit = result.x[N:]
+
+    # Evaluate on held-out data
+    P = sigmoid(theta_fit[:, None] - beta_fit[None, :])
+    test_mask = 1 - Y_train_mask
+
+    # Log-likelihood on test set
+    ll_test = (test_mask * (Y * np.log(P + 1e-10) +
+               (1 - Y) * np.log(1 - P + 1e-10))).sum()
+    n_test = test_mask.sum()
+
+    return ll_test / n_test  # Average log-likelihood
+
+def cross_validate(Y, lambda_param, n_folds=5, seed=42):
+    """K-fold cross-validation for regularization strength."""
+    np.random.seed(seed)
+    N, M = Y.shape
+
+    # Create random fold assignments for entries
+    fold_assignment = np.random.randint(0, n_folds, (N, M))
+
+    cv_scores = []
+    for fold in range(n_folds):
+        train_mask = (fold_assignment != fold).astype(float)
+        score = fit_and_evaluate(train_mask, Y, lambda_param)
+        cv_scores.append(score)
+
+    return np.mean(cv_scores), np.std(cv_scores)
+
+# Grid search over regularization strengths
+lambdas = [0.001, 0.01, 0.1, 0.5, 1.0, 2.0, 5.0]
+cv_means = []
+cv_stds = []
+
+print("Cross-validation results:")
+for lam in lambdas:
+    mean, std = cross_validate(Y, lam)
+    cv_means.append(mean)
+    cv_stds.append(std)
+    print(f"  lambda = {lam:5.3f}: CV log-lik = {mean:.4f} +/- {std:.4f}")
+
+# Plot
+plt.figure()
+plt.errorbar(lambdas, cv_means, yerr=cv_stds, fmt='o-', capsize=5, markersize=8)
+plt.xscale('log')
+plt.xlabel('Regularization strength ($\\lambda$)')
+plt.ylabel('Cross-validation log-likelihood')
+plt.title('Hyperparameter Selection via Cross-Validation')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+best_lambda = lambdas[np.argmax(cv_means)]
+print(f"\nBest regularization: lambda = {best_lambda}")
+```
 
 
-## Exercises {#sec-efficient-exercises}
+## Generalization Experiments {#sec-generalization}
+
+The estimation methods developed in this chapter produce learned factor models with latent parameters $(U, V, Z)$. But how well do these models generalize? To evaluate the robustness and transferability of learned factor models, we train and test them under various **masking schemes**, each representing a different notion of generalization. These masks determine which parts of the response matrix $Y$ are visible during training and which are held out for evaluation.
+
+### Masking Schemes for Evaluation {#sec-masking-schemes}
+
+| **Masking Type** | **Train Set** | **Test Set** | **Purpose** |
+|------------------|---------------|--------------|-------------|
+| Entry-wise random | 80% random entries | 20% random entries | Interpolation under missing-at-random |
+| Row holdout (random) | 80% of models, all items | 20% of models, all items | Generalization to unseen models |
+| Row holdout (shifted) | Slice of models (small→large) | Disjoint slice | Covariate-shift generalization |
+| Column holdout (random) | All models, 80% of items | All models, 20% of items | Generalization to unseen items |
+| Column holdout (shifted) | Subset of benchmarks | Held-out benchmarks | Cross-domain transfer |
+| Row-column block (L-mask) | $R_{tr} \times C_{tr}$ | $R_{te} \times C_{te}$ | Compositional generalization |
+| Temporal split | Models before cutoff | Models after cutoff | Temporal generalization |
+
+These settings parallel psychometric validation tests where new examinees, items, or contexts probe the invariance of latent constructs.
+
+### Implementation of Masking Functions
+
+```{python}
+#| eval: false
+
+import torch
+
+def random_mask(data_idtor, pct=0.8):
+    """Entry-wise random masking."""
+    train_idtor = torch.bernoulli(data_idtor * pct).int()
+    test_idtor = data_idtor.int() - train_idtor
+    return train_idtor, test_idtor
+
+def model_mask(data_idtor, pct_models=0.8, exposure_rate=0.3):
+    """Row holdout: hold out unseen models."""
+    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
+    train_idtor = torch.zeros_like(data_idtor).int()
+    train_idtor[train_row_mask, :] = data_idtor[train_row_mask, :]
+    train_idtor[~train_row_mask, :], _ = random_mask(data_idtor[~train_row_mask, :], pct=exposure_rate)
+    test_idtor = data_idtor - train_idtor
+    return train_idtor, test_idtor
+
+def item_mask(data_idtor, pct_items=0.8, exposure_rate=0.3):
+    """Column holdout: hold out unseen items."""
+    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
+    train_idtor = torch.zeros_like(data_idtor).int()
+    train_idtor[:, train_col_mask] = data_idtor[:, train_col_mask]
+    train_idtor[:, ~train_col_mask], _ = random_mask(data_idtor[:, ~train_col_mask], pct=exposure_rate)
+    test_idtor = data_idtor - train_idtor
+    return train_idtor, test_idtor
+
+def L_mask(data_idtor, pct_models=0.8, pct_items=0.8):
+    """Row-column block (L-mask): compositional generalization."""
+    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
+    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
+    train_idtor = torch.zeros_like(data_idtor).int()
+    train_idtor[train_row_mask][:, train_col_mask] = data_idtor[train_row_mask][:, train_col_mask]
+    test_idtor = data_idtor - train_idtor
+    test_idtor[train_row_mask, :] = 0
+    test_idtor[:, train_col_mask] = 0
+    return train_idtor, test_idtor
+```
+
+### Two-Stage Training for Holdout Generalization {#sec-two-stage}
+
+To avoid data contamination in row and column holdout experiments, we use a **two-stage training procedure**:
+
+#### Row Holdout: Estimating Parameters for Unseen Models
+
+When testing generalization to unseen models, we:
+
+1. **Stage 1:** Train on known models to learn item parameters $(V, Z)$
+2. **Stage 2:** Freeze $(V, Z)$ and estimate ability parameters $U$ for held-out models using their limited exposed responses
+
+This ensures item parameters are learned without information from test models.
+
+```{python}
+#| eval: false
+
+# Stage 1: Train on known models
+test_row = test_idtor.max(axis=1).values  # Identify held-out models
+model_stage1 = train_model(Y[~test_row, :], mask=train_idtor[~test_row, :])
+
+# Freeze V, Z from Stage 1
+V_frozen = model_stage1.V.detach()
+Z_frozen = model_stage1.Z.detach()
+
+# Stage 2: Estimate U for unseen models with frozen item parameters
+model_stage2 = train_model(Y[test_row, :], mask=train_idtor[test_row, :],
+                           V_fixed=V_frozen, Z_fixed=Z_frozen)
+```
+
+#### Column Holdout: Estimating Parameters for Unseen Items
+
+When testing generalization to unseen items, we:
+
+1. **Stage 1:** Train on known items to learn model parameters $U$
+2. **Stage 2:** Freeze $U$ and estimate item parameters $(V, Z)$ for held-out items
+
+```{python}
+#| eval: false
+
+# Stage 1: Train on known items
+test_col = test_idtor.max(axis=0).values  # Identify held-out items
+model_stage1 = train_model(Y[:, ~test_col], mask=train_idtor[:, ~test_col])
+
+# Freeze U from Stage 1
+U_frozen = model_stage1.U.detach()
+
+# Stage 2: Estimate V, Z for unseen items with frozen model parameters
+model_stage2 = train_model(Y[:, test_col], mask=train_idtor[:, test_col],
+                           U_fixed=U_frozen)
+```
+
+::: {.callout-note title="Why Two-Stage Training?"}
+The two-stage procedure prevents information leakage:
+
+- **Row holdout:** Item parameters learned from training models should not contain information about test models
+- **Column holdout:** Model parameters learned from training items should not contain information about test items
+
+This mirrors the real-world scenario where we want to evaluate new models on pre-calibrated items, or calibrate new items using established models.
+:::
+
+### Evaluation Across Masking Schemes
+
+For each masking scheme, we compute AUC on the held-out entries:
+
+```{python}
+#| eval: false
+
+from torchmetrics import AUROC
+
+masking_schemes = {
+    "entry_random": random_mask,
+    "row_holdout": model_mask,
+    "col_holdout": item_mask,
+    "L_mask": L_mask,
+}
+
+results = {}
+auroc = AUROC(task="binary")
+
+for name, mask_fn in masking_schemes.items():
+    train_mask, test_mask = mask_fn(data_idtor)
+
+    # Train model (with two-stage for row/col holdout)
+    model = train_with_appropriate_stages(Y, train_mask, test_mask, name)
+
+    # Evaluate on held-out entries
+    P_hat = model().detach()
+    auc = auroc(P_hat[test_mask.bool()], Y[test_mask.bool()])
+    results[name] = auc.item()
+    print(f"{name}: AUC = {auc:.3f}")
+```
+
+The factor model typically achieves AUC of 92-97% on random masking across benchmarks, demonstrating strong predictive power. Performance on row and column holdout tests the model's ability to generalize to new models and new items, respectively.
+
+::: {.callout-tip title="Application: Item Response Scaling Laws"}
+The separability of model ability from item difficulty — the core property of IRT — has a powerful application to scaling laws. @truong2025irsl show that by embedding IRT within the scaling law framework, one can factorize scaling law estimation from $O(M \times N)$ to $O(M + N)$, where $M$ is the number of models (or checkpoints) and $N$ is the number of questions.
+
+Their key finding is that the IRT ability parameter $\theta$ scales linearly with the logarithm of pre-training compute: $\theta \approx a \cdot \log(\text{FLOP}) + b$. Combined with calibrated item parameters, this yields per-question scaling predictions: $\hat{R}_{ij}(x) = \sigma(d_j(\theta_i(x) - z_j))$. Because item parameters transfer across benchmarks that share the same measurement objective, ability estimated on one benchmark can predict performance on another — a direct validation of the cross-benchmark transfer tested in the masking experiments above.
+
+In a study of 6,612 model checkpoints and 37,682 questions, this approach achieves comparable or superior decision accuracy to traditional scaling laws using only 50 questions per benchmark — a 99.9% reduction in queries. The approach uses Beta-IRT, which models empirical probability responses (token probabilities, pass rates) rather than binary correctness, capturing richer scaling signals.
+:::
+
+
+## Discussion Questions {#sec-discussion}
+
+1. **Identifiability and Interpretation:** In AI evaluation, should we anchor the ability scale by fixing one model (e.g., GPT-4 = 0) or by centering all models? What are the implications for interpreting ability scores over time as new models are released?
+
+2. **Bayesian vs Frequentist:** When is Bayesian inference preferred over MLE for AI benchmark analysis? Consider scenarios with limited data, extreme scores, or the need for uncertainty quantification.
+
+3. **From Learning to Design:** This chapter focuses on estimating parameters from a fixed dataset. Chapter 3 considers how to *design* the evaluation---choosing which items to include, how to allocate testing effort, and how to ensure robustness. What aspects of the estimation methods learned here would inform good benchmark design?
+
+4. **Transfer of Item Parameters:** If we calibrate item difficulties on one set of models (e.g., 2023 models), can we use these parameters to evaluate 2024 models? What assumptions does this require, and when might they fail?
+
+5. **Multidimensional Extensions:** The chapter focused on unidimensional models (single ability). How would the learning procedures change for multidimensional factor models? What additional challenges arise?
+
+
+## Bibliographic Notes {#sec-bib-notes}
+
+### Maximum Likelihood Estimation
+
+The theory of maximum likelihood for IRT models is developed comprehensively in @lord1968statistical and @birnbaum1968some. The joint MLE approach and its limitations (incidental parameter problem) are discussed in @neyman1948consistent. For modern computational approaches, see @baker2004item.
+
+### Conditional and Marginal MLE
+
+Conditional MLE for the Rasch model was developed by @andersen1970asymptotic, who proved consistency and derived the elementary symmetric functions needed for computation. Marginal MLE was introduced by @bock1970fitting and popularized by @bock1981marginal using the EM algorithm.
+
+### EM Algorithm
+
+The general EM algorithm was formalized by @dempster1977maximum. Its application to IRT is detailed in @bock1981marginal. For modern treatments, see @mclachlan2007algorithm.
+
+### Bayesian IRT
+
+Bayesian approaches to IRT were pioneered by @swaminathan1982bayesian and advanced using Gibbs sampling by @albert1992bayesian. Modern references include @fox2010bayesian and the software documentation for Stan [@carpenter2017stan].
+
+### Beta-IRT and Continuous Responses
+
+Standard IRT models assume binary (correct/incorrect) responses, but language models provide richer signals: token probabilities in pre-training and empirical pass rates in repeated sampling. @truong2025irsl introduce Beta-IRT, which replaces the Bernoulli loss with a Beta loss parameterized by the IRT logistic mean $\sigma(d_j(\theta_i - z_j))$ and a precision parameter $\phi$. This achieves reliable calibration with as few as 2 test takers (30--60$\times$ fewer than Binary-IRT), making it practical for scaling law studies where the number of model checkpoints far exceeds what binary IRT requires. The connection between per-problem exponential scaling and aggregate power-law scaling is formalized by @schaeffer2025monkeys, who show the power-law exponent is controlled by the left-tail shape of the success probability distribution — precisely the item difficulty distribution in IRT terms.
+
+### Optimization Methods
+
+L-BFGS is described in @nocedal2006numerical. For deep learning optimizers applied to psychometric models, see @kingma2015adam for Adam.
+
+
+## Exercises {#sec-exercises}
 
 ### Theoretical Exercises
 
-**Exercise 3.1** ($\star$): Show that Fisher information $I_j(\theta) = P_j(\theta)(1 - P_j(\theta))$ is maximized when $\theta = \beta_j$, and that the maximum value is $1/4$.
+**Exercise 2.1** ($\star$): Derive the gradient of the Rasch model log-likelihood with respect to $\theta_i$. Show that it equals the sum of residuals: $\frac{\partial \ell}{\partial \theta_i} = \sum_j (Y_{ij} - P_{ij})$.
 
-**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(a_j(\theta - \beta_j))$, derive the Fisher information and show that it equals $a_j^2 P_j(1 - P_j)$. How does discrimination $a_j$ affect optimal item selection?
+**Exercise 2.2** ($\star\star$): Prove that the Hessian matrix of the Rasch log-likelihood is negative semi-definite, ensuring the log-likelihood is concave.
 
-**Exercise 3.3** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.
+**Exercise 2.3** ($\star\star$): Show that for the Rasch model, the Fisher information for item $j$ at ability $\theta$ is $I_j(\theta) = P_j(1-P_j)$, and that this is maximized when $\theta = \beta_j$.
+
+**Exercise 2.4** ($\star\star\star$): Derive the EM algorithm for the 2PL model. What additional complications arise compared to the Rasch model due to the discrimination parameters?
+
+**Exercise 2.5** ($\star\star$): Show that L2 regularization on the parameters is equivalent to MAP estimation with Gaussian priors. What is the relationship between the regularization strength $\lambda$ and the prior variance $\sigma^2$?
 
 ### Computational Exercises
 
-**Exercise 3.4** ($\star\star$): Extend the D-optimal design simulation to a 2-dimensional factor model with $K = 2$. Implement item selection using $j^* = \arg\max_j \det(\mathcal{I} + I_j)$ where $I_j = P_j(1 - P_j) V_j V_j^\top$. Compare the selected item loading vectors to random selection.
+**Exercise 2.6** ($\star\star$): Implement conditional MLE for the Rasch model. Use the fact that the conditional likelihood depends only on item parameters and can be computed using elementary symmetric functions.
 
-**Exercise 3.5** ($\star\star$): Compare the convergence of CAT across models with different ability levels. Does CAT require more items for extreme abilities (very high or very low)? Why?
+**Exercise 2.7** ($\star\star\star$): Implement a Gibbs sampler for the Rasch model that alternates between:
+   - Sampling $\theta_i \mid Y, \beta$ for each person (using slice sampling)
+   - Sampling $\beta_j \mid Y, \theta$ for each item
 
-**Exercise 3.6** ($\star\star$): Investigate the sensitivity of CAT to misspecification of item parameters. If the calibration sample differs systematically from the test population, how does CAT performance degrade? Simulate this scenario.
+Compare the posterior estimates to those from Metropolis-Hastings.
+
+**Exercise 2.8** ($\star\star\star$): Implement marginal MLE using numerical quadrature to integrate out the ability parameters. Compare convergence and parameter recovery to the EM approach from this chapter.
+
+**Exercise 2.9** ($\star\star$): Implement Beta-IRT estimation. Given a response matrix $P_{ij} \in [0, 1]$ of empirical probabilities (e.g., token probabilities or pass rates), maximize the Beta log-likelihood $\sum_{i,j} \log p(P_{ij}; \mu_{ij}, \phi)$ where $\mu_{ij} = \sigma(d_j(\theta_i - z_j))$ is the IRT-predicted mean and $\phi > 0$ is a precision parameter. (a) Derive the gradient with respect to $\theta_i$ and $z_j$. (b) Simulate data with $M = 50$ models and $N = 200$ items, where $P_{ij} \sim \text{Beta}(\mu_{ij} \phi, (1 - \mu_{ij})\phi)$ with $\phi = 10$. (c) Compare parameter recovery of Beta-IRT vs. binary IRT (where responses are thresholded at 0.5) as a function of $M$. Verify the finding of @truong2025irsl that Beta-IRT achieves reliable calibration with far fewer models than Binary-IRT.
+
+### Discussion Exercises
+
+**Exercise 2.9:** Compare the convergence of gradient descent, L-BFGS, and Adam on a Rasch model estimation problem. Which converges fastest? Which is most robust to different initializations?
+
+**Exercise 2.10:** Investigate the sensitivity of MLE and Bayesian estimation to model misspecification. Generate data from a 2PL model but fit a Rasch model. How do the estimated abilities compare? When does the misspecification matter most?
+
+**Exercise 2.11:** Implement a cross-validation procedure for selecting between the Rasch, 2PL, and factor models. Apply it to benchmark data with different numbers of items and models. When does the additional complexity of the 2PL or factor model improve out-of-sample prediction?

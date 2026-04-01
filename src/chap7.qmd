@@ -36,1008 +36,855 @@ pyodide:
     - scipy
 ---
 
-# Information and Mechanism Design {#sec-design}
+# Causality and Distribution Shift {#sec-causality}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, you will be able to:
 
-1. **Explain** why Goodhart's Law is not merely a cautionary aphorism but a formal game-theoretic phenomenon, and classify its four variants in AI evaluation contexts.
-2. **Formalize** AI evaluation as a Stackelberg game between an evaluation designer and a model builder, and prove that deterministic benchmarks fail while randomized mechanisms achieve one-shot incentive alignment.
-3. **Analyze** the information-variance tradeoff in repeated evaluation: why reducing noise requires revealing information, and how this degrades alignment over time.
-4. **Derive** distribution correction as the primary mechanism for restoring alignment, and compute the optimal evaluation size $k^*$ as a function of correction rate $\rho$.
-5. **Model** metric design as a principal-agent problem and characterize when developers prefer to reveal, conceal, or garble evaluation information.
-6. **Apply** positional representation and positional proportionality criteria to select representative benchmark subsets using social choice theory.
-7. **Synthesize** design principles spanning strategic robustness, information control, and representativeness for AI benchmarks.
+1. **Formulate** causal models for AI evaluation and distinguish causal from associational claims about benchmark performance.
+2. **Apply** structural causal models (SCMs) to represent the data-generating process behind evaluation data, including the roles of training data, model architecture, and benchmark design.
+3. **Identify** when distribution shift---between training, calibration, and deployment populations---threatens the validity of evaluation conclusions, and characterize shift types (covariate, label, concept).
+4. **Use** interventional and counterfactual reasoning to diagnose construct-irrelevant variance: does the benchmark score change because ability changed, or because something else did?
+5. **Explain** the connection between Borsboom's causal theory of validity and modern causal inference: a benchmark is valid if and only if the target construct causally produces variation in scores.
+6. **Apply** doubly robust estimation to correct for selection bias in adaptive and non-representative evaluations, connecting importance weighting, model-based imputation, and prediction-powered inference.
+7. **Evaluate** when benchmark results generalize across deployment contexts and when they do not, using transportability criteria and conformal inference.
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
 This chapter can be covered in **3 lectures** (75-90 minutes each):
 
-**Lecture 1: The Evaluation Game**
+**Lecture 1: Causal Models for Evaluation**
 
-- Goodhart's Law and strategic manipulation (15 min)
-- Stackelberg benchmark game: setup and failure of deterministic mechanisms (20 min)
-- One-shot incentive alignment via randomization (25 min)
-- Hands-on: deterministic vs. randomized evaluation simulation (15 min)
+- From correlation to causation in benchmark scores (20 min)
+- Structural causal models and the evaluation DAG (25 min)
+- Interventional reasoning: diagnosing contamination and CIV (20 min)
+- Borsboom's causal validity revisited (10 min)
 
-**Lecture 2: Information Leakage and Restoring Alignment**
+**Lecture 2: Distribution Shift and Transportability**
 
-- Repeated evaluation and the information-variance tradeoff (20 min)
-- Distribution correction and alignment recovery (25 min)
-- Optimal evaluation size and the holdout mechanism (20 min)
-- Hands-on: Pareto frontier and correction simulations (10 min)
+- Types of distribution shift: covariate, label, concept (20 min)
+- When do benchmark results generalize? Transportability (25 min)
+- The evaluation-as-bandit framing (20 min)
+- Hands-on: shift visualization (10 min)
 
-**Lecture 3: Metric Design and Representative Selection**
+**Lecture 3: Robust Estimation and Conformal Prediction**
 
-- Metric design as a principal-agent problem (25 min)
-- Information elicitation: reveal, conceal, garble (20 min)
-- Representative benchmark selection via social choice theory (20 min)
-- Design principles synthesis (10 min)
+- Three estimators: DM, IPW, doubly robust (25 min)
+- Connection to prediction-powered inference (15 min)
+- Conformal prediction under distribution shift (20 min)
+- Hands-on: DR estimation and weighted conformal (15 min)
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces game-theoretic notation: $F$ (task universe), $F_E/F_M$ (evaluator/builder task sets), $\pi_E/\pi_M$ (sampling distributions), $f(\theta)$ (task performance), $u_E$ (evaluator utility), $\Delta_t$ (misalignment), and $\gamma$ (gaming penalty). See @sec-notation for the complete notation reference.
+This chapter introduces causal and distributional notation: $\text{do}(X=x)$ (intervention), $P^{(s)}/P^{(t)}$ (source/target distributions), $\pi_0/\pi$ (logging/target policies), $w(x)$ (importance weights), $\hat{V}_{\text{DR}}$ (doubly robust estimator), and $C_\alpha(x)$ (conformal prediction sets). See @sec-notation for the complete notation reference.
 :::
 
 
-## When Measurement Becomes a Target {#sec-goodhart}
+## From Association to Causation in Benchmark Scores {#sec-association-causation}
 
-> "When a measure becomes a target, it ceases to be a good measure." --- Charles Goodhart (1975)
+Model A outperforms Model B on a popular reasoning benchmark. What can we conclude? The association is clear: $\mathbb{E}[Y \mid \text{Model} = A] > \mathbb{E}[Y \mid \text{Model} = B]$. But does this mean Model A has greater reasoning ability? Or did Model A's training data happen to include problems similar to the benchmark items, giving it a memorization advantage that has nothing to do with reasoning?
 
-In previous chapters, we treated evaluation as a *statistical* problem: how to estimate latent abilities from noisy observations (@sec-foundations), how to quantify measurement precision (@sec-reliability), and how to assess whether a benchmark measures what it claims to measure (@sec-validity, @sec-causality). Throughout, we implicitly assumed that the data-generating process is *fixed* --- that the act of measurement does not change the phenomenon being measured.
+This distinction---between associational and causal claims---is the central concern of this chapter. In @sec-foundations, we introduced Borsboom's realist definition of validity: a test is valid for measuring an attribute if and only if (a) the attribute exists and (b) variation in the attribute *causally produces* variation in test scores [@borsboom2005measuring]. In @sec-validity, we developed the practical implications of this definition through content, criterion, construct, external, and consequential validity. This chapter provides the *formal causal machinery* to make these ideas precise.
 
-This assumption breaks down once benchmarks become *influential*. When a developer's reputation, funding, or regulatory standing depends on benchmark scores, the developer has every incentive to optimize specifically for the benchmark --- not for the broader capability it claims to measure. The data-generating process is no longer fixed: it shifts in response to the measurement itself. This is Goodhart's Law, and in AI evaluation it is not a metaphor but a demonstrable, recurring phenomenon.
+### The Causal Hierarchy {#sec-causal-hierarchy}
 
-**Concrete examples.** The Foundation Model Transparency Index (FMTI) saw scores jump dramatically after its first release, not because companies became more transparent, but because they learned *which specific indicators* were measured and optimized their disclosures accordingly. Chatbot Arena has faced concerns about strategic submission: developers can selectively deploy models optimized for the types of queries that appear on the platform. And benchmark contamination --- where training data includes evaluation items --- is rational behavior for a developer whose market value depends on leaderboard position (@sec-contamination).
+@pearl2009causality distinguishes three levels of causal reasoning, each requiring progressively stronger assumptions:
 
-@manheim2018categorizing identify four variants of the Goodhart effect, each with a distinct causal mechanism:
+1. **Association** $P(Y \mid X)$: What does observing $X$ tell us about $Y$? *Example:* "Models with more parameters tend to score higher on MMLU." This is a correlation that could arise from many causal structures.
 
-1. **Regressional Goodhart**: The proxy $\hat{u}$ and the true objective $u$ are correlated but not identical. Optimizing $\hat{u}$ overshoots because extreme values of $\hat{u}$ tend to arise from noise, not from genuinely extreme $u$. This is the measurement error story from @sec-reliability: a benchmark with $\alpha = 0.7$ captures 70% true variance and 30% noise, so selecting the top-scoring model partially selects for lucky noise.
+2. **Intervention** $P(Y \mid \text{do}(X = x))$: What happens to $Y$ if we *set* $X$ to $x$, regardless of what would have occurred naturally? *Example:* "If we increase the context window from 4K to 128K tokens, does the reasoning score improve?" This requires knowing the causal structure, not just the joint distribution.
 
-2. **Extremal Goodhart**: The relationship between $\hat{u}$ and $u$ that holds in the bulk of the distribution breaks down in the tails. A benchmark that reliably ranks typical models may fail catastrophically when applied to a model specifically engineered to maximize the benchmark score.
+3. **Counterfactual** $P(Y_x \mid X = x')$: What *would have happened* to $Y$ if $X$ had been $x$, given that we actually observed $X = x'$? *Example:* "Would this model have scored lower on the benchmark if its training data had not included the benchmark's source documents?" Counterfactuals reason about individual cases, not populations.
 
-3. **Causal Goodhart**: The proxy and the objective share a common cause. Optimizing the proxy can break this causal link. If "passes safety benchmark" and "is actually safe" are both caused by "was trained carefully," a developer can find shortcuts to the benchmark that bypass the common cause.
+Most benchmark analyses operate at Level 1. A leaderboard reports $P(Y \mid \text{Model})$---the association between model identity and score. But the claims we want to make are at Level 2 or 3: "This model *has better reasoning ability*" is a causal claim about what produces the score.
 
-4. **Adversarial Goodhart**: An agent actively exploits the gap between proxy and objective. This is the regime that dominates in competitive AI evaluation, and the focus of this chapter.
+### Structural Causal Models {#sec-scm}
 
-The shift from Chapters 3--6 to this chapter is a shift in the source of the threat. Measurement error (@sec-reliability) is stochastic. Validity threats (@sec-validity-threats) are systematic but unintentional. Strategic manipulation is *deliberate and adaptive*: the DGP itself changes in response to the measurement. This connects to the literature on performative prediction [@perdomo2020performative], where the act of deploying a model changes the distribution it operates on, and to strategic classification [@hardt2016strategic], where agents manipulate their features to achieve favorable outcomes.
+A **Structural Causal Model** (SCM) provides the formal language for causal reasoning [@pearl2009causality].
 
-The remainder of this chapter builds three layers of strategic analysis: (i) benchmark disclosure and information design --- how much should evaluators reveal about the evaluation mechanism? (ii) metric selection and reporting granularity --- which metrics should evaluators report, and at what level of detail? (iii) mechanism design for repeated evaluation --- how can evaluators maintain alignment when the game repeats?
+::: {.callout-note title="Definition: Structural Causal Model"}
+An SCM is a tuple $\mathcal{M} = (U, V, F, P(U))$ where:
 
+- $U$ is a set of exogenous (background) variables
+- $V = \{V_1, \ldots, V_n\}$ is a set of endogenous variables
+- $F = \{f_1, \ldots, f_n\}$ is a set of structural equations, $V_i = f_i(\text{pa}(V_i), U_i)$, where $\text{pa}(V_i) \subseteq V \setminus \{V_i\}$
+- $P(U)$ is a distribution over exogenous variables
 
-## The Evaluation Game {#sec-evaluation-game}
-
-We now formalize the strategic interaction between an evaluation designer and a model builder as a Stackelberg game. The designer moves first by committing to an evaluation mechanism; the builder responds by training a model. The key question: under what conditions can a benchmark mechanism incentivize builders to improve performance on the *full* task distribution, rather than merely optimizing for the specific tasks being measured?
-
-### Setup: Evaluator and Builder {#sec-game-setup}
-
-Let $\Theta$ denote the space of all possible models. For a given model $\theta \in \Theta$, let $f(\theta) \in [0, 1]$ denote the model's performance on task $f$. The universe of all possible tasks is the finite set $F$ with $|F| = N$.
-
-::: {.callout-note title="Definition: Evaluation Designer's Utility"}
-The evaluation designer's utility for a model $\theta$ is the aggregate performance across all tasks:
-$$
-u_E(\theta) = \sum_{f \in F} f(\theta)
-$$
-The designer acts as a social planner seeking models that perform broadly rather than narrowly.
+Each SCM induces a directed acyclic graph (DAG) where edges point from $\text{pa}(V_i)$ to $V_i$. The DAG encodes conditional independence structure: $V_i \perp\!\!\!\perp V_j \mid S$ if $S$ *d-separates* $V_i$ and $V_j$ in the DAG.
 :::
 
-Each party acquires tasks by sampling from $F$: the designer draws tasks according to $\pi_E$ over $F$, forming the evaluation set $F_E$, while the builder draws according to $\pi_M$, forming the training set $F_M$. In practice, $\pi_M$ is approximately uniform (builders have broad access to training data), while $\pi_E$ is typically biased toward tasks that are easy to construct, grade, or that reflect particular evaluation priorities.
+### The Evaluation DAG {#sec-evaluation-dag}
 
-::: {.callout-note title="Definition: Stackelberg Benchmark Game"}
-The game proceeds in three stages, parameterized by a mechanism $(M, r)$ where $M$ is a sampling function and $r: \Theta \times \mathcal{P}(F) \to \mathbb{R}$ is a reward function:
+We now construct an SCM for the AI evaluation process. The key endogenous variables are:
 
-1. **Designer's move (ex-ante):** The evaluation designer publishes the mechanism $(M, r)$. If $M$ is randomized, the designer privately draws randomness $\omega$ and computes $S^* = M(F_E, \omega)$, withholding the realization. If $M$ is deterministic, $S^* \subseteq F_E$ is fixed.
+- $D$: **Training data** (corpus composition, size, quality)
+- $A$: **Architecture** (transformer variant, parameter count, training recipe)
+- $\theta$: **Latent ability** (the construct the benchmark claims to measure)
+- $B$: **Benchmark design** (item pool, selection criteria, format)
+- $\beta$: **Item properties** (difficulty, discrimination, content)
+- $F$: **Formatting** (prompt template, few-shot examples, system prompt)
+- $Y$: **Observed score** (the benchmark outcome)
 
-2. **Builder's move:** The builder observes the mechanism $(M, r)$ but not the realized set $S^*$, and selects a model $\theta^* \in \Theta$.
+The causal structure is:
 
-3. **Evaluation stage (ex-post):** The designer publishes the score $r(\theta^*, S^*)$. The builder's payoff is $r(\theta^*, S^*)$; the designer's payoff is $u_E(\theta^*)$.
+$$
+D \to \theta, \quad A \to \theta, \quad \theta \to Y, \quad \beta \to Y, \quad B \to \beta, \quad F \to Y
+$$
+
+When the benchmark is *valid* in Borsboom's sense, the primary path from $D$ and $A$ to $Y$ passes through $\theta$: training data and architecture determine ability, and ability determines the score. The item properties $\beta$ moderate this relationship (harder items produce lower scores for the same ability), but do not confound it.
+
+**Validity threats as DAG pathologies.** The threats identified in @sec-validity-threats correspond to specific DAG structures:
+
+- **Contamination** (@sec-contamination): A direct path $D \to Y$ that bypasses $\theta$. The model's training data includes benchmark items, so the score reflects memorization rather than ability. This is a *confounding* path that inflates the observed association between $\theta$ and $Y$.
+- **Construct-irrelevant variance** (@sec-civ): A path $F \to Y$ that does not pass through $\theta$. Prompt formatting affects the score independent of ability. This is an additional cause of $Y$ that is not part of the target construct.
+- **Differential item functioning** (@sec-dif-theory): An interaction $A \to Y$ that is not mediated by $\theta$. Certain architectures have advantages on certain items independent of their ability level.
+
+::: {.callout-important title="Validity = No Unblocked Backdoor Paths"}
+Under Borsboom's causal framework, a benchmark is valid if and only if the *only* systematic path from the data-generating process to the observed score passes through the target construct $\theta$. Every unblocked non-$\theta$ path is a validity threat. The diagnostic tools from @sec-validity-diagnostics — DIF analysis, dimensionality assessment, item-fit statistics — are empirical tests for whether such paths exist.
 :::
 
-The misalignment between the builder's incentive (performance on $S^*$) and the designer's objective (performance on all of $F$) creates the Goodhart problem.
 
-### Failure of Deterministic Mechanisms {#sec-deterministic-failure}
+## Interventional and Counterfactual Diagnostics {#sec-interventional-diagnostics}
 
-Consider first a deterministic mechanism where the designer publishes a fixed subset $S^* \subseteq F_E$.
+The evaluation DAG from @sec-evaluation-dag allows us to reason about *interventions*---what happens when we deliberately change one variable while holding others fixed.
 
-::: {.callout-warning title="Proposition: Failure of Deterministic Mechanisms"}
-If the designer publishes a deterministic set $S^*$ with additive reward $r(\theta, S) = \sum_{f \in S} f(\theta)$, the builder's best response is:
+### The Back-Door Adjustment {#sec-backdoor}
+
+The back-door criterion [@pearl2009causality] identifies when observational data suffices to estimate causal effects. A set of variables $Z$ satisfies the back-door criterion relative to an ordered pair $(X, Y)$ if: (i) no node in $Z$ is a descendant of $X$, and (ii) $Z$ blocks every path between $X$ and $Y$ that contains an arrow into $X$.
+
+When the back-door criterion is satisfied:
+
 $$
-\theta^* \in \arg\max_{\theta \in \Theta} \sum_{f \in S^*} f(\theta)
+P(Y \mid \text{do}(X = x)) = \sum_z P(Y \mid X = x, Z = z) P(Z = z)
+$$ {#eq-backdoor}
+
+This *adjustment formula* removes confounding by averaging over the confounder distribution. For AI evaluation, this means: to estimate the causal effect of ability $\theta$ on score $Y$, we must adjust for all confounders---variables that cause both $\theta$ and $Y$ through non-$\theta$ paths.
+
+### Diagnosing Contamination {#sec-causal-contamination}
+
+The contamination diagnostic from @sec-contamination can be formalized as an interventional question. Let $D_{\text{overlap}}$ denote the subset of training data that overlaps with benchmark items. The causal question is:
+
 $$
-This provides *no incentive* for performance on tasks outside $S^*$.
+P(Y \mid \text{do}(D_{\text{overlap}} = \emptyset)) \stackrel{?}{=} P(Y \mid D_{\text{overlap}} = \emptyset)
+$$
+
+If these are equal, removing the overlapping data does not change the score *beyond* what we would expect from the reduced training set. If they differ, the overlap was providing a direct $D \to Y$ path (memorization) rather than contributing to $\theta$ (genuine learning).
+
+In practice, we cannot perform this intervention on already-trained models. But we can approximate it through:
+
+- **Chronological splits**: Items created after the training data cutoff cannot be memorized. Comparing scores on pre- vs. post-cutoff items estimates the contamination effect.
+- **Canary detection**: Embedding unique strings in benchmark items and testing whether models reproduce them provides evidence for the $D \to Y$ path [@jacovi2023stop].
+- **Item-fit analysis**: The infit/outfit statistics from @sec-item-fit detect items where some models perform unexpectedly well---a signature of the memorization path.
+
+### Counterfactual Reasoning for DIF {#sec-counterfactual-dif}
+
+Differential Item Functioning (@sec-dif-theory) has a natural counterfactual interpretation. An item $i$ exhibits DIF between groups $g = 0$ and $g = 1$ if:
+
+$$
+P(Y_{i,g=1} = 1 \mid \theta) \neq P(Y_{i,g=0} = 1 \mid \theta)
+$$
+
+This is a counterfactual statement: "For a model with ability $\theta$, would the response to item $i$ have been different if the model belonged to the other group, holding ability fixed?" The "group" variable $g$ (e.g., model architecture family) has a *direct* effect on the item response that is not mediated by $\theta$.
+
+Under the evaluation DAG, DIF corresponds to a path $A \to Y$ that does not pass through $\theta$---an architectural advantage on specific items that reflects something other than the target construct. The Mantel-Haenszel procedure from @sec-dif-analysis estimates this direct effect by stratifying on $\theta$ (using total score as a proxy), which blocks the $A \to \theta \to Y$ path and isolates the $A \to Y$ direct effect.
+
+::: {.callout-important title="When Is a Score Difference Causal?"}
+A score difference $Y_A - Y_B$ between two models reflects a genuine *ability* difference only if all paths from the data-generating process to $Y$ that do not pass through $\theta$ are blocked. Common unblocked paths in AI evaluation:
+
+- **Training data overlap** ($D \to Y$ bypassing $\theta$): memorization inflates scores
+- **Prompt formatting** ($F \to Y$): format preferences affect scores independent of ability
+- **Evaluation order** (position bias in LLM-as-judge): systematic bias from presentation order
+
+The causal diagnostics in this section and the statistical diagnostics in @sec-validity-diagnostics are complementary approaches to detecting these unblocked paths.
 :::
 
-*Proof.* The builder observes $S^*$ directly and maximizes the known objective. Tasks in $F \setminus S^*$ do not affect the score. $\square$
 
-This is exactly Goodhart's adversarial variant: the builder exploits the known structure of the evaluation to specialize. It is also the construct underrepresentation problem from @sec-construct-underrepresentation viewed through a strategic lens: a fixed benchmark *systematically ignores* capabilities outside $S^*$, and a rational builder responds accordingly.
+## Distribution Shift and Transportability {#sec-shift-taxonomy}
 
+In @sec-external-validity, we raised the question of whether benchmark results generalize beyond the specific conditions of the evaluation. This section provides the formal framework.
 
-### One-Shot Alignment via Randomization {#sec-one-shot-alignment}
+### Setup {#sec-shift-setup}
 
-While deterministic mechanisms fail, randomization offers a path forward. When the builder faces genuine uncertainty about which tasks will be evaluated, the strategic landscape changes fundamentally.
+Let $P^{(s)}(X, Y)$ denote the **source** (benchmark) joint distribution over items $X$ and responses $Y$, and $P^{(t)}(X, Y)$ the **target** (deployment) distribution. The fundamental question is: when does a performance estimate computed under $P^{(s)}$ remain valid under $P^{(t)}$?
 
-::: {.callout-warning title="Theorem 1: One-Shot Incentive Alignment (Omniscient Builder)"}
-Consider a randomized mechanism where (i) $M$ draws a single task uniformly: $s \sim \text{Unif}(F_E)$, (ii) the reward is $r(\theta, \{s\}) = s(\theta)$, and (iii) the builder has a uniform prior $\pi$ over which tasks comprise $F_E$. Then the builder's expected reward is proportional to the designer's utility:
-$$
-\mathbb{E}_{F_E \sim \pi}\!\left[\mathbb{E}_{s \sim \text{Unif}(F_E)}[s(\theta)]\right] = \frac{1}{|F|}\, u_E(\theta)
-$$
-and the builder's best response maximizes $u_E(\theta)$.
+The joint distribution factorizes as $P(X, Y) = P(Y \mid X) P(X)$, giving rise to a taxonomy of shift types based on which component changes.
+
+::: {.callout-note title="Definition: Types of Distribution Shift"}
+1. **Covariate shift**: $P^{(s)}(X) \neq P^{(t)}(X)$ but $P^{(s)}(Y \mid X) = P^{(t)}(Y \mid X)$. The *item distribution* changes but the model's *conditional behavior* is stable. Example: a benchmark oversamples easy items; deployment sees a harder mix.
+
+2. **Label shift** (prior probability shift): $P^{(s)}(Y) \neq P^{(t)}(Y)$ but $P^{(s)}(X \mid Y) = P^{(t)}(X \mid Y)$. The *base rate* of outcomes changes. Example: a benchmark has 50% correct base rate; deployment tasks have 10%.
+
+3. **Concept drift**: $P^{(s)}(Y \mid X) \neq P^{(t)}(Y \mid X)$. The *relationship between items and responses* changes. Example: a coding benchmark becomes outdated as programming conventions evolve, so the correct answers shift.
 :::
 
-*Proof sketch.* Under a symmetric (uniform) prior over which tasks compose $F_E$, the builder has no information distinguishing any task $f_i$ from $f_j$. By symmetry, the marginal probability that any specific task $f$ is the sampled task is constant: $P(s = f) = 1/|F|$. Therefore the builder's expected reward is $(1/|F|) \sum_{f \in F} f(\theta) = (1/|F|) \, u_E(\theta)$, and maximizing expected reward is equivalent to maximizing $u_E(\theta)$. $\square$
+### Covariate Shift in AI Evaluation {#sec-covariate-shift}
 
-The omniscient version assumes the builder knows all of $F$. A more realistic version considers a builder with limited information:
+Covariate shift is the most common and most correctable form of shift. In AI evaluation, it arises whenever the benchmark item pool is not representative of the deployment item distribution.
 
-::: {.callout-warning title="Theorem 2: One-Shot Alignment (Limited Information)"}
-Suppose the builder draws tasks i.i.d. from distribution $p_M$ and believes the evaluator also draws from $p_M$. Under a single-sample mechanism, the builder's best response is:
-$$
-\theta^* \in \arg\max_{\theta \in \Theta} \mathbb{E}_{f \sim p_M}[f(\theta)]
-$$
-That is, the builder optimizes over their own best approximation of the task universe.
-:::
+Consider a benchmark designed to measure mathematical reasoning. If the item pool is drawn disproportionately from algebra (easy) rather than from combinatorics, number theory, and analysis (hard), then the benchmark's item distribution $P^{(s)}(X)$ is shifted toward easy items relative to the deployment distribution $P^{(t)}(X)$. The model's behavior on any given item---its conditional response $P(Y \mid X)$---is the same in both settings. But the overall accuracy computed under $P^{(s)}$ overestimates deployment accuracy because easy items are overweighted.
 
-*Proof sketch.* The builder's expected reward, taken over their prior on $F_E$ and the randomness in $M$, equals $\mathbb{E}_{f \sim p_M}[f(\theta)]$. Since $F_M$ is drawn from $p_M$, the builder's best response is empirical risk minimization over $F_M$, which is the best they can do given their information. $\square$
+This connects directly to the content validity discussion in @sec-content-validity: a benchmark with poor content validity (non-representative item sampling) is a benchmark with covariate shift relative to the construct domain.
 
-This result is powerful: the single-sample mechanism is "the best you can do" as an evaluation designer. The builder's best response is to approximate their own approximation of $F$ to the best of their ability --- essentially training broadly over all available data. Under incentive alignment, the builder performs **empirical risk minimization** (ERM) over their task set $F_M$. By classical uniform convergence [@vapnik1998statistical], restricting to any subset $S \subset F_M$ can only increase regret; the builder has no incentive to "game" by focusing on a narrow task set.
+### Concept Drift in AI Evaluation {#sec-concept-drift}
 
-### Discussion: What Randomization Buys {#sec-randomization-discussion}
+Concept drift is more dangerous because the model's conditional behavior itself changes. In AI evaluation, concept drift occurs when:
 
-The one-shot alignment result reveals a fundamental tension with the statistical efficiency goals of earlier chapters. In @sec-fisher-information and @sec-cat, we showed that *targeted* evaluation --- choosing items to maximize Fisher information about $\theta$ --- is statistically optimal. But targeted evaluation requires revealing information about which tasks the evaluator considers informative, which creates exploitable structure.
+- **Model updates**: A model is updated via RLHF, fine-tuning, or system prompt changes. The IRT parameters calibrated on the old model no longer apply.
+- **Prompt template changes**: Switching from a zero-shot to a few-shot template changes $P(Y \mid X)$ even for the same items.
+- **Temporal evolution**: Programming languages evolve, scientific knowledge advances, and social norms shift. A benchmark's "correct" answers may become outdated.
 
-Randomized evaluation is not optimal for *estimation precision* but is optimal for *incentive alignment*. This tension between statistical efficiency and strategic robustness is a recurring theme:
+Under concept drift, no reweighting of the source distribution can recover the target performance. The model must be re-evaluated on data drawn from the target distribution, or the concept drift must be modeled explicitly.
 
-- Computerized adaptive testing (@sec-cat) reveals the evaluator's information about ability through the item selection strategy, making the evaluator's priorities transparent.
-- Bayesian persuasion [@kamenica2011bayesian] provides the information design framework: the evaluator is a sender choosing an information structure, and the builder is a receiver who updates and best-responds. The evaluator's problem is to design a signal that induces the builder to take the action the evaluator prefers.
+### Transportability {#sec-transportability}
 
-The resolution, as we develop in the next two sections, is that the evaluator must *invest in correction* to make the inevitable information leakage harmless.
+When can we transport causal conclusions from one setting to another? @bareinboim2016causal formalize this through **selection diagrams**: DAGs augmented with special "selection" nodes $S$ that indicate which mechanisms differ between source and target.
+
+The key result (stated informally): a causal effect is transportable from source to target if the differences between environments, as encoded by $S$, can be "adjusted away" using the causal structure. Specifically, the target-domain causal effect is identifiable from the source data plus knowledge of which mechanisms differ.
+
+For AI evaluation, this means: a benchmark result is transportable to a new deployment context if we can identify *what changed* between the benchmark setting and deployment, and the evaluation DAG provides a path to adjust for those changes. If the only change is the item distribution (covariate shift), importance weighting suffices. If the model's behavior changes (concept drift), we need additional assumptions or new data from the target domain.
 
 {{< include _plt_setup.qmd >}}
 
 ```{pyodide-python}
-#| label: deterministic-vs-randomized
+#| label: shift-taxonomy
 #| autorun: true
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.special import expit
 
 np.random.seed(42)
-
-# --- Setup ---
-N = 50           # total tasks in universe F
-n_eval = 10      # tasks in evaluation set
-n_rounds = 200   # simulation rounds
-
-# Task values: how much each task contributes to "true capability"
-task_values = np.random.uniform(0.3, 1.0, N)
-
-# --- Deterministic mechanism: builder knows S* ---
-# Builder puts all effort into the known evaluation tasks
-det_eval_set = np.random.choice(N, n_eval, replace=False)
-det_perf = np.zeros(N)
-det_perf[det_eval_set] = 0.95  # high on evaluated tasks
-det_perf[~np.isin(np.arange(N), det_eval_set)] = 0.2  # low elsewhere
-
-# --- Randomized mechanism: builder faces uncertainty ---
-# Under randomized eval, builder's best response is to train broadly
-rand_perf = np.full(N, 0.65)  # uniform effort across all tasks
-
-# --- Evaluate ---
-# True utility = sum of performance across ALL tasks
-det_utility = det_perf.sum()
-rand_utility = rand_perf.sum()
-
-# Eval score = average on sampled tasks
-n_trials = 500
-det_scores = np.array([det_perf[np.random.choice(N, n_eval, replace=False)].mean()
-                       for _ in range(n_trials)])
-rand_scores = np.array([rand_perf[np.random.choice(N, n_eval, replace=False)].mean()
-                        for _ in range(n_trials)])
-
-# --- Plot ---
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
-colors = ['#5B8DEE', '#E8637A', '#45BF7C', '#F0A35C', '#B07CD8']
-
-# Panel 1: Task-level performance
-ax = axes[0]
-sorted_idx_det = np.argsort(-det_perf)
-ax.bar(range(N), det_perf[sorted_idx_det], color=colors[1], alpha=0.7, width=1.0)
-ax.set_xlabel('Task (sorted)')
-ax.set_ylabel('Performance')
-ax.set_title('Deterministic')
-ax.set_ylim(0, 1.05)
-ax.axhline(y=det_perf.mean(), color='k', ls='--', lw=0.8)
-
-ax = axes[1]
-ax.bar(range(N), rand_perf[np.argsort(-rand_perf)], color=colors[0], alpha=0.7, width=1.0)
-ax.set_xlabel('Task (sorted)')
-ax.set_title('Randomized')
-ax.set_ylim(0, 1.05)
-ax.axhline(y=rand_perf.mean(), color='k', ls='--', lw=0.8)
-
-# Panel 3: Utility comparison
-ax = axes[2]
-bar_x = [0, 1]
-bar_vals = [det_utility / N, rand_utility / N]
-bar_colors = [colors[1], colors[0]]
-bars = ax.bar(bar_x, bar_vals, color=bar_colors, width=0.6, alpha=0.8)
-ax.set_xticks(bar_x)
-ax.set_xticklabels(['Det.', 'Rand.'])
-ax.set_ylabel('Avg. true utility')
-ax.set_title('Alignment')
-ax.set_ylim(0, 0.85)
-for b, v in zip(bars, bar_vals):
-    ax.text(b.get_x() + b.get_width()/2, v + 0.02, f'{v:.2f}', ha='center', va='bottom')
-
-plt.tight_layout()
-plt.show()
-```
-
-**Figure.** Under a deterministic mechanism (left), the builder concentrates effort on the $k=10$ known evaluation tasks and neglects the rest, achieving high benchmark scores but low true utility. Under a randomized mechanism (center), the builder spreads effort broadly. The right panel compares average true utility across *all* tasks: the randomized mechanism produces a substantially higher utility despite lower peak performance on any single task.
-
-
-## The Information-Variance Tradeoff {#sec-info-variance-tradeoff}
-
-Theorem 1 established that randomized evaluation achieves incentive alignment in one-shot settings. But benchmarks operate as *repeated games*: weekly leaderboards, monthly submissions, quarterly benchmark releases. In repeated evaluation, randomization alone fails because information *leaks*.
-
-### Repeated Evaluation and Information Leakage {#sec-repeated-game}
-
-::: {.callout-note title="Definition: Repeated Evaluation Game"}
-At each round $t = 1, 2, \ldots$:
-
-1. The evaluator draws a fresh evaluation set $F_E^{(t)}$ by sampling from $F$ according to $\pi_E$.
-2. The evaluator samples $k$ tasks from $F_E^{(t)}$ via mechanism $M$ and publishes the score.
-3. The builder observes the $k$ evaluated tasks, updates their estimate $\hat{\pi}_{E,t}$ of the evaluation distribution, and selects model $\theta_t$.
-:::
-
-The variance of a $k$-task average reward scales as $\text{Var}(\hat{r}_k(\theta)) \approx \sigma^2/k$. To reliably distinguish two models with performance gap $\Delta$ at 95% confidence requires $k \geq 4\sigma^2/\Delta^2$. As models improve and converge ($\Delta \to 0$), the required sample size grows quadratically. This creates inexorable market pressure to increase $k$.
-
-But increasing $k$ to reduce variance simultaneously increases the rate at which the builder accumulates information about $\pi_E$. The builder's *information set* at time $t$ is $\mathcal{I}_t = \bigcup_{i=1}^{t-1} S_i$, where $S_i$ is the set of tasks sampled in round $i$. The *leakage* is $L_t = |\mathcal{I}_t|/|F|$.
-
-### Posterior Concentration and Incentive Misalignment {#sec-posterior-concentration}
-
-As the builder observes sampled tasks across rounds, their estimate $\hat{\pi}_{E,t}$ of the evaluation distribution concentrates around the true $\pi_E$. By standard results in Bayesian nonparametrics, the posterior concentration rate is $O(d_{\text{eff}} \log m / m)$ where $m$ is the number of observations and $d_{\text{eff}}$ is the effective dimension of the distribution class.
-
-::: {.callout-warning title="Proposition: Incentive Misalignment Under Distribution Learning"}
-Let $\hat{\pi}_{E,t}$ denote the builder's posterior mean estimate of $\pi_E$ at time $t$. The builder's optimal strategy is $\theta^*_t = \arg\max_\theta \mathbb{E}_{f \sim \hat{\pi}_{E,t}}[f(\theta)]$. Then:
-
-1. **Initial alignment:** When the prior over $\pi_E$ is diffuse, the builder optimizes broadly, approximating performance on the full universe $F$.
-
-2. **Posterior concentration leads to specialization:** As $\hat{\pi}_{E,t}$ concentrates around $\pi_E$:
-$$
-\lim_{t \to \infty} \theta^*_t = \arg\max_{\theta \in \Theta} \mathbb{E}_{f \sim \pi_E}[f(\theta)]
-$$
-If $\pi_E$ is non-uniform, the builder specializes to high-density regions at the expense of broad capability.
-:::
-
-This is the core tension: *privatization works in one-shot settings, but repeated evaluation reveals information that enables strategic specialization.* The builder cannot identify a fixed evaluation set (since $F_E^{(t)}$ is resampled each round), but from repeated observations the builder learns $\pi_E$ itself --- the *distribution* from which evaluation tasks are drawn.
-
-### The Pareto Frontier {#sec-pareto-frontier}
-
-Define the **residual misalignment** at time $t$ as:
-$$
-\Delta_t = \mathbb{E}_{f \sim \pi_E^{(t)}}[f(\theta^*_t)] - \frac{1}{|F|} u_E(\theta^*_t)
-$$
-
-This measures the gap between what the builder optimizes for (expected performance under $\pi_E$) and what society wants (aggregate performance over all of $F$). When $\pi_E$ is uniform, $\Delta_t = 0$.
-
-No evaluation strategy can simultaneously achieve low variance and low leakage. Variance decreases in $k$; leakage increases in $k$. Varying $k$ traces a Pareto frontier where the evaluator must choose their preferred operating point.
-
-```{pyodide-python}
-#| label: pareto-frontier
-#| autorun: true
-import numpy as np
-import matplotlib.pyplot as plt
-
-np.random.seed(42)
-
-# --- Simulation parameters ---
-N = 200          # task universe size
-n_rounds = 200   # number of rounds
-k_values = [5, 10, 20, 50, 100]
-n_trials = 20    # Monte Carlo trials
-
-# Initial biased evaluator distribution: overweight first 40% of tasks by 3x
-pi_E_true = np.ones(N) / N
-pi_E_true[:int(0.4 * N)] *= 3.0
-pi_E_true /= pi_E_true.sum()
-
-colors = ['#5B8DEE', '#45BF7C', '#F0A35C', '#E8637A', '#B07CD8']
 
 fig, axes = plt.subplots(1, 3, figsize=(6, 2))
 
-for ki, k in enumerate(k_values):
-    all_variance = np.zeros((n_trials, n_rounds))
-    all_kl = np.zeros((n_trials, n_rounds))
-    all_misalign = np.zeros((n_trials, n_rounds))
+theta_range = np.linspace(-3, 3, 200)
 
-    for trial in range(n_trials):
-        # Builder starts with uniform prior (Dirichlet(1,...,1))
-        counts = np.ones(N)
+# --- Panel 1: Covariate Shift ---
+# Source: easy items (beta ~ N(-1, 0.5))
+# Target: broad items (beta ~ N(0, 1.5))
+beta_source = np.random.normal(-1, 0.5, 500)
+beta_target = np.random.normal(0, 1.5, 500)
 
-        for t in range(n_rounds):
-            # Evaluator samples k tasks from pi_E
-            tasks = np.random.choice(N, size=k, p=pi_E_true, replace=True)
+axes[0].hist(beta_source, bins=30, alpha=0.6, color='#5B8DEE', density=True, label='Source (benchmark)')
+axes[0].hist(beta_target, bins=30, alpha=0.6, color='#E8637A', density=True, label='Target (deployment)')
+axes[0].set_xlabel(r'Item difficulty ($\beta$)')
+axes[0].set_ylabel('Density')
+axes[0].set_title('Covariate Shift')
+axes[0].legend()
+axes[0].set_xlim(-4, 4)
 
-            # Score variance: use task values as performance
-            task_scores = np.random.normal(0.5, 0.2, k)
-            all_variance[trial, t] = np.var(task_scores)
+# Inset: same ICC in both
+ax_inset1 = axes[0].inset_axes([0.55, 0.55, 0.4, 0.35])
+theta_ex = 0.5
+p_source = expit(theta_ex - theta_range)
+ax_inset1.plot(theta_range, p_source, '#5B8DEE', linewidth=1.5, label='Source')
+ax_inset1.plot(theta_range, p_source, '#E8637A', linewidth=1.5, linestyle='--', label='Target')
+ax_inset1.set_title('Same P(Y|X)')
+ax_inset1.set_xticks([])
+ax_inset1.set_yticks([])
 
-            # Builder updates posterior
-            for task in tasks:
-                counts[task] += 1
+# --- Panel 2: Label Shift ---
+# Source: 50% correct base rate
+# Target: 10% correct base rate
+n_items = 1000
+y_source = np.random.binomial(1, 0.5, n_items)
+y_target = np.random.binomial(1, 0.1, n_items)
 
-            # Builder's estimate of pi_E
-            pi_hat = counts / counts.sum()
+categories = ['Correct', 'Incorrect']
+source_rates = [y_source.mean(), 1 - y_source.mean()]
+target_rates = [y_target.mean(), 1 - y_target.mean()]
 
-            # KL divergence from true pi_E
-            mask = pi_E_true > 0
-            kl = np.sum(pi_E_true[mask] * np.log(pi_E_true[mask] / pi_hat[mask]))
-            all_kl[trial, t] = kl
+x_pos = np.arange(len(categories))
+width = 0.35
+axes[1].bar(x_pos - width/2, source_rates, width, color='#5B8DEE', alpha=0.7, label='Source')
+axes[1].bar(x_pos + width/2, target_rates, width, color='#E8637A', alpha=0.7, label='Target')
+axes[1].set_xticks(x_pos)
+axes[1].set_xticklabels(categories)
+axes[1].set_ylabel('Proportion')
+axes[1].set_title('Label Shift')
+axes[1].legend()
+axes[1].set_ylim(0, 1.1)
 
-            # Misalignment: TV distance as proxy
-            tv = 0.5 * np.sum(np.abs(pi_hat - np.ones(N)/N))
-            bias_tv = 0.5 * np.sum(np.abs(pi_E_true - np.ones(N)/N))
-            # Builder exploits learned bias: misalignment ~ min(learned_bias, true_bias)
-            all_misalign[trial, t] = min(tv, bias_tv)
+# --- Panel 3: Concept Drift ---
+# Source: Rasch with beta=0
+# Target: Rasch with beta shifted AND discrimination changed
+beta_fixed = 0.0
+p_source_icc = expit(theta_range - beta_fixed)
+p_target_icc = expit(1.5 * (theta_range - 0.5))  # Different discrimination and difficulty
 
-    col = colors[ki % len(colors)]
-    rounds = np.arange(n_rounds)
-
-    # Panel 1: Evaluation variance (averaged over rounds, show as function of t)
-    avg_var = all_variance.mean(axis=0)
-    axes[0].plot(rounds, np.convolve(avg_var, np.ones(10)/10, mode='same'),
-                 color=col, label=f'k={k}', lw=1.2)
-
-    # Panel 2: KL divergence (builder's learning of pi_E)
-    avg_kl = all_kl.mean(axis=0)
-    axes[1].plot(rounds, avg_kl, color=col, label=f'k={k}', lw=1.2)
-
-    # Panel 3: Misalignment
-    avg_mis = all_misalign.mean(axis=0)
-    axes[2].plot(rounds, avg_mis, color=col, label=f'k={k}', lw=1.2)
-
-axes[0].set_xlabel('Round')
-axes[0].set_ylabel('Score variance')
-axes[0].set_title('Evaluation noise')
-axes[0].legend(ncol=2, loc='upper right')
-
-axes[1].set_xlabel('Round')
-axes[1].set_ylabel('KL divergence')
-axes[1].set_title("Builder's learning")
-
-axes[2].set_xlabel('Round')
-axes[2].set_ylabel('Misalignment')
-axes[2].set_title('Incentive drift')
+axes[2].plot(theta_range, p_source_icc, '#5B8DEE', linewidth=2.5, label='Source: P(Y|X)')
+axes[2].plot(theta_range, p_target_icc, '#E8637A', linewidth=2.5, linestyle='--', label='Target: P(Y|X)')
+axes[2].fill_between(theta_range, p_source_icc, p_target_icc, alpha=0.15, color='#F0A35C')
+axes[2].set_xlabel(r'Ability ($\theta$)')
+axes[2].set_ylabel('P(Correct)')
+axes[2].set_title('Concept Drift')
+axes[2].legend()
+axes[2].set_ylim(-0.05, 1.05)
 
 plt.tight_layout()
 plt.show()
+
+print("Distribution Shift Summary:")
+print(f"  Covariate shift: source mean difficulty = {beta_source.mean():.2f}, "
+      f"target mean difficulty = {beta_target.mean():.2f}")
+print(f"  Label shift: source base rate = {y_source.mean():.2f}, "
+      f"target base rate = {y_target.mean():.2f}")
+print(f"  Concept drift: P(Y|X) changes between source and target")
 ```
 
-**Figure.** The information-variance Pareto frontier across $k \in \{5, 10, 20, 50, 100\}$ over 200 rounds with $|F| = 200$ tasks. Left: evaluation noise (score variance) is lower for larger $k$. Center: the builder learns $\pi_E$ faster with larger $k$, as measured by KL divergence between the builder's posterior and the true $\pi_E$. Right: as the builder's posterior concentrates, incentive misalignment grows. No single $k$ achieves both low noise and low misalignment --- a fundamental tradeoff.
+The three panels illustrate the shift taxonomy. **Covariate shift** (left): the benchmark item pool is concentrated at easy difficulties (blue), while deployment items span a broader range (red), but the item characteristic curve is the same in both settings. **Label shift** (center): the base rate of correct responses differs between benchmark (50%) and deployment (10%). **Concept drift** (right): the relationship between ability and response probability itself changes---the target ICC (dashed red) has different discrimination and difficulty than the source (blue), so no reweighting of items can correct the estimate.
 
 
-## Restoring Alignment {#sec-restoring-alignment}
+## Off-Policy Evaluation and Doubly Robust Estimation {#sec-off-policy}
 
-The Pareto frontier of the previous section seems like an impasse: any choice of $k$ sacrifices either measurement precision or incentive alignment. The resolution comes from recognizing that the *evaluator is also a learner*. If the evaluator corrects their distribution over time, the information the builder accumulates becomes obsolete.
+The distribution shift framework tells us *when* benchmark results are biased. This section develops the tools to *correct* that bias, drawing on the off-policy evaluation literature from contextual bandits.
 
-### Distribution Correction {#sec-distribution-correction}
+### The Evaluation-as-Bandit Framing {#sec-bandit-framing}
 
-::: {.callout-note title="Assumption: Distribution Correction"}
-The evaluator updates $\pi_E^{(t)}$ via linear interpolation toward uniform at rate $\rho \in (0, 1]$:
+We reframe AI evaluation as an off-policy estimation problem. The key mapping is:
+
+| Bandit concept | AI evaluation translation |
+|---|---|
+| Context $x$ | Evaluation item (content, format, difficulty) |
+| Action $a$ | Model's response |
+| Reward $r$ | Correctness score ($0$ or $1$, or a continuous quality rating) |
+| Logging policy $\pi_0(a \mid x)$ | The benchmark design process---how items were selected and administered |
+| Target policy $\pi(a \mid x)$ | The model's behavior under deployment conditions |
+
+::: {.callout-note title="Definition: Off-Policy Evaluation"}
+Given logged data $\{(x_t, a_t, r_t)\}_{t=1}^n$ collected under logging policy $\pi_0$, the off-policy evaluation problem is to estimate the **value** of a target policy $\pi$:
+
 $$
-\pi_E^{(t)} = (1 - \rho)\,\pi_E^{(t-1)} + \rho \cdot \text{Uniform}(F)
+V(\pi) = \mathbb{E}_{x \sim P, a \sim \pi(\cdot \mid x)}[r(x, a)]
 $$
-so that $\text{KL}(\pi_E^{(t)} \| \text{Uniform}(F)) \to 0$ exponentially with rate $\rho$.
+
+without deploying $\pi$ to collect new data.
 :::
 
-In practice, evaluators correct their biases through several channels: *incident reports* from users who discover model failures that benchmarks missed; *systematic audits* of coverage across capability dimensions (languages, modalities, reasoning types); *improving benchmark acquisition capacity* over time. The parameter $\rho$ captures the fraction of bias removed per evaluation round.
+Why does this framing matter? Whenever items are selected non-uniformly---by adaptive testing (@sec-cat), by convenience sampling, or by any design process that makes some items more likely to appear than others---we are observing rewards under $\pi_0$ but want to estimate performance under $\pi$. Naive accuracy (the simple average of rewards) is biased because $\pi_0 \neq \pi$.
 
-::: {.callout-warning title="Proposition: Alignment Recovery Under Distribution Correction"}
-Under the repeated evaluation game with distribution correction, the builder's optimal strategy converges to maximizing the designer's utility:
+### Three Estimators {#sec-three-estimators}
+
+Three classical estimators address this problem, each with different bias-variance tradeoffs.
+
+**The Direct Method (DM).** Build a reward model $\hat{r}(x, a)$ and use it to predict rewards under the target policy:
+
 $$
-\theta^*_t \to \arg\max_{\theta \in \Theta} \frac{1}{|F|} \sum_{f \in F} f(\theta) = \arg\max_{\theta \in \Theta} u_E(\theta)
+\hat{V}_{\text{DM}} = \frac{1}{n} \sum_{t=1}^{n} \hat{r}(x_t, \pi)
+$$ {#eq-dm}
+
+where $\hat{r}(x_t, \pi) = \sum_a \pi(a \mid x_t) \hat{r}(x_t, a)$ integrates the reward model over the target policy's action distribution. In the AIMS context, $\hat{r}$ is precisely the IRT model from @sec-foundations: $\hat{r}(x, a) = P(Y = 1 \mid \theta, \beta_x)$. The direct method is what we have been doing throughout Chapters 1--3: using the fitted IRT model to predict performance.
+
+The direct method is biased when the reward model is misspecified. If the IRT model is wrong---perhaps the true data-generating process has interactions the model does not capture---the predictions will be systematically off.
+
+**Inverse Propensity Weighting (IPW).** Instead of modeling the reward, model the selection process and reweight observations:
+
 $$
-as $\pi_E^{(t)} \to \text{Uniform}(F)$.
+\hat{V}_{\text{IPW}} = \frac{1}{n} \sum_{t=1}^{n} \frac{\pi(a_t \mid x_t)}{\pi_0(a_t \mid x_t)} r_t
+$$ {#eq-ipw}
+
+Each observation is weighted by the ratio of how likely the target policy was to take that action versus how likely the logging policy was. IPW is unbiased when the propensities are known, but can have very high variance when $\pi_0$ and $\pi$ differ substantially (the weights become large).
+
+::: {.callout-important title="The CAT Propensity Problem"}
+In computerized adaptive testing (@sec-cat), items are selected to maximize Fisher information at the current ability estimate. This means the item selection probability $\pi_0(x_t \mid \hat{\theta}_t)$ is non-uniform: items near the model's estimated ability are heavily oversampled, while very easy and very hard items are undersampled.
+
+Naive accuracy on CAT-selected items is biased because the item pool is deliberately non-representative. IPW corrects this by upweighting items that were unlikely to be selected by the adaptive algorithm. The propensities $\pi_0$ are known from the CAT algorithm's selection rule (the item with maximum Fisher information at the current estimate is selected with probability 1 in a greedy CAT, or with probability proportional to information in a stochastic variant).
 :::
 
-*Proof sketch.* The builder's expected reward under mechanism $M$ is $\mathbb{E}_{f \sim \pi_E^{(t)}}[f(\theta)]$. As $\pi_E^{(t)} \to \text{Uniform}(F)$, this converges to $(1/|F|) u_E(\theta)$. In the limit, the builder knows $\pi_E = \text{Uniform}(F)$ perfectly, but this knowledge provides no advantage: optimizing for the uniform distribution *is* the designer's objective. $\square$
+**The Doubly Robust Estimator (DR).** The doubly robust estimator [@dudik2011doubly; @robins1994estimation] combines both approaches:
 
-The key insight is a *race between two learners*: the builder learns $\pi_E^{(t)}$ from observations, while the evaluator corrects $\pi_E^{(t)}$ toward uniform. The residual misalignment depends on the relative rates of these two processes.
+$$
+\hat{V}_{\text{DR}} = \frac{1}{n} \sum_{t=1}^{n} \left[ \hat{r}(x_t, \pi) + \frac{\pi(a_t \mid x_t)}{\pi_0(a_t \mid x_t)} \bigl(r_t - \hat{r}(x_t, a_t)\bigr) \right]
+$$ {#eq-dr}
 
-::: {.callout-warning title="Proposition: Misalignment Bound"}
-Let $D_0 = \text{KL}(\pi_E^{(0)} \| \text{Uniform}(F))$ and $m_t = k \cdot \min(t, \rho^{-1})$ be the builder's effective sample size. The residual misalignment satisfies:
-$$
-\Delta_t \leq \min\!\left(\underbrace{\frac{m_t}{m_t + |F|}}_{\text{estimation-limited}},\;\; \underbrace{(1-\rho)^t \sqrt{\frac{D_0}{2}}}_{\text{correction-limited}}\right)
-$$
+::: {.callout-note title="Definition: Doubly Robust Estimator"}
+The DR estimator augments the direct method prediction $\hat{r}(x_t, \pi)$ with a propensity-weighted correction term $\frac{\pi}{\pi_0}(r_t - \hat{r})$. It is **doubly robust**: consistent if *either* the reward model $\hat{r}$ or the propensity model $\pi_0$ is correctly specified (but not necessarily both).
+
+- When $\hat{r}$ is correct: the residual $r_t - \hat{r}(x_t, a_t)$ has zero expectation, so the correction vanishes and $\hat{V}_{\text{DR}} \approx \hat{V}_{\text{DM}}$.
+- When $\hat{r}$ is wrong but $\pi_0$ is correct: the IPW term corrects the model's bias, yielding an unbiased estimate.
 :::
 
-The two terms capture complementary regimes:
+**Proof of double robustness.** We verify that $\mathbb{E}[\hat{V}_{\text{DR}}] = V(\pi)$ when either model is correct. Taking expectations:
 
-- **Estimation-limited** ($t$ small): $m_t \approx kt$, giving $\Delta_t \lesssim kt/|F|$. The builder has too few observations to identify the evaluator's biases.
-- **Correction-limited** ($t$ large): $\Delta_t \lesssim (1-\rho)^t \sqrt{D_0/2}$. The builder may know $\pi_E^{(t)}$ well, but the evaluator's correction has driven the bias toward zero, leaving nothing to exploit.
+$$
+\mathbb{E}[\hat{V}_{\text{DR}}] = \mathbb{E}\!\left[\hat{r}(x, \pi)\right] + \mathbb{E}\!\left[\frac{\pi(a \mid x)}{\pi_0(a \mid x)}(r - \hat{r}(x, a))\right]
+$$
 
-*Proof sketch.* The correction-limited term follows from Pinsker's inequality: $\Delta_t \leq \text{TV}(\pi_E^{(t)}, \text{Uniform}(F)) \leq \sqrt{D_0/2}\,(1-\rho)^t$, since the total variation decays geometrically under linear interpolation. The estimation-limited term follows from Bayesian shrinkage: a builder with $m_t$ observations and a Dirichlet$(1,\ldots,1)$ prior has posterior mean that is an $m_t/(m_t + |F|)$-fraction of the way from uniform to the empirical distribution. $\square$
+For the second term, conditioning on $x$:
+
+$$
+\mathbb{E}\!\left[\frac{\pi(a \mid x)}{\pi_0(a \mid x)}(r - \hat{r}(x, a)) \;\middle|\; x\right] = \sum_a \pi_0(a \mid x) \frac{\pi(a \mid x)}{\pi_0(a \mid x)} \bigl(\mathbb{E}[r \mid x, a] - \hat{r}(x, a)\bigr)
+$$
+
+$$
+= \sum_a \pi(a \mid x) \bigl(r^*(x, a) - \hat{r}(x, a)\bigr)
+$$
+
+where $r^*(x, a) = \mathbb{E}[r \mid x, a]$ is the true reward function. If $\hat{r} = r^*$, this is zero. If $\pi_0$ is correct (which it is by construction in the importance weighting), the full expectation becomes:
+
+$$
+\mathbb{E}[\hat{V}_{\text{DR}}] = \mathbb{E}\!\left[\hat{r}(x, \pi)\right] + \mathbb{E}_x\!\left[\sum_a \pi(a \mid x)(r^*(x,a) - \hat{r}(x,a))\right] = \mathbb{E}_x\!\left[\sum_a \pi(a \mid x) r^*(x, a)\right] = V(\pi)
+$$
+
+### Connection to Prediction-Powered Inference {#sec-ppi-connection}
+
+Prediction-Powered Inference (PPI) [@angelopoulos2023prediction] is a recently developed framework that is structurally equivalent to doubly robust estimation. PPI uses a small labeled dataset $\mathcal{D}_n = \{(X_i, Y_i)\}_{i=1}^n$ (expensive: actual model evaluations) and a large unlabeled dataset $\mathcal{D}_N = \{(X_i, \hat{Y}_i)\}_{i=1}^N$ (cheap: model predictions or automated scores) to estimate a population quantity $\mu = \mathbb{E}[Y]$:
+
+$$
+\hat{\mu}_{\text{PPI}} = \frac{1}{N} \sum_{i \in \mathcal{D}_N} \hat{Y}_i + \frac{1}{n} \sum_{i \in \mathcal{D}_n} (Y_i - \hat{Y}_i)
+$$ {#eq-ppi}
+
+The first term is the direct method estimate using the cheap predictions. The second term is the bias correction: it estimates the systematic error in $\hat{Y}$ using the labeled subsample. This is exactly the DR structure: imputation + correction.
+
+The connection to the cold-start pipeline in @sec-cold-start is direct. The PPE (Prediction-Powered Evaluation) approach from Chapter 2 learns a mapping from model embeddings and metadata to IRT parameters, producing predictions $\hat{Y}_{ij}$ for unseen model-item pairs. PPI provides the debiasing step: use a small set of actual evaluations to correct the PPE predictions, yielding valid confidence intervals for model performance. The PPE predictions serve as the imputation model $\hat{r}$; the actual evaluations provide the labeled correction $Y - \hat{Y}$.
+
+### Importance Weighting for Covariate Shift {#sec-importance-weighting}
+
+When the shift between benchmark and deployment is purely covariate shift ($P^{(s)}(Y \mid X) = P^{(t)}(Y \mid X)$, $P^{(s)}(X) \neq P^{(t)}(X)$), the importance-weighted estimator corrects the bias [@shimodaira2000improving]:
+
+$$
+\hat{\mu}_{\text{IW}} = \frac{\sum_{i=1}^n w(x_i) Y_i}{\sum_{i=1}^n w(x_i)}, \quad w(x_i) = \frac{P^{(t)}(x_i)}{P^{(s)}(x_i)}
+$$ {#eq-iw}
+
+This is the self-normalized variant, which is more stable than the unnormalized version. The weights $w(x_i)$ upweight items that are underrepresented in the benchmark relative to deployment, and downweight overrepresented items.
+
+**Practical challenges:**
+
+- **Density ratio estimation**: The weights require knowing or estimating the density ratio $P^{(t)}/P^{(s)}$. Methods include logistic regression on a domain classifier, kernel mean matching, and moment matching [@sugiyama2012density].
+- **Weight clipping**: Extreme weights inflate variance. Clipping weights at a maximum value $M$ (e.g., $w_i \leftarrow \min(w_i, M)$) trades bias for variance reduction.
+- **Effective sample size**: The effective sample size $n_{\text{eff}} = (\sum w_i)^2 / \sum w_i^2$ measures how much information the reweighted sample contains. When $n_{\text{eff}} \ll n$, the importance-weighted estimate is unreliable.
+
+**AI example.** A reasoning benchmark oversamples algebra items (60% algebra, 20% geometry, 20% combinatorics). The deployment distribution is uniform across topics. Importance weighting reweights: algebra items get weight $w = 1/3 \div 3/5 = 5/9$, while geometry and combinatorics items get weight $w = 1/3 \div 1/5 = 5/3$. The corrected accuracy better reflects deployment performance.
 
 ```{pyodide-python}
-#| label: distribution-correction
+#| label: dr-estimation
 #| autorun: true
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.special import expit
 
-np.random.seed(42)
+np.random.seed(123)
 
-# --- Parameters ---
-N = 200
-n_rounds = 200
-k = 20
-rho_values = [0, 0.01, 0.05, 0.1, 0.2]
-n_trials = 20
+# --- Simulate CAT-like adaptive item selection ---
+n_models = 50
+n_items_pool = 200
+n_selected = 30  # Items selected per model by CAT
+n_reps = 500
 
-# Initial biased evaluator distribution
-pi_E_init = np.ones(N) / N
-pi_E_init[:int(0.4 * N)] *= 3.0
-pi_E_init /= pi_E_init.sum()
+# True model abilities
+theta_true = np.random.normal(0, 1, n_models)
+# Item difficulties spanning the range
+beta_pool = np.linspace(-3, 3, n_items_pool)
 
-# True task performance: each task has a "value"
-task_values = np.random.uniform(0.3, 0.9, N)
+# True value: average accuracy under uniform item selection
+true_values = np.zeros(n_models)
+for j in range(n_models):
+    true_values[j] = expit(theta_true[j] - beta_pool).mean()
 
-colors = ['#888888', '#B07CD8', '#F0A35C', '#45BF7C', '#5B8DEE']
+# Run repeated experiments
+dm_estimates = np.zeros((n_reps, n_models))
+ipw_estimates = np.zeros((n_reps, n_models))
+dr_estimates = np.zeros((n_reps, n_models))
+naive_estimates = np.zeros((n_reps, n_models))
 
+for rep in range(n_reps):
+    for j in range(n_models):
+        # CAT item selection: select items near theta (high Fisher info)
+        # Propensity: proportional to Fisher information
+        p_items = expit(theta_true[j] - beta_pool)
+        fisher_info = p_items * (1 - p_items)  # Rasch Fisher info
+        propensity = fisher_info / fisher_info.sum()  # Normalized propensity
+
+        # Select items (with replacement for simplicity)
+        selected = np.random.choice(n_items_pool, n_selected, p=propensity, replace=False)
+        beta_selected = beta_pool[selected]
+        prop_selected = propensity[selected]
+
+        # Generate responses
+        p_correct = expit(theta_true[j] - beta_selected)
+        responses = np.random.binomial(1, p_correct)
+
+        # Uniform target propensity
+        target_prop = 1.0 / n_items_pool
+
+        # --- Naive estimate (simple average) ---
+        naive_estimates[rep, j] = responses.mean()
+
+        # --- Direct Method: use true IRT model ---
+        # Slight misspecification: use noisy theta estimate
+        theta_hat = theta_true[j] + np.random.normal(0, 0.3)
+        dm_pred = expit(theta_hat - beta_pool).mean()
+        dm_estimates[rep, j] = dm_pred
+
+        # --- IPW ---
+        weights = target_prop / prop_selected
+        weights = weights / weights.sum()  # Self-normalize
+        ipw_estimates[rep, j] = (weights * responses).sum()
+
+        # --- Doubly Robust ---
+        r_hat = expit(theta_hat - beta_selected)  # IRT prediction for selected items
+        r_hat_full = expit(theta_hat - beta_pool).mean()  # DM estimate
+        correction = (weights * (responses - r_hat)).sum()
+        dr_estimates[rep, j] = r_hat_full + correction
+
+# --- Compute bias and RMSE ---
+def compute_stats(estimates, true_vals):
+    bias = (estimates.mean(axis=0) - true_vals).mean()
+    rmse = np.sqrt(((estimates.mean(axis=0) - true_vals)**2).mean())
+    return bias, rmse
+
+stats = {
+    'Naive': compute_stats(naive_estimates, true_values),
+    'DM (IRT)': compute_stats(dm_estimates, true_values),
+    'IPW': compute_stats(ipw_estimates, true_values),
+    'DR': compute_stats(dr_estimates, true_values)
+}
+
+# --- Visualization ---
 fig, axes = plt.subplots(1, 2, figsize=(6, 2))
 
-for ri, rho in enumerate(rho_values):
-    all_misalign = np.zeros((n_trials, n_rounds))
-    all_kl = np.zeros((n_trials, n_rounds))
+methods = list(stats.keys())
+biases = [stats[m][0] for m in methods]
+rmses = [stats[m][1] for m in methods]
+colors = ['#B07CD8', '#5B8DEE', '#F0A35C', '#45BF7C']
 
-    for trial in range(n_trials):
-        pi_E = pi_E_init.copy()
-        uniform = np.ones(N) / N
+# Panel 1: Bias
+bars1 = axes[0].bar(methods, biases, color=colors, alpha=0.8, edgecolor='white')
+axes[0].axhline(y=0, color='black', linewidth=0.8)
+axes[0].set_ylabel('Bias')
+axes[0].set_title('Estimation Bias (500 replications)')
+for bar, val in zip(bars1, biases):
+    axes[0].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.001,
+                 f'{val:.4f}', ha='center', fontweight='bold')
 
-        for t in range(n_rounds):
-            # Correct distribution
-            if rho > 0:
-                pi_E = (1 - rho) * pi_E + rho * uniform
+# Panel 2: RMSE
+bars2 = axes[1].bar(methods, rmses, color=colors, alpha=0.8, edgecolor='white')
+axes[1].set_ylabel('RMSE')
+axes[1].set_title('Root Mean Squared Error (500 replications)')
+for bar, val in zip(bars2, rmses):
+    axes[1].text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.001,
+                 f'{val:.4f}', ha='center', fontweight='bold')
 
-            # Misalignment: total variation between pi_E and uniform
-            tv = 0.5 * np.sum(np.abs(pi_E - uniform))
-            all_misalign[trial, t] = tv
+plt.tight_layout()
+plt.show()
 
-            # KL divergence
-            mask = pi_E > 1e-15
-            kl = np.sum(pi_E[mask] * np.log(pi_E[mask] / uniform[mask]))
-            all_kl[trial, t] = kl
+print(f"\nOff-Policy Estimation Results ({n_reps} replications, {n_models} models):")
+print(f"  {'Method':<12} {'Bias':>8} {'RMSE':>8}")
+print(f"  {'-'*28}")
+for m in methods:
+    print(f"  {m:<12} {stats[m][0]:>8.4f} {stats[m][1]:>8.4f}")
+```
 
-    col = colors[ri]
-    rounds = np.arange(n_rounds)
-    label = f'ρ={rho}' if rho > 0 else 'ρ=0 (no correction)'
+The simulation demonstrates the off-policy estimation problem under CAT-like adaptive item selection. The **naive** estimator (simple average of responses on adaptively-selected items) is biased because the CAT algorithm oversamples items near the model's ability level. The **Direct Method** (IRT prediction with noisy ability estimate) has low bias when the model is approximately correct but is sensitive to misspecification. **IPW** corrects the selection bias but has higher variance due to extreme weights. The **Doubly Robust** estimator combines the strengths of both, achieving the lowest RMSE by using the IRT model for imputation and IPW for bias correction.
 
-    axes[0].plot(rounds, all_misalign.mean(axis=0), color=col, label=label, lw=1.5)
-    kl_mean = all_kl.mean(axis=0)
-    kl_mean = np.maximum(kl_mean, 1e-10)
-    axes[1].plot(rounds, kl_mean, color=col, label=label, lw=1.5)
+```{pyodide-python}
+#| label: importance-weighting
+#| autorun: true
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.special import expit
+from scipy.stats import norm
 
-axes[0].set_xlabel('Round')
-axes[0].set_ylabel('Misalignment (TV distance)')
-axes[0].set_title('Residual misalignment')
+np.random.seed(456)
+
+# --- Simulate covariate shift: benchmark oversamples easy items ---
+n_models = 100
+n_source_items = 200
+n_target_items = 200
+
+theta = np.random.normal(0.5, 1, n_models)
+
+# Source: easy-biased item pool (mean difficulty = -1)
+beta_source = np.random.normal(-1, 0.7, n_source_items)
+# Target: broad item pool (mean difficulty = 0)
+beta_target = np.random.normal(0, 1.5, n_target_items)
+
+# Compute true accuracy under each distribution
+acc_source = np.array([expit(th - beta_source).mean() for th in theta])
+acc_target = np.array([expit(th - beta_target).mean() for th in theta])
+
+# Importance-weighted estimate using source data
+# Weight each source item by p_target(beta) / p_source(beta)
+weights = norm.pdf(beta_source, 0, 1.5) / norm.pdf(beta_source, -1, 0.7)
+weights = weights / weights.sum() * len(weights)  # Normalize to sum to n
+
+# Compute IW-corrected accuracy for each model
+acc_iw = np.zeros(n_models)
+for j in range(n_models):
+    p_correct = expit(theta[j] - beta_source)
+    acc_iw[j] = (weights * p_correct).mean()
+
+# --- Visualization ---
+fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+
+# Panel 1: Item distributions
+beta_range = np.linspace(-4, 4, 200)
+axes[0].plot(beta_range, norm.pdf(beta_range, -1, 0.7), '#5B8DEE', linewidth=2.5,
+             label='Source (benchmark)')
+axes[0].plot(beta_range, norm.pdf(beta_range, 0, 1.5), '#E8637A', linewidth=2.5,
+             label='Target (deployment)')
+axes[0].fill_between(beta_range, norm.pdf(beta_range, -1, 0.7), alpha=0.15, color='#5B8DEE')
+axes[0].fill_between(beta_range, norm.pdf(beta_range, 0, 1.5), alpha=0.15, color='#E8637A')
+axes[0].set_xlabel(r'Item difficulty ($\beta$)')
+axes[0].set_ylabel('Density')
+axes[0].set_title('Item Distributions: Source vs Target')
 axes[0].legend()
 
-axes[1].set_xlabel('Round')
-axes[1].set_ylabel('KL divergence')
-axes[1].set_title('Distribution bias')
-axes[1].set_yscale('log')
-axes[1].legend()
+# Panel 2: Accuracy estimates
+# Sort by target accuracy for clearer visualization
+sort_idx = np.argsort(acc_target)
+model_rank = np.arange(n_models)
+
+axes[1].scatter(model_rank, acc_source[sort_idx], color='#5B8DEE', s=20, alpha=0.6,
+                label=f'Naive (source): mean={acc_source.mean():.3f}')
+axes[1].scatter(model_rank, acc_iw[sort_idx], color='#45BF7C', s=20, alpha=0.6,
+                label=f'IW-corrected: mean={acc_iw.mean():.3f}')
+axes[1].scatter(model_rank, acc_target[sort_idx], color='#E8637A', s=20, alpha=0.6,
+                label=f'True target: mean={acc_target.mean():.3f}')
+axes[1].set_xlabel('Model rank (by true target accuracy)')
+axes[1].set_ylabel('Estimated accuracy')
+axes[1].set_title('Covariate Shift Correction')
+axes[1].legend(loc='lower right')
 
 plt.tight_layout()
 plt.show()
+
+print(f"\nCovariate Shift Correction:")
+print(f"  Naive (source) mean accuracy: {acc_source.mean():.3f}")
+print(f"  IW-corrected mean accuracy:   {acc_iw.mean():.3f}")
+print(f"  True target mean accuracy:    {acc_target.mean():.3f}")
+print(f"  Naive overestimation:         {acc_source.mean() - acc_target.mean():.3f}")
+print(f"  IW residual bias:             {acc_iw.mean() - acc_target.mean():.3f}")
 ```
 
-**Figure.** Alignment recovery under distribution correction with $|F| = 200$ and $k = 20$. Left: residual misalignment converges to zero for all $\rho > 0$, with faster correction rates producing faster convergence. The $\rho = 0$ baseline (gray) maintains persistent misalignment. Right: KL divergence decays exponentially on a log scale, with rate proportional to $\rho$.
+The left panel shows the source (benchmark) and target (deployment) item difficulty distributions. The benchmark oversamples easy items (blue, centered at $\beta = -1$), while deployment items span a broader range (red, centered at $\beta = 0$). The right panel shows the consequence: naive accuracy computed on benchmark items (blue) systematically overestimates deployment accuracy (red). Importance weighting (green) corrects the bias by upweighting hard items that are underrepresented in the benchmark, bringing the estimates close to the true deployment accuracy.
 
-### Optimal Evaluation Size {#sec-optimal-k}
 
-With distribution correction, the Pareto frontier from @sec-pareto-frontier collapses. Each revealed task provides only *transient* advantage to the builder, because the bias it reveals gets corrected within $O(1/\rho)$ rounds. The evaluator's per-round loss decomposes as:
+## Conformal Prediction Under Distribution Shift {#sec-conformal}
+
+The off-policy estimators in @sec-off-policy correct *point estimates* of model performance. But practitioners also need *uncertainty quantification*: not just "the model's deployment accuracy is 0.78" but "the model's deployment accuracy is in $[0.72, 0.84]$ with 90% confidence." Conformal prediction provides this guarantee with minimal distributional assumptions.
+
+::: {.callout-note title="Definition: Conformal Prediction"}
+Given a calibration set $\{(X_i, Y_i)\}_{i=1}^n$ and a new input $X_{n+1}$, a conformal prediction set $C_\alpha(X_{n+1})$ satisfies:
+
 $$
-\mathcal{L}(k) = \underbrace{\frac{\sigma^2}{k}}_{\text{evaluation variance}} + \underbrace{\frac{\gamma k}{\rho}}_{\text{steady-state exploitation}}
+P(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha
 $$
 
-The first term decreases in $k$ (more tasks, less noise); the second increases in $k$ (more tasks, faster builder learning) and decreases in $\rho$ (faster correction, shorter exploitation window).
-
-::: {.callout-warning title="Proposition: Optimal Sample Size"}
-Given correction rate $\rho > 0$ and gaming penalty $\gamma > 0$, the optimal number of evaluation tasks per round is:
-$$
-k^* = \sigma \sqrt{\frac{\rho}{\gamma}}
-$$
-with minimum loss $\mathcal{L}(k^*) = 2\sigma\sqrt{\gamma/\rho}$.
+under the assumption that the calibration and test data are **exchangeable** (informally: drawn from the same distribution in no particular order). No parametric assumptions on the data distribution are required.
 :::
 
-*Proof.* Setting $\partial \mathcal{L}/\partial k = -\sigma^2/k^2 + \gamma/\rho = 0$ gives $k^2 = \sigma^2 \rho / \gamma$, hence $k^* = \sigma\sqrt{\rho/\gamma}$. The second-order condition $\partial^2 \mathcal{L}/\partial k^2 = 2\sigma^2/k^3 > 0$ confirms this is a minimum. $\square$
+### Split Conformal Prediction {#sec-split-conformal}
 
-Several key implications follow:
+The split conformal algorithm [@vovk2005algorithmic] is the simplest conformal method:
 
-- **$k^*$ increases with $\sqrt{\rho}$:** Faster correction allows larger evaluation sets. An evaluator who corrects twice as fast can evaluate $\sqrt{2} \approx 1.4$ times as many tasks.
-- **$k^*$ increases with $\sigma$:** Higher task variance demands more samples for a reliable signal, just as in the static case.
-- **Limiting behavior:** As $\rho \to 0$ (no correction), $k^* \to 0$ --- the evaluator should reveal as few tasks as possible. As $\rho \to \infty$ (instant correction), $k^* \to \infty$ --- leakage is immediately outdated.
-- **The key lever is $\rho$:** Since $\mathcal{L}(k^*) = 2\sigma\sqrt{\gamma/\rho}$, the evaluator's *optimal* loss decreases as $1/\sqrt{\rho}$. Investing in distribution correction (coverage audits, benchmark changelogs, incident-driven task additions) is the most effective lever for benchmark design.
+1. Fit a model $\hat{f}$ on a training set.
+2. On a held-out calibration set $\{(X_i, Y_i)\}_{i=1}^n$, compute nonconformity scores $s_i = |Y_i - \hat{f}(X_i)|$.
+3. Let $\hat{q}$ be the $\lceil (1-\alpha)(1 + 1/n) \rceil / n$ quantile of $\{s_1, \ldots, s_n\}$.
+4. For a new input $X_{n+1}$, predict $C_\alpha(X_{n+1}) = [\hat{f}(X_{n+1}) - \hat{q}, \hat{f}(X_{n+1}) + \hat{q}]$.
+
+The coverage guarantee $P(Y_{n+1} \in C_\alpha) \geq 1 - \alpha$ holds for *any* model $\hat{f}$, *any* data distribution, and *any* sample size---as long as the calibration and test data are exchangeable.
+
+### When Exchangeability Fails {#sec-exchangeability-failure}
+
+Under distribution shift, exchangeability fails: the calibration data is drawn from $P^{(s)}$ while the test data comes from $P^{(t)}$. This causes the conformal prediction set to lose its coverage guarantee. Specifically, if the target distribution concentrates on regions where the model is less accurate (harder items), the calibration-based quantile $\hat{q}$ underestimates the nonconformity scores at test time, leading to **undercoverage**.
+
+### Weighted Conformal Prediction {#sec-weighted-conformal}
+
+@tibshirani2019conformal show that coverage can be restored under covariate shift by replacing the uniform quantile with an **importance-weighted quantile**. The key insight is the same as for importance weighting in @sec-importance-weighting: reweight the calibration scores to match the target distribution.
+
+The algorithm modifies step 3: instead of the uniform quantile, compute the weighted quantile of $\{s_1, \ldots, s_n, +\infty\}$ with weights $\{w_1, \ldots, w_n, w_{n+1}\}$ where $w_i = P^{(t)}(X_i) / P^{(s)}(X_i)$ and $w_{n+1} = P^{(t)}(X_{n+1}) / P^{(s)}(X_{n+1})$. This yields:
+
+$$
+P^{(t)}(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha
+$$
+
+The coverage guarantee now holds under the *target* distribution, provided the importance weights are correct. @barber2023conformal extend this beyond covariate shift to more general forms of distribution shift.
 
 ```{pyodide-python}
-#| label: optimal-k-surface
+#| label: conformal-prediction
 #| autorun: true
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.special import expit
+from scipy.stats import norm
 
-sigma = 5.0
-gamma = 0.05
-rho_values = [0.05, 0.1, 0.2, 0.5]
+np.random.seed(789)
 
-k_range = np.linspace(1, 80, 200)
-colors = ['#E8637A', '#F0A35C', '#45BF7C', '#5B8DEE']
+# --- Simulate: calibrate on easy items, test on harder items ---
+n_cal = 200   # Calibration items (source)
+n_test = 200  # Test items (target)
+n_models = 50
 
-fig, ax = plt.subplots(1, 1, figsize=(3.5, 3))
+# Source: easy items; Target: harder items
+beta_cal = np.random.normal(-0.5, 0.8, n_cal)
+beta_test = np.random.normal(1.0, 1.0, n_test)
 
-for i, rho in enumerate(rho_values):
-    loss = sigma**2 / k_range + gamma * k_range / rho
-    k_star = sigma * np.sqrt(rho / gamma)
-    loss_star = 2 * sigma * np.sqrt(gamma / rho)
+# Test at multiple nominal coverage levels
+alphas = np.arange(0.05, 0.55, 0.05)
+coverage_naive = np.zeros(len(alphas))
+coverage_weighted = np.zeros(len(alphas))
 
-    ax.plot(k_range, loss, color=colors[i], lw=1.5, label=f'ρ={rho}')
-    ax.plot(k_star, loss_star, '*', color=colors[i], markersize=10, zorder=5)
-    ax.annotate(f'k*={k_star:.0f}', (k_star, loss_star),
-                textcoords='offset points', xytext=(8, 5), fontsize=6, color=colors[i])
+for a_idx, alpha in enumerate(alphas):
+    covers_naive = 0
+    covers_weighted = 0
+    n_total = 0
 
-# Static case (rho -> 0): only variance term
-ax.plot(k_range, sigma**2 / k_range, '--', color='#888888', lw=1, label='ρ→0 (static)')
+    for j in range(n_models):
+        theta_j = np.random.normal(0, 1)
 
-ax.set_xlabel('Evaluation tasks per round (k)')
-ax.set_ylabel('Evaluator loss L(k)')
-ax.set_title('Optimal evaluation size')
-ax.legend()
-ax.set_ylim(0, 15)
-ax.set_xlim(0, 80)
+        # True accuracy on calibration and test items
+        p_cal = expit(theta_j - beta_cal)
+        p_test = expit(theta_j - beta_test)
 
-plt.tight_layout()
-plt.show()
-```
+        # Generate binary responses
+        y_cal = np.random.binomial(1, p_cal)
+        y_test = np.random.binomial(1, p_test)
 
-**Figure.** Evaluator loss $\mathcal{L}(k) = \sigma^2/k + \gamma k / \rho$ for different correction rates, with stars marking the optimal $k^*$. Faster correction (larger $\rho$) shifts $k^*$ rightward and lowers the minimum loss. The static case ($\rho \to 0$, dashed) is monotonically decreasing, reflecting the irresolvable tradeoff without correction. Parameters: $\sigma = 5$, $\gamma = 0.05$.
+        # Model prediction: IRT probability
+        r_hat_cal = p_cal
+        r_hat_test = p_test
 
-### Noise-Gated Holdout {#sec-holdout}
+        # Nonconformity scores on calibration set
+        scores_cal = np.abs(y_cal - r_hat_cal)
 
-Distribution correction makes leaked information obsolete by moving the target. A complementary mechanism *prevents* leakage in the first place by gating the information flow.
+        # --- Naive conformal: uniform quantile ---
+        q_level = int(np.ceil((1 - alpha) * (n_cal + 1))) - 1
+        q_level = min(q_level, n_cal - 1)
+        sorted_scores = np.sort(scores_cal)
+        q_naive = sorted_scores[q_level]
 
-::: {.callout-note title="Definition: Holdout Evaluation Mechanism"}
-The evaluator publishes a reference set $S_0 \subset F$ of size $n_0$, sampled from $\pi_E$. At each round $t$:
+        # --- Weighted conformal: importance-weighted quantile ---
+        weights = norm.pdf(beta_cal, 1.0, 1.0) / norm.pdf(beta_cal, -0.5, 0.8)
+        weights = weights / weights.sum()
 
-1. Draw a holdout set $S_t$ of size $k$ from $\pi_E^{(t)}$ and noise $\xi_t \sim \text{Laplace}(0, 1/\varepsilon)$.
-2. Compute the reference score $r_T(\theta_t) = \frac{1}{n_0}\sum_{f \in S_0} f(\theta_t)$ and the holdout score $r_H(\theta_t) = \frac{1}{k}\sum_{f \in S_t} f(\theta_t)$.
-3. **Threshold test:** If $|r_H(\theta_t) + \xi_t - r_T(\theta_t)| < \eta$, publish $r_T(\theta_t)$ ("silent" round). Otherwise, publish $r_H(\theta_t) + \xi_t$ ("alarm" round).
-:::
+        # Weighted quantile
+        sorted_idx = np.argsort(scores_cal)
+        cum_weights = np.cumsum(weights[sorted_idx])
+        q_idx = np.searchsorted(cum_weights, 1 - alpha)
+        q_idx = min(q_idx, n_cal - 1)
+        q_weighted = scores_cal[sorted_idx[q_idx]]
 
-The mechanism is **self-correcting**: it reveals less information precisely when the builder is behaving well ($\Delta_{\text{game}} \approx 0$, so the alarm fires only due to noise, with probability $p_{\text{alarm}} = e^{-\varepsilon\eta}$), and reveals more when the builder is gaming (the score discrepancy reliably triggers the alarm). The effective leakage per round for a non-gaming builder is:
-$$
-\lambda_{\text{out}}^{\text{holdout}} \approx e^{-\varepsilon\eta} \cdot k
-$$
+        # Check coverage on test items
+        for i in range(n_test):
+            score_test = np.abs(y_test[i] - r_hat_test[i])
+            covers_naive += (score_test <= q_naive)
+            covers_weighted += (score_test <= q_weighted)
+            n_total += 1
 
-Setting $\varepsilon\eta = 3$ yields a $\sim 20\times$ slowdown in the builder's learning rate, buying the evaluator substantially more time for distribution correction.
+    coverage_naive[a_idx] = covers_naive / n_total
+    coverage_weighted[a_idx] = covers_weighted / n_total
 
-::: {.callout-warning title="Why Noise Alone Cannot Replace Distribution Correction"}
-The holdout mechanism slows the builder's learning but does not change their *incentives* conditional on what they have learned. Regardless of how much Laplace noise is added, the builder's optimal strategy given their posterior $\hat{\pi}_{E,t}$ remains $\theta_t^* = \arg\max_\theta \mathbb{E}_{f \sim \hat{\pi}_{E,t}}[f(\theta)]$. If $\pi_E$ is biased and fixed, the builder will eventually learn this bias and specialize accordingly. Only distribution correction, which drives $\pi_E^{(t)} \to \text{Uniform}(F)$, ensures that the builder's eventual knowledge provides no exploitable advantage. This is the key difference from pure differential privacy: DP slows learning; distribution correction eliminates the *incentive* to exploit what is learned.
-:::
-
-This connects to the differential privacy literature [@dwork2015generalization; @dwork2014algorithmic]. The holdout mechanism inherits DP guarantees from the Sparse Vector Algorithm, bounding the max-information between the builder's observations and the holdout set. However, DP addresses a different threat: it prevents reconstruction of which specific tasks are in the holdout (overfitting to the test *set*), while our concern is that the builder learns the evaluation *distribution* and specializes accordingly.
-
-
-## Metric Design as Principal-Agent Problem {#sec-metric-design}
-
-We now shift from "which tasks to show" to "which metrics to report." Even with a perfectly designed evaluation mechanism, the *choice of metric* can create perverse incentives.
-
-### When Metrics Create Perverse Incentives {#sec-perverse-incentives}
-
-A vivid illustration comes from healthcare. In 2001, the New York State Department of Health began publishing hospital mortality rates for cardiac surgery. @dranove2003paying documented the consequences: hospitals began *avoiding* severely ill patients rather than improving care. By publishing average treated outcome (ATO) as the quality metric, the system rewarded patient selection rather than treatment effectiveness.
-
-The AI evaluation analogy is direct. A leaderboard that rewards average benchmark score incentivizes developers to specialize on easy benchmarks or to select favorable evaluation conditions, rather than improving broadly. The metric itself creates the misalignment.
-
-Formalizing this as a principal-agent problem [@laffont1986using]: the principal (evaluator) chooses a reward function $w$, and the agent (developer) best-responds with policy $\pi^w$. The principal's regret is $R(\pi^w) = \max_{\tilde{\pi} \in \Pi} V(\tilde{\pi}) - V(\pi^w)$, where $V(\pi) = \mathbb{E}[Y(\pi) - Y(0)]$ is the total treatment effect.
-
-::: {.callout-warning title="Proposition: ATO Has Unbounded Regret"}
-The average treated outcome $w_{\text{ATO}}(x, t, y) = y \cdot \mathbf{1}[t = 1]$ can have unbounded regret. An agent maximizing $\mathbb{E}[w_{\text{ATO}}]$ may achieve $R(\pi^{w_{\text{ATO}}}) = \max_\pi V(\pi)$ --- the *worst possible* policy.
-:::
-
-The intuition is stark: a hospital maximizing average treated outcome selects only the healthiest patients for treatment, achieving excellent ATO but zero (or negative) total treatment effect. In the AI setting, a developer maximizing average benchmark accuracy across their selected tasks may simply drop the hardest benchmarks from their evaluation suite.
-
-::: {.callout-warning title="Proposition: Total Treatment Effect Achieves Zero Regret"}
-The total treatment effect metric $w_{\text{TT}}(x, t, y) = y - \hat{\mu}_0(x)$ achieves zero regret when the principal has unbiased counterfactual estimates $\hat{\mu}_0(x) = \mathbb{E}[Y(0) \mid X = x]$.
-:::
-
-The key insight: by subtracting the counterfactual baseline (what would have happened without treatment), the metric removes the incentive for patient selection. In AI evaluation, this translates to scoring the "capability uplift" --- performance relative to a baseline --- rather than raw performance. This connects to the doubly robust estimation from @sec-causality: counterfactual metrics require causal reasoning about what performance *would have been* absent the developer's effort.
-
-### Information Asymmetry and Metric Elicitation {#sec-information-elicitation}
-
-Beyond metric choice, there is a prior question: how much should the developer *reveal* about their model's capabilities? Consider a developer (agent) with a private cost-correlated variable $X$ --- for instance, knowledge about which capability dimensions their model excels at. The evaluator (principal) can design contracts conditioned on $X$ if it is revealed.
-
-Drawing on the information elicitation framework of @wang2024relying, the key question is: when does the developer prefer to reveal, conceal, or *garble* information about their capabilities?
-
-- **Reveal:** The developer discloses $X$ fully. The principal designs a targeted contract, which benefits both parties when the information enables efficient allocation.
-- **Conceal:** The developer hides $X$. The principal must use a one-size-fits-all contract, which is robust but potentially inefficient.
-- **Garble:** The developer discloses a noisy version of $X$. This intermediate option can be Pareto-improving.
-
-::: {.callout-warning title="Proposition: Principal Always Benefits from Revelation"}
-The principal's expected utility is weakly higher under revelation than concealment: $V_P^{\text{reveal}} \geq V_P^{\text{conceal}}$.
-:::
-
-*Proof sketch.* Under revelation, the principal's optimization problem has a strictly larger feasible set (contracts conditioned on $X$), so the optimum can only improve. $\square$
-
-But the developer's incentives are more nuanced. Revelation helps when conditioning on $X$ sufficiently differentiates high-cost and low-cost types, allowing the principal to offer more efficient contracts. Concealment is preferred when revelation would lead the principal to extract all of the developer's surplus through perfectly targeted contracts.
-
-### Garbling as Differential Privacy {#sec-garbling-privacy}
-
-The most interesting case is *garbling*: the developer reveals $Y = X$ with probability $\varepsilon$ and $Y = \xi$ (noise) with probability $1 - \varepsilon$. This is precisely the randomized response mechanism from differential privacy.
-
-::: {.callout-warning title="Proposition: Garbling Can Pareto-Dominate Both Extremes"}
-Under fairly wide conditions (e.g., two exponential cost types with different means), the agent may prefer garbled disclosure to both full concealment and full revelation. Moreover, garbling can increase total welfare compared to concealment.
-:::
-
-The intuition is that garbling provides the principal with *just enough* information to design better contracts without enabling full surplus extraction. In the AI evaluation context, this maps to:
-
-- **Model cards with calibrated noise:** Developers disclose approximate capability profiles rather than exact performance vectors.
-- **Differential privacy in metric reporting:** Adding Laplace noise to reported metrics creates a garbling mechanism.
-- **Benchmark transparency tiers:** Publish aggregate scores publicly, but release fine-grained breakdowns only through a privacy-preserving mechanism.
-
-This connects directly to the holdout mechanism of @sec-holdout: both use calibrated noise to create better incentive equilibria. The parallel is deep --- the evaluator's decision about how much to reveal about the evaluation distribution and the developer's decision about how much to reveal about model capabilities are dual problems in information design.
-
-```{pyodide-python}
-#| label: agency-game
-#| autorun: true
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.optimize import minimize_scalar
-
-np.random.seed(42)
-
-# --- Agency game simulation ---
-# Two exponential cost types: lambda_0 (high cost), lambda_1 (low cost)
-lambda_0_range = np.linspace(0.5, 5.0, 30)
-lambda_1_range = np.linspace(0.5, 5.0, 30)
-
-# Principal's value from agent effort
-b = 2.0
-
-# Compute revelation advantage for agent
-V_diff = np.zeros((len(lambda_0_range), len(lambda_1_range)))
-
-for i, lam0 in enumerate(lambda_0_range):
-    for j, lam1 in enumerate(lambda_1_range):
-        # Prior: equal probability of each type
-        p0, p1 = 0.5, 0.5
-
-        # Under revelation: principal offers type-specific contracts
-        # Optimal effort for type k: e* = max(0, b - lambda_k)
-        # Agent surplus under reveal: E[max(0, w_k - C_k)] for targeted w_k
-        e_rev_0 = max(0, b - lam0)
-        e_rev_1 = max(0, b - lam1)
-        # Agent expected utility: wage minus expected cost
-        V_agent_rev = p0 * max(0, (b - lam0)**2 / (2*b)) + p1 * max(0, (b - lam1)**2 / (2*b))
-
-        # Under concealment: principal offers pooling contract
-        lam_pool = p0 * lam0 + p1 * lam1
-        e_con = max(0, b - lam_pool)
-        V_agent_con = max(0, (b - lam_pool)**2 / (2*b))
-
-        V_diff[i, j] = V_agent_rev - V_agent_con
-
+# --- Visualization ---
 fig, axes = plt.subplots(1, 2, figsize=(6, 2))
 
-# Panel 1: Heatmap of V_reveal - V_conceal
-im = axes[0].imshow(V_diff, extent=[lambda_1_range[0], lambda_1_range[-1],
-                                     lambda_0_range[-1], lambda_0_range[0]],
-                    aspect='auto', cmap='RdBu_r', vmin=-0.5, vmax=0.5)
-axes[0].set_xlabel('λ₁ (low-cost type)')
-axes[0].set_ylabel('λ₀ (high-cost type)')
-axes[0].set_title('Agent: V_reveal − V_conceal')
-axes[0].contour(lambda_1_range, lambda_0_range, V_diff,
-                levels=[0], colors='black', linewidths=1.5)
-plt.colorbar(im, ax=axes[0], shrink=0.8)
-
-# Panel 2: Agent utility under garbling (varying epsilon)
-lam0_fixed, lam1_fixed = 3.0, 1.0
-epsilons = np.linspace(0, 1, 100)
-V_garble = np.zeros(len(epsilons))
-
-for ei, eps in enumerate(epsilons):
-    # Under garbling: principal observes Y = X w.p. eps, Y = noise w.p. 1-eps
-    # Effective type distribution from principal's perspective
-    # Garbled: principal assigns probability
-    # P(type=0 | Y=0) = eps * p0 / (eps*p0 + (1-eps)*0.5)
-    # Simplified: interpolate between reveal and conceal
-    V_garble[ei] = eps * (0.5 * max(0, (b - lam0_fixed)**2 / (2*b)) +
-                          0.5 * max(0, (b - lam1_fixed)**2 / (2*b))) + \
-                   (1 - eps) * max(0, (b - 0.5*lam0_fixed - 0.5*lam1_fixed)**2 / (2*b))
-
-axes[1].plot(epsilons, V_garble, color='#5B8DEE', lw=2)
-axes[1].axhline(y=V_garble[0], color='#E8637A', ls='--', lw=1, label='Conceal')
-axes[1].axhline(y=V_garble[-1], color='#45BF7C', ls='--', lw=1, label='Reveal')
-best_eps = epsilons[np.argmax(V_garble)]
-axes[1].axvline(x=best_eps, color='#F0A35C', ls=':', lw=1, label=f'ε*={best_eps:.2f}')
-axes[1].set_xlabel('Garbling parameter ε')
-axes[1].set_ylabel('Agent utility')
-axes[1].set_title(f'Garbling (λ₀={lam0_fixed}, λ₁={lam1_fixed})')
-axes[1].legend()
-
-plt.tight_layout()
-plt.show()
-```
-
-**Figure.** Left: heatmap of the agent's net benefit from revelation vs. concealment across pairs of exponential cost types $(\lambda_0, \lambda_1)$. Red regions indicate the agent prefers revelation; blue regions favor concealment. The black contour marks indifference. Right: agent utility under garbling (noisy disclosure with probability $\varepsilon$) for fixed cost types. An intermediate garbling level can outperform both full concealment and full revelation.
-
-
-## Representative Benchmark Selection {#sec-representative-selection}
-
-A distinct but related design question: given a large suite of evaluation metrics, how should one select a representative subset? This is the "lite benchmark" problem faced by BIG-bench (200+ metrics $\to$ BIG-bench Lite, 24), HELM ($\to$ HELM Lite), and Cal Hospital Compare (hundreds of quality measures $\to$ 12).
-
-### The Subset Selection Problem {#sec-subset-selection}
-
-Let there be $n$ metrics and $m$ alternatives (models). Each metric $i$ produces a ranking $\sigma_i$ over the alternatives. We seek a subset $K \subseteq N = [n]$ of metrics that is "representative" of the full set $N$. But what does "representative" mean formally? The work of @procaccia2025metritocracy provides two precise definitions grounded in social choice theory.
-
-### Positional Representation {#sec-positional-representation}
-
-The first notion prevents *under-representation* at every rank cutoff.
-
-::: {.callout-note title="Definition: Positional Representation"}
-A subset $K$ satisfies **positional representation** for group size $g$ if for every rank cutoff $r \in [m]$ and every alternative $a$:
-$$
-C(K, r, a) \geq \left\lfloor \frac{C(N, r, a)}{g} \right\rfloor
-$$
-where $C(S, r, a) = |\{i \in S : \sigma_i(a) \leq r\}|$ counts how many metrics in $S$ rank alternative $a$ in the top $r$.
-:::
-
-In words: if alternative $a$ is ranked in the top $r$ by at least $\ell \cdot g$ metrics in $N$, then $a$ must be ranked in the top $r$ by at least $\ell$ metrics in $K$. The parameter $g$ controls the granularity of representation --- smaller $g$ requires finer representation but demands larger $|K|$.
-
-::: {.callout-warning title="Theorem: Positional Representation Bounds"}
-The minimum subset size needed to guarantee positional representation satisfies:
-$$
-\Omega\!\left(\frac{n}{g} \cdot \frac{\log m}{\log(n \log m / g)}\right) \leq |K| \leq O\!\left(\frac{n}{g} \log m\right)
-$$
-The upper bound is achieved by a polynomial-time greedy algorithm (Algorithm 1 in @procaccia2025metritocracy) based on set cover.
-:::
-
-The greedy algorithm works as follows: iterate through the preference profile row by row, coloring entries when an alternative accumulates $g$ appearances. Then greedily select metrics that cover the most remaining colors. The connection to set cover yields the logarithmic factor.
-
-### Positional Proportionality {#sec-positional-proportionality}
-
-Positional representation prevents under-representation but not over-representation. A stronger notion prevents both:
-
-::: {.callout-note title="Definition: Positional Proportionality"}
-A subset $K$ satisfies **$\epsilon$-positional proportionality** if for every alternative $a$ and every rank cutoff $r$:
-$$
-\left| \frac{C(N, r, a)}{|N|} - \frac{C(K, r, a)}{|K|} \right| \leq \epsilon
-$$
-:::
-
-This preserves the *fraction* of metrics ranking each alternative at each position, up to additive error $\epsilon$.
-
-::: {.callout-warning title="Theorem: Positional Proportionality Bounds"}
-The minimum subset size for $\epsilon$-positional proportionality satisfies:
-$$
-\Omega\!\left(\frac{1}{\epsilon^2} \log m\right) \leq |K| \leq O\!\left(\frac{1}{\epsilon^2} \log m\right)
-$$
-These bounds are tight up to constant factors.
-:::
-
-The tight bounds follow from a connection to uniform convergence: a random subset of size $O(\epsilon^{-2} \log m)$ satisfies positional proportionality with high probability, by a Chernoff-type argument applied simultaneously to all $O(m)$ alternatives and rank cutoffs.
-
-A particularly useful consequence connects proportionality to scoring rules:
-
-::: {.callout-warning title="Theorem: Scoring Rule Approximation"}
-If $K$ satisfies $\epsilon$-positional proportionality, then for any scoring rule with score vector $s$ and every alternative $a$:
-$$
-|f_s(a, \sigma_N) - f_s(a, \sigma_K)| \leq \epsilon
-$$
-where $f_s(a, \sigma_S) = \frac{1}{|S|} \sum_{i \in S} s_{\sigma_i(a)}$ is the average score of alternative $a$ under scoring rule $s$ in metric set $S$.
-:::
-
-This is the key practical guarantee: a subset satisfying positional proportionality approximates *any* scoring rule on the original set of metrics. The connection to @sec-dimensionality is direct: positional proportionality provides a formal criterion for when a "lite" benchmark preserves the same information as the full suite, complementing the dimensionality analysis of factor models.
-
-```{pyodide-python}
-#| label: positional-representation
-#| autorun: true
-import numpy as np
-import matplotlib.pyplot as plt
-
-np.random.seed(42)
-
-# --- Generate synthetic benchmark data ---
-n_metrics = 50    # full set
-m_models = 20     # alternatives
-
-# Generate random rankings: each metric produces a permutation
-rankings = np.zeros((n_metrics, m_models), dtype=int)
-for i in range(n_metrics):
-    rankings[i] = np.random.permutation(m_models)
-
-def count_top_r(rankings, subset, r, a):
-    """Count how many metrics in subset rank alternative a in top r."""
-    return sum(1 for i in subset if rankings[i, a] < r)
-
-def greedy_positional_representation(rankings, g):
-    """Greedy algorithm for positional representation."""
-    n, m = rankings.shape
-
-    # Phase 1: Color entries
-    colors = {}
-    color_id = 0
-    alt_counts = {a: [] for a in range(m)}  # track uncolored positions per alt
-
-    for r in range(m):
-        for a in range(m):
-            entries = [(i, r) for i in range(n) if rankings[i, a] == r]
-            for (i, pos) in entries:
-                alt_counts[a].append((i, pos))
-                if len(alt_counts[a]) >= g:
-                    for (mi, mp) in alt_counts[a][-g:]:
-                        colors[(mi, a, mp)] = color_id
-                    color_id += 1
-                    alt_counts[a] = []
-
-    # Phase 2: Greedy set cover
-    K = set()
-    all_colors = set(colors.values())
-    remaining = all_colors.copy()
-
-    metric_colors = {i: set() for i in range(n)}
-    for (mi, a, pos), c in colors.items():
-        metric_colors[mi].add(c)
-
-    while remaining:
-        best_metric = max(range(n), key=lambda i: len(metric_colors[i] & remaining) if i not in K else -1)
-        if len(metric_colors[best_metric] & remaining) == 0:
-            break
-        K.add(best_metric)
-        remaining -= metric_colors[best_metric]
-
-    return K
-
-# --- Run for different group sizes ---
-g_values = [2, 3, 5, 8, 10, 15, 20, 25]
-greedy_sizes = []
-random_sizes = []
-
-for g in g_values:
-    K = greedy_positional_representation(rankings, g)
-    greedy_sizes.append(len(K))
-
-    # Random baseline: how many random metrics needed?
-    n_trials_rand = 50
-    rand_needed = []
-    for _ in range(n_trials_rand):
-        perm = np.random.permutation(n_metrics)
-        for size in range(1, n_metrics + 1):
-            K_rand = set(perm[:size])
-            # Check positional representation
-            satisfied = True
-            for r in range(m_models):
-                for a in range(m_models):
-                    c_full = count_top_r(rankings, range(n_metrics), r, a)
-                    c_sub = count_top_r(rankings, K_rand, r, a)
-                    if c_sub < c_full // g:
-                        satisfied = False
-                        break
-                if not satisfied:
-                    break
-            if satisfied:
-                rand_needed.append(size)
-                break
-        else:
-            rand_needed.append(n_metrics)
-    random_sizes.append(np.mean(rand_needed))
-
-# --- Plot ---
-fig, axes = plt.subplots(1, 2, figsize=(6, 2))
-colors_plot = ['#5B8DEE', '#E8637A', '#45BF7C']
-
-axes[0].plot(g_values, greedy_sizes, 'o-', color=colors_plot[0], lw=1.5, markersize=4, label='Greedy')
-axes[0].plot(g_values, random_sizes, 's--', color=colors_plot[1], lw=1.5, markersize=4, label='Random')
-axes[0].plot(g_values, [n_metrics/g * np.log(m_models) for g in g_values], ':',
-             color='#888888', lw=1, label='(n/g)·log(m) bound')
-axes[0].set_xlabel('Group size g')
-axes[0].set_ylabel('Selected subset size |K|')
-axes[0].set_title('Positional representation')
+# Panel 1: Coverage vs nominal level
+nominal = 1 - alphas
+axes[0].plot(nominal, nominal, 'k--', linewidth=1, label='Ideal (y = x)')
+axes[0].plot(nominal, coverage_naive, 'o-', color='#E8637A', linewidth=2, markersize=6,
+             label='Naive conformal')
+axes[0].plot(nominal, coverage_weighted, 's-', color='#45BF7C', linewidth=2, markersize=6,
+             label='Weighted conformal')
+axes[0].fill_between(nominal, nominal - 0.03, nominal + 0.03, alpha=0.1, color='gray',
+                     label='±3% tolerance')
+axes[0].set_xlabel('Nominal coverage (1 - α)')
+axes[0].set_ylabel('Empirical coverage')
+axes[0].set_title('Coverage Calibration Under Shift')
 axes[0].legend()
+axes[0].set_xlim(0.45, 1.0)
+axes[0].set_ylim(0.45, 1.05)
 
-# Panel 2: Show ranking preservation for the g=5 case
-K_example = greedy_positional_representation(rankings, g=5)
-K_list = sorted(K_example)
-
-# Top-5 ranking of each model: fraction of metrics ranking it in top 5
-top_r = 5
-frac_full = np.array([count_top_r(rankings, range(n_metrics), top_r, a) / n_metrics
-                       for a in range(m_models)])
-frac_subset = np.array([count_top_r(rankings, K_list, top_r, a) / len(K_list)
-                         for a in range(m_models)])
-
-sort_idx = np.argsort(-frac_full)
-x = np.arange(m_models)
-w = 0.35
-axes[1].bar(x - w/2, frac_full[sort_idx], w, color=colors_plot[0], alpha=0.7, label=f'Full (n={n_metrics})')
-axes[1].bar(x + w/2, frac_subset[sort_idx], w, color=colors_plot[2], alpha=0.7, label=f'Subset (|K|={len(K_list)})')
-axes[1].set_xlabel('Model (sorted)')
-axes[1].set_ylabel(f'Fraction in top {top_r}')
-axes[1].set_title(f'Top-{top_r} preservation (g=5)')
+# Panel 2: Distribution comparison
+beta_range = np.linspace(-3, 4, 200)
+axes[1].plot(beta_range, norm.pdf(beta_range, -0.5, 0.8), '#5B8DEE', linewidth=2.5,
+             label='Calibration (easy)')
+axes[1].plot(beta_range, norm.pdf(beta_range, 1.0, 1.0), '#E8637A', linewidth=2.5,
+             label='Test (hard)')
+axes[1].fill_between(beta_range, norm.pdf(beta_range, -0.5, 0.8), alpha=0.15, color='#5B8DEE')
+axes[1].fill_between(beta_range, norm.pdf(beta_range, 1.0, 1.0), alpha=0.15, color='#E8637A')
+axes[1].set_xlabel(r'Item difficulty ($\beta$)')
+axes[1].set_ylabel('Density')
+axes[1].set_title('Calibration vs Test Item Distributions')
 axes[1].legend()
-axes[1].set_xticks([])
 
 plt.tight_layout()
 plt.show()
+
+print(f"\nConformal Prediction Under Covariate Shift:")
+print(f"  {'Nominal':>8} {'Naive':>8} {'Weighted':>8} {'Gap (naive)':>12}")
+for i in range(len(alphas)):
+    nom = 1 - alphas[i]
+    print(f"  {nom:>8.2f} {coverage_naive[i]:>8.3f} {coverage_weighted[i]:>8.3f} "
+          f"{coverage_naive[i] - nom:>+12.3f}")
 ```
 
-**Figure.** Left: subset size $|K|$ required by the greedy algorithm for positional representation at various group sizes $g$, compared to random selection and the theoretical $O(n/g \cdot \log m)$ bound. The greedy algorithm consistently outperforms random selection. Right: for $g=5$, comparison of the fraction of metrics ranking each model in the top 5, between the full set ($n=50$) and the greedy-selected subset. The subset closely preserves the ranking structure.
+The left panel shows coverage calibration: the diagonal represents perfect calibration (empirical coverage = nominal coverage). Naive conformal prediction (red) falls below the diagonal---it promises 90% coverage but delivers less, because the calibration items (easy) are not representative of the test items (hard). Weighted conformal prediction (green) restores coverage by reweighting the calibration scores to match the test distribution. The right panel shows the source of the problem: the calibration distribution (blue) is shifted left (easier items) relative to the test distribution (red).
 
 
-## Synthesis: Design Principles for Strategic Benchmarks {#sec-design-principles}
+## Putting It All Together: A Causal Audit {#sec-causal-audit}
 
-The three threads of this chapter --- information design, metric design, and representative selection --- converge on six actionable design principles for AI evaluation.
+We close with a worked example that composes all tools from this chapter. Consider "CodeReason," a hypothetical benchmark claiming to measure coding reasoning ability in language models.
 
-| Principle | Formal Basis | Recommendation |
-|-----------|-------------|----------------|
-| **1. Randomize and Refresh** | Theorem 1 (one-shot alignment), Prop. (deterministic failure) | Use randomized evaluation with task renewal. Static benchmarks are Goodhart-vulnerable by construction. |
-| **2. Correct and Grow** | Prop. (alignment recovery), Prop. (optimal $k^*$) | Invest in distribution correction ($\rho$) as the primary lever. The optimal $k^*$ scales with $\sqrt{\rho}$. |
-| **3. Gate Information Release** | Holdout mechanism, Prop. (learning slowdown) | Use threshold tests to condition information flow on builder behavior. Combine with distribution correction. |
-| **4. Align Metrics with Welfare** | Prop. (ATO regret), Prop. (TT zero regret) | Score total treatment effect, not averages. Account for counterfactual baselines. |
-| **5. Allow Partial Transparency** | Prop. (garbling dominance) | Calibrated noise in metric reporting (garbling) can create Pareto improvements over both full transparency and full opacity. |
-| **6. Ensure Representative Subsets** | Thms. (positional representation/proportionality bounds) | Use formal representation criteria rather than ad hoc selection when creating lite benchmarks. |
+**Step 1: Draw the evaluation DAG** (@sec-evaluation-dag). We identify: Training Data $D$ (code repositories, documentation), Architecture $A$ (transformer variant), Latent Coding Ability $\theta$, Benchmark Items $\beta$ (coding problems), Prompt Template $F$ (instruction format), and Observed Score $Y$. We suspect two validity-threatening paths: (i) $D \to Y$ bypassing $\theta$ (some models trained on CodeReason's source repository), and (ii) $F \to Y$ (the benchmark uses a specific instruction format that favors certain models).
 
-: Six design principles for strategic AI evaluation {#tbl-design-principles}
+**Step 2: Check for distribution shift** (@sec-shift-taxonomy). The benchmark items are predominantly Python function-completion tasks at medium difficulty. The deployment context requires debugging, multi-file reasoning, and code review across Python, JavaScript, and Rust. This is covariate shift: the item distribution $P^{(s)}(\beta)$ is narrower than $P^{(t)}(\beta)$. We estimate density ratios using a domain classifier trained to distinguish benchmark items from deployment items.
 
-These principles interact in important ways. Principles 1--3 address the *information channel* (how much the evaluator reveals about the evaluation mechanism). Principle 4 addresses the *metric channel* (what the evaluator measures). Principle 5 addresses the *developer channel* (what the developer reveals about their model). Principle 6 addresses the *scope channel* (which metrics to include).
+**Step 3: Apply doubly robust estimation** (@sec-three-estimators). We combine two components: (a) An IRT model fitted on the benchmark data provides $\hat{r}(x, a)$---the direct method estimate of each model's accuracy on any item. (b) The density ratio weights from Step 2 provide the importance weights. The DR estimator corrects the IRT predictions using the importance-weighted residuals. The result: an accuracy estimate that accounts for both the item selection bias and any IRT misspecification.
 
-A well-designed evaluation system should operate on all four channels simultaneously: randomize task selection (Principle 1), invest in distribution correction (Principle 2), gate information via holdout mechanisms (Principle 3), use welfare-aligned metrics (Principle 4), allow developers to disclose through privacy-preserving mechanisms (Principle 5), and ensure the metric suite is formally representative (Principle 6).
+**Step 4: Construct prediction intervals** (@sec-weighted-conformal). Using the importance weights from Step 2, we apply weighted conformal prediction to the DR-corrected estimates. The result: "Model X's deployment accuracy is in [0.62, 0.71] with 90% coverage." The interval is wider than it would be under no shift, reflecting the additional uncertainty from extrapolating to a different item distribution.
+
+**Step 5: Diagnose contamination** (@sec-causal-contamination). We compare model performance on items created before vs. after the training data cutoff (chronological split). Models with suspected contamination show a 15-point accuracy gap between pre- and post-cutoff items. We run item-fit analysis (@sec-item-fit) and find that the pre-cutoff items have inflated outfit statistics for these models. Conclusion: the $D \to Y$ path is active for these models. We flag them and report both contamination-adjusted and unadjusted rankings.
+
+This five-step causal audit integrates the tools from this chapter with the diagnostic methods from @sec-validity-diagnostics, providing a systematic approach to evaluating whether benchmark results are trustworthy enough to inform deployment decisions.
 
 
-## Discussion Questions {#sec-design-discussion}
+## Discussion Questions {#sec-causality-discussion}
 
-1. The evaluation game framework assumes a *benevolent* evaluator (social planner). What changes if the evaluator also has strategic incentives --- for example, a company running its own benchmark to favor its own models?
+1. A benchmark uses Computerized Adaptive Testing (@sec-cat) to select items. A critic argues that the resulting accuracy is "biased because models only answered items matched to their ability level." Using the off-policy evaluation framework, explain whether this criticism is valid and how you would correct the estimate if needed.
 
-2. How does the information-variance tradeoff relate to the reliability-validity tradeoff from @sec-reliability and @sec-validity? Is there a formal connection between $\sigma^2/k$ (evaluation variance) and Cronbach's $\alpha$?
+2. Two benchmarks both claim to measure "reasoning." On Benchmark A, Model X outperforms Model Y. On Benchmark B, the ranking reverses. Draw a DAG that explains this reversal (hint: consider Simpson's paradox). What causal assumptions would make the Benchmark A ranking the correct one?
 
-3. Can you design a mechanism where the builder's incentive is to improve on the *hardest* tasks rather than the average? How would you modify $u_E(\theta)$ and $r(\theta, S)$?
+3. Prediction-powered inference assumes that the model predictions $\hat{Y}$ are informative about the true labels $Y$. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator's consistency, and how would you detect the failure?
 
-4. In what sense is the Chatbot Arena a randomized evaluation mechanism? Does it satisfy the conditions of Theorem 1? What information leaks through the adaptive matching process?
+4. A company evaluates its model on an internal benchmark (source) and wants to predict performance on a customer-facing deployment (target). What information is needed to determine whether the benchmark results are transportable? Which assumptions are untestable from the source data alone?
 
-5. How should a government regulator set $\gamma$ (the gaming penalty) for a safety benchmark? What factors should influence this choice?
-
-6. If two "lite" benchmarks both satisfy $\epsilon$-positional proportionality with the same $\epsilon$ but select different subsets, which should be preferred? What additional criteria might break ties?
-
-7. The holdout mechanism draws on differential privacy. What is the relationship between the privacy budget $\varepsilon$ in the holdout mechanism and the notion of $\varepsilon$-differential privacy from the data privacy literature?
-
-8. Distribution correction requires the evaluator to "know their bias." How can an evaluator identify which regions of the task universe they under-represent? What role do meta-evaluations and coverage audits play?
+5. Conformal prediction guarantees *marginal* coverage: $P(Y \in C_\alpha) \geq 1 - \alpha$ on average over the test distribution. Why is this weaker than *conditional* coverage ($P(Y \in C_\alpha \mid X = x) \geq 1 - \alpha$ for each $x$), and when does the distinction matter for AI evaluation?
 
 
-## Bibliographic Notes {#sec-design-biblio}
+## Bibliographic Notes {#sec-causality-biblio}
 
-The Stackelberg evaluation game and the information-variance tradeoff are developed in @truong2025guard. The distribution correction mechanism and optimal evaluation size results are from the same work. The analysis of metric design as a principal-agent problem draws on @wang2024relying, which develops counterfactual quality metrics (Chapter 5) and information elicitation in agency games (Chapter 6). The positional representation and proportionality framework is from @procaccia2025metritocracy.
+The mathematical framework for causal reasoning used in this chapter is due to @pearl2009causality, who developed structural causal models, the do-calculus, and the graphical criteria for identifiability. An accessible introduction is @peters2017elements. The transportability theory---when causal conclusions can be transferred across settings---is developed by @bareinboim2016causal.
 
-**Goodhart's Law** was articulated by @goodhart1984problems in the context of monetary policy. @manheim2018categorizing formalize four variants. The connection to reward overoptimization in RLHF is explored by @gao2023scaling.
+The taxonomy of distribution shift draws on a large literature. Covariate shift and importance weighting were formalized by @shimodaira2000improving. @sugiyama2012density provide a comprehensive treatment of density ratio estimation methods. @quinonero2009dataset survey the broader landscape of dataset shift in machine learning.
 
-**Strategic classification** --- the study of agents who manipulate their features to achieve favorable classification outcomes --- was formalized by @hardt2016strategic. @perdomo2020performative introduce performative prediction, where the model itself changes the data distribution. @braverman2020role show that randomness is necessary for efficient classification under strategic behavior.
+Doubly robust estimation originated in the biostatistics literature with @robins1994estimation, who introduced the augmented inverse probability weighted estimator. @dudik2011doubly adapted the DR framework to contextual bandits and off-policy evaluation, which is the formulation we use here. The connection between DR estimation and semiparametric efficiency theory is developed in the biostatistics literature; for machine learning applications, see the survey by Dudík, Erber, Langford, and Li (2014).
 
-**Bayesian persuasion** [@kamenica2011bayesian] provides the information design framework connecting evaluator disclosure to builder behavior. @bergemann2019information survey the broader information design literature. **Contract theory** [@laffont1986using; @holmstrom1991multitask] provides the principal-agent foundations for metric design.
+Prediction-Powered Inference was introduced by @angelopoulos2023prediction, who showed how to construct valid confidence intervals by combining a small labeled dataset with a large set of model predictions. The structural connection between PPI and doubly robust estimation is noted in their paper and further developed in follow-up work on PPI++.
 
-**Differential privacy and adaptive data analysis** [@dwork2015generalization; @dwork2014algorithmic] underpin the holdout mechanism. @blum2015ladder apply reusable holdout techniques to machine learning competitions. The connection between DP and strategic robustness is developed in the holdout mechanism analysis.
+Conformal prediction was introduced by @vovk2005algorithmic. @tibshirani2019conformal extended conformal methods to handle covariate shift via importance weighting, and @barber2023conformal further generalized the framework beyond exchangeability.
 
-**Social choice and benchmarking** connect to @zhang2024inherent (Arrow's impossibility for benchmarks), @colombo2022what (Borda count for benchmark aggregation), and @rofin2022votenrank (scoring rules for benchmark ranking). The committee selection literature, particularly justified representation [@aziz2017justified], provides the social choice foundations for positional representation.
+The connection between Borsboom's causal validity and structural causal models was developed in @sec-foundations. The evaluation DAG in this chapter makes that connection explicit, showing how each validity threat from @sec-validity-threats corresponds to a specific causal pathway. Data attribution methods---influence functions, TracIn, and TRAK---provide complementary tools for tracing the causal effect of training data on model predictions, but are beyond the scope of this chapter; see Koh and Liang (2017) for the foundational work.
 
 
-## Exercises {#sec-design-exercises}
+## Exercises {#sec-causality-exercises}
 
-1. **(Easy)** Show that if $\pi_E = \text{Uniform}(F)$, the one-shot alignment theorem holds for any sample size $k$, not just $k = 1$. *Hint:* Show that for any $k$-subset mechanism, the expected reward is proportional to $u_E(\theta)$.
+**Theoretical**
 
-2. **(Easy)** Verify that $k^* = \sigma\sqrt{\rho/\gamma}$ minimizes $\mathcal{L}(k) = \sigma^2/k + \gamma k/\rho$. What is $\mathcal{L}(k^*)$? What happens to $k^*$ when $\gamma$ doubles?
+1. Show that under covariate shift ($P^{(s)}(Y \mid X) = P^{(t)}(Y \mid X)$, $P^{(s)}(X) \neq P^{(t)}(X)$), the importance-weighted estimator $\hat{\mu}_{\text{IW}} = \frac{1}{n}\sum_{i=1}^n w(x_i) Y_i$ with $w(x_i) = P^{(t)}(x_i)/P^{(s)}(x_i)$ is unbiased for $\mathbb{E}_{P^{(t)}}[Y]$. Under what conditions on the weight distribution does the variance of $\hat{\mu}_{\text{IW}}$ diverge?
 
-3. **(Medium)** Derive the estimation-limited term in the misalignment bound using a Dirichlet$(1, \ldots, 1)$ prior over distributions on $F$ with $m$ effective observations. Show that the posterior predictive is the shrinkage estimator $\hat{\pi}_E = \frac{m}{m+N}\hat{p} + \frac{N}{m+N}\text{Uniform}(F)$ and that $\text{TV}(\hat{\pi}_E, \text{Uniform}(F)) \leq m/(m+N)$.
+2. Prove the double robustness property: show that $\mathbb{E}[\hat{V}_{\text{DR}}] = V(\pi)$ (@eq-dr) if either (a) the reward model satisfies $\hat{r}(x, a) = \mathbb{E}[r \mid x, a]$ for all $(x, a)$, or (b) the propensity $\pi_0(a \mid x)$ is correctly specified. Where does the proof rely on the assumption that the logged data is collected under $\pi_0$?
 
-4. **(Medium)** In the agency game with binary $X$, suppose $C \mid X=0 \sim \text{Exp}(\lambda_0)$ and $C \mid X=1$ is zero-cost. Derive the condition on $\lambda_0$ and the principal's value $b$ under which the agent prefers concealment to revelation.
+3. In a CAT procedure that selects the item maximizing Fisher information at the current ability estimate $\hat{\theta}$, derive the selection propensity $\pi_0(x_t \mid \hat{\theta}_t)$ for a Rasch model. Show that this propensity is maximized for items with $\beta_i \approx \hat{\theta}_t$ and decays for items far from the current estimate. What is the effective sample size $n_{\text{eff}}$ of the resulting IPW estimator as a function of the item pool's difficulty distribution?
 
-5. **(Medium)** Show that any subset $K$ satisfying $\epsilon$-positional proportionality approximates any scoring rule within $\epsilon$. *Hint:* Write $f_s(a, \sigma_S)$ as a weighted sum of cumulative counts $C(S, r, a)/|S|$ and apply Abel summation.
+4. Using the evaluation DAG from @sec-evaluation-dag, show that benchmark contamination (a direct path $D \to Y$ bypassing $\theta$) is *not identifiable* from observational data alone without additional assumptions. What minimal intervention (e.g., a chronological split or a canary-based test) would identify the contamination effect? State the identifying assumptions precisely.
 
-6. **(Hard)** Extend the one-shot alignment theorem to the case where the builder has a non-uniform prior $p_M$ over $F$. Show that the builder's best response maximizes $\mathbb{E}_{f \sim p_M}[f(\theta)]$. Under what conditions does this coincide with maximizing $u_E(\theta)$?
+**Computational**
 
-7. **(Hard)** Prove that the holdout mechanism slows the builder's posterior concentration by a factor of $e^{\varepsilon\eta}$. *Hint:* Compute the effective sample size $m_t^{\text{holdout}} = n_0 + p_{\text{alarm}} \cdot k \cdot \min(t, \rho^{-1})$ and compare to $m_t^{\text{baseline}}$.
+5. Implement importance weighting for a benchmark with covariate shift. Simulate a Rasch model with $P^{(s)}(\beta) = \mathcal{N}(-1, 1)$ (easy-biased source) and $P^{(t)}(\beta) = \mathcal{N}(0, 1.5)$ (broader target). For 200 models, compare naive and IW-corrected accuracy estimates. Vary the degree of shift (by changing the source mean from $-2$ to $0$) and plot the naive bias as a function of shift magnitude.
 
-8. **(Hard, computational)** Implement the greedy algorithm for positional representation on the HELM Lite data (or a synthetic dataset with $n = 100$ metrics, $m = 50$ models). Compare $|K|$ to the existing lite benchmark subset for different values of the group size $g$. At what $g$ does the greedy algorithm match the size of the existing subset?
+6. Simulate a full CAT procedure for 200 models on a 500-item Rasch pool. For each model, run a 30-item adaptive test using the maximum-information selection rule from @sec-cat. Compute naive accuracy, IPW-corrected accuracy, and DR-corrected accuracy. Introduce IRT misspecification (e.g., the true model is 2PL but the reward model assumes Rasch) and show that DR remains robust while DM degrades.
+
+7. Implement weighted conformal prediction for AI evaluation under covariate shift. Calibrate on items drawn from $\mathcal{N}(-0.5, 0.8)$ and test on items from $\mathcal{N}(1.0, 1.0)$. Plot empirical coverage vs. nominal level for both standard and weighted conformal across the range $\alpha \in [0.05, 0.50]$. How does the effective sample size of the weighted calibration set affect the coverage guarantee?
+
+**Discussion**
+
+8. @angelopoulos2023prediction's PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the "expensive" labels are actual model runs and the "cheap" predictions are the PPE cold-start predictions from @sec-cold-start. Design a practical PPI pipeline for evaluating a new model on 10,000 items when you can only afford to run 500 actual evaluations. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?

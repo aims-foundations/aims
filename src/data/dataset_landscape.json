@@ -1,0 +1,135 @@
+[
+  {
+    "benchmark": "MMLU-Pro",
+    "category": "Knowledge",
+    "n_items": 100,
+    "x": 9.829825401306152,
+    "y": 4.015336513519287
+  },
+  {
+    "benchmark": "HLE",
+    "category": "Knowledge",
+    "n_items": 100,
+    "x": 10.156991958618164,
+    "y": 3.49312162399292
+  },
+  {
+    "benchmark": "LiveBench",
+    "category": "Knowledge",
+    "n_items": 100,
+    "x": 10.425654411315918,
+    "y": 4.3511576652526855
+  },
+  {
+    "benchmark": "C-Eval",
+    "category": "Knowledge (Chinese)",
+    "n_items": 100,
+    "x": 8.606409072875977,
+    "y": 2.8630893230438232
+  },
+  {
+    "benchmark": "CMMLU",
+    "category": "Knowledge (Chinese)",
+    "n_items": 100,
+    "x": 8.967464447021484,
+    "y": 2.2271392345428467
+  },
+  {
+    "benchmark": "KMMLU",
+    "category": "Knowledge (Korean)",
+    "n_items": 100,
+    "x": 8.287647247314453,
+    "y": 2.274662733078003
+  },
+  {
+    "benchmark": "AfriEval",
+    "category": "Knowledge (African)",
+    "n_items": 100,
+    "x": 9.37236499786377,
+    "y": 1.1063377857208252
+  },
+  {
+    "benchmark": "AsiaEval",
+    "category": "Knowledge (Asian)",
+    "n_items": 100,
+    "x": 8.639307975769043,
+    "y": 1.5502433776855469
+  },
+  {
+    "benchmark": "IberBench",
+    "category": "Knowledge (Iberian)",
+    "n_items": 100,
+    "x": 8.69668960571289,
+    "y": 0.8539618849754333
+  },
+  {
+    "benchmark": "BigCodeBench",
+    "category": "Code Generation",
+    "n_items": 100,
+    "x": 10.743179321289062,
+    "y": 6.119071960449219
+  },
+  {
+    "benchmark": "EvalPlus",
+    "category": "Code Generation",
+    "n_items": 100,
+    "x": 11.066699028015137,
+    "y": 5.260641574859619
+  },
+  {
+    "benchmark": "CRUXEval",
+    "category": "Code Reasoning",
+    "n_items": 100,
+    "x": 10.461294174194336,
+    "y": 5.5281758308410645
+  },
+  {
+    "benchmark": "SWE-bench",
+    "category": "Software Engineering",
+    "n_items": 100,
+    "x": 7.169732093811035,
+    "y": 9.26310920715332
+  },
+  {
+    "benchmark": "SWE-bench Full",
+    "category": "Software Engineering",
+    "n_items": 100,
+    "x": 7.244785308837891,
+    "y": 8.68297004699707
+  },
+  {
+    "benchmark": "SWE-bench Java",
+    "category": "Software Engineering",
+    "n_items": 100,
+    "x": 6.423809051513672,
+    "y": 9.421609878540039
+  },
+  {
+    "benchmark": "SWE-bench Multilingual",
+    "category": "Software Engineering",
+    "n_items": 100,
+    "x": 6.597990036010742,
+    "y": 8.893787384033203
+  },
+  {
+    "benchmark": "SWE-PolyBench",
+    "category": "Software Engineering",
+    "n_items": 100,
+    "x": 9.23985481262207,
+    "y": 0.3577238917350769
+  },
+  {
+    "benchmark": "MLE-bench",
+    "category": "ML Engineering",
+    "n_items": 75,
+    "x": 11.089223861694336,
+    "y": 3.777517080307007
+  },
+  {
+    "benchmark": "BFCL",
+    "category": "Tool Use",
+    "n_items": 100,
+    "x": 11.23836898803711,
+    "y": 4.639707565307617
+  }
+]

@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; Conclusion – AI Measurement Science</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../src/notation.html" rel="next">
+<link href="../src/chap9.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-8d83524533cf2fa443ab6df3a53e67f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-a28b74086d39a9f8f816743c2505fd82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8d83524533cf2fa443ab6df3a53e67f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+MathJax = {
+  loader: {
+    load: ['[tex]/boldsymbol']
+  },
+  tex: {
+    tags: "all",
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    packages: {
+      '[+]': ['boldsymbol']
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">AI Measurement Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
+<span class="menu-text">AIMS Lab Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../src/chap10.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Landscape</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Measurement as Predictive Modeling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Foundations of Measurement</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Learning</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Efficient Measurement</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Measurement Reliability and Validity</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reliability</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Validity</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Causality and Distribution Shift</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Design, Governance, and Applications</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Information and Mechanism Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Red-Teaming and Adversarial Evaluation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap10.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Notation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
+<p>license.qmd</p>
+</div></div></nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-conclusion-approach" id="toc-sec-conclusion-approach" class="nav-link active" data-scroll-target="#sec-conclusion-approach"><span class="header-section-number">10.1</span> Our Approach</a>
+  <ul class="collapse">
+  <li><a href="#foundations-from-measurement-science" id="toc-foundations-from-measurement-science" class="nav-link" data-scroll-target="#foundations-from-measurement-science"><span class="header-section-number">10.1.1</span> Foundations from Measurement Science</a></li>
+  <li><a href="#from-models-to-methods" id="toc-from-models-to-methods" class="nav-link" data-scroll-target="#from-models-to-methods"><span class="header-section-number">10.1.2</span> From Models to Methods</a></li>
+  <li><a href="#reliability-validity-and-causality" id="toc-reliability-validity-and-causality" class="nav-link" data-scroll-target="#reliability-validity-and-causality"><span class="header-section-number">10.1.3</span> Reliability, Validity, and Causality</a></li>
+  <li><a href="#design-strategy-and-adversarial-evaluation" id="toc-design-strategy-and-adversarial-evaluation" class="nav-link" data-scroll-target="#design-strategy-and-adversarial-evaluation"><span class="header-section-number">10.1.4</span> Design, Strategy, and Adversarial Evaluation</a></li>
+  <li><a href="#the-critical-turn" id="toc-the-critical-turn" class="nav-link" data-scroll-target="#the-critical-turn"><span class="header-section-number">10.1.5</span> The Critical Turn</a></li>
+  </ul></li>
+  <li><a href="#sec-lessons" id="toc-sec-lessons" class="nav-link" data-scroll-target="#sec-lessons"><span class="header-section-number">10.2</span> Lessons from the Field</a>
+  <ul class="collapse">
+  <li><a href="#what-worked" id="toc-what-worked" class="nav-link" data-scroll-target="#what-worked"><span class="header-section-number">10.2.1</span> What Worked</a></li>
+  <li><a href="#what-surprised-us" id="toc-what-surprised-us" class="nav-link" data-scroll-target="#what-surprised-us"><span class="header-section-number">10.2.2</span> What Surprised Us</a></li>
+  <li><a href="#what-remains-difficult" id="toc-what-remains-difficult" class="nav-link" data-scroll-target="#what-remains-difficult"><span class="header-section-number">10.2.3</span> What Remains Difficult</a></li>
+  </ul></li>
+  <li><a href="#sec-open-challenges" id="toc-sec-open-challenges" class="nav-link" data-scroll-target="#sec-open-challenges"><span class="header-section-number">10.3</span> Open Challenges</a>
+  <ul class="collapse">
+  <li><a href="#beyond-binary-responses" id="toc-beyond-binary-responses" class="nav-link" data-scroll-target="#beyond-binary-responses"><span class="header-section-number">10.3.1</span> Beyond Binary Responses</a></li>
+  <li><a href="#multidimensional-ability-and-benchmark-portfolios" id="toc-multidimensional-ability-and-benchmark-portfolios" class="nav-link" data-scroll-target="#multidimensional-ability-and-benchmark-portfolios"><span class="header-section-number">10.3.2</span> Multidimensional Ability and Benchmark Portfolios</a></li>
+  <li><a href="#temporal-dynamics-and-evaluation-drift" id="toc-temporal-dynamics-and-evaluation-drift" class="nav-link" data-scroll-target="#temporal-dynamics-and-evaluation-drift"><span class="header-section-number">10.3.3</span> Temporal Dynamics and Evaluation Drift</a></li>
+  <li><a href="#evaluation-of-agentic-systems" id="toc-evaluation-of-agentic-systems" class="nav-link" data-scroll-target="#evaluation-of-agentic-systems"><span class="header-section-number">10.3.4</span> Evaluation of Agentic Systems</a></li>
+  <li><a href="#scalable-oversight-and-recursive-evaluation" id="toc-scalable-oversight-and-recursive-evaluation" class="nav-link" data-scroll-target="#scalable-oversight-and-recursive-evaluation"><span class="header-section-number">10.3.5</span> Scalable Oversight and Recursive Evaluation</a></li>
+  <li><a href="#fairness-in-evaluation" id="toc-fairness-in-evaluation" class="nav-link" data-scroll-target="#fairness-in-evaluation"><span class="header-section-number">10.3.6</span> Fairness in Evaluation</a></li>
+  </ul></li>
+  <li><a href="#sec-capstone" id="toc-sec-capstone" class="nav-link" data-scroll-target="#sec-capstone"><span class="header-section-number">10.4</span> Capstone Projects</a>
+  <ul class="collapse">
+  <li><a href="#project-1-irt-model-comparison-on-real-benchmarks-star" id="toc-project-1-irt-model-comparison-on-real-benchmarks-star" class="nav-link" data-scroll-target="#project-1-irt-model-comparison-on-real-benchmarks-star">Project 1: IRT Model Comparison on Real Benchmarks (<span class="math inline">\(\star\)</span>)</a></li>
+  <li><a href="#project-2-adaptive-testing-for-efficient-ai-evaluation-star" id="toc-project-2-adaptive-testing-for-efficient-ai-evaluation-star" class="nav-link" data-scroll-target="#project-2-adaptive-testing-for-efficient-ai-evaluation-star">Project 2: Adaptive Testing for Efficient AI Evaluation (<span class="math inline">\(\star\)</span>)</a></li>
+  <li><a href="#project-3-reliability-audit-of-an-evaluation-pipeline-star" id="toc-project-3-reliability-audit-of-an-evaluation-pipeline-star" class="nav-link" data-scroll-target="#project-3-reliability-audit-of-an-evaluation-pipeline-star">Project 3: Reliability Audit of an Evaluation Pipeline (<span class="math inline">\(\star\)</span>)</a></li>
+  <li><a href="#project-4-benchmark-bug-detection-at-scale-starstar" id="toc-project-4-benchmark-bug-detection-at-scale-starstar" class="nav-link" data-scroll-target="#project-4-benchmark-bug-detection-at-scale-starstar">Project 4: Benchmark Bug Detection at Scale (<span class="math inline">\(\star\star\)</span>)</a></li>
+  <li><a href="#project-5-validity-analysis-of-a-domain-specific-benchmark-starstar" id="toc-project-5-validity-analysis-of-a-domain-specific-benchmark-starstar" class="nav-link" data-scroll-target="#project-5-validity-analysis-of-a-domain-specific-benchmark-starstar">Project 5: Validity Analysis of a Domain-Specific Benchmark (<span class="math inline">\(\star\star\)</span>)</a></li>
+  <li><a href="#project-6-scaling-laws-through-the-irt-lens-starstar" id="toc-project-6-scaling-laws-through-the-irt-lens-starstar" class="nav-link" data-scroll-target="#project-6-scaling-laws-through-the-irt-lens-starstar">Project 6: Scaling Laws through the IRT Lens (<span class="math inline">\(\star\star\)</span>)</a></li>
+  <li><a href="#project-7-red-teaming-as-measurement-starstar" id="toc-project-7-red-teaming-as-measurement-starstar" class="nav-link" data-scroll-target="#project-7-red-teaming-as-measurement-starstar">Project 7: Red-Teaming as Measurement (<span class="math inline">\(\star\star\)</span>)</a></li>
+  <li><a href="#project-8-asr-comparisons-under-aggregation-and-judge-error-starstar" id="toc-project-8-asr-comparisons-under-aggregation-and-judge-error-starstar" class="nav-link" data-scroll-target="#project-8-asr-comparisons-under-aggregation-and-judge-error-starstar">Project 8: ASR Comparisons Under Aggregation and Judge Error (<span class="math inline">\(\star\star\)</span>)</a></li>
+  <li><a href="#project-9-prediction-powered-evaluation-starstar" id="toc-project-9-prediction-powered-evaluation-starstar" class="nav-link" data-scroll-target="#project-9-prediction-powered-evaluation-starstar">Project 9: Prediction-Powered Evaluation (<span class="math inline">\(\star\star\)</span>)</a></li>
+  <li><a href="#project-10-evaluation-design-for-agentic-systems-starstarstar" id="toc-project-10-evaluation-design-for-agentic-systems-starstarstar" class="nav-link" data-scroll-target="#project-10-evaluation-design-for-agentic-systems-starstarstar">Project 10: Evaluation Design for Agentic Systems (<span class="math inline">\(\star\star\star\)</span>)</a></li>
+  </ul></li>
+  <li><a href="#sec-checklist" id="toc-sec-checklist" class="nav-link" data-scroll-target="#sec-checklist"><span class="header-section-number">10.5</span> A Practitioner’s Checklist</a>
+  <ul class="collapse">
+  <li><a href="#construct-definition" id="toc-construct-definition" class="nav-link" data-scroll-target="#construct-definition"><span class="header-section-number">10.5.1</span> Construct Definition</a></li>
+  <li><a href="#item-development-and-calibration" id="toc-item-development-and-calibration" class="nav-link" data-scroll-target="#item-development-and-calibration"><span class="header-section-number">10.5.2</span> Item Development and Calibration</a></li>
+  <li><a href="#evaluation-design" id="toc-evaluation-design" class="nav-link" data-scroll-target="#evaluation-design"><span class="header-section-number">10.5.3</span> Evaluation Design</a></li>
+  <li><a href="#analysis-and-reporting" id="toc-analysis-and-reporting" class="nav-link" data-scroll-target="#analysis-and-reporting"><span class="header-section-number">10.5.4</span> Analysis and Reporting</a></li>
+  <li><a href="#validity-and-generalization" id="toc-validity-and-generalization" class="nav-link" data-scroll-target="#validity-and-generalization"><span class="header-section-number">10.5.5</span> Validity and Generalization</a></li>
+  <li><a href="#maintenance-and-monitoring" id="toc-maintenance-and-monitoring" class="nav-link" data-scroll-target="#maintenance-and-monitoring"><span class="header-section-number">10.5.6</span> Maintenance and Monitoring</a></li>
+  </ul></li>
+  <li><a href="#sec-scope" id="toc-sec-scope" class="nav-link" data-scroll-target="#sec-scope"><span class="header-section-number">10.6</span> Scope and Limitations</a></li>
+  <li><a href="#sec-final-thought" id="toc-sec-final-thought" class="nav-link" data-scroll-target="#sec-final-thought"><span class="header-section-number">10.7</span> Final Thought</a></li>
+  <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap10.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-conclusion" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter synthesizes the book’s main themes, identifies open challenges in AI measurement science, describes capstone projects suitable for a one-quarter course, and offers a practitioner’s checklist for designing evaluations.</p>
+<section id="sec-conclusion-approach" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="sec-conclusion-approach"><span class="header-section-number">10.1</span> Our Approach</h2>
+<section id="foundations-from-measurement-science" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="foundations-from-measurement-science"><span class="header-section-number">10.1.1</span> Foundations from Measurement Science</h3>
+<p>The central premise of this book is that AI evaluation is a <em>measurement</em> problem, not merely an engineering one. When we assign a number to a model — accuracy, Elo rating, pass rate — we are making a claim about a latent construct (ability, safety, reasoning) that we cannot directly observe. The science of such claims has been developed over a century in psychometrics, educational testing, and the philosophy of measurement. We have drawn on this tradition throughout.</p>
+<p><a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> introduced the mathematical models that formalize the relationship between latent ability and observed responses: Item Response Theory (Rasch, 2PL, 3PL), factor models, and paired-comparison systems (Bradley-Terry, Elo). A recurring theme is that these models are not interchangeable — each encodes assumptions about the structure of ability and the nature of items. The Rasch model’s sufficiency and specific objectivity properties justify using sum scores as measurements; the 2PL and 3PL models trade these properties for descriptive flexibility. The choice of model is a choice about what we are willing to assume.</p>
+</section>
+<section id="from-models-to-methods" class="level3" data-number="10.1.2">
+<h3 data-number="10.1.2" class="anchored" data-anchor-id="from-models-to-methods"><span class="header-section-number">10.1.2</span> From Models to Methods</h3>
+<p><a href="chap3.html" class="quarto-xref"><span>Chapter 3</span></a> showed how to estimate latent parameters from evaluation data via maximum likelihood, EM algorithms, and Bayesian inference. <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a> developed the design principles — Fisher information, computerized adaptive testing, D-optimal design — that make evaluation efficient. Together, these chapters establish that we can measure AI systems with far fewer queries than brute-force evaluation requires: calibrated item banks and adaptive algorithms yield precise ability estimates using a fraction of the items.</p>
+</section>
+<section id="reliability-validity-and-causality" class="level3" data-number="10.1.3">
+<h3 data-number="10.1.3" class="anchored" data-anchor-id="reliability-validity-and-causality"><span class="header-section-number">10.1.3</span> Reliability, Validity, and Causality</h3>
+<p>The transition from Part I to Part II marked a shift from <em>how</em> to measure to <em>how well</em> we measure. <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> decomposed the noise in AI evaluation into its constituent sources — sampling stochasticity, prompt sensitivity, annotator variability, item sampling — and provided tools (Generalizability Theory, IRT-based reliability) for quantifying and reducing each. <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> asked the harder question: even if measurements are precise, do they measure what we intend? Content validity, criterion validity, construct validity, differential item functioning, and benchmark contamination diagnostics all address different facets of this question. <a href="chap7.html" class="quarto-xref"><span>Chapter 7</span></a> connected these ideas to formal causal reasoning, showing when benchmark results generalize across contexts and how to correct for distribution shift.</p>
+</section>
+<section id="design-strategy-and-adversarial-evaluation" class="level3" data-number="10.1.4">
+<h3 data-number="10.1.4" class="anchored" data-anchor-id="design-strategy-and-adversarial-evaluation"><span class="header-section-number">10.1.4</span> Design, Strategy, and Adversarial Evaluation</h3>
+<p>Part III moved from the science of measurement to its strategic and practical dimensions. <a href="chap8.html" class="quarto-xref"><span>Chapter 8</span></a> formalized evaluation as a game between evaluators and model builders, showing how strategic behavior (Goodhart’s Law, benchmark gaming) distorts measurement and how mechanism design can restore alignment. <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> applied the full measurement framework to adversarial evaluation, showing that red-teaming is a measurement problem — with all the attendant concerns about validity, reliability, and construct definition.</p>
+</section>
+<section id="the-critical-turn" class="level3" data-number="10.1.5">
+<h3 data-number="10.1.5" class="anchored" data-anchor-id="the-critical-turn"><span class="header-section-number">10.1.5</span> The Critical Turn</h3>
+<p>A thread running through every chapter is that technical choices in evaluation are never value-neutral. Which items we include defines the construct (<a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a>). Which models we test and how we sample them shapes the ability scale (<a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a>). How we aggregate across annotators determines whose judgments count (<a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a>). How we design incentives determines what model builders optimize for (<a href="chap8.html" class="quarto-xref"><span>Chapter 8</span></a>). AI measurement science provides tools for making these choices explicit, principled, and auditable — but the choices themselves remain human judgments.</p>
+</section>
+</section>
+<section id="sec-lessons" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="sec-lessons"><span class="header-section-number">10.2</span> Lessons from the Field</h2>
+<section id="what-worked" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="what-worked"><span class="header-section-number">10.2.1</span> What Worked</h3>
+<p><strong>IRT models are surprisingly effective for AI evaluation.</strong> Despite being developed for human testing, Rasch and 2PL models fit AI benchmark data well. The key insight from <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> is that the same mathematical structure — a latent ability interacting with item difficulty through a logistic function — describes both human and AI response patterns. This is not because AI systems are “like humans” but because the statistical structure of evaluation data (binary responses to items of varying difficulty) is the same regardless of the test-taker.</p>
+<p><strong>Adaptive testing dramatically reduces evaluation cost.</strong> The efficiency gains from CAT (<a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a>) are not incremental. <span class="citation" data-cites="truong2025irsl">S. Truong et al. (<a href="#ref-truong2025irsl" role="doc-biblioref">2025</a>)</span> demonstrate that 50 adaptively selected questions can match the decision accuracy of thousands of uniformly administered questions — a 99.9% reduction in the query budget. This suggests that most of the compute currently spent on AI evaluation is wasted on uninformative items.</p>
+<p><strong>Reliability diagnostics catch real problems.</strong> Item-level statistics derived from IRT — item-total correlations, tetrachoric correlations, Mokken scalability — are not merely theoretical diagnostics. <span class="citation" data-cites="truong2025bugs">S. T. Truong et al. (<a href="#ref-truong2025bugs" role="doc-biblioref">2025</a>)</span> showed that flagging items with anomalous statistics achieves up to 84% precision in detecting genuine benchmark errors: incorrect answer keys, ambiguous wording, and grading bugs.</p>
+</section>
+<section id="what-surprised-us" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="what-surprised-us"><span class="header-section-number">10.2.2</span> What Surprised Us</h3>
+<p><strong>Benchmarks are noisier than they appear.</strong> The Generalizability Theory analysis in <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> reveals that what looks like stable model ranking is often an artifact of large item counts averaging over substantial per-item noise. When decomposed, prompt sensitivity and annotator variability are often larger than the differences between models we claim to distinguish.</p>
+<p><strong>Validity is the hard part.</strong> Reliability is a solved problem in the sense that we have excellent tools for quantifying and improving it. Validity is not. The question “Does this benchmark measure what it claims to measure?” requires domain expertise, theoretical commitments, and empirical evidence that no purely statistical procedure can provide. The diagnostics in <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> help, but they are necessary conditions, not sufficient ones.</p>
+<p><strong>Scaling laws and measurement theory are deeply connected.</strong> The observation by <span class="citation" data-cites="schaeffer2025monkeys">Schaeffer et al. (<a href="#ref-schaeffer2025monkeys" role="doc-biblioref">2025</a>)</span> that per-problem exponential scaling aggregates to power-law scaling — because item difficulties follow a heavy-tailed distribution — is a statement about item response theory in disguise. The distribution of item difficulties determines the aggregate scaling behavior. <span class="citation" data-cites="truong2025irsl">S. Truong et al. (<a href="#ref-truong2025irsl" role="doc-biblioref">2025</a>)</span> make this connection explicit, showing that IRT ability <span class="math inline">\(\theta\)</span> scales linearly with <span class="math inline">\(\log(\text{FLOP})\)</span> and that item parameters transfer across benchmarks. Measurement theory does not just evaluate models — it characterizes how they improve.</p>
+</section>
+<section id="what-remains-difficult" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="what-remains-difficult"><span class="header-section-number">10.2.3</span> What Remains Difficult</h3>
+<p><strong>Construct definition for AI is unresolved.</strong> In human testing, constructs like “verbal reasoning” or “mathematical ability” have decades of theoretical development and empirical validation. For AI, we are still debating what “reasoning” means, whether “understanding” is coherent, and how to distinguish genuine capability from surface-level pattern matching. Without clear construct definitions, validity analysis has no target.</p>
+<p><strong>Benchmark contamination is an arms race.</strong> The diagnostic tools in <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> can detect some forms of contamination after the fact, but preventing contamination requires ongoing effort: holdout sets, dynamic benchmarks, and adversarial construction. The fundamental tension is that useful benchmarks must be public enough to be widely adopted but private enough to avoid being gamed.</p>
+<p><strong>Evaluation of generative output lacks ground truth.</strong> Much of this book assumes binary (correct/incorrect) or probability-valued responses. But the most important AI capabilities — open-ended generation, creative problem-solving, multi-turn dialogue — produce outputs where “correctness” is ill-defined. Extending measurement theory to these settings is an open frontier.</p>
+</section>
+</section>
+<section id="sec-open-challenges" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="sec-open-challenges"><span class="header-section-number">10.3</span> Open Challenges</h2>
+<section id="beyond-binary-responses" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="beyond-binary-responses"><span class="header-section-number">10.3.1</span> Beyond Binary Responses</h3>
+<p>Standard IRT models assume binary or bounded-probability responses. But modern AI evaluation increasingly involves rubric-based scoring (1–5 scales), preference judgments (pairwise comparisons), and continuous quality metrics (BLEU, ROUGE, reward model scores). Extending the measurement framework to these response types — while preserving the desirable properties of IRT (separability, adaptive testing, cross-benchmark transfer) — is an active research area. Beta-IRT (<a href="chap3.html" class="quarto-xref"><span>Chapter 3</span></a>; <span class="citation" data-cites="truong2025irsl">S. Truong et al. (<a href="#ref-truong2025irsl" role="doc-biblioref">2025</a>)</span>) is one step in this direction, but a general theory of measurement for mixed response types remains elusive.</p>
+</section>
+<section id="multidimensional-ability-and-benchmark-portfolios" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="multidimensional-ability-and-benchmark-portfolios"><span class="header-section-number">10.3.2</span> Multidimensional Ability and Benchmark Portfolios</h3>
+<p>The unidimensional models emphasized in this book assume a single latent ability. In practice, AI systems have heterogeneous capabilities: a model may excel at coding but struggle with medical reasoning. Multidimensional IRT and factor models (<a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a>) provide the mathematical framework, but practical questions remain. How many dimensions are needed? How should benchmark portfolios be designed to efficiently measure multiple abilities simultaneously? How should multidimensional ability profiles be communicated to non-expert stakeholders?</p>
+</section>
+<section id="temporal-dynamics-and-evaluation-drift" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="temporal-dynamics-and-evaluation-drift"><span class="header-section-number">10.3.3</span> Temporal Dynamics and Evaluation Drift</h3>
+<p>AI evaluation is not static. Models improve, benchmarks saturate, and the relationship between benchmark performance and real-world utility shifts over time. <a href="chap7.html" class="quarto-xref"><span>Chapter 7</span></a> addressed distribution shift in a cross-sectional setting, but <em>longitudinal</em> evaluation — tracking how models and benchmarks co-evolve — requires new tools. Item parameter drift (when calibrated difficulties become stale), concept drift (when the construct itself changes), and benchmark half-life (when a benchmark loses discriminative power) are all practical problems that the field has barely begun to address.</p>
+</section>
+<section id="evaluation-of-agentic-systems" class="level3" data-number="10.3.4">
+<h3 data-number="10.3.4" class="anchored" data-anchor-id="evaluation-of-agentic-systems"><span class="header-section-number">10.3.4</span> Evaluation of Agentic Systems</h3>
+<p>The measurement models in this book were developed for systems that produce a single response to a single prompt. Agentic AI systems — those that take multi-step actions in environments, use tools, and interact with humans over extended time horizons — pose fundamentally different measurement challenges. What is the “item” in an agentic evaluation? What is the “response”? How do we define and measure reliability when the evaluation environment itself is stochastic and path-dependent?</p>
+</section>
+<section id="scalable-oversight-and-recursive-evaluation" class="level3" data-number="10.3.5">
+<h3 data-number="10.3.5" class="anchored" data-anchor-id="scalable-oversight-and-recursive-evaluation"><span class="header-section-number">10.3.5</span> Scalable Oversight and Recursive Evaluation</h3>
+<p>As AI systems approach or exceed human performance on specific tasks, the evaluation bottleneck shifts from model capability to evaluator capability. If human judges cannot reliably assess the quality of an AI system’s outputs, how do we maintain measurement validity? Approaches including AI-assisted evaluation, debate, and recursive reward modeling all attempt to extend the reach of human judgment, but their measurement properties — reliability, validity, potential for systematic bias — are largely uncharacterized.</p>
+</section>
+<section id="fairness-in-evaluation" class="level3" data-number="10.3.6">
+<h3 data-number="10.3.6" class="anchored" data-anchor-id="fairness-in-evaluation"><span class="header-section-number">10.3.6</span> Fairness in Evaluation</h3>
+<p>Evaluation systems can be unfair in multiple ways: items may exhibit differential functioning across model families or deployment contexts (<a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a>), adaptive testing algorithms may underquery certain regions of the ability space, and benchmark selection may systematically favor certain architectures. The fairness of evaluation has received far less attention than the fairness of the systems being evaluated. Developing measurement-theoretic notions of evaluation fairness — analogous to test fairness in educational testing — is an important open direction.</p>
+</section>
+</section>
+<section id="sec-capstone" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="sec-capstone"><span class="header-section-number">10.4</span> Capstone Projects</h2>
+<p>The following projects are designed for the CS321M (AI Measurement Science) course at Stanford. Each integrates concepts from multiple chapters of this book. Projects are suitable for individuals or pairs and should result in a pre-analysis plan (3–4 pages, NeurIPS format) and a final manuscript (up to 8 pages, NeurIPS format) with reproducible code.</p>
+<p>Difficulty ratings: (<span class="math inline">\(\star\)</span>) single-person, 4 weeks; (<span class="math inline">\(\star\star\)</span>) 1–2 persons, 6 weeks; (<span class="math inline">\(\star\star\star\)</span>) 1–2 persons, 8+ weeks, potential research contribution.</p>
+<section id="project-1-irt-model-comparison-on-real-benchmarks-star" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-1-irt-model-comparison-on-real-benchmarks-star">Project 1: IRT Model Comparison on Real Benchmarks (<span class="math inline">\(\star\)</span>)</h3>
+<p>Fit Rasch, 2PL, and multidimensional IRT models to a large-scale evaluation dataset (e.g., the Open LLM Leaderboard response matrix or HELM data). Compare models using information criteria, cross-validated log-likelihood, and out-of-sample prediction. Test whether the Rasch model’s sufficiency property holds empirically by comparing sum-score-based rankings to IRT ability rankings. Investigate whether items that misfit the Rasch model correspond to known benchmark quality issues.</p>
+<p><strong>Key concepts:</strong> <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> (IRT models), <a href="chap3.html" class="quarto-xref"><span>Chapter 3</span></a> (estimation), <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> (item fit).</p>
+</section>
+<section id="project-2-adaptive-testing-for-efficient-ai-evaluation-star" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-2-adaptive-testing-for-efficient-ai-evaluation-star">Project 2: Adaptive Testing for Efficient AI Evaluation (<span class="math inline">\(\star\)</span>)</h3>
+<p>Using a pre-calibrated item bank from an existing benchmark, implement CAT for AI model evaluation. Compare the efficiency (number of items needed to reach a target standard error) and accuracy (rank correlation with full-benchmark scores) of Fisher-information item selection versus random selection. Investigate how performance degrades when calibration data come from a different generation of models (calibration drift).</p>
+<p><strong>Key concepts:</strong> <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a> (CAT, Fisher information), <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> (IRT), <a href="chap7.html" class="quarto-xref"><span>Chapter 7</span></a> (distribution shift).</p>
+</section>
+<section id="project-3-reliability-audit-of-an-evaluation-pipeline-star" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-3-reliability-audit-of-an-evaluation-pipeline-star">Project 3: Reliability Audit of an Evaluation Pipeline (<span class="math inline">\(\star\)</span>)</h3>
+<p>Select an evaluation pipeline that involves human or LLM judges (e.g., MT-Bench, AlpacaEval, or Chatbot Arena). Design and conduct a G-study decomposing variance into model, item, judge, and interaction components. Run a D-study to determine the optimal allocation of judges and items under a fixed budget. Report the generalizability coefficient and compare it to the reliability implicitly assumed by published leaderboards.</p>
+<p><strong>Key concepts:</strong> <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> (G-theory, D-studies, LLM-as-judge reliability).</p>
+</section>
+<section id="project-4-benchmark-bug-detection-at-scale-starstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-4-benchmark-bug-detection-at-scale-starstar">Project 4: Benchmark Bug Detection at Scale (<span class="math inline">\(\star\star\)</span>)</h3>
+<p>Apply the diagnostic framework of <span class="citation" data-cites="truong2025bugs">S. T. Truong et al. (<a href="#ref-truong2025bugs" role="doc-biblioref">2025</a>)</span> to a benchmark not studied in their paper. Compute item-total correlations, tetrachoric correlations, and Mokken scalability coefficients across a diverse set of LLMs. Flag the top-50 most suspicious items and conduct a manual review. Report precision, analyze the types of errors found, and propose corrections. Investigate how the number and diversity of LLMs affects detection power.</p>
+<p><strong>Key concepts:</strong> <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> (sufficiency, Rasch), <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> (item-total correlation), <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> (content validity).</p>
+</section>
+<section id="project-5-validity-analysis-of-a-domain-specific-benchmark-starstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-5-validity-analysis-of-a-domain-specific-benchmark-starstar">Project 5: Validity Analysis of a Domain-Specific Benchmark (<span class="math inline">\(\star\star\)</span>)</h3>
+<p>Choose a domain-specific benchmark (medical, legal, coding, mathematical reasoning). Conduct a comprehensive validity analysis: (a) content validity — does the item pool representatively sample the stated construct? (b) construct validity — does dimensionality analysis support a unidimensional interpretation? (c) criterion validity — do scores correlate with external measures of the construct? (d) DIF analysis — do items function differently across model families?</p>
+<p><strong>Key concepts:</strong> <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> (all validity types, DIF), <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> (factor models, dimensionality).</p>
+</section>
+<section id="project-6-scaling-laws-through-the-irt-lens-starstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-6-scaling-laws-through-the-irt-lens-starstar">Project 6: Scaling Laws through the IRT Lens (<span class="math inline">\(\star\star\)</span>)</h3>
+<p>Replicate and extend the Item Response Scaling Laws framework of <span class="citation" data-cites="truong2025irsl">S. Truong et al. (<a href="#ref-truong2025irsl" role="doc-biblioref">2025</a>)</span>. Using publicly available checkpoint evaluation data, fit Beta-IRT models and estimate the relationship between <span class="math inline">\(\theta\)</span> and pre-training compute. Test cross-benchmark transfer: estimate <span class="math inline">\(\theta\)</span> on one benchmark and predict performance on another. Compare the efficiency of IRT-based scaling estimation to traditional per-benchmark curve fitting.</p>
+<p><strong>Key concepts:</strong> <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> (IRT), <a href="chap3.html" class="quarto-xref"><span>Chapter 3</span></a> (Beta-IRT), <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a> (adaptive testing), <a href="chap7.html" class="quarto-xref"><span>Chapter 7</span></a> (transfer).</p>
+</section>
+<section id="project-7-red-teaming-as-measurement-starstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-7-red-teaming-as-measurement-starstar">Project 7: Red-Teaming as Measurement (<span class="math inline">\(\star\star\)</span>)</h3>
+<p>Design and calibrate an adversarial item bank for a specific safety domain (e.g., medical misinformation, code injection, social engineering). Fit a multidimensional IRT model with standard and adversarial ability dimensions. Implement adaptive adversarial testing and compare its efficiency to uniform item selection. Analyze the validity of the adversarial construct: does adversarial robustness form a coherent dimension, or does it fragment into domain-specific factors?</p>
+<p><strong>Key concepts:</strong> <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> (adversarial IRT, item banks), <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a> (CAT), <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> (construct validity).</p>
+</section>
+<section id="project-8-asr-comparisons-under-aggregation-and-judge-error-starstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-8-asr-comparisons-under-aggregation-and-judge-error-starstar">Project 8: ASR Comparisons Under Aggregation and Judge Error (<span class="math inline">\(\star\star\)</span>)</h3>
+<p>Conduct an empirical study of the aggregation and judge-error biases documented by <span class="citation" data-cites="chouldechova2026comparison">Chouldechova et al. (<a href="#ref-chouldechova2026comparison" role="doc-biblioref">2026</a>)</span>. Using a red-teaming dataset with multiple samples per prompt, estimate: (a) the distribution of per-prompt success probabilities, (b) the power-law exponent under Top-1 aggregation (<span class="citation" data-cites="schaeffer2025monkeys">Schaeffer et al. (<a href="#ref-schaeffer2025monkeys" role="doc-biblioref">2025</a>)</span>), (c) differential judge error rates across target models. Quantify how much of the published variation in ASR across models is attributable to estimand differences versus genuine safety differences.</p>
+<p><strong>Key concepts:</strong> <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> (ASR as estimand, judge validity), <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> (measurement error).</p>
+</section>
+<section id="project-9-prediction-powered-evaluation-starstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-9-prediction-powered-evaluation-starstar">Project 9: Prediction-Powered Evaluation (<span class="math inline">\(\star\star\)</span>)</h3>
+<p>Implement and evaluate the prediction-powered inference (PPI) framework for AI evaluation. Use a large LLM judge as the prediction source and a smaller human-labeled set as ground truth. Compare PPI estimates to synthetic-only and human-only baselines across multiple benchmarks. Investigate: how does PPI performance depend on the quality of the LLM judge? What is the minimum human annotation budget needed for PPI to outperform both baselines?</p>
+<p><strong>Key concepts:</strong> <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> (PPI, synthetic data), <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> (judge reliability), <a href="chap7.html" class="quarto-xref"><span>Chapter 7</span></a> (doubly robust estimation).</p>
+</section>
+<section id="project-10-evaluation-design-for-agentic-systems-starstarstar" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="project-10-evaluation-design-for-agentic-systems-starstarstar">Project 10: Evaluation Design for Agentic Systems (<span class="math inline">\(\star\star\star\)</span>)</h3>
+<p>Propose and evaluate a measurement framework for agentic AI systems (e.g., coding agents, web-browsing agents, tool-using assistants). Key challenges include: defining the unit of measurement (what is an “item”?), handling variable-length interactions, and decomposing performance into sub-capabilities. Implement a prototype evaluation using a real agent benchmark and analyze its reliability (via G-theory over tasks, seeds, and environments) and construct validity (via factor analysis of sub-task scores).</p>
+<p><strong>Key concepts:</strong> <a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a> (factor models), <a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a> (G-theory), <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a> (construct validity), <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a> (design).</p>
+</section>
+</section>
+<section id="sec-checklist" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="sec-checklist"><span class="header-section-number">10.5</span> A Practitioner’s Checklist</h2>
+<p>The following checklist distills the book’s recommendations into actionable steps for designing and auditing AI evaluations. It is organized by the evaluation lifecycle.</p>
+<section id="construct-definition" class="level3" data-number="10.5.1">
+<h3 data-number="10.5.1" class="anchored" data-anchor-id="construct-definition"><span class="header-section-number">10.5.1</span> Construct Definition</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Write an explicit construct definition: what is the benchmark intended to measure, and what is it <em>not</em> intended to measure?</label></li>
+<li><label><input type="checkbox">Specify the content domain and develop a test blueprint mapping sub-domains to item counts (<a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a>).</label></li>
+<li><label><input type="checkbox">Distinguish between the construct (latent ability) and the indicator (observed score). A benchmark score is <em>evidence about</em> ability, not ability itself (<a href="chap2.html" class="quarto-xref"><span>Chapter 2</span></a>).</label></li>
+</ul>
+</section>
+<section id="item-development-and-calibration" class="level3" data-number="10.5.2">
+<h3 data-number="10.5.2" class="anchored" data-anchor-id="item-development-and-calibration"><span class="header-section-number">10.5.2</span> Item Development and Calibration</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Calibrate items using IRT: estimate difficulty, discrimination, and (if applicable) guessing parameters on a diverse set of models (<a href="chap3.html" class="quarto-xref"><span>Chapter 3</span></a>).</label></li>
+<li><label><input type="checkbox">Screen for problematic items using item-total correlations, tetrachoric correlations, and fit statistics. Remove or revise items that misfit (<a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a>; <span class="citation" data-cites="truong2025bugs">S. T. Truong et al. (<a href="#ref-truong2025bugs" role="doc-biblioref">2025</a>)</span>).</label></li>
+<li><label><input type="checkbox">Check for DIF: do items function differently across model families, sizes, or training paradigms? Differential functioning may indicate construct-irrelevant variance (<a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a>).</label></li>
+<li><label><input type="checkbox">Audit item content for errors: incorrect keys, ambiguous wording, grading bugs, culturally-embedded assumptions.</label></li>
+</ul>
+</section>
+<section id="evaluation-design" class="level3" data-number="10.5.3">
+<h3 data-number="10.5.3" class="anchored" data-anchor-id="evaluation-design"><span class="header-section-number">10.5.3</span> Evaluation Design</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Choose the response format (binary, probability, preference, rubric) that best captures the construct. Binary responses are simplest but discard information; empirical probabilities and rubric scores preserve richer signals (<a href="chap3.html" class="quarto-xref"><span>Chapter 3</span></a>; <span class="citation" data-cites="truong2025irsl">S. Truong et al. (<a href="#ref-truong2025irsl" role="doc-biblioref">2025</a>)</span>).</label></li>
+<li><label><input type="checkbox">Consider adaptive testing: if the item bank is calibrated, CAT can reduce the query budget by 90%+ with minimal loss in precision (<a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a>).</label></li>
+<li><label><input type="checkbox">For judge-based evaluation, design the rating protocol with reliability in mind: standardize rubrics, randomize presentation order, and plan for multiple judges (<a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a>).</label></li>
+<li><label><input type="checkbox">Run a D-study to allocate the evaluation budget optimally across items, judges, and replications (<a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a>).</label></li>
+</ul>
+</section>
+<section id="analysis-and-reporting" class="level3" data-number="10.5.4">
+<h3 data-number="10.5.4" class="anchored" data-anchor-id="analysis-and-reporting"><span class="header-section-number">10.5.4</span> Analysis and Reporting</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Report confidence intervals, not just point estimates. The SEM provides a natural uncertainty band; models whose scores overlap within <span class="math inline">\(\pm 2 \times \text{SEM}\)</span> may not be meaningfully different (<a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a>).</label></li>
+<li><label><input type="checkbox">Report the reliability of the evaluation (Cronbach’s <span class="math inline">\(\alpha\)</span>, G-coefficient, or IRT-based conditional reliability). If reliability is low, ranking differences are uninterpretable.</label></li>
+<li><label><input type="checkbox">For red-teaming, always report the aggregation rule (one-shot, Top-1 of <span class="math inline">\(K\)</span>) alongside the ASR. Comparisons across aggregation rules are not comparisons of safety (<a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>).</label></li>
+<li><label><input type="checkbox">For judge-based evaluation, report inter-rater agreement disaggregated by model and item type. Differential judge error invalidates comparisons (<a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>).</label></li>
+</ul>
+</section>
+<section id="validity-and-generalization" class="level3" data-number="10.5.5">
+<h3 data-number="10.5.5" class="anchored" data-anchor-id="validity-and-generalization"><span class="header-section-number">10.5.5</span> Validity and Generalization</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Assess content validity: does the item pool representatively sample the intended construct domain?</label></li>
+<li><label><input type="checkbox">Assess construct validity: does dimensionality analysis support the intended interpretation? Do scores correlate with external criteria?</label></li>
+<li><label><input type="checkbox">Consider distribution shift: will the evaluation generalize to the deployment context? If not, apply importance weighting or doubly robust corrections (<a href="chap7.html" class="quarto-xref"><span>Chapter 7</span></a>).</label></li>
+<li><label><input type="checkbox">Document known validity threats and limitations. No evaluation is perfectly valid; transparency about limitations is itself a form of quality assurance.</label></li>
+</ul>
+</section>
+<section id="maintenance-and-monitoring" class="level3" data-number="10.5.6">
+<h3 data-number="10.5.6" class="anchored" data-anchor-id="maintenance-and-monitoring"><span class="header-section-number">10.5.6</span> Maintenance and Monitoring</h3>
+<ul class="task-list">
+<li><label><input type="checkbox">Monitor for benchmark saturation: when the top models all score above 95%, the benchmark no longer discriminates and should be retired or extended.</label></li>
+<li><label><input type="checkbox">Monitor for contamination: periodically check whether new models have been trained on benchmark data, using the diagnostics from <a href="chap6.html" class="quarto-xref"><span>Chapter 6</span></a>.</label></li>
+<li><label><input type="checkbox">Recalibrate item parameters periodically: as the model population changes, item difficulties may drift.</label></li>
+<li><label><input type="checkbox">Maintain a living item bank: retire compromised items, add new items, and recalibrate regularly.</label></li>
+</ul>
+</section>
+</section>
+<section id="sec-scope" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="sec-scope"><span class="header-section-number">10.6</span> Scope and Limitations</h2>
+<p>This book has focused on the statistical and psychometric foundations of AI evaluation. Several important topics are largely out of scope:</p>
+<p><strong>Cognitive science of AI systems.</strong> We treat AI models as black boxes that produce responses to items. Understanding <em>why</em> a model succeeds or fails on a particular item — through mechanistic interpretability, probing, or causal analysis of internal representations — is a complementary but distinct line of inquiry.</p>
+<p><strong>Large-scale systems engineering.</strong> Evaluation at the scale of modern AI development involves distributed computing, data pipelines, versioning, and infrastructure that we do not cover. The measurement principles in this book apply regardless of scale, but their implementation at scale introduces engineering challenges.</p>
+<p><strong>Legal and regulatory frameworks.</strong> AI evaluation increasingly intersects with regulation (EU AI Act, NIST AI RMF). We do not cover the legal dimensions of evaluation, though the validity and reliability frameworks developed here provide the scientific basis for regulatory requirements.</p>
+<p><strong>Domain-specific evaluation.</strong> While we discuss domain-specific examples throughout, we do not provide deep coverage of evaluation in any single domain (healthcare, education, law, finance). Each domain brings its own construct definitions, validity concerns, and stakeholder requirements that warrant dedicated treatment.</p>
+<p><strong>Multi-modal evaluation.</strong> The models in this book are developed primarily for text-based evaluation. Extending measurement theory to vision, audio, multi-modal, and embodied AI evaluation raises new questions about construct definition and response modeling.</p>
+</section>
+<section id="sec-final-thought" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="sec-final-thought"><span class="header-section-number">10.7</span> Final Thought</h2>
+<p>The gap between what we claim about AI systems and what we can rigorously demonstrate is wide. Benchmarks proliferate, but the science behind them lags. We have the tools — developed over a century of measurement science — to close this gap. Item response theory, factor analysis, reliability theory, validity analysis, causal reasoning, and mechanism design are not merely theoretical curiosities; they are the foundation for making AI evaluation trustworthy.</p>
+<p>The challenge is not technical but cultural. The AI community has optimized for speed — new benchmarks, new models, new leaderboards — at the expense of rigor. Adopting measurement science requires slowing down: defining constructs before collecting data, calibrating items before reporting scores, quantifying uncertainty before claiming progress. This is the discipline that separates measurement from mere scoring.</p>
+<p>We invite you to contribute — to develop new measurement methods, to apply existing ones rigorously, to critique evaluations that fall short, and to insist that claims about AI systems rest on solid scientific ground. The stakes are high: the decisions we make about AI deployment, safety, and regulation depend on the quality of our measurements. Let us make them worthy of the task.</p>
+
+
+<!-- -->
+
+</section>
+<section id="bibliography" class="level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-chouldechova2026comparison" class="csl-entry" role="listitem">
+Chouldechova, Alexandra, A. Feder Cooper, Solon Barocas, Abhinav Palia, Dan Vann, and Hanna Wallach. 2026. <span>“Comparison Requires Valid Measurement: Rethinking Attack Success Rate Comparisons in <span>AI</span> Red Teaming.”</span> <em>arXiv Preprint arXiv:2502.00000</em>.
+</div>
+<div id="ref-schaeffer2025monkeys" class="csl-entry" role="listitem">
+Schaeffer, Rylan, Joshua Kazdan, John Hughes, et al. 2025. <span>“How Do Large Language Monkeys Get Their Power (Laws)?”</span> <em>arXiv Preprint arXiv:2502.17578</em>.
+</div>
+<div id="ref-truong2025bugs" class="csl-entry" role="listitem">
+Truong, Sang T., Yuheng Tu, Michael Hardy, et al. 2025. <span>“Fantastic Bugs and Where to Find Them in <span>AI</span> Benchmarks.”</span> <em>arXiv Preprint</em>.
+</div>
+<div id="ref-truong2025irsl" class="csl-entry" role="listitem">
+Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item Response Scaling Laws.”</span> <em>arXiv Preprint</em>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../src/chap9.html" class="pagination-link" aria-label="Red-Teaming and Adversarial Evaluation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Red-Teaming and Adversarial Evaluation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../src/notation.html" class="pagination-link" aria-label="Notation">
+        <span class="nav-page-text">Notation</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">---</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu"># Conclusion {#sec-conclusion}</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>This chapter synthesizes the book's main themes, identifies open challenges in AI measurement science, describes capstone projects suitable for a one-quarter course, and offers a practitioner's checklist for designing evaluations.</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">## Our Approach {#sec-conclusion-approach}</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">### Foundations from Measurement Science</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a>The central premise of this book is that AI evaluation is a *measurement* problem, not merely an engineering one. When we assign a number to a model --- accuracy, Elo rating, pass rate --- we are making a claim about a latent construct (ability, safety, reasoning) that we cannot directly observe. The science of such claims has been developed over a century in psychometrics, educational testing, and the philosophy of measurement. We have drawn on this tradition throughout.</span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a>@sec-foundations introduced the mathematical models that formalize the relationship between latent ability and observed responses: Item Response Theory (Rasch, 2PL, 3PL), factor models, and paired-comparison systems (Bradley-Terry, Elo). A recurring theme is that these models are not interchangeable --- each encodes assumptions about the structure of ability and the nature of items. The Rasch model's sufficiency and specific objectivity properties justify using sum scores as measurements; the 2PL and 3PL models trade these properties for descriptive flexibility. The choice of model is a choice about what we are willing to assume.</span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="fu">### From Models to Methods</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a>@sec-learning showed how to estimate latent parameters from evaluation data via maximum likelihood, EM algorithms, and Bayesian inference. @sec-efficient developed the design principles --- Fisher information, computerized adaptive testing, D-optimal design --- that make evaluation efficient. Together, these chapters establish that we can measure AI systems with far fewer queries than brute-force evaluation requires: calibrated item banks and adaptive algorithms yield precise ability estimates using a fraction of the items.</span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="fu">### Reliability, Validity, and Causality</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a></span>
+<span id="cb1-23"><a href="#cb1-23"></a>The transition from Part I to Part II marked a shift from *how* to measure to *how well* we measure. @sec-reliability decomposed the noise in AI evaluation into its constituent sources --- sampling stochasticity, prompt sensitivity, annotator variability, item sampling --- and provided tools (Generalizability Theory, IRT-based reliability) for quantifying and reducing each. @sec-validity asked the harder question: even if measurements are precise, do they measure what we intend? Content validity, criterion validity, construct validity, differential item functioning, and benchmark contamination diagnostics all address different facets of this question. @sec-causality connected these ideas to formal causal reasoning, showing when benchmark results generalize across contexts and how to correct for distribution shift.</span>
+<span id="cb1-24"><a href="#cb1-24"></a></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="fu">### Design, Strategy, and Adversarial Evaluation</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a></span>
+<span id="cb1-27"><a href="#cb1-27"></a>Part III moved from the science of measurement to its strategic and practical dimensions. @sec-design formalized evaluation as a game between evaluators and model builders, showing how strategic behavior (Goodhart's Law, benchmark gaming) distorts measurement and how mechanism design can restore alignment. @sec-redteaming applied the full measurement framework to adversarial evaluation, showing that red-teaming is a measurement problem --- with all the attendant concerns about validity, reliability, and construct definition.</span>
+<span id="cb1-28"><a href="#cb1-28"></a></span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="fu">### The Critical Turn</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a></span>
+<span id="cb1-31"><a href="#cb1-31"></a>A thread running through every chapter is that technical choices in evaluation are never value-neutral. Which items we include defines the construct (@sec-validity). Which models we test and how we sample them shapes the ability scale (@sec-foundations). How we aggregate across annotators determines whose judgments count (@sec-reliability). How we design incentives determines what model builders optimize for (@sec-design). AI measurement science provides tools for making these choices explicit, principled, and auditable --- but the choices themselves remain human judgments.</span>
+<span id="cb1-32"><a href="#cb1-32"></a></span>
+<span id="cb1-33"><a href="#cb1-33"></a></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="fu">## Lessons from the Field {#sec-lessons}</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a></span>
+<span id="cb1-36"><a href="#cb1-36"></a><span class="fu">### What Worked</span></span>
+<span id="cb1-37"><a href="#cb1-37"></a></span>
+<span id="cb1-38"><a href="#cb1-38"></a>**IRT models are surprisingly effective for AI evaluation.** Despite being developed for human testing, Rasch and 2PL models fit AI benchmark data well. The key insight from @sec-foundations is that the same mathematical structure --- a latent ability interacting with item difficulty through a logistic function --- describes both human and AI response patterns. This is not because AI systems are "like humans" but because the statistical structure of evaluation data (binary responses to items of varying difficulty) is the same regardless of the test-taker.</span>
+<span id="cb1-39"><a href="#cb1-39"></a></span>
+<span id="cb1-40"><a href="#cb1-40"></a>**Adaptive testing dramatically reduces evaluation cost.** The efficiency gains from CAT (@sec-efficient) are not incremental. @truong2025irsl demonstrate that 50 adaptively selected questions can match the decision accuracy of thousands of uniformly administered questions --- a 99.9% reduction in the query budget. This suggests that most of the compute currently spent on AI evaluation is wasted on uninformative items.</span>
+<span id="cb1-41"><a href="#cb1-41"></a></span>
+<span id="cb1-42"><a href="#cb1-42"></a>**Reliability diagnostics catch real problems.** Item-level statistics derived from IRT --- item-total correlations, tetrachoric correlations, Mokken scalability --- are not merely theoretical diagnostics. @truong2025bugs showed that flagging items with anomalous statistics achieves up to 84% precision in detecting genuine benchmark errors: incorrect answer keys, ambiguous wording, and grading bugs.</span>
+<span id="cb1-43"><a href="#cb1-43"></a></span>
+<span id="cb1-44"><a href="#cb1-44"></a><span class="fu">### What Surprised Us</span></span>
+<span id="cb1-45"><a href="#cb1-45"></a></span>
+<span id="cb1-46"><a href="#cb1-46"></a>**Benchmarks are noisier than they appear.** The Generalizability Theory analysis in @sec-reliability reveals that what looks like stable model ranking is often an artifact of large item counts averaging over substantial per-item noise. When decomposed, prompt sensitivity and annotator variability are often larger than the differences between models we claim to distinguish.</span>
+<span id="cb1-47"><a href="#cb1-47"></a></span>
+<span id="cb1-48"><a href="#cb1-48"></a>**Validity is the hard part.** Reliability is a solved problem in the sense that we have excellent tools for quantifying and improving it. Validity is not. The question "Does this benchmark measure what it claims to measure?" requires domain expertise, theoretical commitments, and empirical evidence that no purely statistical procedure can provide. The diagnostics in @sec-validity help, but they are necessary conditions, not sufficient ones.</span>
+<span id="cb1-49"><a href="#cb1-49"></a></span>
+<span id="cb1-50"><a href="#cb1-50"></a>**Scaling laws and measurement theory are deeply connected.** The observation by @schaeffer2025monkeys that per-problem exponential scaling aggregates to power-law scaling --- because item difficulties follow a heavy-tailed distribution --- is a statement about item response theory in disguise. The distribution of item difficulties determines the aggregate scaling behavior. @truong2025irsl make this connection explicit, showing that IRT ability $\theta$ scales linearly with $\log(\text{FLOP})$ and that item parameters transfer across benchmarks. Measurement theory does not just evaluate models --- it characterizes how they improve.</span>
+<span id="cb1-51"><a href="#cb1-51"></a></span>
+<span id="cb1-52"><a href="#cb1-52"></a><span class="fu">### What Remains Difficult</span></span>
+<span id="cb1-53"><a href="#cb1-53"></a></span>
+<span id="cb1-54"><a href="#cb1-54"></a>**Construct definition for AI is unresolved.** In human testing, constructs like "verbal reasoning" or "mathematical ability" have decades of theoretical development and empirical validation. For AI, we are still debating what "reasoning" means, whether "understanding" is coherent, and how to distinguish genuine capability from surface-level pattern matching. Without clear construct definitions, validity analysis has no target.</span>
+<span id="cb1-55"><a href="#cb1-55"></a></span>
+<span id="cb1-56"><a href="#cb1-56"></a>**Benchmark contamination is an arms race.** The diagnostic tools in @sec-validity can detect some forms of contamination after the fact, but preventing contamination requires ongoing effort: holdout sets, dynamic benchmarks, and adversarial construction. The fundamental tension is that useful benchmarks must be public enough to be widely adopted but private enough to avoid being gamed.</span>
+<span id="cb1-57"><a href="#cb1-57"></a></span>
+<span id="cb1-58"><a href="#cb1-58"></a>**Evaluation of generative output lacks ground truth.** Much of this book assumes binary (correct/incorrect) or probability-valued responses. But the most important AI capabilities --- open-ended generation, creative problem-solving, multi-turn dialogue --- produce outputs where "correctness" is ill-defined. Extending measurement theory to these settings is an open frontier.</span>
+<span id="cb1-59"><a href="#cb1-59"></a></span>
+<span id="cb1-60"><a href="#cb1-60"></a></span>
+<span id="cb1-61"><a href="#cb1-61"></a><span class="fu">## Open Challenges {#sec-open-challenges}</span></span>
+<span id="cb1-62"><a href="#cb1-62"></a></span>
+<span id="cb1-63"><a href="#cb1-63"></a><span class="fu">### Beyond Binary Responses</span></span>
+<span id="cb1-64"><a href="#cb1-64"></a></span>
+<span id="cb1-65"><a href="#cb1-65"></a>Standard IRT models assume binary or bounded-probability responses. But modern AI evaluation increasingly involves rubric-based scoring (1--5 scales), preference judgments (pairwise comparisons), and continuous quality metrics (BLEU, ROUGE, reward model scores). Extending the measurement framework to these response types --- while preserving the desirable properties of IRT (separability, adaptive testing, cross-benchmark transfer) --- is an active research area. Beta-IRT (@sec-learning; @truong2025irsl) is one step in this direction, but a general theory of measurement for mixed response types remains elusive.</span>
+<span id="cb1-66"><a href="#cb1-66"></a></span>
+<span id="cb1-67"><a href="#cb1-67"></a><span class="fu">### Multidimensional Ability and Benchmark Portfolios</span></span>
+<span id="cb1-68"><a href="#cb1-68"></a></span>
+<span id="cb1-69"><a href="#cb1-69"></a>The unidimensional models emphasized in this book assume a single latent ability. In practice, AI systems have heterogeneous capabilities: a model may excel at coding but struggle with medical reasoning. Multidimensional IRT and factor models (@sec-foundations) provide the mathematical framework, but practical questions remain. How many dimensions are needed? How should benchmark portfolios be designed to efficiently measure multiple abilities simultaneously? How should multidimensional ability profiles be communicated to non-expert stakeholders?</span>
+<span id="cb1-70"><a href="#cb1-70"></a></span>
+<span id="cb1-71"><a href="#cb1-71"></a><span class="fu">### Temporal Dynamics and Evaluation Drift</span></span>
+<span id="cb1-72"><a href="#cb1-72"></a></span>
+<span id="cb1-73"><a href="#cb1-73"></a>AI evaluation is not static. Models improve, benchmarks saturate, and the relationship between benchmark performance and real-world utility shifts over time. @sec-causality addressed distribution shift in a cross-sectional setting, but *longitudinal* evaluation --- tracking how models and benchmarks co-evolve --- requires new tools. Item parameter drift (when calibrated difficulties become stale), concept drift (when the construct itself changes), and benchmark half-life (when a benchmark loses discriminative power) are all practical problems that the field has barely begun to address.</span>
+<span id="cb1-74"><a href="#cb1-74"></a></span>
+<span id="cb1-75"><a href="#cb1-75"></a><span class="fu">### Evaluation of Agentic Systems</span></span>
+<span id="cb1-76"><a href="#cb1-76"></a></span>
+<span id="cb1-77"><a href="#cb1-77"></a>The measurement models in this book were developed for systems that produce a single response to a single prompt. Agentic AI systems --- those that take multi-step actions in environments, use tools, and interact with humans over extended time horizons --- pose fundamentally different measurement challenges. What is the "item" in an agentic evaluation? What is the "response"? How do we define and measure reliability when the evaluation environment itself is stochastic and path-dependent?</span>
+<span id="cb1-78"><a href="#cb1-78"></a></span>
+<span id="cb1-79"><a href="#cb1-79"></a><span class="fu">### Scalable Oversight and Recursive Evaluation</span></span>
+<span id="cb1-80"><a href="#cb1-80"></a></span>
+<span id="cb1-81"><a href="#cb1-81"></a>As AI systems approach or exceed human performance on specific tasks, the evaluation bottleneck shifts from model capability to evaluator capability. If human judges cannot reliably assess the quality of an AI system's outputs, how do we maintain measurement validity? Approaches including AI-assisted evaluation, debate, and recursive reward modeling all attempt to extend the reach of human judgment, but their measurement properties --- reliability, validity, potential for systematic bias --- are largely uncharacterized.</span>
+<span id="cb1-82"><a href="#cb1-82"></a></span>
+<span id="cb1-83"><a href="#cb1-83"></a><span class="fu">### Fairness in Evaluation</span></span>
+<span id="cb1-84"><a href="#cb1-84"></a></span>
+<span id="cb1-85"><a href="#cb1-85"></a>Evaluation systems can be unfair in multiple ways: items may exhibit differential functioning across model families or deployment contexts (@sec-validity), adaptive testing algorithms may underquery certain regions of the ability space, and benchmark selection may systematically favor certain architectures. The fairness of evaluation has received far less attention than the fairness of the systems being evaluated. Developing measurement-theoretic notions of evaluation fairness --- analogous to test fairness in educational testing --- is an important open direction.</span>
+<span id="cb1-86"><a href="#cb1-86"></a></span>
+<span id="cb1-87"><a href="#cb1-87"></a></span>
+<span id="cb1-88"><a href="#cb1-88"></a><span class="fu">## Capstone Projects {#sec-capstone}</span></span>
+<span id="cb1-89"><a href="#cb1-89"></a></span>
+<span id="cb1-90"><a href="#cb1-90"></a>The following projects are designed for the CS321M (AI Measurement Science) course at Stanford. Each integrates concepts from multiple chapters of this book. Projects are suitable for individuals or pairs and should result in a pre-analysis plan (3--4 pages, NeurIPS format) and a final manuscript (up to 8 pages, NeurIPS format) with reproducible code.</span>
+<span id="cb1-91"><a href="#cb1-91"></a></span>
+<span id="cb1-92"><a href="#cb1-92"></a>Difficulty ratings: ($\star$) single-person, 4 weeks; ($\star\star$) 1--2 persons, 6 weeks; ($\star\star\star$) 1--2 persons, 8+ weeks, potential research contribution.</span>
+<span id="cb1-93"><a href="#cb1-93"></a></span>
+<span id="cb1-94"><a href="#cb1-94"></a><span class="fu">### Project 1: IRT Model Comparison on Real Benchmarks ($\star$) {.unnumbered}</span></span>
+<span id="cb1-95"><a href="#cb1-95"></a></span>
+<span id="cb1-96"><a href="#cb1-96"></a>Fit Rasch, 2PL, and multidimensional IRT models to a large-scale evaluation dataset (e.g., the Open LLM Leaderboard response matrix or HELM data). Compare models using information criteria, cross-validated log-likelihood, and out-of-sample prediction. Test whether the Rasch model's sufficiency property holds empirically by comparing sum-score-based rankings to IRT ability rankings. Investigate whether items that misfit the Rasch model correspond to known benchmark quality issues.</span>
+<span id="cb1-97"><a href="#cb1-97"></a></span>
+<span id="cb1-98"><a href="#cb1-98"></a>**Key concepts:** @sec-foundations (IRT models), @sec-learning (estimation), @sec-validity (item fit).</span>
+<span id="cb1-99"><a href="#cb1-99"></a></span>
+<span id="cb1-100"><a href="#cb1-100"></a><span class="fu">### Project 2: Adaptive Testing for Efficient AI Evaluation ($\star$) {.unnumbered}</span></span>
+<span id="cb1-101"><a href="#cb1-101"></a></span>
+<span id="cb1-102"><a href="#cb1-102"></a>Using a pre-calibrated item bank from an existing benchmark, implement CAT for AI model evaluation. Compare the efficiency (number of items needed to reach a target standard error) and accuracy (rank correlation with full-benchmark scores) of Fisher-information item selection versus random selection. Investigate how performance degrades when calibration data come from a different generation of models (calibration drift).</span>
+<span id="cb1-103"><a href="#cb1-103"></a></span>
+<span id="cb1-104"><a href="#cb1-104"></a>**Key concepts:** @sec-efficient (CAT, Fisher information), @sec-foundations (IRT), @sec-causality (distribution shift).</span>
+<span id="cb1-105"><a href="#cb1-105"></a></span>
+<span id="cb1-106"><a href="#cb1-106"></a><span class="fu">### Project 3: Reliability Audit of an Evaluation Pipeline ($\star$) {.unnumbered}</span></span>
+<span id="cb1-107"><a href="#cb1-107"></a></span>
+<span id="cb1-108"><a href="#cb1-108"></a>Select an evaluation pipeline that involves human or LLM judges (e.g., MT-Bench, AlpacaEval, or Chatbot Arena). Design and conduct a G-study decomposing variance into model, item, judge, and interaction components. Run a D-study to determine the optimal allocation of judges and items under a fixed budget. Report the generalizability coefficient and compare it to the reliability implicitly assumed by published leaderboards.</span>
+<span id="cb1-109"><a href="#cb1-109"></a></span>
+<span id="cb1-110"><a href="#cb1-110"></a>**Key concepts:** @sec-reliability (G-theory, D-studies, LLM-as-judge reliability).</span>
+<span id="cb1-111"><a href="#cb1-111"></a></span>
+<span id="cb1-112"><a href="#cb1-112"></a><span class="fu">### Project 4: Benchmark Bug Detection at Scale ($\star\star$) {.unnumbered}</span></span>
+<span id="cb1-113"><a href="#cb1-113"></a></span>
+<span id="cb1-114"><a href="#cb1-114"></a>Apply the diagnostic framework of @truong2025bugs to a benchmark not studied in their paper. Compute item-total correlations, tetrachoric correlations, and Mokken scalability coefficients across a diverse set of LLMs. Flag the top-50 most suspicious items and conduct a manual review. Report precision, analyze the types of errors found, and propose corrections. Investigate how the number and diversity of LLMs affects detection power.</span>
+<span id="cb1-115"><a href="#cb1-115"></a></span>
+<span id="cb1-116"><a href="#cb1-116"></a>**Key concepts:** @sec-foundations (sufficiency, Rasch), @sec-reliability (item-total correlation), @sec-validity (content validity).</span>
+<span id="cb1-117"><a href="#cb1-117"></a></span>
+<span id="cb1-118"><a href="#cb1-118"></a><span class="fu">### Project 5: Validity Analysis of a Domain-Specific Benchmark ($\star\star$) {.unnumbered}</span></span>
+<span id="cb1-119"><a href="#cb1-119"></a></span>
+<span id="cb1-120"><a href="#cb1-120"></a>Choose a domain-specific benchmark (medical, legal, coding, mathematical reasoning). Conduct a comprehensive validity analysis: (a) content validity --- does the item pool representatively sample the stated construct? (b) construct validity --- does dimensionality analysis support a unidimensional interpretation? (c) criterion validity --- do scores correlate with external measures of the construct? (d) DIF analysis --- do items function differently across model families?</span>
+<span id="cb1-121"><a href="#cb1-121"></a></span>
+<span id="cb1-122"><a href="#cb1-122"></a>**Key concepts:** @sec-validity (all validity types, DIF), @sec-foundations (factor models, dimensionality).</span>
+<span id="cb1-123"><a href="#cb1-123"></a></span>
+<span id="cb1-124"><a href="#cb1-124"></a><span class="fu">### Project 6: Scaling Laws through the IRT Lens ($\star\star$) {.unnumbered}</span></span>
+<span id="cb1-125"><a href="#cb1-125"></a></span>
+<span id="cb1-126"><a href="#cb1-126"></a>Replicate and extend the Item Response Scaling Laws framework of @truong2025irsl. Using publicly available checkpoint evaluation data, fit Beta-IRT models and estimate the relationship between $\theta$ and pre-training compute. Test cross-benchmark transfer: estimate $\theta$ on one benchmark and predict performance on another. Compare the efficiency of IRT-based scaling estimation to traditional per-benchmark curve fitting.</span>
+<span id="cb1-127"><a href="#cb1-127"></a></span>
+<span id="cb1-128"><a href="#cb1-128"></a>**Key concepts:** @sec-foundations (IRT), @sec-learning (Beta-IRT), @sec-efficient (adaptive testing), @sec-causality (transfer).</span>
+<span id="cb1-129"><a href="#cb1-129"></a></span>
+<span id="cb1-130"><a href="#cb1-130"></a><span class="fu">### Project 7: Red-Teaming as Measurement ($\star\star$) {.unnumbered}</span></span>
+<span id="cb1-131"><a href="#cb1-131"></a></span>
+<span id="cb1-132"><a href="#cb1-132"></a>Design and calibrate an adversarial item bank for a specific safety domain (e.g., medical misinformation, code injection, social engineering). Fit a multidimensional IRT model with standard and adversarial ability dimensions. Implement adaptive adversarial testing and compare its efficiency to uniform item selection. Analyze the validity of the adversarial construct: does adversarial robustness form a coherent dimension, or does it fragment into domain-specific factors?</span>
+<span id="cb1-133"><a href="#cb1-133"></a></span>
+<span id="cb1-134"><a href="#cb1-134"></a>**Key concepts:** @sec-redteaming (adversarial IRT, item banks), @sec-efficient (CAT), @sec-validity (construct validity).</span>
+<span id="cb1-135"><a href="#cb1-135"></a></span>
+<span id="cb1-136"><a href="#cb1-136"></a><span class="fu">### Project 8: ASR Comparisons Under Aggregation and Judge Error ($\star\star$) {.unnumbered}</span></span>
+<span id="cb1-137"><a href="#cb1-137"></a></span>
+<span id="cb1-138"><a href="#cb1-138"></a>Conduct an empirical study of the aggregation and judge-error biases documented by @chouldechova2026comparison. Using a red-teaming dataset with multiple samples per prompt, estimate: (a) the distribution of per-prompt success probabilities, (b) the power-law exponent under Top-1 aggregation (@schaeffer2025monkeys), (c) differential judge error rates across target models. Quantify how much of the published variation in ASR across models is attributable to estimand differences versus genuine safety differences.</span>
+<span id="cb1-139"><a href="#cb1-139"></a></span>
+<span id="cb1-140"><a href="#cb1-140"></a>**Key concepts:** @sec-redteaming (ASR as estimand, judge validity), @sec-reliability (measurement error).</span>
+<span id="cb1-141"><a href="#cb1-141"></a></span>
+<span id="cb1-142"><a href="#cb1-142"></a><span class="fu">### Project 9: Prediction-Powered Evaluation ($\star\star$) {.unnumbered}</span></span>
+<span id="cb1-143"><a href="#cb1-143"></a></span>
+<span id="cb1-144"><a href="#cb1-144"></a>Implement and evaluate the prediction-powered inference (PPI) framework for AI evaluation. Use a large LLM judge as the prediction source and a smaller human-labeled set as ground truth. Compare PPI estimates to synthetic-only and human-only baselines across multiple benchmarks. Investigate: how does PPI performance depend on the quality of the LLM judge? What is the minimum human annotation budget needed for PPI to outperform both baselines?</span>
+<span id="cb1-145"><a href="#cb1-145"></a></span>
+<span id="cb1-146"><a href="#cb1-146"></a>**Key concepts:** @sec-redteaming (PPI, synthetic data), @sec-reliability (judge reliability), @sec-causality (doubly robust estimation).</span>
+<span id="cb1-147"><a href="#cb1-147"></a></span>
+<span id="cb1-148"><a href="#cb1-148"></a><span class="fu">### Project 10: Evaluation Design for Agentic Systems ($\star\star\star$) {.unnumbered}</span></span>
+<span id="cb1-149"><a href="#cb1-149"></a></span>
+<span id="cb1-150"><a href="#cb1-150"></a>Propose and evaluate a measurement framework for agentic AI systems (e.g., coding agents, web-browsing agents, tool-using assistants). Key challenges include: defining the unit of measurement (what is an "item"?), handling variable-length interactions, and decomposing performance into sub-capabilities. Implement a prototype evaluation using a real agent benchmark and analyze its reliability (via G-theory over tasks, seeds, and environments) and construct validity (via factor analysis of sub-task scores).</span>
+<span id="cb1-151"><a href="#cb1-151"></a></span>
+<span id="cb1-152"><a href="#cb1-152"></a>**Key concepts:** @sec-foundations (factor models), @sec-reliability (G-theory), @sec-validity (construct validity), @sec-efficient (design).</span>
+<span id="cb1-153"><a href="#cb1-153"></a></span>
+<span id="cb1-154"><a href="#cb1-154"></a></span>
+<span id="cb1-155"><a href="#cb1-155"></a><span class="fu">## A Practitioner's Checklist {#sec-checklist}</span></span>
+<span id="cb1-156"><a href="#cb1-156"></a></span>
+<span id="cb1-157"><a href="#cb1-157"></a>The following checklist distills the book's recommendations into actionable steps for designing and auditing AI evaluations. It is organized by the evaluation lifecycle.</span>
+<span id="cb1-158"><a href="#cb1-158"></a></span>
+<span id="cb1-159"><a href="#cb1-159"></a><span class="fu">### Construct Definition</span></span>
+<span id="cb1-160"><a href="#cb1-160"></a></span>
+<span id="cb1-161"><a href="#cb1-161"></a><span class="ss">- </span><span class="va">[ ]</span> Write an explicit construct definition: what is the benchmark intended to measure, and what is it *not* intended to measure?</span>
+<span id="cb1-162"><a href="#cb1-162"></a><span class="ss">- </span><span class="va">[ ]</span> Specify the content domain and develop a test blueprint mapping sub-domains to item counts (@sec-validity).</span>
+<span id="cb1-163"><a href="#cb1-163"></a><span class="ss">- </span><span class="va">[ ]</span> Distinguish between the construct (latent ability) and the indicator (observed score). A benchmark score is *evidence about* ability, not ability itself (@sec-foundations).</span>
+<span id="cb1-164"><a href="#cb1-164"></a></span>
+<span id="cb1-165"><a href="#cb1-165"></a><span class="fu">### Item Development and Calibration</span></span>
+<span id="cb1-166"><a href="#cb1-166"></a></span>
+<span id="cb1-167"><a href="#cb1-167"></a><span class="ss">- </span><span class="va">[ ]</span> Calibrate items using IRT: estimate difficulty, discrimination, and (if applicable) guessing parameters on a diverse set of models (@sec-learning).</span>
+<span id="cb1-168"><a href="#cb1-168"></a><span class="ss">- </span><span class="va">[ ]</span> Screen for problematic items using item-total correlations, tetrachoric correlations, and fit statistics. Remove or revise items that misfit (@sec-reliability; @truong2025bugs).</span>
+<span id="cb1-169"><a href="#cb1-169"></a><span class="ss">- </span><span class="va">[ ]</span> Check for DIF: do items function differently across model families, sizes, or training paradigms? Differential functioning may indicate construct-irrelevant variance (@sec-validity).</span>
+<span id="cb1-170"><a href="#cb1-170"></a><span class="ss">- </span><span class="va">[ ]</span> Audit item content for errors: incorrect keys, ambiguous wording, grading bugs, culturally-embedded assumptions.</span>
+<span id="cb1-171"><a href="#cb1-171"></a></span>
+<span id="cb1-172"><a href="#cb1-172"></a><span class="fu">### Evaluation Design</span></span>
+<span id="cb1-173"><a href="#cb1-173"></a></span>
+<span id="cb1-174"><a href="#cb1-174"></a><span class="ss">- </span><span class="va">[ ]</span> Choose the response format (binary, probability, preference, rubric) that best captures the construct. Binary responses are simplest but discard information; empirical probabilities and rubric scores preserve richer signals (@sec-learning; @truong2025irsl).</span>
+<span id="cb1-175"><a href="#cb1-175"></a><span class="ss">- </span><span class="va">[ ]</span> Consider adaptive testing: if the item bank is calibrated, CAT can reduce the query budget by 90%+ with minimal loss in precision (@sec-efficient).</span>
+<span id="cb1-176"><a href="#cb1-176"></a><span class="ss">- </span><span class="va">[ ]</span> For judge-based evaluation, design the rating protocol with reliability in mind: standardize rubrics, randomize presentation order, and plan for multiple judges (@sec-reliability).</span>
+<span id="cb1-177"><a href="#cb1-177"></a><span class="ss">- </span><span class="va">[ ]</span> Run a D-study to allocate the evaluation budget optimally across items, judges, and replications (@sec-reliability).</span>
+<span id="cb1-178"><a href="#cb1-178"></a></span>
+<span id="cb1-179"><a href="#cb1-179"></a><span class="fu">### Analysis and Reporting</span></span>
+<span id="cb1-180"><a href="#cb1-180"></a></span>
+<span id="cb1-181"><a href="#cb1-181"></a><span class="ss">- </span><span class="va">[ ]</span> Report confidence intervals, not just point estimates. The SEM provides a natural uncertainty band; models whose scores overlap within $\pm 2 \times \text{SEM}$ may not be meaningfully different (@sec-reliability).</span>
+<span id="cb1-182"><a href="#cb1-182"></a><span class="ss">- </span><span class="va">[ ]</span> Report the reliability of the evaluation (Cronbach's $\alpha$, G-coefficient, or IRT-based conditional reliability). If reliability is low, ranking differences are uninterpretable.</span>
+<span id="cb1-183"><a href="#cb1-183"></a><span class="ss">- </span><span class="va">[ ]</span> For red-teaming, always report the aggregation rule (one-shot, Top-1 of $K$) alongside the ASR. Comparisons across aggregation rules are not comparisons of safety (@sec-redteaming).</span>
+<span id="cb1-184"><a href="#cb1-184"></a><span class="ss">- </span><span class="va">[ ]</span> For judge-based evaluation, report inter-rater agreement disaggregated by model and item type. Differential judge error invalidates comparisons (@sec-redteaming).</span>
+<span id="cb1-185"><a href="#cb1-185"></a></span>
+<span id="cb1-186"><a href="#cb1-186"></a><span class="fu">### Validity and Generalization</span></span>
+<span id="cb1-187"><a href="#cb1-187"></a></span>
+<span id="cb1-188"><a href="#cb1-188"></a><span class="ss">- </span><span class="va">[ ]</span> Assess content validity: does the item pool representatively sample the intended construct domain?</span>
+<span id="cb1-189"><a href="#cb1-189"></a><span class="ss">- </span><span class="va">[ ]</span> Assess construct validity: does dimensionality analysis support the intended interpretation? Do scores correlate with external criteria?</span>
+<span id="cb1-190"><a href="#cb1-190"></a><span class="ss">- </span><span class="va">[ ]</span> Consider distribution shift: will the evaluation generalize to the deployment context? If not, apply importance weighting or doubly robust corrections (@sec-causality).</span>
+<span id="cb1-191"><a href="#cb1-191"></a><span class="ss">- </span><span class="va">[ ]</span> Document known validity threats and limitations. No evaluation is perfectly valid; transparency about limitations is itself a form of quality assurance.</span>
+<span id="cb1-192"><a href="#cb1-192"></a></span>
+<span id="cb1-193"><a href="#cb1-193"></a><span class="fu">### Maintenance and Monitoring</span></span>
+<span id="cb1-194"><a href="#cb1-194"></a></span>
+<span id="cb1-195"><a href="#cb1-195"></a><span class="ss">- </span><span class="va">[ ]</span> Monitor for benchmark saturation: when the top models all score above 95%, the benchmark no longer discriminates and should be retired or extended.</span>
+<span id="cb1-196"><a href="#cb1-196"></a><span class="ss">- </span><span class="va">[ ]</span> Monitor for contamination: periodically check whether new models have been trained on benchmark data, using the diagnostics from @sec-validity.</span>
+<span id="cb1-197"><a href="#cb1-197"></a><span class="ss">- </span><span class="va">[ ]</span> Recalibrate item parameters periodically: as the model population changes, item difficulties may drift.</span>
+<span id="cb1-198"><a href="#cb1-198"></a><span class="ss">- </span><span class="va">[ ]</span> Maintain a living item bank: retire compromised items, add new items, and recalibrate regularly.</span>
+<span id="cb1-199"><a href="#cb1-199"></a></span>
+<span id="cb1-200"><a href="#cb1-200"></a></span>
+<span id="cb1-201"><a href="#cb1-201"></a><span class="fu">## Scope and Limitations {#sec-scope}</span></span>
+<span id="cb1-202"><a href="#cb1-202"></a></span>
+<span id="cb1-203"><a href="#cb1-203"></a>This book has focused on the statistical and psychometric foundations of AI evaluation. Several important topics are largely out of scope:</span>
+<span id="cb1-204"><a href="#cb1-204"></a></span>
+<span id="cb1-205"><a href="#cb1-205"></a>**Cognitive science of AI systems.** We treat AI models as black boxes that produce responses to items. Understanding *why* a model succeeds or fails on a particular item --- through mechanistic interpretability, probing, or causal analysis of internal representations --- is a complementary but distinct line of inquiry.</span>
+<span id="cb1-206"><a href="#cb1-206"></a></span>
+<span id="cb1-207"><a href="#cb1-207"></a>**Large-scale systems engineering.** Evaluation at the scale of modern AI development involves distributed computing, data pipelines, versioning, and infrastructure that we do not cover. The measurement principles in this book apply regardless of scale, but their implementation at scale introduces engineering challenges.</span>
+<span id="cb1-208"><a href="#cb1-208"></a></span>
+<span id="cb1-209"><a href="#cb1-209"></a>**Legal and regulatory frameworks.** AI evaluation increasingly intersects with regulation (EU AI Act, NIST AI RMF). We do not cover the legal dimensions of evaluation, though the validity and reliability frameworks developed here provide the scientific basis for regulatory requirements.</span>
+<span id="cb1-210"><a href="#cb1-210"></a></span>
+<span id="cb1-211"><a href="#cb1-211"></a>**Domain-specific evaluation.** While we discuss domain-specific examples throughout, we do not provide deep coverage of evaluation in any single domain (healthcare, education, law, finance). Each domain brings its own construct definitions, validity concerns, and stakeholder requirements that warrant dedicated treatment.</span>
+<span id="cb1-212"><a href="#cb1-212"></a></span>
+<span id="cb1-213"><a href="#cb1-213"></a>**Multi-modal evaluation.** The models in this book are developed primarily for text-based evaluation. Extending measurement theory to vision, audio, multi-modal, and embodied AI evaluation raises new questions about construct definition and response modeling.</span>
+<span id="cb1-214"><a href="#cb1-214"></a></span>
+<span id="cb1-215"><a href="#cb1-215"></a></span>
+<span id="cb1-216"><a href="#cb1-216"></a><span class="fu">## Final Thought {#sec-final-thought}</span></span>
+<span id="cb1-217"><a href="#cb1-217"></a></span>
+<span id="cb1-218"><a href="#cb1-218"></a>The gap between what we claim about AI systems and what we can rigorously demonstrate is wide. Benchmarks proliferate, but the science behind them lags. We have the tools --- developed over a century of measurement science --- to close this gap. Item response theory, factor analysis, reliability theory, validity analysis, causal reasoning, and mechanism design are not merely theoretical curiosities; they are the foundation for making AI evaluation trustworthy.</span>
+<span id="cb1-219"><a href="#cb1-219"></a></span>
+<span id="cb1-220"><a href="#cb1-220"></a>The challenge is not technical but cultural. The AI community has optimized for speed --- new benchmarks, new models, new leaderboards --- at the expense of rigor. Adopting measurement science requires slowing down: defining constructs before collecting data, calibrating items before reporting scores, quantifying uncertainty before claiming progress. This is the discipline that separates measurement from mere scoring.</span>
+<span id="cb1-221"><a href="#cb1-221"></a></span>
+<span id="cb1-222"><a href="#cb1-222"></a>We invite you to contribute --- to develop new measurement methods, to apply existing ones rigorously, to critique evaluations that fall short, and to insist that claims about AI systems rest on solid scientific ground. The stakes are high: the decisions we make about AI deployment, safety, and regulation depend on the quality of our measurements. Let us make them worthy of the task.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+    <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap10.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script type="text/javascript">
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let pseudocodeOptions = {
+          indentSize: el.dataset.indentSize || "1.2em",
+          commentDelimiter: el.dataset.commentDelimiter || "//",
+          lineNumber: el.dataset.lineNumber === "true" ? true : false,
+          lineNumberPunc: el.dataset.lineNumberPunc || ":",
+          noEnd: el.dataset.noEnd === "true" ? true : false,
+          titlePrefix: el.dataset.captionPrefix || "Algorithm"
+        };
+        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+      });
+    })(document);
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+        if (captionSpan !== null) {
+          let captionPrefix = el.dataset.captionPrefix + " ";
+          let captionNumber = "";
+          if (el.dataset.pseudocodeNumber) {
+            captionNumber = el.dataset.pseudocodeNumber + " ";
+            if (el.dataset.chapterLevel) {
+              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+            }
+          }
+          captionSpan.innerHTML = captionPrefix + captionNumber;
+        }
+      });
+    })(document);
+    </script>
+  
+
+
+
+
+</body></html>

@@ -76,7 +76,7 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces Classical Test Theory notation: $X_{ij} = T_i + E_{ij}$ (observed = true + error), $\rho_{XX'}$ (reliability), $\alpha$ (Cronbach's alpha), $\sigma^2_p, \sigma^2_i, \sigma^2_r$ (G-theory variance components), and $\kappa$ (Cohen's kappa). See @sec-notation for the complete notation reference.
+This chapter introduces Classical Test Theory notation: $X_{ij} = T_i + E_{ij}$ (observed = true + error), $\rho_{XX'}$ (reliability), $\alpha$ (Cronbach's alpha), $\sigma^2_p, \sigma^2_i, \sigma^2_r$ (G-theory variance components), and $\kappa$ (Cohen's kappa). See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
 

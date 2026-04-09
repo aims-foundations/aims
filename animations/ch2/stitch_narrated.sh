@@ -14,7 +14,12 @@
 # ────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
-export PATH="/lfs/local/0/sttruong/miniconda3/bin:$PATH"
+for cmd in ffmpeg ffprobe python3; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "Error: $cmd is required but not installed." >&2
+        exit 1
+    fi
+done
 
 # ── parse arguments ──────────────────────────────────────────────
 MUSIC_FILE=""
@@ -68,20 +73,21 @@ for section_line in "${SECTIONS[@]}"; do
     segment_out="$TMPDIR/${sec_id}.mp4"
 
     if [[ "$anim_vid" == "NONE" && "$title_vid" != "NONE" ]]; then
-        # No animation — extend title card to match narration length
+        # No animation — keep the full title card and pad whichever stream is shorter
         title_dur=$(get_duration "$title_vid")
-        echo "   Title card: ${title_dur}s (extending to ${nar_dur}s)"
+        final_dur=$(python3 -c "print(max(float($nar_dur), float($title_dur)))")
+        video_pad=$(python3 -c "print(max(0.0, float($final_dur) - float($title_dur)))")
+        echo "   Title card: ${title_dur}s (target ${final_dur}s)"
 
         ffmpeg -y -i "$title_vid" -i "$nar_audio" \
-            -filter_complex "[0:v]tpad=stop_mode=clone:stop_duration=$(python3 -c "print(max(0, $nar_dur - $title_dur))")[v]" \
-            -map "[v]" -map 1:a \
+            -filter_complex "[0:v]tpad=stop_mode=clone:stop_duration=${video_pad}[v];[1:a]apad,atrim=0:${final_dur}[a]" \
+            -map "[v]" -map "[a]" \
             -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 60 \
             -c:a aac -b:a 192k \
-            -shortest \
             "$segment_out" 2>/dev/null
 
     elif [[ "$title_vid" != "NONE" && "$anim_vid" != "NONE" ]]; then
-        # Title card + animation — concat video, then overlay narration
+        # Title card + animation — concat video, then pad whichever stream is shorter
         anim_dur=$(get_duration "$anim_vid")
         title_dur=$(get_duration "$title_vid")
         total_vid=$(python3 -c "print($title_dur + $anim_dur)")
@@ -99,30 +105,29 @@ for section_line in "${SECTIONS[@]}"; do
 
         concat_dur=$(get_duration "$concat_vid")
 
-        # Extend with freeze-frame if narration is longer
-        extra=$(python3 -c "print(max(0, $nar_dur - $concat_dur))")
-        echo "   Extending by ${extra}s for narration"
+        final_dur=$(python3 -c "print(max(float($nar_dur), float($concat_dur)))")
+        video_pad=$(python3 -c "print(max(0.0, float($final_dur) - float($concat_dur)))")
+        echo "   Target segment duration: ${final_dur}s"
 
         ffmpeg -y -i "$concat_vid" -i "$nar_audio" \
-            -filter_complex "[0:v]tpad=stop_mode=clone:stop_duration=${extra}[v]" \
-            -map "[v]" -map 1:a \
+            -filter_complex "[0:v]tpad=stop_mode=clone:stop_duration=${video_pad}[v];[1:a]apad,atrim=0:${final_dur}[a]" \
+            -map "[v]" -map "[a]" \
             -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 60 \
             -c:a aac -b:a 192k \
-            -shortest \
             "$segment_out" 2>/dev/null
 
     elif [[ "$title_vid" == "NONE" && "$anim_vid" != "NONE" ]]; then
-        # Animation only (no title card) — extend with freeze-frame
+        # Animation only (no title card) — preserve the full animation and narration
         anim_dur=$(get_duration "$anim_vid")
-        extra=$(python3 -c "print(max(0, $nar_dur - $anim_dur))")
-        echo "   Animation: ${anim_dur}s (extending by ${extra}s)"
+        final_dur=$(python3 -c "print(max(float($nar_dur), float($anim_dur)))")
+        video_pad=$(python3 -c "print(max(0.0, float($final_dur) - float($anim_dur)))")
+        echo "   Animation: ${anim_dur}s (target ${final_dur}s)"
 
         ffmpeg -y -i "$anim_vid" -i "$nar_audio" \
-            -filter_complex "[0:v]tpad=stop_mode=clone:stop_duration=${extra}[v]" \
-            -map "[v]" -map 1:a \
+            -filter_complex "[0:v]tpad=stop_mode=clone:stop_duration=${video_pad}[v];[1:a]apad,atrim=0:${final_dur}[a]" \
+            -map "[v]" -map "[a]" \
             -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 60 \
             -c:a aac -b:a 192k \
-            -shortest \
             "$segment_out" 2>/dev/null
     fi
 

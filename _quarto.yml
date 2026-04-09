@@ -7,10 +7,9 @@ project:
 site-url: https://aimslab.stanford.edu/textbook
 
 resources:
-  - CNAME
   - "*.pdf"
   - "src/data/*.json"
-  - "animations/**/*.mp4"
+  - "animations/**/*_narrated.mp4"
   
 reference-location: document # footnotes in margin
 citation-location: document # citations in margin
@@ -34,6 +33,7 @@ filters:
 
 format:
   html:
+    toc-expand: 2
     theme:
       light: [flatly, resources/scss/global.scss]
       dark: [darkly, resources/scss/global.scss]
@@ -126,9 +126,8 @@ book:
       orcid: 0000-0001-9039-3220
     
   date: last-modified
-  repo-url: https://github.com/sangttruong/aims
+  repo-url: https://github.com/aims-foundations/aims
   repo-actions: [source, issue]
-  downloads: [pdf]
   navbar:
     left:
       - text: "AIMS Lab Home"

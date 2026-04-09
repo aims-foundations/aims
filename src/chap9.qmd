@@ -75,7 +75,7 @@ This chapter can be covered in **2 lectures** (75--90 minutes each):
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces adversarial evaluation notation: $\theta_j^{(\text{adv})}/\theta_j^{(\text{std})}$ (adversarial/standard ability), $\alpha_{s,\mathcal{D}}$ (attack success probability), $J/s$ (operational judge / oracle criterion), $K$ (repeated samples), and $\hat{\mu}_{\text{PPI}}$ (prediction-powered inference estimator). See @sec-notation for the complete notation reference.
+This chapter introduces adversarial evaluation notation: $\theta_j^{(\text{adv})}/\theta_j^{(\text{std})}$ (adversarial/standard ability), $\alpha_{s,\mathcal{D}}$ (attack success probability), $J/s$ (operational judge / oracle criterion), $K$ (repeated samples), and $\hat{\mu}_{\text{PPI}}$ (prediction-powered inference estimator). See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
 

@@ -25,9 +25,9 @@ local boxes = {
 
 -- generate tcolorbox options for a given box title
 local function boxOpts(title)
-  --local color = boxes[title]['color']
-  local color = '.grey'
-  local icon = boxes[title]['icon']
+  local box = boxes[title]
+  local color = box and box['color'] or '.grey'
+  local icon = box and box['icon'] or '\\faSquare'
   local Title = title:gsub("^%l", string.upper)
   local opts = 'colframe=' .. color .. ', title=' .. icon .. ' \\enspace ' .. Title
   return opts
@@ -58,8 +58,12 @@ function Callout(callout)
   elseif quarto.doc.is_format('html') then
     -- if box doesn't already have a value for collapse
   	if callout.collapse == nil then
-  	  -- apply collapse value corresponding to the box type
-  		callout.collapse = boxes[pandoc.utils.stringify(callout.title)]['collapse']
-  	end
+      local box = boxes[pandoc.utils.stringify(callout.title)]
+      if box == nil then
+        return
+      end
+      -- apply collapse value corresponding to the box type
+      callout.collapse = box['collapse']
+    end
   end
 end

@@ -67,7 +67,7 @@ This chapter can be covered in **2 lectures** (75-90 minutes each):
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces $I_j(\theta)$ (Fisher information for item $j$) and $\mathcal{I}(\theta)$ (Fisher information matrix). See @sec-notation for the complete notation reference.
+This chapter introduces $I_j(\theta)$ (Fisher information for item $j$) and $\mathcal{I}(\theta)$ (Fisher information matrix). See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
 

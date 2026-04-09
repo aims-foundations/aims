@@ -80,7 +80,7 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces estimation notation: $\ell(\theta, \beta)$ (log-likelihood), $\hat{\theta}_{\text{MLE}}$ and $\hat{\theta}_{\text{MAP}}$ (point estimates), $\pi(\theta)$ (priors), and $\eta$ (learning rate). See @sec-notation for the complete notation reference.
+This chapter introduces estimation notation: $\ell(\theta, \beta)$ (log-likelihood), $\hat{\theta}_{\text{MLE}}$ and $\hat{\theta}_{\text{MAP}}$ (point estimates), $\pi(\theta)$ (priors), and $\eta$ (learning rate). See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
 ::: {.callout-tip title="Video Overview" collapse="false"}
@@ -1268,6 +1268,17 @@ Their key finding is that the IRT ability parameter $\theta$ scales linearly wit
 In a study of 6,612 model checkpoints and 37,682 questions, this approach achieves comparable or superior decision accuracy to traditional scaling laws using only 50 questions per benchmark — a 99.9% reduction in queries. The approach uses Beta-IRT, which models empirical probability responses (token probabilities, pass rates) rather than binary correctness, capturing richer scaling signals.
 :::
 
+### Amortized Model Evaluation {#sec-amortized-eval}
+
+The amortized models introduced in @sec-cold-start (Prediction-Powered Evaluation) can also be evaluated under the masking framework. In the PPE pipeline, the item-side predictor $f_\theta$ maps question embeddings to latent parameters, and the model-side predictor $g_\phi$ maps model metadata to ability vectors. We evaluate these amortized predictors on held-out data using the same AUC metric:
+
+| **Split**          | **AUC** |
+|--------------------|---------|
+| Column holdout (random)    | 0.804   |
+| Row holdout (random)    | 0.848   |
+
+The strong AUC on row holdout (unseen models) confirms that model behavior is well-predicted by simple metadata features (parameter count, architecture, release date), enabling reliable evaluation without running models on every benchmark item. The column holdout result shows that question embeddings carry enough information to predict behavioral patterns for unseen items, though the gap between column and row holdout suggests that item-level prediction is the harder task --- consistent with the semantic--behavioral gap discussed in @sec-cold-start.
+
 
 ## Discussion Questions {#sec-discussion}
 
@@ -1282,7 +1293,7 @@ In a study of 6,612 model checkpoints and 37,682 questions, this approach achiev
 5. **Multidimensional Extensions:** The chapter focused on unidimensional models (single ability). How would the learning procedures change for multidimensional factor models? What additional challenges arise?
 
 
-## Bibliographic Notes {#sec-bib-notes}
+## Bibliographic Notes {#sec-learning-bib}
 
 ### Maximum Likelihood Estimation
 
@@ -1309,7 +1320,7 @@ Standard IRT models assume binary (correct/incorrect) responses, but language mo
 L-BFGS is described in @nocedal2006numerical. For deep learning optimizers applied to psychometric models, see @kingma2015adam for Adam.
 
 
-## Exercises {#sec-exercises}
+## Exercises {#sec-learning-exercises}
 
 ### Theoretical Exercises
 

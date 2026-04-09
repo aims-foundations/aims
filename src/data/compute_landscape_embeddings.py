@@ -6,20 +6,37 @@ Two outputs:
 2. item_landscape.json — sampled items across benchmarks (up to 100 per benchmark)
 
 Requires: sentence-transformers, umap-learn, pandas, numpy
-Run on skampere1 where torch_measure data lives.
+
+Usage:
+  python src/data/compute_landscape_embeddings.py
+  python src/data/compute_landscape_embeddings.py --data-dir /path/to/item_cache
 """
 
+import argparse
 import json
 import os
 import random
 from pathlib import Path
+from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
 
+
+def _resolve_path(env_name: str, default: Path) -> Path:
+    value = os.environ.get(env_name)
+    return Path(value).expanduser() if value else default
+
 # Config
-DATA_DIR = Path("/lfs/skampere1/0/sttruong/torch_measure/data")
-OUTPUT_DIR = Path("/lfs/skampere1/0/sttruong/torch_measure/data")
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_DATA_DIR = _resolve_path(
+    "AIMS_BENCH_DATA_DIR",
+    REPO_ROOT / "src" / "data" / "item_cache",
+)
+DEFAULT_OUTPUT_DIR = _resolve_path(
+    "AIMS_OUTPUT_DIR",
+    REPO_ROOT / "src" / "data",
+)
 MAX_ITEMS_PER_BENCH = 100  # for item-level plot
 MAX_CHARS = 512  # truncate item text for embedding
 SEED = 42
@@ -53,7 +70,15 @@ random.seed(SEED)
 np.random.seed(SEED)
 
 
-def load_items(bench_dir: Path, max_items: int = MAX_ITEMS_PER_BENCH) -> list[dict]:
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR)
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--max-items-per-bench", type=int, default=MAX_ITEMS_PER_BENCH)
+    return parser.parse_args()
+
+
+def load_items(bench_dir: Path, max_items: int = MAX_ITEMS_PER_BENCH) -> List[Dict[str, str]]:
     """Load and sample items from a benchmark's item_content.csv."""
     item_file = bench_dir / "processed" / "item_content.csv"
     if not item_file.exists():
@@ -91,23 +116,58 @@ def load_items(bench_dir: Path, max_items: int = MAX_ITEMS_PER_BENCH) -> list[di
 
 
 def main():
-    from sentence_transformers import SentenceTransformer
-    import umap
+    args = parse_args()
+    data_dir = args.data_dir.expanduser()
+    out_dir = args.output_dir.expanduser()
+
+    if not data_dir.exists():
+        raise FileNotFoundError(
+            f"Data directory {data_dir} does not exist. Pass --data-dir if your "
+            "benchmark cache lives elsewhere."
+        )
+
+    available_item_files = [
+        data_dir / bench_name / "processed" / "item_content.csv"
+        for bench_name in BENCH_META
+        if (data_dir / bench_name / "processed" / "item_content.csv").exists()
+    ]
+    if not available_item_files:
+        raise FileNotFoundError(
+            f"No benchmark items were found under {data_dir}. Expected per-benchmark "
+            "`processed/item_content.csv` files. Pass --data-dir if your cache "
+            "lives elsewhere."
+        )
+
+    try:
+        from sentence_transformers import SentenceTransformer
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "sentence-transformers is required to run this script. "
+            "Install dependencies with `pip install -r requirements.txt`."
+        ) from exc
+
+    try:
+        import umap
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "umap-learn is required to run this script. "
+            "Install dependencies with `pip install -r requirements.txt`."
+        ) from exc
 
     print("Loading sentence transformer...")
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    all_items = []  # for item-level plot
-    bench_embeddings = {}  # for dataset-level plot
+    all_items: List[Dict[str, Any]] = []  # for item-level plot
+    bench_embeddings: Dict[str, Dict[str, Any]] = {}  # for dataset-level plot
 
     for bench_name, (category, display_name) in BENCH_META.items():
-        bench_dir = DATA_DIR / bench_name
+        bench_dir = data_dir / bench_name
         if not bench_dir.exists():
             print(f"  Skipping {bench_name} (not found)")
             continue
 
         print(f"Loading {display_name} ({bench_name})...")
-        items = load_items(bench_dir)
+        items = load_items(bench_dir, max_items=args.max_items_per_bench)
         if not items:
             print(f"  No items found for {bench_name}")
             continue
@@ -136,6 +196,10 @@ def main():
 
     print(f"\nTotal items: {len(all_items)}")
     print(f"Total benchmarks: {len(bench_embeddings)}")
+    if len(bench_embeddings) < 2:
+        raise RuntimeError("Need at least two benchmarks to compute dataset-level UMAP.")
+    if len(all_items) < 2:
+        raise RuntimeError("Need at least two items to compute item-level UMAP.")
 
     # --- UMAP for dataset-level ---
     print("\nComputing dataset-level UMAP...")
@@ -176,7 +240,6 @@ def main():
         })
 
     # --- Save ---
-    out_dir = Path("/lfs/skampere2/0/sttruong/aims/src/data")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     with open(out_dir / "dataset_landscape.json", "w") as f:

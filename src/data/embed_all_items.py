@@ -11,18 +11,43 @@ Usage:
 """
 
 import json
+import os
 import time
 from pathlib import Path
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
 import torch
 
-CACHE_DIR = Path("/lfs/skampere2/0/sttruong/aims/src/data/item_cache")
-OUTPUT_DIR = Path("/lfs/skampere2/0/sttruong/aims/src/data")
+
+def _resolve_path(env_name: str, default: Path) -> Path:
+    value = os.environ.get(env_name)
+    return Path(value).expanduser() if value else default
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+CACHE_DIR = _resolve_path(
+    "AIMS_ITEM_CACHE_DIR",
+    REPO_ROOT / "src" / "data" / "item_cache",
+)
+OUTPUT_DIR = _resolve_path(
+    "AIMS_OUTPUT_DIR",
+    REPO_ROOT / "src" / "data",
+)
 MODEL_NAME = "Alibaba-NLP/gte-large-en-v1.5"
 MAX_CHARS = 1024
+MIN_CONTENT_CHARS = 10
 BATCH_SIZE = 512  # gte-large is small enough for big batches
+CACHE_VERSION = 1
+
+CACHE_SETTINGS = {
+    "cache_version": CACHE_VERSION,
+    "model": MODEL_NAME,
+    "max_chars": MAX_CHARS,
+    "min_content_chars": MIN_CONTENT_CHARS,
+    "normalize_embeddings": True,
+}
 
 BENCH_META = {
     "mmlupro_data": ("Knowledge", "MMLU-Pro"),
@@ -62,7 +87,6 @@ BENCH_META = {
     "agentbench_data": ("Agent", "AgentBench"),
     # Newly extracted
     "terminal_bench_data": ("Terminal Agent", "Terminal-Bench"),
-    "livecodebench_data": ("Code Generation", "LiveCodeBench"),
     "alpacaeval_data": ("Preference", "AlpacaEval"),
     "wildbench_data": ("Preference", "WildBench"),
     "corebench_data": ("Reproducibility", "CORE-Bench"),
@@ -75,7 +99,7 @@ BENCH_META = {
 }
 
 
-def load_items(bench_dir: str) -> tuple[list[str], list[str]]:
+def load_items(bench_dir: str) -> Tuple[List[str], List[str]]:
     """Load item texts and IDs from item_content.csv."""
     item_file = CACHE_DIR / bench_dir / "processed" / "item_content.csv"
     if not item_file.exists():
@@ -91,7 +115,7 @@ def load_items(bench_dir: str) -> tuple[list[str], list[str]]:
         return [], []
 
     df = df.dropna(subset=["content"])
-    df = df[df["content"].str.len() > 10]
+    df = df[df["content"].str.len() > MIN_CONTENT_CHARS]
 
     if len(df) == 0:
         return [], []
@@ -110,12 +134,26 @@ def get_cache_path(bench_dir: str) -> Path:
     return CACHE_DIR / bench_dir / "processed" / "item_embeddings.pt"
 
 
-def main():
-    from sentence_transformers import SentenceTransformer
+def load_cached_embeddings(cache_path: Path) -> Dict[str, object]:
+    cached = torch.load(cache_path, map_location="cpu", weights_only=True)
+    embeddings = cached.get("embeddings")
+    item_ids = cached.get("item_ids")
 
-    print(f"Loading model: {MODEL_NAME}")
-    model = SentenceTransformer(MODEL_NAME, trust_remote_code=True)
-    print(f"Model loaded. Embedding dim: {model.get_sentence_embedding_dimension()}")
+    if embeddings is None or item_ids is None:
+        raise ValueError("cache is missing embeddings or item_ids")
+    if embeddings.shape[0] != len(item_ids):
+        raise ValueError("cache has mismatched embeddings and item_ids")
+
+    return cached
+
+
+def cache_is_compatible(cached: Dict[str, object]) -> bool:
+    return all(cached.get(key) == value for key, value in CACHE_SETTINGS.items())
+
+
+def main():
+    model = None
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Phase 1: Embed all benchmarks with caching
     bench_order = []  # track which benchmarks we successfully processed
@@ -124,41 +162,78 @@ def main():
     for bench_dir, (category, display_name) in BENCH_META.items():
         cache_path = get_cache_path(bench_dir)
 
+        cached = None
         if cache_path.exists():
-            cached = torch.load(cache_path, weights_only=True)
+            try:
+                candidate = load_cached_embeddings(cache_path)
+            except Exception as exc:
+                print(f"[REBUILD] {display_name}: invalid cache ({exc})")
+            else:
+                if cache_is_compatible(candidate):
+                    cached = candidate
+                else:
+                    print(f"[REBUILD] {display_name}: cache settings changed")
+
+        if cached is not None:
             n = cached["embeddings"].shape[0]
             print(f"[CACHED] {display_name}: {n:,} items")
             bench_order.append((bench_dir, display_name, category, n))
             total_items += n
-        else:
-            texts, item_ids = load_items(bench_dir)
-            if not texts:
-                print(f"[SKIP]   {display_name}: no items found")
-                continue
+            continue
 
-            n = len(texts)
-            print(f"[EMBED]  {display_name}: {n:,} items...", end=" ", flush=True)
-            t0 = time.time()
-            embeddings = model.encode(
-                texts,
-                batch_size=BATCH_SIZE,
-                show_progress_bar=False,
-                normalize_embeddings=True,
-            )
-            dt = time.time() - t0
-            print(f"done in {dt:.1f}s ({n/dt:.0f} items/s)")
+        texts, item_ids = load_items(bench_dir)
+        if not texts:
+            if cache_path.exists():
+                raise FileNotFoundError(
+                    f"Cache for {display_name} at {cache_path} is incompatible with "
+                    f"the current settings, and source items were not found at "
+                    f"{CACHE_DIR / bench_dir / 'processed' / 'item_content.csv'}."
+                )
+            print(f"[SKIP]   {display_name}: no items found")
+            continue
 
-            cache_path.parent.mkdir(parents=True, exist_ok=True)
-            torch.save({
-                "embeddings": torch.from_numpy(embeddings).half(),  # fp16 to save space
-                "item_ids": item_ids,
-                "model": MODEL_NAME,
-            }, cache_path)
+        n = len(texts)
+        if model is None:
+            try:
+                from sentence_transformers import SentenceTransformer
+            except ModuleNotFoundError as exc:
+                raise ModuleNotFoundError(
+                    "sentence-transformers is required to run this script. "
+                    "Install dependencies with `pip install -r requirements.txt`."
+                ) from exc
 
-            bench_order.append((bench_dir, display_name, category, n))
-            total_items += n
+            print(f"Loading model: {MODEL_NAME}")
+            model = SentenceTransformer(MODEL_NAME, trust_remote_code=True)
+            print(f"Model loaded. Embedding dim: {model.get_sentence_embedding_dimension()}")
+
+        print(f"[EMBED]  {display_name}: {n:,} items...", end=" ", flush=True)
+        t0 = time.time()
+        embeddings = model.encode(
+            texts,
+            batch_size=BATCH_SIZE,
+            show_progress_bar=False,
+            normalize_embeddings=True,
+        )
+        dt = time.time() - t0
+        print(f"done in {dt:.1f}s ({n/dt:.0f} items/s)")
+
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({
+            "embeddings": torch.from_numpy(embeddings).half(),  # fp16 to save space
+            "item_ids": item_ids,
+            **CACHE_SETTINGS,
+        }, cache_path)
+
+        bench_order.append((bench_dir, display_name, category, n))
+        total_items += n
 
     print(f"\nTotal: {total_items:,} items across {len(bench_order)} benchmarks")
+    if not bench_order:
+        raise FileNotFoundError(
+            f"No benchmark items were found under {CACHE_DIR}. Expected per-benchmark "
+            "`processed/item_content.csv` files. Set AIMS_ITEM_CACHE_DIR if your "
+            "benchmark cache lives elsewhere."
+        )
 
     # Phase 2: Collect all embeddings
     print("\nCollecting embeddings...")
@@ -166,7 +241,7 @@ def main():
     all_items = []
     for bench_dir, display_name, category, n in bench_order:
         cache_path = get_cache_path(bench_dir)
-        cached = torch.load(cache_path, weights_only=True)
+        cached = load_cached_embeddings(cache_path)
         embs = cached["embeddings"].float().numpy()
         ids = cached["item_ids"]
         all_embeddings.append(embs)
@@ -177,11 +252,22 @@ def main():
                 "item_id": ids[i],
             })
 
+    if len(all_items) < 2:
+        raise RuntimeError(
+            "Need at least two embedded items to compute UMAP coordinates."
+        )
+
     all_embeddings = np.concatenate(all_embeddings, axis=0)
     print(f"Embedding matrix: {all_embeddings.shape}")
 
     # Phase 3: UMAP
-    import umap
+    try:
+        import umap
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "umap-learn is required to run this script. "
+            "Install dependencies with `pip install -r requirements.txt`."
+        ) from exc
 
     print("Running UMAP...")
     t0 = time.time()

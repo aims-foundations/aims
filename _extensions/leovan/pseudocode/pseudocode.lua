@@ -170,7 +170,7 @@ local function render_pseudocode_block_latex(global_options)
         source_code = string.gsub(source_code, "\\begin{algorithmic}", "\\label{" .. options["label"] .. "}\n\\begin{algorithmic}")
       end
 
-      return pandoc.RawInline("latex", source_code)
+      return pandoc.RawBlock("latex", source_code)
     end
   }
 

@@ -8,7 +8,7 @@ The book is intended for researchers, practitioners, and students who work on or
 
 We hope with the present book to help the field move from ad hoc benchmarking toward principled measurement—so that our claims about AI systems rest on solid scientific ground.
 
-Stanford, 2025, Truong & Koyejo
+Stanford, 2026, Truong & Koyejo
 
 ## Structure of this book {.unnumbered}
 
@@ -58,9 +58,9 @@ The book assumes knowledge of the fundamentals of statistics, linear algebra, an
 
 For readers seeking to strengthen their prerequisites or deepen their understanding of the fields this book draws from, we recommend the following companion texts:
 
-- @murphy2022probabilistic — A modern, comprehensive treatment of probabilistic modeling, Bayesian inference, and statistical learning. Excellent preparation for the latent variable models and estimation methods in Chapters 1–3.
+- @murphy2022probabilistic — A modern, comprehensive treatment of probabilistic modeling, Bayesian inference, and statistical learning. Excellent preparation for the latent variable models and estimation methods in @sec-foundations through @sec-efficient.
 - @bishop2006pattern — Thorough coverage of factor analysis, EM algorithms, and Bayesian methods, all of which appear throughout this book.
-- @borsboom2005measuring — A philosophically rigorous account of what it means to measure a psychological attribute. Essential reading for the validity and construct modeling discussions in Chapters 4–5.
+- @borsboom2005measuring — A philosophically rigorous account of what it means to measure a psychological attribute. Essential reading for the validity and construct modeling discussions in @sec-reliability and @sec-validity.
 - @lord1968statistical — The classical statistical theory of mental testing that underlies much of modern psychometrics. For readers wanting depth in reliability, item analysis, and test construction before the measurement chapters.
 
 ## Citation {.unnumbered}

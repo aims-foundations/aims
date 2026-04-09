@@ -19,7 +19,7 @@ import os
 import re
 import subprocess
 import tempfile
-import edge_tts
+from typing import Any, Dict, List
 
 SCRIPT_PATH = "animations/ch2/script.md"
 NARRATION_DIR = "animations/ch2/narration"
@@ -80,7 +80,7 @@ def extract_between(content: str, start: str, end: str) -> str:
     return content[s:e]
 
 
-def parse_narration(text: str) -> list[dict]:
+def parse_narration(text: str) -> List[Dict[str, Any]]:
     """Parse narration text into a list of chunks and pauses.
 
     Returns list of:
@@ -169,7 +169,9 @@ def get_audio_duration(path: str) -> float:
     result = subprocess.run(
         ["ffprobe", "-v", "quiet", "-show_entries", "format=duration",
          "-of", "default=noprint_wrappers=1:nokey=1", path],
-        capture_output=True, text=True
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return float(result.stdout.strip())
 
@@ -181,16 +183,25 @@ def generate_silence(duration_s: float, output: str):
          f"anullsrc=r=24000:cl=mono",
          "-t", str(duration_s), "-c:a", "libmp3lame", "-q:a", "9",
          output],
-        capture_output=True
+        capture_output=True,
+        check=True,
     )
 
 
 async def generate_tts(text: str, voice: str, rate: str, output: str):
+    try:
+        import edge_tts
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "edge_tts is required to generate narration. "
+            "Install dependencies with `pip install -r requirements.txt`."
+        ) from exc
+
     communicate = edge_tts.Communicate(text, voice, rate=rate)
     await communicate.save(output)
 
 
-async def build_section(section_id: str, chunks: list[dict],
+async def build_section(section_id: str, chunks: List[Dict[str, Any]],
                         voice: str, rate: str, tmpdir: str, output: str):
     """Build a single section audio file from text chunks + silence gaps."""
     part_files = []
@@ -223,11 +234,12 @@ async def build_section(section_id: str, chunks: list[dict],
         ["ffmpeg", "-y", "-f", "concat", "-safe", "0",
          "-i", concat_list, "-c:a", "libmp3lame", "-q:a", "2",
          output],
-        capture_output=True
+        capture_output=True,
+        check=True,
     )
 
 
-def estimate_rate(text_chunks: list[dict], target_dur: float,
+def estimate_rate(text_chunks: List[Dict[str, Any]], target_dur: float,
                   base_wpm: float = 155) -> str:
     """Estimate a TTS rate adjustment to fit narration into target duration.
 
@@ -257,8 +269,8 @@ def estimate_rate(text_chunks: list[dict], target_dur: float,
     # Rate adjustment as percentage
     rate_pct = ((required_wpm / base_wpm) - 1) * 100
 
-    # Clamp to natural pace: never speed up, only slow down if needed
-    rate_pct = max(-10, min(0, rate_pct))
+    # Clamp to reasonable range: don't go slower than -10% or faster than +60%
+    rate_pct = max(-10, min(60, rate_pct))
 
     sign = "+" if rate_pct >= 0 else ""
     return f"{sign}{int(rate_pct)}%"

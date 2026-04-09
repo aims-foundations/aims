@@ -76,7 +76,7 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces game-theoretic notation: $F$ (task universe), $F_E/F_M$ (evaluator/builder task sets), $\pi_E/\pi_M$ (sampling distributions), $f(\theta)$ (task performance), $u_E$ (evaluator utility), $\Delta_t$ (misalignment), and $\gamma$ (gaming penalty). See @sec-notation for the complete notation reference.
+This chapter introduces game-theoretic notation: $F$ (task universe), $F_E/F_M$ (evaluator/builder task sets), $\pi_E/\pi_M$ (sampling distributions), $f(\theta)$ (task performance), $u_E$ (evaluator utility), $\Delta_t$ (misalignment), and $\gamma$ (gaming penalty). See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
 
@@ -182,7 +182,7 @@ This result is powerful: the single-sample mechanism is "the best you can do" as
 
 ### Discussion: What Randomization Buys {#sec-randomization-discussion}
 
-The one-shot alignment result reveals a fundamental tension with the statistical efficiency goals of earlier chapters. In @sec-fisher-information and @sec-cat, we showed that *targeted* evaluation --- choosing items to maximize Fisher information about $\theta$ --- is statistically optimal. But targeted evaluation requires revealing information about which tasks the evaluator considers informative, which creates exploitable structure.
+The one-shot alignment result reveals a fundamental tension with the statistical efficiency goals of earlier chapters. In @sec-fisher-design and @sec-cat, we showed that *targeted* evaluation --- choosing items to maximize Fisher information about $\theta$ --- is statistically optimal. But targeted evaluation requires revealing information about which tasks the evaluator considers informative, which creates exploitable structure.
 
 Randomized evaluation is not optimal for *estimation precision* but is optimal for *incentive alignment*. This tension between statistical efficiency and strategic robustness is a recurring theme:
 

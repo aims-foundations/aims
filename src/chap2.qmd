@@ -72,13 +72,7 @@ This chapter introduces the core notation used throughout the book: $\theta_i$ (
 
 Consider the following scenario: You have evaluated 100 language models on a benchmark consisting of 1,000 multiple-choice questions. Each model either answers each question correctly (1) or incorrectly (0), producing a $100 \times 1000$ binary response matrix $Y$. You compute each model's accuracy---the proportion of correct answers---and rank the models accordingly.
 
-Have you *measured* anything?
-
-The answer is not as obvious as it might seem. You have certainly *scored* the models: you assigned numbers to them based on their performance. But measurement, in the scientific sense, requires more than assigning numbers. It requires that those numbers correspond to some underlying property---a *latent construct*---in a principled way.
-
-### Scoring vs. Measuring
-
-The distinction between scoring and measuring is fundamental to understanding why AI evaluation needs measurement science. Consider an analogy from physics: if you measure the temperature of water with a mercury thermometer, the height of the mercury column is a *score*---a number you can read off the instrument. But you trust this score as a *measurement* of temperature because you understand the relationship between mercury expansion and thermal energy.
+Have you *measured* anything? The answer is not as obvious as it might seem. You have certainly *scored* the models: you assigned numbers to them based on their performance. But measurement, in the scientific sense, requires more than assigning numbers. It requires that those numbers correspond to some underlying property---a *latent construct*---in a principled way. The distinction between scoring and measuring is fundamental to understanding why AI evaluation needs measurement science. Consider an analogy from physics: if you measure the temperature of water with a mercury thermometer, the height of the mercury column is a *score*---a number you can read off the instrument. But you trust this score as a *measurement* of temperature because you understand the relationship between mercury expansion and thermal energy.
 
 In AI evaluation, we often have scores without this deeper understanding. When GPT-4 achieves 86% accuracy on MMLU [@hendrycks2021mmlu] and Claude achieves 84%, we cannot immediately conclude that GPT-4 has more "intelligence" or "capability" than Claude. Several questions must be answered first:
 
@@ -92,24 +86,7 @@ In AI evaluation, we often have scores without this deeper understanding. When G
 
 These questions have been central to psychology and education for over a century. The field of *psychometrics* developed sophisticated tools---Item Response Theory, factor analysis, validity frameworks---precisely to address them. AI evaluation is now confronting the same fundamental challenges.
 
-### The Response Matrix
-
-The basic data structure in measurement is the *response matrix* $Y \in \{0, 1\}^{N \times M}$, where:
-
-- Each row $i \in \{1, \ldots, N\}$ represents a *test taker* (in AI: a model)
-- Each column $j \in \{1, \ldots, M\}$ represents an *item* (in AI: a benchmark question)
-- Each entry $Y_{ij} \in \{0, 1\}$ indicates whether test taker $i$ answered item $j$ correctly
-
-$$
-Y = \begin{pmatrix}
-Y_{11} & Y_{12} & \cdots & Y_{1M} \\
-Y_{21} & Y_{22} & \cdots & Y_{2M} \\
-\vdots & \vdots & \ddots & \vdots \\
-Y_{N1} & Y_{N2} & \cdots & Y_{NM}
-\end{pmatrix}
-$$
-
-The naive approach to evaluation computes row means (model accuracies) and ranks models accordingly. But the response matrix contains far more information than these marginal statistics. The *pattern* of responses---which models succeed on which questions---reveals structure that aggregate scores obscure.
+Every AI evaluation produces a *response matrix* $Y$ recording which subjects (models) answered which items correctly --- see @sec-response-matrix for the formal definition and a discussion of its shape across benchmark types. What matters here is that the matrix contains far more information than its row means: the *pattern* of responses reveals structure that aggregate accuracy obscures.
 
 {{< include _plt_setup.qmd >}}
 
@@ -144,9 +121,7 @@ ax.set_title('Sorted Response Matrix')
 plt.show()
 ```
 
-When we sort the response matrix by row sums (model abilities) and column sums (item difficulties), a characteristic diagonal structure emerges. High-ability models answer most questions correctly; easy questions are answered correctly by most models. This structure is not guaranteed---it depends on the data satisfying certain assumptions---but when present, it suggests that a simple latent variable model may adequately describe the data.
-
-### Why AI Evaluation Needs Measurement Science
+When we sort the rows and columns by marginal sums, a characteristic diagonal structure emerges: high-ability models answer most questions correctly, and easy questions are answered correctly by most models. This structure is not guaranteed, but when present it suggests that a simple latent variable model may adequately describe the data.
 
 The problems facing AI evaluation today mirror those that psychology confronted in the early 20th century:
 
@@ -160,27 +135,7 @@ The problems facing AI evaluation today mirror those that psychology confronted 
 
 5. **Reliability:** How stable are our rankings under different conditions? Test-retest reliability and standard error of measurement quantify this.
 
-The tools developed in psychometrics are not merely analogies---they are directly applicable to AI evaluation. The response matrix from an LLM benchmark has the same structure as the response matrix from a standardized test. The statistical models that describe human test performance can describe AI benchmark performance.
-
-::: {.callout-note title="The Central Claim of AIMS"}
-AI benchmarks are tests in the psychometric sense. The methods developed over a century of educational and psychological measurement---Item Response Theory, factor analysis, validity frameworks---apply directly to AI evaluation. Understanding and applying these methods is essential for trustworthy AI measurement.
-:::
-
-
-### Evaluation Datasets Used in This Book {#sec-datasets}
-
-Throughout this book, we work with several large-scale evaluation corpora that represent distinct yet complementary perspectives on measuring model behavior. These datasets provide the empirical foundation for our analyses.
-
-**HELM Benchmark Suite.** We use **22 datasets** drawn from **5 HELM [@liang_holistic_2023] repositories**---*Classic*, *Lite*, *AIR-Bench*, *Thai Exam*, and *MMLU*---encompassing both *capability* and *safety* measurements. In total, this collection includes **172 test takers** (models) and **217,268 questions**. We focus on responses that can be graded dichotomously (correct/incorrect), as is the case for most benchmarks through metrics such as *exact match* or *equivalent indicator*. To ensure stable estimation, we remove duplicate questions, those with identical response patterns, or with fewer than 30 test takers; exclude test takers with fewer than 30 total responses; and treat unattempted questions as missing values.
-
-**Open LLM Leaderboard.** We use data from the **Open LLM Leaderboard** (Hugging Face, 2025) [@myrzakhan2024openllmleaderboard], a public benchmarking platform that evaluates open large language models on a standardized suite of academic and practical tasks. The dataset spans models submitted between **2022 and 2025**, covering parameter scales from small models (<5B parameters) to frontier systems (>140B parameters). In total, it includes **4,416 distinct language models**, each evaluated on **21,176 benchmark questions** from six suites: MMLU-Pro, OpenLLM-Math, MUSR, BBH, IFEval, and GPQA.
-
-**LMarena Preference Data.** In addition to correctness-based evaluation, we incorporate **pairwise preference data** from the **LMarena dataset** [@chiang2024chatbotarena], which provides human or automated judgments of relative model quality. Each example corresponds to a prompt presented to two competing models, with an annotation indicating which response is preferred. The dataset includes **211,728 unique prompts**, **3,779 unique model pairs**, and **179 distinct models**. These preference judgments provide a complementary view focusing on *relative comparisons* rather than absolute correctness.
-
-**Agent Leaderboard.** We include **Agent Leaderboard data** from Galileo AI [@bhavsar2025agentleaderboard], which evaluates the *agentic performance* of large language models across tool-use and reasoning scenarios. This dataset contains approximately **34,700 rows**, where each row corresponds to a question, the model's response, and a numerical score judged by GPT-4. The evaluation covers multiple agentic subjects with roughly 100 questions each, including approximately **40 distinct models** such as Gemini-2.5, Claude-3.5, GPT-4.1/4.5, Llama-4, and Qwen-2.5.
-
-Together, these four sources enable unified modeling of *accuracy*, *preference*, and *agency* within a shared latent-factor evaluation framework.
-
+The tools developed in psychometrics are directly applicable to AI evaluation: the statistical models that describe human test performance can describe AI benchmark performance.
 
 ## Probabilistic Models for Measurement {#sec-probabilistic-models}
 
@@ -189,8 +144,6 @@ Measurement requires a model connecting observable responses to latent construct
 ### Item Response Theory {#sec-irt}
 
 Item Response Theory (IRT) models the probability of a correct response as a function of person ability and item characteristics. The key insight is that both persons and items can be characterized by parameters on a common scale.
-
-#### The Rasch Model (1PL)
 
 The simplest IRT model is the **Rasch model**, also called the one-parameter logistic (1PL) model:
 
@@ -206,7 +159,7 @@ where:
 - $\sigma(\cdot)$ is the logistic sigmoid function
 :::
 
-The model has an elegant interpretation: the probability of success depends only on the *difference* between ability and difficulty. When $\theta_i = \beta_j$, the probability is exactly 0.5---the person has a 50% chance of answering correctly. When $\theta_i > \beta_j$, the probability exceeds 0.5; when $\theta_i < \beta_j$, it falls below 0.5.
+In the Rasch model, the probability of success depends only on the *difference* between ability and difficulty. When $\theta_i = \beta_j$, the probability is exactly 0.5---the person has a 50% chance of answering correctly. When $\theta_i > \beta_j$, the probability exceeds 0.5; when $\theta_i < \beta_j$, it falls below 0.5.
 
 ::: {.callout-tip title="Reading Plate Diagrams" collapse="false"}
 Throughout this chapter we use **plate diagrams** (also called plate notation) to visualize probabilistic models. The conventions are:
@@ -249,6 +202,31 @@ plt.legend(title='Item Difficulty')
 plt.grid(True, alpha=0.3)
 plt.show()
 ```
+
+#### Local Independence {#sec-local-independence}
+
+The Rasch model (and every other IRT and factor model in this chapter) specifies a probability for a *single* response $Y_{ij}$. To make the jump from per-item probabilities to a joint distribution over a person's entire response vector, we need an additional modeling assumption.
+
+::: {.callout-warning title="Assumption: Local Independence and Its Limits"}
+**Local independence** states that, given the latent parameters, responses are conditionally independent:
+
+$$
+P(Y_{i1}, \ldots, Y_{iM} \mid \theta_i, \beta) = \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j).
+$$
+
+All systematic co-variation across a person's responses should be absorbed into the ability $\theta_i$, leaving only item-specific noise. This is what lets us multiply per-item probabilities into a tractable likelihood in @sec-likelihood.
+
+**When do we expect it to hold?** When $\theta_i$ genuinely captures the single construct driving performance on every item, so that what is left between items is unrelated noise. For a well-designed unidimensional test, this is a reasonable first approximation.
+
+**When does it fail?** Several things routinely break it in practice:
+
+- **Shared context (*testlet effects*).** Multiple questions on the same reading passage, dataset split, or few-shot prompt template share information that $\theta_i$ does not model.
+- **Item chaining.** Later items leak answers to earlier ones, or solving $j$ depends on the technique used in $k$.
+- **Training contamination.** For AI evaluation, items scraped from the web may appear in a model's training data; correlated memorization looks like an extra latent factor.
+- **Multidimensionality.** If the test actually measures several skills, a single $\theta_i$ leaves residual item-item dependence that only a multidimensional model can remove.
+
+Local independence is testable: fit the model, then check residual correlations between item pairs. Persistent residuals are a signal to enrich the model---with more factors or testlet/bifactor structure (@sec-hierarchical-models)---rather than a reason to ignore the violation.
+:::
 
 #### The Two-Parameter Logistic Model (2PL)
 
@@ -416,7 +394,28 @@ $$
 where $\Sigma = \text{Cov}(U)$ is the factor covariance matrix.
 :::
 
-**Intuition.** The formula for $S_{jk}$ is a Pearson correlation, so its form follows from the standard definition $\text{Cor}(A, B) = \text{Cov}(A, B) / (\text{SD}(A) \cdot \text{SD}(B))$. The numerator $(V_j^\top \Sigma)_k$ captures the covariance between the latent response $Y^*_{ij} = U_i^\top V_j + Z_j + \epsilon_{ij}$ and factor $U_{ik}$: since $Z_j$ and $\epsilon_{ij}$ are independent of $U$, only the term $U_i^\top V_j$ contributes, yielding $\text{Cov}(U_i^\top V_j, U_{ik}) = (V_j^\top \Sigma)_k$. The denominator normalizes by $\text{SD}(U_{ik}) = \sqrt{\Sigma_{kk}}$ and $\text{SD}(Y^*_{ij}) = \sqrt{V_j^\top \Sigma V_j + \pi^2/3}$, where the $\pi^2/3$ term is the variance of the logistic error $\epsilon_{ij}$. The result is a number in $[-1, 1]$ that is directly comparable across items, unlike raw loadings $V_j$ which depend on the arbitrary scale of the factors. A detailed derivation is given in @sec-learning.
+**Intuition.** The formula for $S_{jk}$ is just a Pearson correlation, built from the standard recipe
+
+$$
+\text{Cor}(A, B) = \frac{\text{Cov}(A, B)}{\text{SD}(A) \cdot \text{SD}(B)},
+$$
+
+applied to $A = Y^*_{ij}$ and $B = U_{ik}$. Reading the three pieces in turn:
+
+- **Numerator — the covariance.** Of the three terms in $Y^*_{ij} = U_i^\top V_j + Z_j + \epsilon_{ij}$, only $U_i^\top V_j$ depends on $U$; the item difficulty $Z_j$ and logistic noise $\epsilon_{ij}$ are independent of $U$ and drop out. This leaves
+$$
+\text{Cov}(Y^*_{ij}, U_{ik}) = \text{Cov}(U_i^\top V_j,\, U_{ik}) = (V_j^\top \Sigma)_k.
+$$
+
+- **Denominator — the two standard deviations.** The factor has $\text{SD}(U_{ik}) = \sqrt{\Sigma_{kk}}$, and the latent response has
+$$
+\text{SD}(Y^*_{ij}) = \sqrt{\underbrace{V_j^\top \Sigma V_j}_{\text{from } U_i^\top V_j} + \underbrace{\pi^2/3}_{\text{from } \epsilon_{ij}}},
+$$
+since $Z_j$ is a constant offset and the logistic error contributes variance $\pi^2/3$.
+
+- **Why standardize.** The resulting $S_{jk} \in [-1, 1]$ is directly comparable across items, unlike the raw loadings $V_j$, which depend on the arbitrary scale of the factors.
+
+A detailed derivation is given in @sec-learning.
 
 We define the **structure vector** for item $j$ as $S_j = (S_{j1}, S_{j2}, \ldots, S_{jK})^\top \in \mathbb{R}^K$, where each entry $S_{jk}$ is given by the formula above. Stacking these row vectors yields the $M \times K$ **structure matrix** $S$, whose $j$-th row is $S_j^\top$. The structure vector $S_j$ serves as a standardized fingerprint of item $j$: it tells us how strongly the item's latent response correlates with each factor, on a $[-1, 1]$ scale that is comparable across items.
 
@@ -448,7 +447,46 @@ Strongly positive inter-cluster correlations indicate overlapping constructs, wh
 
 Factor models assign a feature vector to each item (the structure vector), allowing items to be clustered via standard algorithms. This helps interpret evaluation results that would otherwise be obscured by aggregate scores.
 
-### Paired Comparison Models: Elo and Bradley-Terry {#sec-paired-comparison}
+### Amortized Models
+
+The factor models introduced in @sec-factor-models learn a latent parameter vector for each person ($U_i$) and each item ($V_j$, $Z_j$) by optimizing over the observed response matrix. This works well when we have enough responses for every entity, but it has two limitations: (1) the number of parameters grows linearly with the number of persons and items, and (2) new persons or items that were not present during training have no learned representation. **Amortized models** address both limitations by replacing per-entity parameter optimization with a learned function that maps observable features to latent parameters.
+
+In the standard factor model, each item $j$ has its own learned parameters $V_j$ and $Z_j$. An amortized model instead learns a function $f_\theta$ that predicts these parameters from item features:
+
+$$
+[\hat{V}_j, \hat{Z}_j] = f_\theta(x_j)
+$$
+
+where $x_j$ is a feature vector for item $j$ (e.g., a text embedding of the question). Similarly, person parameters can be amortized via a function $g_\phi$:
+
+$$
+\hat{U}_i = g_\phi(m_i)
+$$
+
+where $m_i$ is a feature vector for person $i$ (e.g., model metadata such as parameter count, architecture family, and release date). The predicted correctness probability is then:
+
+$$
+\hat{P}_{ij} = \sigma(\hat{U}_i^\top \hat{V}_j + \hat{Z}_j)
+$$
+
+The key advantage is that $f_\theta$ and $g_\phi$ generalize to *new* items and persons not seen during training, as long as their features are available.
+
+Amortized measurement models are closely related to **neural collaborative filtering** (NCF), a family of methods from recommendation systems that use neural networks to model user-item interactions. In the recommender systems literature, the response matrix $Y$ records user preferences (ratings, clicks); in our setting, it records model correctness. Both problems share the same structure: predicting missing entries of a sparse matrix.
+
+Classical matrix factorization decomposes the response matrix as $Y \approx U V^\top + Z$, which is exactly the logistic factor model from @sec-factor-models without the sigmoid. NCF extends this by replacing the inner product $U_i^\top V_j$ with a neural network $h_\psi(U_i, V_j)$ that can learn non-linear interactions between person and item latent factors. In the measurement context, this corresponds to replacing the linear logit $U_i^\top V_j + Z_j$ with a more flexible function:
+
+$$
+P(Y_{ij} = 1) = \sigma(h_\psi(U_i, V_j, Z_j))
+$$
+
+This increased flexibility can capture complex interaction patterns---for instance, a model that is strong on reasoning but specifically weak on multi-step arithmetic---that a linear factor model would need many dimensions to approximate. The cost is reduced interpretability: the latent factors no longer have a clean geometric interpretation as "ability axes."
+
+::: {.callout-note title="NCF and Amortized Models"}
+Neural collaborative filtering and amortized models address complementary problems. NCF uses neural networks to model the *interaction* between latent factors (replacing $U_i^\top V_j$ with a learned function). Amortized models use neural networks to *predict* the latent factors from features (replacing per-entity $U_i$, $V_j$ with functions of observable features). The two ideas can be combined: use amortized encoders to produce latent factors, then a neural interaction function to produce predictions.
+:::
+
+
+### Preference Models {#sec-paired-comparison}
 
 Not all measurement data comes in the form of item responses. In many settings, we observe *pairwise comparisons*: which of two items is preferred, which of two players wins. These settings require different models.
 
@@ -468,7 +506,7 @@ The model has the same mathematical form as the Rasch model, but the interpretat
 
 ![Plate diagram for the Bradley-Terry model. A comparison outcome $Y_c$ depends on the strengths $\theta_i$ and $\theta_j$ of the two competitors in each pair.](Figures/plate_bt.png){#fig-bt-plate width=50%}
 
-#### The Elo Rating System
+#### Online Measurement Model
 
 The Elo rating system, developed by Arpad Elo for chess ratings, is essentially a Bradley-Terry model with online updates:
 
@@ -496,7 +534,7 @@ The Chatbot Arena (LMSYS) uses Elo ratings to rank language models based on huma
 The Chatbot Arena implements exactly the paradigm that L.L. Thurstone proposed in 1927: measuring psychological attributes through pairwise comparisons. Thurstone developed this method to scale attitudes, preferences, and other subjective quantities. A century later, the same mathematics underlies how we rank AI systems.
 :::
 
-### Network Models: GGM and Ising {#sec-network-models}
+### Network Models {#sec-network-models}
 
 The models discussed so far assume a *common cause* structure: latent variables cause observed responses. Network models propose an alternative: observed variables are directly connected to each other, and correlations arise from these connections rather than common latent causes.
 
@@ -600,11 +638,9 @@ Explicitly modeling these levels separates the sources of variation at each leve
 :::
 
 
-## The Rasch Model as "The Measurement Model" {#sec-rasch-measurement}
+## Measurement Model {#sec-rasch-measurement}
 
 Among the many probabilistic models for measurement, the Rasch model holds a special status. Georg Rasch and his followers argue that it is not merely *one* measurement model among many---it is *the* measurement model, the only model that satisfies the requirements for fundamental measurement. This section examines this claim carefully.
-
-### Sufficiency of Sum Scores {#sec-sufficiency}
 
 The most remarkable property of the Rasch model is that the **sum score is a sufficient statistic** for the ability parameter. This means that the total number of correct responses contains all the information about a person's ability; knowing *which* items were answered correctly adds nothing.
 
@@ -648,9 +684,7 @@ $$
 Both numerator and denominator contain the factor $\exp(\theta_i S_i)$, which cancels when $S_i$ is fixed.
 :::
 
-#### Why Sufficiency Matters
-
-Sufficiency has profound implications:
+Sufficiency has the following implications:
 
 1. **Data reduction without information loss.** We can summarize each person's responses by a single number (the sum score) without losing any information about their ability.
 
@@ -675,8 +709,6 @@ Items that violate these conditions --- negative tetrachoric correlations, negat
 This illustrates a broader principle: the mathematical properties of measurement models are not merely theoretical --- they yield *operational* diagnostics for evaluation quality. When data violate model predictions, either the model is wrong or the data are corrupted. Since the sufficiency assumption is already implicit in how the community uses benchmarks, violations are strong evidence of item-level problems.
 :::
 
-
-### Specific Objectivity {#sec-specific-objectivity}
 
 Georg Rasch's central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of **specific objectivity**.
 
@@ -704,8 +736,6 @@ Rasch identified two levels of objectivity:
 
 2. **General objectivity:** The entire ability scale is sample-independent. Ability estimates remain valid regardless of which items were administered.
 
-### Test-Free and Sample-Free Measurement {#sec-test-free}
-
 Specific objectivity enables what Rasch called **test-free person measurement** and **sample-free item calibration**:
 
 - **Test-free person measurement:** A person's ability can be estimated from *any* subset of calibrated items, and the estimate will be the same (within sampling error).
@@ -723,8 +753,6 @@ Consider measuring temperature with different thermometers:
 The Rasch model claims the same properties for psychological measurement: calibrated tests yield the same ability estimates regardless of which specific items are used.
 :::
 
-#### Implications for AI Evaluation
-
 If AI benchmarks satisfy Rasch model assumptions:
 
 1. **Benchmark subset comparisons are valid.** We can compare a model tested on MMLU subset A with a model tested on MMLU subset B, as long as both subsets are calibrated to the same scale.
@@ -736,8 +764,6 @@ If AI benchmarks satisfy Rasch model assumptions:
 4. **Cross-benchmark comparisons may be possible.** If different benchmarks measure the same construct, we can equate their scales.
 
 These properties are not guaranteed---they hold only if the Rasch model fits the data. Testing model fit becomes essential.
-
-### The Rasch vs. General IRT Debate {#sec-rasch-debate}
 
 The claim that Rasch is "the" measurement model is controversial. The debate centers on the **prescriptive vs. descriptive** approaches to measurement.
 
@@ -791,17 +817,13 @@ AIMS takes a pragmatic position: we test whether data fit Rasch-like models, use
 
 The probabilistic models we use today emerged from over a century of work across psychology, education, economics, and statistics. Understanding this history illuminates why certain models dominate and what problems they were designed to solve.
 
-### Thurstone's Law of Comparative Judgment (1927) {#sec-thurstone}
-
-The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the **Law of Comparative Judgment** [@thurstone].
-
-Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values.
+The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the **Law of Comparative Judgment** [@thurstone]. Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values.
 
 ::: {.callout-note title="Thurstone's Model (Case V)"}
 Each stimulus $i$ has a true scale value $\theta_i$. When comparing stimuli $i$ and $j$, each is perceived with Gaussian noise:
 
 $$
-\tilde{\theta}_i \sim N(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim N(\theta_j, \sigma^2)
+\tilde{\theta}_i \sim \mathcal{N}(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim \mathcal{N}(\theta_j, \sigma^2)
 $$
 
 The probability that $i$ is judged greater than $j$ is:
@@ -815,8 +837,6 @@ where $\Phi$ is the standard normal CDF.
 
 Thurstone's method was revolutionary: it showed that subjective quantities could be measured scientifically. The same mathematics now underlies how we rank AI systems from human preferences.
 
-### Bradley-Terry and Luce (1952-1959) {#sec-bradley-terry-history}
-
 In 1952, Ralph Bradley and Milton Terry developed a model for ranking from paired comparisons in the context of incomplete block designs [@bradley-terry-model]. Their model:
 
 $$
@@ -826,8 +846,6 @@ $$
 where $\pi_i > 0$ are "worth" parameters. With $\theta_i = \log \pi_i$, this becomes the familiar logistic form.
 
 In 1959, R. Duncan Luce provided an axiomatic foundation through his **Choice Axiom**: the ratio of choice probabilities for two alternatives should be independent of what other alternatives are available. This axiom leads directly to the Bradley-Terry/logistic model.
-
-### Georg Rasch and the Danish School (1960) {#sec-rasch-history}
 
 Georg Rasch was a Danish mathematician who worked on problems in educational testing. In 1960, he published "Probabilistic Models for Some Intelligence and Attainment Tests," which introduced what we now call the Rasch model [@rasch1960probabilistic].
 
@@ -841,15 +859,13 @@ Other important figures in the Rasch tradition:
 - **Gerhard Fischer** (Vienna): Extended the Rasch model to the Linear Logistic Test Model (LLTM) and developed software for estimation.
 - **David Andrich** (Australia): Extended Rasch models to polytomous data (rating scales) and developed the RUMM software.
 
-### McFadden and Econometrics (1974) {#sec-mcfadden}
-
 In 1974, Daniel McFadden (who later won the Nobel Prize in Economics) developed the random utility framework for discrete choice. His insight was that choices could be modeled as utility maximization with random error:
 
 A person chooses alternative $i$ over $j$ if $U_i + \epsilon_i > U_j + \epsilon_j$, where $U$ is deterministic utility and $\epsilon$ is random. If the errors are i.i.d. Gumbel distributed, this yields the logistic choice model [@mcfadden1974conditional].
 
 McFadden's work connected preference models to economics and provided a theoretical justification for the Bradley-Terry model: it arises from random utility maximization under specific distributional assumptions.
 
-### Modern Developments {#sec-modern-developments}
+Modern Developments
 
 **Network Psychometrics (2010s):** Borsboom and colleagues proposed that psychological constructs might be better understood as networks of causally connected symptoms rather than reflections of underlying latent variables [@borsboom2013network]. The Ising model and Gaussian Graphical Model provide statistical tools for this perspective.
 
@@ -968,88 +984,6 @@ The Chatbot Arena (LMSYS) [@liang_holistic_2023] provides a concrete example of 
 - Do ratings fluctuate as new models enter the arena?
 
 The Arena demonstrates both the power and limitations of measurement approaches. The Elo ratings provide a principled summary of human preferences, but interpreting what they mean requires the full apparatus of validity theory.
-
-
-## Amortized Models and Neural Collaborative Filtering {#sec-cold-start}
-
-The factor models introduced in @sec-factor-models learn a latent parameter vector for each person ($U_i$) and each item ($V_j$, $Z_j$) by optimizing over the observed response matrix. This works well when we have enough responses for every entity, but it has two limitations: (1) the number of parameters grows linearly with the number of persons and items, and (2) new persons or items that were not present during training have no learned representation. **Amortized models** address both limitations by replacing per-entity parameter optimization with a learned function that maps observable features to latent parameters.
-
-### From Per-Entity to Amortized Parameters
-
-In the standard factor model, each item $j$ has its own learned parameters $V_j$ and $Z_j$. An amortized model instead learns a function $f_\theta$ that predicts these parameters from item features:
-
-$$
-[\hat{V}_j, \hat{Z}_j] = f_\theta(x_j)
-$$
-
-where $x_j$ is a feature vector for item $j$ (e.g., a text embedding of the question). Similarly, person parameters can be amortized via a function $g_\phi$:
-
-$$
-\hat{U}_i = g_\phi(m_i)
-$$
-
-where $m_i$ is a feature vector for person $i$ (e.g., model metadata such as parameter count, architecture family, and release date). The predicted correctness probability is then:
-
-$$
-\hat{P}_{ij} = \sigma(\hat{U}_i^\top \hat{V}_j + \hat{Z}_j)
-$$
-
-The key advantage is that $f_\theta$ and $g_\phi$ generalize to *new* items and persons not seen during training, as long as their features are available.
-
-### Neural Collaborative Filtering
-
-Amortized measurement models are closely related to **neural collaborative filtering** (NCF), a family of methods from recommendation systems that use neural networks to model user-item interactions. In the recommender systems literature, the response matrix $Y$ records user preferences (ratings, clicks); in our setting, it records model correctness. Both problems share the same structure: predicting missing entries of a sparse matrix.
-
-Classical matrix factorization decomposes the response matrix as $Y \approx U V^\top + Z$, which is exactly the logistic factor model from @sec-factor-models without the sigmoid. NCF extends this by replacing the inner product $U_i^\top V_j$ with a neural network $h_\psi(U_i, V_j)$ that can learn non-linear interactions between person and item latent factors. In the measurement context, this corresponds to replacing the linear logit $U_i^\top V_j + Z_j$ with a more flexible function:
-
-$$
-P(Y_{ij} = 1) = \sigma(h_\psi(U_i, V_j, Z_j))
-$$
-
-This increased flexibility can capture complex interaction patterns---for instance, a model that is strong on reasoning but specifically weak on multi-step arithmetic---that a linear factor model would need many dimensions to approximate. The cost is reduced interpretability: the latent factors no longer have a clean geometric interpretation as "ability axes."
-
-::: {.callout-note title="NCF and Amortized Models"}
-Neural collaborative filtering and amortized models address complementary problems. NCF uses neural networks to model the *interaction* between latent factors (replacing $U_i^\top V_j$ with a learned function). Amortized models use neural networks to *predict* the latent factors from features (replacing per-entity $U_i$, $V_j$ with functions of observable features). The two ideas can be combined: use amortized encoders to produce latent factors, then a neural interaction function to produce predictions.
-:::
-
-### Prediction-Powered Evaluation
-
-**Prediction-Powered Evaluation (PPE)** is a concrete instantiation of the amortized approach for AI evaluation. The pipeline has three stages:
-
-**Stage 1 --- Factor Model Pretraining.** Learn latent behavioral factors $(U, V, Z)$ from observed response data $Y_{ij}$ using the factor model from @sec-factor-models:
-
-$$
-p(Y_{ij}=1 \mid U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
-$$
-
-**Stage 2 --- Amortized Mapping.** Two parallel predictors are trained:
-
-- **Item-side predictor** $f_\theta$: maps question embeddings $E_j \in \mathbb{R}^{4096}$ to latent parameters $[\hat V_j, \hat Z_j] = f_\theta(E_j)$
-- **Model-side predictor** $g_\phi$: maps model metadata $F_i \in \mathbb{R}^{24}$ (scale, architecture, release time) to $\hat U_i = F_i W_U$
-
-The item predictor is a neural network trained with Bernoulli log-likelihood using fixed $U$ from Stage 1. The model predictor is a simple linear transformation for interpretability.
-
-**Stage 3 --- Zero-Shot Evaluation.** Given a new model or item, predict its latent parameters from metadata/embeddings and reconstruct correctness probabilities:
-
-$$
-\hat P_{ij} = \sigma(\hat U_i^\top \hat V_j + \hat Z_j)
-$$
-
-| **Component**         | **Input**                     | **Output**                 | **Purpose**                                      |
-|------------------------|------------------------------|----------------------------|--------------------------------------------------|
-| Factor model           | Response matrix $Y$           | $U, V, Z$                  | Extract latent behavioral structure              |
-| Semantic predictor     | Question embeddings $E_j$     | $[\hat V_j, \hat Z_j]$     | Generalize to unseen questions                   |
-| Model predictor        | Metadata $F_i$                | $\hat U_i$                 | Generalize to unseen models                      |
-| Correctness predictor  | $\hat U_i, \hat V_j, \hat Z_j$ | $\hat P_{ij}$             | Predict correctness without running evaluation   |
-
-### The Semantic--Behavioral Gap
-
-A natural hope is that semantic similarity between questions implies behavioral similarity: if two questions have similar embeddings, perhaps models respond to them similarly. However, this intuition is misleading. Even near-identical embeddings (cosine > 0.99) exhibit nearly random behavioral correlations ($-1$ to $+1$), showing that semantic proximity does *not* imply behavioral equivalence. This gap motivates the two-stage approach above: first learn a *behavioral* latent space from response data, then learn to map semantic features into that space.
-
-### Iterative Filtering
-
-Before training the PPE pipeline, we can improve inter-item consistency by removing adversarial or inconsistent items. **Iterative filtering** repeatedly computes tetrachoric correlations and removes items with the highest proportion of negative correlations. After filtering, negative correlations typically drop from ~23% to under 2%, retaining roughly half the original items. Empirical evaluation of the PPE pipeline on held-out data is presented in @sec-learning.
-
 
 ## Summary and Preview {#sec-summary}
 

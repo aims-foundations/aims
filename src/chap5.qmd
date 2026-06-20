@@ -41,46 +41,46 @@ pyodide:
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, you will be able to:
 
-1. **Define** reliability in the context of AI evaluation and distinguish it from validity.
-2. **Apply** Classical Test Theory to decompose observed scores into signal and noise.
-3. **Compute** reliability coefficients (Cronbach's alpha, split-half, test-retest) for AI benchmarks.
-4. **Explain** Generalizability Theory and use it to quantify multiple sources of measurement error (items, raters, occasions).
-5. **Analyze** sources of noise in AI evaluation: annotation variability, prompt sensitivity, model stochasticity, and benchmark sampling.
-6. **Evaluate** the reliability of LLM-as-a-judge evaluation protocols.
-7. **Design** evaluation procedures that control for identified sources of unreliability.
+1. **Decompose** a benchmark's response variance into person, item, person-by-item, and residual components, derived directly from the IRT response model.
+2. **Define** reliability as the person (signal) share of that variance---the generalizability coefficient---and distinguish it from validity.
+3. **Estimate** the components and the reliability they imply (ANOVA/method of moments, marginal MLE, bias-corrected plug-in), and **compute** the classical score-based coefficients (Cronbach's $\alpha$, split-half, test--retest, SEM), linked by Spearman--Brown.
+4. **Diagnose** the sources of variability in AI evaluation---prompt sensitivity, sampling stochasticity, rater disagreement, item sampling---and map each to the component it feeds.
+5. **Apply** generalizability theory to multi-facet designs, using G- and D-studies to size items and raters to a target reliability, including LLM-as-a-judge protocols.
+6. **Explain** conditional reliability (precision varies with ability) and why systematic bias, such as a judge's position bias, escapes reliability analysis.
+7. **Audit** benchmarks with item-level diagnostics to flag broken items, and **design** evaluations that control the dominant sources of variability.
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
 This chapter can be covered in **3 lectures** (75-90 minutes each):
 
-**Lecture 1: Signal and Noise in AI Measurement**
+**Lecture 1: From responses to variance components**
 
 - When leaderboards flicker: motivating reliability (15 min)
-- Classical Test Theory: true score + error (25 min)
-- Reliability coefficients for AI benchmarks (25 min)
-- Hands-on: split-half reliability and Cronbach's alpha (10 min)
+- The response model and the four-term decomposition; reliability as the generalizability coefficient (25 min)
+- Estimating the components; conditional reliability across ability (20 min)
+- Hands-on: variance attribution and the plug-in bias (15 min)
 
-**Lecture 2: Generalizability Theory**
+**Lecture 2: Measuring and sourcing variability**
 
-- Sources of noise: taxonomy for AI evaluation (15 min)
-- From CTT to G-theory: multiple error facets (25 min)
-- G-studies and D-studies for benchmark design (25 min)
-- Hands-on: variance decomposition and D-study optimization (10 min)
+- Reliability coefficients from scores: $\alpha$, split-half, SEM, Spearman--Brown (20 min)
+- Item analysis: finding broken benchmark items (15 min)
+- Sources of variability: prompt, stochasticity, raters, item sampling, mapped to components (25 min)
+- Hands-on: coefficients and the variability-by-mechanism simulation (15 min)
 
-**Lecture 3: Reliability in Practice**
+**Lecture 3: Generalizability and design**
 
-- LLM-as-a-judge reliability (25 min)
-- Inter-rater agreement: kappa and beyond (15 min)
-- Reliability under IRT: conditional precision (20 min)
-- Design principles for reliable AI evaluation (15 min)
+- Generalizability theory: facets, G-studies, and D-studies (25 min)
+- LLM-as-a-judge: the rater facet, $\kappa$, and systematic bias (25 min)
+- Designing reliable evaluations (15 min)
+- Hands-on: cost-optimal D-study design (10 min)
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces Classical Test Theory notation: $X_{ij} = T_i + E_{ij}$ (observed = true + error), $\rho_{XX'}$ (reliability), $\alpha$ (Cronbach's alpha), $\sigma^2_p, \sigma^2_i, \sigma^2_r$ (G-theory variance components), and $\kappa$ (Cohen's kappa). See the [notation appendix](notation.qmd) for the complete notation reference.
+This chapter is built on the response-model variance decomposition $\operatorname{Var}(Y) = V_{\text{person}} + V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}$, with reliability $\rho = V_{\text{person}} / \operatorname{Var}(Y)$---the **generalizability coefficient**. The same components appear as the random-effects variances $\sigma^2_p, \sigma^2_i, \sigma^2_{pi}$ (plus a rater facet $\sigma^2_r$), and collapse to classical test theory's $X = T + E$ with reliability $\rho_{XX'}$, Cronbach's $\alpha$, and the standard error of measurement (SEM). Other symbols: $\rho(\theta)$ and test information $I(\theta)$ for conditional reliability, and $\kappa$ (Cohen's kappa) for rater agreement. See the [notation appendix](notation.qmd) for the complete reference.
 :::
 
 
-## When Leaderboards Flicker {#sec-leaderboards-flicker}
+## Sources of Variability in AI Measurement {#sec-leaderboards-flicker}
 
 Imagine you evaluate ten language models on a reasoning benchmark. You report the rankings to your team. The next day, a colleague re-runs the same evaluation and gets a different ranking. The top two models swap places. A model that was fourth is now second. Nothing about the models changed---only the measurement procedure differed in small ways: a slightly different prompt template, a different random seed for sampling, a different subset of annotators scoring the open-ended responses.
 
@@ -92,47 +92,530 @@ Reliability is not accuracy. A thermometer that consistently reads two degrees t
 If an evaluation procedure produces different results every time it is applied to the same model, it cannot be measuring anything about the model. Unreliable measurements are noise, regardless of how carefully the benchmark was designed. @sec-validity addresses validity---whether we are measuring the *right* thing. This chapter addresses the prior question: are we measuring *anything* at all?
 :::
 
-The sources of inconsistency in AI evaluation are diverse: prompt formatting, temperature sampling, annotator disagreement, benchmark item selection, scoring rubric ambiguity, and even API version drift. Each source contributes noise that can distort model rankings. This chapter provides the theoretical tools to quantify, decompose, and control these sources of noise, drawing on Classical Test Theory and Generalizability Theory from the measurement sciences, applied throughout to the specific challenges of evaluating AI systems.
+The sources of inconsistency in AI evaluation are diverse: prompt formatting, temperature sampling, annotator disagreement, benchmark item selection, scoring rubric ambiguity, and even API version drift. Each source contributes variability that can distort model rankings. This chapter provides the theoretical tools to quantify, decompose, and control these sources of variability, drawing on Classical Test Theory and Generalizability Theory from the measurement sciences, applied throughout to the specific challenges of evaluating AI systems.
 
+### Sources of variability {#sec-noise-sources}
 
-## Classical Test Theory for AI Evaluation {#sec-ctt-reliability}
+These swings have identifiable causes, and which one dominates decides the cure---adding items does nothing if the problem is rater disagreement. Four mechanisms account for most of the variability in AI evaluation.
 
-### The True Score Model {#sec-true-score-model}
+**Prompt sensitivity.** Even at temperature 0, a model gives different responses under different prompt formats: "Let's think step by step," a multiple-choice versus open-ended answer format, or a reordering of the few-shot examples can shift rankings [@mizrahi2024state]. This is the *test-format effect* of educational testing---the same knowledge assessed differently by different instruments. If model $A$ beats $B$ on one template but not another, their standing is prompt-dependent, not ability-dependent.
 
-Recall from @sec-foundations the decomposition $X = T + E$: every observed score is the sum of a true score and an error. We now develop this formally.
+**Sampling stochasticity.** At temperature $> 0$ the same model gives different outputs to the same prompt on each run---the closest analogue to classical test--retest error. For binary items this is usually minimal (most models answer deterministically), but open-ended generations (summaries, code, essays) can earn different scores across runs. Replicated trials let you measure this run-to-run noise and average it down.
 
-Let $X_{ij}$ be the observed score for model $i$ on measurement occasion $j$ (where "occasion" might mean a particular run, a particular prompt template, or a particular annotator). The true score $T_i$ is defined as the expectation over hypothetical replications:
+**Annotator and judge disagreement.** For tasks that cannot be scored automatically---creative writing, safety, open-ended reasoning---human annotators or LLM judges assess quality, and they disagree. This is a distinct source that neither item difficulty nor model ability captures, so it needs its own treatment, which generalizability theory provides (@sec-gtheory); the special case of LLM judges---quantifying their agreement (Cohen's $\kappa$) and detecting their systematic biases---is the subject of @sec-llm-judge.
+
+**Benchmark sampling.** The benchmark is itself a sample from a larger domain: a 200-item coding benchmark is one draw from the space of all coding problems, and another draw would rank models somewhat differently. Longer tests sample the domain more thoroughly and are more reliable---the Spearman--Brown effect (@sec-ctt-reliability)---and Chapter 3's D-optimal item selection minimizes this variability by choosing a maximally informative sample.
+
+To see these mechanisms bite, simulate many evaluation runs that perturb item difficulty (a prompt change), model ability (stochasticity), and the scores themselves (rater disagreement), then slice the resulting score variance by knob.
+
+{{< include _plt_setup.qmd >}}
+
+```{pyodide-python}
+#| label: nd-decompose
+#| autorun: true
+#| fig-cap: "Score variance split into signal (stable between-model differences) and the variability contributed by each mechanism, estimated by knocking out one knob at a time. Rater disagreement dominates the variability; the per-item prompt perturbations average out over the 50 items, and single-trial stochasticity is small."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+np.random.seed(42)
+N, M = 20, 50                              # models, items
+theta = np.linspace(-2, 2, N)             # true abilities
+beta  = np.random.normal(0, 1.5, M)       # item difficulties
+sigma_prompt, sigma_rater, sigma_stoch = 0.3, 0.5, 0.2   # the three variability knobs
+
+def run_evaluation(sp, sr, ss, seed):
+    np.random.seed(seed)
+    beta_eff  = beta  + np.random.normal(0, sp, M)        # prompt shifts item difficulty
+    theta_eff = theta + np.random.normal(0, ss, N)        # stochasticity shifts ability
+    Y = (np.random.rand(N, M) < sigmoid(theta_eff[:, None] - beta_eff[None, :])).astype(float)
+    return Y.mean(1) + np.random.normal(0, sr / np.sqrt(M), N)   # + rater variability on scores
+
+all_scores = np.array([run_evaluation(sigma_prompt, sigma_rater, sigma_stoch, r) for r in range(200)])
+signal = all_scores.mean(0).var()          # between-model (stable) variance
+within_var = all_scores.var(0).mean()      # within-model (run-to-run) variance
+
+def avg_within(sp, sr, ss):                 # average run-to-run variance for a knob setting
+    reps = np.array([run_evaluation(sp, sr, ss, 1000 + r) for r in range(100)])
+    return reps.var(0).mean()
+full = avg_within(sigma_prompt, sigma_rater, sigma_stoch)
+prompt_c = max(0, full - avg_within(0, sigma_rater, sigma_stoch))   # knock out one knob at a time
+rater_c  = max(0, full - avg_within(sigma_prompt, 0, sigma_stoch))
+stoch_c  = max(0, full - avg_within(sigma_prompt, sigma_rater, 0))
+
+plt.figure(figsize=(3.4, 2))
+plt.bar(['model\n(signal)', 'prompt', 'rater', 'stochastic'],
+        [signal, prompt_c, rater_c, stoch_c],
+        color=['#2ca02c', '#ff7f0e', '#d62728', '#9467bd'], alpha=0.85)
+plt.ylabel('variance'); plt.title('Variance by mechanism')
+plt.tick_params(labelsize=6); plt.grid(True, alpha=0.3, axis='y'); plt.tight_layout(); plt.show()
+print(f"reliability = signal / total = {signal / (signal + within_var):.3f}")
+```
+
+Most of that variability falls on models with similar abilities, so their ranks reshuffle from run to run---the flicker this section opened with, reproduced.
+
+```{pyodide-python}
+#| label: nd-ranking
+#| autorun: true
+#| fig-cap: "Model rank across three independent evaluation runs. Lines crossing show pairs whose ordering is not stable; well-separated models keep their place."
+runs = [run_evaluation(sigma_prompt, sigma_rater, sigma_stoch, s) for s in (10, 20, 30)]
+rankings = [np.argsort(-r) for r in runs]          # best model first
+
+plt.figure(figsize=(3.4, 2))
+for i in range(N):
+    positions = [int(np.where(rk == i)[0][0]) for rk in rankings]
+    plt.plot([1, 2, 3], positions, '-o', color=plt.cm.viridis(theta[i] / 4 + 0.5),
+             alpha=0.5, ms=3, lw=0.8)
+plt.gca().invert_yaxis()
+plt.xticks([1, 2, 3]); plt.xlabel('evaluation run'); plt.ylabel('rank')
+plt.title('Ranking instability'); plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
+```
+
+Equivalently, the 95% confidence interval around each model's mean score overlaps its neighbors'---marking exactly the comparisons a leaderboard cannot support.
+
+```{pyodide-python}
+#| label: nd-intervals
+#| autorun: true
+#| fig-cap: "Mean score per model with a 95% confidence interval over evaluation runs. Overlapping intervals identify ranking differences that fall within the variability."
+means, sems = all_scores.mean(0), all_scores.std(0)
+order = np.argsort(means)
+
+plt.figure(figsize=(3.4, 2))
+plt.barh(range(N), means[order], xerr=1.96 * sems[order],
+         color='steelblue', alpha=0.7, capsize=2, height=0.7)
+plt.yticks([]); plt.xlabel('mean score'); plt.ylabel('model (ranked)')
+plt.title('Scores with 95% CI'); plt.grid(True, alpha=0.3, axis='x')
+plt.tight_layout(); plt.show()
+```
+
+Rater disagreement is the dominant *fixable* source here, while prompt and item perturbations largely cancel across models on a fixed, long benchmark and stochasticity is the run-to-run noise that replication would tame. Which mechanism dominates---and how to spend a budget of items and raters against it---is what the rest of the chapter quantifies: first by decomposing the variance (@sec-response-to-variance) and estimating its parts, then by turning the decomposition into a design tool (@sec-gtheory).
+
+## From the Response Model to Variance Components {#sec-response-to-variance}
+
+In @sec-efficient we modeled a single response as a sigmoid of a person term and an item term, $P_{ij} = \sigma(\theta_i - \beta_j)$. Based on this model, in addition to predictive measurement, we can ask another question: when a benchmark score varies, where does the variance come from? The answer turns out to be the entire vocabulary of this chapter---person variance, item variance, their interaction, and an irreducible residual. When we score a model on a benchmark, we rarely care about its performance on *these* particular items, graded by *this* judge, on *this* day; we care about how it would do across the whole universe of items, judges, and occasions we might have used. The observed test is only a sample from that universe, and a score is dependable only insofar as it generalizes from the sample back to the universe. Each source of variation is a way the sample can misrepresent the universe, so attributing variance to these sources is how we quantify the threat to generalization. The generalizability coefficient is the share of score variance carried by the thing we want to generalize about---genuine differences between subjects---rather than by the luck of which items or judges we happened to draw.
+
+Following the Rasch model of @sec-foundations, let $Y_{ij} \in \{0,1\}$ be the response of person $i \in \{1,\dots,N\}$ on item $j \in \{1,\dots,M\}$, with ability $\theta_i$ and difficulty $\beta_j$. We add one a person-by-item interaction $\gamma_{ij}$ to the model. The interaction $\gamma_{ij}$ lets a particular person be unusually good (or bad) on a particular item, over and above what overall ability and difficulty predict: a model that has memorized one specific question, or a question that is idiosyncratically easy for one model family, lives in $\gamma_{ij}$. We then write the log-odds of a correct response as function of the two main effects and an interaction:
 
 $$
-T_i = \mathbb{E}_j[X_{ij}]
+\operatorname{logit} P(Y_{ij} = 1) = \theta_i - \beta_j + \gamma_{ij} \iff P_{ij} \;=\; P(Y_{ij} = 1 \mid \theta_i, \beta_j, \gamma_{ij}) \;=\; \sigma\!\big(\theta_i - \beta_j + \gamma_{ij}\big).
+$$ {#eq-cell-prob}
+
+Subjects and items are not fixed but drawn from populations:
 $$
+\theta_i \sim \mathcal{N}(0, \sigma_p^2), \qquad \beta_j \sim \mathcal{N}(0, \sigma_i^2), \qquad \gamma_{ij} \sim \mathcal{N}(0, \sigma_{pi}^2),
+$$ {#eq-random-effects}
 
-The error $E_{ij} = X_{ij} - T_i$ satisfies three axioms:
-
-1. **Zero mean:** $\mathbb{E}_j[E_{ij}] = 0$ for all $i$
-2. **Uncorrelated with true scores:** $\text{Cov}(T_i, E_{ij}) = 0$
-3. **Uncorrelated across occasions:** $\text{Cov}(E_{ij}, E_{ik}) = 0$ for $j \neq k$
-
-These assumptions give us the fundamental variance decomposition:
-
-$$
-\sigma^2_X = \sigma^2_T + \sigma^2_E
-$$
-
-::: {.callout-note title="Definition: Reliability"}
-Reliability is the proportion of observed score variance that is true score variance:
+and treat the population variances---$\sigma_p^2$ across subjects, $\sigma_i^2$ across items, and $\sigma_{pi}^2$ for the person-by-item term---as the quantities to attribute, and ultimately to estimate. On the log-odds scale, the attribution is immediate, because independent effects add:
 
 $$
-\rho_{XX'} = \frac{\sigma^2_T}{\sigma^2_X} = \frac{\sigma^2_T}{\sigma^2_T + \sigma^2_E} = 1 - \frac{\sigma^2_E}{\sigma^2_X}
+\operatorname{Var}(\theta_I - \beta_J + \gamma_{IJ}) = \sigma_p^2 + \sigma_i^2 + \sigma_{pi}^2 .
+$$ {#eq-latent-decomp}
+
+The person share of this latent variance is the **reliability**, or one-facet **generalizability coefficient**,
+
+$$
+\rho_\eta = \frac{\sigma_p^2}{\sigma_p^2 + \sigma_i^2 + \sigma_{pi}^2},
+$$ {#eq-reliability-latent}
+
+the fraction of variation that reflects genuine differences between subjects rather than item difficulty or idiosyncratic person--item effects. This is the *idealized* reliability---what we could achieve if we observed the log-odds $\eta$ directly. A real benchmark gives only binary responses, whose Bernoulli sampling adds a further, irreducible error; carrying the decomposition through the sigmoid onto that observed scale, and watching the error shrink as items accumulate, is the subject of @sec-ctt-reliability.
+
+The decomposition is not limited to two facets. An evaluation that also varies *raters*---and, across runs, *occasions*---adds their main effects and interactions; because independent effects still add on the log-odds scale, each facet brings its own variance components. For models ($p$) answering items ($i$) scored by raters ($r$),
+
+$$
+\operatorname{Var}(\eta) = \sigma_p^2 + \sigma_i^2 + \sigma_r^2 + \sigma_{pi}^2 + \sigma_{pr}^2 + \sigma_{ir}^2 + \sigma_{pir}^2 ,
+$$ {#eq-multifacet}
+
+one component per facet ($\sigma_p^2$ model, $\sigma_i^2$ item, $\sigma_r^2$ rater) and one per interaction; the first three terms are @eq-latent-decomp, the rest are what the rater facet adds. Every mechanism of @sec-noise-sources is one of these components---rater disagreement is $\sigma_r^2$ and $\sigma_{pr}^2$, run-to-run drift adds an occasion facet---and generalizability theory (@sec-gtheory) estimates them and spends a fixed budget of items and raters to drive the error down.
+
+With the estimand defined, the next three sections estimate it---plug-in from fixed effects (@sec-plug-in), Bayesian (@sec-bayesian), and method of moments (@sec-ctt-reliability), in increasing distance from the response model we started with. Generalizability theory (@sec-gtheory) then turns the decomposition into a design tool for reliable AI evaluation.
+
+## Variance Estimation via Plug-in Method {#sec-plug-in}
+
+We now have the estimand---the components $\sigma_p^2, \sigma_i^2, \sigma_{pi}^2$ of @eq-random-effects and the reliability they define---but a finite benchmark only lets us *estimate* them. Three methods do so, and we take them in order of distance from the foundations of the earlier chapters. The most direct simply reuses the IRT machinery of @sec-foundations and @sec-efficient: fit each model's ability as a **fixed effect**, then ask how spread out the fitted abilities are.
+
+Fit the Rasch abilities $\hat\theta_1, \dots, \hat\theta_N$ by maximum likelihood with the item difficulties held fixed, and take their empirical variance as an estimate of $\sigma_p^2$. This is what much of the AI-evaluation literature does---and, uncorrected, it is biased upward.
+
+The bias has a precise form. Write each fitted ability as the truth plus estimation error, $\hat\theta_i = \theta_i + e_i$, with $\theta_i \sim \mathcal{N}(0, \sigma_p^2)$ the quantity of interest and $e_i$ the Rasch fit's error---mean zero, variance $\operatorname{Var}(e_i) = \operatorname{SE}(\hat\theta_i)^2$. The fit's error depends on the responses, not on the value of $\theta_i$, so the two are independent and their variances add:
+
+$$
+\operatorname{Var}(\hat\theta_i) = \operatorname{Var}(\theta_i) + \operatorname{Var}(e_i) = \sigma_p^2 + \operatorname{SE}(\hat\theta_i)^2 .
 $$
 
-Equivalently, reliability is the squared correlation between observed scores and true scores: $\rho_{XX'} = r^2_{XT}$.
+The plug-in estimator is the empirical mean of these per-model variances, so (up to the usual $\tfrac{N-1}{N}$ finite-sample factor) it targets their average, not $\sigma_p^2$ alone:
+
+$$
+\mathbb{E}\Big[\tfrac{1}{N}\textstyle\sum_i (\hat\theta_i - \bar{\hat\theta})^2\Big] \;\approx\; \sigma_p^2 + \overline{\operatorname{SE}^2}, \qquad \overline{\operatorname{SE}^2} = \tfrac{1}{N}\textstyle\sum_i \operatorname{SE}(\hat\theta_i)^2 .
+$$
+
+The inflation $\overline{\operatorname{SE}^2}$ is the average sampling variance of the per-model estimates: noisy abilities spread out more than the true ones, so estimation error masquerades as between-model variance---the same confounding of signal and noise that makes the interaction and residual inseparable without replicated trials (@sec-bridge-to-gtheory). Subtracting it gives the bias-corrected estimate,
+
+$$
+\hat\sigma_p^2 = \tfrac{1}{N}\textstyle\sum_i (\hat\theta_i - \bar{\hat\theta})^2 - \overline{\operatorname{SE}^2},
+$$
+
+which is exactly the method-of-moments estimator of @sec-ctt-reliability seen on the logit scale. Each standard error is read from the Fisher information of the Rasch fit,
+
+$$
+\operatorname{SE}(\hat\theta_i) = \Big(\textstyle\sum_{j=1}^M \hat P_{ij}\,(1 - \hat P_{ij})\Big)^{-1/2} = I(\hat\theta_i)^{-1/2}, \qquad \hat P_{ij} = \sigma(\hat\theta_i - \beta_j),
+$$
+
+the inverse square root of the test information $I(\theta)$ of @sec-fisher-design---each item contributing $\hat P_{ij}(1 - \hat P_{ij})$, most when it sits near the model's ability. The bias therefore shrinks like $1/M$: information accumulates with items, so $\overline{\operatorname{SE}^2} \sim 1/M$, and on long benchmarks the naive and corrected estimates of $\sigma_p^2$ nearly agree---but for $\sigma_{pi}^2$ they never do without replication.
+
+The simulation plants abilities of known variance $\sigma_p^2 = 1$, draws one binary trial per cell, fits the abilities, and compares the naive and bias-corrected estimates as the benchmark lengthens.
+
+```{pyodide-python}
+#| label: plugin-estimator
+#| autorun: true
+#| fig-cap: "Plug-in estimation of $\\sigma_p^2$ (planted at 1.0) from one binary trial per cell. Left: at a sparse design the naive variance of the fitted abilities overshoots, while subtracting $\\overline{\\operatorname{SE}^2}$ recovers the truth. Center: the naive bias decays as items accumulate. Right: that bias is exactly the average squared standard error."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+def fit_ability(S, beta, T, n_iter=60):
+    """Per-model ML ability (item difficulties known); returns theta_hat and its SE."""
+    rowp  = np.clip(S.mean(1) / T, 0.02, 0.98)
+    theta = np.clip(np.log(rowp / (1 - rowp)), -4, 4)
+    for _ in range(n_iter):                         # Newton steps; the Rasch log-lik is concave
+        Pm   = sigmoid(theta[:, None] - beta[None, :])
+        info = (T * Pm * (1 - Pm)).sum(1) + 1e-6
+        theta = np.clip(theta + (S - T * Pm).sum(1) / info, -5, 5)
+    Pm   = sigmoid(theta[:, None] - beta[None, :])
+    info = (T * Pm * (1 - Pm)).sum(1) + 1e-9
+    return theta, 1 / np.sqrt(info)                 # SE = inverse-root Fisher information
+
+N, sd_p, sd_i, T = 150, 1.0, 1.0, 1                 # one trial per cell
+true_var = sd_p ** 2
+
+def one_run(M, seed):
+    rng    = np.random.RandomState(seed)
+    th, bt = rng.normal(0, sd_p, N), rng.normal(0, sd_i, M)
+    S = (rng.rand(T, N, M) < sigmoid(th[:, None] - bt[None, :])[None]).sum(0).astype(float)
+    th_hat, se = fit_ability(S, bt, T)
+    naive = th_hat.var()
+    return naive, naive - (se ** 2).mean(), (se ** 2).mean()   # naive, corrected, mean SE^2
+
+M_grid = [40, 80, 160, 320]
+R = {M: np.mean([one_run(M, 1000 + M + 11 * s) for s in range(8)], axis=0) for M in M_grid}
+
+fig, axes = plt.subplots(1, 3, figsize=(6, 2))
+naive, corr, _ = R[40]
+axes[0].bar(['naive', 'bias-\ncorrected'], [naive, corr], color=['#d62728', '#1f77b4'], alpha=0.85)
+axes[0].axhline(true_var, color='black', ls='--', lw=1, label='true $\\sigma_p^2$')
+axes[0].set_ylabel('$\\widehat{\\sigma}_p^2$'); axes[0].set_title('Estimates ($M=40$)')
+axes[0].legend(fontsize=6); axes[0].grid(True, alpha=0.3, axis='y'); axes[0].tick_params(labelsize=6)
+
+axes[1].plot(M_grid, [R[M][0] for M in M_grid], 'o-', color='#d62728', ms=3, lw=1.4, label='naive')
+axes[1].plot(M_grid, [R[M][1] for M in M_grid], 's-', color='#1f77b4', ms=3, lw=1.4, label='corrected')
+axes[1].axhline(true_var, color='black', ls='--', lw=1)
+axes[1].set_xscale('log'); axes[1].set_xlabel('items per model ($M$)')
+axes[1].set_ylabel('$\\widehat{\\sigma}_p^2$'); axes[1].set_title('Convergence')
+axes[1].legend(fontsize=6); axes[1].grid(True, alpha=0.3)
+
+pred = [R[M][2] for M in M_grid]
+emp  = [R[M][0] - true_var for M in M_grid]
+lim  = max(pred) * 1.1
+axes[2].plot([0, lim], [0, lim], 'k--', lw=1, alpha=0.6)
+axes[2].scatter(pred, emp, c='#d62728', s=18, zorder=3)
+axes[2].set_xlabel('predicted bias  $\\overline{SE^2}$'); axes[2].set_ylabel('empirical bias')
+axes[2].set_title('Bias mechanism'); axes[2].grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+print(f"M=40: naive={naive:.3f}, bias-corrected={corr:.3f}  (true sigma_p^2 = {true_var:.2f})")
+```
+
+The naive estimate overshoots by exactly the average squared standard error; subtracting it recovers $\sigma_p^2$. The correction is cheap, but the plug-in still treats each ability as a free constant, ignoring that the abilities are themselves a sample from a population---a limitation the Bayesian view of @sec-bayesian removes by modelling that population directly.
+
+### Remark: reliability varies with ability {#sec-irt-reliability}
+
+The standard error of the plug-in, $\operatorname{SE}(\hat\theta_i) = I(\hat\theta_i)^{-1/2}$, depends on ability through the information $I(\theta)$: a model is pinned down precisely only where the items inform it. Reliability inherits that dependence. The single $\rho$ of @eq-reliability-latent is a population average; the same response model gives a *conditional* reliability at each ability $\theta$,
+
+$$
+\rho(\theta) = 1 - \frac{1}{I(\theta)\,\sigma_p^2}, \qquad I(\theta) = \sum_{j=1}^M P_j(\theta)\,\big(1 - P_j(\theta)\big),
+$$ {#eq-conditional-reliability}
+
+where $\sigma_p^2$ is the spread of abilities and $I(\theta)$ is the **test information** of @sec-fisher-design. Note that $I(\theta)$ is nothing but the per-item residual $P_j(1 - P_j)$---the irreducible Bernoulli noise of @eq-residual---summed at a fixed ability: the same variance that *limits* a single response is exactly the *information* that response carries.
+
+For AI evaluation the consequence is sharp. A benchmark can post a high overall $\rho$ (or Cronbach's $\alpha$) yet be **unreliable for the models that matter most**. Once the frontier passes the difficulty of every item, $P_j(\theta) \to 1$, the information $I(\theta) \to 0$, and $\rho(\theta)$ collapses---benchmark saturation that a single reliability number hides.
+
+```{pyodide-python}
+#| label: conditional-reliability
+#| autorun: true
+#| fig-cap: "Conditional reliability $\\rho(\\theta)$ for an item pool clustered at easy difficulties versus one spread across the range. The easy pool looks fine on average but its reliability collapses for high-ability (frontier) models, whose responses its items barely inform."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+theta = np.linspace(-3, 3, 200)
+sigma_p2 = 1.0 ** 2
+M = 40
+beta_easy  = np.random.RandomState(0).normal(-1.0, 0.5, M)   # items clustered at easy difficulties
+beta_broad = np.linspace(-2.5, 2.5, M)                       # items spread across the range
+
+def cond_reliability(betas):
+    I = np.sum([sigmoid(theta - b) * (1 - sigmoid(theta - b)) for b in betas], axis=0)
+    return np.clip(1 - 1 / (I * sigma_p2 + 1e-9), 0, 1)
+
+plt.figure(figsize=(3.6, 2.2))
+plt.plot(theta, cond_reliability(beta_easy),  color='#d62728', lw=1.8, label='easy items')
+plt.plot(theta, cond_reliability(beta_broad), color='#2ca02c', lw=1.8, label='broad items')
+plt.axhline(0.90, color='black', ls='--', lw=1, alpha=0.6)
+plt.xlabel('ability $\\theta$  (frontier models at right)')
+plt.ylabel('conditional reliability $\\rho(\\theta)$')
+plt.title('Reliability varies with ability'); plt.legend(fontsize=7); plt.ylim(0, 1)
+plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
+```
+
+The fix is the design side of Chapter 4: pick items whose difficulty matches the ability range of interest, or select them adaptively per model (@sec-fisher-design, @sec-cat). Targeted items hold $\rho(\theta)$ high exactly where you need to tell models apart.
+
+## Variance Estimation via Bayesian Method {#sec-bayesian}
+
+The random-effects model @eq-random-effects is already a Bayesian hierarchical model: the distribution $\theta_i \sim \mathcal{N}(0, \sigma_p^2)$ is a **prior** on each model's ability, and the variance components $\sigma_p^2, \sigma_i^2, \sigma_{pi}^2$ are its **hyperparameters**. Estimation then comes in two flavors, depending on what we do with those hyperparameters.
+
+**Empirical Bayes (marginal maximum likelihood).** Treat the abilities as latent and integrate them out, leaving the marginal likelihood---the *evidence*---as a function of the hyperparameter, then pick the value that maximizes it. Writing the evidence at a candidate variance $\boldsymbol{s}^2$,
+
+$$
+\mathcal{L}(\boldsymbol{s}^2) = \int \Big[\textstyle\prod_{i,j} P_{ij}^{\,Y_{ij}}(1 - P_{ij})^{1 - Y_{ij}}\Big]\, p(\theta, \beta, \gamma \mid \boldsymbol{s}^2)\; d\theta\, d\beta\, d\gamma, \qquad P_{ij} = \sigma(\theta_i - \beta_j + \gamma_{ij}),
+$$
+
+with the population (prior) density $p(\theta, \beta, \gamma \mid \boldsymbol{s}^2) = \prod_i \mathcal{N}(\theta_i; 0, s_p^2)\,\prod_j \mathcal{N}(\beta_j; 0, s_i^2)\,\prod_{ij}\mathcal{N}(\gamma_{ij}; 0, s_{pi}^2)$, the estimate is the maximizer
+
+$$
+\hat{\boldsymbol{\sigma}}^2 = \arg\max_{\boldsymbol{s}^2}\, \log \mathcal{L}(\boldsymbol{s}^2),
+$$
+
+a search for the prior scale that best explains the data---a hyperparameter point estimate. The Bernoulli noise sits inside the likelihood, so no separate residual correction is needed and the estimates are logit-scale. With item difficulties fixed and only abilities random, the evidence is a product of one-dimensional integrals,
+
+$$
+\mathcal{L}(s^2) = \prod_{i=1}^N \int_{\mathbb{R}} \prod_{j=1}^M \sigma(\theta - \beta_j)^{Y_{ij}}\big(1 - \sigma(\theta - \beta_j)\big)^{1 - Y_{ij}}\, \mathcal{N}(\theta; 0, s^2)\, d\theta,
+$$
+
+which a grid evaluates exactly.
+
+**Full Bayes.** Rather than point-estimate the hyperparameter, place a hyperprior $p(\boldsymbol{s}^2)$ on it and report the whole posterior,
+
+$$
+p(\boldsymbol{s}^2 \mid Y) \;\propto\; \mathcal{L}(\boldsymbol{s}^2)\, p(\boldsymbol{s}^2),
+$$
+
+summarized by its mean and a 95% credible interval. Empirical Bayes is then the special case that keeps only the peak of this posterior (the evidence maximizer, under a flat hyperprior); full Bayes keeps the spread, which is the honest uncertainty about $\sigma_p^2$ from a finite sample. For the multi-facet model the posterior is high-dimensional and is sampled by MCMC (NumPyro or PyMC); for the one-facet case with difficulties fixed, the same one-dimensional grid that gave the evidence gives the posterior directly.
+
+The simulation evaluates the evidence over candidate ability spreads $s$, marks the empirical-Bayes maximizer, and overlays the full posterior (evidence times a flat hyperprior, normalized) with its mean and 95% credible interval.
+
+```{pyodide-python}
+#| label: bayes-estimator
+#| autorun: true
+#| fig-cap: "Estimating the ability spread $\\sigma_p$ from one binary trial per cell. The curve is the posterior (evidence $\\times$ flat hyperprior, normalized); empirical Bayes / marginal MLE keeps only its peak, while full Bayes reports the mean and the shaded 95% credible interval. The truth is $\\sigma_p = 1$."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+N, M, T, sd_p = 150, 40, 1, 1.0
+rng   = np.random.RandomState(0)
+theta = rng.normal(0, sd_p, N)
+beta  = rng.normal(0, 1.0, M)
+S = (rng.rand(T, N, M) < sigmoid(theta[:, None] - beta[None, :])[None]).sum(0).astype(float)
+
+def log_evidence(s, K=121):                              # log p(Y | s), abilities integrated out
+    g  = np.linspace(-5, 5, K)
+    P  = sigmoid(g[:, None] - beta[None, :])
+    LL = S @ np.log(P + 1e-12).T + (T - S) @ np.log(1 - P + 1e-12).T
+    a  = LL + (-0.5 * (g / s) ** 2 - np.log(s))[None, :] + np.log(g[1] - g[0])
+    m  = a.max(1, keepdims=True)
+    return (m[:, 0] + np.log(np.exp(a - m).sum(1))).sum()
+
+s_grid = np.linspace(0.3, 2.0, 60)
+ds     = s_grid[1] - s_grid[0]
+logE   = np.array([log_evidence(s) for s in s_grid])
+
+s_mml  = s_grid[logE.argmax()]                          # empirical Bayes: evidence peak
+post   = np.exp(logE - logE.max()); post /= post.sum() * ds   # full Bayes: flat hyperprior, normalized
+cdf    = np.cumsum(post) * ds; cdf /= cdf[-1]
+s_mean = (s_grid * post).sum() * ds
+lo, hi = s_grid[np.searchsorted(cdf, 0.025)], s_grid[np.searchsorted(cdf, 0.975)]
+
+plt.figure(figsize=(3.8, 2.3))
+plt.plot(s_grid, post, color='#1f77b4', lw=1.8, label='posterior $p(\\sigma_p \\mid Y)$')
+plt.fill_between(s_grid, post, where=(s_grid >= lo) & (s_grid <= hi), color='#1f77b4', alpha=0.2, label='95% CI')
+plt.axvline(s_mml, color='#d62728', lw=1.4, label=f'EB / MML peak = {s_mml:.2f}')
+plt.axvline(s_mean, color='#1f77b4', ls=':', lw=1.4, label=f'posterior mean = {s_mean:.2f}')
+plt.axvline(1.0, color='black', ls='--', lw=1, label='true = 1.0')
+plt.xlabel('ability spread $\\sigma_p$'); plt.ylabel('density'); plt.yticks([])
+plt.title('Empirical Bayes vs full Bayes'); plt.legend(fontsize=6)
+plt.tight_layout(); plt.show()
+print(f"empirical Bayes (MML) sigma_p = {s_mml:.3f};  full Bayes mean = {s_mean:.3f}, 95% CI = [{lo:.2f}, {hi:.2f}]")
+```
+
+The two views answer different questions: empirical Bayes returns the single most-supported $\sigma_p$, while full Bayes returns the range the data leave open---wide here, because one binary response per cell is weak evidence. Both, like the plug-in, work on the latent scale. The last method drops the model entirely and reads the components off the observed scores.
+
+## Variance Estimation via Model-free Method {#sec-ctt-reliability}
+
+The plug-in and Bayesian methods fit the response model; the third estimator fits nothing, reading the components off the observed scores by method of moments. Because the scores are binary, the components it exposes live on the probability scale, which we develop first. @sec-response-to-variance worked on the log-odds scale, where the three components add cleanly. A benchmark, though, produces only binary responses $Y \sim \text{Bernoulli}(P_{IJ})$---not the latent predictor. We now carry the decomposition through the sigmoid to $\operatorname{Var}(Y)$: the nonlinear link recasts the three terms onto the **probability scale** $P_{ij}$, where the decomposition stays exact and orthogonal, and adds a fourth---the Bernoulli noise. We work on the probability scale because it yields that residual for free. (The orthogonal decomposition that follows needs only that persons and items are sampled independently, not that they are Gaussian.) The decomposition follows the functional ANOVA (Hoeffding--Sobol) method.
+
+We introduce some notation
+$$
+\bar P = \mathbb{E}_{I,J}[P_{IJ}], \qquad P_{i\bullet} = \mathbb{E}_J[P_{iJ}], \qquad P_{\bullet j} = \mathbb{E}_I[P_{Ij}],
+$$ {#eq-mean-notation}
+
+and define the person main effect $P_{i\bullet} - \bar P$, the item main effect $P_{\bullet j} - \bar P$, and the interaction $P_{ij} - P_{i\bullet} - P_{\bullet j} + \bar P$, so that
+
+$$
+P_{ij} = \bar P + \underbrace{(P_{i\bullet} - \bar P)}_{\text{person}} + \underbrace{(P_{\bullet j} - \bar P)}_{\text{item}} + \underbrace{(P_{ij} - P_{i\bullet} - P_{\bullet j} + \bar P)}_{\text{interaction}} .
+$$ {#eq-anova-effects}
+
+Each term removes progressively more conditioning: the person effect is how much person $i$ shifts the success probability after averaging over all items, the item effect is the analogous shift for item $j$, and the interaction is whatever remains---the part of the cell that neither margin explains. By construction these effects are mean-zero and mutually **orthogonal** (each averages to zero over any index it retains), so every cross-covariance vanishes and the variance of the success probability splits with no cross terms:
+
+$$
+\operatorname{Var}(P_{IJ}) = \underbrace{\operatorname{Var}_I\!\big(P_{I\bullet}\big)}_{V_{\text{person}}}
+\;+\; \underbrace{\operatorname{Var}_J\!\big(P_{\bullet J}\big)}_{V_{\text{item}}}
+\;+\; \underbrace{\mathbb{E}\big[(P_{IJ} - P_{I\bullet} - P_{\bullet J} + \bar P)^2\big]}_{V_{\text{interaction}}} .
+$$ {#eq-pi-decomp}
+
+The three terms above account for variance in the probability of a correct response, but the graded outcome $Y$ is a Bernoulli draw from that probability. The law of total variance, conditioning on the sampled cell $(I,J)$, supplies the last piece:
+
+$$
+\operatorname{Var}(Y)
+= \underbrace{\operatorname{Var}\big(\mathbb{E}[Y \mid I,J]\big)}_{\operatorname{Var}(P_{IJ})\,=\,V_{\text{person}} + V_{\text{item}} + V_{\text{interaction}}}
+\;+\; \underbrace{\mathbb{E}\big[\operatorname{Var}(Y \mid I,J)\big]}_{V_{\text{residual}}} .
+$$ {#eq-bernoulli-variance}
+
+Since $\operatorname{Var}(Y \mid I,J) = P_{IJ}\big(1 - P_{IJ}\big)$, the residual is the average Bernoulli noise,
+
+$$
+V_{\text{residual}} = \mathbb{E}\big[P_{IJ}\,(1 - P_{IJ})\big],
+$$ {#eq-residual}
+
+the irreducible measurement noise of a single graded trial---largest near $P_{ij} = 0.5$, vanishing as items become trivially easy or impossibly hard. Collecting the four pieces gives the decomposition that organizes the rest of this chapter:
+
+$$
+\operatorname{Var}(Y) = V_{\text{person}} + V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}
+$$ {#eq-full-decomp}
+
+Dividing through by $\operatorname{Var}(Y)$ turns each term into a share of total variance. The person share is the **observed-scale reliability**---the analogue of the idealized $\rho_\eta$ (@eq-reliability-latent), now with the Bernoulli residual in the denominator, which a single graded response cannot escape:
+
+$$
+\rho \;=\; \frac{V_{\text{person}}}{V_{\text{person}} + V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}} .
+$$ {#eq-reliability-as-share}
+
+### Connection to Generalizability Theory {#sec-bridge-to-gtheory}
+
+@eq-full-decomp is the variance-component decomposition of a one-facet Generalizability study, derived here from the response model rather than postulated. Each probability-scale term names a classical G-theory component---the score-scale image of a latent variance from @eq-random-effects:
+
+| Term in @eq-full-decomp | G-theory component | What it measures |
+|---|---|---|
+| $V_{\text{person}}$ | universe-score (person) variance | real differences between test-takers (the signal) |
+| $V_{\text{item}}$ | item variance | some items are just harder than others |
+| $V_{\text{interaction}}$ | person$\times$item variance | a person is unusually strong/weak on specific items |
+| $V_{\text{residual}}$ | residual | irreducible Bernoulli grading noise |
+| $\rho$ (@eq-reliability-as-share) | generalizability coefficient / ICC | reliability |
+
+The same logic extends to more facets---raters, occasions---each adding its own variance components, the multi-facet decomposition of @eq-multifacet; generalizability theory (@sec-gtheory) estimates those components and designs around them.
+
+Classical test theory (CTT), the early-twentieth-century antecedent of all this, is the same decomposition with only one distinction kept: bundle every non-person term into a single *error* $E$ and write the observed score as $X = T + E$, with *true score* $T_i = \mathbb{E}[X_i]$ (the mean over hypothetical replications), $\sigma_T^2 = V_{\text{person}}$, and $\sigma_E^2 = V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}$. Its reliability is the true-score share $\rho_{XX'} = \sigma_T^2 / \sigma_X^2$---for a single graded response exactly the person share of @eq-reliability-as-share, and for a benchmark total over many items higher still (the same ratio that appears as Chapter 3's CAT stopping rule $R = 1 - \sigma^2_{\text{post}}/\sigma^2_{\text{prior}}$). So the response model, CTT, and generalizability theory are three views of one object; what CTT adds is not a new decomposition but a toolkit of coefficients for estimating $\rho_{XX'}$ from scores alone (@sec-ctt-reliability).
+
+::: {.callout-important title="Why you need replicated trials"}
+With a *single* graded response per cell, the estimated cell probability $\hat P_{ij}$ is just $0$ or $1$, and the interaction $V_{\text{interaction}}$ is perfectly confounded with the Bernoulli residual $V_{\text{residual}}$---there is no way to tell an idiosyncratic person-item effect apart from a lucky guess. Separating them requires **replication**: multiple trials per person-item cell, so that $\hat P_{ij}$ is a within-cell average. This is the statistical reason a long-form evaluation record carries a `trial` field alongside the person and item identifiers, and it is exactly the move from a one-facet to a two-facet G-study.
 :::
 
-In AI evaluation, the "true score" $T_i$ represents the stable capability of model $i$ on the construct being measured. The "error" $E_{ij}$ encompasses everything that causes the observed score to deviate from this stable capability: prompt variation, sampling randomness, annotator disagreement, item selection, and so on.
+These observed-scale components are estimated straight from the scores by the classic G-study route---**analysis of variance / method of moments**. Equate the observed mean squares of a crossed person-by-item design to their expectations and solve: for one trial per cell, $\hat V_{\text{person}} = (MS_p - MS_{pi})/n_i$ and $\hat V_{\text{item}} = (MS_i - MS_{pi})/n_p$, while $MS_{pi}$ estimates the interaction and residual together---fused until trials are replicated (@sec-g-d-studies). The empirical cell proportions $\hat P_{ij}$ give the same components through the functional ANOVA of @eq-pi-decomp.
 
-This connects directly to the reliability formula used in Chapter 3's CAT stopping rule: $R = 1 - \sigma^2_{\text{post}} / \sigma^2_{\text{prior}}$. The IRT version and CTT version express the same idea---both measure the fraction of variance that is signal rather than noise.
+The simulation below builds the response model, reads off the four population components, and then asks two questions: can we recover them from finite data, and how does the interaction erode reliability? We take it in three short steps.
 
+First, construct the cell-probability matrix from the model and compute the four components directly from it.
+
+```{pyodide-python}
+#| label: va-decompose
+#| autorun: true
+#| fig-cap: "The four variance components of @eq-full-decomp as shares of total response variance, computed from the true cell probabilities. For a single binary trial the person share---the signal---is small next to item difficulty and Bernoulli noise."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+np.random.seed(42)
+N, M = 60, 40                                      # persons (models), items
+gamma_scale = 0.6                                  # person-by-item interaction scale
+
+theta = np.random.normal(0, 1.0, N)               # person abilities
+beta  = np.random.normal(0, 1.5, M)               # item difficulties
+gamma = np.random.normal(0, gamma_scale, (N, M))  # person x item interaction
+P     = sigmoid(theta[:, None] - beta[None, :] + gamma)   # cell probabilities
+
+def anova_components(Pmat):
+    """Functional-ANOVA components of a cell-probability matrix: person, item, interaction."""
+    g   = Pmat.mean()
+    row = Pmat.mean(1) - g                          # person effect   (P_i. - Pbar)
+    col = Pmat.mean(0) - g                          # item effect     (P_.j - Pbar)
+    inter = Pmat - row[:, None] - col[None, :] - g
+    return (row ** 2).mean(), (col ** 2).mean(), (inter ** 2).mean()
+
+V_person, V_item, V_inter = anova_components(P)
+V_resid = (P * (1 - P)).mean()                      # Bernoulli residual
+shares  = np.array([V_person, V_item, V_inter, V_resid])
+shares /= shares.sum()
+
+labels = ['Person\n(signal)', 'Item', 'Person×\nItem', 'Residual']
+plt.figure(figsize=(3.2, 2))
+plt.bar(labels, shares, color=['#2ca02c', '#1f77b4', '#ff7f0e', '#8c564b'])
+plt.ylabel('share of Var(Y)'); plt.title('Variance decomposition')
+plt.tick_params(labelsize=6); plt.tight_layout(); plt.show()
+print(f"shares: person={shares[0]:.3f}  item={shares[1]:.3f}  "
+      f"interaction={shares[2]:.3f}  residual={shares[3]:.3f}")
+```
+
+Estimating the components from finite data recovers the main effects, but with a single trial per cell the interaction is inseparable from Bernoulli noise: its estimate is badly inflated, and only converges to the truth once each cell is replicated.
+
+```{pyodide-python}
+#| label: va-identifiability
+#| autorun: true
+#| fig-cap: "Estimated person-by-item interaction variance against the number of trials per cell. With one trial it absorbs the Bernoulli residual and overshoots; replication separates the two, converging to the true value (dashed)."
+def estimate_interaction(T, seed):
+    """Estimate the interaction component from T binary trials per cell."""
+    rng  = np.random.RandomState(seed)
+    Phat = (rng.rand(T, N, M) < P[None]).mean(0)    # within-cell success rate
+    return anova_components(Phat)[2]
+
+trials  = [1, 2, 3, 5, 8, 12, 20, 40]
+Vpi_hat = [np.mean([estimate_interaction(T, 500 + s) for s in range(15)]) for T in trials]
+
+plt.figure(figsize=(3.2, 2))
+plt.plot(trials, Vpi_hat, 'o-', color='#ff7f0e', label='estimated')
+plt.axhline(V_inter, color='black', linestyle='--', linewidth=1, label='true')
+plt.xlabel('trials per cell ($T$)'); plt.ylabel('interaction variance')
+plt.title('Interaction needs replication'); plt.legend(fontsize=7)
+plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
+print(f"V_interaction:  T=1 -> {Vpi_hat[0]:.4f}   T=40 -> {Vpi_hat[-1]:.4f}   true -> {V_inter:.4f}")
+```
+
+Finally, the interaction is what erodes reliability: as the person-by-item term grows, more of the variance is idiosyncratic, and the person share---the generalizability coefficient---falls.
+
+```{pyodide-python}
+#| label: va-reliability
+#| autorun: true
+#| fig-cap: "Reliability (the person share of variance) as a function of the interaction scale $\\sigma_\\gamma$. Stronger person-by-item interaction means a model's standing depends more on which items it happens to face, lowering reliability."
+scales = np.linspace(0.0, 1.6, 14)
+rho = []
+for s in scales:
+    g  = np.random.normal(0, s, (N, M))
+    Ps = sigmoid(theta[:, None] - beta[None, :] + g)
+    vp, vi, vpi = anova_components(Ps)
+    rho.append(vp / (vp + vi + vpi + (Ps * (1 - Ps)).mean()))
+
+plt.figure(figsize=(3.2, 2))
+plt.plot(scales, rho, '-', color='#2ca02c', linewidth=1.8)
+plt.xlabel('interaction scale $\\sigma_\\gamma$'); plt.ylabel('reliability $\\rho$')
+plt.title('Reliability vs interaction'); plt.grid(True, alpha=0.3)
+plt.ylim(0, max(rho) * 1.1); plt.tight_layout(); plt.show()
+```
+
+The decomposition above used the full response matrix; in practice you often have only *total scores*---one accuracy number per model, with no fitted item parameters. The coefficients in this section, inherited from classical test theory, estimate the person share $\rho_{XX'}$ (@eq-reliability-as-share) directly from such scores. They also resolve a puzzle left open above: the reliability of a *single* graded response came out around $0.09$, yet benchmarks with hundreds of items rank models stably. The reconciliation is aggregation---averaging over many items multiplies signal relative to noise---and the Spearman--Brown formula (@eq-spearman-brown) makes it quantitative. The standard error of measurement turns a reliability into an error bar on each model's score; the coefficients that follow---test--retest, split-half, and Cronbach's $\alpha$---estimate that reliability from data alone.
 
 ### Standard Error of Measurement {#sec-sem}
 
@@ -188,308 +671,137 @@ $$ {#eq-spearman-brown}
 
 This formula is practically important: it tells you how many items you need to achieve a target reliability. If your 50-item benchmark has $\rho = 0.80$, you need $K = 2$ (100 items) to reach $\rho = 0.89$, or $K = 4$ (200 items) to reach $\rho = 0.94$.
 
-{{< include _plt_setup.qmd >}}
+To see these coefficients in action, simulate a 100-model, 100-item Rasch benchmark and start with split-half reliability: correlate two half-test scores, then apply the Spearman--Brown correction.
 
 ```{pyodide-python}
-#| label: reliability-coefficients
+#| label: rc-split-half
 #| autorun: true
-#| fig-cap: "Left: Split-half reliability from a simulated Rasch benchmark. Center: Cronbach's alpha increases with test length following the Spearman-Brown prophecy. Right: SEM decreases as reliability improves with more items."
-
+#| fig-cap: "Split-half reliability on a simulated 100-item Rasch benchmark: the two half-test scores correlate strongly, and the Spearman--Brown correction rescales the half-length correlation to the full test."
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr
 
 def sigmoid(x):
-    """Numerically stable sigmoid function."""
-    return np.where(x >= 0,
-                    1 / (1 + np.exp(-x)),
-                    np.exp(x) / (1 + np.exp(x)))
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
 
-# Simulate benchmark data under the Rasch model
 np.random.seed(42)
-N = 100  # models
-M = 100  # items
+N, M = 100, 100                                    # models, items
 theta = np.random.normal(0, 1, N)
-beta = np.random.normal(0, 1.5, M)
+beta  = np.random.normal(0, 1.5, M)
+Y = (np.random.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)
 
-# Generate binary response matrix
-P = sigmoid(theta[:, None] - beta[None, :])
-Y = (np.random.rand(N, M) < P).astype(float)
+half1, half2 = Y[:, :M // 2].mean(1), Y[:, M // 2:].mean(1)
+r12    = pearsonr(half1, half2)[0]
+rho_sb = 2 * r12 / (1 + r12)                        # Spearman-Brown correction
 
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
+plt.figure(figsize=(3.2, 2))
+plt.scatter(half1, half2, alpha=0.5, s=15, color='steelblue')
+plt.plot([0, 1], [0, 1], 'k--', alpha=0.3)
+plt.xlabel('half 1 score'); plt.ylabel('half 2 score')
+plt.title(f'Split-half ($\\rho$ = {rho_sb:.3f})'); plt.grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+```
 
-# Panel 1: Split-half reliability
-half1 = Y[:, :M//2].mean(axis=1)
-half2 = Y[:, M//2:].mean(axis=1)
-r12, _ = pearsonr(half1, half2)
-rho_sb = 2 * r12 / (1 + r12)
+Cronbach's $\alpha$ averages over all possible splits; as items accumulate it climbs along the Spearman--Brown curve predicted from a short test.
 
-axes[0].scatter(half1, half2, alpha=0.5, s=15, color='steelblue')
-axes[0].plot([0, 1], [0, 1], 'k--', alpha=0.3)
-axes[0].set_xlabel('Half 1 Score')
-axes[0].set_ylabel('Half 2 Score')
-axes[0].set_title(f'Split-Half (ρ = {rho_sb:.3f})')
-axes[0].grid(True, alpha=0.3)
-
-# Panel 2: Cronbach's alpha vs number of items (Spearman-Brown)
+```{pyodide-python}
+#| label: rc-alpha
+#| autorun: true
+#| fig-cap: "Cronbach's $\\alpha$ against the number of items, with the Spearman--Brown prediction extrapolated from the five-item value. Reliability rises with test length exactly as the prophecy formula anticipates."
 item_counts = np.arange(5, M + 1, 5)
 alphas = []
 for m in item_counts:
-    Y_sub = Y[:, :m]
-    item_vars = Y_sub.var(axis=0, ddof=1)
-    total_var = Y_sub.sum(axis=1).var(ddof=1)
-    alpha_val = (m / (m - 1)) * (1 - item_vars.sum() / total_var)
-    alphas.append(alpha_val)
+    Ys = Y[:, :m]
+    alphas.append((m / (m - 1)) * (1 - Ys.var(0, ddof=1).sum() / Ys.sum(1).var(ddof=1)))
 
-# Spearman-Brown prediction from base reliability (5 items)
-base_rho = alphas[0]
-K_vals = item_counts / item_counts[0]
-sb_predicted = K_vals * base_rho / (1 + (K_vals - 1) * base_rho)
+base    = alphas[0]
+K       = item_counts / item_counts[0]
+sb_pred = K * base / (1 + (K - 1) * base)           # Spearman-Brown from the 5-item value
 
-axes[1].plot(item_counts, alphas, 'o-', color='steelblue', markersize=3,
-             linewidth=1.5, label='Empirical α')
-axes[1].plot(item_counts, sb_predicted, '--', color='coral', linewidth=1.5,
-             label='Spearman-Brown')
-axes[1].set_xlabel('Number of Items')
-axes[1].set_ylabel("Cronbach's α")
-axes[1].set_title('Reliability vs Test Length')
-axes[1].legend(fontsize=7)
-axes[1].grid(True, alpha=0.3)
-axes[1].set_ylim(0, 1)
-
-# Panel 3: SEM vs number of items
-sigma_X = np.array([Y[:, :m].mean(axis=1).std() for m in item_counts])
-sems = sigma_X * np.sqrt(1 - np.array(alphas))
-
-axes[2].plot(item_counts, sems, 'o-', color='steelblue', markersize=3, linewidth=1.5)
-axes[2].set_xlabel('Number of Items')
-axes[2].set_ylabel('SEM (score units)')
-axes[2].set_title('Standard Error of Measurement')
-axes[2].grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.show()
-
-print(f"Full test ({M} items): α = {alphas[-1]:.3f}, SEM = {sems[-1]:.4f}")
-print(f"Half test ({M//2} items): α = {alphas[len(alphas)//2 - 1]:.3f}")
-print(f"Spearman-Brown from 5 items: predicted α at {M} items = {sb_predicted[-1]:.3f}")
+plt.figure(figsize=(3.2, 2))
+plt.plot(item_counts, alphas, 'o-', color='steelblue', ms=3, label='empirical $\\alpha$')
+plt.plot(item_counts, sb_pred, '--', color='coral', label='Spearman-Brown')
+plt.xlabel('number of items'); plt.ylabel("Cronbach's $\\alpha$")
+plt.title('Reliability vs test length'); plt.ylim(0, 1)
+plt.legend(fontsize=7); plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
+print(f"alpha: {M} items = {alphas[-1]:.3f};  Spearman-Brown from 5 items = {sb_pred[-1]:.3f}")
 ```
 
-
-## Sources of Noise in AI Evaluation {#sec-noise-sources}
-
-Classical Test Theory lumps all error into a single term $E$. To improve evaluation reliability, we need to understand *where* the noise comes from. This section provides a taxonomy of noise sources specific to AI evaluation.
-
-### A Taxonomy of Error Sources {#sec-error-taxonomy}
-
-We organize noise sources by the level at which they operate:
-
-| Source | Level | CTT Interpretation | Example |
-|--------|-------|-------------------|---------|
-| Sampling stochasticity | Within-model | Test-retest error | Different outputs at temperature > 0 |
-| Prompt sensitivity | Within-model | Format effect | Different prompt templates yield different scores |
-| Item sampling | Within-benchmark | Parallel forms error | Different subsets of questions |
-| Annotator disagreement | Within-scoring | Rater error | Different humans score the same output differently |
-| LLM judge variability | Within-scoring | Rater error | Different LLM judges disagree |
-| Rubric ambiguity | Within-scoring | Systematic + random | Vague criteria interpreted differently |
-| API/version drift | Across-time | Test-retest error | Model weights updated silently |
-
-Each source contributes to $\sigma^2_E$, but they do so in different ways and require different remedies. Prompt sensitivity and annotator disagreement may be the dominant sources for open-ended evaluation, while item sampling variability dominates for fixed-format benchmarks.
-
-
-### Prompt Sensitivity {#sec-prompt-sensitivity}
-
-Even deterministic models (temperature = 0) produce different responses under different prompt formats. Adding "Let's think step by step" to a reasoning prompt, changing the answer format from multiple choice to open-ended, or even rearranging the few-shot examples can shift model rankings [@mizrahi2024state]. This is analogous to *test format effects* in educational testing---the same knowledge is assessed differently by a multiple-choice exam versus a free-response exam.
-
-Prompt sensitivity threatens reliability because the "true score" depends on which prompt template is used. If model $A$ outperforms model $B$ on one template but not another, the models' relative standing is prompt-dependent, not ability-dependent.
-
-
-### Sampling Stochasticity {#sec-sampling-stochasticity}
-
-When temperature $> 0$, the same model gives different outputs to the same prompt on each run. This is the closest analogue to classical test-retest error: the model's response is a random draw from its distribution, and different draws yield different scores. The within-model variance across runs directly inflates $\sigma^2_E$.
-
-For binary items (correct/incorrect), this source is minimal---most models give the same answer deterministically. But for open-ended generation (summaries, code, essays), stochastic outputs can receive different quality scores across runs.
-
-
-### Annotator and Judge Variability {#sec-annotator-variability}
-
-For tasks where responses cannot be automatically scored---creative writing, safety evaluation, open-ended reasoning---human annotators or LLM judges must assess quality. Different raters often disagree, and this disagreement is a major source of unreliability.
-
-::: {.callout-note title="Definition: Cohen's Kappa"}
-For two raters scoring the same set of items on a categorical scale, Cohen's kappa [@cohen1960coefficient] adjusts for chance agreement:
-
-$$
-\kappa = \frac{p_o - p_e}{1 - p_e}
-$$
-
-where $p_o$ is the observed proportion of agreement and $p_e$ is the expected proportion of agreement by chance. $\kappa = 1$ indicates perfect agreement; $\kappa = 0$ indicates agreement no better than chance; $\kappa < 0$ indicates systematic disagreement.
-:::
-
-For more than two raters, Fleiss's kappa [@fleiss1971measuring] extends this to multiple annotators. Krippendorff's alpha [@krippendorff2011computing] provides a more general measure that handles missing data, ordinal scales, and any number of raters.
-
-
-### Benchmark Sampling Variability {#sec-benchmark-sampling}
-
-The benchmark itself is a sample from a larger domain of possible items. Different samples yield different model rankings. A 200-item coding benchmark is a sample from the space of all possible coding problems; another sample of 200 problems from the same domain would likely produce somewhat different scores.
-
-This is the item sampling component of reliability, and it is the source that @eq-spearman-brown addresses: longer tests sample the domain more thoroughly and are therefore more reliable. It also connects to Chapter 3's design perspective: D-optimal item selection minimizes this variability by choosing a maximally informative sample.
+Finally, the standard error of measurement shrinks as reliability rises with more items, tightening the error bar on each model's score.
 
 ```{pyodide-python}
-#| label: noise-decomposition
+#| label: rc-sem
 #| autorun: true
-#| fig-cap: "Left: Variance decomposition reveals that item sampling and annotator disagreement typically dominate. Center: Model rankings shift across evaluation conditions. Right: Overlapping confidence intervals show where rankings are unreliable."
+#| fig-cap: "Standard error of measurement against the number of items. As reliability climbs the SEM falls, narrowing the confidence band around each model's score."
+sigma_X = np.array([Y[:, :m].mean(1).std() for m in item_counts])
+sems    = sigma_X * np.sqrt(1 - np.array(alphas))
 
-np.random.seed(42)
-N = 20    # models
-M = 50    # items
-R = 5     # raters per item
-
-# True abilities and item difficulties
-theta = np.linspace(-2, 2, N)
-beta = np.random.normal(0, 1.5, M)
-
-# Variance parameters for each noise source
-sigma_prompt = 0.3    # prompt sensitivity (shifts difficulty)
-sigma_sample = 0.0    # item sampling (captured by different subsets)
-sigma_rater = 0.5     # rater noise (scoring variability)
-sigma_stoch = 0.2     # sampling stochasticity (model randomness)
-
-# Generate a full evaluation with all noise sources
-def run_evaluation(theta, beta, sigma_prompt, sigma_rater, sigma_stoch, seed=None):
-    if seed is not None:
-        np.random.seed(seed)
-    N, M = len(theta), len(beta)
-    # Prompt effect: shifts item difficulties
-    prompt_shift = np.random.normal(0, sigma_prompt, M)
-    beta_eff = beta + prompt_shift
-    # Model stochasticity: shifts ability
-    stoch_shift = np.random.normal(0, sigma_stoch, N)
-    theta_eff = theta + stoch_shift
-    # Generate responses
-    P = sigmoid(theta_eff[:, None] - beta_eff[None, :])
-    Y = (np.random.rand(N, M) < P).astype(float)
-    # Rater noise on total scores
-    scores = Y.mean(axis=1) + np.random.normal(0, sigma_rater / np.sqrt(M), N)
-    return scores, Y
-
-# Run multiple replications
-n_reps = 200
-all_scores = np.zeros((n_reps, N))
-for rep in range(n_reps):
-    scores, _ = run_evaluation(theta, beta, sigma_prompt, sigma_rater, sigma_stoch, seed=rep)
-    all_scores[rep] = scores
-
-# Variance decomposition (approximate via simulation)
-mean_scores = all_scores.mean(axis=0)
-total_var = all_scores.var()
-between_model_var = mean_scores.var()
-within_model_var = all_scores.var(axis=0).mean()
-
-# Run with individual sources turned off to estimate contributions
-var_components = {}
-for name, sp, sr, ss in [('Prompt', 0, sigma_rater, sigma_stoch),
-                          ('Rater', sigma_prompt, 0, sigma_stoch),
-                          ('Stochastic', sigma_prompt, sigma_rater, 0),
-                          ('Full', sigma_prompt, sigma_rater, sigma_stoch)]:
-    reps = np.zeros((100, N))
-    for rep in range(100):
-        s, _ = run_evaluation(theta, beta, sp, sr, ss, seed=rep + 1000)
-        reps[rep] = s
-    var_components[name] = reps.var(axis=0).mean()
-
-# Estimate each component's contribution
-prompt_contrib = var_components['Full'] - var_components['Prompt']
-rater_contrib = var_components['Full'] - var_components['Rater']
-stoch_contrib = var_components['Full'] - var_components['Stochastic']
-residual = max(0, within_model_var - prompt_contrib - rater_contrib - stoch_contrib)
-
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
-
-# Panel 1: Variance decomposition
-components = [between_model_var, prompt_contrib, rater_contrib, stoch_contrib]
-labels = ['Model\n(signal)', 'Prompt\nformat', 'Rater\nnoise', 'Sampling\nstoch.']
-colors = ['#2ca02c', '#ff7f0e', '#d62728', '#9467bd']
-bars = axes[0].bar(labels, components, color=colors, alpha=0.8)
-axes[0].set_ylabel('Variance')
-axes[0].set_title('Variance Decomposition')
-axes[0].grid(True, alpha=0.3, axis='y')
-
-# Panel 2: Ranking shifts across conditions
-conditions = [run_evaluation(theta, beta, sigma_prompt, sigma_rater, sigma_stoch, seed=s)
-              for s in [10, 20, 30]]
-rankings = [np.argsort(-s[0]) for s in conditions]
-
-for i in range(N):
-    positions = [np.where(r == i)[0][0] for r in rankings]
-    color = plt.cm.viridis(theta[i] / 4 + 0.5)
-    axes[1].plot([1, 2, 3], positions, '-o', color=color, alpha=0.5,
-                 markersize=3, linewidth=0.8)
-
-axes[1].set_xlabel('Evaluation Run')
-axes[1].set_ylabel('Rank')
-axes[1].set_title('Ranking Instability')
-axes[1].set_xticks([1, 2, 3])
-axes[1].invert_yaxis()
-axes[1].grid(True, alpha=0.3)
-
-# Panel 3: Score distributions with confidence intervals
-score_means = all_scores.mean(axis=0)
-score_sems = all_scores.std(axis=0)
-order = np.argsort(score_means)
-
-axes[2].barh(range(N), score_means[order], xerr=1.96 * score_sems[order],
-             color='steelblue', alpha=0.7, capsize=2, height=0.7)
-axes[2].set_xlabel('Mean Score')
-axes[2].set_ylabel('Model (ranked)')
-axes[2].set_title('Scores with 95% CI')
-axes[2].set_yticks([])
-axes[2].grid(True, alpha=0.3, axis='x')
-
-plt.tight_layout()
-plt.show()
-
-reliability = between_model_var / total_var
-print(f"Signal (between-model) variance: {between_model_var:.4f}")
-print(f"Noise (within-model) variance: {within_model_var:.4f}")
-print(f"Estimated reliability: {reliability:.3f}")
+plt.figure(figsize=(3.2, 2))
+plt.plot(item_counts, sems, 'o-', color='steelblue', ms=3)
+plt.xlabel('number of items'); plt.ylabel('SEM (score units)')
+plt.title('Standard error of measurement'); plt.grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+print(f"full test ({M} items): alpha = {alphas[-1]:.3f}, SEM = {sems[-1]:.4f}")
 ```
 
+### Item analysis: finding broken items {#sec-item-analysis}
 
-## Generalizability Theory {#sec-gtheory}
+Reliability diagnostics do more than score a test---they locate the items that *break* it. Under a unidimensional model (Rasch, or any single-factor model), every item should correlate positively with the total score: the *positive manifold*. An item whose **item--total correlation** is negative or near zero is measuring something other than the construct, and on a benchmark that usually means a concrete defect---a flipped answer key, an ambiguous question, or a grading bug. Removing such an item *raises* Cronbach's $\alpha$, the same diagnostic seen from the other side.
 
-### From One Error to Many {#sec-ctt-limits}
+@truong2025bugs turn this into a bug-finding tool at scale: flagging items by negative tetrachoric correlation or low Mokken scalability coefficient recovers genuine errors with up to 84% precision among the top-50 flagged items across nine benchmarks, given enough test-takers (they recommend 60--80 models from at least ten organizations so the correlations are stable). The justification is the Rasch model's sufficiency property: if the sum score is a sufficient statistic for ability, all inter-item correlations are non-negative, so a negative one is a principled alarm rather than a heuristic.
 
-CTT gives a single reliability number, collapsing all sources of error into $\sigma^2_E$. This is useful for a quick summary but insufficient when you need to *improve* reliability---you cannot fix what you have not diagnosed. If your evaluation is unreliable because annotators disagree, adding more items will not help. If it is unreliable because of item sampling variability, adding more annotators will not help.
+To see it, plant eight defective items in a simulated benchmark---four with flipped answer keys, four answered at random---and rank every item by its item--total correlation.
 
-Generalizability Theory (G-theory), developed by @cronbach1972dependability, addresses this limitation by modeling multiple *facets* of measurement simultaneously. Where CTT asks "how reliable is this test?", G-theory asks "how much variance is attributable to each source, and how can we design a measurement procedure that minimizes error?"
+```{pyodide-python}
+#| label: item-analysis
+#| autorun: true
+#| fig-cap: "Item--total correlation for every item in a simulated benchmark with eight planted defects (red): flipped-key items correlate negatively, random items sit near zero, and sound items (blue) sit well above. Ranking by this correlation flags the defects."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+rng = np.random.RandomState(0)
+N, M, n_bad = 200, 60, 8
+theta = rng.normal(0, 1, N)
+beta  = rng.normal(0, 1, M)
+Y = (rng.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)
+
+bad = rng.choice(M, n_bad, replace=False)
+for idx, j in enumerate(bad):
+    if idx < n_bad // 2:
+        Y[:, j] = 1 - Y[:, j]                        # flipped answer key
+    else:
+        Y[:, j] = (rng.rand(N) < 0.5).astype(float)  # random responses (no signal)
+
+total = Y.sum(1)
+itc = np.array([np.corrcoef(Y[:, j], total - Y[:, j])[0, 1] for j in range(M)])  # leave-one-out
+is_bad = np.zeros(M, bool); is_bad[bad] = True
+
+order   = np.argsort(itc)
+flagged = order[:n_bad]
+precision = np.mean(is_bad[flagged])
+
+plt.figure(figsize=(3.6, 2.2))
+plt.scatter(range(M), itc[order],
+            c=['#d62728' if is_bad[i] else '#1f77b4' for i in order], s=12)
+plt.axhline(0, color='black', lw=0.8)
+plt.xlabel('item (ranked by item--total correlation)')
+plt.ylabel('item--total correlation')
+plt.title('Broken items have low correlation'); plt.grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+print(f"precision@{n_bad} (flag the lowest-correlation items) = {precision:.2f}")
+```
+
+The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice you would *inspect* the flagged items rather than delete them blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.
+
+## Generalizability and design {#sec-gtheory}
+
+@eq-multifacet wrote the variance of a multi-facet design as a sum of components. A *G-study* estimates those components from data---by the method-of-moments or REML routes of @sec-ctt-reliability and @sec-bayesian. Generalizability theory's distinctive step is the *D-study* [@cronbach1972dependability]: given the components, design the evaluation---how many items and raters buy a target reliability. That, and the design principles it implies, close the chapter.
 
 
-### The G-Theory Framework {#sec-gtheory-framework}
-
-Consider an evaluation where $N$ models are tested on $M$ items, each scored by $R$ raters. The observed score for model $p$, item $i$, rater $r$ is decomposed as:
-
-$$
-X_{pir} = \mu + \alpha_p + \beta_i + \gamma_r + (\alpha\beta)_{pi} + (\alpha\gamma)_{pr} + (\beta\gamma)_{ir} + \epsilon_{pir}
-$$
-
-where $\mu$ is the grand mean and each Greek letter represents a random effect:
-
-- $\alpha_p$: model effect (the signal we want to measure), variance $\sigma^2_p$
-- $\beta_i$: item effect (some items are harder), variance $\sigma^2_i$
-- $\gamma_r$: rater effect (some raters are lenient), variance $\sigma^2_r$
-- $(\alpha\beta)_{pi}$: model-by-item interaction (item $i$ is especially hard for model $p$), variance $\sigma^2_{pi}$
-- $(\alpha\gamma)_{pr}$: model-by-rater interaction (rater $r$ is especially harsh on model $p$), variance $\sigma^2_{pr}$
-- $(\beta\gamma)_{ir}$: item-by-rater interaction, variance $\sigma^2_{ir}$
-- $\epsilon_{pir}$: residual (everything else), variance $\sigma^2_{pir,e}$
-
-The AI evaluation translation is direct:
-
-| G-theory term | AI evaluation analogue |
-|--------------|----------------------|
-| Person ($p$) | Model being evaluated |
-| Item ($i$) | Benchmark question or task |
-| Rater ($r$) | Human annotator or LLM judge |
-| Occasion ($o$) | Run, random seed, or prompt variant |
+### The D-study {#sec-g-d-studies}
 
 ::: {.callout-note title="Definition: Generalizability Coefficient"}
 The generalizability coefficient is the ratio of true score variance to true-plus-relative-error variance:
@@ -505,540 +817,260 @@ $$
 $$
 :::
 
-
-### G-Studies and D-Studies {#sec-g-d-studies}
-
-G-theory separates the estimation and design phases:
-
-**G-study (Generalizability study):** Collect data from a fully or partially crossed design and estimate all variance components. This tells you *where the noise is*---the diagnostic step. Variance components are typically estimated using the method of expected mean squares from ANOVA or via restricted maximum likelihood (REML).
-
-**D-study (Decision study):** Given the variance components from a G-study, compute the generalizability coefficient for a *planned* evaluation design. This answers questions like: "How many items and raters do I need to achieve $G \geq 0.90$?"
+The **D-study** plugs the estimated components into this coefficient for a *planned* design and asks how many items and raters it takes to reach, say, $G \geq 0.90$.
 
 The key insight is that you can *trade off* facets against each other. If rater variance dominates ($\sigma^2_{pr}$ is large), increasing $n_r$ is more cost-effective than increasing $n_i$. If item sampling variance dominates ($\sigma^2_{pi}$ is large), more items help more than more raters. The D-study makes these tradeoffs explicit and quantitative.
 
+Take the seven variance components of a simulated model×item×rater design as given (a G-study estimates them; @sec-ctt-reliability, @sec-bayesian) and read off the breakdown.
+
 ```{pyodide-python}
-#| label: gtheory-simulation
+#| label: gd-components
 #| autorun: true
-#| fig-cap: "Left: Variance component estimates from a simulated G-study reveal where noise originates. Center: D-study shows how G-coefficient improves with more items and raters. Right: Cost-optimal designs for different budgets."
+#| fig-cap: "The seven variance components of a crossed model×item×rater design. The model component is the signal; everything else is a source of error a D-study can design against."
+import numpy as np
+import matplotlib.pyplot as plt
 
-np.random.seed(42)
+# Seven variance components of a crossed model x item x rater design.
+# A G-study estimates these from data; we take them as given to focus on design.
+true_var = {'p': 1.0, 'i': 0.5, 'r': 0.3, 'pi': 0.4, 'pr': 0.3, 'ir': 0.1, 'e': 0.2}
 
-# True variance components
-true_var = {
-    'p': 1.0,     # model (signal)
-    'i': 0.5,     # item
-    'r': 0.3,     # rater
-    'pi': 0.4,    # model x item interaction
-    'pr': 0.3,    # model x rater interaction
-    'ir': 0.1,    # item x rater interaction
-    'e': 0.2      # residual
-}
-
-# Simulate data: 30 models x 20 items x 5 raters
-N_p, N_i, N_r = 30, 20, 5
-
-# Generate random effects
-alpha_p = np.random.normal(0, np.sqrt(true_var['p']), N_p)
-beta_i = np.random.normal(0, np.sqrt(true_var['i']), N_i)
-gamma_r = np.random.normal(0, np.sqrt(true_var['r']), N_r)
-ab_pi = np.random.normal(0, np.sqrt(true_var['pi']), (N_p, N_i))
-ag_pr = np.random.normal(0, np.sqrt(true_var['pr']), (N_p, N_r))
-bg_ir = np.random.normal(0, np.sqrt(true_var['ir']), (N_i, N_r))
-eps = np.random.normal(0, np.sqrt(true_var['e']), (N_p, N_i, N_r))
-
-# Construct observed scores
-mu = 5.0
-X = (mu + alpha_p[:, None, None] + beta_i[None, :, None] + gamma_r[None, None, :]
-     + ab_pi[:, :, None] + ag_pr[:, None, :] + bg_ir[None, :, :] + eps)
-
-# Estimate variance components via method of moments (ANOVA)
-grand_mean = X.mean()
-MS_p = N_i * N_r * X.mean(axis=(1, 2)).var(ddof=1)
-MS_i = N_p * N_r * X.mean(axis=(0, 2)).var(ddof=1)
-MS_r = N_p * N_i * X.mean(axis=(0, 1)).var(ddof=1)
-MS_pi = N_r * X.mean(axis=2).var(ddof=1) * N_p * N_i / ((N_p - 1) * (N_i - 1))
-MS_pr = N_i * X.mean(axis=1).var(ddof=1) * N_p * N_r / ((N_p - 1) * (N_r - 1))
-
-# Simplified variance component estimates
-est_var_p = max(0, (MS_p - MS_pi) / (N_i * N_r))
-est_var_i = max(0, (MS_i) / (N_p * N_r))
-est_var_r = max(0, (MS_r) / (N_p * N_i))
-
-# For interactions, use residual-based estimates
-X_pi = X.mean(axis=2)  # average over raters
-est_var_pi = max(0, X_pi.var() - est_var_p - est_var_i - true_var['e'] / N_r)
-X_pr = X.mean(axis=1)  # average over items
-est_var_pr = max(0, X_pr.var() - est_var_p - est_var_r - true_var['e'] / N_i)
-est_var_e = max(0.01, X.var() - est_var_p - est_var_i - est_var_r
-                - est_var_pi - est_var_pr)
-
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
-
-# Panel 1: Variance components
-comp_names = ['Model\n(signal)', 'Item', 'Rater', 'Model×\nItem', 'Model×\nRater', 'Residual']
-true_vals = [true_var['p'], true_var['i'], true_var['r'],
-             true_var['pi'], true_var['pr'], true_var['e']]
+names  = ['model\n(signal)', 'item', 'rater', 'model×\nitem', 'model×\nrater', 'residual']
+keys   = ['p', 'i', 'r', 'pi', 'pr', 'e']
 colors = ['#2ca02c', '#1f77b4', '#d62728', '#ff7f0e', '#9467bd', '#8c564b']
-bars = axes[0].bar(comp_names, true_vals, color=colors, alpha=0.8)
-axes[0].set_ylabel('Variance')
-axes[0].set_title('Variance Components')
-axes[0].grid(True, alpha=0.3, axis='y')
-axes[0].tick_params(axis='x', rotation=30)
 
-# Panel 2: D-study surface
-n_items_range = np.arange(5, 51, 5)
-n_raters_range = np.arange(1, 11)
+plt.figure(figsize=(3.6, 2))
+plt.bar(names, [true_var[k] for k in keys], color=colors, alpha=0.85)
+plt.ylabel('variance'); plt.title('Variance components (G-study)')
+plt.xticks(rotation=30, ha='right'); plt.tick_params(labelsize=6)
+plt.grid(True, alpha=0.3, axis='y'); plt.tight_layout(); plt.show()
+```
 
-G_matrix = np.zeros((len(n_raters_range), len(n_items_range)))
-for ii, ni in enumerate(n_items_range):
-    for ri, nr in enumerate(n_raters_range):
-        rel_error = (true_var['pi'] / ni + true_var['pr'] / nr
-                     + true_var['e'] / (ni * nr))
-        G_matrix[ri, ii] = true_var['p'] / (true_var['p'] + rel_error)
+The D-study plugs those components into the generalizability coefficient for a *planned* design of $n_i$ items and $n_r$ raters. Sweeping both traces the design frontier---and shows that items and raters substitute for each other only up to a point.
 
-im = axes[1].contourf(n_items_range, n_raters_range, G_matrix,
-                       levels=np.arange(0.5, 1.01, 0.05), cmap='RdYlGn')
-axes[1].contour(n_items_range, n_raters_range, G_matrix,
-                levels=[0.80, 0.90], colors='black', linewidths=1.5)
-axes[1].set_xlabel('Number of Items')
-axes[1].set_ylabel('Number of Raters')
-axes[1].set_title('G-Coefficient (D-Study)')
-plt.colorbar(im, ax=axes[1], shrink=0.8)
+```{pyodide-python}
+#| label: gd-dstudy
+#| autorun: true
+#| fig-cap: "Generalizability coefficient as a function of the number of items and raters in a planned design. Black contours mark $G = 0.80$ and $0.90$; the curvature shows that beyond a point, adding the cheaper facet stops helping."
+n_items  = np.arange(5, 51, 5)
+n_raters = np.arange(1, 11)
 
-# Panel 3: Cost-optimal designs
-cost_item = 1.0   # cost per item (e.g., API call)
-cost_rater = 5.0  # cost per rater (e.g., annotation)
+def G_coeff(ni, nr):
+    rel = true_var['pi'] / ni + true_var['pr'] / nr + true_var['e'] / (ni * nr)
+    return true_var['p'] / (true_var['p'] + rel)
 
+G = np.array([[G_coeff(ni, nr) for ni in n_items] for nr in n_raters])
+
+plt.figure(figsize=(3.6, 2))
+im = plt.contourf(n_items, n_raters, G, levels=np.arange(0.5, 1.01, 0.05), cmap='RdYlGn')
+plt.contour(n_items, n_raters, G, levels=[0.80, 0.90], colors='black', linewidths=1.2)
+plt.xlabel('number of items'); plt.ylabel('number of raters')
+plt.title('G-coefficient (D-study)'); plt.colorbar(im, shrink=0.85)
+plt.tight_layout(); plt.show()
+```
+
+Add costs---items are cheap (an API call), raters expensive (annotation)---and the D-study becomes a constrained optimization: for each budget, find the $(n_i, n_r)$ that maximizes $G$.
+
+```{pyodide-python}
+#| label: gd-cost
+#| autorun: true
+#| fig-cap: "Best achievable generalizability coefficient as a function of total budget, optimizing the split between items and raters at each level. The dashed line marks the $G = 0.90$ target."
+cost_item, cost_rater = 1.0, 5.0
 budgets = np.arange(50, 501, 10)
-optimal_G = []
-optimal_ni = []
-optimal_nr = []
 
-for budget in budgets:
-    best_G = 0
-    best_ni, best_nr = 5, 1
-    for ni in range(5, int(budget / cost_item) + 1):
-        remaining = budget - ni * cost_item
-        nr = max(1, int(remaining / (ni * cost_rater)))
-        if nr < 1:
-            continue
-        total_cost = ni * cost_item + ni * nr * cost_rater
-        if total_cost > budget:
-            nr = max(1, nr - 1)
-        rel_error = (true_var['pi'] / ni + true_var['pr'] / nr
-                     + true_var['e'] / (ni * nr))
-        G = true_var['p'] / (true_var['p'] + rel_error)
-        if G > best_G:
-            best_G = G
-            best_ni, best_nr = ni, nr
-    optimal_G.append(best_G)
-    optimal_ni.append(best_ni)
-    optimal_nr.append(best_nr)
+best_G = []
+for B in budgets:
+    g = 0.0
+    for ni in range(5, int(B / cost_item) + 1):
+        nr = max(1, int((B - ni * cost_item) / (ni * cost_rater)))
+        if ni * cost_item + ni * nr * cost_rater <= B:
+            g = max(g, G_coeff(ni, nr))
+    best_G.append(g)
 
-axes[2].plot(budgets, optimal_G, 'steelblue', linewidth=1.5)
-axes[2].axhline(0.90, color='red', linestyle='--', linewidth=1, label='G = 0.90')
-axes[2].set_xlabel('Budget')
-axes[2].set_ylabel('Optimal G-Coefficient')
-axes[2].set_title('Cost-Optimal Design')
-axes[2].legend(fontsize=7)
-axes[2].grid(True, alpha=0.3)
+plt.figure(figsize=(3.6, 2))
+plt.plot(budgets, best_G, color='steelblue', lw=1.5)
+plt.axhline(0.90, color='red', ls='--', lw=1, label='G = 0.90')
+plt.xlabel('budget'); plt.ylabel('optimal G-coefficient')
+plt.title('Cost-optimal design'); plt.legend(fontsize=7)
+plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
 
-plt.tight_layout()
-plt.show()
-
-# Find minimum budget for G >= 0.90
-for b, g in zip(budgets, optimal_G):
+for B, g in zip(budgets, best_G):
     if g >= 0.90:
-        print(f"Minimum budget for G ≥ 0.90: {b} (items={optimal_ni[list(budgets).index(b)]}, "
-              f"raters={optimal_nr[list(budgets).index(b)]})")
+        print(f"minimum budget for G >= 0.90: {B}")
         break
 ```
 
+### The rater facet in practice: LLM-as-a-judge {#sec-llm-judge}
 
-## LLM-as-a-Judge Reliability {#sec-llm-judge}
+The D-study asked how to spend a budget of items and *raters*. For open-ended tasks---summarization, safety, instruction following---the dominant modern rater is an **LLM judge** [@zheng2023judging], scoring outputs against a rubric or making pairwise preference calls. Everything above applies unchanged: a judge is a rater with its own leniency ($\gamma_r$), model-specific quirks ($\sigma^2_{pr}$), and run-to-run variability, so aggregating $n_r > 1$ judges buys reliability at the $1/n_r$ rate of the D-study. Two things, though, are special to judges.
 
-### The Rise of Automated Scoring {#sec-automated-scoring}
+**Agreement is categorical.** Judge outputs are usually labels or pairwise winners, not interval scores, so their agreement is summarized by a chance-corrected agreement coefficient rather than a variance ratio. Three questions recur---do different judges agree (*inter-judge*), does a judge agree with humans (*human--LLM*), is a judge self-consistent across repeats (*intra-judge*)---and each is such a coefficient between the relevant raters.
 
-As AI systems are increasingly evaluated on open-ended tasks---summarization, creative writing, instruction following, safety---human annotation becomes the bottleneck. LLMs are now widely used as judges, scoring model outputs on rubric-based criteria or making pairwise preference judgments [@zheng2023judging]. This creates a new measurement instrument whose reliability properties must be understood.
+::: {.callout-note title="Definition: Cohen's Kappa"}
+For two raters scoring the same set of items on a categorical scale, Cohen's kappa [@cohen1960coefficient] adjusts for chance agreement:
 
-In the G-theory framework, an LLM judge is a *rater*. It has its own biases ($\gamma_r$), interacts differently with different models ($\alpha\gamma_{pr}$), and may score the same output differently on repeated calls (if temperature $> 0$). The reliability analysis from the previous section applies directly, with the LLM judge playing the role of the human annotator.
+$$
+\kappa = \frac{p_o - p_e}{1 - p_e}
+$$
 
-
-### Inter-Rater Agreement {#sec-human-llm-agreement}
-
-Three questions characterize LLM-as-a-judge reliability:
-
-1. **Inter-judge reliability:** Do different LLM judges agree with each other? If GPT-4, Claude, and Gemini all judge the same outputs, do they produce the same rankings?
-
-2. **Human-LLM agreement:** Does the LLM judge agree with human annotators? High agreement suggests the LLM captures human preferences; low agreement means the LLM measures something different.
-
-3. **Intra-judge consistency:** Does the same LLM judge produce the same score when asked twice? At temperature 0 this should be deterministic, but prompt-order effects and other sources of instability can create variability.
-
-
-### Position Bias and Systematic Error {#sec-position-bias}
-
-LLM judges exhibit position bias: in pairwise comparisons, they tend to prefer the response presented first (or last, depending on the model) [@wang2023large]. This is a *systematic* error, not random noise.
-
-::: {.callout-important title="Systematic vs. Random Error"}
-CTT's error term $E$ captures *random* error: zero mean, uncorrelated across occasions. *Systematic* errors---like position bias or a judge that always prefers longer responses---inflate the true score, not the error term. A biased judge can be highly reliable (consistent in its bias) yet invalid.
-
-Reliability analysis detects random error. Detecting systematic error requires the validity tools from @sec-validity. A high inter-rater agreement between two LLM judges does not mean they are correct---they might share the same systematic bias.
+where $p_o$ is the observed proportion of agreement and $p_e$ is the expected proportion of agreement by chance. $\kappa = 1$ is perfect agreement; $\kappa = 0$ is chance; $\kappa < 0$ is systematic disagreement.
 :::
 
-
-### Designing Reliable Judge Protocols {#sec-judge-design}
-
-Based on the reliability framework, practical strategies for improving LLM-as-a-judge reliability include:
-
-1. **Multiple judges with aggregation.** Using $n_r > 1$ judges and taking the majority vote or average score reduces error variance by a factor of $1/n_r$ (the G-theory D-study). Three independent judges are substantially more reliable than one.
-
-2. **Position randomization.** Present responses in both orders and average the judgments. This eliminates position bias, converting a systematic error into cancelled noise.
-
-3. **Deterministic scoring.** Use temperature 0 to eliminate sampling stochasticity. This removes one source of $\sigma^2_E$ entirely.
-
-4. **Rubric specificity.** Vague rubrics like "which response is better?" produce more disagreement than specific criteria like "which response correctly follows the instruction and provides accurate information?" Specific rubrics reduce $\sigma^2_r$ and $\sigma^2_{ir}$.
-
-5. **Calibration against gold standards.** Before deploying an LLM judge, measure its agreement with human annotations on a calibration set. This provides an estimate of systematic bias (not just random error).
+For more than two raters, Fleiss's kappa [@fleiss1971measuring] extends this to multiple annotators; Krippendorff's alpha [@krippendorff2011computing] handles missing data, ordinal scales, and any number of raters. Simulate five judges of differing quality on 200 pairwise comparisons and their pairwise $\kappa$ shows how much they agree beyond chance.
 
 ```{pyodide-python}
-#| label: llm-judge-reliability
+#| label: lj-kappa
 #| autorun: true
-#| fig-cap: "Left: Inter-judge agreement matrix (Cohen's kappa) for simulated LLM judges. Center: Accuracy improves with majority voting across more judges. Right: Position bias is a systematic error that reduces validity but not reliability."
+#| fig-cap: "Pairwise Cohen's $\\kappa$ among five simulated LLM judges of differing quality. Higher-quality judges agree more; the off-diagonal values are the chance-corrected agreement."
+import numpy as np
+import matplotlib.pyplot as plt
 
 np.random.seed(42)
+N_pairs, N_judges = 200, 5
+true_labels = (np.random.normal(0, 1, N_pairs) > 0).astype(int)   # 1 if the first response is better
 
-N_pairs = 200  # pairwise comparisons
-N_judges = 5
-
-# True quality differences (positive = first response is better)
-true_diff = np.random.normal(0, 1, N_pairs)
-true_labels = (true_diff > 0).astype(int)
-
-# Simulate judges with different quality levels and biases
-judge_quality = [0.85, 0.80, 0.75, 0.78, 0.72]  # P(correct)
-judge_bias = [0.0, 0.05, -0.05, 0.10, -0.03]     # position bias
+judge_quality = [0.85, 0.80, 0.75, 0.78, 0.72]   # P(correct)
+judge_bias    = [0.0, 0.05, -0.05, 0.10, -0.03]  # position bias
 
 judgments = np.zeros((N_judges, N_pairs), dtype=int)
 for j in range(N_judges):
-    # Each judge: correct with probability quality, plus position bias
-    p_correct = judge_quality[j]
     for k in range(N_pairs):
-        if np.random.rand() < p_correct:
-            judgments[j, k] = true_labels[k]
-        else:
-            judgments[j, k] = 1 - true_labels[k]
-        # Position bias: tendency to choose first response
+        judgments[j, k] = true_labels[k] if np.random.rand() < judge_quality[j] else 1 - true_labels[k]
         if np.random.rand() < abs(judge_bias[j]):
             judgments[j, k] = 1 if judge_bias[j] > 0 else 0
 
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
+def cohen_kappa(a, b):
+    p_o = np.mean(a == b)
+    pa, pb = a.mean(), b.mean()
+    p_e = pa * pb + (1 - pa) * (1 - pb)
+    return (p_o - p_e) / (1 - p_e) if p_e < 1 else 0.0
 
-# Panel 1: Inter-judge kappa matrix
-kappa_matrix = np.zeros((N_judges, N_judges))
-for j1 in range(N_judges):
-    for j2 in range(N_judges):
-        if j1 == j2:
-            kappa_matrix[j1, j2] = 1.0
-        else:
-            # Compute Cohen's kappa
-            p_o = np.mean(judgments[j1] == judgments[j2])
-            p1_yes = judgments[j1].mean()
-            p2_yes = judgments[j2].mean()
-            p_e = p1_yes * p2_yes + (1 - p1_yes) * (1 - p2_yes)
-            kappa_matrix[j1, j2] = (p_o - p_e) / (1 - p_e) if p_e < 1 else 0
+K = np.array([[1.0 if i == j else cohen_kappa(judgments[i], judgments[j])
+               for j in range(N_judges)] for i in range(N_judges)])
 
-im = axes[0].imshow(kappa_matrix, cmap='RdYlGn', vmin=0, vmax=1)
-axes[0].set_xticks(range(N_judges))
-axes[0].set_yticks(range(N_judges))
-axes[0].set_xticklabels([f'J{i+1}' for i in range(N_judges)])
-axes[0].set_yticklabels([f'J{i+1}' for i in range(N_judges)])
-axes[0].set_title("Inter-Judge κ")
+plt.figure(figsize=(2.8, 2.3))
+im = plt.imshow(K, cmap='RdYlGn', vmin=0, vmax=1)
+plt.xticks(range(N_judges), [f'J{i+1}' for i in range(N_judges)])
+plt.yticks(range(N_judges), [f'J{i+1}' for i in range(N_judges)])
 for i in range(N_judges):
     for j in range(N_judges):
-        axes[0].text(j, i, f'{kappa_matrix[i,j]:.2f}', ha='center', va='center', fontsize=6)
-plt.colorbar(im, ax=axes[0], shrink=0.8)
-
-# Panel 2: Accuracy vs number of judges (majority vote)
-judge_counts = range(1, N_judges + 1)
-accuracies = []
-for n_j in judge_counts:
-    # Average over many random subsets of judges
-    acc_samples = []
-    for _ in range(100):
-        subset = np.random.choice(N_judges, n_j, replace=False)
-        majority = (judgments[subset].mean(axis=0) > 0.5).astype(int)
-        acc_samples.append(np.mean(majority == true_labels))
-    accuracies.append(np.mean(acc_samples))
-
-axes[1].plot(list(judge_counts), accuracies, 'o-', color='steelblue',
-             linewidth=1.5, markersize=5)
-axes[1].set_xlabel('Number of Judges')
-axes[1].set_ylabel('Accuracy')
-axes[1].set_title('Majority Vote Accuracy')
-axes[1].grid(True, alpha=0.3)
-axes[1].set_xticks(list(judge_counts))
-
-# Panel 3: Effect of position bias on accuracy
-bias_levels = np.linspace(0, 0.3, 20)
-acc_with_bias = []
-acc_debiased = []
-
-for bias in bias_levels:
-    # Single judge with varying bias
-    correct = np.zeros(N_pairs)
-    biased = np.zeros(N_pairs)
-    for k in range(N_pairs):
-        # Without debiasing
-        if np.random.rand() < 0.80:
-            pred = true_labels[k]
-        else:
-            pred = 1 - true_labels[k]
-        if np.random.rand() < bias:
-            pred = 1  # always pick first
-        biased[k] = pred
-
-        # With debiasing (average both orders)
-        pred1, pred2 = pred, pred
-        if np.random.rand() < bias:
-            pred2 = 0  # reversed order: pick "first" = second
-        correct[k] = round((pred1 + (1 - pred2)) / 2)
-
-    acc_with_bias.append(np.mean(biased == true_labels))
-    acc_debiased.append(np.mean(correct == true_labels))
-
-axes[2].plot(bias_levels, acc_with_bias, 'r-', linewidth=1.5, label='With bias')
-axes[2].plot(bias_levels, acc_debiased, 'g-', linewidth=1.5, label='Debiased')
-axes[2].set_xlabel('Position Bias Strength')
-axes[2].set_ylabel('Accuracy')
-axes[2].set_title('Position Bias Effect')
-axes[2].legend(fontsize=7)
-axes[2].grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.show()
-
-mean_kappa = kappa_matrix[np.triu_indices(N_judges, k=1)].mean()
-print(f"Mean inter-judge κ: {mean_kappa:.3f}")
-print(f"Single judge accuracy: {accuracies[0]:.3f}")
-print(f"5-judge majority accuracy: {accuracies[-1]:.3f}")
+        plt.text(j, i, f'{K[i, j]:.2f}', ha='center', va='center', fontsize=6)
+plt.title('Inter-judge $\\kappa$'); plt.colorbar(im, shrink=0.8); plt.tight_layout(); plt.show()
+print(f"mean inter-judge kappa = {K[np.triu_indices(N_judges, 1)].mean():.3f}")
 ```
 
-
-## Reliability Under IRT {#sec-irt-reliability}
-
-### Conditional Reliability {#sec-conditional-reliability}
-
-CTT provides a single reliability number for the entire test. But from @sec-foundations and @sec-efficient, we know that measurement precision varies across the ability range. A benchmark designed for mid-range models may be highly reliable at $\theta = 0$ but unreliable at the extremes.
-
-Under IRT, the precision of measurement at ability $\theta$ is captured by the test information function (introduced in @sec-fisher-design):
-
-$$
-I(\theta) = \sum_{j=1}^M P_j(\theta)(1 - P_j(\theta))
-$$
-
-The *conditional reliability* at $\theta$ is:
-
-$$
-\rho(\theta) = 1 - \frac{1}{I(\theta) \cdot \sigma^2_\theta}
-$$
-
-where $\sigma^2_\theta$ is the variance of abilities in the population. This formula makes a key point: reliability is not a fixed property of the test---it depends on *where* in the ability range you are measuring and *how* spread out the population is.
-
-
-### The Spearman-Brown Prophecy Under IRT {#sec-spearman-brown-irt}
-
-The classical Spearman-Brown formula (@eq-spearman-brown) says reliability increases with test length. Under IRT, this is approximately true when items are well-targeted to the ability range of interest, but breaks down when items are poorly matched.
-
-Adding 50 easy items to a benchmark that already has 50 hard items does little to improve reliability for high-ability models---the easy items provide almost no information in that range. This is precisely the insight behind adaptive testing (@sec-cat): by selecting items matched to each model's ability, CAT achieves the same reliability with fewer items.
+**Aggregating judges.** Because a judge is a rater, the D-study remedy applies directly: pool several independent judges by majority vote and accuracy climbs at the $1/n_r$ rate, just as adding raters raised $G$ above.
 
 ```{pyodide-python}
-#| label: conditional-reliability
+#| label: lj-majority
 #| autorun: true
-#| fig-cap: "Left: Test information function for different item pool designs. Center: Conditional reliability varies across the ability range. Right: Adaptive testing achieves target reliability with fewer items at all ability levels."
+#| fig-cap: "Accuracy of a majority vote over an increasing number of judges. Pooling independent judges sharpens the verdict---the D-study, applied to the rater facet."
+counts = range(1, N_judges + 1)
+acc = []
+for n_j in counts:
+    samples = [np.mean(((judgments[np.random.choice(N_judges, n_j, replace=False)].mean(0) > 0.5)
+                        .astype(int)) == true_labels) for _ in range(100)]
+    acc.append(np.mean(samples))
 
-np.random.seed(42)
-
-theta_grid = np.linspace(-3, 3, 200)
-sigma_theta = 1.0  # population SD
-
-# Three item pool designs
-M = 30
-# Design 1: Uniform spread
-beta_uniform = np.linspace(-2, 2, M)
-# Design 2: Concentrated at center
-beta_center = np.random.normal(0, 0.5, M)
-# Design 3: Concentrated at extremes (bimodal)
-beta_extreme = np.concatenate([np.random.normal(-1.5, 0.3, M//2),
-                                np.random.normal(1.5, 0.3, M//2)])
-
-def test_info(theta_grid, betas):
-    info = np.zeros_like(theta_grid)
-    for b in betas:
-        P = sigmoid(theta_grid - b)
-        info += P * (1 - P)
-    return info
-
-def cond_reliability(info, sigma_sq):
-    return 1 - 1 / (info * sigma_sq + 1e-10)
-
-fig, axes = plt.subplots(1, 3, figsize=(6, 2))
-
-# Panel 1: Test information functions
-designs = [('Uniform', beta_uniform, '#2ca02c'),
-           ('Centered', beta_center, '#1f77b4'),
-           ('Extreme', beta_extreme, '#d62728')]
-
-for name, betas, color in designs:
-    info = test_info(theta_grid, betas)
-    axes[0].plot(theta_grid, info, color=color, linewidth=1.5, label=name)
-
-axes[0].set_xlabel('Ability (θ)')
-axes[0].set_ylabel('Test Information')
-axes[0].set_title('Test Information Function')
-axes[0].legend(fontsize=7)
-axes[0].grid(True, alpha=0.3)
-
-# Panel 2: Conditional reliability
-for name, betas, color in designs:
-    info = test_info(theta_grid, betas)
-    rho = np.clip(cond_reliability(info, sigma_theta**2), 0, 1)
-    axes[1].plot(theta_grid, rho, color=color, linewidth=1.5, label=name)
-
-axes[1].axhline(0.90, color='black', linestyle='--', linewidth=1, alpha=0.5)
-axes[1].set_xlabel('Ability (θ)')
-axes[1].set_ylabel('Conditional Reliability')
-axes[1].set_title('Reliability Across Ability')
-axes[1].legend(fontsize=7)
-axes[1].grid(True, alpha=0.3)
-axes[1].set_ylim(0, 1)
-
-# Panel 3: Items needed to reach target reliability
-target_rho = 0.90
-theta_test_points = np.linspace(-2.5, 2.5, 50)
-
-items_needed_uniform = []
-items_needed_adaptive = []
-
-for theta_t in theta_test_points:
-    # Uniform: add items from uniform pool one at a time
-    betas_sorted = sorted(beta_uniform, key=lambda b: abs(b - theta_t))
-    for k in range(1, M + 1):
-        info = sum(sigmoid(theta_t - b) * (1 - sigmoid(theta_t - b)) for b in betas_sorted[:k])
-        rho = 1 - 1 / (info * sigma_theta**2 + 1e-10)
-        if rho >= target_rho:
-            items_needed_uniform.append(k)
-            break
-    else:
-        items_needed_uniform.append(M)
-
-    # Adaptive: always pick item closest to theta
-    all_betas = np.random.normal(0, 1.5, 100)
-    betas_adapt = sorted(all_betas, key=lambda b: abs(b - theta_t))
-    for k in range(1, len(betas_adapt) + 1):
-        info = sum(sigmoid(theta_t - b) * (1 - sigmoid(theta_t - b)) for b in betas_adapt[:k])
-        rho = 1 - 1 / (info * sigma_theta**2 + 1e-10)
-        if rho >= target_rho:
-            items_needed_adaptive.append(k)
-            break
-    else:
-        items_needed_adaptive.append(len(betas_adapt))
-
-axes[2].plot(theta_test_points, items_needed_uniform, color='#1f77b4',
-             linewidth=1.5, label='Fixed (uniform)')
-axes[2].plot(theta_test_points, items_needed_adaptive, color='#2ca02c',
-             linewidth=1.5, label='Adaptive')
-axes[2].set_xlabel('Ability (θ)')
-axes[2].set_ylabel('Items Needed')
-axes[2].set_title(f'Items for ρ ≥ {target_rho}')
-axes[2].legend(fontsize=7)
-axes[2].grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.show()
+plt.figure(figsize=(3.2, 2))
+plt.plot(list(counts), acc, 'o-', color='steelblue', lw=1.5, ms=5)
+plt.xlabel('number of judges'); plt.ylabel('accuracy'); plt.xticks(list(counts))
+plt.title('Majority-vote accuracy'); plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
+print(f"single judge = {acc[0]:.3f},  5-judge majority = {acc[-1]:.3f}")
 ```
 
-The practical implication is clear: a single reliability number can be misleading. A benchmark might report $\alpha = 0.92$ overall, but have conditional reliability below 0.80 for the frontier models that matter most---because all the items are too easy for them. The IRT framework provides the tools to diagnose and fix this problem, connecting directly to the efficient measurement methods of @sec-efficient.
+**Bias is not noise.** Everything so far---CTT, G-theory, agreement coefficients---measures *random* error, which averages out with more data. Judges also have *systematic* errors that do not: position bias (favoring the response shown first [@wang2023large]), length preference, self-preference. These shift the verdict, not its variance, so they are invisible to reliability.
+
+::: {.callout-important title="Systematic vs. random error"}
+Reliability analysis detects only *random* error---zero-mean, averaging away with replication. A systematic error like position bias is consistent, so a biased judge can be perfectly *reliable* yet *invalid*, and high inter-judge agreement does not rescue it: two judges can share the same bias. On a balanced benchmark such bias is even invisible to aggregate accuracy, because favoring "first" helps exactly as often as it hurts. Detecting it requires the validity tools of @sec-validity, or a design trick: swap the presentation order. A position-biased judge then contradicts itself, and the contradiction rate rises with the bias.
+:::
+
+```{pyodide-python}
+#| label: lj-position-bias
+#| autorun: true
+#| fig-cap: "Order-inconsistency rate (the judge's two verdicts disagree when the responses are swapped) against position-bias strength. Bias is invisible to a single-order run but shows up as self-contradiction across orders---which is also why averaging both orders cancels it."
+np.random.seed(0)
+N, q = 4000, 0.80
+t = (np.random.rand(N) > 0.5).astype(int)        # 1 if the canonical-first response is better
+
+def says_first(first_better, b):                  # does the judge call the displayed-first better?
+    v = first_better if np.random.rand() < q else 1 - first_better
+    return 1 if np.random.rand() < b else v       # position bias overrides toward "first"
+
+bias_levels = np.linspace(0, 0.3, 16)
+inconsistency = [sum(says_first(t[k], b) == says_first(1 - t[k], b) for k in range(N)) / N
+                 for b in bias_levels]
+
+plt.figure(figsize=(3.2, 2))
+plt.plot(bias_levels, inconsistency, '-', color='#d62728', lw=1.8)
+plt.xlabel('position-bias strength'); plt.ylabel('order-inconsistency rate')
+plt.title('Bias exposed by swapping order'); plt.grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+print(f"inconsistency: no bias = {inconsistency[0]:.3f}, strong bias = {inconsistency[-1]:.3f}")
+```
+
+**Designing a judge protocol.** The remedies combine the D-study with bias control: aggregate several independent judges; randomize the presentation order and average, cancelling position bias into noise; score at temperature 0 to remove sampling stochasticity; write concrete rubrics, which shrink $\sigma^2_r$ and $\sigma^2_{ir}$; and calibrate against a human gold set, since agreement alone cannot catch a bias the judges share.
 
 
-## Designing Reliable AI Evaluations {#sec-reliable-design}
+### Design principles {#sec-reliable-design}
 
-The theory developed in this chapter yields concrete design principles for AI evaluation:
+The theory developed in this chapter yields concrete design principles:
 
-1. **Know your dominant noise source.** Run a G-study before committing to an evaluation design. If annotator variability dominates, invest in more raters or clearer rubrics. If item sampling variability dominates, use more items or D-optimal item selection.
+1. **Know your dominant source of variability** (@sec-g-d-studies). Run a G-study before committing to a design. If rater variability dominates, invest in more raters or clearer rubrics; if item-sampling variability dominates, use more items or D-optimal selection.
 
-2. **Match items to the ability range of interest.** Conditional reliability shows that measurement precision varies across ability levels. If the goal is to rank frontier models, the benchmark needs items that are difficult enough to discriminate among them.
+2. **Match items to the ability range of interest** (@sec-irt-reliability). Conditional reliability varies across ability levels; ranking frontier models needs items hard enough to discriminate among them.
 
-3. **Use multiple judges when scoring is subjective.** The G-theory D-study quantifies the improvement from adding judges. Three independent judges with majority vote is substantially more reliable than a single judge, and often more cost-effective than adding more items.
+3. **Use multiple judges when scoring is subjective** (@sec-llm-judge). The D-study quantifies the gain: three independent judges with majority vote are substantially more reliable than one, and often cheaper than more items.
 
-4. **Report confidence intervals, not just point estimates.** The SEM provides a natural uncertainty band. Two models whose scores overlap within $\pm 2 \times \text{SEM}$ may not be meaningfully different. Leaderboards should indicate which ranking differences are statistically reliable.
+4. **Report confidence intervals, not just point estimates** (@sec-sem). Two models whose scores overlap within $\pm 2\,\text{SEM}$ may not be meaningfully different; leaderboards should mark which ranking differences are reliable.
 
-5. **Control what you can.** Use temperature 0 for deterministic scoring. Randomize prompt formats and average across them. Standardize rubrics. These measures eliminate sources of $\sigma^2_E$ rather than averaging over them.
+5. **Control what you can** (@sec-noise-sources). Score at temperature 0, randomize and average over prompt formats, standardize rubrics---these *eliminate* sources of variability rather than averaging over them.
 
-6. **Separate reliability from validity.** High reliability is necessary but not sufficient. A benchmark can be highly reliable while systematically measuring the wrong thing (contamination, shortcut features, length bias). The tools for detecting these problems are in @sec-validity.
+6. **Separate reliability from validity** (@sec-validity). High reliability is necessary but not sufficient: a benchmark can be reliable while systematically measuring the wrong thing (contamination, shortcut features, length bias).
 
-7. **Audit items using reliability diagnostics.** Individual items can degrade overall reliability. Items with negative item-total correlations *reduce* Cronbach's $\alpha$ --- removing them improves reliability. @truong2025bugs demonstrate that this classical item analysis principle is a powerful tool for finding benchmark bugs: items with negative tetrachoric correlations or low Mokken scalability coefficients often have incorrect answer keys, ambiguous wording, or grading errors. On nine benchmarks, reliability-based flagging achieves up to 84% precision at the top-50 flagged items. The intuition is simple: under the Rasch model (or any unidimensional model), all items should correlate positively with each other and with the total score. Violations indicate items that are measuring something different from the rest of the benchmark --- whether due to multidimensionality or outright errors.
-
-
-## Discussion Questions {#sec-reliability-discussion}
-
-1. **Determinism and reliability.** At temperature 0, a language model gives the same output every time. Does this mean the evaluation has perfect test-retest reliability? What sources of unreliability remain even with deterministic models?
-
-2. **Reliability vs. number of items.** The Spearman-Brown formula predicts that longer tests are more reliable. AI benchmarks often have thousands of items---far more than typical educational tests. Does this mean AI benchmarks automatically have high reliability? What assumptions might be violated?
-
-3. **LLM-as-a-judge tradeoffs.** Using GPT-4 as a judge is cheaper than human annotation but introduces model-specific biases. Under what conditions would you prefer a less accurate but more reliable judge? How does G-theory help formalize this tradeoff?
-
-4. **Reliability across model generations.** When a new generation of models is released, the reliability of an existing benchmark may change (because item difficulties shift relative to model abilities). How should benchmark developers monitor and maintain reliability over time?
-
-5. **The reliability-validity tension.** A benchmark consisting of 1000 copies of the same easy question would have extremely high internal consistency but near-zero validity. How does this pathological example illustrate the distinction between reliability and validity? What design principles prevent this?
-
-6. **Item-level diagnostics and benchmark maintenance.** @truong2025bugs find that removing items with negative item-total correlations improves both reliability and validity of AI benchmarks. But removing items also shortens the test, which the Spearman-Brown formula predicts will *reduce* reliability. Under what conditions does the net effect of item removal improve reliability? How would you design an iterative item screening procedure that balances these competing pressures?
-
+7. **Audit items, don't just score them** (@sec-item-analysis). Reliability diagnostics flag broken benchmark items---negative item--total correlations signal flipped keys, ambiguity, or grading bugs.
 
 ## Bibliographic Notes {#sec-reliability-bib}
 
-### Classical Test Theory
+**Classical test theory.** The foundational reference is @lord1968statistical, which formalized CTT axiomatically. @cronbach1951coefficient introduced coefficient alpha, the most widely used reliability statistic. The Spearman-Brown formula dates to Spearman (1910) and Brown (1910) independently. For the connection between CTT and IRT-based reliability, see Chapter 7 of @hambleton1985irt.
 
-The foundational reference is @lord1968statistical, which formalized CTT axiomatically. @cronbach1951coefficient introduced coefficient alpha, the most widely used reliability statistic. The Spearman-Brown formula dates to Spearman (1910) and Brown (1910) independently. For the connection between CTT and IRT-based reliability, see Chapter 7 of @hambleton1985irt.
+**Generalizability theory.** G-theory was developed by @cronbach1972dependability, building on earlier work by Cronbach on the multiple sources of measurement error. @brennan2001generalizability provides the comprehensive modern treatment. @shavelson1991generalizability offers an accessible primer. The connection between G-theory and mixed-effects models makes modern software (e.g., `lme4` in R) directly applicable to G-studies.
 
-### Generalizability Theory
+**Inter-rater reliability.** @cohen1960coefficient introduced Cohen's kappa. @fleiss1971measuring extended it to multiple raters. @krippendorff2011computing provides Krippendorff's alpha, which handles missing data, ordinal scales, and any number of raters. For a comprehensive treatment with practical guidance, see @gwet2014handbook.
 
-G-theory was developed by @cronbach1972dependability, building on earlier work by Cronbach on the multiple sources of measurement error. @brennan2001generalizability provides the comprehensive modern treatment. @shavelson1991generalizability offers an accessible primer. The connection between G-theory and mixed-effects models makes modern software (e.g., `lme4` in R) directly applicable to G-studies.
+**LLM-as-a-judge.** @zheng2023judging introduced the LLM-as-a-judge paradigm and the MT-Bench evaluation framework. Position bias was documented by @wang2023large. @shankar2024validates addresses the question of validating LLM judges against human preferences. For prompt sensitivity in evaluation, see @mizrahi2024state. @biderman2024lessons discusses reproducibility challenges in language model evaluation more broadly.
 
-### Inter-Rater Reliability
-
-@cohen1960coefficient introduced Cohen's kappa. @fleiss1971measuring extended it to multiple raters. @krippendorff2011computing provides Krippendorff's alpha, which handles missing data, ordinal scales, and any number of raters. For a comprehensive treatment with practical guidance, see @gwet2014handbook.
-
-### LLM-as-a-Judge
-
-@zheng2023judging introduced the LLM-as-a-judge paradigm and the MT-Bench evaluation framework. Position bias was documented by @wang2023large. @shankar2024validates addresses the question of validating LLM judges against human preferences. For prompt sensitivity in evaluation, see @mizrahi2024state. @biderman2024lessons discusses reproducibility challenges in language model evaluation more broadly.
-
-### Item-Level Reliability Diagnostics
-
-Classical item analysis --- computing item-total correlations, inter-item correlations, and Mokken scalability coefficients to identify misfitting items --- is a standard step in educational test development. @truong2025bugs apply these techniques to AI benchmarks at scale, showing that items flagged by negative tetrachoric correlations or low scalability coefficients frequently contain genuine errors (incorrect keys, ambiguous wording, grading bugs). Their framework is grounded in the Rasch model's sufficiency property (@sec-sufficiency): if sum scores are sufficient statistics for ability, all inter-item correlations must be non-negative, making violations a principled diagnostic signal. They recommend evaluating with 60--80 LLMs from at least 10 organizations for reliable detection.
-
+**Item-level diagnostics.** Classical item analysis --- computing item-total correlations, inter-item correlations, and Mokken scalability coefficients to identify misfitting items --- is a standard step in educational test development. @truong2025bugs apply these techniques to AI benchmarks at scale, showing that items flagged by negative tetrachoric correlations or low scalability coefficients frequently contain genuine errors (incorrect keys, ambiguous wording, grading bugs). Their framework is grounded in the Rasch model's sufficiency property: if sum scores are sufficient statistics for ability, all inter-item correlations must be non-negative, making violations a principled diagnostic signal (@sec-item-analysis). They recommend evaluating with 60--80 LLMs from at least 10 organizations for reliable detection.
 
 ## Exercises {#sec-reliability-exercises}
 
-### Theoretical Exercises
+The first six exercises are conceptual; the rest involve derivation or implementation, marked $\star$ (straightforward) to $\star\star\star$ (challenging).
 
-**Exercise 4.1** ($\star$): Starting from the CTT model $X = T + E$ with the standard assumptions ($\mathbb{E}[E] = 0$, $\text{Cov}(T, E) = 0$), derive that $\rho_{XX'} = \sigma^2_T / \sigma^2_X$. Show that reliability equals the squared correlation between observed and true scores: $\rho_{XX'} = r^2_{XT}$.
+1. **Determinism and reliability.** At temperature 0, a language model gives the same output every time. Does this mean the evaluation has perfect test--retest reliability? What sources of unreliability remain even with deterministic models?
 
-**Exercise 4.2** ($\star\star$): Derive the Spearman-Brown prophecy formula. If a test of length $M$ has reliability $\rho$, show that a test of length $KM$ (made of $K$ parallel forms) has reliability $\rho_K = K\rho / (1 + (K-1)\rho)$. What happens as $K \to \infty$?
+2. **Reliability vs. number of items.** Spearman--Brown predicts that longer tests are more reliable, and AI benchmarks often have thousands of items---far more than typical educational tests. Does this make them automatically reliable? What assumptions might be violated?
 
-**Exercise 4.3** ($\star\star$): In a G-theory $p \times i \times r$ design, derive the formula for the generalizability coefficient $G$. Show that increasing $n_r$ reduces the contribution of rater variance but not item variance, and vice versa.
+3. **LLM-as-a-judge tradeoffs.** Using an LLM as a judge is cheaper than human annotation but introduces model-specific biases. Under what conditions would you prefer a less accurate but more reliable judge? How does generalizability theory formalize the tradeoff?
 
-**Exercise 4.4** ($\star\star$): Show that Cronbach's alpha is the mean of all possible split-half reliabilities (after Spearman-Brown correction) for a test with $M$ items. Under what conditions is alpha a lower bound for reliability?
+4. **Reliability across model generations.** When a new generation of models is released, a benchmark's reliability can change as item difficulties shift relative to model abilities. How should benchmark developers monitor and maintain reliability over time?
 
-### Computational Exercises
+5. **The reliability--validity tension.** A benchmark of 1000 copies of the same easy question would have extremely high internal consistency but near-zero validity. How does this illustrate the distinction, and what design principles prevent it?
 
-**Exercise 4.5** ($\star\star$): Implement a G-study for a model $\times$ item $\times$ rater design. Given a 3-way data array $X[p, i, r]$, estimate all variance components using expected mean squares. Apply your implementation to simulated data and verify that the estimates recover the true variance components.
+6. **Item removal and the Spearman--Brown tension.** @truong2025bugs find that removing items with negative item--total correlations improves both reliability and validity, yet removing items shortens the test, which Spearman--Brown says *reduces* reliability. When does item removal help on net, and how would you design an iterative screening procedure that balances the two?
 
-**Exercise 4.6** ($\star\star$): Simulate an LLM-as-a-judge evaluation with 5 judges of varying quality (agreement with gold standard ranging from 0.70 to 0.90). Compute: (a) pairwise Cohen's kappa for all judge pairs, (b) accuracy with majority vote for 1, 3, and 5 judges. How does reliability change if all judges share the same systematic bias (e.g., preferring longer responses)?
+7. **Deriving reliability** ($\star$). Starting from the CTT model $X = T + E$ with the standard assumptions ($\mathbb{E}[E] = 0$, $\operatorname{Cov}(T, E) = 0$), derive $\rho_{XX'} = \sigma^2_T / \sigma^2_X$, and show reliability equals the squared correlation between observed and true scores, $\rho_{XX'} = r^2_{XT}$.
 
-**Exercise 4.7** ($\star\star\star$): Implement a D-study optimizer. Given variance components and cost per item ($c_i$) and cost per rater-item pair ($c_r$), find the cheapest evaluation design $(n_i, n_r)$ that achieves $G \geq G^*$. Solve this as a constrained optimization problem and visualize the cost surface.
+8. **Spearman--Brown** ($\star\star$). Derive the prophecy formula: a test of length $KM$ built from $K$ parallel forms of a length-$M$ test with reliability $\rho$ has reliability $\rho_K = K\rho / (1 + (K-1)\rho)$. What happens as $K \to \infty$?
 
-### Discussion Exercises
+9. **Generalizability coefficient** ($\star\star$). In a $p \times i \times r$ design, derive the generalizability coefficient $G$, and show that increasing $n_r$ reduces the contribution of rater variance but not item variance, and vice versa.
 
-**Exercise 4.8**: The Chatbot Arena uses a single human preference judgment per comparison. Using G-theory, analyze the reliability of Elo ratings derived from this design. How many comparisons per model pair would be needed to achieve $G \geq 0.90$? What are the cost implications?
+10. **Cronbach's $\alpha$ as a mean split-half** ($\star\star$). Show that $\alpha$ is the mean of all possible split-half reliabilities (after Spearman--Brown correction) for an $M$-item test. Under what conditions is $\alpha$ a lower bound for reliability?
 
-**Exercise 4.9** ($\star\star$): Implement the item-level diagnostic pipeline from @truong2025bugs. Simulate a Rasch benchmark with $N = 80$ models and $M = 200$ items. Introduce 20 "buggy" items: 10 with flipped answer keys (replace $Y_{ij}$ with $1 - Y_{ij}$) and 10 with random responses (independent of $\theta$). Compute: (a) item-total correlations, (b) average tetrachoric correlations, and (c) Mokken scalability coefficients $H_j$ for all items. Rank items by each statistic. What is the precision@20 and recall@20 for each method? How does performance change as you vary the number of LLMs from 10 to 100?
+11. **G-study implementation** ($\star\star$). Implement a G-study for a model$\times$item$\times$rater design: given a 3-way array $X[p,i,r]$, estimate all variance components by expected mean squares, and verify on simulated data that the estimates recover the truth.
+
+12. **LLM-judge simulation** ($\star\star$). Simulate an LLM-as-a-judge evaluation with 5 judges of varying quality (agreement with a gold standard from 0.70 to 0.90). Compute (a) pairwise Cohen's $\kappa$ and (b) majority-vote accuracy for 1, 3, and 5 judges. How does reliability change if all judges share a systematic bias, such as preferring longer responses?
+
+13. **D-study optimizer** ($\star\star\star$). Given variance components and costs per item ($c_i$) and per rater--item pair ($c_r$), find the cheapest design $(n_i, n_r)$ achieving $G \geq G^\star$. Solve it as a constrained optimization and visualize the cost surface.
+
+14. **Chatbot Arena reliability** ($\star\star$). The Chatbot Arena uses a single human preference judgment per comparison. Using generalizability theory, analyze the reliability of the resulting Elo ratings: how many comparisons per model pair would reach $G \geq 0.90$, and what are the cost implications?
+
+15. **Item-bug detection** ($\star\star$). Implement the diagnostic of @truong2025bugs: simulate a Rasch benchmark with $N = 80$ models and $M = 200$ items, introduce 20 buggy items (10 with flipped keys, 10 answered at random), and rank items by (a) item--total correlation, (b) average tetrachoric correlation, and (c) Mokken $H_j$. Report precision@20 and recall@20 for each, and study how performance varies as the number of models grows from 10 to 100.

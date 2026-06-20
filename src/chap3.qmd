@@ -44,7 +44,7 @@ pyodide:
 By the end of this chapter, you will be able to:
 
 1. **Derive** the log-likelihood function for the Rasch model and explain the role of person and item parameters.
-2. **Implement** maximum likelihood estimation (MLE) for IRT models using gradient descent and L-BFGS optimization.
+2. **Implement** maximum likelihood estimation (MLE) for IRT models using gradient ascent and L-BFGS optimization.
 3. **Explain** the identifiability problem in IRT and describe standard solutions (sum-to-zero, fixed anchor).
 4. **Distinguish** between joint MLE, conditional MLE, and marginal MLE, and articulate when each is appropriate.
 5. **Implement** the Expectation-Maximization (EM) algorithm for Rasch model estimation and explain the E-step and M-step.
@@ -130,7 +130,7 @@ $$ {#eq-rasch-prob}
 
 where $\theta_i$ is the ability of model $i$ and $\beta_j$ is the difficulty of item $j$.
 
-Under the assumption of *local independence*---that responses are conditionally independent given the latent parameters---the likelihood of the entire response matrix is:
+Under the *local independence* assumption introduced in @sec-local-independence---responses are conditionally independent given the latent parameters---the likelihood of the entire response matrix factorizes into a product of per-observation terms:
 
 $$
 L(\theta, \beta \mid Y) = \prod_{i=1}^N \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j)^{Y_{ij}} [1 - P(Y_{ij} \mid \theta_i, \beta_j)]^{1-Y_{ij}}
@@ -167,9 +167,34 @@ The gradient is simply the sum of **residuals**: observed minus predicted. If mo
 :::
 
 
-### Implementation with Gradient Descent {#sec-gd-implementation}
+### The Identifiability Problem {#sec-identifiability}
 
-Let us implement MLE via gradient descent on synthetic data. First, we generate a response matrix from known parameters:
+Before implementing the optimizer, we must address a subtlety that would otherwise cause the iterates to drift indefinitely without improving fit.
+
+::: {.callout-warning title="The Identifiability Problem"}
+The Rasch model has a fundamental identifiability issue: if we add a constant $c$ to all abilities and all difficulties, the likelihood is unchanged:
+
+$$
+P(Y_{ij}=1 \mid \theta_i + c, \beta_j + c) = \sigma((\theta_i + c) - (\beta_j + c)) = \sigma(\theta_i - \beta_j)
+$$
+
+The parameters are only identified up to an additive constant. This means infinitely many parameter values produce the same likelihood.
+
+**Common Solutions:**
+
+1. **Sum-to-zero constraint:** Set $\sum_i \theta_i = 0$ or $\sum_j \beta_j = 0$
+2. **Fixed anchor:** Set one parameter (e.g., $\beta_1 = 0$) as reference
+3. **Prior constraint:** Use Bayesian priors centered at zero
+
+For AI benchmarks, we typically use sum-to-zero: a model with $\theta = 0$ has "average" ability relative to the calibration sample.
+:::
+
+We will adopt the sum-to-zero constraint below, re-centering $\hat{\theta}$ and $\hat{\beta}$ after each gradient step so the iterates stay anchored.
+
+
+### Implementation with Gradient Ascent {#sec-gd-implementation}
+
+Let us implement MLE via gradient ascent on synthetic data. First, we generate a response matrix from known parameters:
 
 {{< include _plt_setup.qmd >}}
 
@@ -226,12 +251,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-Now we implement MLE via gradient descent:
+Next, we define helper functions for the log-likelihood and its gradients derived in @sec-gradient:
 
 ```{pyodide-python}
-#| label: mle-gradient-descent
+#| label: rasch-helpers
 #| autorun: true
-#| fig-cap: "Convergence of gradient descent for Rasch model MLE."
 
 def rasch_log_likelihood(theta, beta, Y):
     """Compute Rasch model log-likelihood."""
@@ -245,6 +269,14 @@ def rasch_gradients(theta, beta, Y):
     grad_theta = (Y - P).sum(axis=1)
     grad_beta = (P - Y).sum(axis=0)
     return grad_theta, grad_beta
+```
+
+With the helpers in place, we run the gradient ascent loop. At each step we take a gradient step and then apply the sum-to-zero re-centering described in @sec-identifiability:
+
+```{pyodide-python}
+#| label: mle-gradient-ascent
+#| autorun: true
+#| fig-cap: "Convergence of gradient ascent for Rasch model MLE."
 
 # Initialize parameters at zero
 theta_hat = np.zeros(N)
@@ -312,37 +344,14 @@ print(f"Correlation with true difficulties: {corr_beta:.4f}")
 ```
 
 
-### The Identifiability Problem {#sec-identifiability}
-
-::: {.callout-warning title="The Identifiability Problem"}
-The Rasch model has a fundamental identifiability issue: if we add a constant $c$ to all abilities and all difficulties, the likelihood is unchanged:
-
-$$
-P(Y_{ij}=1 \mid \theta_i + c, \beta_j + c) = \sigma((\theta_i + c) - (\beta_j + c)) = \sigma(\theta_i - \beta_j)
-$$
-
-The parameters are only identified up to an additive constant. This means infinitely many parameter values produce the same likelihood.
-
-**Common Solutions:**
-
-1. **Sum-to-zero constraint:** Set $\sum_i \theta_i = 0$ or $\sum_j \beta_j = 0$
-2. **Fixed anchor:** Set one parameter (e.g., $\beta_1 = 0$) as reference
-3. **Prior constraint:** Use Bayesian priors centered at zero
-
-For AI benchmarks, we typically use sum-to-zero: a model with $\theta = 0$ has "average" ability relative to the calibration sample.
-:::
-
-Without addressing identifiability, gradient descent may drift indefinitely. The re-centering step in our implementation ensures parameters remain anchored.
-
-
 ### L-BFGS Optimization {#sec-lbfgs}
 
-While gradient descent is intuitive, quasi-Newton methods like L-BFGS converge much faster by approximating second-order information:
+While gradient ascent is intuitive, quasi-Newton methods like L-BFGS converge much faster by approximating second-order information. L-BFGS is conventionally formulated as a minimization routine, so we negate the log-likelihood and minimize the resulting objective:
 
 ```{pyodide-python}
 #| label: lbfgs-optimization
 #| autorun: true
-#| fig-cap: "L-BFGS achieves faster convergence than gradient descent."
+#| fig-cap: "L-BFGS achieves faster convergence than gradient ascent."
 
 from scipy.optimize import minimize
 
@@ -392,8 +401,8 @@ print(f"L-BFGS converged: {result.success}")
 print(f"Final log-likelihood: {-result.fun:.2f}")
 print(f"Iterations: {result.nit}")
 
-# Compare to gradient descent
-print(f"\nCorrelation with GD estimates:")
+# Compare to gradient ascent
+print(f"\nCorrelation with GA estimates:")
 print(f"  Abilities: {np.corrcoef(theta_hat, theta_lbfgs)[0,1]:.6f}")
 print(f"  Difficulties: {np.corrcoef(beta_hat, beta_lbfgs)[0,1]:.6f}")
 ```
@@ -405,11 +414,17 @@ The MLE approach we have discussed so far is called *joint maximum likelihood es
 
 ### Joint MLE (JMLE) {#sec-jmle}
 
-JMLE simultaneously estimates all parameters by maximizing @eq-log-likelihood. While intuitive, JMLE suffers from the *incidental parameter problem*: as the number of items $M$ remains fixed and the number of persons $N$ grows, the item parameter estimates $\hat{\beta}$ are inconsistent---they do not converge to the true values.
+JMLE simultaneously estimates all parameters by maximizing @eq-log-likelihood. While intuitive, JMLE suffers from the *incidental parameter problem* [@neyman1948consistent]: as the number of items $M$ remains fixed and the number of persons $N$ grows, the item parameter estimates $\hat{\beta}$ are inconsistent---they do not converge to the true values. @haberman1977maximum proves this formally for the Rasch model; @lancaster2000incidental surveys how the problem generalizes across statistics and econometrics.
 
-This happens because each person parameter $\theta_i$ is estimated from only $M$ observations (their responses to $M$ items), and these "incidental" person parameters introduce bias into the item estimates.
+::: {.callout-note title="Intuition: Why More Data Does Not Fix the Bias"}
+For a standard estimation problem, more data means better estimates: the law of large numbers washes out idiosyncratic noise and $\hat{\beta}$ converges to the truth. One might hope the same holds here: as we add more test takers, the sample information about each item $\beta_j$ grows without bound, so $\hat{\beta}_j$ should become unbiased.
 
-For AI benchmarks with many items (typically $M > 100$), this bias is small in practice. But for smaller tests, JMLE can be problematic.
+The catch is that each new test taker also brings a new parameter $\theta_i$ to estimate. Unlike $\beta_j$, the person parameter $\theta_i$ is *only* estimated from that person's $M$ responses --- adding more test takers does **not** give us more information about any existing $\theta_i$. These per-person parameters are "incidental": their number grows with $N$, but their precision does not.
+
+When we plug the noisy $\hat{\theta}_i$ back into the likelihood to update $\hat{\beta}_j$, the bias in the person estimates leaks into the item estimates, and the two biases do not cancel. As a result, $\hat{\beta}_j$ is biased by a factor that depends only on $M$ --- more persons cannot rescue us; only more *items per person* can.
+:::
+
+For AI benchmarks with many items (typically $M > 100$), this bias is small in practice. But for smaller tests, JMLE can be problematic, which motivates the conditional and marginal approaches below.
 
 ### Conditional MLE (CMLE) {#sec-cmle}
 
@@ -1297,7 +1312,7 @@ The strong AUC on row holdout (unseen models) confirms that model behavior is we
 
 ### Maximum Likelihood Estimation
 
-The theory of maximum likelihood for IRT models is developed comprehensively in @lord1968statistical and @birnbaum1968some. The joint MLE approach and its limitations (incidental parameter problem) are discussed in @neyman1948consistent. For modern computational approaches, see @baker2004item.
+The theory of maximum likelihood for IRT models is developed comprehensively in @lord1968statistical and @birnbaum1968some. The joint MLE approach and its limitations (incidental parameter problem) were first formalized in @neyman1948consistent; @haberman1977maximum proves the inconsistency specifically for the Rasch model, and @lancaster2000incidental provides a modern survey. For modern computational approaches, see @baker2004item.
 
 ### Conditional and Marginal MLE
 
@@ -1350,7 +1365,7 @@ Compare the posterior estimates to those from Metropolis-Hastings.
 
 ### Discussion Exercises
 
-**Exercise 2.9:** Compare the convergence of gradient descent, L-BFGS, and Adam on a Rasch model estimation problem. Which converges fastest? Which is most robust to different initializations?
+**Exercise 2.9:** Compare the convergence of gradient ascent, L-BFGS, and Adam on a Rasch model estimation problem. Which converges fastest? Which is most robust to different initializations?
 
 **Exercise 2.10:** Investigate the sensitivity of MLE and Bayesian estimation to model misspecification. Generate data from a 2PL model but fit a Rasch model. How do the estimated abilities compare? When does the misspecification matter most?
 

@@ -126,7 +126,7 @@ def sigmoid(x):
 
 theta_range = np.linspace(-4, 4, 200)
 
-fig, axes = plt.subplots(1, 2, figsize=(6, 2))
+fig, axes = plt.subplots(1, 1, figsize=(2, 2))
 
 # Information curves for different item difficulties
 difficulties = [-2, -1, 0, 1, 2]
@@ -144,6 +144,37 @@ axes[0].set_title('Item Information Curves')
 axes[0].legend(fontsize=7)
 axes[0].grid(True, alpha=0.3)
 
+plt.tight_layout()
+plt.show()
+```
+
+
+### Computerized Adaptive Testing {#sec-cat}
+
+Computerized Adaptive Testing (CAT) is the sequential application of optimal item selection. Rather than administering a fixed test to all models, CAT adapts the test in real time: after each response, it selects the next item that would be most informative given what we have learned so far.
+
+The CAT procedure iterates four steps:
+
+1. **Select** the most informative item given the current ability estimate
+2. **Administer** the item and observe the response
+3. **Update** the ability estimate using the new data
+4. **Check** a stopping criterion; if not met, return to step 1
+
+::: {.callout-important title="Why Fisher Information for Item Selection?"}
+Fisher information measures how much a response to item $j$ tells us about $\theta$:
+
+- **High information**: The item difficulty is well-matched to the ability level
+- **Low information**: The item is too easy or too hard
+
+Asking a frontier model to answer $1 + 1$ or a small model to prove the Riemann hypothesis provides almost no information. The most informative items are those where the model has roughly a 50% chance of success.
+:::
+
+
+```{pyodide-python}
+#| label: fisher-information-design
+#| autorun: true
+#| fig-cap: "Fisher information curves illustrate the key design principle: items are most informative when their difficulty matches the test-taker's ability."
+
 # Cumulative information: adaptive vs random
 np.random.seed(42)
 N, M = 100, 50
@@ -152,6 +183,7 @@ beta_true = np.random.normal(0, 1.5, M)
 
 theta_test = 0.5
 n_items = 20
+fig, axes = plt.subplots(1, 1, figsize=(2, 2))
 
 # Adaptive: choose items closest to current estimate
 beta_available = beta_true.copy()
@@ -187,27 +219,6 @@ axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 ```
-
-
-### Computerized Adaptive Testing {#sec-cat}
-
-Computerized Adaptive Testing (CAT) is the sequential application of optimal item selection. Rather than administering a fixed test to all models, CAT adapts the test in real time: after each response, it selects the next item that would be most informative given what we have learned so far.
-
-The CAT procedure iterates four steps:
-
-1. **Select** the most informative item given the current ability estimate
-2. **Administer** the item and observe the response
-3. **Update** the ability estimate using the new data
-4. **Check** a stopping criterion; if not met, return to step 1
-
-::: {.callout-important title="Why Fisher Information for Item Selection?"}
-Fisher information measures how much a response to item $j$ tells us about $\theta$:
-
-- **High information**: The item difficulty is well-matched to the ability level
-- **Low information**: The item is too easy or too hard
-
-Asking a frontier model to answer $1 + 1$ or a small model to prove the Riemann hypothesis provides almost no information. The most informative items are those where the model has roughly a 50% chance of success.
-:::
 
 
 ### CAT Implementation {#sec-cat-implementation}

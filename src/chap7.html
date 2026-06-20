@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8d83524533cf2fa443ab6df3a53e67f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-a28b74086d39a9f8f816743c2505fd82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-8d83524533cf2fa443ab6df3a53e67f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -1332,7 +1332,7 @@ V(\pi) = \mathbb{E}_{x \sim P, a \sim \pi(\cdot \mid x)}[r(x, a)]
 \hat{\mu}_{\text{PPI}} = \frac{1}{N} \sum_{i \in \mathcal{D}_N} \hat{Y}_i + \frac{1}{n} \sum_{i \in \mathcal{D}_n} (Y_i - \hat{Y}_i)
 \tag{7.5}\]</span></span></p>
 <p>The first term is the direct method estimate using the cheap predictions. The second term is the bias correction: it estimates the systematic error in <span class="math inline">\(\hat{Y}\)</span> using the labeled subsample. This is exactly the DR structure: imputation + correction.</p>
-<p>The connection to the cold-start pipeline in <a href="chap2.html#sec-cold-start" class="quarto-xref"><span>Section 2.6</span></a> is direct. The PPE (Prediction-Powered Evaluation) approach from Chapter 2 learns a mapping from model embeddings and metadata to IRT parameters, producing predictions <span class="math inline">\(\hat{Y}_{ij}\)</span> for unseen model-item pairs. PPI provides the debiasing step: use a small set of actual evaluations to correct the PPE predictions, yielding valid confidence intervals for model performance. The PPE predictions serve as the imputation model <span class="math inline">\(\hat{r}\)</span>; the actual evaluations provide the labeled correction <span class="math inline">\(Y - \hat{Y}\)</span>.</p>
+<p>The connection to the cold-start pipeline in <span class="quarto-unresolved-ref">?sec-cold-start</span> is direct. The PPE (Prediction-Powered Evaluation) approach from Chapter 2 learns a mapping from model embeddings and metadata to IRT parameters, producing predictions <span class="math inline">\(\hat{Y}_{ij}\)</span> for unseen model-item pairs. PPI provides the debiasing step: use a small set of actual evaluations to correct the PPE predictions, yielding valid confidence intervals for model performance. The PPE predictions serve as the imputation model <span class="math inline">\(\hat{r}\)</span>; the actual evaluations provide the labeled correction <span class="math inline">\(Y - \hat{Y}\)</span>.</p>
 </section>
 <section id="sec-importance-weighting" class="level3" data-number="7.4.4">
 <h3 data-number="7.4.4" class="anchored" data-anchor-id="sec-importance-weighting"><span class="header-section-number">7.4.4</span> Importance Weighting for Covariate Shift</h3>
@@ -1450,7 +1450,7 @@ P^{(t)}(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha
 </ol>
 <p><strong>Discussion</strong></p>
 <ol start="8" type="1">
-<li><span class="citation" data-cites="angelopoulos2023prediction">Angelopoulos et al. (<a href="#ref-angelopoulos2023prediction" role="doc-biblioref">2023</a>)</span>’s PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the “expensive” labels are actual model runs and the “cheap” predictions are the PPE cold-start predictions from <a href="chap2.html#sec-cold-start" class="quarto-xref"><span>Section 2.6</span></a>. Design a practical PPI pipeline for evaluating a new model on 10,000 items when you can only afford to run 500 actual evaluations. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</li>
+<li><span class="citation" data-cites="angelopoulos2023prediction">Angelopoulos et al. (<a href="#ref-angelopoulos2023prediction" role="doc-biblioref">2023</a>)</span>’s PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the “expensive” labels are actual model runs and the “cheap” predictions are the PPE cold-start predictions from <span class="quarto-unresolved-ref">?sec-cold-start</span>. Design a practical PPI pipeline for evaluating a new model on 10,000 items when you can only afford to run 500 actual evaluations. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</li>
 </ol>
 
 

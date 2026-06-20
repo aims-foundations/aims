@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8d83524533cf2fa443ab6df3a53e67f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-a28b74086d39a9f8f816743c2505fd82.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-8d83524533cf2fa443ab6df3a53e67f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -312,7 +312,7 @@ globalThis.qpyodideCustomizedPyodideOptions = {
 }
 
 // Store cell data
-globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport matplotlib.pyplot as plt\nplt.rcParams.update({\n    \"figure.figsize\": (3.5, 3),\n    \"figure.dpi\": 150,\n    \"figure.autolayout\": True,\n    \"font.size\": 8,\n    \"font.family\": \"serif\",\n    \"mathtext.fontset\": \"cm\",\n    \"axes.labelsize\": 8,\n    \"axes.titlesize\": 9,\n    \"xtick.labelsize\": 7,\n    \"ytick.labelsize\": 7,\n    \"legend.fontsize\": 7,\n    \"lines.linewidth\": 1.0,\n})","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"echo":"false","fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef sigmoid(x):\n    \"\"\"Numerically stable sigmoid function.\"\"\"\n    return np.where(x >= 0,\n                    1 / (1 + np.exp(-x)),\n                    np.exp(x) / (1 + np.exp(x)))\n\ntheta_range = np.linspace(-4, 4, 200)\n\nfig, axes = plt.subplots(1, 2, figsize=(6, 2))\n\n# Information curves for different item difficulties\ndifficulties = [-2, -1, 0, 1, 2]\ncolors = plt.cm.viridis(np.linspace(0, 1, len(difficulties)))\n\nfor beta_j, color in zip(difficulties, colors):\n    P = sigmoid(theta_range - beta_j)\n    info = P * (1 - P)\n    axes[0].plot(theta_range, info, color=color, linewidth=2,\n                 label=f'Item difficulty = {beta_j}')\n\naxes[0].set_xlabel('Ability (θ)')\naxes[0].set_ylabel('Fisher Information')\naxes[0].set_title('Item Information Curves')\naxes[0].legend(fontsize=7)\naxes[0].grid(True, alpha=0.3)\n\n# Cumulative information: adaptive vs random\nnp.random.seed(42)\nN, M = 100, 50\ntheta_true = np.random.normal(0, 1, N)\nbeta_true = np.random.normal(0, 1.5, M)\n\ntheta_test = 0.5\nn_items = 20\n\n# Adaptive: choose items closest to current estimate\nbeta_available = beta_true.copy()\nadaptive_info = [0]\ntheta_estimate = 0\n\nfor t in range(n_items):\n    distances = np.abs(beta_available - theta_estimate)\n    best_idx = np.argmin(distances)\n    beta_selected = beta_available[best_idx]\n    P = sigmoid(theta_test - beta_selected)\n    info = P * (1 - P)\n    adaptive_info.append(adaptive_info[-1] + info)\n    beta_available = np.delete(beta_available, best_idx)\n    theta_estimate = theta_test\n\n# Random selection\nrandom_order = np.random.permutation(len(beta_true))[:n_items]\nrandom_info = [0]\nfor j in random_order:\n    P = sigmoid(theta_test - beta_true[j])\n    info = P * (1 - P)\n    random_info.append(random_info[-1] + info)\n\naxes[1].plot(range(n_items + 1), adaptive_info, 'g-', linewidth=2, label='Adaptive')\naxes[1].plot(range(n_items + 1), random_info, 'b-', linewidth=2, label='Random')\naxes[1].set_xlabel('Number of Items')\naxes[1].set_ylabel('Cumulative Fisher Information')\naxes[1].set_title(f'Information Accumulation (θ = {theta_test})')\naxes[1].legend()\naxes[1].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Fisher information curves illustrate the key design principle: items are most informative when their difficulty matches the test-takers ability.","fig-height":5,"fig-width":7,"label":"fisher-information-design","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\n# Generate synthetic data for CAT simulation\nnp.random.seed(42)\nN, M = 100, 50\ntheta_true = np.random.normal(0, 1, N)\nbeta_true = np.random.normal(0, 1.5, M)\n\ndef cat_simulation(theta_true_i, beta, n_items_max=30, reliability_threshold=0.95):\n    \"\"\"\n    Simulate CAT for a single test-taker.\n\n    Parameters\n    ----------\n    theta_true_i : float\n        True ability of the test-taker\n    beta : ndarray\n        Item difficulties (pre-calibrated)\n    n_items_max : int\n        Maximum number of items to administer\n    reliability_threshold : float\n        Stop when reliability exceeds this threshold\n\n    Returns\n    -------\n    dict with theta_hat, n_items, reliability_history, etc.\n    \"\"\"\n    M = len(beta)\n    administered = []\n    responses = []\n\n    # Prior: theta ~ N(0, 1)\n    theta_hat = 0.0\n    prior_var = 1.0\n\n    theta_history = [theta_hat]\n    reliability_history = [0.0]\n    se_history = [1.0]\n    available_items = list(range(M))\n\n    for t in range(min(n_items_max, M)):\n        # Select item with maximum Fisher information at current estimate\n        best_item = None\n        best_info = -np.inf\n\n        for j in available_items:\n            P_j = sigmoid(theta_hat - beta[j])\n            info_j = P_j * (1 - P_j)\n            if info_j > best_info:\n                best_info = info_j\n                best_item = j\n\n        # Administer item (simulate response from true ability)\n        P_true = sigmoid(theta_true_i - beta[best_item])\n        response = int(np.random.random() < P_true)\n\n        administered.append(best_item)\n        responses.append(response)\n        available_items.remove(best_item)\n\n        # Update ability estimate via MAP (Newton-Raphson)\n        for _ in range(10):\n            P_vec = sigmoid(theta_hat - np.array([beta[j] for j in administered]))\n            grad = np.sum(np.array(responses) - P_vec) - theta_hat / prior_var\n            hess = -np.sum(P_vec * (1 - P_vec)) - 1 / prior_var\n            if abs(hess) > 1e-10:\n                theta_hat = theta_hat - grad / hess\n\n        # Posterior variance and reliability\n        total_info = np.sum([sigmoid(theta_hat - beta[j]) * (1 - sigmoid(theta_hat - beta[j]))\n                           for j in administered])\n        posterior_var = 1 / (1/prior_var + total_info)\n        reliability = 1 - posterior_var / prior_var\n\n        theta_history.append(theta_hat)\n        reliability_history.append(reliability)\n        se_history.append(np.sqrt(posterior_var))\n\n        if reliability >= reliability_threshold:\n            break\n\n    return {\n        'theta_hat': theta_hat, 'n_items': len(administered),\n        'reliability_history': reliability_history,\n        'theta_history': theta_history, 'se_history': se_history,\n        'final_reliability': reliability_history[-1]\n    }\n\ndef random_selection_simulation(theta_true_i, beta, n_items_max=30, reliability_threshold=0.95):\n    \"\"\"Simulate random item selection for comparison.\"\"\"\n    M = len(beta)\n    item_order = list(np.random.permutation(M)[:n_items_max])\n\n    theta_hat = 0.0\n    prior_var = 1.0\n    administered = []\n    responses = []\n    reliability_history = [0.0]\n    theta_history = [theta_hat]\n\n    for j in item_order:\n        P_true = sigmoid(theta_true_i - beta[j])\n        response = int(np.random.random() < P_true)\n        administered.append(j)\n        responses.append(response)\n\n        for _ in range(10):\n            P_vec = sigmoid(theta_hat - np.array([beta[k] for k in administered]))\n            grad = np.sum(np.array(responses) - P_vec) - theta_hat / prior_var\n            hess = -np.sum(P_vec * (1 - P_vec)) - 1 / prior_var\n            if abs(hess) > 1e-10:\n                theta_hat = theta_hat - grad / hess\n\n        total_info = np.sum([sigmoid(theta_hat - beta[k]) * (1 - sigmoid(theta_hat - beta[k]))\n                           for k in administered])\n        posterior_var = 1 / (1/prior_var + total_info)\n        reliability = 1 - posterior_var / prior_var\n        reliability_history.append(reliability)\n        theta_history.append(theta_hat)\n\n        if reliability >= reliability_threshold:\n            break\n\n    return {'n_items': len(administered), 'reliability_history': reliability_history,\n            'theta_history': theta_history, 'theta_hat': theta_hat,\n            'final_reliability': reliability_history[-1]}\n\n# Run simulations\nnp.random.seed(42)\nn_test_takers = 100\ntheta_test_sample = np.random.normal(0, 1, n_test_takers)\n\ncat_results = []\nrandom_results = []\nfor theta_i in theta_test_sample:\n    cat_results.append(cat_simulation(theta_i, beta_true))\n    random_results.append(random_selection_simulation(theta_i, beta_true))\n\ncat_items = [r['n_items'] for r in cat_results]\nrandom_items = [r['n_items'] for r in random_results]\n\n# Plot comparison\nfig, axes = plt.subplots(1, 3, figsize=(6, 2))\n\n# Bar chart\nmethods = ['Random', 'CAT']\nmeans = [np.mean(random_items), np.mean(cat_items)]\nstds = [np.std(random_items), np.std(cat_items)]\nbars = axes[0].bar(methods, means, yerr=stds, capsize=5, alpha=0.7,\n                   color=['#1f77b4', '#2ca02c'])\naxes[0].set_ylabel('Items to reach 95% reliability')\naxes[0].set_title('Efficiency: CAT vs Random')\naxes[0].grid(True, alpha=0.3, axis='y')\nfor bar, mean, std in zip(bars, means, stds):\n    axes[0].text(bar.get_x() + bar.get_width()/2, bar.get_height() + std + 0.5,\n                f'{mean:.1f}', ha='center', va='bottom', fontsize=11)\n\n# Reliability trajectory\nexample_idx = 50\naxes[1].plot(random_results[example_idx]['reliability_history'], 'b-', linewidth=2, label='Random')\naxes[1].plot(cat_results[example_idx]['reliability_history'], 'g-', linewidth=2, label='CAT')\naxes[1].axhline(0.95, color='r', linestyle='--', linewidth=1.5, label='Threshold')\naxes[1].set_xlabel('Items administered')\naxes[1].set_ylabel('Reliability')\naxes[1].set_title(f'Reliability Growth (θ = {theta_test_sample[example_idx]:.2f})')\naxes[1].legend(fontsize=7)\naxes[1].grid(True, alpha=0.3)\n\n# Histogram\naxes[2].hist(random_items, bins=15, alpha=0.6, label='Random', color='#1f77b4')\naxes[2].hist(cat_items, bins=15, alpha=0.6, label='CAT', color='#2ca02c')\naxes[2].set_xlabel('Number of items')\naxes[2].set_ylabel('Frequency')\naxes[2].set_title('Distribution of Test Lengths')\naxes[2].legend()\naxes[2].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\n\nefficiency_gain = (np.mean(random_items) - np.mean(cat_items)) / np.mean(random_items) * 100\nprint(f\"Random: {np.mean(random_items):.1f} ± {np.std(random_items):.1f} items\")\nprint(f\"CAT: {np.mean(cat_items):.1f} ± {np.std(cat_items):.1f} items\")\nprint(f\"Efficiency gain: {efficiency_gain:.1f}% fewer items with CAT\")","id":3,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"CAT achieves the same measurement precision as random testing with substantially fewer items.","fig-height":5,"fig-width":7,"label":"cat-simulation","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\nfrom scipy.optimize import minimize as sp_minimize\n\ndef compute_test_information(item_indices, beta_pool, theta_grid):\n    \"\"\"Compute total Fisher information of a test across an ability grid.\"\"\"\n    total_info = np.zeros_like(theta_grid)\n    for j in item_indices:\n        P = sigmoid(theta_grid - beta_pool[j])\n        total_info += P * (1 - P)\n    return total_info\n\ndef d_optimal_greedy(beta_pool, K, theta_grid):\n    \"\"\"Greedy D-optimal item selection for the Rasch model.\n\n    Selects K items from the pool to maximize total information\n    integrated over the theta grid (approximating D-optimality\n    for the unidimensional case).\n    \"\"\"\n    available = list(range(len(beta_pool)))\n    selected = []\n\n    for _ in range(K):\n        best_item = None\n        best_score = -np.inf\n\n        for j in available:\n            candidate = selected + [j]\n            info = compute_test_information(candidate, beta_pool, theta_grid)\n            # D-optimal criterion: product of information values\n            # (log-determinant in 1D = log of information)\n            score = np.sum(np.log(info + 1e-10))\n            if score > best_score:\n                best_score = score\n                best_item = j\n\n        selected.append(best_item)\n        available.remove(best_item)\n\n    return selected\n\n# Large item pool\nnp.random.seed(42)\nM_pool = 200\nbeta_pool = np.random.normal(0, 2, M_pool)\nK = 20  # Select 20 items\n\ntheta_grid = np.linspace(-3, 3, 100)\n\n# D-optimal selection\nd_optimal_items = d_optimal_greedy(beta_pool, K, theta_grid)\n\n# Random selection (multiple draws for comparison)\nrandom_infos = []\nfor trial in range(50):\n    random_items = np.random.choice(M_pool, K, replace=False)\n    info = compute_test_information(random_items, beta_pool, theta_grid)\n    random_infos.append(info)\n\nd_opt_info = compute_test_information(d_optimal_items, beta_pool, theta_grid)\nrandom_mean = np.mean(random_infos, axis=0)\nrandom_std = np.std(random_infos, axis=0)\n\n# Visualization\nfig, axes = plt.subplots(1, 3, figsize=(6, 2))\n\n# Test information functions\naxes[0].plot(theta_grid, d_opt_info, 'g-', linewidth=2, label='D-optimal')\naxes[0].plot(theta_grid, random_mean, 'b-', linewidth=2, label='Random (mean)')\naxes[0].fill_between(theta_grid, random_mean - random_std, random_mean + random_std,\n                     alpha=0.2, color='blue')\naxes[0].set_xlabel('Ability (θ)')\naxes[0].set_ylabel('Test Information')\naxes[0].set_title('Test Information Function')\naxes[0].legend(fontsize=7)\naxes[0].grid(True, alpha=0.3)\n\n# Selected item difficulties\naxes[1].hist(beta_pool[d_optimal_items], bins=12, alpha=0.7, color='green',\n             label='D-optimal', density=True)\naxes[1].hist(beta_pool, bins=30, alpha=0.3, color='gray',\n             label='Full pool', density=True)\naxes[1].set_xlabel('Item Difficulty (β)')\naxes[1].set_ylabel('Density')\naxes[1].set_title('Selected Item Difficulties')\naxes[1].legend(fontsize=7)\naxes[1].grid(True, alpha=0.3)\n\n# Integrated information comparison\nd_opt_total = np.trapz(d_opt_info, theta_grid)\nrandom_totals = [np.trapz(ri, theta_grid) for ri in random_infos]\n\naxes[2].hist(random_totals, bins=15, alpha=0.6, color='blue', label='Random')\naxes[2].axvline(d_opt_total, color='green', linewidth=2, linestyle='--',\n                label=f'D-optimal ({d_opt_total:.1f})')\naxes[2].set_xlabel('Integrated Information')\naxes[2].set_ylabel('Frequency')\naxes[2].set_title('Total Information Comparison')\naxes[2].legend(fontsize=7)\naxes[2].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\n\nprint(f\"D-optimal integrated info: {d_opt_total:.1f}\")\nprint(f\"Random integrated info: {np.mean(random_totals):.1f} ± {np.std(random_totals):.1f}\")\nprint(f\"D-optimal advantage: {(d_opt_total / np.mean(random_totals) - 1) * 100:.1f}% more information\")","id":4,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"D-optimal item selection chooses items with diverse difficulties covering the target ability range, yielding substantially higher total information than random selection.","fig-height":5,"fig-width":7,"label":"d-optimal-design","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport matplotlib.pyplot as plt\nplt.rcParams.update({\n    \"figure.figsize\": (3.5, 3),\n    \"figure.dpi\": 150,\n    \"figure.autolayout\": True,\n    \"font.size\": 8,\n    \"font.family\": \"serif\",\n    \"mathtext.fontset\": \"cm\",\n    \"axes.labelsize\": 8,\n    \"axes.titlesize\": 9,\n    \"xtick.labelsize\": 7,\n    \"ytick.labelsize\": 7,\n    \"legend.fontsize\": 7,\n    \"lines.linewidth\": 1.0,\n})","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"echo":"false","fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef sigmoid(x):\n    \"\"\"Numerically stable sigmoid function.\"\"\"\n    return np.where(x >= 0,\n                    1 / (1 + np.exp(-x)),\n                    np.exp(x) / (1 + np.exp(x)))\n\ntheta_range = np.linspace(-4, 4, 200)\n\nfig, axes = plt.subplots(1, 1, figsize=(2, 2))\n\n# Information curves for different item difficulties\ndifficulties = [-2, -1, 0, 1, 2]\ncolors = plt.cm.viridis(np.linspace(0, 1, len(difficulties)))\n\nfor beta_j, color in zip(difficulties, colors):\n    P = sigmoid(theta_range - beta_j)\n    info = P * (1 - P)\n    axes[0].plot(theta_range, info, color=color, linewidth=2,\n                 label=f'Item difficulty = {beta_j}')\n\naxes[0].set_xlabel('Ability (θ)')\naxes[0].set_ylabel('Fisher Information')\naxes[0].set_title('Item Information Curves')\naxes[0].legend(fontsize=7)\naxes[0].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Fisher information curves illustrate the key design principle: items are most informative when their difficulty matches the test-takers ability.","fig-height":5,"fig-width":7,"label":"fisher-information-design","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\n# Cumulative information: adaptive vs random\nnp.random.seed(42)\nN, M = 100, 50\ntheta_true = np.random.normal(0, 1, N)\nbeta_true = np.random.normal(0, 1.5, M)\n\ntheta_test = 0.5\nn_items = 20\nfig, axes = plt.subplots(1, 1, figsize=(2, 2))\n\n# Adaptive: choose items closest to current estimate\nbeta_available = beta_true.copy()\nadaptive_info = [0]\ntheta_estimate = 0\n\nfor t in range(n_items):\n    distances = np.abs(beta_available - theta_estimate)\n    best_idx = np.argmin(distances)\n    beta_selected = beta_available[best_idx]\n    P = sigmoid(theta_test - beta_selected)\n    info = P * (1 - P)\n    adaptive_info.append(adaptive_info[-1] + info)\n    beta_available = np.delete(beta_available, best_idx)\n    theta_estimate = theta_test\n\n# Random selection\nrandom_order = np.random.permutation(len(beta_true))[:n_items]\nrandom_info = [0]\nfor j in random_order:\n    P = sigmoid(theta_test - beta_true[j])\n    info = P * (1 - P)\n    random_info.append(random_info[-1] + info)\n\naxes[1].plot(range(n_items + 1), adaptive_info, 'g-', linewidth=2, label='Adaptive')\naxes[1].plot(range(n_items + 1), random_info, 'b-', linewidth=2, label='Random')\naxes[1].set_xlabel('Number of Items')\naxes[1].set_ylabel('Cumulative Fisher Information')\naxes[1].set_title(f'Information Accumulation (θ = {theta_test})')\naxes[1].legend()\naxes[1].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()","id":3,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Fisher information curves illustrate the key design principle: items are most informative when their difficulty matches the test-takers ability.","fig-height":5,"fig-width":7,"label":"fisher-information-design","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\n# Generate synthetic data for CAT simulation\nnp.random.seed(42)\nN, M = 100, 50\ntheta_true = np.random.normal(0, 1, N)\nbeta_true = np.random.normal(0, 1.5, M)\n\ndef cat_simulation(theta_true_i, beta, n_items_max=30, reliability_threshold=0.95):\n    \"\"\"\n    Simulate CAT for a single test-taker.\n\n    Parameters\n    ----------\n    theta_true_i : float\n        True ability of the test-taker\n    beta : ndarray\n        Item difficulties (pre-calibrated)\n    n_items_max : int\n        Maximum number of items to administer\n    reliability_threshold : float\n        Stop when reliability exceeds this threshold\n\n    Returns\n    -------\n    dict with theta_hat, n_items, reliability_history, etc.\n    \"\"\"\n    M = len(beta)\n    administered = []\n    responses = []\n\n    # Prior: theta ~ N(0, 1)\n    theta_hat = 0.0\n    prior_var = 1.0\n\n    theta_history = [theta_hat]\n    reliability_history = [0.0]\n    se_history = [1.0]\n    available_items = list(range(M))\n\n    for t in range(min(n_items_max, M)):\n        # Select item with maximum Fisher information at current estimate\n        best_item = None\n        best_info = -np.inf\n\n        for j in available_items:\n            P_j = sigmoid(theta_hat - beta[j])\n            info_j = P_j * (1 - P_j)\n            if info_j > best_info:\n                best_info = info_j\n                best_item = j\n\n        # Administer item (simulate response from true ability)\n        P_true = sigmoid(theta_true_i - beta[best_item])\n        response = int(np.random.random() < P_true)\n\n        administered.append(best_item)\n        responses.append(response)\n        available_items.remove(best_item)\n\n        # Update ability estimate via MAP (Newton-Raphson)\n        for _ in range(10):\n            P_vec = sigmoid(theta_hat - np.array([beta[j] for j in administered]))\n            grad = np.sum(np.array(responses) - P_vec) - theta_hat / prior_var\n            hess = -np.sum(P_vec * (1 - P_vec)) - 1 / prior_var\n            if abs(hess) > 1e-10:\n                theta_hat = theta_hat - grad / hess\n\n        # Posterior variance and reliability\n        total_info = np.sum([sigmoid(theta_hat - beta[j]) * (1 - sigmoid(theta_hat - beta[j]))\n                           for j in administered])\n        posterior_var = 1 / (1/prior_var + total_info)\n        reliability = 1 - posterior_var / prior_var\n\n        theta_history.append(theta_hat)\n        reliability_history.append(reliability)\n        se_history.append(np.sqrt(posterior_var))\n\n        if reliability >= reliability_threshold:\n            break\n\n    return {\n        'theta_hat': theta_hat, 'n_items': len(administered),\n        'reliability_history': reliability_history,\n        'theta_history': theta_history, 'se_history': se_history,\n        'final_reliability': reliability_history[-1]\n    }\n\ndef random_selection_simulation(theta_true_i, beta, n_items_max=30, reliability_threshold=0.95):\n    \"\"\"Simulate random item selection for comparison.\"\"\"\n    M = len(beta)\n    item_order = list(np.random.permutation(M)[:n_items_max])\n\n    theta_hat = 0.0\n    prior_var = 1.0\n    administered = []\n    responses = []\n    reliability_history = [0.0]\n    theta_history = [theta_hat]\n\n    for j in item_order:\n        P_true = sigmoid(theta_true_i - beta[j])\n        response = int(np.random.random() < P_true)\n        administered.append(j)\n        responses.append(response)\n\n        for _ in range(10):\n            P_vec = sigmoid(theta_hat - np.array([beta[k] for k in administered]))\n            grad = np.sum(np.array(responses) - P_vec) - theta_hat / prior_var\n            hess = -np.sum(P_vec * (1 - P_vec)) - 1 / prior_var\n            if abs(hess) > 1e-10:\n                theta_hat = theta_hat - grad / hess\n\n        total_info = np.sum([sigmoid(theta_hat - beta[k]) * (1 - sigmoid(theta_hat - beta[k]))\n                           for k in administered])\n        posterior_var = 1 / (1/prior_var + total_info)\n        reliability = 1 - posterior_var / prior_var\n        reliability_history.append(reliability)\n        theta_history.append(theta_hat)\n\n        if reliability >= reliability_threshold:\n            break\n\n    return {'n_items': len(administered), 'reliability_history': reliability_history,\n            'theta_history': theta_history, 'theta_hat': theta_hat,\n            'final_reliability': reliability_history[-1]}\n\n# Run simulations\nnp.random.seed(42)\nn_test_takers = 100\ntheta_test_sample = np.random.normal(0, 1, n_test_takers)\n\ncat_results = []\nrandom_results = []\nfor theta_i in theta_test_sample:\n    cat_results.append(cat_simulation(theta_i, beta_true))\n    random_results.append(random_selection_simulation(theta_i, beta_true))\n\ncat_items = [r['n_items'] for r in cat_results]\nrandom_items = [r['n_items'] for r in random_results]\n\n# Plot comparison\nfig, axes = plt.subplots(1, 3, figsize=(6, 2))\n\n# Bar chart\nmethods = ['Random', 'CAT']\nmeans = [np.mean(random_items), np.mean(cat_items)]\nstds = [np.std(random_items), np.std(cat_items)]\nbars = axes[0].bar(methods, means, yerr=stds, capsize=5, alpha=0.7,\n                   color=['#1f77b4', '#2ca02c'])\naxes[0].set_ylabel('Items to reach 95% reliability')\naxes[0].set_title('Efficiency: CAT vs Random')\naxes[0].grid(True, alpha=0.3, axis='y')\nfor bar, mean, std in zip(bars, means, stds):\n    axes[0].text(bar.get_x() + bar.get_width()/2, bar.get_height() + std + 0.5,\n                f'{mean:.1f}', ha='center', va='bottom', fontsize=11)\n\n# Reliability trajectory\nexample_idx = 50\naxes[1].plot(random_results[example_idx]['reliability_history'], 'b-', linewidth=2, label='Random')\naxes[1].plot(cat_results[example_idx]['reliability_history'], 'g-', linewidth=2, label='CAT')\naxes[1].axhline(0.95, color='r', linestyle='--', linewidth=1.5, label='Threshold')\naxes[1].set_xlabel('Items administered')\naxes[1].set_ylabel('Reliability')\naxes[1].set_title(f'Reliability Growth (θ = {theta_test_sample[example_idx]:.2f})')\naxes[1].legend(fontsize=7)\naxes[1].grid(True, alpha=0.3)\n\n# Histogram\naxes[2].hist(random_items, bins=15, alpha=0.6, label='Random', color='#1f77b4')\naxes[2].hist(cat_items, bins=15, alpha=0.6, label='CAT', color='#2ca02c')\naxes[2].set_xlabel('Number of items')\naxes[2].set_ylabel('Frequency')\naxes[2].set_title('Distribution of Test Lengths')\naxes[2].legend()\naxes[2].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\n\nefficiency_gain = (np.mean(random_items) - np.mean(cat_items)) / np.mean(random_items) * 100\nprint(f\"Random: {np.mean(random_items):.1f} ± {np.std(random_items):.1f} items\")\nprint(f\"CAT: {np.mean(cat_items):.1f} ± {np.std(cat_items):.1f} items\")\nprint(f\"Efficiency gain: {efficiency_gain:.1f}% fewer items with CAT\")","id":4,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"CAT achieves the same measurement precision as random testing with substantially fewer items.","fig-height":5,"fig-width":7,"label":"cat-simulation","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\nfrom scipy.optimize import minimize as sp_minimize\n\ndef compute_test_information(item_indices, beta_pool, theta_grid):\n    \"\"\"Compute total Fisher information of a test across an ability grid.\"\"\"\n    total_info = np.zeros_like(theta_grid)\n    for j in item_indices:\n        P = sigmoid(theta_grid - beta_pool[j])\n        total_info += P * (1 - P)\n    return total_info\n\ndef d_optimal_greedy(beta_pool, K, theta_grid):\n    \"\"\"Greedy D-optimal item selection for the Rasch model.\n\n    Selects K items from the pool to maximize total information\n    integrated over the theta grid (approximating D-optimality\n    for the unidimensional case).\n    \"\"\"\n    available = list(range(len(beta_pool)))\n    selected = []\n\n    for _ in range(K):\n        best_item = None\n        best_score = -np.inf\n\n        for j in available:\n            candidate = selected + [j]\n            info = compute_test_information(candidate, beta_pool, theta_grid)\n            # D-optimal criterion: product of information values\n            # (log-determinant in 1D = log of information)\n            score = np.sum(np.log(info + 1e-10))\n            if score > best_score:\n                best_score = score\n                best_item = j\n\n        selected.append(best_item)\n        available.remove(best_item)\n\n    return selected\n\n# Large item pool\nnp.random.seed(42)\nM_pool = 200\nbeta_pool = np.random.normal(0, 2, M_pool)\nK = 20  # Select 20 items\n\ntheta_grid = np.linspace(-3, 3, 100)\n\n# D-optimal selection\nd_optimal_items = d_optimal_greedy(beta_pool, K, theta_grid)\n\n# Random selection (multiple draws for comparison)\nrandom_infos = []\nfor trial in range(50):\n    random_items = np.random.choice(M_pool, K, replace=False)\n    info = compute_test_information(random_items, beta_pool, theta_grid)\n    random_infos.append(info)\n\nd_opt_info = compute_test_information(d_optimal_items, beta_pool, theta_grid)\nrandom_mean = np.mean(random_infos, axis=0)\nrandom_std = np.std(random_infos, axis=0)\n\n# Visualization\nfig, axes = plt.subplots(1, 3, figsize=(6, 2))\n\n# Test information functions\naxes[0].plot(theta_grid, d_opt_info, 'g-', linewidth=2, label='D-optimal')\naxes[0].plot(theta_grid, random_mean, 'b-', linewidth=2, label='Random (mean)')\naxes[0].fill_between(theta_grid, random_mean - random_std, random_mean + random_std,\n                     alpha=0.2, color='blue')\naxes[0].set_xlabel('Ability (θ)')\naxes[0].set_ylabel('Test Information')\naxes[0].set_title('Test Information Function')\naxes[0].legend(fontsize=7)\naxes[0].grid(True, alpha=0.3)\n\n# Selected item difficulties\naxes[1].hist(beta_pool[d_optimal_items], bins=12, alpha=0.7, color='green',\n             label='D-optimal', density=True)\naxes[1].hist(beta_pool, bins=30, alpha=0.3, color='gray',\n             label='Full pool', density=True)\naxes[1].set_xlabel('Item Difficulty (β)')\naxes[1].set_ylabel('Density')\naxes[1].set_title('Selected Item Difficulties')\naxes[1].legend(fontsize=7)\naxes[1].grid(True, alpha=0.3)\n\n# Integrated information comparison\nd_opt_total = np.trapz(d_opt_info, theta_grid)\nrandom_totals = [np.trapz(ri, theta_grid) for ri in random_infos]\n\naxes[2].hist(random_totals, bins=15, alpha=0.6, color='blue', label='Random')\naxes[2].axvline(d_opt_total, color='green', linewidth=2, linestyle='--',\n                label=f'D-optimal ({d_opt_total:.1f})')\naxes[2].set_xlabel('Integrated Information')\naxes[2].set_ylabel('Frequency')\naxes[2].set_title('Total Information Comparison')\naxes[2].legend(fontsize=7)\naxes[2].grid(True, alpha=0.3)\n\nplt.tight_layout()\nplt.show()\n\nprint(f\"D-optimal integrated info: {d_opt_total:.1f}\")\nprint(f\"Random integrated info: {np.mean(random_totals):.1f} ± {np.std(random_totals):.1f}\")\nprint(f\"D-optimal advantage: {(d_opt_total / np.mean(random_totals) - 1) * 100:.1f}% more information\")","id":5,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"D-optimal item selection chooses items with diverse difficulties covering the target ability range, yielding substantially higher total information than random selection.","fig-height":5,"fig-width":7,"label":"d-optimal-design","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
 </script>
@@ -1052,10 +1052,12 @@ I_{\text{total}}(\theta) = \sum_{k=1}^K I_{j_k}(\theta)
 <p>Asking a frontier model to answer <span class="math inline">\(1 + 1\)</span> or a small model to prove the Riemann hypothesis provides almost no information. The most informative items are those where the model has roughly a 50% chance of success.</p>
 </div>
 </div>
+<div id="qpyodide-insertion-location-3"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="sec-cat-implementation" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="sec-cat-implementation"><span class="header-section-number">4.2.3</span> CAT Implementation</h3>
-<div id="qpyodide-insertion-location-3"></div>
+<div id="qpyodide-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="sec-stopping" class="level3" data-number="4.2.4">
@@ -1085,7 +1087,7 @@ I_{\text{total}}(\theta) = \sum_{k=1}^K I_{j_k}(\theta)
 <div class="callout-body-container callout-body">
 <p>Traditional CAT assumes deterministic responses: a human test-taker gives the same answer if asked the same question twice. AI models may or may not satisfy this depending on temperature and sampling settings.</p>
 <p>For deterministic evaluation (temperature = 0), CAT applies directly. For stochastic evaluation, we may need multiple samples per item, or methods that account for response variability.</p>
-<p>CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in <a href="chap2.html#sec-cold-start" class="quarto-xref"><span>Section 2.6</span></a>.</p>
+<p>CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in <span class="quarto-unresolved-ref">?sec-cold-start</span>.</p>
 </div>
 </div>
 </section>
@@ -1102,7 +1104,7 @@ I_{\text{total}}(\theta) = \sum_{k=1}^K I_{j_k}(\theta)
 <li><strong>A-optimal:</strong> Minimize <span class="math inline">\(\text{tr}(\mathcal{I}^{-1})\)</span>—the average variance of individual ability components.</li>
 <li><strong>E-optimal:</strong> Maximize <span class="math inline">\(\lambda_{\min}(\mathcal{I})\)</span>—the smallest eigenvalue. This ensures no ability dimension is poorly estimated.</li>
 </ul>
-<div id="qpyodide-insertion-location-4"></div>
+<div id="qpyodide-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>D-optimal design produces item pools with difficulties spread across the target ability range, ensuring high information everywhere. Random selection tends to cluster items near the center of the pool’s difficulty distribution, leaving the tails poorly covered.</p>
 </section>
@@ -1796,7 +1798,7 @@ Wright, Benjamin D., and Mark H. Stone. 1979. <em>Best Test Design</em>. MESA Pr
 <span id="cb1-126"><a href="#cb1-126"></a></span>
 <span id="cb1-127"><a href="#cb1-127"></a>theta_range <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">200</span>)</span>
 <span id="cb1-128"><a href="#cb1-128"></a></span>
-<span id="cb1-129"><a href="#cb1-129"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
+<span id="cb1-129"><a href="#cb1-129"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
 <span id="cb1-130"><a href="#cb1-130"></a></span>
 <span id="cb1-131"><a href="#cb1-131"></a><span class="co"># Information curves for different item difficulties</span></span>
 <span id="cb1-132"><a href="#cb1-132"></a>difficulties <span class="op">=</span> [<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>]</span>
@@ -1814,470 +1816,481 @@ Wright, Benjamin D., and Mark H. Stone. 1979. <em>Best Test Design</em>. MESA Pr
 <span id="cb1-144"><a href="#cb1-144"></a>axes[<span class="dv">0</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
 <span id="cb1-145"><a href="#cb1-145"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
 <span id="cb1-146"><a href="#cb1-146"></a></span>
-<span id="cb1-147"><a href="#cb1-147"></a><span class="co"># Cumulative information: adaptive vs random</span></span>
-<span id="cb1-148"><a href="#cb1-148"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-149"><a href="#cb1-149"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
-<span id="cb1-150"><a href="#cb1-150"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
-<span id="cb1-151"><a href="#cb1-151"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, M)</span>
-<span id="cb1-152"><a href="#cb1-152"></a></span>
-<span id="cb1-153"><a href="#cb1-153"></a>theta_test <span class="op">=</span> <span class="fl">0.5</span></span>
-<span id="cb1-154"><a href="#cb1-154"></a>n_items <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb1-147"><a href="#cb1-147"></a>plt.tight_layout()</span>
+<span id="cb1-148"><a href="#cb1-148"></a>plt.show()</span>
+<span id="cb1-149"><a href="#cb1-149"></a><span class="in">```</span></span>
+<span id="cb1-150"><a href="#cb1-150"></a></span>
+<span id="cb1-151"><a href="#cb1-151"></a></span>
+<span id="cb1-152"><a href="#cb1-152"></a><span class="fu">### Computerized Adaptive Testing {#sec-cat}</span></span>
+<span id="cb1-153"><a href="#cb1-153"></a></span>
+<span id="cb1-154"><a href="#cb1-154"></a>Computerized Adaptive Testing (CAT) is the sequential application of optimal item selection. Rather than administering a fixed test to all models, CAT adapts the test in real time: after each response, it selects the next item that would be most informative given what we have learned so far.</span>
 <span id="cb1-155"><a href="#cb1-155"></a></span>
-<span id="cb1-156"><a href="#cb1-156"></a><span class="co"># Adaptive: choose items closest to current estimate</span></span>
-<span id="cb1-157"><a href="#cb1-157"></a>beta_available <span class="op">=</span> beta_true.copy()</span>
-<span id="cb1-158"><a href="#cb1-158"></a>adaptive_info <span class="op">=</span> [<span class="dv">0</span>]</span>
-<span id="cb1-159"><a href="#cb1-159"></a>theta_estimate <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-160"><a href="#cb1-160"></a></span>
-<span id="cb1-161"><a href="#cb1-161"></a><span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(n_items):</span>
-<span id="cb1-162"><a href="#cb1-162"></a>    distances <span class="op">=</span> np.<span class="bu">abs</span>(beta_available <span class="op">-</span> theta_estimate)</span>
-<span id="cb1-163"><a href="#cb1-163"></a>    best_idx <span class="op">=</span> np.argmin(distances)</span>
-<span id="cb1-164"><a href="#cb1-164"></a>    beta_selected <span class="op">=</span> beta_available[best_idx]</span>
-<span id="cb1-165"><a href="#cb1-165"></a>    P <span class="op">=</span> sigmoid(theta_test <span class="op">-</span> beta_selected)</span>
-<span id="cb1-166"><a href="#cb1-166"></a>    info <span class="op">=</span> P <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P)</span>
-<span id="cb1-167"><a href="#cb1-167"></a>    adaptive_info.append(adaptive_info[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> info)</span>
-<span id="cb1-168"><a href="#cb1-168"></a>    beta_available <span class="op">=</span> np.delete(beta_available, best_idx)</span>
-<span id="cb1-169"><a href="#cb1-169"></a>    theta_estimate <span class="op">=</span> theta_test</span>
-<span id="cb1-170"><a href="#cb1-170"></a></span>
-<span id="cb1-171"><a href="#cb1-171"></a><span class="co"># Random selection</span></span>
-<span id="cb1-172"><a href="#cb1-172"></a>random_order <span class="op">=</span> np.random.permutation(<span class="bu">len</span>(beta_true))[:n_items]</span>
-<span id="cb1-173"><a href="#cb1-173"></a>random_info <span class="op">=</span> [<span class="dv">0</span>]</span>
-<span id="cb1-174"><a href="#cb1-174"></a><span class="cf">for</span> j <span class="kw">in</span> random_order:</span>
-<span id="cb1-175"><a href="#cb1-175"></a>    P <span class="op">=</span> sigmoid(theta_test <span class="op">-</span> beta_true[j])</span>
-<span id="cb1-176"><a href="#cb1-176"></a>    info <span class="op">=</span> P <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P)</span>
-<span id="cb1-177"><a href="#cb1-177"></a>    random_info.append(random_info[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> info)</span>
-<span id="cb1-178"><a href="#cb1-178"></a></span>
-<span id="cb1-179"><a href="#cb1-179"></a>axes[<span class="dv">1</span>].plot(<span class="bu">range</span>(n_items <span class="op">+</span> <span class="dv">1</span>), adaptive_info, <span class="st">'g-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Adaptive'</span>)</span>
-<span id="cb1-180"><a href="#cb1-180"></a>axes[<span class="dv">1</span>].plot(<span class="bu">range</span>(n_items <span class="op">+</span> <span class="dv">1</span>), random_info, <span class="st">'b-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Random'</span>)</span>
-<span id="cb1-181"><a href="#cb1-181"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Number of Items'</span>)</span>
-<span id="cb1-182"><a href="#cb1-182"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Cumulative Fisher Information'</span>)</span>
-<span id="cb1-183"><a href="#cb1-183"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Information Accumulation (θ = </span><span class="sc">{</span>theta_test<span class="sc">}</span><span class="ss">)'</span>)</span>
-<span id="cb1-184"><a href="#cb1-184"></a>axes[<span class="dv">1</span>].legend()</span>
-<span id="cb1-185"><a href="#cb1-185"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-186"><a href="#cb1-186"></a></span>
-<span id="cb1-187"><a href="#cb1-187"></a>plt.tight_layout()</span>
-<span id="cb1-188"><a href="#cb1-188"></a>plt.show()</span>
-<span id="cb1-189"><a href="#cb1-189"></a><span class="in">```</span></span>
-<span id="cb1-190"><a href="#cb1-190"></a></span>
-<span id="cb1-191"><a href="#cb1-191"></a></span>
-<span id="cb1-192"><a href="#cb1-192"></a><span class="fu">### Computerized Adaptive Testing {#sec-cat}</span></span>
-<span id="cb1-193"><a href="#cb1-193"></a></span>
-<span id="cb1-194"><a href="#cb1-194"></a>Computerized Adaptive Testing (CAT) is the sequential application of optimal item selection. Rather than administering a fixed test to all models, CAT adapts the test in real time: after each response, it selects the next item that would be most informative given what we have learned so far.</span>
-<span id="cb1-195"><a href="#cb1-195"></a></span>
-<span id="cb1-196"><a href="#cb1-196"></a>The CAT procedure iterates four steps:</span>
-<span id="cb1-197"><a href="#cb1-197"></a></span>
-<span id="cb1-198"><a href="#cb1-198"></a><span class="ss">1. </span>**Select** the most informative item given the current ability estimate</span>
-<span id="cb1-199"><a href="#cb1-199"></a><span class="ss">2. </span>**Administer** the item and observe the response</span>
-<span id="cb1-200"><a href="#cb1-200"></a><span class="ss">3. </span>**Update** the ability estimate using the new data</span>
-<span id="cb1-201"><a href="#cb1-201"></a><span class="ss">4. </span>**Check** a stopping criterion; if not met, return to step 1</span>
+<span id="cb1-156"><a href="#cb1-156"></a>The CAT procedure iterates four steps:</span>
+<span id="cb1-157"><a href="#cb1-157"></a></span>
+<span id="cb1-158"><a href="#cb1-158"></a><span class="ss">1. </span>**Select** the most informative item given the current ability estimate</span>
+<span id="cb1-159"><a href="#cb1-159"></a><span class="ss">2. </span>**Administer** the item and observe the response</span>
+<span id="cb1-160"><a href="#cb1-160"></a><span class="ss">3. </span>**Update** the ability estimate using the new data</span>
+<span id="cb1-161"><a href="#cb1-161"></a><span class="ss">4. </span>**Check** a stopping criterion; if not met, return to step 1</span>
+<span id="cb1-162"><a href="#cb1-162"></a></span>
+<span id="cb1-163"><a href="#cb1-163"></a>::: {.callout-important title="Why Fisher Information for Item Selection?"}</span>
+<span id="cb1-164"><a href="#cb1-164"></a>Fisher information measures how much a response to item $j$ tells us about $\theta$:</span>
+<span id="cb1-165"><a href="#cb1-165"></a></span>
+<span id="cb1-166"><a href="#cb1-166"></a><span class="ss">- </span>**High information**: The item difficulty is well-matched to the ability level</span>
+<span id="cb1-167"><a href="#cb1-167"></a><span class="ss">- </span>**Low information**: The item is too easy or too hard</span>
+<span id="cb1-168"><a href="#cb1-168"></a></span>
+<span id="cb1-169"><a href="#cb1-169"></a>Asking a frontier model to answer $1 + 1$ or a small model to prove the Riemann hypothesis provides almost no information. The most informative items are those where the model has roughly a 50% chance of success.</span>
+<span id="cb1-170"><a href="#cb1-170"></a>:::</span>
+<span id="cb1-171"><a href="#cb1-171"></a></span>
+<span id="cb1-172"><a href="#cb1-172"></a></span>
+<span id="cb1-173"><a href="#cb1-173"></a><span class="in">```{pyodide-python}</span></span>
+<span id="cb1-174"><a href="#cb1-174"></a><span class="co">#| label: fisher-information-design</span></span>
+<span id="cb1-175"><a href="#cb1-175"></a><span class="co">#| autorun: true</span></span>
+<span id="cb1-176"><a href="#cb1-176"></a><span class="co">#| fig-cap: "Fisher information curves illustrate the key design principle: items are most informative when their difficulty matches the test-taker's ability."</span></span>
+<span id="cb1-177"><a href="#cb1-177"></a></span>
+<span id="cb1-178"><a href="#cb1-178"></a><span class="co"># Cumulative information: adaptive vs random</span></span>
+<span id="cb1-179"><a href="#cb1-179"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-180"><a href="#cb1-180"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
+<span id="cb1-181"><a href="#cb1-181"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
+<span id="cb1-182"><a href="#cb1-182"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, M)</span>
+<span id="cb1-183"><a href="#cb1-183"></a></span>
+<span id="cb1-184"><a href="#cb1-184"></a>theta_test <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb1-185"><a href="#cb1-185"></a>n_items <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb1-186"><a href="#cb1-186"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb1-187"><a href="#cb1-187"></a></span>
+<span id="cb1-188"><a href="#cb1-188"></a><span class="co"># Adaptive: choose items closest to current estimate</span></span>
+<span id="cb1-189"><a href="#cb1-189"></a>beta_available <span class="op">=</span> beta_true.copy()</span>
+<span id="cb1-190"><a href="#cb1-190"></a>adaptive_info <span class="op">=</span> [<span class="dv">0</span>]</span>
+<span id="cb1-191"><a href="#cb1-191"></a>theta_estimate <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-192"><a href="#cb1-192"></a></span>
+<span id="cb1-193"><a href="#cb1-193"></a><span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(n_items):</span>
+<span id="cb1-194"><a href="#cb1-194"></a>    distances <span class="op">=</span> np.<span class="bu">abs</span>(beta_available <span class="op">-</span> theta_estimate)</span>
+<span id="cb1-195"><a href="#cb1-195"></a>    best_idx <span class="op">=</span> np.argmin(distances)</span>
+<span id="cb1-196"><a href="#cb1-196"></a>    beta_selected <span class="op">=</span> beta_available[best_idx]</span>
+<span id="cb1-197"><a href="#cb1-197"></a>    P <span class="op">=</span> sigmoid(theta_test <span class="op">-</span> beta_selected)</span>
+<span id="cb1-198"><a href="#cb1-198"></a>    info <span class="op">=</span> P <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P)</span>
+<span id="cb1-199"><a href="#cb1-199"></a>    adaptive_info.append(adaptive_info[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> info)</span>
+<span id="cb1-200"><a href="#cb1-200"></a>    beta_available <span class="op">=</span> np.delete(beta_available, best_idx)</span>
+<span id="cb1-201"><a href="#cb1-201"></a>    theta_estimate <span class="op">=</span> theta_test</span>
 <span id="cb1-202"><a href="#cb1-202"></a></span>
-<span id="cb1-203"><a href="#cb1-203"></a>::: {.callout-important title="Why Fisher Information for Item Selection?"}</span>
-<span id="cb1-204"><a href="#cb1-204"></a>Fisher information measures how much a response to item $j$ tells us about $\theta$:</span>
-<span id="cb1-205"><a href="#cb1-205"></a></span>
-<span id="cb1-206"><a href="#cb1-206"></a><span class="ss">- </span>**High information**: The item difficulty is well-matched to the ability level</span>
-<span id="cb1-207"><a href="#cb1-207"></a><span class="ss">- </span>**Low information**: The item is too easy or too hard</span>
-<span id="cb1-208"><a href="#cb1-208"></a></span>
-<span id="cb1-209"><a href="#cb1-209"></a>Asking a frontier model to answer $1 + 1$ or a small model to prove the Riemann hypothesis provides almost no information. The most informative items are those where the model has roughly a 50% chance of success.</span>
-<span id="cb1-210"><a href="#cb1-210"></a>:::</span>
-<span id="cb1-211"><a href="#cb1-211"></a></span>
-<span id="cb1-212"><a href="#cb1-212"></a></span>
-<span id="cb1-213"><a href="#cb1-213"></a><span class="fu">### CAT Implementation {#sec-cat-implementation}</span></span>
-<span id="cb1-214"><a href="#cb1-214"></a></span>
-<span id="cb1-215"><a href="#cb1-215"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-216"><a href="#cb1-216"></a><span class="co">#| label: cat-simulation</span></span>
-<span id="cb1-217"><a href="#cb1-217"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-218"><a href="#cb1-218"></a><span class="co">#| fig-cap: "CAT achieves the same measurement precision as random testing with substantially fewer items."</span></span>
-<span id="cb1-219"><a href="#cb1-219"></a></span>
-<span id="cb1-220"><a href="#cb1-220"></a><span class="co"># Generate synthetic data for CAT simulation</span></span>
-<span id="cb1-221"><a href="#cb1-221"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-222"><a href="#cb1-222"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
-<span id="cb1-223"><a href="#cb1-223"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
-<span id="cb1-224"><a href="#cb1-224"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, M)</span>
+<span id="cb1-203"><a href="#cb1-203"></a><span class="co"># Random selection</span></span>
+<span id="cb1-204"><a href="#cb1-204"></a>random_order <span class="op">=</span> np.random.permutation(<span class="bu">len</span>(beta_true))[:n_items]</span>
+<span id="cb1-205"><a href="#cb1-205"></a>random_info <span class="op">=</span> [<span class="dv">0</span>]</span>
+<span id="cb1-206"><a href="#cb1-206"></a><span class="cf">for</span> j <span class="kw">in</span> random_order:</span>
+<span id="cb1-207"><a href="#cb1-207"></a>    P <span class="op">=</span> sigmoid(theta_test <span class="op">-</span> beta_true[j])</span>
+<span id="cb1-208"><a href="#cb1-208"></a>    info <span class="op">=</span> P <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P)</span>
+<span id="cb1-209"><a href="#cb1-209"></a>    random_info.append(random_info[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> info)</span>
+<span id="cb1-210"><a href="#cb1-210"></a></span>
+<span id="cb1-211"><a href="#cb1-211"></a>axes[<span class="dv">1</span>].plot(<span class="bu">range</span>(n_items <span class="op">+</span> <span class="dv">1</span>), adaptive_info, <span class="st">'g-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Adaptive'</span>)</span>
+<span id="cb1-212"><a href="#cb1-212"></a>axes[<span class="dv">1</span>].plot(<span class="bu">range</span>(n_items <span class="op">+</span> <span class="dv">1</span>), random_info, <span class="st">'b-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Random'</span>)</span>
+<span id="cb1-213"><a href="#cb1-213"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Number of Items'</span>)</span>
+<span id="cb1-214"><a href="#cb1-214"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Cumulative Fisher Information'</span>)</span>
+<span id="cb1-215"><a href="#cb1-215"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Information Accumulation (θ = </span><span class="sc">{</span>theta_test<span class="sc">}</span><span class="ss">)'</span>)</span>
+<span id="cb1-216"><a href="#cb1-216"></a>axes[<span class="dv">1</span>].legend()</span>
+<span id="cb1-217"><a href="#cb1-217"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-218"><a href="#cb1-218"></a></span>
+<span id="cb1-219"><a href="#cb1-219"></a>plt.tight_layout()</span>
+<span id="cb1-220"><a href="#cb1-220"></a>plt.show()</span>
+<span id="cb1-221"><a href="#cb1-221"></a><span class="in">```</span></span>
+<span id="cb1-222"><a href="#cb1-222"></a></span>
+<span id="cb1-223"><a href="#cb1-223"></a></span>
+<span id="cb1-224"><a href="#cb1-224"></a><span class="fu">### CAT Implementation {#sec-cat-implementation}</span></span>
 <span id="cb1-225"><a href="#cb1-225"></a></span>
-<span id="cb1-226"><a href="#cb1-226"></a><span class="kw">def</span> cat_simulation(theta_true_i, beta, n_items_max<span class="op">=</span><span class="dv">30</span>, reliability_threshold<span class="op">=</span><span class="fl">0.95</span>):</span>
-<span id="cb1-227"><a href="#cb1-227"></a>    <span class="co">"""</span></span>
-<span id="cb1-228"><a href="#cb1-228"></a><span class="co">    Simulate CAT for a single test-taker.</span></span>
-<span id="cb1-229"><a href="#cb1-229"></a></span>
-<span id="cb1-230"><a href="#cb1-230"></a><span class="co">    Parameters</span></span>
-<span id="cb1-231"><a href="#cb1-231"></a><span class="co">    ----------</span></span>
-<span id="cb1-232"><a href="#cb1-232"></a><span class="co">    theta_true_i : float</span></span>
-<span id="cb1-233"><a href="#cb1-233"></a><span class="co">        True ability of the test-taker</span></span>
-<span id="cb1-234"><a href="#cb1-234"></a><span class="co">    beta : ndarray</span></span>
-<span id="cb1-235"><a href="#cb1-235"></a><span class="co">        Item difficulties (pre-calibrated)</span></span>
-<span id="cb1-236"><a href="#cb1-236"></a><span class="co">    n_items_max : int</span></span>
-<span id="cb1-237"><a href="#cb1-237"></a><span class="co">        Maximum number of items to administer</span></span>
-<span id="cb1-238"><a href="#cb1-238"></a><span class="co">    reliability_threshold : float</span></span>
-<span id="cb1-239"><a href="#cb1-239"></a><span class="co">        Stop when reliability exceeds this threshold</span></span>
+<span id="cb1-226"><a href="#cb1-226"></a><span class="in">```{pyodide-python}</span></span>
+<span id="cb1-227"><a href="#cb1-227"></a><span class="co">#| label: cat-simulation</span></span>
+<span id="cb1-228"><a href="#cb1-228"></a><span class="co">#| autorun: true</span></span>
+<span id="cb1-229"><a href="#cb1-229"></a><span class="co">#| fig-cap: "CAT achieves the same measurement precision as random testing with substantially fewer items."</span></span>
+<span id="cb1-230"><a href="#cb1-230"></a></span>
+<span id="cb1-231"><a href="#cb1-231"></a><span class="co"># Generate synthetic data for CAT simulation</span></span>
+<span id="cb1-232"><a href="#cb1-232"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-233"><a href="#cb1-233"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
+<span id="cb1-234"><a href="#cb1-234"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
+<span id="cb1-235"><a href="#cb1-235"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, M)</span>
+<span id="cb1-236"><a href="#cb1-236"></a></span>
+<span id="cb1-237"><a href="#cb1-237"></a><span class="kw">def</span> cat_simulation(theta_true_i, beta, n_items_max<span class="op">=</span><span class="dv">30</span>, reliability_threshold<span class="op">=</span><span class="fl">0.95</span>):</span>
+<span id="cb1-238"><a href="#cb1-238"></a>    <span class="co">"""</span></span>
+<span id="cb1-239"><a href="#cb1-239"></a><span class="co">    Simulate CAT for a single test-taker.</span></span>
 <span id="cb1-240"><a href="#cb1-240"></a></span>
-<span id="cb1-241"><a href="#cb1-241"></a><span class="co">    Returns</span></span>
-<span id="cb1-242"><a href="#cb1-242"></a><span class="co">    -------</span></span>
-<span id="cb1-243"><a href="#cb1-243"></a><span class="co">    dict with theta_hat, n_items, reliability_history, etc.</span></span>
-<span id="cb1-244"><a href="#cb1-244"></a><span class="co">    """</span></span>
-<span id="cb1-245"><a href="#cb1-245"></a>    M <span class="op">=</span> <span class="bu">len</span>(beta)</span>
-<span id="cb1-246"><a href="#cb1-246"></a>    administered <span class="op">=</span> []</span>
-<span id="cb1-247"><a href="#cb1-247"></a>    responses <span class="op">=</span> []</span>
-<span id="cb1-248"><a href="#cb1-248"></a></span>
-<span id="cb1-249"><a href="#cb1-249"></a>    <span class="co"># Prior: theta ~ N(0, 1)</span></span>
-<span id="cb1-250"><a href="#cb1-250"></a>    theta_hat <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb1-251"><a href="#cb1-251"></a>    prior_var <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb1-252"><a href="#cb1-252"></a></span>
-<span id="cb1-253"><a href="#cb1-253"></a>    theta_history <span class="op">=</span> [theta_hat]</span>
-<span id="cb1-254"><a href="#cb1-254"></a>    reliability_history <span class="op">=</span> [<span class="fl">0.0</span>]</span>
-<span id="cb1-255"><a href="#cb1-255"></a>    se_history <span class="op">=</span> [<span class="fl">1.0</span>]</span>
-<span id="cb1-256"><a href="#cb1-256"></a>    available_items <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(M))</span>
-<span id="cb1-257"><a href="#cb1-257"></a></span>
-<span id="cb1-258"><a href="#cb1-258"></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">min</span>(n_items_max, M)):</span>
-<span id="cb1-259"><a href="#cb1-259"></a>        <span class="co"># Select item with maximum Fisher information at current estimate</span></span>
-<span id="cb1-260"><a href="#cb1-260"></a>        best_item <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb1-261"><a href="#cb1-261"></a>        best_info <span class="op">=</span> <span class="op">-</span>np.inf</span>
-<span id="cb1-262"><a href="#cb1-262"></a></span>
-<span id="cb1-263"><a href="#cb1-263"></a>        <span class="cf">for</span> j <span class="kw">in</span> available_items:</span>
-<span id="cb1-264"><a href="#cb1-264"></a>            P_j <span class="op">=</span> sigmoid(theta_hat <span class="op">-</span> beta[j])</span>
-<span id="cb1-265"><a href="#cb1-265"></a>            info_j <span class="op">=</span> P_j <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_j)</span>
-<span id="cb1-266"><a href="#cb1-266"></a>            <span class="cf">if</span> info_j <span class="op">&gt;</span> best_info:</span>
-<span id="cb1-267"><a href="#cb1-267"></a>                best_info <span class="op">=</span> info_j</span>
-<span id="cb1-268"><a href="#cb1-268"></a>                best_item <span class="op">=</span> j</span>
-<span id="cb1-269"><a href="#cb1-269"></a></span>
-<span id="cb1-270"><a href="#cb1-270"></a>        <span class="co"># Administer item (simulate response from true ability)</span></span>
-<span id="cb1-271"><a href="#cb1-271"></a>        P_true <span class="op">=</span> sigmoid(theta_true_i <span class="op">-</span> beta[best_item])</span>
-<span id="cb1-272"><a href="#cb1-272"></a>        response <span class="op">=</span> <span class="bu">int</span>(np.random.random() <span class="op">&lt;</span> P_true)</span>
+<span id="cb1-241"><a href="#cb1-241"></a><span class="co">    Parameters</span></span>
+<span id="cb1-242"><a href="#cb1-242"></a><span class="co">    ----------</span></span>
+<span id="cb1-243"><a href="#cb1-243"></a><span class="co">    theta_true_i : float</span></span>
+<span id="cb1-244"><a href="#cb1-244"></a><span class="co">        True ability of the test-taker</span></span>
+<span id="cb1-245"><a href="#cb1-245"></a><span class="co">    beta : ndarray</span></span>
+<span id="cb1-246"><a href="#cb1-246"></a><span class="co">        Item difficulties (pre-calibrated)</span></span>
+<span id="cb1-247"><a href="#cb1-247"></a><span class="co">    n_items_max : int</span></span>
+<span id="cb1-248"><a href="#cb1-248"></a><span class="co">        Maximum number of items to administer</span></span>
+<span id="cb1-249"><a href="#cb1-249"></a><span class="co">    reliability_threshold : float</span></span>
+<span id="cb1-250"><a href="#cb1-250"></a><span class="co">        Stop when reliability exceeds this threshold</span></span>
+<span id="cb1-251"><a href="#cb1-251"></a></span>
+<span id="cb1-252"><a href="#cb1-252"></a><span class="co">    Returns</span></span>
+<span id="cb1-253"><a href="#cb1-253"></a><span class="co">    -------</span></span>
+<span id="cb1-254"><a href="#cb1-254"></a><span class="co">    dict with theta_hat, n_items, reliability_history, etc.</span></span>
+<span id="cb1-255"><a href="#cb1-255"></a><span class="co">    """</span></span>
+<span id="cb1-256"><a href="#cb1-256"></a>    M <span class="op">=</span> <span class="bu">len</span>(beta)</span>
+<span id="cb1-257"><a href="#cb1-257"></a>    administered <span class="op">=</span> []</span>
+<span id="cb1-258"><a href="#cb1-258"></a>    responses <span class="op">=</span> []</span>
+<span id="cb1-259"><a href="#cb1-259"></a></span>
+<span id="cb1-260"><a href="#cb1-260"></a>    <span class="co"># Prior: theta ~ N(0, 1)</span></span>
+<span id="cb1-261"><a href="#cb1-261"></a>    theta_hat <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb1-262"><a href="#cb1-262"></a>    prior_var <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb1-263"><a href="#cb1-263"></a></span>
+<span id="cb1-264"><a href="#cb1-264"></a>    theta_history <span class="op">=</span> [theta_hat]</span>
+<span id="cb1-265"><a href="#cb1-265"></a>    reliability_history <span class="op">=</span> [<span class="fl">0.0</span>]</span>
+<span id="cb1-266"><a href="#cb1-266"></a>    se_history <span class="op">=</span> [<span class="fl">1.0</span>]</span>
+<span id="cb1-267"><a href="#cb1-267"></a>    available_items <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(M))</span>
+<span id="cb1-268"><a href="#cb1-268"></a></span>
+<span id="cb1-269"><a href="#cb1-269"></a>    <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">min</span>(n_items_max, M)):</span>
+<span id="cb1-270"><a href="#cb1-270"></a>        <span class="co"># Select item with maximum Fisher information at current estimate</span></span>
+<span id="cb1-271"><a href="#cb1-271"></a>        best_item <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-272"><a href="#cb1-272"></a>        best_info <span class="op">=</span> <span class="op">-</span>np.inf</span>
 <span id="cb1-273"><a href="#cb1-273"></a></span>
-<span id="cb1-274"><a href="#cb1-274"></a>        administered.append(best_item)</span>
-<span id="cb1-275"><a href="#cb1-275"></a>        responses.append(response)</span>
-<span id="cb1-276"><a href="#cb1-276"></a>        available_items.remove(best_item)</span>
-<span id="cb1-277"><a href="#cb1-277"></a></span>
-<span id="cb1-278"><a href="#cb1-278"></a>        <span class="co"># Update ability estimate via MAP (Newton-Raphson)</span></span>
-<span id="cb1-279"><a href="#cb1-279"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb1-280"><a href="#cb1-280"></a>            P_vec <span class="op">=</span> sigmoid(theta_hat <span class="op">-</span> np.array([beta[j] <span class="cf">for</span> j <span class="kw">in</span> administered]))</span>
-<span id="cb1-281"><a href="#cb1-281"></a>            grad <span class="op">=</span> np.<span class="bu">sum</span>(np.array(responses) <span class="op">-</span> P_vec) <span class="op">-</span> theta_hat <span class="op">/</span> prior_var</span>
-<span id="cb1-282"><a href="#cb1-282"></a>            hess <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(P_vec <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_vec)) <span class="op">-</span> <span class="dv">1</span> <span class="op">/</span> prior_var</span>
-<span id="cb1-283"><a href="#cb1-283"></a>            <span class="cf">if</span> <span class="bu">abs</span>(hess) <span class="op">&gt;</span> <span class="fl">1e-10</span>:</span>
-<span id="cb1-284"><a href="#cb1-284"></a>                theta_hat <span class="op">=</span> theta_hat <span class="op">-</span> grad <span class="op">/</span> hess</span>
-<span id="cb1-285"><a href="#cb1-285"></a></span>
-<span id="cb1-286"><a href="#cb1-286"></a>        <span class="co"># Posterior variance and reliability</span></span>
-<span id="cb1-287"><a href="#cb1-287"></a>        total_info <span class="op">=</span> np.<span class="bu">sum</span>([sigmoid(theta_hat <span class="op">-</span> beta[j]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> sigmoid(theta_hat <span class="op">-</span> beta[j]))</span>
-<span id="cb1-288"><a href="#cb1-288"></a>                           <span class="cf">for</span> j <span class="kw">in</span> administered])</span>
-<span id="cb1-289"><a href="#cb1-289"></a>        posterior_var <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span><span class="op">/</span>prior_var <span class="op">+</span> total_info)</span>
-<span id="cb1-290"><a href="#cb1-290"></a>        reliability <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> posterior_var <span class="op">/</span> prior_var</span>
-<span id="cb1-291"><a href="#cb1-291"></a></span>
-<span id="cb1-292"><a href="#cb1-292"></a>        theta_history.append(theta_hat)</span>
-<span id="cb1-293"><a href="#cb1-293"></a>        reliability_history.append(reliability)</span>
-<span id="cb1-294"><a href="#cb1-294"></a>        se_history.append(np.sqrt(posterior_var))</span>
-<span id="cb1-295"><a href="#cb1-295"></a></span>
-<span id="cb1-296"><a href="#cb1-296"></a>        <span class="cf">if</span> reliability <span class="op">&gt;=</span> reliability_threshold:</span>
-<span id="cb1-297"><a href="#cb1-297"></a>            <span class="cf">break</span></span>
-<span id="cb1-298"><a href="#cb1-298"></a></span>
-<span id="cb1-299"><a href="#cb1-299"></a>    <span class="cf">return</span> {</span>
-<span id="cb1-300"><a href="#cb1-300"></a>        <span class="st">'theta_hat'</span>: theta_hat, <span class="st">'n_items'</span>: <span class="bu">len</span>(administered),</span>
-<span id="cb1-301"><a href="#cb1-301"></a>        <span class="st">'reliability_history'</span>: reliability_history,</span>
-<span id="cb1-302"><a href="#cb1-302"></a>        <span class="st">'theta_history'</span>: theta_history, <span class="st">'se_history'</span>: se_history,</span>
-<span id="cb1-303"><a href="#cb1-303"></a>        <span class="st">'final_reliability'</span>: reliability_history[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb1-304"><a href="#cb1-304"></a>    }</span>
-<span id="cb1-305"><a href="#cb1-305"></a></span>
-<span id="cb1-306"><a href="#cb1-306"></a><span class="kw">def</span> random_selection_simulation(theta_true_i, beta, n_items_max<span class="op">=</span><span class="dv">30</span>, reliability_threshold<span class="op">=</span><span class="fl">0.95</span>):</span>
-<span id="cb1-307"><a href="#cb1-307"></a>    <span class="co">"""Simulate random item selection for comparison."""</span></span>
-<span id="cb1-308"><a href="#cb1-308"></a>    M <span class="op">=</span> <span class="bu">len</span>(beta)</span>
-<span id="cb1-309"><a href="#cb1-309"></a>    item_order <span class="op">=</span> <span class="bu">list</span>(np.random.permutation(M)[:n_items_max])</span>
-<span id="cb1-310"><a href="#cb1-310"></a></span>
-<span id="cb1-311"><a href="#cb1-311"></a>    theta_hat <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb1-312"><a href="#cb1-312"></a>    prior_var <span class="op">=</span> <span class="fl">1.0</span></span>
-<span id="cb1-313"><a href="#cb1-313"></a>    administered <span class="op">=</span> []</span>
-<span id="cb1-314"><a href="#cb1-314"></a>    responses <span class="op">=</span> []</span>
-<span id="cb1-315"><a href="#cb1-315"></a>    reliability_history <span class="op">=</span> [<span class="fl">0.0</span>]</span>
-<span id="cb1-316"><a href="#cb1-316"></a>    theta_history <span class="op">=</span> [theta_hat]</span>
-<span id="cb1-317"><a href="#cb1-317"></a></span>
-<span id="cb1-318"><a href="#cb1-318"></a>    <span class="cf">for</span> j <span class="kw">in</span> item_order:</span>
-<span id="cb1-319"><a href="#cb1-319"></a>        P_true <span class="op">=</span> sigmoid(theta_true_i <span class="op">-</span> beta[j])</span>
-<span id="cb1-320"><a href="#cb1-320"></a>        response <span class="op">=</span> <span class="bu">int</span>(np.random.random() <span class="op">&lt;</span> P_true)</span>
-<span id="cb1-321"><a href="#cb1-321"></a>        administered.append(j)</span>
-<span id="cb1-322"><a href="#cb1-322"></a>        responses.append(response)</span>
-<span id="cb1-323"><a href="#cb1-323"></a></span>
-<span id="cb1-324"><a href="#cb1-324"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
-<span id="cb1-325"><a href="#cb1-325"></a>            P_vec <span class="op">=</span> sigmoid(theta_hat <span class="op">-</span> np.array([beta[k] <span class="cf">for</span> k <span class="kw">in</span> administered]))</span>
-<span id="cb1-326"><a href="#cb1-326"></a>            grad <span class="op">=</span> np.<span class="bu">sum</span>(np.array(responses) <span class="op">-</span> P_vec) <span class="op">-</span> theta_hat <span class="op">/</span> prior_var</span>
-<span id="cb1-327"><a href="#cb1-327"></a>            hess <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(P_vec <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_vec)) <span class="op">-</span> <span class="dv">1</span> <span class="op">/</span> prior_var</span>
-<span id="cb1-328"><a href="#cb1-328"></a>            <span class="cf">if</span> <span class="bu">abs</span>(hess) <span class="op">&gt;</span> <span class="fl">1e-10</span>:</span>
-<span id="cb1-329"><a href="#cb1-329"></a>                theta_hat <span class="op">=</span> theta_hat <span class="op">-</span> grad <span class="op">/</span> hess</span>
-<span id="cb1-330"><a href="#cb1-330"></a></span>
-<span id="cb1-331"><a href="#cb1-331"></a>        total_info <span class="op">=</span> np.<span class="bu">sum</span>([sigmoid(theta_hat <span class="op">-</span> beta[k]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> sigmoid(theta_hat <span class="op">-</span> beta[k]))</span>
-<span id="cb1-332"><a href="#cb1-332"></a>                           <span class="cf">for</span> k <span class="kw">in</span> administered])</span>
-<span id="cb1-333"><a href="#cb1-333"></a>        posterior_var <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span><span class="op">/</span>prior_var <span class="op">+</span> total_info)</span>
-<span id="cb1-334"><a href="#cb1-334"></a>        reliability <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> posterior_var <span class="op">/</span> prior_var</span>
-<span id="cb1-335"><a href="#cb1-335"></a>        reliability_history.append(reliability)</span>
-<span id="cb1-336"><a href="#cb1-336"></a>        theta_history.append(theta_hat)</span>
-<span id="cb1-337"><a href="#cb1-337"></a></span>
-<span id="cb1-338"><a href="#cb1-338"></a>        <span class="cf">if</span> reliability <span class="op">&gt;=</span> reliability_threshold:</span>
-<span id="cb1-339"><a href="#cb1-339"></a>            <span class="cf">break</span></span>
-<span id="cb1-340"><a href="#cb1-340"></a></span>
-<span id="cb1-341"><a href="#cb1-341"></a>    <span class="cf">return</span> {<span class="st">'n_items'</span>: <span class="bu">len</span>(administered), <span class="st">'reliability_history'</span>: reliability_history,</span>
-<span id="cb1-342"><a href="#cb1-342"></a>            <span class="st">'theta_history'</span>: theta_history, <span class="st">'theta_hat'</span>: theta_hat,</span>
-<span id="cb1-343"><a href="#cb1-343"></a>            <span class="st">'final_reliability'</span>: reliability_history[<span class="op">-</span><span class="dv">1</span>]}</span>
-<span id="cb1-344"><a href="#cb1-344"></a></span>
-<span id="cb1-345"><a href="#cb1-345"></a><span class="co"># Run simulations</span></span>
-<span id="cb1-346"><a href="#cb1-346"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-347"><a href="#cb1-347"></a>n_test_takers <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb1-348"><a href="#cb1-348"></a>theta_test_sample <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_test_takers)</span>
-<span id="cb1-349"><a href="#cb1-349"></a></span>
-<span id="cb1-350"><a href="#cb1-350"></a>cat_results <span class="op">=</span> []</span>
-<span id="cb1-351"><a href="#cb1-351"></a>random_results <span class="op">=</span> []</span>
-<span id="cb1-352"><a href="#cb1-352"></a><span class="cf">for</span> theta_i <span class="kw">in</span> theta_test_sample:</span>
-<span id="cb1-353"><a href="#cb1-353"></a>    cat_results.append(cat_simulation(theta_i, beta_true))</span>
-<span id="cb1-354"><a href="#cb1-354"></a>    random_results.append(random_selection_simulation(theta_i, beta_true))</span>
+<span id="cb1-274"><a href="#cb1-274"></a>        <span class="cf">for</span> j <span class="kw">in</span> available_items:</span>
+<span id="cb1-275"><a href="#cb1-275"></a>            P_j <span class="op">=</span> sigmoid(theta_hat <span class="op">-</span> beta[j])</span>
+<span id="cb1-276"><a href="#cb1-276"></a>            info_j <span class="op">=</span> P_j <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_j)</span>
+<span id="cb1-277"><a href="#cb1-277"></a>            <span class="cf">if</span> info_j <span class="op">&gt;</span> best_info:</span>
+<span id="cb1-278"><a href="#cb1-278"></a>                best_info <span class="op">=</span> info_j</span>
+<span id="cb1-279"><a href="#cb1-279"></a>                best_item <span class="op">=</span> j</span>
+<span id="cb1-280"><a href="#cb1-280"></a></span>
+<span id="cb1-281"><a href="#cb1-281"></a>        <span class="co"># Administer item (simulate response from true ability)</span></span>
+<span id="cb1-282"><a href="#cb1-282"></a>        P_true <span class="op">=</span> sigmoid(theta_true_i <span class="op">-</span> beta[best_item])</span>
+<span id="cb1-283"><a href="#cb1-283"></a>        response <span class="op">=</span> <span class="bu">int</span>(np.random.random() <span class="op">&lt;</span> P_true)</span>
+<span id="cb1-284"><a href="#cb1-284"></a></span>
+<span id="cb1-285"><a href="#cb1-285"></a>        administered.append(best_item)</span>
+<span id="cb1-286"><a href="#cb1-286"></a>        responses.append(response)</span>
+<span id="cb1-287"><a href="#cb1-287"></a>        available_items.remove(best_item)</span>
+<span id="cb1-288"><a href="#cb1-288"></a></span>
+<span id="cb1-289"><a href="#cb1-289"></a>        <span class="co"># Update ability estimate via MAP (Newton-Raphson)</span></span>
+<span id="cb1-290"><a href="#cb1-290"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb1-291"><a href="#cb1-291"></a>            P_vec <span class="op">=</span> sigmoid(theta_hat <span class="op">-</span> np.array([beta[j] <span class="cf">for</span> j <span class="kw">in</span> administered]))</span>
+<span id="cb1-292"><a href="#cb1-292"></a>            grad <span class="op">=</span> np.<span class="bu">sum</span>(np.array(responses) <span class="op">-</span> P_vec) <span class="op">-</span> theta_hat <span class="op">/</span> prior_var</span>
+<span id="cb1-293"><a href="#cb1-293"></a>            hess <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(P_vec <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_vec)) <span class="op">-</span> <span class="dv">1</span> <span class="op">/</span> prior_var</span>
+<span id="cb1-294"><a href="#cb1-294"></a>            <span class="cf">if</span> <span class="bu">abs</span>(hess) <span class="op">&gt;</span> <span class="fl">1e-10</span>:</span>
+<span id="cb1-295"><a href="#cb1-295"></a>                theta_hat <span class="op">=</span> theta_hat <span class="op">-</span> grad <span class="op">/</span> hess</span>
+<span id="cb1-296"><a href="#cb1-296"></a></span>
+<span id="cb1-297"><a href="#cb1-297"></a>        <span class="co"># Posterior variance and reliability</span></span>
+<span id="cb1-298"><a href="#cb1-298"></a>        total_info <span class="op">=</span> np.<span class="bu">sum</span>([sigmoid(theta_hat <span class="op">-</span> beta[j]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> sigmoid(theta_hat <span class="op">-</span> beta[j]))</span>
+<span id="cb1-299"><a href="#cb1-299"></a>                           <span class="cf">for</span> j <span class="kw">in</span> administered])</span>
+<span id="cb1-300"><a href="#cb1-300"></a>        posterior_var <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span><span class="op">/</span>prior_var <span class="op">+</span> total_info)</span>
+<span id="cb1-301"><a href="#cb1-301"></a>        reliability <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> posterior_var <span class="op">/</span> prior_var</span>
+<span id="cb1-302"><a href="#cb1-302"></a></span>
+<span id="cb1-303"><a href="#cb1-303"></a>        theta_history.append(theta_hat)</span>
+<span id="cb1-304"><a href="#cb1-304"></a>        reliability_history.append(reliability)</span>
+<span id="cb1-305"><a href="#cb1-305"></a>        se_history.append(np.sqrt(posterior_var))</span>
+<span id="cb1-306"><a href="#cb1-306"></a></span>
+<span id="cb1-307"><a href="#cb1-307"></a>        <span class="cf">if</span> reliability <span class="op">&gt;=</span> reliability_threshold:</span>
+<span id="cb1-308"><a href="#cb1-308"></a>            <span class="cf">break</span></span>
+<span id="cb1-309"><a href="#cb1-309"></a></span>
+<span id="cb1-310"><a href="#cb1-310"></a>    <span class="cf">return</span> {</span>
+<span id="cb1-311"><a href="#cb1-311"></a>        <span class="st">'theta_hat'</span>: theta_hat, <span class="st">'n_items'</span>: <span class="bu">len</span>(administered),</span>
+<span id="cb1-312"><a href="#cb1-312"></a>        <span class="st">'reliability_history'</span>: reliability_history,</span>
+<span id="cb1-313"><a href="#cb1-313"></a>        <span class="st">'theta_history'</span>: theta_history, <span class="st">'se_history'</span>: se_history,</span>
+<span id="cb1-314"><a href="#cb1-314"></a>        <span class="st">'final_reliability'</span>: reliability_history[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb1-315"><a href="#cb1-315"></a>    }</span>
+<span id="cb1-316"><a href="#cb1-316"></a></span>
+<span id="cb1-317"><a href="#cb1-317"></a><span class="kw">def</span> random_selection_simulation(theta_true_i, beta, n_items_max<span class="op">=</span><span class="dv">30</span>, reliability_threshold<span class="op">=</span><span class="fl">0.95</span>):</span>
+<span id="cb1-318"><a href="#cb1-318"></a>    <span class="co">"""Simulate random item selection for comparison."""</span></span>
+<span id="cb1-319"><a href="#cb1-319"></a>    M <span class="op">=</span> <span class="bu">len</span>(beta)</span>
+<span id="cb1-320"><a href="#cb1-320"></a>    item_order <span class="op">=</span> <span class="bu">list</span>(np.random.permutation(M)[:n_items_max])</span>
+<span id="cb1-321"><a href="#cb1-321"></a></span>
+<span id="cb1-322"><a href="#cb1-322"></a>    theta_hat <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb1-323"><a href="#cb1-323"></a>    prior_var <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb1-324"><a href="#cb1-324"></a>    administered <span class="op">=</span> []</span>
+<span id="cb1-325"><a href="#cb1-325"></a>    responses <span class="op">=</span> []</span>
+<span id="cb1-326"><a href="#cb1-326"></a>    reliability_history <span class="op">=</span> [<span class="fl">0.0</span>]</span>
+<span id="cb1-327"><a href="#cb1-327"></a>    theta_history <span class="op">=</span> [theta_hat]</span>
+<span id="cb1-328"><a href="#cb1-328"></a></span>
+<span id="cb1-329"><a href="#cb1-329"></a>    <span class="cf">for</span> j <span class="kw">in</span> item_order:</span>
+<span id="cb1-330"><a href="#cb1-330"></a>        P_true <span class="op">=</span> sigmoid(theta_true_i <span class="op">-</span> beta[j])</span>
+<span id="cb1-331"><a href="#cb1-331"></a>        response <span class="op">=</span> <span class="bu">int</span>(np.random.random() <span class="op">&lt;</span> P_true)</span>
+<span id="cb1-332"><a href="#cb1-332"></a>        administered.append(j)</span>
+<span id="cb1-333"><a href="#cb1-333"></a>        responses.append(response)</span>
+<span id="cb1-334"><a href="#cb1-334"></a></span>
+<span id="cb1-335"><a href="#cb1-335"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb1-336"><a href="#cb1-336"></a>            P_vec <span class="op">=</span> sigmoid(theta_hat <span class="op">-</span> np.array([beta[k] <span class="cf">for</span> k <span class="kw">in</span> administered]))</span>
+<span id="cb1-337"><a href="#cb1-337"></a>            grad <span class="op">=</span> np.<span class="bu">sum</span>(np.array(responses) <span class="op">-</span> P_vec) <span class="op">-</span> theta_hat <span class="op">/</span> prior_var</span>
+<span id="cb1-338"><a href="#cb1-338"></a>            hess <span class="op">=</span> <span class="op">-</span>np.<span class="bu">sum</span>(P_vec <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_vec)) <span class="op">-</span> <span class="dv">1</span> <span class="op">/</span> prior_var</span>
+<span id="cb1-339"><a href="#cb1-339"></a>            <span class="cf">if</span> <span class="bu">abs</span>(hess) <span class="op">&gt;</span> <span class="fl">1e-10</span>:</span>
+<span id="cb1-340"><a href="#cb1-340"></a>                theta_hat <span class="op">=</span> theta_hat <span class="op">-</span> grad <span class="op">/</span> hess</span>
+<span id="cb1-341"><a href="#cb1-341"></a></span>
+<span id="cb1-342"><a href="#cb1-342"></a>        total_info <span class="op">=</span> np.<span class="bu">sum</span>([sigmoid(theta_hat <span class="op">-</span> beta[k]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> sigmoid(theta_hat <span class="op">-</span> beta[k]))</span>
+<span id="cb1-343"><a href="#cb1-343"></a>                           <span class="cf">for</span> k <span class="kw">in</span> administered])</span>
+<span id="cb1-344"><a href="#cb1-344"></a>        posterior_var <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span><span class="op">/</span>prior_var <span class="op">+</span> total_info)</span>
+<span id="cb1-345"><a href="#cb1-345"></a>        reliability <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> posterior_var <span class="op">/</span> prior_var</span>
+<span id="cb1-346"><a href="#cb1-346"></a>        reliability_history.append(reliability)</span>
+<span id="cb1-347"><a href="#cb1-347"></a>        theta_history.append(theta_hat)</span>
+<span id="cb1-348"><a href="#cb1-348"></a></span>
+<span id="cb1-349"><a href="#cb1-349"></a>        <span class="cf">if</span> reliability <span class="op">&gt;=</span> reliability_threshold:</span>
+<span id="cb1-350"><a href="#cb1-350"></a>            <span class="cf">break</span></span>
+<span id="cb1-351"><a href="#cb1-351"></a></span>
+<span id="cb1-352"><a href="#cb1-352"></a>    <span class="cf">return</span> {<span class="st">'n_items'</span>: <span class="bu">len</span>(administered), <span class="st">'reliability_history'</span>: reliability_history,</span>
+<span id="cb1-353"><a href="#cb1-353"></a>            <span class="st">'theta_history'</span>: theta_history, <span class="st">'theta_hat'</span>: theta_hat,</span>
+<span id="cb1-354"><a href="#cb1-354"></a>            <span class="st">'final_reliability'</span>: reliability_history[<span class="op">-</span><span class="dv">1</span>]}</span>
 <span id="cb1-355"><a href="#cb1-355"></a></span>
-<span id="cb1-356"><a href="#cb1-356"></a>cat_items <span class="op">=</span> [r[<span class="st">'n_items'</span>] <span class="cf">for</span> r <span class="kw">in</span> cat_results]</span>
-<span id="cb1-357"><a href="#cb1-357"></a>random_items <span class="op">=</span> [r[<span class="st">'n_items'</span>] <span class="cf">for</span> r <span class="kw">in</span> random_results]</span>
-<span id="cb1-358"><a href="#cb1-358"></a></span>
-<span id="cb1-359"><a href="#cb1-359"></a><span class="co"># Plot comparison</span></span>
-<span id="cb1-360"><a href="#cb1-360"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-361"><a href="#cb1-361"></a></span>
-<span id="cb1-362"><a href="#cb1-362"></a><span class="co"># Bar chart</span></span>
-<span id="cb1-363"><a href="#cb1-363"></a>methods <span class="op">=</span> [<span class="st">'Random'</span>, <span class="st">'CAT'</span>]</span>
-<span id="cb1-364"><a href="#cb1-364"></a>means <span class="op">=</span> [np.mean(random_items), np.mean(cat_items)]</span>
-<span id="cb1-365"><a href="#cb1-365"></a>stds <span class="op">=</span> [np.std(random_items), np.std(cat_items)]</span>
-<span id="cb1-366"><a href="#cb1-366"></a>bars <span class="op">=</span> axes[<span class="dv">0</span>].bar(methods, means, yerr<span class="op">=</span>stds, capsize<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
-<span id="cb1-367"><a href="#cb1-367"></a>                   color<span class="op">=</span>[<span class="st">'#1f77b4'</span>, <span class="st">'#2ca02c'</span>])</span>
-<span id="cb1-368"><a href="#cb1-368"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Items to reach 95</span><span class="sc">% r</span><span class="st">eliability'</span>)</span>
-<span id="cb1-369"><a href="#cb1-369"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Efficiency: CAT vs Random'</span>)</span>
-<span id="cb1-370"><a href="#cb1-370"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, axis<span class="op">=</span><span class="st">'y'</span>)</span>
-<span id="cb1-371"><a href="#cb1-371"></a><span class="cf">for</span> bar, mean, std <span class="kw">in</span> <span class="bu">zip</span>(bars, means, stds):</span>
-<span id="cb1-372"><a href="#cb1-372"></a>    axes[<span class="dv">0</span>].text(bar.get_x() <span class="op">+</span> bar.get_width()<span class="op">/</span><span class="dv">2</span>, bar.get_height() <span class="op">+</span> std <span class="op">+</span> <span class="fl">0.5</span>,</span>
-<span id="cb1-373"><a href="#cb1-373"></a>                <span class="ss">f'</span><span class="sc">{</span>mean<span class="sc">:.1f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
-<span id="cb1-374"><a href="#cb1-374"></a></span>
-<span id="cb1-375"><a href="#cb1-375"></a><span class="co"># Reliability trajectory</span></span>
-<span id="cb1-376"><a href="#cb1-376"></a>example_idx <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb1-377"><a href="#cb1-377"></a>axes[<span class="dv">1</span>].plot(random_results[example_idx][<span class="st">'reliability_history'</span>], <span class="st">'b-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Random'</span>)</span>
-<span id="cb1-378"><a href="#cb1-378"></a>axes[<span class="dv">1</span>].plot(cat_results[example_idx][<span class="st">'reliability_history'</span>], <span class="st">'g-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'CAT'</span>)</span>
-<span id="cb1-379"><a href="#cb1-379"></a>axes[<span class="dv">1</span>].axhline(<span class="fl">0.95</span>, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">'Threshold'</span>)</span>
-<span id="cb1-380"><a href="#cb1-380"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Items administered'</span>)</span>
-<span id="cb1-381"><a href="#cb1-381"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Reliability'</span>)</span>
-<span id="cb1-382"><a href="#cb1-382"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Reliability Growth (θ = </span><span class="sc">{</span>theta_test_sample[example_idx]<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
-<span id="cb1-383"><a href="#cb1-383"></a>axes[<span class="dv">1</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb1-384"><a href="#cb1-384"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-356"><a href="#cb1-356"></a><span class="co"># Run simulations</span></span>
+<span id="cb1-357"><a href="#cb1-357"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-358"><a href="#cb1-358"></a>n_test_takers <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb1-359"><a href="#cb1-359"></a>theta_test_sample <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_test_takers)</span>
+<span id="cb1-360"><a href="#cb1-360"></a></span>
+<span id="cb1-361"><a href="#cb1-361"></a>cat_results <span class="op">=</span> []</span>
+<span id="cb1-362"><a href="#cb1-362"></a>random_results <span class="op">=</span> []</span>
+<span id="cb1-363"><a href="#cb1-363"></a><span class="cf">for</span> theta_i <span class="kw">in</span> theta_test_sample:</span>
+<span id="cb1-364"><a href="#cb1-364"></a>    cat_results.append(cat_simulation(theta_i, beta_true))</span>
+<span id="cb1-365"><a href="#cb1-365"></a>    random_results.append(random_selection_simulation(theta_i, beta_true))</span>
+<span id="cb1-366"><a href="#cb1-366"></a></span>
+<span id="cb1-367"><a href="#cb1-367"></a>cat_items <span class="op">=</span> [r[<span class="st">'n_items'</span>] <span class="cf">for</span> r <span class="kw">in</span> cat_results]</span>
+<span id="cb1-368"><a href="#cb1-368"></a>random_items <span class="op">=</span> [r[<span class="st">'n_items'</span>] <span class="cf">for</span> r <span class="kw">in</span> random_results]</span>
+<span id="cb1-369"><a href="#cb1-369"></a></span>
+<span id="cb1-370"><a href="#cb1-370"></a><span class="co"># Plot comparison</span></span>
+<span id="cb1-371"><a href="#cb1-371"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
+<span id="cb1-372"><a href="#cb1-372"></a></span>
+<span id="cb1-373"><a href="#cb1-373"></a><span class="co"># Bar chart</span></span>
+<span id="cb1-374"><a href="#cb1-374"></a>methods <span class="op">=</span> [<span class="st">'Random'</span>, <span class="st">'CAT'</span>]</span>
+<span id="cb1-375"><a href="#cb1-375"></a>means <span class="op">=</span> [np.mean(random_items), np.mean(cat_items)]</span>
+<span id="cb1-376"><a href="#cb1-376"></a>stds <span class="op">=</span> [np.std(random_items), np.std(cat_items)]</span>
+<span id="cb1-377"><a href="#cb1-377"></a>bars <span class="op">=</span> axes[<span class="dv">0</span>].bar(methods, means, yerr<span class="op">=</span>stds, capsize<span class="op">=</span><span class="dv">5</span>, alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
+<span id="cb1-378"><a href="#cb1-378"></a>                   color<span class="op">=</span>[<span class="st">'#1f77b4'</span>, <span class="st">'#2ca02c'</span>])</span>
+<span id="cb1-379"><a href="#cb1-379"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Items to reach 95</span><span class="sc">% r</span><span class="st">eliability'</span>)</span>
+<span id="cb1-380"><a href="#cb1-380"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Efficiency: CAT vs Random'</span>)</span>
+<span id="cb1-381"><a href="#cb1-381"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, axis<span class="op">=</span><span class="st">'y'</span>)</span>
+<span id="cb1-382"><a href="#cb1-382"></a><span class="cf">for</span> bar, mean, std <span class="kw">in</span> <span class="bu">zip</span>(bars, means, stds):</span>
+<span id="cb1-383"><a href="#cb1-383"></a>    axes[<span class="dv">0</span>].text(bar.get_x() <span class="op">+</span> bar.get_width()<span class="op">/</span><span class="dv">2</span>, bar.get_height() <span class="op">+</span> std <span class="op">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb1-384"><a href="#cb1-384"></a>                <span class="ss">f'</span><span class="sc">{</span>mean<span class="sc">:.1f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
 <span id="cb1-385"><a href="#cb1-385"></a></span>
-<span id="cb1-386"><a href="#cb1-386"></a><span class="co"># Histogram</span></span>
-<span id="cb1-387"><a href="#cb1-387"></a>axes[<span class="dv">2</span>].hist(random_items, bins<span class="op">=</span><span class="dv">15</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'Random'</span>, color<span class="op">=</span><span class="st">'#1f77b4'</span>)</span>
-<span id="cb1-388"><a href="#cb1-388"></a>axes[<span class="dv">2</span>].hist(cat_items, bins<span class="op">=</span><span class="dv">15</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'CAT'</span>, color<span class="op">=</span><span class="st">'#2ca02c'</span>)</span>
-<span id="cb1-389"><a href="#cb1-389"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'Number of items'</span>)</span>
-<span id="cb1-390"><a href="#cb1-390"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Frequency'</span>)</span>
-<span id="cb1-391"><a href="#cb1-391"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Distribution of Test Lengths'</span>)</span>
-<span id="cb1-392"><a href="#cb1-392"></a>axes[<span class="dv">2</span>].legend()</span>
-<span id="cb1-393"><a href="#cb1-393"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-394"><a href="#cb1-394"></a></span>
-<span id="cb1-395"><a href="#cb1-395"></a>plt.tight_layout()</span>
-<span id="cb1-396"><a href="#cb1-396"></a>plt.show()</span>
-<span id="cb1-397"><a href="#cb1-397"></a></span>
-<span id="cb1-398"><a href="#cb1-398"></a>efficiency_gain <span class="op">=</span> (np.mean(random_items) <span class="op">-</span> np.mean(cat_items)) <span class="op">/</span> np.mean(random_items) <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb1-399"><a href="#cb1-399"></a><span class="bu">print</span>(<span class="ss">f"Random: </span><span class="sc">{</span>np<span class="sc">.</span>mean(random_items)<span class="sc">:.1f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(random_items)<span class="sc">:.1f}</span><span class="ss"> items"</span>)</span>
-<span id="cb1-400"><a href="#cb1-400"></a><span class="bu">print</span>(<span class="ss">f"CAT: </span><span class="sc">{</span>np<span class="sc">.</span>mean(cat_items)<span class="sc">:.1f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(cat_items)<span class="sc">:.1f}</span><span class="ss"> items"</span>)</span>
-<span id="cb1-401"><a href="#cb1-401"></a><span class="bu">print</span>(<span class="ss">f"Efficiency gain: </span><span class="sc">{</span>efficiency_gain<span class="sc">:.1f}</span><span class="ss">% fewer items with CAT"</span>)</span>
-<span id="cb1-402"><a href="#cb1-402"></a><span class="in">```</span></span>
-<span id="cb1-403"><a href="#cb1-403"></a></span>
-<span id="cb1-404"><a href="#cb1-404"></a></span>
-<span id="cb1-405"><a href="#cb1-405"></a><span class="fu">### Stopping Rules and Practical Considerations {#sec-stopping}</span></span>
-<span id="cb1-406"><a href="#cb1-406"></a></span>
-<span id="cb1-407"><a href="#cb1-407"></a>CAT requires a stopping criterion. Common choices include:</span>
+<span id="cb1-386"><a href="#cb1-386"></a><span class="co"># Reliability trajectory</span></span>
+<span id="cb1-387"><a href="#cb1-387"></a>example_idx <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb1-388"><a href="#cb1-388"></a>axes[<span class="dv">1</span>].plot(random_results[example_idx][<span class="st">'reliability_history'</span>], <span class="st">'b-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Random'</span>)</span>
+<span id="cb1-389"><a href="#cb1-389"></a>axes[<span class="dv">1</span>].plot(cat_results[example_idx][<span class="st">'reliability_history'</span>], <span class="st">'g-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'CAT'</span>)</span>
+<span id="cb1-390"><a href="#cb1-390"></a>axes[<span class="dv">1</span>].axhline(<span class="fl">0.95</span>, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">'Threshold'</span>)</span>
+<span id="cb1-391"><a href="#cb1-391"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Items administered'</span>)</span>
+<span id="cb1-392"><a href="#cb1-392"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Reliability'</span>)</span>
+<span id="cb1-393"><a href="#cb1-393"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Reliability Growth (θ = </span><span class="sc">{</span>theta_test_sample[example_idx]<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb1-394"><a href="#cb1-394"></a>axes[<span class="dv">1</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb1-395"><a href="#cb1-395"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-396"><a href="#cb1-396"></a></span>
+<span id="cb1-397"><a href="#cb1-397"></a><span class="co"># Histogram</span></span>
+<span id="cb1-398"><a href="#cb1-398"></a>axes[<span class="dv">2</span>].hist(random_items, bins<span class="op">=</span><span class="dv">15</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'Random'</span>, color<span class="op">=</span><span class="st">'#1f77b4'</span>)</span>
+<span id="cb1-399"><a href="#cb1-399"></a>axes[<span class="dv">2</span>].hist(cat_items, bins<span class="op">=</span><span class="dv">15</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'CAT'</span>, color<span class="op">=</span><span class="st">'#2ca02c'</span>)</span>
+<span id="cb1-400"><a href="#cb1-400"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'Number of items'</span>)</span>
+<span id="cb1-401"><a href="#cb1-401"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb1-402"><a href="#cb1-402"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Distribution of Test Lengths'</span>)</span>
+<span id="cb1-403"><a href="#cb1-403"></a>axes[<span class="dv">2</span>].legend()</span>
+<span id="cb1-404"><a href="#cb1-404"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-405"><a href="#cb1-405"></a></span>
+<span id="cb1-406"><a href="#cb1-406"></a>plt.tight_layout()</span>
+<span id="cb1-407"><a href="#cb1-407"></a>plt.show()</span>
 <span id="cb1-408"><a href="#cb1-408"></a></span>
-<span id="cb1-409"><a href="#cb1-409"></a><span class="ss">1. </span>**Reliability threshold:** Stop when $R = 1 - \sigma^2_{\text{post}} / \sigma^2_{\text{prior}} \geq 0.95$</span>
-<span id="cb1-410"><a href="#cb1-410"></a><span class="ss">2. </span>**Standard error threshold:** Stop when $\text{SE}(\hat{\theta}) \leq 0.3$</span>
-<span id="cb1-411"><a href="#cb1-411"></a><span class="ss">3. </span>**Fixed length:** Administer exactly $K$ items</span>
-<span id="cb1-412"><a href="#cb1-412"></a><span class="ss">4. </span>**Information threshold:** Stop when additional items provide negligible information</span>
-<span id="cb1-413"><a href="#cb1-413"></a></span>
-<span id="cb1-414"><a href="#cb1-414"></a>For AI evaluation, practical constraints interact with statistical criteria:</span>
+<span id="cb1-409"><a href="#cb1-409"></a>efficiency_gain <span class="op">=</span> (np.mean(random_items) <span class="op">-</span> np.mean(cat_items)) <span class="op">/</span> np.mean(random_items) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb1-410"><a href="#cb1-410"></a><span class="bu">print</span>(<span class="ss">f"Random: </span><span class="sc">{</span>np<span class="sc">.</span>mean(random_items)<span class="sc">:.1f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(random_items)<span class="sc">:.1f}</span><span class="ss"> items"</span>)</span>
+<span id="cb1-411"><a href="#cb1-411"></a><span class="bu">print</span>(<span class="ss">f"CAT: </span><span class="sc">{</span>np<span class="sc">.</span>mean(cat_items)<span class="sc">:.1f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(cat_items)<span class="sc">:.1f}</span><span class="ss"> items"</span>)</span>
+<span id="cb1-412"><a href="#cb1-412"></a><span class="bu">print</span>(<span class="ss">f"Efficiency gain: </span><span class="sc">{</span>efficiency_gain<span class="sc">:.1f}</span><span class="ss">% fewer items with CAT"</span>)</span>
+<span id="cb1-413"><a href="#cb1-413"></a><span class="in">```</span></span>
+<span id="cb1-414"><a href="#cb1-414"></a></span>
 <span id="cb1-415"><a href="#cb1-415"></a></span>
-<span id="cb1-416"><a href="#cb1-416"></a><span class="ss">- </span>**Cost:** Each API call has a monetary cost; the stopping rule should account for evaluation budgets.</span>
-<span id="cb1-417"><a href="#cb1-417"></a><span class="ss">- </span>**Time:** Evaluations must complete within deadlines.</span>
-<span id="cb1-418"><a href="#cb1-418"></a><span class="ss">- </span>**Contamination:** Administering too many items from the same pool risks benchmark leakage into training data.</span>
+<span id="cb1-416"><a href="#cb1-416"></a><span class="fu">### Stopping Rules and Practical Considerations {#sec-stopping}</span></span>
+<span id="cb1-417"><a href="#cb1-417"></a></span>
+<span id="cb1-418"><a href="#cb1-418"></a>CAT requires a stopping criterion. Common choices include:</span>
 <span id="cb1-419"><a href="#cb1-419"></a></span>
-<span id="cb1-420"><a href="#cb1-420"></a>::: {.callout-note title="CAT for AI Evaluation"}</span>
-<span id="cb1-421"><a href="#cb1-421"></a>Traditional CAT assumes deterministic responses: a human test-taker gives the same answer if asked the same question twice. AI models may or may not satisfy this depending on temperature and sampling settings.</span>
-<span id="cb1-422"><a href="#cb1-422"></a></span>
-<span id="cb1-423"><a href="#cb1-423"></a>For deterministic evaluation (temperature = 0), CAT applies directly. For stochastic evaluation, we may need multiple samples per item, or methods that account for response variability.</span>
+<span id="cb1-420"><a href="#cb1-420"></a><span class="ss">1. </span>**Reliability threshold:** Stop when $R = 1 - \sigma^2_{\text{post}} / \sigma^2_{\text{prior}} \geq 0.95$</span>
+<span id="cb1-421"><a href="#cb1-421"></a><span class="ss">2. </span>**Standard error threshold:** Stop when $\text{SE}(\hat{\theta}) \leq 0.3$</span>
+<span id="cb1-422"><a href="#cb1-422"></a><span class="ss">3. </span>**Fixed length:** Administer exactly $K$ items</span>
+<span id="cb1-423"><a href="#cb1-423"></a><span class="ss">4. </span>**Information threshold:** Stop when additional items provide negligible information</span>
 <span id="cb1-424"><a href="#cb1-424"></a></span>
-<span id="cb1-425"><a href="#cb1-425"></a>CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in @sec-cold-start.</span>
-<span id="cb1-426"><a href="#cb1-426"></a>:::</span>
-<span id="cb1-427"><a href="#cb1-427"></a></span>
-<span id="cb1-428"><a href="#cb1-428"></a></span>
-<span id="cb1-429"><a href="#cb1-429"></a><span class="fu">### D-Optimal Design {#sec-d-optimal}</span></span>
+<span id="cb1-425"><a href="#cb1-425"></a>For AI evaluation, practical constraints interact with statistical criteria:</span>
+<span id="cb1-426"><a href="#cb1-426"></a></span>
+<span id="cb1-427"><a href="#cb1-427"></a><span class="ss">- </span>**Cost:** Each API call has a monetary cost; the stopping rule should account for evaluation budgets.</span>
+<span id="cb1-428"><a href="#cb1-428"></a><span class="ss">- </span>**Time:** Evaluations must complete within deadlines.</span>
+<span id="cb1-429"><a href="#cb1-429"></a><span class="ss">- </span>**Contamination:** Administering too many items from the same pool risks benchmark leakage into training data.</span>
 <span id="cb1-430"><a href="#cb1-430"></a></span>
-<span id="cb1-431"><a href="#cb1-431"></a>CAT is *sequential* optimal design---it selects one item at a time. But sometimes we need to design a fixed test: selecting $K$ items from a pool of $M$ candidates to administer to all models at once. This is the classical problem of *optimal experimental design*.</span>
-<span id="cb1-432"><a href="#cb1-432"></a></span>
-<span id="cb1-433"><a href="#cb1-433"></a>For a $K$-dimensional factor model with ability vector $U_i \in \mathbb{R}^K$, the Fisher information matrix from administering a set of items $\mathcal{J}$ is:</span>
-<span id="cb1-434"><a href="#cb1-434"></a></span>
-<span id="cb1-435"><a href="#cb1-435"></a>$$</span>
-<span id="cb1-436"><a href="#cb1-436"></a>\mathcal{I}(\theta; \mathcal{J}) = \sum_{j \in \mathcal{J}} P_j(\theta)(1 - P_j(\theta)) \, V_j V_j^\top</span>
-<span id="cb1-437"><a href="#cb1-437"></a>$$</span>
+<span id="cb1-431"><a href="#cb1-431"></a>::: {.callout-note title="CAT for AI Evaluation"}</span>
+<span id="cb1-432"><a href="#cb1-432"></a>Traditional CAT assumes deterministic responses: a human test-taker gives the same answer if asked the same question twice. AI models may or may not satisfy this depending on temperature and sampling settings.</span>
+<span id="cb1-433"><a href="#cb1-433"></a></span>
+<span id="cb1-434"><a href="#cb1-434"></a>For deterministic evaluation (temperature = 0), CAT applies directly. For stochastic evaluation, we may need multiple samples per item, or methods that account for response variability.</span>
+<span id="cb1-435"><a href="#cb1-435"></a></span>
+<span id="cb1-436"><a href="#cb1-436"></a>CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in @sec-cold-start.</span>
+<span id="cb1-437"><a href="#cb1-437"></a>:::</span>
 <span id="cb1-438"><a href="#cb1-438"></a></span>
-<span id="cb1-439"><a href="#cb1-439"></a>where $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$. Different optimality criteria lead to different item selection strategies:</span>
-<span id="cb1-440"><a href="#cb1-440"></a></span>
-<span id="cb1-441"><a href="#cb1-441"></a><span class="ss">- </span>**D-optimal:** Maximize $\det(\mathcal{I})$---the volume of the confidence ellipsoid. This minimizes the generalized variance of the ability estimates.</span>
-<span id="cb1-442"><a href="#cb1-442"></a><span class="ss">- </span>**A-optimal:** Minimize $\text{tr}(\mathcal{I}^{-1})$---the average variance of individual ability components.</span>
-<span id="cb1-443"><a href="#cb1-443"></a><span class="ss">- </span>**E-optimal:** Maximize $\lambda_{\min}(\mathcal{I})$---the smallest eigenvalue. This ensures no ability dimension is poorly estimated.</span>
-<span id="cb1-444"><a href="#cb1-444"></a></span>
-<span id="cb1-445"><a href="#cb1-445"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-446"><a href="#cb1-446"></a><span class="co">#| label: d-optimal-design</span></span>
-<span id="cb1-447"><a href="#cb1-447"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-448"><a href="#cb1-448"></a><span class="co">#| fig-cap: "D-optimal item selection chooses items with diverse difficulties covering the target ability range, yielding substantially higher total information than random selection."</span></span>
+<span id="cb1-439"><a href="#cb1-439"></a></span>
+<span id="cb1-440"><a href="#cb1-440"></a><span class="fu">### D-Optimal Design {#sec-d-optimal}</span></span>
+<span id="cb1-441"><a href="#cb1-441"></a></span>
+<span id="cb1-442"><a href="#cb1-442"></a>CAT is *sequential* optimal design---it selects one item at a time. But sometimes we need to design a fixed test: selecting $K$ items from a pool of $M$ candidates to administer to all models at once. This is the classical problem of *optimal experimental design*.</span>
+<span id="cb1-443"><a href="#cb1-443"></a></span>
+<span id="cb1-444"><a href="#cb1-444"></a>For a $K$-dimensional factor model with ability vector $U_i \in \mathbb{R}^K$, the Fisher information matrix from administering a set of items $\mathcal{J}$ is:</span>
+<span id="cb1-445"><a href="#cb1-445"></a></span>
+<span id="cb1-446"><a href="#cb1-446"></a>$$</span>
+<span id="cb1-447"><a href="#cb1-447"></a>\mathcal{I}(\theta; \mathcal{J}) = \sum_{j \in \mathcal{J}} P_j(\theta)(1 - P_j(\theta)) \, V_j V_j^\top</span>
+<span id="cb1-448"><a href="#cb1-448"></a>$$</span>
 <span id="cb1-449"><a href="#cb1-449"></a></span>
-<span id="cb1-450"><a href="#cb1-450"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize <span class="im">as</span> sp_minimize</span>
+<span id="cb1-450"><a href="#cb1-450"></a>where $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$. Different optimality criteria lead to different item selection strategies:</span>
 <span id="cb1-451"><a href="#cb1-451"></a></span>
-<span id="cb1-452"><a href="#cb1-452"></a><span class="kw">def</span> compute_test_information(item_indices, beta_pool, theta_grid):</span>
-<span id="cb1-453"><a href="#cb1-453"></a>    <span class="co">"""Compute total Fisher information of a test across an ability grid."""</span></span>
-<span id="cb1-454"><a href="#cb1-454"></a>    total_info <span class="op">=</span> np.zeros_like(theta_grid)</span>
-<span id="cb1-455"><a href="#cb1-455"></a>    <span class="cf">for</span> j <span class="kw">in</span> item_indices:</span>
-<span id="cb1-456"><a href="#cb1-456"></a>        P <span class="op">=</span> sigmoid(theta_grid <span class="op">-</span> beta_pool[j])</span>
-<span id="cb1-457"><a href="#cb1-457"></a>        total_info <span class="op">+=</span> P <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P)</span>
-<span id="cb1-458"><a href="#cb1-458"></a>    <span class="cf">return</span> total_info</span>
-<span id="cb1-459"><a href="#cb1-459"></a></span>
-<span id="cb1-460"><a href="#cb1-460"></a><span class="kw">def</span> d_optimal_greedy(beta_pool, K, theta_grid):</span>
-<span id="cb1-461"><a href="#cb1-461"></a>    <span class="co">"""Greedy D-optimal item selection for the Rasch model.</span></span>
+<span id="cb1-452"><a href="#cb1-452"></a><span class="ss">- </span>**D-optimal:** Maximize $\det(\mathcal{I})$---the volume of the confidence ellipsoid. This minimizes the generalized variance of the ability estimates.</span>
+<span id="cb1-453"><a href="#cb1-453"></a><span class="ss">- </span>**A-optimal:** Minimize $\text{tr}(\mathcal{I}^{-1})$---the average variance of individual ability components.</span>
+<span id="cb1-454"><a href="#cb1-454"></a><span class="ss">- </span>**E-optimal:** Maximize $\lambda_{\min}(\mathcal{I})$---the smallest eigenvalue. This ensures no ability dimension is poorly estimated.</span>
+<span id="cb1-455"><a href="#cb1-455"></a></span>
+<span id="cb1-456"><a href="#cb1-456"></a><span class="in">```{pyodide-python}</span></span>
+<span id="cb1-457"><a href="#cb1-457"></a><span class="co">#| label: d-optimal-design</span></span>
+<span id="cb1-458"><a href="#cb1-458"></a><span class="co">#| autorun: true</span></span>
+<span id="cb1-459"><a href="#cb1-459"></a><span class="co">#| fig-cap: "D-optimal item selection chooses items with diverse difficulties covering the target ability range, yielding substantially higher total information than random selection."</span></span>
+<span id="cb1-460"><a href="#cb1-460"></a></span>
+<span id="cb1-461"><a href="#cb1-461"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize <span class="im">as</span> sp_minimize</span>
 <span id="cb1-462"><a href="#cb1-462"></a></span>
-<span id="cb1-463"><a href="#cb1-463"></a><span class="co">    Selects K items from the pool to maximize total information</span></span>
-<span id="cb1-464"><a href="#cb1-464"></a><span class="co">    integrated over the theta grid (approximating D-optimality</span></span>
-<span id="cb1-465"><a href="#cb1-465"></a><span class="co">    for the unidimensional case).</span></span>
-<span id="cb1-466"><a href="#cb1-466"></a><span class="co">    """</span></span>
-<span id="cb1-467"><a href="#cb1-467"></a>    available <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(beta_pool)))</span>
-<span id="cb1-468"><a href="#cb1-468"></a>    selected <span class="op">=</span> []</span>
-<span id="cb1-469"><a href="#cb1-469"></a></span>
-<span id="cb1-470"><a href="#cb1-470"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(K):</span>
-<span id="cb1-471"><a href="#cb1-471"></a>        best_item <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb1-472"><a href="#cb1-472"></a>        best_score <span class="op">=</span> <span class="op">-</span>np.inf</span>
+<span id="cb1-463"><a href="#cb1-463"></a><span class="kw">def</span> compute_test_information(item_indices, beta_pool, theta_grid):</span>
+<span id="cb1-464"><a href="#cb1-464"></a>    <span class="co">"""Compute total Fisher information of a test across an ability grid."""</span></span>
+<span id="cb1-465"><a href="#cb1-465"></a>    total_info <span class="op">=</span> np.zeros_like(theta_grid)</span>
+<span id="cb1-466"><a href="#cb1-466"></a>    <span class="cf">for</span> j <span class="kw">in</span> item_indices:</span>
+<span id="cb1-467"><a href="#cb1-467"></a>        P <span class="op">=</span> sigmoid(theta_grid <span class="op">-</span> beta_pool[j])</span>
+<span id="cb1-468"><a href="#cb1-468"></a>        total_info <span class="op">+=</span> P <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P)</span>
+<span id="cb1-469"><a href="#cb1-469"></a>    <span class="cf">return</span> total_info</span>
+<span id="cb1-470"><a href="#cb1-470"></a></span>
+<span id="cb1-471"><a href="#cb1-471"></a><span class="kw">def</span> d_optimal_greedy(beta_pool, K, theta_grid):</span>
+<span id="cb1-472"><a href="#cb1-472"></a>    <span class="co">"""Greedy D-optimal item selection for the Rasch model.</span></span>
 <span id="cb1-473"><a href="#cb1-473"></a></span>
-<span id="cb1-474"><a href="#cb1-474"></a>        <span class="cf">for</span> j <span class="kw">in</span> available:</span>
-<span id="cb1-475"><a href="#cb1-475"></a>            candidate <span class="op">=</span> selected <span class="op">+</span> [j]</span>
-<span id="cb1-476"><a href="#cb1-476"></a>            info <span class="op">=</span> compute_test_information(candidate, beta_pool, theta_grid)</span>
-<span id="cb1-477"><a href="#cb1-477"></a>            <span class="co"># D-optimal criterion: product of information values</span></span>
-<span id="cb1-478"><a href="#cb1-478"></a>            <span class="co"># (log-determinant in 1D = log of information)</span></span>
-<span id="cb1-479"><a href="#cb1-479"></a>            score <span class="op">=</span> np.<span class="bu">sum</span>(np.log(info <span class="op">+</span> <span class="fl">1e-10</span>))</span>
-<span id="cb1-480"><a href="#cb1-480"></a>            <span class="cf">if</span> score <span class="op">&gt;</span> best_score:</span>
-<span id="cb1-481"><a href="#cb1-481"></a>                best_score <span class="op">=</span> score</span>
-<span id="cb1-482"><a href="#cb1-482"></a>                best_item <span class="op">=</span> j</span>
-<span id="cb1-483"><a href="#cb1-483"></a></span>
-<span id="cb1-484"><a href="#cb1-484"></a>        selected.append(best_item)</span>
-<span id="cb1-485"><a href="#cb1-485"></a>        available.remove(best_item)</span>
-<span id="cb1-486"><a href="#cb1-486"></a></span>
-<span id="cb1-487"><a href="#cb1-487"></a>    <span class="cf">return</span> selected</span>
-<span id="cb1-488"><a href="#cb1-488"></a></span>
-<span id="cb1-489"><a href="#cb1-489"></a><span class="co"># Large item pool</span></span>
-<span id="cb1-490"><a href="#cb1-490"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-491"><a href="#cb1-491"></a>M_pool <span class="op">=</span> <span class="dv">200</span></span>
-<span id="cb1-492"><a href="#cb1-492"></a>beta_pool <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">2</span>, M_pool)</span>
-<span id="cb1-493"><a href="#cb1-493"></a>K <span class="op">=</span> <span class="dv">20</span>  <span class="co"># Select 20 items</span></span>
+<span id="cb1-474"><a href="#cb1-474"></a><span class="co">    Selects K items from the pool to maximize total information</span></span>
+<span id="cb1-475"><a href="#cb1-475"></a><span class="co">    integrated over the theta grid (approximating D-optimality</span></span>
+<span id="cb1-476"><a href="#cb1-476"></a><span class="co">    for the unidimensional case).</span></span>
+<span id="cb1-477"><a href="#cb1-477"></a><span class="co">    """</span></span>
+<span id="cb1-478"><a href="#cb1-478"></a>    available <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="bu">len</span>(beta_pool)))</span>
+<span id="cb1-479"><a href="#cb1-479"></a>    selected <span class="op">=</span> []</span>
+<span id="cb1-480"><a href="#cb1-480"></a></span>
+<span id="cb1-481"><a href="#cb1-481"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(K):</span>
+<span id="cb1-482"><a href="#cb1-482"></a>        best_item <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-483"><a href="#cb1-483"></a>        best_score <span class="op">=</span> <span class="op">-</span>np.inf</span>
+<span id="cb1-484"><a href="#cb1-484"></a></span>
+<span id="cb1-485"><a href="#cb1-485"></a>        <span class="cf">for</span> j <span class="kw">in</span> available:</span>
+<span id="cb1-486"><a href="#cb1-486"></a>            candidate <span class="op">=</span> selected <span class="op">+</span> [j]</span>
+<span id="cb1-487"><a href="#cb1-487"></a>            info <span class="op">=</span> compute_test_information(candidate, beta_pool, theta_grid)</span>
+<span id="cb1-488"><a href="#cb1-488"></a>            <span class="co"># D-optimal criterion: product of information values</span></span>
+<span id="cb1-489"><a href="#cb1-489"></a>            <span class="co"># (log-determinant in 1D = log of information)</span></span>
+<span id="cb1-490"><a href="#cb1-490"></a>            score <span class="op">=</span> np.<span class="bu">sum</span>(np.log(info <span class="op">+</span> <span class="fl">1e-10</span>))</span>
+<span id="cb1-491"><a href="#cb1-491"></a>            <span class="cf">if</span> score <span class="op">&gt;</span> best_score:</span>
+<span id="cb1-492"><a href="#cb1-492"></a>                best_score <span class="op">=</span> score</span>
+<span id="cb1-493"><a href="#cb1-493"></a>                best_item <span class="op">=</span> j</span>
 <span id="cb1-494"><a href="#cb1-494"></a></span>
-<span id="cb1-495"><a href="#cb1-495"></a>theta_grid <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>)</span>
-<span id="cb1-496"><a href="#cb1-496"></a></span>
-<span id="cb1-497"><a href="#cb1-497"></a><span class="co"># D-optimal selection</span></span>
-<span id="cb1-498"><a href="#cb1-498"></a>d_optimal_items <span class="op">=</span> d_optimal_greedy(beta_pool, K, theta_grid)</span>
+<span id="cb1-495"><a href="#cb1-495"></a>        selected.append(best_item)</span>
+<span id="cb1-496"><a href="#cb1-496"></a>        available.remove(best_item)</span>
+<span id="cb1-497"><a href="#cb1-497"></a></span>
+<span id="cb1-498"><a href="#cb1-498"></a>    <span class="cf">return</span> selected</span>
 <span id="cb1-499"><a href="#cb1-499"></a></span>
-<span id="cb1-500"><a href="#cb1-500"></a><span class="co"># Random selection (multiple draws for comparison)</span></span>
-<span id="cb1-501"><a href="#cb1-501"></a>random_infos <span class="op">=</span> []</span>
-<span id="cb1-502"><a href="#cb1-502"></a><span class="cf">for</span> trial <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>):</span>
-<span id="cb1-503"><a href="#cb1-503"></a>    random_items <span class="op">=</span> np.random.choice(M_pool, K, replace<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb1-504"><a href="#cb1-504"></a>    info <span class="op">=</span> compute_test_information(random_items, beta_pool, theta_grid)</span>
-<span id="cb1-505"><a href="#cb1-505"></a>    random_infos.append(info)</span>
-<span id="cb1-506"><a href="#cb1-506"></a></span>
-<span id="cb1-507"><a href="#cb1-507"></a>d_opt_info <span class="op">=</span> compute_test_information(d_optimal_items, beta_pool, theta_grid)</span>
-<span id="cb1-508"><a href="#cb1-508"></a>random_mean <span class="op">=</span> np.mean(random_infos, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-509"><a href="#cb1-509"></a>random_std <span class="op">=</span> np.std(random_infos, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-500"><a href="#cb1-500"></a><span class="co"># Large item pool</span></span>
+<span id="cb1-501"><a href="#cb1-501"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb1-502"><a href="#cb1-502"></a>M_pool <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb1-503"><a href="#cb1-503"></a>beta_pool <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">2</span>, M_pool)</span>
+<span id="cb1-504"><a href="#cb1-504"></a>K <span class="op">=</span> <span class="dv">20</span>  <span class="co"># Select 20 items</span></span>
+<span id="cb1-505"><a href="#cb1-505"></a></span>
+<span id="cb1-506"><a href="#cb1-506"></a>theta_grid <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>)</span>
+<span id="cb1-507"><a href="#cb1-507"></a></span>
+<span id="cb1-508"><a href="#cb1-508"></a><span class="co"># D-optimal selection</span></span>
+<span id="cb1-509"><a href="#cb1-509"></a>d_optimal_items <span class="op">=</span> d_optimal_greedy(beta_pool, K, theta_grid)</span>
 <span id="cb1-510"><a href="#cb1-510"></a></span>
-<span id="cb1-511"><a href="#cb1-511"></a><span class="co"># Visualization</span></span>
-<span id="cb1-512"><a href="#cb1-512"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-513"><a href="#cb1-513"></a></span>
-<span id="cb1-514"><a href="#cb1-514"></a><span class="co"># Test information functions</span></span>
-<span id="cb1-515"><a href="#cb1-515"></a>axes[<span class="dv">0</span>].plot(theta_grid, d_opt_info, <span class="st">'g-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'D-optimal'</span>)</span>
-<span id="cb1-516"><a href="#cb1-516"></a>axes[<span class="dv">0</span>].plot(theta_grid, random_mean, <span class="st">'b-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Random (mean)'</span>)</span>
-<span id="cb1-517"><a href="#cb1-517"></a>axes[<span class="dv">0</span>].fill_between(theta_grid, random_mean <span class="op">-</span> random_std, random_mean <span class="op">+</span> random_std,</span>
-<span id="cb1-518"><a href="#cb1-518"></a>                     alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
-<span id="cb1-519"><a href="#cb1-519"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Ability (θ)'</span>)</span>
-<span id="cb1-520"><a href="#cb1-520"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Test Information'</span>)</span>
-<span id="cb1-521"><a href="#cb1-521"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Test Information Function'</span>)</span>
-<span id="cb1-522"><a href="#cb1-522"></a>axes[<span class="dv">0</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb1-523"><a href="#cb1-523"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-511"><a href="#cb1-511"></a><span class="co"># Random selection (multiple draws for comparison)</span></span>
+<span id="cb1-512"><a href="#cb1-512"></a>random_infos <span class="op">=</span> []</span>
+<span id="cb1-513"><a href="#cb1-513"></a><span class="cf">for</span> trial <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>):</span>
+<span id="cb1-514"><a href="#cb1-514"></a>    random_items <span class="op">=</span> np.random.choice(M_pool, K, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-515"><a href="#cb1-515"></a>    info <span class="op">=</span> compute_test_information(random_items, beta_pool, theta_grid)</span>
+<span id="cb1-516"><a href="#cb1-516"></a>    random_infos.append(info)</span>
+<span id="cb1-517"><a href="#cb1-517"></a></span>
+<span id="cb1-518"><a href="#cb1-518"></a>d_opt_info <span class="op">=</span> compute_test_information(d_optimal_items, beta_pool, theta_grid)</span>
+<span id="cb1-519"><a href="#cb1-519"></a>random_mean <span class="op">=</span> np.mean(random_infos, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-520"><a href="#cb1-520"></a>random_std <span class="op">=</span> np.std(random_infos, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb1-521"><a href="#cb1-521"></a></span>
+<span id="cb1-522"><a href="#cb1-522"></a><span class="co"># Visualization</span></span>
+<span id="cb1-523"><a href="#cb1-523"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
 <span id="cb1-524"><a href="#cb1-524"></a></span>
-<span id="cb1-525"><a href="#cb1-525"></a><span class="co"># Selected item difficulties</span></span>
-<span id="cb1-526"><a href="#cb1-526"></a>axes[<span class="dv">1</span>].hist(beta_pool[d_optimal_items], bins<span class="op">=</span><span class="dv">12</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'green'</span>,</span>
-<span id="cb1-527"><a href="#cb1-527"></a>             label<span class="op">=</span><span class="st">'D-optimal'</span>, density<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-528"><a href="#cb1-528"></a>axes[<span class="dv">1</span>].hist(beta_pool, bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, color<span class="op">=</span><span class="st">'gray'</span>,</span>
-<span id="cb1-529"><a href="#cb1-529"></a>             label<span class="op">=</span><span class="st">'Full pool'</span>, density<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-530"><a href="#cb1-530"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Item Difficulty (β)'</span>)</span>
-<span id="cb1-531"><a href="#cb1-531"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Density'</span>)</span>
-<span id="cb1-532"><a href="#cb1-532"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Selected Item Difficulties'</span>)</span>
-<span id="cb1-533"><a href="#cb1-533"></a>axes[<span class="dv">1</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb1-534"><a href="#cb1-534"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-525"><a href="#cb1-525"></a><span class="co"># Test information functions</span></span>
+<span id="cb1-526"><a href="#cb1-526"></a>axes[<span class="dv">0</span>].plot(theta_grid, d_opt_info, <span class="st">'g-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'D-optimal'</span>)</span>
+<span id="cb1-527"><a href="#cb1-527"></a>axes[<span class="dv">0</span>].plot(theta_grid, random_mean, <span class="st">'b-'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Random (mean)'</span>)</span>
+<span id="cb1-528"><a href="#cb1-528"></a>axes[<span class="dv">0</span>].fill_between(theta_grid, random_mean <span class="op">-</span> random_std, random_mean <span class="op">+</span> random_std,</span>
+<span id="cb1-529"><a href="#cb1-529"></a>                     alpha<span class="op">=</span><span class="fl">0.2</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb1-530"><a href="#cb1-530"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Ability (θ)'</span>)</span>
+<span id="cb1-531"><a href="#cb1-531"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Test Information'</span>)</span>
+<span id="cb1-532"><a href="#cb1-532"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Test Information Function'</span>)</span>
+<span id="cb1-533"><a href="#cb1-533"></a>axes[<span class="dv">0</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb1-534"><a href="#cb1-534"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
 <span id="cb1-535"><a href="#cb1-535"></a></span>
-<span id="cb1-536"><a href="#cb1-536"></a><span class="co"># Integrated information comparison</span></span>
-<span id="cb1-537"><a href="#cb1-537"></a>d_opt_total <span class="op">=</span> np.trapz(d_opt_info, theta_grid)</span>
-<span id="cb1-538"><a href="#cb1-538"></a>random_totals <span class="op">=</span> [np.trapz(ri, theta_grid) <span class="cf">for</span> ri <span class="kw">in</span> random_infos]</span>
-<span id="cb1-539"><a href="#cb1-539"></a></span>
-<span id="cb1-540"><a href="#cb1-540"></a>axes[<span class="dv">2</span>].hist(random_totals, bins<span class="op">=</span><span class="dv">15</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Random'</span>)</span>
-<span id="cb1-541"><a href="#cb1-541"></a>axes[<span class="dv">2</span>].axvline(d_opt_total, color<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
-<span id="cb1-542"><a href="#cb1-542"></a>                label<span class="op">=</span><span class="ss">f'D-optimal (</span><span class="sc">{</span>d_opt_total<span class="sc">:.1f}</span><span class="ss">)'</span>)</span>
-<span id="cb1-543"><a href="#cb1-543"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'Integrated Information'</span>)</span>
-<span id="cb1-544"><a href="#cb1-544"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Frequency'</span>)</span>
-<span id="cb1-545"><a href="#cb1-545"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Total Information Comparison'</span>)</span>
-<span id="cb1-546"><a href="#cb1-546"></a>axes[<span class="dv">2</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb1-547"><a href="#cb1-547"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-548"><a href="#cb1-548"></a></span>
-<span id="cb1-549"><a href="#cb1-549"></a>plt.tight_layout()</span>
-<span id="cb1-550"><a href="#cb1-550"></a>plt.show()</span>
-<span id="cb1-551"><a href="#cb1-551"></a></span>
-<span id="cb1-552"><a href="#cb1-552"></a><span class="bu">print</span>(<span class="ss">f"D-optimal integrated info: </span><span class="sc">{</span>d_opt_total<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
-<span id="cb1-553"><a href="#cb1-553"></a><span class="bu">print</span>(<span class="ss">f"Random integrated info: </span><span class="sc">{</span>np<span class="sc">.</span>mean(random_totals)<span class="sc">:.1f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(random_totals)<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
-<span id="cb1-554"><a href="#cb1-554"></a><span class="bu">print</span>(<span class="ss">f"D-optimal advantage: </span><span class="sc">{</span>(d_opt_total <span class="op">/</span> np.mean(random_totals) <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">% more information"</span>)</span>
-<span id="cb1-555"><a href="#cb1-555"></a><span class="in">```</span></span>
-<span id="cb1-556"><a href="#cb1-556"></a></span>
-<span id="cb1-557"><a href="#cb1-557"></a>D-optimal design produces item pools with difficulties spread across the target ability range, ensuring high information everywhere. Random selection tends to cluster items near the center of the pool's difficulty distribution, leaving the tails poorly covered.</span>
-<span id="cb1-558"><a href="#cb1-558"></a></span>
-<span id="cb1-559"><a href="#cb1-559"></a><span class="fu">### Design for Paired Comparisons {#sec-paired-design}</span></span>
-<span id="cb1-560"><a href="#cb1-560"></a></span>
-<span id="cb1-561"><a href="#cb1-561"></a>When evaluation is based on paired comparisons (as in the Chatbot Arena from Chapter 1), the design problem takes a different form. Instead of selecting items, we must decide which pairs of models to compare. Under the Bradley-Terry model, the information from comparing models $i$ and $k$ about their strength difference $\theta_i - \theta_k$ is:</span>
+<span id="cb1-536"><a href="#cb1-536"></a><span class="co"># Selected item difficulties</span></span>
+<span id="cb1-537"><a href="#cb1-537"></a>axes[<span class="dv">1</span>].hist(beta_pool[d_optimal_items], bins<span class="op">=</span><span class="dv">12</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'green'</span>,</span>
+<span id="cb1-538"><a href="#cb1-538"></a>             label<span class="op">=</span><span class="st">'D-optimal'</span>, density<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-539"><a href="#cb1-539"></a>axes[<span class="dv">1</span>].hist(beta_pool, bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.3</span>, color<span class="op">=</span><span class="st">'gray'</span>,</span>
+<span id="cb1-540"><a href="#cb1-540"></a>             label<span class="op">=</span><span class="st">'Full pool'</span>, density<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-541"><a href="#cb1-541"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Item Difficulty (β)'</span>)</span>
+<span id="cb1-542"><a href="#cb1-542"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Density'</span>)</span>
+<span id="cb1-543"><a href="#cb1-543"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Selected Item Difficulties'</span>)</span>
+<span id="cb1-544"><a href="#cb1-544"></a>axes[<span class="dv">1</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb1-545"><a href="#cb1-545"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-546"><a href="#cb1-546"></a></span>
+<span id="cb1-547"><a href="#cb1-547"></a><span class="co"># Integrated information comparison</span></span>
+<span id="cb1-548"><a href="#cb1-548"></a>d_opt_total <span class="op">=</span> np.trapz(d_opt_info, theta_grid)</span>
+<span id="cb1-549"><a href="#cb1-549"></a>random_totals <span class="op">=</span> [np.trapz(ri, theta_grid) <span class="cf">for</span> ri <span class="kw">in</span> random_infos]</span>
+<span id="cb1-550"><a href="#cb1-550"></a></span>
+<span id="cb1-551"><a href="#cb1-551"></a>axes[<span class="dv">2</span>].hist(random_totals, bins<span class="op">=</span><span class="dv">15</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Random'</span>)</span>
+<span id="cb1-552"><a href="#cb1-552"></a>axes[<span class="dv">2</span>].axvline(d_opt_total, color<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
+<span id="cb1-553"><a href="#cb1-553"></a>                label<span class="op">=</span><span class="ss">f'D-optimal (</span><span class="sc">{</span>d_opt_total<span class="sc">:.1f}</span><span class="ss">)'</span>)</span>
+<span id="cb1-554"><a href="#cb1-554"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'Integrated Information'</span>)</span>
+<span id="cb1-555"><a href="#cb1-555"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb1-556"><a href="#cb1-556"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Total Information Comparison'</span>)</span>
+<span id="cb1-557"><a href="#cb1-557"></a>axes[<span class="dv">2</span>].legend(fontsize<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb1-558"><a href="#cb1-558"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb1-559"><a href="#cb1-559"></a></span>
+<span id="cb1-560"><a href="#cb1-560"></a>plt.tight_layout()</span>
+<span id="cb1-561"><a href="#cb1-561"></a>plt.show()</span>
 <span id="cb1-562"><a href="#cb1-562"></a></span>
-<span id="cb1-563"><a href="#cb1-563"></a>$$</span>
-<span id="cb1-564"><a href="#cb1-564"></a>I_{ik}(\theta) = P_{ik}(1 - P_{ik}), \quad P_{ik} = \sigma(\theta_i - \theta_k)</span>
-<span id="cb1-565"><a href="#cb1-565"></a>$$</span>
-<span id="cb1-566"><a href="#cb1-566"></a></span>
-<span id="cb1-567"><a href="#cb1-567"></a>This is maximized when the models are evenly matched ($P_{ik} = 0.5$, i.e., $\theta_i = \theta_k$). The design problem is to choose a tournament schedule---which pairs to compare, and how often---that maximizes the precision of the estimated ratings.</span>
-<span id="cb1-568"><a href="#cb1-568"></a></span>
-<span id="cb1-569"><a href="#cb1-569"></a>Classical solutions include **balanced incomplete block designs** (BIBDs), where each pair of models is compared equally often. For AI evaluation arenas, adaptive matchmaking algorithms serve the same role as CAT: they select matchups that are most informative given current rating estimates. This is precisely what the Chatbot Arena does when it pairs models with similar Elo ratings.</span>
-<span id="cb1-570"><a href="#cb1-570"></a></span>
+<span id="cb1-563"><a href="#cb1-563"></a><span class="bu">print</span>(<span class="ss">f"D-optimal integrated info: </span><span class="sc">{</span>d_opt_total<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb1-564"><a href="#cb1-564"></a><span class="bu">print</span>(<span class="ss">f"Random integrated info: </span><span class="sc">{</span>np<span class="sc">.</span>mean(random_totals)<span class="sc">:.1f}</span><span class="ss"> ± </span><span class="sc">{</span>np<span class="sc">.</span>std(random_totals)<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb1-565"><a href="#cb1-565"></a><span class="bu">print</span>(<span class="ss">f"D-optimal advantage: </span><span class="sc">{</span>(d_opt_total <span class="op">/</span> np.mean(random_totals) <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> <span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">% more information"</span>)</span>
+<span id="cb1-566"><a href="#cb1-566"></a><span class="in">```</span></span>
+<span id="cb1-567"><a href="#cb1-567"></a></span>
+<span id="cb1-568"><a href="#cb1-568"></a>D-optimal design produces item pools with difficulties spread across the target ability range, ensuring high information everywhere. Random selection tends to cluster items near the center of the pool's difficulty distribution, leaving the tails poorly covered.</span>
+<span id="cb1-569"><a href="#cb1-569"></a></span>
+<span id="cb1-570"><a href="#cb1-570"></a><span class="fu">### Design for Paired Comparisons {#sec-paired-design}</span></span>
 <span id="cb1-571"><a href="#cb1-571"></a></span>
-<span id="cb1-572"><a href="#cb1-572"></a><span class="fu">## Discussion Questions {#sec-efficient-discussion}</span></span>
+<span id="cb1-572"><a href="#cb1-572"></a>When evaluation is based on paired comparisons (as in the Chatbot Arena from Chapter 1), the design problem takes a different form. Instead of selecting items, we must decide which pairs of models to compare. Under the Bradley-Terry model, the information from comparing models $i$ and $k$ about their strength difference $\theta_i - \theta_k$ is:</span>
 <span id="cb1-573"><a href="#cb1-573"></a></span>
-<span id="cb1-574"><a href="#cb1-574"></a><span class="ss">1. </span>**Adaptive testing for AI.** What are the practical challenges in deploying CAT for AI evaluation? Consider: determinism of model responses, cost of API calls, benchmark contamination, and the need for pre-calibrated items.</span>
-<span id="cb1-575"><a href="#cb1-575"></a></span>
-<span id="cb1-576"><a href="#cb1-576"></a><span class="ss">2. </span>**Optimal vs. fixed design.** When is it better to use adaptive testing (CAT) versus a fixed D-optimal test? What factors determine this choice in practice?</span>
+<span id="cb1-574"><a href="#cb1-574"></a>$$</span>
+<span id="cb1-575"><a href="#cb1-575"></a>I_{ik}(\theta) = P_{ik}(1 - P_{ik}), \quad P_{ik} = \sigma(\theta_i - \theta_k)</span>
+<span id="cb1-576"><a href="#cb1-576"></a>$$</span>
 <span id="cb1-577"><a href="#cb1-577"></a></span>
-<span id="cb1-578"><a href="#cb1-578"></a><span class="ss">3. </span>**Paired comparison design.** The Chatbot Arena uses adaptive matchmaking to pair models with similar Elo ratings. What are the advantages and disadvantages of this approach compared to a balanced tournament design?</span>
+<span id="cb1-578"><a href="#cb1-578"></a>This is maximized when the models are evenly matched ($P_{ik} = 0.5$, i.e., $\theta_i = \theta_k$). The design problem is to choose a tournament schedule---which pairs to compare, and how often---that maximizes the precision of the estimated ratings.</span>
 <span id="cb1-579"><a href="#cb1-579"></a></span>
-<span id="cb1-580"><a href="#cb1-580"></a><span class="ss">4. </span>**Evaluation budgets.** A team has a fixed budget of 10,000 API calls to evaluate 50 models on a benchmark with 500 items. Design an evaluation strategy that maximizes measurement precision under this constraint.</span>
+<span id="cb1-580"><a href="#cb1-580"></a>Classical solutions include **balanced incomplete block designs** (BIBDs), where each pair of models is compared equally often. For AI evaluation arenas, adaptive matchmaking algorithms serve the same role as CAT: they select matchups that are most informative given current rating estimates. This is precisely what the Chatbot Arena does when it pairs models with similar Elo ratings.</span>
 <span id="cb1-581"><a href="#cb1-581"></a></span>
 <span id="cb1-582"><a href="#cb1-582"></a></span>
-<span id="cb1-583"><a href="#cb1-583"></a><span class="fu">## Bibliographic Notes {#sec-efficient-bib}</span></span>
+<span id="cb1-583"><a href="#cb1-583"></a><span class="fu">## Discussion Questions {#sec-efficient-discussion}</span></span>
 <span id="cb1-584"><a href="#cb1-584"></a></span>
-<span id="cb1-585"><a href="#cb1-585"></a><span class="fu">### Optimal Experimental Design</span></span>
+<span id="cb1-585"><a href="#cb1-585"></a><span class="ss">1. </span>**Adaptive testing for AI.** What are the practical challenges in deploying CAT for AI evaluation? Consider: determinism of model responses, cost of API calls, benchmark contamination, and the need for pre-calibrated items.</span>
 <span id="cb1-586"><a href="#cb1-586"></a></span>
-<span id="cb1-587"><a href="#cb1-587"></a>The theory of optimal experimental design originates with @kiefer1959optimum. D-optimal design is covered in @atkinson2007optimum. For the connection between Fisher information and test design in IRT, see @van2006optimal and @chang2009nonlinear. @wright1979best provides an accessible introduction to test design under the Rasch model.</span>
+<span id="cb1-587"><a href="#cb1-587"></a><span class="ss">2. </span>**Optimal vs. fixed design.** When is it better to use adaptive testing (CAT) versus a fixed D-optimal test? What factors determine this choice in practice?</span>
 <span id="cb1-588"><a href="#cb1-588"></a></span>
-<span id="cb1-589"><a href="#cb1-589"></a><span class="fu">### Computerized Adaptive Testing</span></span>
+<span id="cb1-589"><a href="#cb1-589"></a><span class="ss">3. </span>**Paired comparison design.** The Chatbot Arena uses adaptive matchmaking to pair models with similar Elo ratings. What are the advantages and disadvantages of this approach compared to a balanced tournament design?</span>
 <span id="cb1-590"><a href="#cb1-590"></a></span>
-<span id="cb1-591"><a href="#cb1-591"></a>CAT has a rich history beginning with @lord1970some. The Fisher information criterion for item selection was developed by @birnbaum1968some. For multidimensional CAT, see @segall1996multidimensional. Applications to AI evaluation are emerging; see @polo2024tinybenchmarks for recent work on efficient benchmark design. @truong2025irsl demonstrate the practical impact of adaptive testing in the scaling law setting: by combining IRT-calibrated item parameters with Elo-based adaptive item selection, they achieve comparable decision accuracy to full-scale evaluation using only 50 questions per benchmark — a 99.9% reduction in the query budget.</span>
+<span id="cb1-591"><a href="#cb1-591"></a><span class="ss">4. </span>**Evaluation budgets.** A team has a fixed budget of 10,000 API calls to evaluate 50 models on a benchmark with 500 items. Design an evaluation strategy that maximizes measurement precision under this constraint.</span>
 <span id="cb1-592"><a href="#cb1-592"></a></span>
 <span id="cb1-593"><a href="#cb1-593"></a></span>
-<span id="cb1-594"><a href="#cb1-594"></a><span class="fu">## Exercises {#sec-efficient-exercises}</span></span>
+<span id="cb1-594"><a href="#cb1-594"></a><span class="fu">## Bibliographic Notes {#sec-efficient-bib}</span></span>
 <span id="cb1-595"><a href="#cb1-595"></a></span>
-<span id="cb1-596"><a href="#cb1-596"></a><span class="fu">### Theoretical Exercises</span></span>
+<span id="cb1-596"><a href="#cb1-596"></a><span class="fu">### Optimal Experimental Design</span></span>
 <span id="cb1-597"><a href="#cb1-597"></a></span>
-<span id="cb1-598"><a href="#cb1-598"></a>**Exercise 3.1** ($\star$): Show that Fisher information $I_j(\theta) = P_j(\theta)(1 - P_j(\theta))$ is maximized when $\theta = \beta_j$, and that the maximum value is $1/4$.</span>
+<span id="cb1-598"><a href="#cb1-598"></a>The theory of optimal experimental design originates with @kiefer1959optimum. D-optimal design is covered in @atkinson2007optimum. For the connection between Fisher information and test design in IRT, see @van2006optimal and @chang2009nonlinear. @wright1979best provides an accessible introduction to test design under the Rasch model.</span>
 <span id="cb1-599"><a href="#cb1-599"></a></span>
-<span id="cb1-600"><a href="#cb1-600"></a>**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(a_j(\theta - \beta_j))$, derive the Fisher information and show that it equals $a_j^2 P_j(1 - P_j)$. How does discrimination $a_j$ affect optimal item selection?</span>
+<span id="cb1-600"><a href="#cb1-600"></a><span class="fu">### Computerized Adaptive Testing</span></span>
 <span id="cb1-601"><a href="#cb1-601"></a></span>
-<span id="cb1-602"><a href="#cb1-602"></a>**Exercise 3.3** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.</span>
+<span id="cb1-602"><a href="#cb1-602"></a>CAT has a rich history beginning with @lord1970some. The Fisher information criterion for item selection was developed by @birnbaum1968some. For multidimensional CAT, see @segall1996multidimensional. Applications to AI evaluation are emerging; see @polo2024tinybenchmarks for recent work on efficient benchmark design. @truong2025irsl demonstrate the practical impact of adaptive testing in the scaling law setting: by combining IRT-calibrated item parameters with Elo-based adaptive item selection, they achieve comparable decision accuracy to full-scale evaluation using only 50 questions per benchmark — a 99.9% reduction in the query budget.</span>
 <span id="cb1-603"><a href="#cb1-603"></a></span>
-<span id="cb1-604"><a href="#cb1-604"></a><span class="fu">### Computational Exercises</span></span>
-<span id="cb1-605"><a href="#cb1-605"></a></span>
-<span id="cb1-606"><a href="#cb1-606"></a>**Exercise 3.4** ($\star\star$): Extend the D-optimal design simulation to a 2-dimensional factor model with $K = 2$. Implement item selection using $j^* = \arg\max_j \det(\mathcal{I} + I_j)$ where $I_j = P_j(1 - P_j) V_j V_j^\top$. Compare the selected item loading vectors to random selection.</span>
-<span id="cb1-607"><a href="#cb1-607"></a></span>
-<span id="cb1-608"><a href="#cb1-608"></a>**Exercise 3.5** ($\star\star$): Compare the convergence of CAT across models with different ability levels. Does CAT require more items for extreme abilities (very high or very low)? Why?</span>
-<span id="cb1-609"><a href="#cb1-609"></a></span>
-<span id="cb1-610"><a href="#cb1-610"></a>**Exercise 3.6** ($\star\star$): Investigate the sensitivity of CAT to misspecification of item parameters. If the calibration sample differs systematically from the test population, how does CAT performance degrade? Simulate this scenario.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-604"><a href="#cb1-604"></a></span>
+<span id="cb1-605"><a href="#cb1-605"></a><span class="fu">## Exercises {#sec-efficient-exercises}</span></span>
+<span id="cb1-606"><a href="#cb1-606"></a></span>
+<span id="cb1-607"><a href="#cb1-607"></a><span class="fu">### Theoretical Exercises</span></span>
+<span id="cb1-608"><a href="#cb1-608"></a></span>
+<span id="cb1-609"><a href="#cb1-609"></a>**Exercise 3.1** ($\star$): Show that Fisher information $I_j(\theta) = P_j(\theta)(1 - P_j(\theta))$ is maximized when $\theta = \beta_j$, and that the maximum value is $1/4$.</span>
+<span id="cb1-610"><a href="#cb1-610"></a></span>
+<span id="cb1-611"><a href="#cb1-611"></a>**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(a_j(\theta - \beta_j))$, derive the Fisher information and show that it equals $a_j^2 P_j(1 - P_j)$. How does discrimination $a_j$ affect optimal item selection?</span>
+<span id="cb1-612"><a href="#cb1-612"></a></span>
+<span id="cb1-613"><a href="#cb1-613"></a>**Exercise 3.3** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.</span>
+<span id="cb1-614"><a href="#cb1-614"></a></span>
+<span id="cb1-615"><a href="#cb1-615"></a><span class="fu">### Computational Exercises</span></span>
+<span id="cb1-616"><a href="#cb1-616"></a></span>
+<span id="cb1-617"><a href="#cb1-617"></a>**Exercise 3.4** ($\star\star$): Extend the D-optimal design simulation to a 2-dimensional factor model with $K = 2$. Implement item selection using $j^* = \arg\max_j \det(\mathcal{I} + I_j)$ where $I_j = P_j(1 - P_j) V_j V_j^\top$. Compare the selected item loading vectors to random selection.</span>
+<span id="cb1-618"><a href="#cb1-618"></a></span>
+<span id="cb1-619"><a href="#cb1-619"></a>**Exercise 3.5** ($\star\star$): Compare the convergence of CAT across models with different ability levels. Does CAT require more items for extreme abilities (very high or very low)? Why?</span>
+<span id="cb1-620"><a href="#cb1-620"></a></span>
+<span id="cb1-621"><a href="#cb1-621"></a>**Exercise 3.6** ($\star\star$): Investigate the sensitivity of CAT to misspecification of item parameters. If the calibration sample differs systematically from the test population, how does CAT performance degrade? Simulate this scenario.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap4.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>

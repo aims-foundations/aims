@@ -710,6 +710,52 @@ This illustrates a broader principle: the mathematical properties of measurement
 :::
 
 
+To see the diagnostic in action, plant eight defective items in a simulated Rasch benchmark---four with flipped answer keys, four answered at random---and rank every item by its **item--total correlation** (its correlation with the rest of the test). Sound items show the *positive manifold*; the defects fall to the bottom.
+
+```{pyodide-python}
+#| label: item-bug-diagnostic
+#| autorun: true
+#| fig-cap: "Item--total correlation for every item in a simulated benchmark with eight planted defects (red): flipped-key items correlate negatively, random items sit near zero, and sound items (blue) sit well above. Ranking by this correlation flags the defects---the @truong2025bugs diagnostic in miniature."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+rng = np.random.RandomState(0)
+N, M, n_bad = 200, 60, 8
+theta = rng.normal(0, 1, N)
+beta  = rng.normal(0, 1, M)
+Y = (rng.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)
+
+bad = rng.choice(M, n_bad, replace=False)
+for idx, j in enumerate(bad):
+    if idx < n_bad // 2:
+        Y[:, j] = 1 - Y[:, j]                        # flipped answer key
+    else:
+        Y[:, j] = (rng.rand(N) < 0.5).astype(float)  # random responses (no signal)
+
+total = Y.sum(1)
+itc = np.array([np.corrcoef(Y[:, j], total - Y[:, j])[0, 1] for j in range(M)])  # leave-one-out
+is_bad = np.zeros(M, bool); is_bad[bad] = True
+
+order   = np.argsort(itc)
+flagged = order[:n_bad]
+precision = np.mean(is_bad[flagged])
+
+plt.figure(figsize=(3.6, 2.2))
+plt.scatter(range(M), itc[order],
+            c=['#d62728' if is_bad[i] else '#1f77b4' for i in order], s=12)
+plt.axhline(0, color='black', lw=0.8)
+plt.xlabel('item (ranked by item--total correlation)')
+plt.ylabel('item--total correlation')
+plt.title('Broken items have low correlation'); plt.grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+print(f"precision@{n_bad} (flag the lowest-correlation items) = {precision:.2f}")
+```
+
+The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice you would *inspect* the flagged items rather than delete them blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.
+
 Georg Rasch's central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of **specific objectivity**.
 
 ::: {.callout-note title="Definition: Specific Objectivity"}

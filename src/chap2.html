@@ -314,7 +314,7 @@ globalThis.qpyodideCustomizedPyodideOptions = {
 }
 
 // Store cell data
-globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport matplotlib.pyplot as plt\nplt.rcParams.update({\n    \"figure.figsize\": (3.5, 3),\n    \"figure.dpi\": 150,\n    \"figure.autolayout\": True,\n    \"font.size\": 8,\n    \"font.family\": \"serif\",\n    \"mathtext.fontset\": \"cm\",\n    \"axes.labelsize\": 8,\n    \"axes.titlesize\": 9,\n    \"xtick.labelsize\": 7,\n    \"ytick.labelsize\": 7,\n    \"legend.fontsize\": 7,\n    \"lines.linewidth\": 1.0,\n})","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"echo":"false","fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\n# Simulate a response matrix with Rasch model structure\nN, M = 50, 200  # 50 models, 200 questions\n\n# Generate latent abilities and difficulties\ntheta = np.random.normal(0, 1, N)  # model abilities\nbeta = np.random.normal(0, 1.5, M)  # question difficulties\n\n# Generate responses via Rasch model\nprob = 1 / (1 + np.exp(-(theta[:, None] - beta[None, :])))\nY = (np.random.random((N, M)) < prob).astype(int)\n\n# Sort by row and column sums\nrow_order = np.argsort(Y.sum(axis=1))[::-1]\ncol_order = np.argsort(Y.sum(axis=0))[::-1]\nY_sorted = Y[row_order][:, col_order]\n\n# Plot\nfig, ax = plt.subplots(1, 1)\nax.imshow(Y_sorted, aspect='auto', cmap='Blues', interpolation='nearest')\nax.set_xlabel('Questions (sorted by difficulty)')\nax.set_ylabel('Models (sorted by ability)')\nax.set_title('Sorted Response Matrix')\n\nplt.show()","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Response matrix from a language model evaluation. Rows are models (sorted by total score), columns are questions (sorted by difficulty). The diagonal structure suggests underlying ability and difficulty parameters.","fig-height":5,"fig-width":7,"label":"response-matrix-visualization","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\ntheta = np.linspace(-4, 4, 200)\ndifficulties = [-2, -1, 0, 1, 2]\n\nplt.figure()\nfor beta in difficulties:\n    prob = sigmoid(theta - beta)\n    plt.plot(theta, prob, label=f'$\\\\beta = {beta}$', linewidth=2)\n\nplt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)\nplt.xlabel('Ability ($\\\\theta$)', fontsize=12)\nplt.ylabel('$P(Y = 1)$', fontsize=12)\nplt.legend(title='Item Difficulty')\nplt.grid(True, alpha=0.3)\nplt.show()","id":3,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Item Characteristic Curves for Rasch model items with different difficulties. All curves have the same shape (slope), differing only in their location.","fig-height":5,"fig-width":7,"label":"icc-rasch","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\ntheta = np.linspace(-4, 4, 200)\n\n# Items with same difficulty but different discriminations\nbeta = 0\ndiscriminations = [0.5, 1.0, 1.5, 2.0]\n\nplt.figure()\nfor a in discriminations:\n    prob = sigmoid(a * (theta - beta))\n    plt.plot(theta, prob, label=f'$a = {a}$', linewidth=2)\n\nplt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)\nplt.axvline(x=0, color='gray', linestyle='--', alpha=0.5)\nplt.xlabel('Ability ($\\\\theta$)', fontsize=12)\nplt.ylabel('$P(Y = 1)$', fontsize=12)\nplt.title('2PL Model: Effect of Discrimination ($\\\\beta = 0$)', fontsize=14)\nplt.legend(title='Discrimination')\nplt.grid(True, alpha=0.3)\nplt.show()","id":4,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Item Characteristic Curves for 2PL model items with different discriminations. Higher discrimination (steeper slope) means the item better distinguishes between ability levels.","fig-height":5,"fig-width":7,"label":"icc-2pl","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\ntheta = np.linspace(-4, 4, 200)\n\n# Compare the three models\na, beta, c = 1.5, 0, 0.25\n\np_1pl = sigmoid(theta - beta)\np_2pl = sigmoid(a * (theta - beta))\np_3pl = c + (1 - c) * sigmoid(a * (theta - beta))\n\nplt.figure()\nplt.plot(theta, p_1pl, label='1PL (Rasch)', linewidth=2)\nplt.plot(theta, p_2pl, label='2PL', linewidth=2)\nplt.plot(theta, p_3pl, label='3PL', linewidth=2)\n\nplt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.3)\nplt.axhline(y=c, color='gray', linestyle=':', alpha=0.5, label=f'Guessing = {c}')\nplt.xlabel('Ability ($\\\\theta$)', fontsize=12)\nplt.ylabel('$P(Y = 1)$', fontsize=12)\nplt.title('Comparison of IRT Models', fontsize=14)\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.show()","id":5,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Comparison of 1PL, 2PL, and 3PL models. The 3PL has a non-zero lower asymptote representing guessing.","fig-height":5,"fig-width":7,"label":"icc-3pl","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport matplotlib.pyplot as plt\nplt.rcParams.update({\n    \"figure.figsize\": (3.5, 3),\n    \"figure.dpi\": 150,\n    \"figure.autolayout\": True,\n    \"font.size\": 8,\n    \"font.family\": \"serif\",\n    \"mathtext.fontset\": \"cm\",\n    \"axes.labelsize\": 8,\n    \"axes.titlesize\": 9,\n    \"xtick.labelsize\": 7,\n    \"ytick.labelsize\": 7,\n    \"legend.fontsize\": 7,\n    \"lines.linewidth\": 1.0,\n})","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"echo":"false","fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\n# Simulate a response matrix with Rasch model structure\nN, M = 50, 200  # 50 models, 200 questions\n\n# Generate latent abilities and difficulties\ntheta = np.random.normal(0, 1, N)  # model abilities\nbeta = np.random.normal(0, 1.5, M)  # question difficulties\n\n# Generate responses via Rasch model\nprob = 1 / (1 + np.exp(-(theta[:, None] - beta[None, :])))\nY = (np.random.random((N, M)) < prob).astype(int)\n\n# Sort by row and column sums\nrow_order = np.argsort(Y.sum(axis=1))[::-1]\ncol_order = np.argsort(Y.sum(axis=0))[::-1]\nY_sorted = Y[row_order][:, col_order]\n\n# Plot\nfig, ax = plt.subplots(1, 1)\nax.imshow(Y_sorted, aspect='auto', cmap='Blues', interpolation='nearest')\nax.set_xlabel('Questions (sorted by difficulty)')\nax.set_ylabel('Models (sorted by ability)')\nax.set_title('Sorted Response Matrix')\n\nplt.show()","id":2,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Response matrix from a language model evaluation. Rows are models (sorted by total score), columns are questions (sorted by difficulty). The diagonal structure suggests underlying ability and difficulty parameters.","fig-height":5,"fig-width":7,"label":"response-matrix-visualization","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\ntheta = np.linspace(-4, 4, 200)\ndifficulties = [-2, -1, 0, 1, 2]\n\nplt.figure()\nfor beta in difficulties:\n    prob = sigmoid(theta - beta)\n    plt.plot(theta, prob, label=f'$\\\\beta = {beta}$', linewidth=2)\n\nplt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)\nplt.xlabel('Ability ($\\\\theta$)', fontsize=12)\nplt.ylabel('$P(Y = 1)$', fontsize=12)\nplt.legend(title='Item Difficulty')\nplt.grid(True, alpha=0.3)\nplt.show()","id":3,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Item Characteristic Curves for Rasch model items with different difficulties. All curves have the same shape (slope), differing only in their location.","fig-height":5,"fig-width":7,"label":"icc-rasch","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\ntheta = np.linspace(-4, 4, 200)\n\n# Items with same difficulty but different discriminations\nbeta = 0\ndiscriminations = [0.5, 1.0, 1.5, 2.0]\n\nplt.figure()\nfor a in discriminations:\n    prob = sigmoid(a * (theta - beta))\n    plt.plot(theta, prob, label=f'$a = {a}$', linewidth=2)\n\nplt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)\nplt.axvline(x=0, color='gray', linestyle='--', alpha=0.5)\nplt.xlabel('Ability ($\\\\theta$)', fontsize=12)\nplt.ylabel('$P(Y = 1)$', fontsize=12)\nplt.title('2PL Model: Effect of Discrimination ($\\\\beta = 0$)', fontsize=14)\nplt.legend(title='Discrimination')\nplt.grid(True, alpha=0.3)\nplt.show()","id":4,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Item Characteristic Curves for 2PL model items with different discriminations. Higher discrimination (steeper slope) means the item better distinguishes between ability levels.","fig-height":5,"fig-width":7,"label":"icc-2pl","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"\ntheta = np.linspace(-4, 4, 200)\n\n# Compare the three models\na, beta, c = 1.5, 0, 0.25\n\np_1pl = sigmoid(theta - beta)\np_2pl = sigmoid(a * (theta - beta))\np_3pl = c + (1 - c) * sigmoid(a * (theta - beta))\n\nplt.figure()\nplt.plot(theta, p_1pl, label='1PL (Rasch)', linewidth=2)\nplt.plot(theta, p_2pl, label='2PL', linewidth=2)\nplt.plot(theta, p_3pl, label='3PL', linewidth=2)\n\nplt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.3)\nplt.axhline(y=c, color='gray', linestyle=':', alpha=0.5, label=f'Guessing = {c}')\nplt.xlabel('Ability ($\\\\theta$)', fontsize=12)\nplt.ylabel('$P(Y = 1)$', fontsize=12)\nplt.title('Comparison of IRT Models', fontsize=14)\nplt.legend()\nplt.grid(True, alpha=0.3)\nplt.show()","id":5,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Comparison of 1PL, 2PL, and 3PL models. The 3PL has a non-zero lower asymptote representing guessing.","fig-height":5,"fig-width":7,"label":"icc-3pl","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport matplotlib.pyplot as plt\n\ndef sigmoid(x):\n    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))\n\nrng = np.random.RandomState(0)\nN, M, n_bad = 200, 60, 8\ntheta = rng.normal(0, 1, N)\nbeta  = rng.normal(0, 1, M)\nY = (rng.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)\n\nbad = rng.choice(M, n_bad, replace=False)\nfor idx, j in enumerate(bad):\n    if idx < n_bad // 2:\n        Y[:, j] = 1 - Y[:, j]                        # flipped answer key\n    else:\n        Y[:, j] = (rng.rand(N) < 0.5).astype(float)  # random responses (no signal)\n\ntotal = Y.sum(1)\nitc = np.array([np.corrcoef(Y[:, j], total - Y[:, j])[0, 1] for j in range(M)])  # leave-one-out\nis_bad = np.zeros(M, bool); is_bad[bad] = True\n\norder   = np.argsort(itc)\nflagged = order[:n_bad]\nprecision = np.mean(is_bad[flagged])\n\nplt.figure(figsize=(3.6, 2.2))\nplt.scatter(range(M), itc[order],\n            c=['#d62728' if is_bad[i] else '#1f77b4' for i in order], s=12)\nplt.axhline(0, color='black', lw=0.8)\nplt.xlabel('item (ranked by item--total correlation)')\nplt.ylabel('item--total correlation')\nplt.title('Broken items have low correlation'); plt.grid(True, alpha=0.3)\nplt.tight_layout(); plt.show()\nprint(f\"precision@{n_bad} (flag the lowest-correlation items) = {precision:.2f}\")","id":6,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"Item--total correlation for every item in a simulated benchmark with eight planted defects (red): flipped-key items correlate negatively, random items sit near zero, and sound items (blue) sit well above. Ranking by this correlation flags the defects---the @truong2025bugs diagnostic in miniature.","fig-height":5,"fig-width":7,"label":"item-bug-diagnostic","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
 </script>
@@ -1788,6 +1788,10 @@ P(Y_i | S_i, \theta_i) = \frac{P(Y_i | \theta_i, \boldsymbol{\beta})}{P(S_i | \t
 <p>This illustrates a broader principle: the mathematical properties of measurement models are not merely theoretical — they yield <em>operational</em> diagnostics for evaluation quality. When data violate model predictions, either the model is wrong or the data are corrupted. Since the sufficiency assumption is already implicit in how the community uses benchmarks, violations are strong evidence of item-level problems.</p>
 </div>
 </div>
+<p>To see the diagnostic in action, plant eight defective items in a simulated Rasch benchmark—four with flipped answer keys, four answered at random—and rank every item by its <strong>item–total correlation</strong> (its correlation with the rest of the test). Sound items show the <em>positive manifold</em>; the defects fall to the bottom.</p>
+<div id="qpyodide-insertion-location-6"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice you would <em>inspect</em> the flagged items rather than delete them blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.</p>
 <p>Georg Rasch’s central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of <strong>specific objectivity</strong>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Definition: Specific Objectivity">
 <div class="callout-header d-flex align-content-center">
@@ -3593,495 +3597,541 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
 <span id="cb4-710"><a href="#cb4-710"></a>:::</span>
 <span id="cb4-711"><a href="#cb4-711"></a></span>
 <span id="cb4-712"><a href="#cb4-712"></a></span>
-<span id="cb4-713"><a href="#cb4-713"></a>Georg Rasch's central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of **specific objectivity**.</span>
+<span id="cb4-713"><a href="#cb4-713"></a>To see the diagnostic in action, plant eight defective items in a simulated Rasch benchmark---four with flipped answer keys, four answered at random---and rank every item by its **item--total correlation** (its correlation with the rest of the test). Sound items show the *positive manifold*; the defects fall to the bottom.</span>
 <span id="cb4-714"><a href="#cb4-714"></a></span>
-<span id="cb4-715"><a href="#cb4-715"></a>::: {.callout-note title="Definition: Specific Objectivity"}</span>
-<span id="cb4-716"><a href="#cb4-716"></a>A measurement procedure exhibits **specific objectivity** if comparisons between persons are independent of which items are used:</span>
-<span id="cb4-717"><a href="#cb4-717"></a></span>
-<span id="cb4-718"><a href="#cb4-718"></a>$$</span>
-<span id="cb4-719"><a href="#cb4-719"></a>\frac{P(Y_{ij} = 1)}{P(Y_{ij} = 0)} \bigg/ \frac{P(Y_{kj} = 1)}{P(Y_{kj} = 0)} = \frac{\exp(\theta_i)}{\exp(\theta_k)}</span>
-<span id="cb4-720"><a href="#cb4-720"></a>$$</span>
+<span id="cb4-715"><a href="#cb4-715"></a><span class="in">```{pyodide-python}</span></span>
+<span id="cb4-716"><a href="#cb4-716"></a><span class="co">#| label: item-bug-diagnostic</span></span>
+<span id="cb4-717"><a href="#cb4-717"></a><span class="co">#| autorun: true</span></span>
+<span id="cb4-718"><a href="#cb4-718"></a><span class="co">#| fig-cap: "Item--total correlation for every item in a simulated benchmark with eight planted defects (red): flipped-key items correlate negatively, random items sit near zero, and sound items (blue) sit well above. Ranking by this correlation flags the defects---the @truong2025bugs diagnostic in miniature."</span></span>
+<span id="cb4-719"><a href="#cb4-719"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-720"><a href="#cb4-720"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-721"><a href="#cb4-721"></a></span>
-<span id="cb4-722"><a href="#cb4-722"></a>The item parameter $\beta_j$ cancels completely. Similarly, comparisons between items are independent of which persons are used.</span>
-<span id="cb4-723"><a href="#cb4-723"></a>:::</span>
+<span id="cb4-722"><a href="#cb4-722"></a><span class="kw">def</span> sigmoid(x):</span>
+<span id="cb4-723"><a href="#cb4-723"></a>    <span class="cf">return</span> np.where(x <span class="op">&gt;=</span> <span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>x)), np.exp(x) <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(x)))</span>
 <span id="cb4-724"><a href="#cb4-724"></a></span>
-<span id="cb4-725"><a href="#cb4-725"></a>In the Rasch model, the odds ratio for two persons on the same item is:</span>
-<span id="cb4-726"><a href="#cb4-726"></a></span>
-<span id="cb4-727"><a href="#cb4-727"></a>$$</span>
-<span id="cb4-728"><a href="#cb4-728"></a>\frac{P(Y_{ij} = 1) / P(Y_{ij} = 0)}{P(Y_{kj} = 1) / P(Y_{kj} = 0)} = \frac{\exp(\theta_i - \beta_j)}{\exp(\theta_k - \beta_j)} = \exp(\theta_i - \theta_k)</span>
-<span id="cb4-729"><a href="#cb4-729"></a>$$</span>
+<span id="cb4-725"><a href="#cb4-725"></a>rng <span class="op">=</span> np.random.RandomState(<span class="dv">0</span>)</span>
+<span id="cb4-726"><a href="#cb4-726"></a>N, M, n_bad <span class="op">=</span> <span class="dv">200</span>, <span class="dv">60</span>, <span class="dv">8</span></span>
+<span id="cb4-727"><a href="#cb4-727"></a>theta <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
+<span id="cb4-728"><a href="#cb4-728"></a>beta  <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)</span>
+<span id="cb4-729"><a href="#cb4-729"></a>Y <span class="op">=</span> (rng.rand(N, M) <span class="op">&lt;</span> sigmoid(theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :])).astype(<span class="bu">float</span>)</span>
 <span id="cb4-730"><a href="#cb4-730"></a></span>
-<span id="cb4-731"><a href="#cb4-731"></a>The item difficulty $\beta_j$ cancels! This means person comparisons are the same regardless of which item we use.</span>
-<span id="cb4-732"><a href="#cb4-732"></a></span>
-<span id="cb4-733"><a href="#cb4-733"></a>Rasch identified two levels of objectivity:</span>
-<span id="cb4-734"><a href="#cb4-734"></a></span>
-<span id="cb4-735"><a href="#cb4-735"></a><span class="ss">1. </span>**Local objectivity:** Comparisons are item-independent for a specific pair of persons.</span>
-<span id="cb4-736"><a href="#cb4-736"></a></span>
-<span id="cb4-737"><a href="#cb4-737"></a><span class="ss">2. </span>**General objectivity:** The entire ability scale is sample-independent. Ability estimates remain valid regardless of which items were administered.</span>
-<span id="cb4-738"><a href="#cb4-738"></a></span>
-<span id="cb4-739"><a href="#cb4-739"></a>Specific objectivity enables what Rasch called **test-free person measurement** and **sample-free item calibration**:</span>
-<span id="cb4-740"><a href="#cb4-740"></a></span>
-<span id="cb4-741"><a href="#cb4-741"></a><span class="ss">- </span>**Test-free person measurement:** A person's ability can be estimated from *any* subset of calibrated items, and the estimate will be the same (within sampling error).</span>
-<span id="cb4-742"><a href="#cb4-742"></a></span>
-<span id="cb4-743"><a href="#cb4-743"></a><span class="ss">- </span>**Sample-free item calibration:** An item's difficulty can be estimated from *any* sample of persons, and the estimate will be the same.</span>
-<span id="cb4-744"><a href="#cb4-744"></a></span>
-<span id="cb4-745"><a href="#cb4-745"></a>This is remarkable because it mirrors the properties of physical measurement:</span>
-<span id="cb4-746"><a href="#cb4-746"></a></span>
-<span id="cb4-747"><a href="#cb4-747"></a>::: {.callout-note title="The Analogy to Physical Measurement"}</span>
-<span id="cb4-748"><a href="#cb4-748"></a>Consider measuring temperature with different thermometers:</span>
-<span id="cb4-749"><a href="#cb4-749"></a></span>
-<span id="cb4-750"><a href="#cb4-750"></a><span class="ss">- </span>A mercury thermometer in New York should give the same reading as an alcohol thermometer in London for the same temperature.</span>
-<span id="cb4-751"><a href="#cb4-751"></a><span class="ss">- </span>Calibrating a thermometer on hot water should yield parameters that work equally well for cold water.</span>
-<span id="cb4-752"><a href="#cb4-752"></a></span>
-<span id="cb4-753"><a href="#cb4-753"></a>The Rasch model claims the same properties for psychological measurement: calibrated tests yield the same ability estimates regardless of which specific items are used.</span>
-<span id="cb4-754"><a href="#cb4-754"></a>:::</span>
-<span id="cb4-755"><a href="#cb4-755"></a></span>
-<span id="cb4-756"><a href="#cb4-756"></a>If AI benchmarks satisfy Rasch model assumptions:</span>
-<span id="cb4-757"><a href="#cb4-757"></a></span>
-<span id="cb4-758"><a href="#cb4-758"></a><span class="ss">1. </span>**Benchmark subset comparisons are valid.** We can compare a model tested on MMLU subset A with a model tested on MMLU subset B, as long as both subsets are calibrated to the same scale.</span>
-<span id="cb4-759"><a href="#cb4-759"></a></span>
-<span id="cb4-760"><a href="#cb4-760"></a><span class="ss">2. </span>**New questions can be calibrated on any models.** We can add new questions to a benchmark by testing them on a sample of models, then use them to evaluate future models.</span>
-<span id="cb4-761"><a href="#cb4-761"></a></span>
-<span id="cb4-762"><a href="#cb4-762"></a><span class="ss">3. </span>**Adaptive testing becomes possible.** We can select questions dynamically based on a model's performance, arriving at an accurate ability estimate with fewer questions.</span>
+<span id="cb4-731"><a href="#cb4-731"></a>bad <span class="op">=</span> rng.choice(M, n_bad, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-732"><a href="#cb4-732"></a><span class="cf">for</span> idx, j <span class="kw">in</span> <span class="bu">enumerate</span>(bad):</span>
+<span id="cb4-733"><a href="#cb4-733"></a>    <span class="cf">if</span> idx <span class="op">&lt;</span> n_bad <span class="op">//</span> <span class="dv">2</span>:</span>
+<span id="cb4-734"><a href="#cb4-734"></a>        Y[:, j] <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> Y[:, j]                        <span class="co"># flipped answer key</span></span>
+<span id="cb4-735"><a href="#cb4-735"></a>    <span class="cf">else</span>:</span>
+<span id="cb4-736"><a href="#cb4-736"></a>        Y[:, j] <span class="op">=</span> (rng.rand(N) <span class="op">&lt;</span> <span class="fl">0.5</span>).astype(<span class="bu">float</span>)  <span class="co"># random responses (no signal)</span></span>
+<span id="cb4-737"><a href="#cb4-737"></a></span>
+<span id="cb4-738"><a href="#cb4-738"></a>total <span class="op">=</span> Y.<span class="bu">sum</span>(<span class="dv">1</span>)</span>
+<span id="cb4-739"><a href="#cb4-739"></a>itc <span class="op">=</span> np.array([np.corrcoef(Y[:, j], total <span class="op">-</span> Y[:, j])[<span class="dv">0</span>, <span class="dv">1</span>] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(M)])  <span class="co"># leave-one-out</span></span>
+<span id="cb4-740"><a href="#cb4-740"></a>is_bad <span class="op">=</span> np.zeros(M, <span class="bu">bool</span>)<span class="op">;</span> is_bad[bad] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb4-741"><a href="#cb4-741"></a></span>
+<span id="cb4-742"><a href="#cb4-742"></a>order   <span class="op">=</span> np.argsort(itc)</span>
+<span id="cb4-743"><a href="#cb4-743"></a>flagged <span class="op">=</span> order[:n_bad]</span>
+<span id="cb4-744"><a href="#cb4-744"></a>precision <span class="op">=</span> np.mean(is_bad[flagged])</span>
+<span id="cb4-745"><a href="#cb4-745"></a></span>
+<span id="cb4-746"><a href="#cb4-746"></a>plt.figure(figsize<span class="op">=</span>(<span class="fl">3.6</span>, <span class="fl">2.2</span>))</span>
+<span id="cb4-747"><a href="#cb4-747"></a>plt.scatter(<span class="bu">range</span>(M), itc[order],</span>
+<span id="cb4-748"><a href="#cb4-748"></a>            c<span class="op">=</span>[<span class="st">'#d62728'</span> <span class="cf">if</span> is_bad[i] <span class="cf">else</span> <span class="st">'#1f77b4'</span> <span class="cf">for</span> i <span class="kw">in</span> order], s<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb4-749"><a href="#cb4-749"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb4-750"><a href="#cb4-750"></a>plt.xlabel(<span class="st">'item (ranked by item--total correlation)'</span>)</span>
+<span id="cb4-751"><a href="#cb4-751"></a>plt.ylabel(<span class="st">'item--total correlation'</span>)</span>
+<span id="cb4-752"><a href="#cb4-752"></a>plt.title(<span class="st">'Broken items have low correlation'</span>)<span class="op">;</span> plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb4-753"><a href="#cb4-753"></a>plt.tight_layout()<span class="op">;</span> plt.show()</span>
+<span id="cb4-754"><a href="#cb4-754"></a><span class="bu">print</span>(<span class="ss">f"precision@</span><span class="sc">{</span>n_bad<span class="sc">}</span><span class="ss"> (flag the lowest-correlation items) = </span><span class="sc">{</span>precision<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb4-755"><a href="#cb4-755"></a><span class="in">```</span></span>
+<span id="cb4-756"><a href="#cb4-756"></a></span>
+<span id="cb4-757"><a href="#cb4-757"></a>The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice you would *inspect* the flagged items rather than delete them blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.</span>
+<span id="cb4-758"><a href="#cb4-758"></a></span>
+<span id="cb4-759"><a href="#cb4-759"></a>Georg Rasch's central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of **specific objectivity**.</span>
+<span id="cb4-760"><a href="#cb4-760"></a></span>
+<span id="cb4-761"><a href="#cb4-761"></a>::: {.callout-note title="Definition: Specific Objectivity"}</span>
+<span id="cb4-762"><a href="#cb4-762"></a>A measurement procedure exhibits **specific objectivity** if comparisons between persons are independent of which items are used:</span>
 <span id="cb4-763"><a href="#cb4-763"></a></span>
-<span id="cb4-764"><a href="#cb4-764"></a><span class="ss">4. </span>**Cross-benchmark comparisons may be possible.** If different benchmarks measure the same construct, we can equate their scales.</span>
-<span id="cb4-765"><a href="#cb4-765"></a></span>
-<span id="cb4-766"><a href="#cb4-766"></a>These properties are not guaranteed---they hold only if the Rasch model fits the data. Testing model fit becomes essential.</span>
+<span id="cb4-764"><a href="#cb4-764"></a>$$</span>
+<span id="cb4-765"><a href="#cb4-765"></a>\frac{P(Y_{ij} = 1)}{P(Y_{ij} = 0)} \bigg/ \frac{P(Y_{kj} = 1)}{P(Y_{kj} = 0)} = \frac{\exp(\theta_i)}{\exp(\theta_k)}</span>
+<span id="cb4-766"><a href="#cb4-766"></a>$$</span>
 <span id="cb4-767"><a href="#cb4-767"></a></span>
-<span id="cb4-768"><a href="#cb4-768"></a>The claim that Rasch is "the" measurement model is controversial. The debate centers on the **prescriptive vs. descriptive** approaches to measurement.</span>
-<span id="cb4-769"><a href="#cb4-769"></a></span>
-<span id="cb4-770"><a href="#cb4-770"></a><span class="fu">#### The Prescriptive Approach (Rasch School)</span></span>
-<span id="cb4-771"><a href="#cb4-771"></a></span>
-<span id="cb4-772"><a href="#cb4-772"></a>The Rasch school argues:</span>
-<span id="cb4-773"><a href="#cb4-773"></a></span>
-<span id="cb4-774"><a href="#cb4-774"></a><span class="ss">1. </span>**Measurement requires specific objectivity.** Without it, we cannot make person comparisons that are independent of the test used.</span>
-<span id="cb4-775"><a href="#cb4-775"></a></span>
-<span id="cb4-776"><a href="#cb4-776"></a><span class="ss">2. </span>**The model is a requirement, not a description.** If data do not fit the Rasch model, the items do not measure the same construct. We should discard misfitting items, not adopt a more complex model.</span>
-<span id="cb4-777"><a href="#cb4-777"></a></span>
-<span id="cb4-778"><a href="#cb4-778"></a><span class="ss">3. </span>**Discrimination variation is a problem, not a feature.** Items with different discriminations measure the construct with different precision. Mixing them produces a heterogeneous test that does not measure a single thing.</span>
-<span id="cb4-779"><a href="#cb4-779"></a></span>
-<span id="cb4-780"><a href="#cb4-780"></a><span class="ss">4. </span>**Sufficiency is non-negotiable.** The sum score must be sufficient for ability, or we are not measuring anything meaningful.</span>
-<span id="cb4-781"><a href="#cb4-781"></a></span>
-<span id="cb4-782"><a href="#cb4-782"></a><span class="fu">#### The Descriptive Approach (General IRT)</span></span>
-<span id="cb4-783"><a href="#cb4-783"></a></span>
-<span id="cb4-784"><a href="#cb4-784"></a>The general IRT school responds:</span>
-<span id="cb4-785"><a href="#cb4-785"></a></span>
-<span id="cb4-786"><a href="#cb4-786"></a><span class="ss">1. </span>**Models should fit data.** The purpose of a statistical model is to describe the data accurately. If items have different discriminations, we should model this, not ignore it.</span>
-<span id="cb4-787"><a href="#cb4-787"></a></span>
-<span id="cb4-788"><a href="#cb4-788"></a><span class="ss">2. </span>**Perfect fit is unrealistic.** Real data never perfectly fit any model. The Rasch school's insistence on exact fit is impractical.</span>
-<span id="cb4-789"><a href="#cb4-789"></a></span>
-<span id="cb4-790"><a href="#cb4-790"></a><span class="ss">3. </span>**Information is lost by forcing Rasch.** Discarding items that don't fit Rasch means discarding information. Better to use all items and model their characteristics.</span>
-<span id="cb4-791"><a href="#cb4-791"></a></span>
-<span id="cb4-792"><a href="#cb4-792"></a><span class="ss">4. </span>**2PL/3PL models are more realistic.** Most tests have items with varying discrimination and guessing. Pretending otherwise does not make it true.</span>
-<span id="cb4-793"><a href="#cb4-793"></a></span>
-<span id="cb4-794"><a href="#cb4-794"></a>::: {.callout-note title="The Fundamental Tension"}</span>
-<span id="cb4-795"><a href="#cb4-795"></a>**Prescriptive view:** The Rasch model defines what measurement IS. Items that don't fit should be discarded because they don't measure the same thing.</span>
-<span id="cb4-796"><a href="#cb4-796"></a></span>
-<span id="cb4-797"><a href="#cb4-797"></a>**Descriptive view:** Use whatever model fits the data best. The 2PL/3PL models are more realistic for most applications.</span>
+<span id="cb4-768"><a href="#cb4-768"></a>The item parameter $\beta_j$ cancels completely. Similarly, comparisons between items are independent of which persons are used.</span>
+<span id="cb4-769"><a href="#cb4-769"></a>:::</span>
+<span id="cb4-770"><a href="#cb4-770"></a></span>
+<span id="cb4-771"><a href="#cb4-771"></a>In the Rasch model, the odds ratio for two persons on the same item is:</span>
+<span id="cb4-772"><a href="#cb4-772"></a></span>
+<span id="cb4-773"><a href="#cb4-773"></a>$$</span>
+<span id="cb4-774"><a href="#cb4-774"></a>\frac{P(Y_{ij} = 1) / P(Y_{ij} = 0)}{P(Y_{kj} = 1) / P(Y_{kj} = 0)} = \frac{\exp(\theta_i - \beta_j)}{\exp(\theta_k - \beta_j)} = \exp(\theta_i - \theta_k)</span>
+<span id="cb4-775"><a href="#cb4-775"></a>$$</span>
+<span id="cb4-776"><a href="#cb4-776"></a></span>
+<span id="cb4-777"><a href="#cb4-777"></a>The item difficulty $\beta_j$ cancels! This means person comparisons are the same regardless of which item we use.</span>
+<span id="cb4-778"><a href="#cb4-778"></a></span>
+<span id="cb4-779"><a href="#cb4-779"></a>Rasch identified two levels of objectivity:</span>
+<span id="cb4-780"><a href="#cb4-780"></a></span>
+<span id="cb4-781"><a href="#cb4-781"></a><span class="ss">1. </span>**Local objectivity:** Comparisons are item-independent for a specific pair of persons.</span>
+<span id="cb4-782"><a href="#cb4-782"></a></span>
+<span id="cb4-783"><a href="#cb4-783"></a><span class="ss">2. </span>**General objectivity:** The entire ability scale is sample-independent. Ability estimates remain valid regardless of which items were administered.</span>
+<span id="cb4-784"><a href="#cb4-784"></a></span>
+<span id="cb4-785"><a href="#cb4-785"></a>Specific objectivity enables what Rasch called **test-free person measurement** and **sample-free item calibration**:</span>
+<span id="cb4-786"><a href="#cb4-786"></a></span>
+<span id="cb4-787"><a href="#cb4-787"></a><span class="ss">- </span>**Test-free person measurement:** A person's ability can be estimated from *any* subset of calibrated items, and the estimate will be the same (within sampling error).</span>
+<span id="cb4-788"><a href="#cb4-788"></a></span>
+<span id="cb4-789"><a href="#cb4-789"></a><span class="ss">- </span>**Sample-free item calibration:** An item's difficulty can be estimated from *any* sample of persons, and the estimate will be the same.</span>
+<span id="cb4-790"><a href="#cb4-790"></a></span>
+<span id="cb4-791"><a href="#cb4-791"></a>This is remarkable because it mirrors the properties of physical measurement:</span>
+<span id="cb4-792"><a href="#cb4-792"></a></span>
+<span id="cb4-793"><a href="#cb4-793"></a>::: {.callout-note title="The Analogy to Physical Measurement"}</span>
+<span id="cb4-794"><a href="#cb4-794"></a>Consider measuring temperature with different thermometers:</span>
+<span id="cb4-795"><a href="#cb4-795"></a></span>
+<span id="cb4-796"><a href="#cb4-796"></a><span class="ss">- </span>A mercury thermometer in New York should give the same reading as an alcohol thermometer in London for the same temperature.</span>
+<span id="cb4-797"><a href="#cb4-797"></a><span class="ss">- </span>Calibrating a thermometer on hot water should yield parameters that work equally well for cold water.</span>
 <span id="cb4-798"><a href="#cb4-798"></a></span>
-<span id="cb4-799"><a href="#cb4-799"></a>This is not merely a statistical disagreement---it reflects different philosophies of science. The Rasch school treats measurement theory as providing *requirements* that data must satisfy. The IRT school treats models as *tools* that should be chosen based on fit.</span>
+<span id="cb4-799"><a href="#cb4-799"></a>The Rasch model claims the same properties for psychological measurement: calibrated tests yield the same ability estimates regardless of which specific items are used.</span>
 <span id="cb4-800"><a href="#cb4-800"></a>:::</span>
 <span id="cb4-801"><a href="#cb4-801"></a></span>
-<span id="cb4-802"><a href="#cb4-802"></a><span class="fu">#### Implications for AI Evaluation</span></span>
+<span id="cb4-802"><a href="#cb4-802"></a>If AI benchmarks satisfy Rasch model assumptions:</span>
 <span id="cb4-803"><a href="#cb4-803"></a></span>
-<span id="cb4-804"><a href="#cb4-804"></a>This debate has direct implications for AI benchmark design:</span>
+<span id="cb4-804"><a href="#cb4-804"></a><span class="ss">1. </span>**Benchmark subset comparisons are valid.** We can compare a model tested on MMLU subset A with a model tested on MMLU subset B, as long as both subsets are calibrated to the same scale.</span>
 <span id="cb4-805"><a href="#cb4-805"></a></span>
-<span id="cb4-806"><a href="#cb4-806"></a><span class="pp">|</span> Question <span class="pp">|</span> Rasch School Answer <span class="pp">|</span> General IRT Answer <span class="pp">|</span></span>
-<span id="cb4-807"><a href="#cb4-807"></a><span class="pp">|----------|--------------------|--------------------|</span></span>
-<span id="cb4-808"><a href="#cb4-808"></a><span class="pp">|</span> Should we allow items with different discriminations? <span class="pp">|</span> No---they measure different constructs <span class="pp">|</span> Yes---model the discrimination <span class="pp">|</span></span>
-<span id="cb4-809"><a href="#cb4-809"></a><span class="pp">|</span> What if data don't fit Rasch? <span class="pp">|</span> Remove misfitting items <span class="pp">|</span> Use 2PL or 3PL <span class="pp">|</span></span>
-<span id="cb4-810"><a href="#cb4-810"></a><span class="pp">|</span> Is sum score the right metric? <span class="pp">|</span> Yes, if Rasch fits <span class="pp">|</span> Only approximately <span class="pp">|</span></span>
-<span id="cb4-811"><a href="#cb4-811"></a><span class="pp">|</span> Can we compare models across benchmarks? <span class="pp">|</span> Yes, with Rasch <span class="pp">|</span> Requires complex equating <span class="pp">|</span></span>
-<span id="cb4-812"><a href="#cb4-812"></a></span>
-<span id="cb4-813"><a href="#cb4-813"></a>AIMS takes a pragmatic position: we test whether data fit Rasch-like models, use the simpler model when it fits adequately, and acknowledge when more complex models are needed. The key insight is that the choice has *consequences* for what we can conclude from evaluation results.</span>
-<span id="cb4-814"><a href="#cb4-814"></a></span>
+<span id="cb4-806"><a href="#cb4-806"></a><span class="ss">2. </span>**New questions can be calibrated on any models.** We can add new questions to a benchmark by testing them on a sample of models, then use them to evaluate future models.</span>
+<span id="cb4-807"><a href="#cb4-807"></a></span>
+<span id="cb4-808"><a href="#cb4-808"></a><span class="ss">3. </span>**Adaptive testing becomes possible.** We can select questions dynamically based on a model's performance, arriving at an accurate ability estimate with fewer questions.</span>
+<span id="cb4-809"><a href="#cb4-809"></a></span>
+<span id="cb4-810"><a href="#cb4-810"></a><span class="ss">4. </span>**Cross-benchmark comparisons may be possible.** If different benchmarks measure the same construct, we can equate their scales.</span>
+<span id="cb4-811"><a href="#cb4-811"></a></span>
+<span id="cb4-812"><a href="#cb4-812"></a>These properties are not guaranteed---they hold only if the Rasch model fits the data. Testing model fit becomes essential.</span>
+<span id="cb4-813"><a href="#cb4-813"></a></span>
+<span id="cb4-814"><a href="#cb4-814"></a>The claim that Rasch is "the" measurement model is controversial. The debate centers on the **prescriptive vs. descriptive** approaches to measurement.</span>
 <span id="cb4-815"><a href="#cb4-815"></a></span>
-<span id="cb4-816"><a href="#cb4-816"></a><span class="fu">## Historical Development {#sec-history}</span></span>
+<span id="cb4-816"><a href="#cb4-816"></a><span class="fu">#### The Prescriptive Approach (Rasch School)</span></span>
 <span id="cb4-817"><a href="#cb4-817"></a></span>
-<span id="cb4-818"><a href="#cb4-818"></a>The probabilistic models we use today emerged from over a century of work across psychology, education, economics, and statistics. Understanding this history illuminates why certain models dominate and what problems they were designed to solve.</span>
+<span id="cb4-818"><a href="#cb4-818"></a>The Rasch school argues:</span>
 <span id="cb4-819"><a href="#cb4-819"></a></span>
-<span id="cb4-820"><a href="#cb4-820"></a>The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the **Law of Comparative Judgment** <span class="co">[</span><span class="ot">@thurstone</span><span class="co">]</span>. Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values.</span>
+<span id="cb4-820"><a href="#cb4-820"></a><span class="ss">1. </span>**Measurement requires specific objectivity.** Without it, we cannot make person comparisons that are independent of the test used.</span>
 <span id="cb4-821"><a href="#cb4-821"></a></span>
-<span id="cb4-822"><a href="#cb4-822"></a>::: {.callout-note title="Thurstone's Model (Case V)"}</span>
-<span id="cb4-823"><a href="#cb4-823"></a>Each stimulus $i$ has a true scale value $\theta_i$. When comparing stimuli $i$ and $j$, each is perceived with Gaussian noise:</span>
-<span id="cb4-824"><a href="#cb4-824"></a></span>
-<span id="cb4-825"><a href="#cb4-825"></a>$$</span>
-<span id="cb4-826"><a href="#cb4-826"></a>\tilde{\theta}_i \sim \mathcal{N}(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim \mathcal{N}(\theta_j, \sigma^2)</span>
-<span id="cb4-827"><a href="#cb4-827"></a>$$</span>
-<span id="cb4-828"><a href="#cb4-828"></a></span>
-<span id="cb4-829"><a href="#cb4-829"></a>The probability that $i$ is judged greater than $j$ is:</span>
-<span id="cb4-830"><a href="#cb4-830"></a></span>
-<span id="cb4-831"><a href="#cb4-831"></a>$$</span>
-<span id="cb4-832"><a href="#cb4-832"></a>P(i \succ j) = \Phi\left(\frac{\theta_i - \theta_j}{\sqrt{2}\sigma}\right)</span>
-<span id="cb4-833"><a href="#cb4-833"></a>$$</span>
-<span id="cb4-834"><a href="#cb4-834"></a></span>
-<span id="cb4-835"><a href="#cb4-835"></a>where $\Phi$ is the standard normal CDF.</span>
-<span id="cb4-836"><a href="#cb4-836"></a>:::</span>
+<span id="cb4-822"><a href="#cb4-822"></a><span class="ss">2. </span>**The model is a requirement, not a description.** If data do not fit the Rasch model, the items do not measure the same construct. We should discard misfitting items, not adopt a more complex model.</span>
+<span id="cb4-823"><a href="#cb4-823"></a></span>
+<span id="cb4-824"><a href="#cb4-824"></a><span class="ss">3. </span>**Discrimination variation is a problem, not a feature.** Items with different discriminations measure the construct with different precision. Mixing them produces a heterogeneous test that does not measure a single thing.</span>
+<span id="cb4-825"><a href="#cb4-825"></a></span>
+<span id="cb4-826"><a href="#cb4-826"></a><span class="ss">4. </span>**Sufficiency is non-negotiable.** The sum score must be sufficient for ability, or we are not measuring anything meaningful.</span>
+<span id="cb4-827"><a href="#cb4-827"></a></span>
+<span id="cb4-828"><a href="#cb4-828"></a><span class="fu">#### The Descriptive Approach (General IRT)</span></span>
+<span id="cb4-829"><a href="#cb4-829"></a></span>
+<span id="cb4-830"><a href="#cb4-830"></a>The general IRT school responds:</span>
+<span id="cb4-831"><a href="#cb4-831"></a></span>
+<span id="cb4-832"><a href="#cb4-832"></a><span class="ss">1. </span>**Models should fit data.** The purpose of a statistical model is to describe the data accurately. If items have different discriminations, we should model this, not ignore it.</span>
+<span id="cb4-833"><a href="#cb4-833"></a></span>
+<span id="cb4-834"><a href="#cb4-834"></a><span class="ss">2. </span>**Perfect fit is unrealistic.** Real data never perfectly fit any model. The Rasch school's insistence on exact fit is impractical.</span>
+<span id="cb4-835"><a href="#cb4-835"></a></span>
+<span id="cb4-836"><a href="#cb4-836"></a><span class="ss">3. </span>**Information is lost by forcing Rasch.** Discarding items that don't fit Rasch means discarding information. Better to use all items and model their characteristics.</span>
 <span id="cb4-837"><a href="#cb4-837"></a></span>
-<span id="cb4-838"><a href="#cb4-838"></a>Thurstone's method was revolutionary: it showed that subjective quantities could be measured scientifically. The same mathematics now underlies how we rank AI systems from human preferences.</span>
+<span id="cb4-838"><a href="#cb4-838"></a><span class="ss">4. </span>**2PL/3PL models are more realistic.** Most tests have items with varying discrimination and guessing. Pretending otherwise does not make it true.</span>
 <span id="cb4-839"><a href="#cb4-839"></a></span>
-<span id="cb4-840"><a href="#cb4-840"></a>In 1952, Ralph Bradley and Milton Terry developed a model for ranking from paired comparisons in the context of incomplete block designs <span class="co">[</span><span class="ot">@bradley-terry-model</span><span class="co">]</span>. Their model:</span>
-<span id="cb4-841"><a href="#cb4-841"></a></span>
-<span id="cb4-842"><a href="#cb4-842"></a>$$</span>
-<span id="cb4-843"><a href="#cb4-843"></a>P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}</span>
-<span id="cb4-844"><a href="#cb4-844"></a>$$</span>
-<span id="cb4-845"><a href="#cb4-845"></a></span>
-<span id="cb4-846"><a href="#cb4-846"></a>where $\pi_i &gt; 0$ are "worth" parameters. With $\theta_i = \log \pi_i$, this becomes the familiar logistic form.</span>
+<span id="cb4-840"><a href="#cb4-840"></a>::: {.callout-note title="The Fundamental Tension"}</span>
+<span id="cb4-841"><a href="#cb4-841"></a>**Prescriptive view:** The Rasch model defines what measurement IS. Items that don't fit should be discarded because they don't measure the same thing.</span>
+<span id="cb4-842"><a href="#cb4-842"></a></span>
+<span id="cb4-843"><a href="#cb4-843"></a>**Descriptive view:** Use whatever model fits the data best. The 2PL/3PL models are more realistic for most applications.</span>
+<span id="cb4-844"><a href="#cb4-844"></a></span>
+<span id="cb4-845"><a href="#cb4-845"></a>This is not merely a statistical disagreement---it reflects different philosophies of science. The Rasch school treats measurement theory as providing *requirements* that data must satisfy. The IRT school treats models as *tools* that should be chosen based on fit.</span>
+<span id="cb4-846"><a href="#cb4-846"></a>:::</span>
 <span id="cb4-847"><a href="#cb4-847"></a></span>
-<span id="cb4-848"><a href="#cb4-848"></a>In 1959, R. Duncan Luce provided an axiomatic foundation through his **Choice Axiom**: the ratio of choice probabilities for two alternatives should be independent of what other alternatives are available. This axiom leads directly to the Bradley-Terry/logistic model.</span>
+<span id="cb4-848"><a href="#cb4-848"></a><span class="fu">#### Implications for AI Evaluation</span></span>
 <span id="cb4-849"><a href="#cb4-849"></a></span>
-<span id="cb4-850"><a href="#cb4-850"></a>Georg Rasch was a Danish mathematician who worked on problems in educational testing. In 1960, he published "Probabilistic Models for Some Intelligence and Attainment Tests," which introduced what we now call the Rasch model <span class="co">[</span><span class="ot">@rasch1960probabilistic</span><span class="co">]</span>.</span>
+<span id="cb4-850"><a href="#cb4-850"></a>This debate has direct implications for AI benchmark design:</span>
 <span id="cb4-851"><a href="#cb4-851"></a></span>
-<span id="cb4-852"><a href="#cb4-852"></a>Rasch's contribution was not the mathematical model itself---the same formula had appeared earlier in other contexts. His contribution was the *philosophical framework* of specific objectivity: the requirement that person and item parameters must be separable.</span>
-<span id="cb4-853"><a href="#cb4-853"></a></span>
-<span id="cb4-854"><a href="#cb4-854"></a>Rasch's work was introduced to the United States by Benjamin Wright at the University of Chicago, who heard Rasch lecture in 1960. Wright became the leading advocate for Rasch measurement in the English-speaking world, founding the MESA (Measurement, Evaluation, Statistical Analysis) program and the journal *Rasch Measurement Transactions*.</span>
-<span id="cb4-855"><a href="#cb4-855"></a></span>
-<span id="cb4-856"><a href="#cb4-856"></a>Other important figures in the Rasch tradition:</span>
-<span id="cb4-857"><a href="#cb4-857"></a></span>
-<span id="cb4-858"><a href="#cb4-858"></a><span class="ss">- </span>**Erling Andersen** (Copenhagen): Developed the theory of conditional maximum likelihood estimation for Rasch models.</span>
-<span id="cb4-859"><a href="#cb4-859"></a><span class="ss">- </span>**Gerhard Fischer** (Vienna): Extended the Rasch model to the Linear Logistic Test Model (LLTM) and developed software for estimation.</span>
-<span id="cb4-860"><a href="#cb4-860"></a><span class="ss">- </span>**David Andrich** (Australia): Extended Rasch models to polytomous data (rating scales) and developed the RUMM software.</span>
+<span id="cb4-852"><a href="#cb4-852"></a><span class="pp">|</span> Question <span class="pp">|</span> Rasch School Answer <span class="pp">|</span> General IRT Answer <span class="pp">|</span></span>
+<span id="cb4-853"><a href="#cb4-853"></a><span class="pp">|----------|--------------------|--------------------|</span></span>
+<span id="cb4-854"><a href="#cb4-854"></a><span class="pp">|</span> Should we allow items with different discriminations? <span class="pp">|</span> No---they measure different constructs <span class="pp">|</span> Yes---model the discrimination <span class="pp">|</span></span>
+<span id="cb4-855"><a href="#cb4-855"></a><span class="pp">|</span> What if data don't fit Rasch? <span class="pp">|</span> Remove misfitting items <span class="pp">|</span> Use 2PL or 3PL <span class="pp">|</span></span>
+<span id="cb4-856"><a href="#cb4-856"></a><span class="pp">|</span> Is sum score the right metric? <span class="pp">|</span> Yes, if Rasch fits <span class="pp">|</span> Only approximately <span class="pp">|</span></span>
+<span id="cb4-857"><a href="#cb4-857"></a><span class="pp">|</span> Can we compare models across benchmarks? <span class="pp">|</span> Yes, with Rasch <span class="pp">|</span> Requires complex equating <span class="pp">|</span></span>
+<span id="cb4-858"><a href="#cb4-858"></a></span>
+<span id="cb4-859"><a href="#cb4-859"></a>AIMS takes a pragmatic position: we test whether data fit Rasch-like models, use the simpler model when it fits adequately, and acknowledge when more complex models are needed. The key insight is that the choice has *consequences* for what we can conclude from evaluation results.</span>
+<span id="cb4-860"><a href="#cb4-860"></a></span>
 <span id="cb4-861"><a href="#cb4-861"></a></span>
-<span id="cb4-862"><a href="#cb4-862"></a>In 1974, Daniel McFadden (who later won the Nobel Prize in Economics) developed the random utility framework for discrete choice. His insight was that choices could be modeled as utility maximization with random error:</span>
+<span id="cb4-862"><a href="#cb4-862"></a><span class="fu">## Historical Development {#sec-history}</span></span>
 <span id="cb4-863"><a href="#cb4-863"></a></span>
-<span id="cb4-864"><a href="#cb4-864"></a>A person chooses alternative $i$ over $j$ if $U_i + \epsilon_i &gt; U_j + \epsilon_j$, where $U$ is deterministic utility and $\epsilon$ is random. If the errors are i.i.d. Gumbel distributed, this yields the logistic choice model <span class="co">[</span><span class="ot">@mcfadden1974conditional</span><span class="co">]</span>.</span>
+<span id="cb4-864"><a href="#cb4-864"></a>The probabilistic models we use today emerged from over a century of work across psychology, education, economics, and statistics. Understanding this history illuminates why certain models dominate and what problems they were designed to solve.</span>
 <span id="cb4-865"><a href="#cb4-865"></a></span>
-<span id="cb4-866"><a href="#cb4-866"></a>McFadden's work connected preference models to economics and provided a theoretical justification for the Bradley-Terry model: it arises from random utility maximization under specific distributional assumptions.</span>
+<span id="cb4-866"><a href="#cb4-866"></a>The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the **Law of Comparative Judgment** <span class="co">[</span><span class="ot">@thurstone</span><span class="co">]</span>. Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values.</span>
 <span id="cb4-867"><a href="#cb4-867"></a></span>
-<span id="cb4-868"><a href="#cb4-868"></a>Modern Developments</span>
-<span id="cb4-869"><a href="#cb4-869"></a></span>
-<span id="cb4-870"><a href="#cb4-870"></a>**Network Psychometrics (2010s):** Borsboom and colleagues proposed that psychological constructs might be better understood as networks of causally connected symptoms rather than reflections of underlying latent variables <span class="co">[</span><span class="ot">@borsboom2013network</span><span class="co">]</span>. The Ising model and Gaussian Graphical Model provide statistical tools for this perspective.</span>
-<span id="cb4-871"><a href="#cb4-871"></a></span>
-<span id="cb4-872"><a href="#cb4-872"></a>**AI Evaluation (2020s):** The application of psychometric methods to AI evaluation is recent. Key developments include:</span>
-<span id="cb4-873"><a href="#cb4-873"></a></span>
-<span id="cb4-874"><a href="#cb4-874"></a><span class="ss">- </span>Chatbot Arena using Elo ratings for LLM ranking <span class="co">[</span><span class="ot">@chiang2024chatbotarena</span><span class="co">]</span></span>
-<span id="cb4-875"><a href="#cb4-875"></a><span class="ss">- </span>Application of IRT to benchmark analysis <span class="co">[</span><span class="ot">@polo2024tinybenchmarks</span><span class="co">]</span></span>
-<span id="cb4-876"><a href="#cb4-876"></a><span class="ss">- </span>Multidimensional factor models for AI capabilities (this textbook)</span>
-<span id="cb4-877"><a href="#cb4-877"></a></span>
-<span id="cb4-878"><a href="#cb4-878"></a>::: {.callout-note title="Key Historical Papers"}</span>
-<span id="cb4-879"><a href="#cb4-879"></a></span>
-<span id="cb4-880"><a href="#cb4-880"></a>**Foundations:**</span>
-<span id="cb4-881"><a href="#cb4-881"></a></span>
-<span id="cb4-882"><a href="#cb4-882"></a><span class="ss">- </span>@thurstone . A law of comparative judgment. *Psychological Review*, 34, 273-286.</span>
-<span id="cb4-883"><a href="#cb4-883"></a><span class="ss">- </span>@bradley-terry-model . Rank analysis of incomplete block designs. *Biometrika*, 39, 324-345.</span>
-<span id="cb4-884"><a href="#cb4-884"></a><span class="ss">- </span>@luce1959individual . *Individual Choice Behavior: A Theoretical Analysis*. Wiley.</span>
-<span id="cb4-885"><a href="#cb4-885"></a><span class="ss">- </span>@rasch1960probabilistic . *Probabilistic Models for Some Intelligence and Attainment Tests*. Danish Institute for Educational Research.</span>
-<span id="cb4-886"><a href="#cb4-886"></a><span class="ss">- </span>@mcfadden1974conditional . Conditional logit analysis of qualitative choice behavior. In *Frontiers in Econometrics* (pp. 105-142). Academic Press.</span>
+<span id="cb4-868"><a href="#cb4-868"></a>::: {.callout-note title="Thurstone's Model (Case V)"}</span>
+<span id="cb4-869"><a href="#cb4-869"></a>Each stimulus $i$ has a true scale value $\theta_i$. When comparing stimuli $i$ and $j$, each is perceived with Gaussian noise:</span>
+<span id="cb4-870"><a href="#cb4-870"></a></span>
+<span id="cb4-871"><a href="#cb4-871"></a>$$</span>
+<span id="cb4-872"><a href="#cb4-872"></a>\tilde{\theta}_i \sim \mathcal{N}(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim \mathcal{N}(\theta_j, \sigma^2)</span>
+<span id="cb4-873"><a href="#cb4-873"></a>$$</span>
+<span id="cb4-874"><a href="#cb4-874"></a></span>
+<span id="cb4-875"><a href="#cb4-875"></a>The probability that $i$ is judged greater than $j$ is:</span>
+<span id="cb4-876"><a href="#cb4-876"></a></span>
+<span id="cb4-877"><a href="#cb4-877"></a>$$</span>
+<span id="cb4-878"><a href="#cb4-878"></a>P(i \succ j) = \Phi\left(\frac{\theta_i - \theta_j}{\sqrt{2}\sigma}\right)</span>
+<span id="cb4-879"><a href="#cb4-879"></a>$$</span>
+<span id="cb4-880"><a href="#cb4-880"></a></span>
+<span id="cb4-881"><a href="#cb4-881"></a>where $\Phi$ is the standard normal CDF.</span>
+<span id="cb4-882"><a href="#cb4-882"></a>:::</span>
+<span id="cb4-883"><a href="#cb4-883"></a></span>
+<span id="cb4-884"><a href="#cb4-884"></a>Thurstone's method was revolutionary: it showed that subjective quantities could be measured scientifically. The same mathematics now underlies how we rank AI systems from human preferences.</span>
+<span id="cb4-885"><a href="#cb4-885"></a></span>
+<span id="cb4-886"><a href="#cb4-886"></a>In 1952, Ralph Bradley and Milton Terry developed a model for ranking from paired comparisons in the context of incomplete block designs <span class="co">[</span><span class="ot">@bradley-terry-model</span><span class="co">]</span>. Their model:</span>
 <span id="cb4-887"><a href="#cb4-887"></a></span>
-<span id="cb4-888"><a href="#cb4-888"></a>**Modern:**</span>
-<span id="cb4-889"><a href="#cb4-889"></a></span>
-<span id="cb4-890"><a href="#cb4-890"></a><span class="ss">- </span>@borsboom2005measuring . *Measuring the Mind: Conceptual Issues in Contemporary Psychometrics*. Cambridge University Press.</span>
-<span id="cb4-891"><a href="#cb4-891"></a><span class="ss">- </span>@epskamp2018gaussian . The Gaussian graphical model in cross-sectional and time-series data. *Multivariate Behavioral Research*, 53, 453-480.</span>
-<span id="cb4-892"><a href="#cb4-892"></a>:::</span>
+<span id="cb4-888"><a href="#cb4-888"></a>$$</span>
+<span id="cb4-889"><a href="#cb4-889"></a>P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}</span>
+<span id="cb4-890"><a href="#cb4-890"></a>$$</span>
+<span id="cb4-891"><a href="#cb4-891"></a></span>
+<span id="cb4-892"><a href="#cb4-892"></a>where $\pi_i &gt; 0$ are "worth" parameters. With $\theta_i = \log \pi_i$, this becomes the familiar logistic form.</span>
 <span id="cb4-893"><a href="#cb4-893"></a></span>
-<span id="cb4-894"><a href="#cb4-894"></a></span>
-<span id="cb4-895"><a href="#cb4-895"></a><span class="fu">## From Psychology to AI: Transferring Measurement Science {#sec-transfer}</span></span>
-<span id="cb4-896"><a href="#cb4-896"></a></span>
-<span id="cb4-897"><a href="#cb4-897"></a>The concepts developed in psychology and education transfer directly to AI evaluation. This section makes the mapping explicit and highlights both the parallels and the differences.</span>
-<span id="cb4-898"><a href="#cb4-898"></a></span>
-<span id="cb4-899"><a href="#cb4-899"></a><span class="fu">### The Translation Table</span></span>
-<span id="cb4-900"><a href="#cb4-900"></a></span>
-<span id="cb4-901"><a href="#cb4-901"></a><span class="pp">|</span> Psychology/Education <span class="pp">|</span> AI Evaluation <span class="pp">|</span> Symbol <span class="pp">|</span></span>
-<span id="cb4-902"><a href="#cb4-902"></a><span class="pp">|---------------------|---------------|--------|</span></span>
-<span id="cb4-903"><a href="#cb4-903"></a><span class="pp">|</span> Test taker (person, examinee) <span class="pp">|</span> AI model <span class="pp">|</span> $i$ <span class="pp">|</span></span>
-<span id="cb4-904"><a href="#cb4-904"></a><span class="pp">|</span> Test item (question, problem) <span class="pp">|</span> Benchmark question <span class="pp">|</span> $j$ <span class="pp">|</span></span>
-<span id="cb4-905"><a href="#cb4-905"></a><span class="pp">|</span> Ability, trait, latent construct <span class="pp">|</span> Capability, skill <span class="pp">|</span> $\theta_i$ or $U_i$ <span class="pp">|</span></span>
-<span id="cb4-906"><a href="#cb4-906"></a><span class="pp">|</span> Item difficulty <span class="pp">|</span> Question difficulty <span class="pp">|</span> $\beta_j$ or $V_j$ <span class="pp">|</span></span>
-<span id="cb4-907"><a href="#cb4-907"></a><span class="pp">|</span> Item discrimination <span class="pp">|</span> Question informativeness <span class="pp">|</span> $a_j$ <span class="pp">|</span></span>
-<span id="cb4-908"><a href="#cb4-908"></a><span class="pp">|</span> Response (correct/incorrect) <span class="pp">|</span> Model output (correct/incorrect) <span class="pp">|</span> $Y_{ij}$ <span class="pp">|</span></span>
-<span id="cb4-909"><a href="#cb4-909"></a><span class="pp">|</span> Test (collection of items) <span class="pp">|</span> Benchmark (collection of questions) <span class="pp">|</span> - <span class="pp">|</span></span>
-<span id="cb4-910"><a href="#cb4-910"></a><span class="pp">|</span> Sum score (number correct) <span class="pp">|</span> Accuracy <span class="pp">|</span> $S_i$ <span class="pp">|</span></span>
-<span id="cb4-911"><a href="#cb4-911"></a><span class="pp">|</span> Reliability <span class="pp">|</span> Evaluation consistency <span class="pp">|</span> - <span class="pp">|</span></span>
-<span id="cb4-912"><a href="#cb4-912"></a><span class="pp">|</span> Validity <span class="pp">|</span> Measuring intended capability <span class="pp">|</span> - <span class="pp">|</span></span>
-<span id="cb4-913"><a href="#cb4-913"></a><span class="pp">|</span> Test bias (DIF) <span class="pp">|</span> Benchmark contamination/bias <span class="pp">|</span> - <span class="pp">|</span></span>
-<span id="cb4-914"><a href="#cb4-914"></a><span class="pp">|</span> Adaptive testing (CAT) <span class="pp">|</span> Efficient evaluation <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb4-894"><a href="#cb4-894"></a>In 1959, R. Duncan Luce provided an axiomatic foundation through his **Choice Axiom**: the ratio of choice probabilities for two alternatives should be independent of what other alternatives are available. This axiom leads directly to the Bradley-Terry/logistic model.</span>
+<span id="cb4-895"><a href="#cb4-895"></a></span>
+<span id="cb4-896"><a href="#cb4-896"></a>Georg Rasch was a Danish mathematician who worked on problems in educational testing. In 1960, he published "Probabilistic Models for Some Intelligence and Attainment Tests," which introduced what we now call the Rasch model <span class="co">[</span><span class="ot">@rasch1960probabilistic</span><span class="co">]</span>.</span>
+<span id="cb4-897"><a href="#cb4-897"></a></span>
+<span id="cb4-898"><a href="#cb4-898"></a>Rasch's contribution was not the mathematical model itself---the same formula had appeared earlier in other contexts. His contribution was the *philosophical framework* of specific objectivity: the requirement that person and item parameters must be separable.</span>
+<span id="cb4-899"><a href="#cb4-899"></a></span>
+<span id="cb4-900"><a href="#cb4-900"></a>Rasch's work was introduced to the United States by Benjamin Wright at the University of Chicago, who heard Rasch lecture in 1960. Wright became the leading advocate for Rasch measurement in the English-speaking world, founding the MESA (Measurement, Evaluation, Statistical Analysis) program and the journal *Rasch Measurement Transactions*.</span>
+<span id="cb4-901"><a href="#cb4-901"></a></span>
+<span id="cb4-902"><a href="#cb4-902"></a>Other important figures in the Rasch tradition:</span>
+<span id="cb4-903"><a href="#cb4-903"></a></span>
+<span id="cb4-904"><a href="#cb4-904"></a><span class="ss">- </span>**Erling Andersen** (Copenhagen): Developed the theory of conditional maximum likelihood estimation for Rasch models.</span>
+<span id="cb4-905"><a href="#cb4-905"></a><span class="ss">- </span>**Gerhard Fischer** (Vienna): Extended the Rasch model to the Linear Logistic Test Model (LLTM) and developed software for estimation.</span>
+<span id="cb4-906"><a href="#cb4-906"></a><span class="ss">- </span>**David Andrich** (Australia): Extended Rasch models to polytomous data (rating scales) and developed the RUMM software.</span>
+<span id="cb4-907"><a href="#cb4-907"></a></span>
+<span id="cb4-908"><a href="#cb4-908"></a>In 1974, Daniel McFadden (who later won the Nobel Prize in Economics) developed the random utility framework for discrete choice. His insight was that choices could be modeled as utility maximization with random error:</span>
+<span id="cb4-909"><a href="#cb4-909"></a></span>
+<span id="cb4-910"><a href="#cb4-910"></a>A person chooses alternative $i$ over $j$ if $U_i + \epsilon_i &gt; U_j + \epsilon_j$, where $U$ is deterministic utility and $\epsilon$ is random. If the errors are i.i.d. Gumbel distributed, this yields the logistic choice model <span class="co">[</span><span class="ot">@mcfadden1974conditional</span><span class="co">]</span>.</span>
+<span id="cb4-911"><a href="#cb4-911"></a></span>
+<span id="cb4-912"><a href="#cb4-912"></a>McFadden's work connected preference models to economics and provided a theoretical justification for the Bradley-Terry model: it arises from random utility maximization under specific distributional assumptions.</span>
+<span id="cb4-913"><a href="#cb4-913"></a></span>
+<span id="cb4-914"><a href="#cb4-914"></a>Modern Developments</span>
 <span id="cb4-915"><a href="#cb4-915"></a></span>
-<span id="cb4-916"><a href="#cb4-916"></a><span class="fu">### Key Parallels</span></span>
+<span id="cb4-916"><a href="#cb4-916"></a>**Network Psychometrics (2010s):** Borsboom and colleagues proposed that psychological constructs might be better understood as networks of causally connected symptoms rather than reflections of underlying latent variables <span class="co">[</span><span class="ot">@borsboom2013network</span><span class="co">]</span>. The Ising model and Gaussian Graphical Model provide statistical tools for this perspective.</span>
 <span id="cb4-917"><a href="#cb4-917"></a></span>
-<span id="cb4-918"><a href="#cb4-918"></a>**Reliability.** In educational testing, reliability refers to the consistency of scores across different conditions:</span>
+<span id="cb4-918"><a href="#cb4-918"></a>**AI Evaluation (2020s):** The application of psychometric methods to AI evaluation is recent. Key developments include:</span>
 <span id="cb4-919"><a href="#cb4-919"></a></span>
-<span id="cb4-920"><a href="#cb4-920"></a><span class="ss">- </span>*Test-retest reliability:* Does the same person get the same score on repeated testing?</span>
-<span id="cb4-921"><a href="#cb4-921"></a><span class="ss">- </span>*Internal consistency:* Do items within the test correlate with each other?</span>
-<span id="cb4-922"><a href="#cb4-922"></a><span class="ss">- </span>*Standard error of measurement:* How precise is the score estimate?</span>
+<span id="cb4-920"><a href="#cb4-920"></a><span class="ss">- </span>Chatbot Arena using Elo ratings for LLM ranking <span class="co">[</span><span class="ot">@chiang2024chatbotarena</span><span class="co">]</span></span>
+<span id="cb4-921"><a href="#cb4-921"></a><span class="ss">- </span>Application of IRT to benchmark analysis <span class="co">[</span><span class="ot">@polo2024tinybenchmarks</span><span class="co">]</span></span>
+<span id="cb4-922"><a href="#cb4-922"></a><span class="ss">- </span>Multidimensional factor models for AI capabilities (this textbook)</span>
 <span id="cb4-923"><a href="#cb4-923"></a></span>
-<span id="cb4-924"><a href="#cb4-924"></a>For AI evaluation:</span>
+<span id="cb4-924"><a href="#cb4-924"></a>::: {.callout-note title="Key Historical Papers"}</span>
 <span id="cb4-925"><a href="#cb4-925"></a></span>
-<span id="cb4-926"><a href="#cb4-926"></a><span class="ss">- </span>*Run-to-run consistency:* Does the same model get the same score with different random seeds?</span>
-<span id="cb4-927"><a href="#cb4-927"></a><span class="ss">- </span>*Item consistency:* Do benchmark questions correlate with each other?</span>
-<span id="cb4-928"><a href="#cb4-928"></a><span class="ss">- </span>*Confidence intervals:* How uncertain is the accuracy estimate?</span>
-<span id="cb4-929"><a href="#cb4-929"></a></span>
-<span id="cb4-930"><a href="#cb4-930"></a>**Validity.** In educational testing, validity concerns whether the test measures what it claims to measure:</span>
-<span id="cb4-931"><a href="#cb4-931"></a></span>
-<span id="cb4-932"><a href="#cb4-932"></a><span class="ss">- </span>*Content validity:* Do the items adequately sample the domain?</span>
-<span id="cb4-933"><a href="#cb4-933"></a><span class="ss">- </span>*Criterion validity:* Does the score predict relevant outcomes?</span>
-<span id="cb4-934"><a href="#cb4-934"></a><span class="ss">- </span>*Construct validity:* Does the score behave as theory predicts?</span>
+<span id="cb4-926"><a href="#cb4-926"></a>**Foundations:**</span>
+<span id="cb4-927"><a href="#cb4-927"></a></span>
+<span id="cb4-928"><a href="#cb4-928"></a><span class="ss">- </span>@thurstone . A law of comparative judgment. *Psychological Review*, 34, 273-286.</span>
+<span id="cb4-929"><a href="#cb4-929"></a><span class="ss">- </span>@bradley-terry-model . Rank analysis of incomplete block designs. *Biometrika*, 39, 324-345.</span>
+<span id="cb4-930"><a href="#cb4-930"></a><span class="ss">- </span>@luce1959individual . *Individual Choice Behavior: A Theoretical Analysis*. Wiley.</span>
+<span id="cb4-931"><a href="#cb4-931"></a><span class="ss">- </span>@rasch1960probabilistic . *Probabilistic Models for Some Intelligence and Attainment Tests*. Danish Institute for Educational Research.</span>
+<span id="cb4-932"><a href="#cb4-932"></a><span class="ss">- </span>@mcfadden1974conditional . Conditional logit analysis of qualitative choice behavior. In *Frontiers in Econometrics* (pp. 105-142). Academic Press.</span>
+<span id="cb4-933"><a href="#cb4-933"></a></span>
+<span id="cb4-934"><a href="#cb4-934"></a>**Modern:**</span>
 <span id="cb4-935"><a href="#cb4-935"></a></span>
-<span id="cb4-936"><a href="#cb4-936"></a>For AI evaluation:</span>
-<span id="cb4-937"><a href="#cb4-937"></a></span>
-<span id="cb4-938"><a href="#cb4-938"></a><span class="ss">- </span>*Content validity:* Does the benchmark cover the intended capability domain?</span>
-<span id="cb4-939"><a href="#cb4-939"></a><span class="ss">- </span>*Criterion validity:* Does benchmark performance predict real-world usefulness?</span>
-<span id="cb4-940"><a href="#cb4-940"></a><span class="ss">- </span>*Construct validity:* Do models that score high actually have the intended capability?</span>
-<span id="cb4-941"><a href="#cb4-941"></a></span>
-<span id="cb4-942"><a href="#cb4-942"></a>**Fairness and Bias.** In educational testing, differential item functioning (DIF) analysis checks whether items are biased against certain groups:</span>
-<span id="cb4-943"><a href="#cb4-943"></a></span>
-<span id="cb4-944"><a href="#cb4-944"></a><span class="ss">- </span>An item shows DIF if persons with equal ability but different group membership have different probabilities of answering correctly.</span>
-<span id="cb4-945"><a href="#cb4-945"></a></span>
-<span id="cb4-946"><a href="#cb4-946"></a>For AI evaluation:</span>
-<span id="cb4-947"><a href="#cb4-947"></a></span>
-<span id="cb4-948"><a href="#cb4-948"></a><span class="ss">- </span>*Training data contamination:* Did some models see the test questions during training?</span>
-<span id="cb4-949"><a href="#cb4-949"></a><span class="ss">- </span>*Architecture bias:* Are some questions easier for certain model architectures?</span>
-<span id="cb4-950"><a href="#cb4-950"></a><span class="ss">- </span>*Prompt sensitivity:* Do different prompt formats advantage different models?</span>
-<span id="cb4-951"><a href="#cb4-951"></a></span>
-<span id="cb4-952"><a href="#cb4-952"></a><span class="fu">### Key Differences</span></span>
-<span id="cb4-953"><a href="#cb4-953"></a></span>
-<span id="cb4-954"><a href="#cb4-954"></a>While the mathematical framework transfers directly, some differences are worth noting:</span>
-<span id="cb4-955"><a href="#cb4-955"></a></span>
-<span id="cb4-956"><a href="#cb4-956"></a><span class="ss">1. </span>**Number of items.** Psychological tests typically have tens to hundreds of items. AI benchmarks may have thousands or hundreds of thousands. This affects estimation and model fitting.</span>
-<span id="cb4-957"><a href="#cb4-957"></a></span>
-<span id="cb4-958"><a href="#cb4-958"></a><span class="ss">2. </span>**Deterministic responses.** Human test-takers show stochastic variation---they may answer the same question differently on different occasions. AI models (with temperature 0) are often deterministic. This changes how we interpret probability models.</span>
-<span id="cb4-959"><a href="#cb4-959"></a></span>
-<span id="cb4-960"><a href="#cb4-960"></a><span class="ss">3. </span>**Construct definition.** Psychological constructs like "intelligence" or "anxiety" have extensive theoretical literature. AI capabilities like "reasoning" or "common sense" are less well defined.</span>
+<span id="cb4-936"><a href="#cb4-936"></a><span class="ss">- </span>@borsboom2005measuring . *Measuring the Mind: Conceptual Issues in Contemporary Psychometrics*. Cambridge University Press.</span>
+<span id="cb4-937"><a href="#cb4-937"></a><span class="ss">- </span>@epskamp2018gaussian . The Gaussian graphical model in cross-sectional and time-series data. *Multivariate Behavioral Research*, 53, 453-480.</span>
+<span id="cb4-938"><a href="#cb4-938"></a>:::</span>
+<span id="cb4-939"><a href="#cb4-939"></a></span>
+<span id="cb4-940"><a href="#cb4-940"></a></span>
+<span id="cb4-941"><a href="#cb4-941"></a><span class="fu">## From Psychology to AI: Transferring Measurement Science {#sec-transfer}</span></span>
+<span id="cb4-942"><a href="#cb4-942"></a></span>
+<span id="cb4-943"><a href="#cb4-943"></a>The concepts developed in psychology and education transfer directly to AI evaluation. This section makes the mapping explicit and highlights both the parallels and the differences.</span>
+<span id="cb4-944"><a href="#cb4-944"></a></span>
+<span id="cb4-945"><a href="#cb4-945"></a><span class="fu">### The Translation Table</span></span>
+<span id="cb4-946"><a href="#cb4-946"></a></span>
+<span id="cb4-947"><a href="#cb4-947"></a><span class="pp">|</span> Psychology/Education <span class="pp">|</span> AI Evaluation <span class="pp">|</span> Symbol <span class="pp">|</span></span>
+<span id="cb4-948"><a href="#cb4-948"></a><span class="pp">|---------------------|---------------|--------|</span></span>
+<span id="cb4-949"><a href="#cb4-949"></a><span class="pp">|</span> Test taker (person, examinee) <span class="pp">|</span> AI model <span class="pp">|</span> $i$ <span class="pp">|</span></span>
+<span id="cb4-950"><a href="#cb4-950"></a><span class="pp">|</span> Test item (question, problem) <span class="pp">|</span> Benchmark question <span class="pp">|</span> $j$ <span class="pp">|</span></span>
+<span id="cb4-951"><a href="#cb4-951"></a><span class="pp">|</span> Ability, trait, latent construct <span class="pp">|</span> Capability, skill <span class="pp">|</span> $\theta_i$ or $U_i$ <span class="pp">|</span></span>
+<span id="cb4-952"><a href="#cb4-952"></a><span class="pp">|</span> Item difficulty <span class="pp">|</span> Question difficulty <span class="pp">|</span> $\beta_j$ or $V_j$ <span class="pp">|</span></span>
+<span id="cb4-953"><a href="#cb4-953"></a><span class="pp">|</span> Item discrimination <span class="pp">|</span> Question informativeness <span class="pp">|</span> $a_j$ <span class="pp">|</span></span>
+<span id="cb4-954"><a href="#cb4-954"></a><span class="pp">|</span> Response (correct/incorrect) <span class="pp">|</span> Model output (correct/incorrect) <span class="pp">|</span> $Y_{ij}$ <span class="pp">|</span></span>
+<span id="cb4-955"><a href="#cb4-955"></a><span class="pp">|</span> Test (collection of items) <span class="pp">|</span> Benchmark (collection of questions) <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb4-956"><a href="#cb4-956"></a><span class="pp">|</span> Sum score (number correct) <span class="pp">|</span> Accuracy <span class="pp">|</span> $S_i$ <span class="pp">|</span></span>
+<span id="cb4-957"><a href="#cb4-957"></a><span class="pp">|</span> Reliability <span class="pp">|</span> Evaluation consistency <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb4-958"><a href="#cb4-958"></a><span class="pp">|</span> Validity <span class="pp">|</span> Measuring intended capability <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb4-959"><a href="#cb4-959"></a><span class="pp">|</span> Test bias (DIF) <span class="pp">|</span> Benchmark contamination/bias <span class="pp">|</span> - <span class="pp">|</span></span>
+<span id="cb4-960"><a href="#cb4-960"></a><span class="pp">|</span> Adaptive testing (CAT) <span class="pp">|</span> Efficient evaluation <span class="pp">|</span> - <span class="pp">|</span></span>
 <span id="cb4-961"><a href="#cb4-961"></a></span>
-<span id="cb4-962"><a href="#cb4-962"></a><span class="ss">4. </span>**Speed of change.** Human abilities change slowly. AI capabilities can change dramatically with each model release. This affects the stability of calibrations.</span>
+<span id="cb4-962"><a href="#cb4-962"></a><span class="fu">### Key Parallels</span></span>
 <span id="cb4-963"><a href="#cb4-963"></a></span>
-<span id="cb4-964"><a href="#cb4-964"></a><span class="ss">5. </span>**Population structure.** Human populations have known demographic structures. The "population" of AI models is arbitrary---determined by which models researchers choose to evaluate.</span>
+<span id="cb4-964"><a href="#cb4-964"></a>**Reliability.** In educational testing, reliability refers to the consistency of scores across different conditions:</span>
 <span id="cb4-965"><a href="#cb4-965"></a></span>
-<span id="cb4-966"><a href="#cb4-966"></a><span class="fu">### Case Study: The Chatbot Arena</span></span>
-<span id="cb4-967"><a href="#cb4-967"></a></span>
-<span id="cb4-968"><a href="#cb4-968"></a>The Chatbot Arena (LMSYS) <span class="co">[</span><span class="ot">@liang_holistic_2023</span><span class="co">]</span> provides a concrete example of measurement concepts applied to AI:</span>
+<span id="cb4-966"><a href="#cb4-966"></a><span class="ss">- </span>*Test-retest reliability:* Does the same person get the same score on repeated testing?</span>
+<span id="cb4-967"><a href="#cb4-967"></a><span class="ss">- </span>*Internal consistency:* Do items within the test correlate with each other?</span>
+<span id="cb4-968"><a href="#cb4-968"></a><span class="ss">- </span>*Standard error of measurement:* How precise is the score estimate?</span>
 <span id="cb4-969"><a href="#cb4-969"></a></span>
-<span id="cb4-970"><a href="#cb4-970"></a>**Setting:** Users interact with two anonymous language models and vote for the one they prefer. Models are ranked using Elo ratings computed from these pairwise comparisons.</span>
+<span id="cb4-970"><a href="#cb4-970"></a>For AI evaluation:</span>
 <span id="cb4-971"><a href="#cb4-971"></a></span>
-<span id="cb4-972"><a href="#cb4-972"></a>**Measurement framework:** This is exactly Thurstone's comparative judgment paradigm from 1927. The Elo rating system implements Bradley-Terry maximum likelihood estimation with online updates.</span>
-<span id="cb4-973"><a href="#cb4-973"></a></span>
-<span id="cb4-974"><a href="#cb4-974"></a>**Validity questions:**</span>
+<span id="cb4-972"><a href="#cb4-972"></a><span class="ss">- </span>*Run-to-run consistency:* Does the same model get the same score with different random seeds?</span>
+<span id="cb4-973"><a href="#cb4-973"></a><span class="ss">- </span>*Item consistency:* Do benchmark questions correlate with each other?</span>
+<span id="cb4-974"><a href="#cb4-974"></a><span class="ss">- </span>*Confidence intervals:* How uncertain is the accuracy estimate?</span>
 <span id="cb4-975"><a href="#cb4-975"></a></span>
-<span id="cb4-976"><a href="#cb4-976"></a><span class="ss">- </span>What construct do the ratings measure? "Human preference" is vague. Preferences for what---helpfulness, harmlessness, style, factual accuracy?</span>
-<span id="cb4-977"><a href="#cb4-977"></a><span class="ss">- </span>Are ratings stable across different user populations?</span>
-<span id="cb4-978"><a href="#cb4-978"></a><span class="ss">- </span>Do ratings predict performance on other benchmarks or real-world tasks?</span>
-<span id="cb4-979"><a href="#cb4-979"></a></span>
-<span id="cb4-980"><a href="#cb4-980"></a>**Reliability questions:**</span>
+<span id="cb4-976"><a href="#cb4-976"></a>**Validity.** In educational testing, validity concerns whether the test measures what it claims to measure:</span>
+<span id="cb4-977"><a href="#cb4-977"></a></span>
+<span id="cb4-978"><a href="#cb4-978"></a><span class="ss">- </span>*Content validity:* Do the items adequately sample the domain?</span>
+<span id="cb4-979"><a href="#cb4-979"></a><span class="ss">- </span>*Criterion validity:* Does the score predict relevant outcomes?</span>
+<span id="cb4-980"><a href="#cb4-980"></a><span class="ss">- </span>*Construct validity:* Does the score behave as theory predicts?</span>
 <span id="cb4-981"><a href="#cb4-981"></a></span>
-<span id="cb4-982"><a href="#cb4-982"></a><span class="ss">- </span>How many comparisons are needed for stable ratings?</span>
-<span id="cb4-983"><a href="#cb4-983"></a><span class="ss">- </span>How sensitive are ratings to the specific prompts used?</span>
-<span id="cb4-984"><a href="#cb4-984"></a><span class="ss">- </span>Do ratings fluctuate as new models enter the arena?</span>
-<span id="cb4-985"><a href="#cb4-985"></a></span>
-<span id="cb4-986"><a href="#cb4-986"></a>The Arena demonstrates both the power and limitations of measurement approaches. The Elo ratings provide a principled summary of human preferences, but interpreting what they mean requires the full apparatus of validity theory.</span>
+<span id="cb4-982"><a href="#cb4-982"></a>For AI evaluation:</span>
+<span id="cb4-983"><a href="#cb4-983"></a></span>
+<span id="cb4-984"><a href="#cb4-984"></a><span class="ss">- </span>*Content validity:* Does the benchmark cover the intended capability domain?</span>
+<span id="cb4-985"><a href="#cb4-985"></a><span class="ss">- </span>*Criterion validity:* Does benchmark performance predict real-world usefulness?</span>
+<span id="cb4-986"><a href="#cb4-986"></a><span class="ss">- </span>*Construct validity:* Do models that score high actually have the intended capability?</span>
 <span id="cb4-987"><a href="#cb4-987"></a></span>
-<span id="cb4-988"><a href="#cb4-988"></a><span class="fu">## Summary and Preview {#sec-summary}</span></span>
+<span id="cb4-988"><a href="#cb4-988"></a>**Fairness and Bias.** In educational testing, differential item functioning (DIF) analysis checks whether items are biased against certain groups:</span>
 <span id="cb4-989"><a href="#cb4-989"></a></span>
-<span id="cb4-990"><a href="#cb4-990"></a>This chapter has introduced the measurement science framework that underlies the rest of AIMS. The key ideas are:</span>
+<span id="cb4-990"><a href="#cb4-990"></a><span class="ss">- </span>An item shows DIF if persons with equal ability but different group membership have different probabilities of answering correctly.</span>
 <span id="cb4-991"><a href="#cb4-991"></a></span>
-<span id="cb4-992"><a href="#cb4-992"></a><span class="fu">### Key Takeaways</span></span>
+<span id="cb4-992"><a href="#cb4-992"></a>For AI evaluation:</span>
 <span id="cb4-993"><a href="#cb4-993"></a></span>
-<span id="cb4-994"><a href="#cb4-994"></a><span class="ss">1. </span>**Measurement requires more than scoring.** Assigning numbers to models based on benchmark performance is scoring, not measuring. Measurement requires a theory connecting scores to latent constructs.</span>
-<span id="cb4-995"><a href="#cb4-995"></a></span>
-<span id="cb4-996"><a href="#cb4-996"></a><span class="ss">2. </span>**Validity matters.** A benchmark measures a construct only if the construct exists and causally produces variation in scores. The philosophical and diagnostic foundations of validity are developed in @sec-validity.</span>
+<span id="cb4-994"><a href="#cb4-994"></a><span class="ss">- </span>*Training data contamination:* Did some models see the test questions during training?</span>
+<span id="cb4-995"><a href="#cb4-995"></a><span class="ss">- </span>*Architecture bias:* Are some questions easier for certain model architectures?</span>
+<span id="cb4-996"><a href="#cb4-996"></a><span class="ss">- </span>*Prompt sensitivity:* Do different prompt formats advantage different models?</span>
 <span id="cb4-997"><a href="#cb4-997"></a></span>
-<span id="cb4-998"><a href="#cb4-998"></a><span class="ss">3. </span>**The Rasch model has special properties.** Sufficiency of sum scores and specific objectivity make Rasch uniquely suitable for fundamental measurement. These properties justify treating sum scores as measurements.</span>
+<span id="cb4-998"><a href="#cb4-998"></a><span class="fu">### Key Differences</span></span>
 <span id="cb4-999"><a href="#cb4-999"></a></span>
-<span id="cb4-1000"><a href="#cb4-1000"></a><span class="ss">4. </span>**Multiple models exist for different purposes.** IRT models (1PL, 2PL, 3PL), factor models, paired comparison models (Bradley-Terry, Elo), network models (GGM, Ising), and hierarchical models serve different purposes. The choice of model---including whether to represent nested evaluation structure---has implications for what we can conclude.</span>
+<span id="cb4-1000"><a href="#cb4-1000"></a>While the mathematical framework transfers directly, some differences are worth noting:</span>
 <span id="cb4-1001"><a href="#cb4-1001"></a></span>
-<span id="cb4-1002"><a href="#cb4-1002"></a><span class="ss">5. </span>**Psychology solved these problems decades ago.** The tools developed in psychometrics---reliability, validity, dimensionality analysis, adaptive testing---apply directly to AI evaluation.</span>
+<span id="cb4-1002"><a href="#cb4-1002"></a><span class="ss">1. </span>**Number of items.** Psychological tests typically have tens to hundreds of items. AI benchmarks may have thousands or hundreds of thousands. This affects estimation and model fitting.</span>
 <span id="cb4-1003"><a href="#cb4-1003"></a></span>
-<span id="cb4-1004"><a href="#cb4-1004"></a><span class="fu">### Preview of Following Chapters</span></span>
+<span id="cb4-1004"><a href="#cb4-1004"></a><span class="ss">2. </span>**Deterministic responses.** Human test-takers show stochastic variation---they may answer the same question differently on different occasions. AI models (with temperature 0) are often deterministic. This changes how we interpret probability models.</span>
 <span id="cb4-1005"><a href="#cb4-1005"></a></span>
-<span id="cb4-1006"><a href="#cb4-1006"></a>The chapters that follow apply this framework to specific AI evaluation challenges:</span>
+<span id="cb4-1006"><a href="#cb4-1006"></a><span class="ss">3. </span>**Construct definition.** Psychological constructs like "intelligence" or "anxiety" have extensive theoretical literature. AI capabilities like "reasoning" or "common sense" are less well defined.</span>
 <span id="cb4-1007"><a href="#cb4-1007"></a></span>
-<span id="cb4-1008"><a href="#cb4-1008"></a><span class="ss">- </span>**Chapter 2 (Learning):** Covers parameter estimation for IRT and factor models, including maximum likelihood, EM algorithms, Bayesian inference, regularization, and model selection. It also develops generalization experiments---evaluating how well learned models transfer to unseen data under various masking schemes---and presents empirical results for the amortized models introduced in this chapter.</span>
+<span id="cb4-1008"><a href="#cb4-1008"></a><span class="ss">4. </span>**Speed of change.** Human abilities change slowly. AI capabilities can change dramatically with each model release. This affects the stability of calibrations.</span>
 <span id="cb4-1009"><a href="#cb4-1009"></a></span>
-<span id="cb4-1010"><a href="#cb4-1010"></a><span class="ss">- </span>**Chapter 3 (Design):** Applies measurement principles to benchmark design, addressing how to construct valid and reliable AI evaluations.</span>
+<span id="cb4-1010"><a href="#cb4-1010"></a><span class="ss">5. </span>**Population structure.** Human populations have known demographic structures. The "population" of AI models is arbitrary---determined by which models researchers choose to evaluate.</span>
 <span id="cb4-1011"><a href="#cb4-1011"></a></span>
-<span id="cb4-1012"><a href="#cb4-1012"></a><span class="ss">- </span>**Chapter 4 (Reliability):** Develops the theory of measurement precision, including classical and IRT-based reliability, standard errors, and information functions.</span>
+<span id="cb4-1012"><a href="#cb4-1012"></a><span class="fu">### Case Study: The Chatbot Arena</span></span>
 <span id="cb4-1013"><a href="#cb4-1013"></a></span>
-<span id="cb4-1014"><a href="#cb4-1014"></a>The measurement concepts from this chapter recur throughout. When we justify using sum scores, we appeal to sufficiency in the Rasch sense. When we analyze benchmark dimensionality, we apply the factor models introduced in this chapter and trained using methods from Chapter 2. The question of whether benchmarks measure what they claim to measure --- validity --- is developed in @sec-validity.</span>
+<span id="cb4-1014"><a href="#cb4-1014"></a>The Chatbot Arena (LMSYS) <span class="co">[</span><span class="ot">@liang_holistic_2023</span><span class="co">]</span> provides a concrete example of measurement concepts applied to AI:</span>
 <span id="cb4-1015"><a href="#cb4-1015"></a></span>
-<span id="cb4-1016"><a href="#cb4-1016"></a></span>
-<span id="cb4-1017"><a href="#cb4-1017"></a><span class="fu">## Exercises {#sec-irt-exercises}</span></span>
-<span id="cb4-1018"><a href="#cb4-1018"></a></span>
-<span id="cb4-1019"><a href="#cb4-1019"></a><span class="fu">### Theoretical Exercises</span></span>
-<span id="cb4-1020"><a href="#cb4-1020"></a></span>
-<span id="cb4-1021"><a href="#cb4-1021"></a>**Exercise 1.1** (*): Explain in your own words why the sum score is a sufficient statistic in the Rasch model but not in the 2PL model. What information is lost when we reduce responses to sum scores under 2PL?</span>
-<span id="cb4-1022"><a href="#cb4-1022"></a></span>
-<span id="cb4-1023"><a href="#cb4-1023"></a>**Exercise 1.2** (**): Prove that the Bradley-Terry model is equivalent to a Rasch model where each "person" is a comparison between two items.</span>
-<span id="cb4-1024"><a href="#cb4-1024"></a></span>
-<span id="cb4-1025"><a href="#cb4-1025"></a>*Hint:* Consider a "person" as an ordered pair $(i, j)$ representing a comparison, and an "item" as a single entity $k$ appearing in a comparison. Define appropriate ability and difficulty parameters.</span>
-<span id="cb4-1026"><a href="#cb4-1026"></a></span>
-<span id="cb4-1027"><a href="#cb4-1027"></a>**Exercise 1.3** (**): Show that in the Rasch model, the odds ratio for persons $i$ and $k$ responding correctly to item $j$ is:</span>
-<span id="cb4-1028"><a href="#cb4-1028"></a></span>
-<span id="cb4-1029"><a href="#cb4-1029"></a>$$</span>
-<span id="cb4-1030"><a href="#cb4-1030"></a>\frac{P(Y_{ij} = 1) / P(Y_{ij} = 0)}{P(Y_{kj} = 1) / P(Y_{kj} = 0)} = \exp(\theta_i - \theta_k)</span>
-<span id="cb4-1031"><a href="#cb4-1031"></a>$$</span>
-<span id="cb4-1032"><a href="#cb4-1032"></a></span>
-<span id="cb4-1033"><a href="#cb4-1033"></a>independent of the item difficulty $\beta_j$. Explain why this property is called "specific objectivity."</span>
-<span id="cb4-1034"><a href="#cb4-1034"></a></span>
-<span id="cb4-1035"><a href="#cb4-1035"></a>**Exercise 1.4** (***): The Ising model and the Rasch model make different assumptions about why responses correlate.</span>
-<span id="cb4-1036"><a href="#cb4-1036"></a></span>
-<span id="cb4-1037"><a href="#cb4-1037"></a>(a) Write down both models for binary data $Y \in <span class="sc">\{</span>0, 1<span class="sc">\}</span>^{N \times M}$.</span>
-<span id="cb4-1038"><a href="#cb4-1038"></a></span>
-<span id="cb4-1039"><a href="#cb4-1039"></a>(b) Describe the causal structure each model assumes.</span>
-<span id="cb4-1040"><a href="#cb4-1040"></a></span>
-<span id="cb4-1041"><a href="#cb4-1041"></a>(c) Under what conditions might each model be appropriate for AI evaluation?</span>
-<span id="cb4-1042"><a href="#cb4-1042"></a></span>
-<span id="cb4-1043"><a href="#cb4-1043"></a>(d) Propose an empirical test that could distinguish between them.</span>
-<span id="cb4-1044"><a href="#cb4-1044"></a></span>
-<span id="cb4-1045"><a href="#cb4-1045"></a><span class="fu">### Computational Exercises</span></span>
-<span id="cb4-1046"><a href="#cb4-1046"></a></span>
-<span id="cb4-1047"><a href="#cb4-1047"></a>**Exercise 1.5** (**): Implement Rasch model estimation using conditional maximum likelihood.</span>
-<span id="cb4-1048"><a href="#cb4-1048"></a></span>
-<span id="cb4-1049"><a href="#cb4-1049"></a><span class="in">```python</span></span>
-<span id="cb4-1050"><a href="#cb4-1050"></a><span class="co"># Given: Response matrix Y (N models x M questions)</span></span>
-<span id="cb4-1051"><a href="#cb4-1051"></a><span class="co"># Task: Estimate item difficulties using conditional MLE</span></span>
-<span id="cb4-1052"><a href="#cb4-1052"></a><span class="co">#</span></span>
-<span id="cb4-1053"><a href="#cb4-1053"></a><span class="co"># Steps:</span></span>
-<span id="cb4-1054"><a href="#cb4-1054"></a><span class="co"># 1. Compute sum scores for each model</span></span>
-<span id="cb4-1055"><a href="#cb4-1055"></a><span class="co"># 2. For each item, compute the conditional likelihood given sum scores</span></span>
-<span id="cb4-1056"><a href="#cb4-1056"></a><span class="co"># 3. Optimize to find item difficulties</span></span>
-<span id="cb4-1057"><a href="#cb4-1057"></a><span class="co"># 4. Compare estimated difficulties to empirical item means (proportion correct)</span></span>
-<span id="cb4-1058"><a href="#cb4-1058"></a><span class="co">#</span></span>
-<span id="cb4-1059"><a href="#cb4-1059"></a><span class="co"># Use scipy.optimize.minimize for optimization</span></span>
-<span id="cb4-1060"><a href="#cb4-1060"></a></span>
-<span id="cb4-1061"><a href="#cb4-1061"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-1062"><a href="#cb4-1062"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
-<span id="cb4-1063"><a href="#cb4-1063"></a><span class="im">from</span> scipy.special <span class="im">import</span> logsumexp</span>
+<span id="cb4-1016"><a href="#cb4-1016"></a>**Setting:** Users interact with two anonymous language models and vote for the one they prefer. Models are ranked using Elo ratings computed from these pairwise comparisons.</span>
+<span id="cb4-1017"><a href="#cb4-1017"></a></span>
+<span id="cb4-1018"><a href="#cb4-1018"></a>**Measurement framework:** This is exactly Thurstone's comparative judgment paradigm from 1927. The Elo rating system implements Bradley-Terry maximum likelihood estimation with online updates.</span>
+<span id="cb4-1019"><a href="#cb4-1019"></a></span>
+<span id="cb4-1020"><a href="#cb4-1020"></a>**Validity questions:**</span>
+<span id="cb4-1021"><a href="#cb4-1021"></a></span>
+<span id="cb4-1022"><a href="#cb4-1022"></a><span class="ss">- </span>What construct do the ratings measure? "Human preference" is vague. Preferences for what---helpfulness, harmlessness, style, factual accuracy?</span>
+<span id="cb4-1023"><a href="#cb4-1023"></a><span class="ss">- </span>Are ratings stable across different user populations?</span>
+<span id="cb4-1024"><a href="#cb4-1024"></a><span class="ss">- </span>Do ratings predict performance on other benchmarks or real-world tasks?</span>
+<span id="cb4-1025"><a href="#cb4-1025"></a></span>
+<span id="cb4-1026"><a href="#cb4-1026"></a>**Reliability questions:**</span>
+<span id="cb4-1027"><a href="#cb4-1027"></a></span>
+<span id="cb4-1028"><a href="#cb4-1028"></a><span class="ss">- </span>How many comparisons are needed for stable ratings?</span>
+<span id="cb4-1029"><a href="#cb4-1029"></a><span class="ss">- </span>How sensitive are ratings to the specific prompts used?</span>
+<span id="cb4-1030"><a href="#cb4-1030"></a><span class="ss">- </span>Do ratings fluctuate as new models enter the arena?</span>
+<span id="cb4-1031"><a href="#cb4-1031"></a></span>
+<span id="cb4-1032"><a href="#cb4-1032"></a>The Arena demonstrates both the power and limitations of measurement approaches. The Elo ratings provide a principled summary of human preferences, but interpreting what they mean requires the full apparatus of validity theory.</span>
+<span id="cb4-1033"><a href="#cb4-1033"></a></span>
+<span id="cb4-1034"><a href="#cb4-1034"></a><span class="fu">## Summary and Preview {#sec-summary}</span></span>
+<span id="cb4-1035"><a href="#cb4-1035"></a></span>
+<span id="cb4-1036"><a href="#cb4-1036"></a>This chapter has introduced the measurement science framework that underlies the rest of AIMS. The key ideas are:</span>
+<span id="cb4-1037"><a href="#cb4-1037"></a></span>
+<span id="cb4-1038"><a href="#cb4-1038"></a><span class="fu">### Key Takeaways</span></span>
+<span id="cb4-1039"><a href="#cb4-1039"></a></span>
+<span id="cb4-1040"><a href="#cb4-1040"></a><span class="ss">1. </span>**Measurement requires more than scoring.** Assigning numbers to models based on benchmark performance is scoring, not measuring. Measurement requires a theory connecting scores to latent constructs.</span>
+<span id="cb4-1041"><a href="#cb4-1041"></a></span>
+<span id="cb4-1042"><a href="#cb4-1042"></a><span class="ss">2. </span>**Validity matters.** A benchmark measures a construct only if the construct exists and causally produces variation in scores. The philosophical and diagnostic foundations of validity are developed in @sec-validity.</span>
+<span id="cb4-1043"><a href="#cb4-1043"></a></span>
+<span id="cb4-1044"><a href="#cb4-1044"></a><span class="ss">3. </span>**The Rasch model has special properties.** Sufficiency of sum scores and specific objectivity make Rasch uniquely suitable for fundamental measurement. These properties justify treating sum scores as measurements.</span>
+<span id="cb4-1045"><a href="#cb4-1045"></a></span>
+<span id="cb4-1046"><a href="#cb4-1046"></a><span class="ss">4. </span>**Multiple models exist for different purposes.** IRT models (1PL, 2PL, 3PL), factor models, paired comparison models (Bradley-Terry, Elo), network models (GGM, Ising), and hierarchical models serve different purposes. The choice of model---including whether to represent nested evaluation structure---has implications for what we can conclude.</span>
+<span id="cb4-1047"><a href="#cb4-1047"></a></span>
+<span id="cb4-1048"><a href="#cb4-1048"></a><span class="ss">5. </span>**Psychology solved these problems decades ago.** The tools developed in psychometrics---reliability, validity, dimensionality analysis, adaptive testing---apply directly to AI evaluation.</span>
+<span id="cb4-1049"><a href="#cb4-1049"></a></span>
+<span id="cb4-1050"><a href="#cb4-1050"></a><span class="fu">### Preview of Following Chapters</span></span>
+<span id="cb4-1051"><a href="#cb4-1051"></a></span>
+<span id="cb4-1052"><a href="#cb4-1052"></a>The chapters that follow apply this framework to specific AI evaluation challenges:</span>
+<span id="cb4-1053"><a href="#cb4-1053"></a></span>
+<span id="cb4-1054"><a href="#cb4-1054"></a><span class="ss">- </span>**Chapter 2 (Learning):** Covers parameter estimation for IRT and factor models, including maximum likelihood, EM algorithms, Bayesian inference, regularization, and model selection. It also develops generalization experiments---evaluating how well learned models transfer to unseen data under various masking schemes---and presents empirical results for the amortized models introduced in this chapter.</span>
+<span id="cb4-1055"><a href="#cb4-1055"></a></span>
+<span id="cb4-1056"><a href="#cb4-1056"></a><span class="ss">- </span>**Chapter 3 (Design):** Applies measurement principles to benchmark design, addressing how to construct valid and reliable AI evaluations.</span>
+<span id="cb4-1057"><a href="#cb4-1057"></a></span>
+<span id="cb4-1058"><a href="#cb4-1058"></a><span class="ss">- </span>**Chapter 4 (Reliability):** Develops the theory of measurement precision, including classical and IRT-based reliability, standard errors, and information functions.</span>
+<span id="cb4-1059"><a href="#cb4-1059"></a></span>
+<span id="cb4-1060"><a href="#cb4-1060"></a>The measurement concepts from this chapter recur throughout. When we justify using sum scores, we appeal to sufficiency in the Rasch sense. When we analyze benchmark dimensionality, we apply the factor models introduced in this chapter and trained using methods from Chapter 2. The question of whether benchmarks measure what they claim to measure --- validity --- is developed in @sec-validity.</span>
+<span id="cb4-1061"><a href="#cb4-1061"></a></span>
+<span id="cb4-1062"><a href="#cb4-1062"></a></span>
+<span id="cb4-1063"><a href="#cb4-1063"></a><span class="fu">## Exercises {#sec-irt-exercises}</span></span>
 <span id="cb4-1064"><a href="#cb4-1064"></a></span>
-<span id="cb4-1065"><a href="#cb4-1065"></a><span class="kw">def</span> estimate_rasch_conditional(Y):</span>
-<span id="cb4-1066"><a href="#cb4-1066"></a>    <span class="co">"""</span></span>
-<span id="cb4-1067"><a href="#cb4-1067"></a><span class="co">    Estimate Rasch model item difficulties using conditional MLE.</span></span>
+<span id="cb4-1065"><a href="#cb4-1065"></a><span class="fu">### Theoretical Exercises</span></span>
+<span id="cb4-1066"><a href="#cb4-1066"></a></span>
+<span id="cb4-1067"><a href="#cb4-1067"></a>**Exercise 1.1** (*): Explain in your own words why the sum score is a sufficient statistic in the Rasch model but not in the 2PL model. What information is lost when we reduce responses to sum scores under 2PL?</span>
 <span id="cb4-1068"><a href="#cb4-1068"></a></span>
-<span id="cb4-1069"><a href="#cb4-1069"></a><span class="co">    Parameters:</span></span>
-<span id="cb4-1070"><a href="#cb4-1070"></a><span class="co">    -----------</span></span>
-<span id="cb4-1071"><a href="#cb4-1071"></a><span class="co">    Y : np.ndarray, shape (N, M)</span></span>
-<span id="cb4-1072"><a href="#cb4-1072"></a><span class="co">        Binary response matrix</span></span>
-<span id="cb4-1073"><a href="#cb4-1073"></a></span>
-<span id="cb4-1074"><a href="#cb4-1074"></a><span class="co">    Returns:</span></span>
-<span id="cb4-1075"><a href="#cb4-1075"></a><span class="co">    --------</span></span>
-<span id="cb4-1076"><a href="#cb4-1076"></a><span class="co">    beta : np.ndarray, shape (M,)</span></span>
-<span id="cb4-1077"><a href="#cb4-1077"></a><span class="co">        Estimated item difficulties (identified by setting sum(beta) = 0)</span></span>
-<span id="cb4-1078"><a href="#cb4-1078"></a><span class="co">    """</span></span>
-<span id="cb4-1079"><a href="#cb4-1079"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb4-1080"><a href="#cb4-1080"></a>    <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb4-1081"><a href="#cb4-1081"></a>    <span class="cf">pass</span></span>
+<span id="cb4-1069"><a href="#cb4-1069"></a>**Exercise 1.2** (**): Prove that the Bradley-Terry model is equivalent to a Rasch model where each "person" is a comparison between two items.</span>
+<span id="cb4-1070"><a href="#cb4-1070"></a></span>
+<span id="cb4-1071"><a href="#cb4-1071"></a>*Hint:* Consider a "person" as an ordered pair $(i, j)$ representing a comparison, and an "item" as a single entity $k$ appearing in a comparison. Define appropriate ability and difficulty parameters.</span>
+<span id="cb4-1072"><a href="#cb4-1072"></a></span>
+<span id="cb4-1073"><a href="#cb4-1073"></a>**Exercise 1.3** (**): Show that in the Rasch model, the odds ratio for persons $i$ and $k$ responding correctly to item $j$ is:</span>
+<span id="cb4-1074"><a href="#cb4-1074"></a></span>
+<span id="cb4-1075"><a href="#cb4-1075"></a>$$</span>
+<span id="cb4-1076"><a href="#cb4-1076"></a>\frac{P(Y_{ij} = 1) / P(Y_{ij} = 0)}{P(Y_{kj} = 1) / P(Y_{kj} = 0)} = \exp(\theta_i - \theta_k)</span>
+<span id="cb4-1077"><a href="#cb4-1077"></a>$$</span>
+<span id="cb4-1078"><a href="#cb4-1078"></a></span>
+<span id="cb4-1079"><a href="#cb4-1079"></a>independent of the item difficulty $\beta_j$. Explain why this property is called "specific objectivity."</span>
+<span id="cb4-1080"><a href="#cb4-1080"></a></span>
+<span id="cb4-1081"><a href="#cb4-1081"></a>**Exercise 1.4** (***): The Ising model and the Rasch model make different assumptions about why responses correlate.</span>
 <span id="cb4-1082"><a href="#cb4-1082"></a></span>
-<span id="cb4-1083"><a href="#cb4-1083"></a><span class="co"># Test on simulated data</span></span>
-<span id="cb4-1084"><a href="#cb4-1084"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb4-1085"><a href="#cb4-1085"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
-<span id="cb4-1086"><a href="#cb4-1086"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
-<span id="cb4-1087"><a href="#cb4-1087"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)</span>
-<span id="cb4-1088"><a href="#cb4-1088"></a>prob <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(theta_true[:, <span class="va">None</span>] <span class="op">-</span> beta_true[<span class="va">None</span>, :])))</span>
-<span id="cb4-1089"><a href="#cb4-1089"></a>Y <span class="op">=</span> (np.random.random((N, M)) <span class="op">&lt;</span> prob).astype(<span class="bu">int</span>)</span>
+<span id="cb4-1083"><a href="#cb4-1083"></a>(a) Write down both models for binary data $Y \in <span class="sc">\{</span>0, 1<span class="sc">\}</span>^{N \times M}$.</span>
+<span id="cb4-1084"><a href="#cb4-1084"></a></span>
+<span id="cb4-1085"><a href="#cb4-1085"></a>(b) Describe the causal structure each model assumes.</span>
+<span id="cb4-1086"><a href="#cb4-1086"></a></span>
+<span id="cb4-1087"><a href="#cb4-1087"></a>(c) Under what conditions might each model be appropriate for AI evaluation?</span>
+<span id="cb4-1088"><a href="#cb4-1088"></a></span>
+<span id="cb4-1089"><a href="#cb4-1089"></a>(d) Propose an empirical test that could distinguish between them.</span>
 <span id="cb4-1090"><a href="#cb4-1090"></a></span>
-<span id="cb4-1091"><a href="#cb4-1091"></a>beta_hat <span class="op">=</span> estimate_rasch_conditional(Y)</span>
-<span id="cb4-1092"><a href="#cb4-1092"></a><span class="co"># Compare to true values (after centering)</span></span>
-<span id="cb4-1093"><a href="#cb4-1093"></a><span class="in">```</span></span>
+<span id="cb4-1091"><a href="#cb4-1091"></a><span class="fu">### Computational Exercises</span></span>
+<span id="cb4-1092"><a href="#cb4-1092"></a></span>
+<span id="cb4-1093"><a href="#cb4-1093"></a>**Exercise 1.5** (**): Implement Rasch model estimation using conditional maximum likelihood.</span>
 <span id="cb4-1094"><a href="#cb4-1094"></a></span>
-<span id="cb4-1095"><a href="#cb4-1095"></a>**Exercise 1.6** (**): Given pairwise preference data, estimate Bradley-Terry parameters.</span>
-<span id="cb4-1096"><a href="#cb4-1096"></a></span>
-<span id="cb4-1097"><a href="#cb4-1097"></a><span class="in">```python</span></span>
-<span id="cb4-1098"><a href="#cb4-1098"></a><span class="co"># Given: Comparison data as list of (winner, loser) pairs</span></span>
-<span id="cb4-1099"><a href="#cb4-1099"></a><span class="co"># Task: Estimate strength parameters via maximum likelihood</span></span>
-<span id="cb4-1100"><a href="#cb4-1100"></a><span class="co">#</span></span>
-<span id="cb4-1101"><a href="#cb4-1101"></a><span class="co"># The likelihood for comparison (i beats j) is:</span></span>
-<span id="cb4-1102"><a href="#cb4-1102"></a><span class="co"># P(i &gt; j) = exp(theta_i) / (exp(theta_i) + exp(theta_j))</span></span>
-<span id="cb4-1103"><a href="#cb4-1103"></a><span class="co">#           = sigmoid(theta_i - theta_j)</span></span>
-<span id="cb4-1104"><a href="#cb4-1104"></a></span>
-<span id="cb4-1105"><a href="#cb4-1105"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-1106"><a href="#cb4-1106"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
-<span id="cb4-1107"><a href="#cb4-1107"></a></span>
-<span id="cb4-1108"><a href="#cb4-1108"></a><span class="kw">def</span> estimate_bradley_terry(comparisons, n_items):</span>
-<span id="cb4-1109"><a href="#cb4-1109"></a>    <span class="co">"""</span></span>
-<span id="cb4-1110"><a href="#cb4-1110"></a><span class="co">    Estimate Bradley-Terry model parameters.</span></span>
-<span id="cb4-1111"><a href="#cb4-1111"></a></span>
-<span id="cb4-1112"><a href="#cb4-1112"></a><span class="co">    Parameters:</span></span>
-<span id="cb4-1113"><a href="#cb4-1113"></a><span class="co">    -----------</span></span>
-<span id="cb4-1114"><a href="#cb4-1114"></a><span class="co">    comparisons : list of (int, int)</span></span>
-<span id="cb4-1115"><a href="#cb4-1115"></a><span class="co">        List of (winner, loser) pairs</span></span>
-<span id="cb4-1116"><a href="#cb4-1116"></a><span class="co">    n_items : int</span></span>
-<span id="cb4-1117"><a href="#cb4-1117"></a><span class="co">        Number of items</span></span>
-<span id="cb4-1118"><a href="#cb4-1118"></a></span>
-<span id="cb4-1119"><a href="#cb4-1119"></a><span class="co">    Returns:</span></span>
-<span id="cb4-1120"><a href="#cb4-1120"></a><span class="co">    --------</span></span>
-<span id="cb4-1121"><a href="#cb4-1121"></a><span class="co">    theta : np.ndarray, shape (n_items,)</span></span>
-<span id="cb4-1122"><a href="#cb4-1122"></a><span class="co">        Estimated strength parameters (identified by setting theta[0] = 0)</span></span>
-<span id="cb4-1123"><a href="#cb4-1123"></a><span class="co">    """</span></span>
-<span id="cb4-1124"><a href="#cb4-1124"></a>    <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb4-1125"><a href="#cb4-1125"></a>    <span class="cf">pass</span></span>
-<span id="cb4-1126"><a href="#cb4-1126"></a></span>
-<span id="cb4-1127"><a href="#cb4-1127"></a><span class="co"># Test: Simulate comparisons and recover parameters</span></span>
-<span id="cb4-1128"><a href="#cb4-1128"></a><span class="in">```</span></span>
-<span id="cb4-1129"><a href="#cb4-1129"></a></span>
-<span id="cb4-1130"><a href="#cb4-1130"></a>**Exercise 1.7** (***): Test whether benchmark data fit the Rasch model using Andersen's likelihood ratio test.</span>
-<span id="cb4-1131"><a href="#cb4-1131"></a></span>
-<span id="cb4-1132"><a href="#cb4-1132"></a><span class="in">```python</span></span>
-<span id="cb4-1133"><a href="#cb4-1133"></a><span class="co"># Andersen's LR test:</span></span>
-<span id="cb4-1134"><a href="#cb4-1134"></a><span class="co"># 1. Split persons into groups based on sum score (e.g., high vs low scorers)</span></span>
-<span id="cb4-1135"><a href="#cb4-1135"></a><span class="co"># 2. Estimate item difficulties separately for each group</span></span>
-<span id="cb4-1136"><a href="#cb4-1136"></a><span class="co"># 3. If Rasch holds, these estimates should be equal</span></span>
-<span id="cb4-1137"><a href="#cb4-1137"></a><span class="co"># 4. Test statistic: 2 * (sum of group log-likelihoods - pooled log-likelihood)</span></span>
-<span id="cb4-1138"><a href="#cb4-1138"></a><span class="co"># 5. Under H0, this is chi-squared with df = (n_groups - 1) * (n_items - 1)</span></span>
-<span id="cb4-1139"><a href="#cb4-1139"></a></span>
-<span id="cb4-1140"><a href="#cb4-1140"></a><span class="kw">def</span> andersen_lr_test(Y, n_groups<span class="op">=</span><span class="dv">2</span>):</span>
-<span id="cb4-1141"><a href="#cb4-1141"></a>    <span class="co">"""</span></span>
-<span id="cb4-1142"><a href="#cb4-1142"></a><span class="co">    Perform Andersen's LR test for Rasch model fit.</span></span>
-<span id="cb4-1143"><a href="#cb4-1143"></a></span>
-<span id="cb4-1144"><a href="#cb4-1144"></a><span class="co">    Parameters:</span></span>
-<span id="cb4-1145"><a href="#cb4-1145"></a><span class="co">    -----------</span></span>
-<span id="cb4-1146"><a href="#cb4-1146"></a><span class="co">    Y : np.ndarray, shape (N, M)</span></span>
-<span id="cb4-1147"><a href="#cb4-1147"></a><span class="co">        Binary response matrix</span></span>
-<span id="cb4-1148"><a href="#cb4-1148"></a><span class="co">    n_groups : int</span></span>
-<span id="cb4-1149"><a href="#cb4-1149"></a><span class="co">        Number of groups to split persons into</span></span>
+<span id="cb4-1095"><a href="#cb4-1095"></a><span class="in">```python</span></span>
+<span id="cb4-1096"><a href="#cb4-1096"></a><span class="co"># Given: Response matrix Y (N models x M questions)</span></span>
+<span id="cb4-1097"><a href="#cb4-1097"></a><span class="co"># Task: Estimate item difficulties using conditional MLE</span></span>
+<span id="cb4-1098"><a href="#cb4-1098"></a><span class="co">#</span></span>
+<span id="cb4-1099"><a href="#cb4-1099"></a><span class="co"># Steps:</span></span>
+<span id="cb4-1100"><a href="#cb4-1100"></a><span class="co"># 1. Compute sum scores for each model</span></span>
+<span id="cb4-1101"><a href="#cb4-1101"></a><span class="co"># 2. For each item, compute the conditional likelihood given sum scores</span></span>
+<span id="cb4-1102"><a href="#cb4-1102"></a><span class="co"># 3. Optimize to find item difficulties</span></span>
+<span id="cb4-1103"><a href="#cb4-1103"></a><span class="co"># 4. Compare estimated difficulties to empirical item means (proportion correct)</span></span>
+<span id="cb4-1104"><a href="#cb4-1104"></a><span class="co">#</span></span>
+<span id="cb4-1105"><a href="#cb4-1105"></a><span class="co"># Use scipy.optimize.minimize for optimization</span></span>
+<span id="cb4-1106"><a href="#cb4-1106"></a></span>
+<span id="cb4-1107"><a href="#cb4-1107"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-1108"><a href="#cb4-1108"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb4-1109"><a href="#cb4-1109"></a><span class="im">from</span> scipy.special <span class="im">import</span> logsumexp</span>
+<span id="cb4-1110"><a href="#cb4-1110"></a></span>
+<span id="cb4-1111"><a href="#cb4-1111"></a><span class="kw">def</span> estimate_rasch_conditional(Y):</span>
+<span id="cb4-1112"><a href="#cb4-1112"></a>    <span class="co">"""</span></span>
+<span id="cb4-1113"><a href="#cb4-1113"></a><span class="co">    Estimate Rasch model item difficulties using conditional MLE.</span></span>
+<span id="cb4-1114"><a href="#cb4-1114"></a></span>
+<span id="cb4-1115"><a href="#cb4-1115"></a><span class="co">    Parameters:</span></span>
+<span id="cb4-1116"><a href="#cb4-1116"></a><span class="co">    -----------</span></span>
+<span id="cb4-1117"><a href="#cb4-1117"></a><span class="co">    Y : np.ndarray, shape (N, M)</span></span>
+<span id="cb4-1118"><a href="#cb4-1118"></a><span class="co">        Binary response matrix</span></span>
+<span id="cb4-1119"><a href="#cb4-1119"></a></span>
+<span id="cb4-1120"><a href="#cb4-1120"></a><span class="co">    Returns:</span></span>
+<span id="cb4-1121"><a href="#cb4-1121"></a><span class="co">    --------</span></span>
+<span id="cb4-1122"><a href="#cb4-1122"></a><span class="co">    beta : np.ndarray, shape (M,)</span></span>
+<span id="cb4-1123"><a href="#cb4-1123"></a><span class="co">        Estimated item difficulties (identified by setting sum(beta) = 0)</span></span>
+<span id="cb4-1124"><a href="#cb4-1124"></a><span class="co">    """</span></span>
+<span id="cb4-1125"><a href="#cb4-1125"></a>    N, M <span class="op">=</span> Y.shape</span>
+<span id="cb4-1126"><a href="#cb4-1126"></a>    <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb4-1127"><a href="#cb4-1127"></a>    <span class="cf">pass</span></span>
+<span id="cb4-1128"><a href="#cb4-1128"></a></span>
+<span id="cb4-1129"><a href="#cb4-1129"></a><span class="co"># Test on simulated data</span></span>
+<span id="cb4-1130"><a href="#cb4-1130"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb4-1131"><a href="#cb4-1131"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
+<span id="cb4-1132"><a href="#cb4-1132"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
+<span id="cb4-1133"><a href="#cb4-1133"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)</span>
+<span id="cb4-1134"><a href="#cb4-1134"></a>prob <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(theta_true[:, <span class="va">None</span>] <span class="op">-</span> beta_true[<span class="va">None</span>, :])))</span>
+<span id="cb4-1135"><a href="#cb4-1135"></a>Y <span class="op">=</span> (np.random.random((N, M)) <span class="op">&lt;</span> prob).astype(<span class="bu">int</span>)</span>
+<span id="cb4-1136"><a href="#cb4-1136"></a></span>
+<span id="cb4-1137"><a href="#cb4-1137"></a>beta_hat <span class="op">=</span> estimate_rasch_conditional(Y)</span>
+<span id="cb4-1138"><a href="#cb4-1138"></a><span class="co"># Compare to true values (after centering)</span></span>
+<span id="cb4-1139"><a href="#cb4-1139"></a><span class="in">```</span></span>
+<span id="cb4-1140"><a href="#cb4-1140"></a></span>
+<span id="cb4-1141"><a href="#cb4-1141"></a>**Exercise 1.6** (**): Given pairwise preference data, estimate Bradley-Terry parameters.</span>
+<span id="cb4-1142"><a href="#cb4-1142"></a></span>
+<span id="cb4-1143"><a href="#cb4-1143"></a><span class="in">```python</span></span>
+<span id="cb4-1144"><a href="#cb4-1144"></a><span class="co"># Given: Comparison data as list of (winner, loser) pairs</span></span>
+<span id="cb4-1145"><a href="#cb4-1145"></a><span class="co"># Task: Estimate strength parameters via maximum likelihood</span></span>
+<span id="cb4-1146"><a href="#cb4-1146"></a><span class="co">#</span></span>
+<span id="cb4-1147"><a href="#cb4-1147"></a><span class="co"># The likelihood for comparison (i beats j) is:</span></span>
+<span id="cb4-1148"><a href="#cb4-1148"></a><span class="co"># P(i &gt; j) = exp(theta_i) / (exp(theta_i) + exp(theta_j))</span></span>
+<span id="cb4-1149"><a href="#cb4-1149"></a><span class="co">#           = sigmoid(theta_i - theta_j)</span></span>
 <span id="cb4-1150"><a href="#cb4-1150"></a></span>
-<span id="cb4-1151"><a href="#cb4-1151"></a><span class="co">    Returns:</span></span>
-<span id="cb4-1152"><a href="#cb4-1152"></a><span class="co">    --------</span></span>
-<span id="cb4-1153"><a href="#cb4-1153"></a><span class="co">    statistic : float</span></span>
-<span id="cb4-1154"><a href="#cb4-1154"></a><span class="co">        LR test statistic</span></span>
-<span id="cb4-1155"><a href="#cb4-1155"></a><span class="co">    p_value : float</span></span>
-<span id="cb4-1156"><a href="#cb4-1156"></a><span class="co">        p-value from chi-squared distribution</span></span>
-<span id="cb4-1157"><a href="#cb4-1157"></a><span class="co">    """</span></span>
-<span id="cb4-1158"><a href="#cb4-1158"></a>    <span class="co"># YOUR CODE HERE</span></span>
-<span id="cb4-1159"><a href="#cb4-1159"></a>    <span class="cf">pass</span></span>
-<span id="cb4-1160"><a href="#cb4-1160"></a><span class="in">```</span></span>
-<span id="cb4-1161"><a href="#cb4-1161"></a></span>
-<span id="cb4-1162"><a href="#cb4-1162"></a><span class="fu">### Discussion Questions</span></span>
-<span id="cb4-1163"><a href="#cb4-1163"></a></span>
-<span id="cb4-1164"><a href="#cb4-1164"></a>**Discussion 1.1:** The Rasch model's sufficiency property justifies using sum scores as measurements. But most AI benchmarks use items with varying discriminations, which violates the Rasch assumption. Does this mean that current benchmark rankings are fundamentally flawed, or can they still be useful approximations? Under what conditions would adopting Rasch-based measurement change the ranking of frontier models?</span>
-<span id="cb4-1165"><a href="#cb4-1165"></a></span>
-<span id="cb4-1166"><a href="#cb4-1166"></a>**Discussion 1.2:** The Rasch school argues that items not fitting the Rasch model should be discarded because they do not measure the same construct. What are the implications of this view for AI benchmark design? Should we design benchmarks to fit Rasch, or should we use more flexible models that accommodate heterogeneous items?</span>
-<span id="cb4-1167"><a href="#cb4-1167"></a></span>
-<span id="cb4-1168"><a href="#cb4-1168"></a>**Discussion 1.3:** Network psychometrics views symptoms as causally connected rather than caused by a latent factor. Could AI capabilities be "network-like" rather than "factor-like"? What evidence would distinguish these views? How would it change how we interpret benchmark scores?</span>
-<span id="cb4-1169"><a href="#cb4-1169"></a></span>
-<span id="cb4-1170"><a href="#cb4-1170"></a>**Discussion 1.4:** @truong2025irsl show that IRT ability $\theta$ scales linearly with $\log(\text{FLOP})$ during pre-training, and that this relationship enables cross-benchmark transfer of ability estimates. What does this imply about the nature of the latent construct $\theta$? Is it a stable property of the model, or an artifact of the IRT parameterization? Under what conditions would cross-benchmark transfer of $\theta$ fail?</span>
-<span id="cb4-1171"><a href="#cb4-1171"></a></span>
+<span id="cb4-1151"><a href="#cb4-1151"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-1152"><a href="#cb4-1152"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb4-1153"><a href="#cb4-1153"></a></span>
+<span id="cb4-1154"><a href="#cb4-1154"></a><span class="kw">def</span> estimate_bradley_terry(comparisons, n_items):</span>
+<span id="cb4-1155"><a href="#cb4-1155"></a>    <span class="co">"""</span></span>
+<span id="cb4-1156"><a href="#cb4-1156"></a><span class="co">    Estimate Bradley-Terry model parameters.</span></span>
+<span id="cb4-1157"><a href="#cb4-1157"></a></span>
+<span id="cb4-1158"><a href="#cb4-1158"></a><span class="co">    Parameters:</span></span>
+<span id="cb4-1159"><a href="#cb4-1159"></a><span class="co">    -----------</span></span>
+<span id="cb4-1160"><a href="#cb4-1160"></a><span class="co">    comparisons : list of (int, int)</span></span>
+<span id="cb4-1161"><a href="#cb4-1161"></a><span class="co">        List of (winner, loser) pairs</span></span>
+<span id="cb4-1162"><a href="#cb4-1162"></a><span class="co">    n_items : int</span></span>
+<span id="cb4-1163"><a href="#cb4-1163"></a><span class="co">        Number of items</span></span>
+<span id="cb4-1164"><a href="#cb4-1164"></a></span>
+<span id="cb4-1165"><a href="#cb4-1165"></a><span class="co">    Returns:</span></span>
+<span id="cb4-1166"><a href="#cb4-1166"></a><span class="co">    --------</span></span>
+<span id="cb4-1167"><a href="#cb4-1167"></a><span class="co">    theta : np.ndarray, shape (n_items,)</span></span>
+<span id="cb4-1168"><a href="#cb4-1168"></a><span class="co">        Estimated strength parameters (identified by setting theta[0] = 0)</span></span>
+<span id="cb4-1169"><a href="#cb4-1169"></a><span class="co">    """</span></span>
+<span id="cb4-1170"><a href="#cb4-1170"></a>    <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb4-1171"><a href="#cb4-1171"></a>    <span class="cf">pass</span></span>
 <span id="cb4-1172"><a href="#cb4-1172"></a></span>
-<span id="cb4-1173"><a href="#cb4-1173"></a><span class="fu">## Bibliographic Notes {#sec-irt-bib}</span></span>
-<span id="cb4-1174"><a href="#cb4-1174"></a></span>
-<span id="cb4-1175"><a href="#cb4-1175"></a><span class="fu">### Item Response Theory</span></span>
-<span id="cb4-1176"><a href="#cb4-1176"></a></span>
-<span id="cb4-1177"><a href="#cb4-1177"></a>The standard reference for IRT is Lord and Novick's *Statistical Theories of Mental Test Scores* (1968), though it predates modern computational methods. More accessible introductions include Hambleton and Swaminathan's *Item Response Theory* (1985) and de Ayala's *The Theory and Practice of Item Response Theory* (2009). The *Handbook of Modern Item Response Theory* (van der Linden &amp; Hambleton, 1997) provides comprehensive coverage.</span>
-<span id="cb4-1178"><a href="#cb4-1178"></a></span>
-<span id="cb4-1179"><a href="#cb4-1179"></a><span class="fu">### Rasch Measurement</span></span>
-<span id="cb4-1180"><a href="#cb4-1180"></a></span>
-<span id="cb4-1181"><a href="#cb4-1181"></a>Rasch's original book *Probabilistic Models for Some Intelligence and Attainment Tests* (1960) remains influential. Wright and Stone's *Best Test Design* (1979) provides practical guidance. Fischer and Molenaar's *Rasch Models: Foundations, Recent Developments, and Applications* (1995) covers extensions and applications. For the philosophical foundations, see Rasch's papers on objectivity collected in the *Rasch Measurement Transactions* archive.</span>
-<span id="cb4-1182"><a href="#cb4-1182"></a></span>
-<span id="cb4-1183"><a href="#cb4-1183"></a><span class="fu">### Historical Development</span></span>
-<span id="cb4-1184"><a href="#cb4-1184"></a></span>
-<span id="cb4-1185"><a href="#cb4-1185"></a>Thurstone's seminal paper "A Law of Comparative Judgment" (1927) launched the quantitative study of preferences. Bradley and Terry's "Rank Analysis of Incomplete Block Designs" (1952) and Luce's *Individual Choice Behavior* (1959) established the axiomatic foundations. McFadden's "Conditional Logit Analysis" (1974) connected these to economic theory. For a history of psychometrics, see Boring's *A History of Experimental Psychology* (1950).</span>
-<span id="cb4-1186"><a href="#cb4-1186"></a></span>
-<span id="cb4-1187"><a href="#cb4-1187"></a><span class="fu">### Probabilistic Graphical Models</span></span>
-<span id="cb4-1188"><a href="#cb4-1188"></a></span>
-<span id="cb4-1189"><a href="#cb4-1189"></a>This chapter uses plate diagrams and concepts from probabilistic graphical models (PGMs). @koller2009pgm provide a comprehensive reference covering directed and undirected graphical models, plate notation, and inference algorithms. Readers seeking deeper background on the graphical model foundations underlying IRT and network models will find Chapters 3--4 (Bayesian networks) and Chapter 5 (undirected models / Markov random fields) especially relevant.</span>
-<span id="cb4-1190"><a href="#cb4-1190"></a></span>
-<span id="cb4-1191"><a href="#cb4-1191"></a><span class="fu">### Network Psychometrics</span></span>
-<span id="cb4-1192"><a href="#cb4-1192"></a></span>
-<span id="cb4-1193"><a href="#cb4-1193"></a>The network approach is developed in Borsboom and Cramer's "Network Analysis: An Integrative Approach" (2013) and formalized in Epskamp et al.'s papers on the Gaussian graphical model and Ising model (2018). The *Network Psychometrics with R* book (Epskamp et al., 2022) provides practical guidance.</span>
-<span id="cb4-1194"><a href="#cb4-1194"></a></span>
-<span id="cb4-1195"><a href="#cb4-1195"></a><span class="fu">### AI Evaluation</span></span>
+<span id="cb4-1173"><a href="#cb4-1173"></a><span class="co"># Test: Simulate comparisons and recover parameters</span></span>
+<span id="cb4-1174"><a href="#cb4-1174"></a><span class="in">```</span></span>
+<span id="cb4-1175"><a href="#cb4-1175"></a></span>
+<span id="cb4-1176"><a href="#cb4-1176"></a>**Exercise 1.7** (***): Test whether benchmark data fit the Rasch model using Andersen's likelihood ratio test.</span>
+<span id="cb4-1177"><a href="#cb4-1177"></a></span>
+<span id="cb4-1178"><a href="#cb4-1178"></a><span class="in">```python</span></span>
+<span id="cb4-1179"><a href="#cb4-1179"></a><span class="co"># Andersen's LR test:</span></span>
+<span id="cb4-1180"><a href="#cb4-1180"></a><span class="co"># 1. Split persons into groups based on sum score (e.g., high vs low scorers)</span></span>
+<span id="cb4-1181"><a href="#cb4-1181"></a><span class="co"># 2. Estimate item difficulties separately for each group</span></span>
+<span id="cb4-1182"><a href="#cb4-1182"></a><span class="co"># 3. If Rasch holds, these estimates should be equal</span></span>
+<span id="cb4-1183"><a href="#cb4-1183"></a><span class="co"># 4. Test statistic: 2 * (sum of group log-likelihoods - pooled log-likelihood)</span></span>
+<span id="cb4-1184"><a href="#cb4-1184"></a><span class="co"># 5. Under H0, this is chi-squared with df = (n_groups - 1) * (n_items - 1)</span></span>
+<span id="cb4-1185"><a href="#cb4-1185"></a></span>
+<span id="cb4-1186"><a href="#cb4-1186"></a><span class="kw">def</span> andersen_lr_test(Y, n_groups<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb4-1187"><a href="#cb4-1187"></a>    <span class="co">"""</span></span>
+<span id="cb4-1188"><a href="#cb4-1188"></a><span class="co">    Perform Andersen's LR test for Rasch model fit.</span></span>
+<span id="cb4-1189"><a href="#cb4-1189"></a></span>
+<span id="cb4-1190"><a href="#cb4-1190"></a><span class="co">    Parameters:</span></span>
+<span id="cb4-1191"><a href="#cb4-1191"></a><span class="co">    -----------</span></span>
+<span id="cb4-1192"><a href="#cb4-1192"></a><span class="co">    Y : np.ndarray, shape (N, M)</span></span>
+<span id="cb4-1193"><a href="#cb4-1193"></a><span class="co">        Binary response matrix</span></span>
+<span id="cb4-1194"><a href="#cb4-1194"></a><span class="co">    n_groups : int</span></span>
+<span id="cb4-1195"><a href="#cb4-1195"></a><span class="co">        Number of groups to split persons into</span></span>
 <span id="cb4-1196"><a href="#cb4-1196"></a></span>
-<span id="cb4-1197"><a href="#cb4-1197"></a>The application of psychometric methods to AI is recent. For IRT applied to LLMs, see Polo et al.'s "Efficient Multi-Prompt Evaluation" (2024). For factor models, see the methods developed in this textbook. The Chatbot Arena is described in Zheng et al.'s "Judging LLM-as-a-Judge" (2023).</span>
-<span id="cb4-1198"><a href="#cb4-1198"></a></span>
-<span id="cb4-1199"><a href="#cb4-1199"></a><span class="fu">### Scaling Laws and IRT</span></span>
-<span id="cb4-1200"><a href="#cb4-1200"></a></span>
-<span id="cb4-1201"><a href="#cb4-1201"></a>@truong2025irsl introduce Item Response Scaling Laws (IRSL), which embed IRT within the scaling law framework. By factorizing model ability from question difficulty, IRSL reduces scaling law estimation from $O(M \times N)$ to $O(M + N)$ parameters, with the estimated ability transferring across benchmarks. Their Beta-IRT formulation models empirical probability responses (token probabilities, pass rates) rather than binary correctness, using a Beta loss that achieves reliable calibration with as few as 2 test takers. @schaeffer2025monkeys provide the distributional theory explaining why per-problem exponential scaling aggregates to power-law scaling: the exponent is determined by the left-tail shape parameter of the success probability distribution, connecting the heterogeneity of item difficulty to aggregate scaling behavior.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb4-1197"><a href="#cb4-1197"></a><span class="co">    Returns:</span></span>
+<span id="cb4-1198"><a href="#cb4-1198"></a><span class="co">    --------</span></span>
+<span id="cb4-1199"><a href="#cb4-1199"></a><span class="co">    statistic : float</span></span>
+<span id="cb4-1200"><a href="#cb4-1200"></a><span class="co">        LR test statistic</span></span>
+<span id="cb4-1201"><a href="#cb4-1201"></a><span class="co">    p_value : float</span></span>
+<span id="cb4-1202"><a href="#cb4-1202"></a><span class="co">        p-value from chi-squared distribution</span></span>
+<span id="cb4-1203"><a href="#cb4-1203"></a><span class="co">    """</span></span>
+<span id="cb4-1204"><a href="#cb4-1204"></a>    <span class="co"># YOUR CODE HERE</span></span>
+<span id="cb4-1205"><a href="#cb4-1205"></a>    <span class="cf">pass</span></span>
+<span id="cb4-1206"><a href="#cb4-1206"></a><span class="in">```</span></span>
+<span id="cb4-1207"><a href="#cb4-1207"></a></span>
+<span id="cb4-1208"><a href="#cb4-1208"></a><span class="fu">### Discussion Questions</span></span>
+<span id="cb4-1209"><a href="#cb4-1209"></a></span>
+<span id="cb4-1210"><a href="#cb4-1210"></a>**Discussion 1.1:** The Rasch model's sufficiency property justifies using sum scores as measurements. But most AI benchmarks use items with varying discriminations, which violates the Rasch assumption. Does this mean that current benchmark rankings are fundamentally flawed, or can they still be useful approximations? Under what conditions would adopting Rasch-based measurement change the ranking of frontier models?</span>
+<span id="cb4-1211"><a href="#cb4-1211"></a></span>
+<span id="cb4-1212"><a href="#cb4-1212"></a>**Discussion 1.2:** The Rasch school argues that items not fitting the Rasch model should be discarded because they do not measure the same construct. What are the implications of this view for AI benchmark design? Should we design benchmarks to fit Rasch, or should we use more flexible models that accommodate heterogeneous items?</span>
+<span id="cb4-1213"><a href="#cb4-1213"></a></span>
+<span id="cb4-1214"><a href="#cb4-1214"></a>**Discussion 1.3:** Network psychometrics views symptoms as causally connected rather than caused by a latent factor. Could AI capabilities be "network-like" rather than "factor-like"? What evidence would distinguish these views? How would it change how we interpret benchmark scores?</span>
+<span id="cb4-1215"><a href="#cb4-1215"></a></span>
+<span id="cb4-1216"><a href="#cb4-1216"></a>**Discussion 1.4:** @truong2025irsl show that IRT ability $\theta$ scales linearly with $\log(\text{FLOP})$ during pre-training, and that this relationship enables cross-benchmark transfer of ability estimates. What does this imply about the nature of the latent construct $\theta$? Is it a stable property of the model, or an artifact of the IRT parameterization? Under what conditions would cross-benchmark transfer of $\theta$ fail?</span>
+<span id="cb4-1217"><a href="#cb4-1217"></a></span>
+<span id="cb4-1218"><a href="#cb4-1218"></a></span>
+<span id="cb4-1219"><a href="#cb4-1219"></a><span class="fu">## Bibliographic Notes {#sec-irt-bib}</span></span>
+<span id="cb4-1220"><a href="#cb4-1220"></a></span>
+<span id="cb4-1221"><a href="#cb4-1221"></a><span class="fu">### Item Response Theory</span></span>
+<span id="cb4-1222"><a href="#cb4-1222"></a></span>
+<span id="cb4-1223"><a href="#cb4-1223"></a>The standard reference for IRT is Lord and Novick's *Statistical Theories of Mental Test Scores* (1968), though it predates modern computational methods. More accessible introductions include Hambleton and Swaminathan's *Item Response Theory* (1985) and de Ayala's *The Theory and Practice of Item Response Theory* (2009). The *Handbook of Modern Item Response Theory* (van der Linden &amp; Hambleton, 1997) provides comprehensive coverage.</span>
+<span id="cb4-1224"><a href="#cb4-1224"></a></span>
+<span id="cb4-1225"><a href="#cb4-1225"></a><span class="fu">### Rasch Measurement</span></span>
+<span id="cb4-1226"><a href="#cb4-1226"></a></span>
+<span id="cb4-1227"><a href="#cb4-1227"></a>Rasch's original book *Probabilistic Models for Some Intelligence and Attainment Tests* (1960) remains influential. Wright and Stone's *Best Test Design* (1979) provides practical guidance. Fischer and Molenaar's *Rasch Models: Foundations, Recent Developments, and Applications* (1995) covers extensions and applications. For the philosophical foundations, see Rasch's papers on objectivity collected in the *Rasch Measurement Transactions* archive.</span>
+<span id="cb4-1228"><a href="#cb4-1228"></a></span>
+<span id="cb4-1229"><a href="#cb4-1229"></a><span class="fu">### Historical Development</span></span>
+<span id="cb4-1230"><a href="#cb4-1230"></a></span>
+<span id="cb4-1231"><a href="#cb4-1231"></a>Thurstone's seminal paper "A Law of Comparative Judgment" (1927) launched the quantitative study of preferences. Bradley and Terry's "Rank Analysis of Incomplete Block Designs" (1952) and Luce's *Individual Choice Behavior* (1959) established the axiomatic foundations. McFadden's "Conditional Logit Analysis" (1974) connected these to economic theory. For a history of psychometrics, see Boring's *A History of Experimental Psychology* (1950).</span>
+<span id="cb4-1232"><a href="#cb4-1232"></a></span>
+<span id="cb4-1233"><a href="#cb4-1233"></a><span class="fu">### Probabilistic Graphical Models</span></span>
+<span id="cb4-1234"><a href="#cb4-1234"></a></span>
+<span id="cb4-1235"><a href="#cb4-1235"></a>This chapter uses plate diagrams and concepts from probabilistic graphical models (PGMs). @koller2009pgm provide a comprehensive reference covering directed and undirected graphical models, plate notation, and inference algorithms. Readers seeking deeper background on the graphical model foundations underlying IRT and network models will find Chapters 3--4 (Bayesian networks) and Chapter 5 (undirected models / Markov random fields) especially relevant.</span>
+<span id="cb4-1236"><a href="#cb4-1236"></a></span>
+<span id="cb4-1237"><a href="#cb4-1237"></a><span class="fu">### Network Psychometrics</span></span>
+<span id="cb4-1238"><a href="#cb4-1238"></a></span>
+<span id="cb4-1239"><a href="#cb4-1239"></a>The network approach is developed in Borsboom and Cramer's "Network Analysis: An Integrative Approach" (2013) and formalized in Epskamp et al.'s papers on the Gaussian graphical model and Ising model (2018). The *Network Psychometrics with R* book (Epskamp et al., 2022) provides practical guidance.</span>
+<span id="cb4-1240"><a href="#cb4-1240"></a></span>
+<span id="cb4-1241"><a href="#cb4-1241"></a><span class="fu">### AI Evaluation</span></span>
+<span id="cb4-1242"><a href="#cb4-1242"></a></span>
+<span id="cb4-1243"><a href="#cb4-1243"></a>The application of psychometric methods to AI is recent. For IRT applied to LLMs, see Polo et al.'s "Efficient Multi-Prompt Evaluation" (2024). For factor models, see the methods developed in this textbook. The Chatbot Arena is described in Zheng et al.'s "Judging LLM-as-a-Judge" (2023).</span>
+<span id="cb4-1244"><a href="#cb4-1244"></a></span>
+<span id="cb4-1245"><a href="#cb4-1245"></a><span class="fu">### Scaling Laws and IRT</span></span>
+<span id="cb4-1246"><a href="#cb4-1246"></a></span>
+<span id="cb4-1247"><a href="#cb4-1247"></a>@truong2025irsl introduce Item Response Scaling Laws (IRSL), which embed IRT within the scaling law framework. By factorizing model ability from question difficulty, IRSL reduces scaling law estimation from $O(M \times N)$ to $O(M + N)$ parameters, with the estimated ability transferring across benchmarks. Their Beta-IRT formulation models empirical probability responses (token probabilities, pass rates) rather than binary correctness, using a Beta loss that achieves reliable calibration with as few as 2 test takers. @schaeffer2025monkeys provide the distributional theory explaining why per-problem exponential scaling aggregates to power-law scaling: the exponent is determined by the left-tail shape parameter of the success probability distribution, connecting the heterogeneity of item difficulty to aggregate scaling behavior.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap2.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>

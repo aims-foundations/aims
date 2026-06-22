@@ -56,9 +56,12 @@ jobs:
       - name: Decide whether to rebuild PDF
         id: render-mode
         run: |
-          rebuild_pdf=false
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.rebuild_pdf }}" == "true" ]]; then
-            rebuild_pdf=true
+          # Rebuild the PDF on every content push so the published PDF stays in sync
+          # with the site. A manual run can still skip it (HTML-only republish) by
+          # dispatching the workflow with rebuild_pdf=false.
+          rebuild_pdf=true
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.rebuild_pdf }}" == "false" ]]; then
+            rebuild_pdf=false
           fi
           echo "rebuild_pdf=$rebuild_pdf" >> "$GITHUB_OUTPUT"
 

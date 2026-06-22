@@ -36,7 +36,7 @@ pyodide:
     - scipy
 ---
 
-# Information and Mechanism Design {#sec-design}
+# Design {#sec-design}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, the reader will be able to:
@@ -100,7 +100,7 @@ This assumption breaks down once benchmarks become *influential*. When a develop
 
 4. **Adversarial Goodhart**: An agent actively exploits the gap between proxy and objective. This is the regime that dominates in competitive AI evaluation, and the focus of this chapter.
 
-The shift from Chapters 3--6 to this chapter is a shift in the source of the threat. Measurement error (@sec-reliability) is stochastic. Validity threats (@sec-validity-threats) are systematic but unintentional. Strategic manipulation is *deliberate and adaptive*: the DGP itself changes in response to the measurement. This connects to the literature on performative prediction [@perdomo2020performative], where the act of deploying a model changes the distribution it operates on, and to strategic classification [@hardt2016strategic], where agents manipulate their features to achieve favorable outcomes.
+The shift from the earlier measurement chapters to this one is a shift in the source of the threat. Measurement error (@sec-reliability) is stochastic. Validity threats (@sec-validity-threats) are systematic but unintentional. Strategic manipulation is *deliberate and adaptive*: the DGP itself changes in response to the measurement. This connects to the literature on performative prediction [@perdomo2020performative], where the act of deploying a model changes the distribution it operates on, and to strategic classification [@hardt2016strategic], where agents manipulate their features to achieve favorable outcomes.
 
 The remainder of this chapter builds three layers of strategic analysis: (i) benchmark disclosure and information design --- how much should evaluators reveal about the evaluation mechanism? (ii) metric selection and reporting granularity --- which metrics should evaluators report, and at what level of detail? (iii) mechanism design for repeated evaluation --- how can evaluators maintain alignment when the game repeats?
 

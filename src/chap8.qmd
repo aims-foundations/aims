@@ -35,7 +35,7 @@ pyodide:
     - matplotlib
 ---
 
-# The Evaluation Ecosystem and Its Governance {#sec-ecosystem}
+# Ecosystem {#sec-ecosystem}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, the reader will be able to:

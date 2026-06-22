@@ -1,8 +1,6 @@
 # AI Measurement Science
 ### Sang Truong and Sanmi Koyejo
 
-A Science of Knowing Where AI Thrives, Where It Breaks, and How to Respond
-
 This book is available online at: [aimslab.stanford.edu/textbook/](https://aimslab.stanford.edu/textbook/)
 
 ## Prerequisites

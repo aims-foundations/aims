@@ -12,33 +12,25 @@ Stanford, 2026, Truong & Koyejo
 
 ## Structure of this book {.unnumbered}
 
-The book opens with a survey of the evaluation data landscape, followed by three parts which introduce predictive measurement models, develop reliability and validity analysis, and discuss design, governance, and applications.
+The book opens with the foundational question of measurement—does an evaluation measure what it claims to?—and only then builds the machinery to answer it: the data landscape, predictive models and their estimation, the reliability analysis and diagnostics that establish trust, efficient design, and the causal analysis of when results generalize. It closes with the strategic and applied dimensions of evaluation: governance, mechanism design, and adversarial testing.
+
+@sec-validity opens the book with validity—the question of whether an evaluation measures the construct it claims to. It develops validity as a unitary concept supported by five kinds of evidence (content, criterion, construct, external, and consequential), organized around the *nomological network* of constructs and Borsboom's existence-and-causation condition. It catalogs the major threats—construct-irrelevant variance, construct underrepresentation, and contamination—at the conceptual level, deferring their operationalization to later chapters once the measurement machinery is in place. The chapter is deliberately theoretical: it frames the questions the rest of the book learns to answer.
 
 @sec-data-landscape surveys the AI evaluation data landscape: the response matrix abstraction, a taxonomy of 70+ benchmarks spanning knowledge, coding, agentic, multilingual, cultural, and preference evaluation, and the practical data quality issues that arise in real-world evaluation. It introduces the `torch_measure` toolkit for loading and analyzing benchmark data.
-
-**Part I: Measurement as Predictive Modeling**
 
 @sec-foundations lays the mathematical groundwork for the rest of the book. It covers probabilistic models for AI evaluation data—including Item Response Theory (Rasch, 2PL, 3PL), Bradley-Terry models for pairwise comparisons, and factor models for multidimensional ability. A central theme is the relationship between model assumptions and what they allow us to infer: sufficiency, specific objectivity, and the tradeoffs between model complexity and interpretability. The chapter also introduces prediction-powered evaluation—an amortized factor model that maps external features to latent parameters for cold-start prediction of unseen models and items.
 
 @sec-learning studies how to estimate latent parameters from evaluation data. It covers maximum likelihood estimation, gradient-based optimization, the EM algorithm, Bayesian inference, regularization, and model selection. It also develops generalization experiments with various masking schemes to evaluate the robustness and transferability of learned factor models.
 
+@sec-reliability addresses the question of signal versus noise in AI measurement. It covers Classical Test Theory, Generalizability Theory for decomposing multiple sources of error, and practical tools for assessing and improving the reliability of evaluation protocols—including LLM-as-a-judge designs and agentic measurement. It is also where the validity threats of @sec-validity become operational: the item-level diagnostics—differential item functioning, dimensionality assessment, and item-fit statistics—are each a structured reading of the same variance decomposition.
+
 @sec-efficient develops the statistical foundations for efficient evaluation design. It introduces Fisher information for item selection, Computerized Adaptive Testing (CAT), D-optimal design for constructing maximally informative item pools, and efficient paired-comparison schedules for model arenas.
 
-**Part II: Measurement Reliability and Validity**
-
-@sec-reliability addresses the question of signal versus noise in AI measurement. It covers Classical Test Theory, Generalizability Theory for decomposing multiple sources of error, and practical tools for assessing and improving the reliability of evaluation protocols—including LLM-as-a-judge designs and agentic measurement.
-
-@sec-validity asks whether our evaluations measure what they claim to measure. It covers content, criterion, and construct validity; diagnostic tools for detecting benchmark contamination, differential item functioning, and construct-irrelevant variance; and principled approaches to instrument construction and revision, including the use of synthetic data.
-
 @sec-causality examines the causal foundations of AI measurement. It covers structural causal models for evaluation data, distribution shift (covariate, label, and concept shift) and when benchmark results generalize across contexts, interventional and counterfactual reasoning for diagnosing construct-irrelevant variance, and methods for robust prediction under shift including conformal inference and data attribution.
-
-**Part III: Design, Governance, and Applications**
 
 @sec-design considers the strategic and economic dimensions of evaluation design. It introduces decision-making under ambiguity (Maxmin Expected Utility), Bayesian persuasion for optimal information disclosure, robust mechanism design, and the strategic considerations that arise when benchmark results influence development incentives.
 
 @sec-redteaming applies the measurement framework to adversarial evaluation: red-teaming as structured measurement, attack success rate as an estimand (and when comparisons are valid), adversarial robustness as a multidimensional latent trait, synthetic data for evaluation at scale, and prediction-powered inference for combining human and automated judgments.
-
-**Conclusion**
 
 @sec-conclusion synthesizes the book's themes, distills lessons from the field, identifies six open challenges (beyond binary responses, multidimensional ability, temporal dynamics, agentic evaluation, scalable oversight, and fairness in evaluation), presents ten capstone projects for the CS321M course, and offers a practitioner's checklist for designing rigorous AI evaluations.
 
@@ -69,6 +61,17 @@ Thanks for reading our book! We hope it proves useful for research and teaching.
 
 ::: {.content-visible when-format="html"}
 ::: {.quarto-title-citeas .csl-entry}
-Truong, S. T., Koyejo, S. 2026. _AI Measurement Science: A Science of Knowing Where AI Thrives, Where It Breaks, and How to Respond_. Stanford University.
+Truong, S. T., Koyejo, S. 2026. _AI Measurement Science_. Stanford University.
 :::
 :::
+
+To cite this book, use the following BibTeX entry:
+
+```bibtex
+@book{truongkoyejo2026aims,
+  title     = {AI Measurement Science},
+  author    = {Truong, Sang T. and Koyejo, Sanmi},
+  year      = {2026},
+  url       = {https://aimslab.stanford.edu/textbook/}
+}
+```

@@ -12,8 +12,10 @@
 \begin{titlepage}
   \begin{center}
     {\usekomafont{title}\scshape\Huge $title$\par}
+$if(subtitle)$
     \vskip 1em
     {\usekomafont{subtitle}\LARGE $subtitle$\par}
+$endif$
     \vskip 1em
     \setstretch{1.5}
     {\usekomafont{author} $for(authors/allbutlast)$$it.name.literal$, $endfor$ and~$for(authors/last)$$it.name.literal$ $endfor$\par}

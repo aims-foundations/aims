@@ -36,7 +36,7 @@ pyodide:
     - scipy
 ---
 
-# Red-Teaming and Adversarial Evaluation {#sec-redteaming}
+# Application {#sec-redteaming}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, the reader will be able to:

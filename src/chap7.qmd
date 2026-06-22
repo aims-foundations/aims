@@ -36,7 +36,7 @@ pyodide:
     - scipy
 ---
 
-# Causality and Distribution Shift {#sec-causality}
+# Causality {#sec-causality}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, the reader will be able to:
@@ -372,7 +372,7 @@ $$
 \hat{V}_{\text{DM}} = \frac{1}{n} \sum_{t=1}^{n} \hat{r}(x_t, \pi)
 $$ {#eq-dm}
 
-where $\hat{r}(x_t, \pi) = \sum_a \pi(a \mid x_t) \hat{r}(x_t, a)$ integrates the reward model over the target policy's action distribution. In the AIMS context, $\hat{r}$ is precisely the IRT model from @sec-foundations: $\hat{r}(x, a) = P(Y = 1 \mid \theta, \beta_x)$. The direct method is what we have been doing throughout Chapters 1--3: using the fitted IRT model to predict performance.
+where $\hat{r}(x_t, \pi) = \sum_a \pi(a \mid x_t) \hat{r}(x_t, a)$ integrates the reward model over the target policy's action distribution. In the AIMS context, $\hat{r}$ is precisely the IRT model from @sec-foundations: $\hat{r}(x, a) = P(Y = 1 \mid \theta, \beta_x)$. The direct method is what we have been doing throughout the earlier modeling chapters (@sec-foundations, @sec-learning): using the fitted IRT model to predict performance.
 
 The direct method is biased when the reward model is misspecified. If the IRT model is wrong---perhaps the true data-generating process has interactions the model does not capture---the predictions will be systematically off.
 
@@ -435,7 +435,7 @@ $$ {#eq-ppi}
 
 The first term is the direct method estimate using the cheap predictions. The second term is the bias correction: it estimates the systematic error in $\hat{Y}$ using the labeled subsample. This is exactly the DR structure: imputation + correction.
 
-The connection to the cold-start pipeline in @sec-cold-start is direct. The PPE (Prediction-Powered Evaluation) approach from Chapter 2 learns a mapping from model embeddings and metadata to IRT parameters, producing predictions $\hat{Y}_{ij}$ for unseen model-item pairs. PPI provides the debiasing step: use a small set of actual evaluations to correct the PPE predictions, yielding valid confidence intervals for model performance. The PPE predictions serve as the imputation model $\hat{r}$; the actual evaluations provide the labeled correction $Y - \hat{Y}$.
+The connection to the cold-start pipeline in @sec-cold-start is direct. The PPE (Prediction-Powered Evaluation) approach from @sec-foundations learns a mapping from model embeddings and metadata to IRT parameters, producing predictions $\hat{Y}_{ij}$ for unseen model-item pairs. PPI provides the debiasing step: use a small set of actual evaluations to correct the PPE predictions, yielding valid confidence intervals for model performance. The PPE predictions serve as the imputation model $\hat{r}$; the actual evaluations provide the labeled correction $Y - \hat{Y}$.
 
 ### Importance Weighting for Covariate Shift {#sec-importance-weighting}
 

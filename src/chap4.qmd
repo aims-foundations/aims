@@ -39,7 +39,7 @@ pyodide:
 # Efficient Measurement {#sec-efficient}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Formulate** the benchmark design problem as an optimization over item selection and scoring rules.
 2. **Apply** Fisher information to select maximally informative items, and implement a Computerized Adaptive Testing procedure.

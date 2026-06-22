@@ -39,11 +39,11 @@ pyodide:
 # Validity {#sec-validity}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Define** validity in the context of AI evaluation and explain why it cannot be reduced to a single statistic.
 2. **Distinguish** between content validity, criterion validity, construct validity, external validity, and consequential validity for AI benchmarks.
-3. **Apply** Borsboom's realist framework and Salaudeen et al.'s claim-centered framework to evaluate whether a benchmark measures what it claims to measure.
+3. **Operationalize** the claim-centered framework to gather validity evidence edge by edge along a benchmark's nomological network, using Borsboom's existence-and-causation condition as the standard that keeps that evidence honest.
 4. **Identify** common threats to validity in AI evaluation: benchmark contamination, construct-irrelevant variance, construct underrepresentation, and differential item functioning.
 5. **Use** diagnostic tools (DIF analysis, dimensionality assessment, item-fit statistics) to detect validity threats.
 6. **Design** instrument construction and revision procedures, including the use of synthetic data for item generation.
@@ -55,171 +55,74 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 
 **Lecture 1: Validity Frameworks and Evidence**
 
-- Borsboom's realist framework: validity as truth, warrant inference, semantic indeterminacy (20 min)
+- The nomological network and Borsboom's realist condition; non-identifiability (20 min)
 - From reliability to validity: motivating the distinction (10 min)
 - A taxonomy of validity evidence: content, criterion, construct, external, consequential (25 min)
 - Threats to validity in AI evaluation (20 min)
 
 **Lecture 2: Diagnostic Tools**
 
-- Differential Item Functioning (DIF) analysis (25 min)
-- Dimensionality assessment and parallel analysis (25 min)
-- Item-fit statistics and contamination detection (20 min)
+- Differential Item Functioning (DIF) analysis (20 min)
+- Dimensionality assessment and parallel analysis (20 min)
+- Item-fit statistics and contamination detection (15 min)
+- The Multitrait-Multimethod matrix (20 min)
 - Hands-on: running diagnostics on simulated data (5 min)
 
-**Lecture 3: Building Valid Benchmarks**
+**Lecture 3: Building Valid AI Evaluations**
 
-- The Multitrait-Multimethod matrix (25 min)
-- Principled item construction and revision (20 min)
-- Nomological networks and the claim-centered framework (15 min)
-- Design exercise: planning a valid evaluation (15 min)
+- Principled item construction and revision (30 min)
+- Design principles synthesizing the chapter (20 min)
+- Design exercise: planning a valid evaluation (25 min)
 :::
 
 ::: {.callout-note title="Notation"}
 This chapter introduces validity-specific notation: $g$ (group membership for DIF), $\alpha_{MH}$ (Mantel-Haenszel odds ratio), $\lambda_k$ (eigenvalues for dimensionality), $\text{MNSQ}_i$ (item fit statistics), and $r_{ij}$ (MTMM correlations). See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
-
-## Borsboom's Warrant Inference Framework {#sec-borsboom}
-
-Before we can assess whether an evaluation is valid, we must understand what validity *means*. This seemingly philosophical question has profound practical implications. If we do not have a clear conception of validity, we cannot evaluate whether our benchmarks actually measure what we intend.
-
-The Dutch psychometrician Denny Borsboom has developed the most influential contemporary framework for understanding measurement validity. His approach, which we call the *realist framework*, provides the philosophical foundation for the AIMS approach to AI evaluation.
-
-### Validity as Truth, Not Evidence {#sec-validity-truth}
-
-Traditional approaches to validity, following Cronbach and Messick, treat validity as a matter of *evidence accumulation*. Under this view, a test is valid to the extent that we have gathered evidence supporting its intended interpretation. Validity becomes a matter of degree: more evidence means more validity.
-
-Borsboom rejects this view. He argues that validity is fundamentally about *truth*, not evidence:
-
-::: {.callout-note title="Borsboom's Definition of Validity"}
-A test is **valid** for measuring an attribute if and only if:
-
-1. The attribute **exists**, and
-2. Variations in the attribute **causally produce** variations in the measurement outcomes.
-
-This is a yes/no property: either the attribute causes the test responses, or it does not. Evidence is relevant to our *knowledge* of validity, but validity itself is about the causal structure of the world.
-:::
-
-This definition has several important implications:
-
-**Existence requirement.** The attribute being measured must actually exist. If we claim to measure "general intelligence" but there is no such thing---if intelligence is better understood as a collection of independent abilities---then no test can validly measure it. The existence question is empirical, not definitional.
-
-**Causation requirement.** The attribute must *cause* variation in test responses. It is not enough for test scores to be *correlated* with the attribute; the attribute must be the reason for the variation. This rules out tests that are merely predictive of outcomes without measuring the underlying construct.
-
-**Truth vs. evidence distinction.** We can have strong evidence that a test is valid and yet be wrong. Conversely, a test might be valid even if we have limited evidence. This distinction matters because it separates the epistemological question (what do we know?) from the ontological question (what is true?).
-
-### The Warrant Inference Problem {#sec-warrant-inference}
-
-Measurement involves an inference from observed data to latent constructs:
-
-$$
-\text{Observed: } Y_{ij} \quad \xrightarrow{\text{inference}} \quad \text{Latent: } \theta_i
-$$
-
-This inference requires a **warrant**: a justified belief that the test measures what it claims to measure. The warrant connects the measurement procedure (administering test items, recording responses) to the theoretical construct (ability, intelligence, reasoning).
-
-Following Toulmin's model of argumentation, a measurement argument has the structure:
-
-- **Claim:** "Model $i$ has ability $\theta_i = 2.3$"
-- **Data:** "Model $i$ answered 47 of 60 questions correctly"
-- **Warrant:** "The test measures the ability construct, and the scoring procedure accurately converts responses to ability estimates"
-- **Backing:** "The test items were written by domain experts, the psychometric model fits the data, ability estimates are stable across different item subsets"
-
-The warrant is the critical element. Without it, we have no basis for interpreting test scores as measurements of the intended construct. The backing provides evidence for the warrant but does not replace it.
-
-### Semantic Indeterminacy {#sec-semantic-indeterminacy}
-
-Borsboom identifies a fundamental problem in measurement: **semantic indeterminacy**. The meaning of a test score depends on which measurement system we adopt, but there is no compelling argument for any particular system.
-
-Consider three measurement frameworks:
-
-1. **Classical Test Theory (CTT):** A test score $X = T + E$ consists of a true score $T$ plus random error $E$. The true score is defined as the expected value of the test score over hypothetical replications.
-
-2. **Item Response Theory (IRT):** Test responses are generated by a latent ability $\theta$ through a probabilistic model $P(Y_{ij} = 1 | \theta_i, \beta_j)$. The ability parameter is a property of the person that exists independently of any particular test.
-
-3. **Network Models:** There is no latent variable. Test items are causally connected to each other, and correlations arise from these direct connections rather than a common cause.
-
-These frameworks make different claims about what test scores mean:
-
-| Framework | What does the score represent? |
-|-----------|-------------------------------|
-| CTT | Expected value over test replications |
-| IRT | Position on a latent continuum |
-| Network | Summary of a network state |
-
-The frameworks are not merely different parameterizations of the same model---they make different ontological commitments about what exists and what causes what. Yet we often cannot empirically distinguish between them.
-
-::: {.callout-note title="Implications for AI Evaluation"}
-When we say "GPT-4 has reasoning ability of 2.3 logits," what do we mean? The answer depends on our measurement framework:
-
-- **CTT interpretation:** If we tested GPT-4 many times on parallel forms, its average score would correspond to 2.3 logits.
-- **IRT interpretation:** GPT-4 possesses an underlying reasoning capacity that, when combined with item difficulties, generates the observed response pattern.
-- **Network interpretation:** GPT-4's responses to reasoning questions form a pattern that we summarize with the number 2.3, but there is no single "reasoning ability" being measured.
-
-These interpretations have different implications for how we should use and trust the measurement.
-:::
-
-### Construct Validity and the Nomological Network {#sec-nomological-network}
-
-If a construct cannot be directly observed, how do we know it exists? Cronbach and Meehl proposed that constructs are defined by their place in a **nomological network**---a web of theoretical relationships connecting the construct to other constructs and observable indicators.
-
-For example, "reasoning ability" might be defined by relationships like:
-
-- Higher reasoning ability $\to$ better performance on logic puzzles
-- Higher reasoning ability $\to$ better performance on mathematical proofs
-- Higher reasoning ability $\to$ correlation with general intelligence
-- Higher reasoning ability $\to$ development with education
-
-The construct gains meaning through these relationships. If a test score behaves as the theory predicts---if it correlates with the right things and not with the wrong things---we have evidence that it measures the intended construct.
-
-For AI evaluation, this suggests we need theoretical frameworks that specify:
-
-1. What capabilities should be related to benchmark performance
-2. What capabilities should be independent of benchmark performance
-3. How capabilities should develop with model scale or training
-4. How capabilities should transfer across domains
-
-Without such frameworks, we have benchmark scores without meaning.
-
-
 ## From Reliability to Validity {#sec-reliability-to-validity}
 
-Consider a coding benchmark that produces highly consistent scores: every time you evaluate a model, it gets roughly the same accuracy. The split-half reliability is 0.95, Cronbach's alpha is 0.93, and the G-coefficient from @sec-reliability is excellent. You might conclude that the benchmark is working well.
+Consider a coding benchmark that produces highly consistent scores: every evaluation of a given model yields roughly the same accuracy. The split-half reliability is 0.95, Cronbach's alpha is 0.93, and the G-coefficient from @sec-reliability is excellent. One might conclude that the benchmark is working well. But suppose closer investigation reveals that the benchmark items were scraped from a popular programming tutorial site. The models with the highest scores turn out to be those whose training data included that site. The benchmark is not measuring *coding ability*---it is measuring *memorization of specific solutions*. The scores are perfectly consistent, but they do not mean what they appear to.
 
-But suppose you investigate further and discover that the benchmark items were scraped from a popular programming tutorial site. The models with the highest scores turn out to be those whose training data included that site. The benchmark is not measuring *coding ability*---it is measuring *memorization of specific solutions*. The scores are perfectly consistent, but they do not mean what you think they mean.
+This is the validity problem. Reliability asks: *does the evaluation give the same answer twice?* Validity asks the deeper question: *does the evaluation measure what it claims to measure?* A perfectly reliable instrument can be completely invalid---like a bathroom scale that always reads 70 kg regardless of who steps on it. Conversely, validity *requires* reliability: if measurements fluctuate randomly, they cannot track any underlying construct. In the language of @sec-nomological-network, the scraped benchmark has a strong $\theta \to Y$ edge for the *wrong* $\theta$: variation in scores is causally produced by memorization, not coding ability. Reliability cannot detect this, because the spurious cause is just as consistent as the genuine one would be. This chapter develops the theory and tools for assessing and building validity in AI evaluation. We begin with a taxonomy of validity evidence (@sec-validity-taxonomy), then examine the major threats to validity in AI benchmarks (@sec-validity-threats). We develop diagnostic tools for detecting these threats (@sec-validity-diagnostics) and close with methods for constructing valid evaluation instruments (@sec-valid-design-principles).
 
-This is the validity problem. Reliability asks: *does the evaluation give the same answer twice?* Validity asks the deeper question: *does the evaluation measure what it claims to measure?* A perfectly reliable instrument can be completely invalid---like a bathroom scale that always reads 70 kg regardless of who steps on it. Conversely, validity *requires* reliability: if measurements fluctuate randomly, they cannot track any underlying attribute.
+## A Network of Constructs {#sec-nomological-network}
 
-In @sec-borsboom, we introduced Borsboom's realist definition of validity: a test is valid for measuring an attribute if and only if (a) the attribute exists, and (b) variation in the attribute *causally produces* variation in test scores [@borsboom2005measuring]. This is a demanding standard. It requires not just statistical association between scores and the target construct, but a causal mechanism connecting the two.
+A construct does not exist in isolation. It acquires meaning through its place in a *nomological network*---a web of lawful relationships connecting a construct to its observable measures and to the downstream outcomes it should predict [@cronbach1955construct]. Throughout this chapter we model constructs as latent variables that causally produce the measures (a single benchmark may probe more than one construct at once). Drawn out, the network is then a graphical model over the constructs, their measurements, and the outcomes they should predict [@frank2025experimentology], and validity becomes the question of whether the relationships we *observe* are consistent with the structure the network *asserts* (@fig-nomological).
 
-More recently, @salaudeen2025measurement proposed a *claim-centered* framework for AI evaluation validity. Their key insight is that benchmarks are not valid or invalid in the abstract---they are valid *for specific claims*. A benchmark might validly support the claim "Model A scores higher than Model B on these 500 multiple-choice questions" while failing to support the broader claim "Model A reasons better than Model B." Validity is about the relationship between the measurement instrument, the intended interpretation, and the population of systems being evaluated.
+From a causal perspective, Denny Borsboom provides a definition for validity. A measurement instrument is valid for measuring a construct if and only if:
 
-::: {.callout-important title="Validity Is Not a Property of the Test Alone"}
-A benchmark is not "valid" or "invalid" in isolation. Validity depends on:
+1. The construct theoretically exists, and
+2. Variations in the construct causally produce variations in the measurement response.
 
-- **The construct**: what attribute are we claiming to measure?
-- **The population**: which models or systems are being evaluated?
-- **The interpretation**: what conclusions are drawn from the scores?
-- **The context**: in what setting will the scores be used?
+First, the construct being measured must exist independent of the measurement itself. If we claim to measure "reasoning" but there is no such thing---if intelligence is better understood as a collection of independent abilities---then no test can validly measure it. Second, the construct must cause variation in measurement responses. It is not enough for test scores to be correlated with the construct; the construct must be the reason for the variation.
 
-The same benchmark may be valid for one purpose and invalid for another. Validity is a property of the *inference*, not the instrument.
-:::
+A natural next step is to instantiate the construct within the nomological network. One compelling ontological hypothesis is that the construct is the common cause of the responses. The common cause can then be represented as a latent variable in a graphical model. This is the main idea behind latent variable models, such as Item Response Theory, where test responses are generated by a latent ability. The ability is a property of the test taker that exists independently of any particular test and causally produces the responses.
 
-This chapter develops the theory and tools for assessing and building validity in AI evaluation. We begin with a taxonomy of validity evidence (@sec-validity-taxonomy), then examine the major threats to validity in AI benchmarks (@sec-validity-threats). We develop diagnostic tools for detecting these threats (@sec-validity-diagnostics) and close with methods for constructing valid evaluation instruments (@sec-building-valid).
+![The nomological network as a graphical (measurement) model. Open circles are latent, shaded circles are observed. Two latent constructs $\theta_1, \theta_2$ generate four benchmark items: $Y_1$ loads on $\theta_1$ alone, $Y_2$ cross-loads on both constructs, and $Y_3, Y_4$ load on $\theta_2$ alone. Each item also carries an item-specific latent variable (unique factor) $z_j$, capturing variance not shared with the constructs. An intervention $I_k$ acts on the *causes* of each construct $\theta_k$ (e.g., training data, objective, supervised fine-tuning, reinforcement learning)---the AI-native handle for probing whether $\theta_k$ causally produces the responses. The loading edges $\theta_k \to Y_j$ are the subject of construct validity; items sharing a construct should converge while items on different constructs should discriminate; and the $z_j$ are construct-irrelevant, item-specific variance.](Figures/nomological_network.png){#fig-nomological width=45%}
 
+Reading the network from left to right gives this chapter its structure:
+
+- An **intervention** $I_k$ acts on the causes of construct $\theta_k$---in AI, the training data, objective, supervised fine-tuning, or RL. This is the handle we use to test whether $\theta_k$ genuinely produces the responses (@sec-causality).
+- Each **construct** $\theta_k$ causally produces the scores $Y_j$ on the items that load on it, and an item may load on more than one construct (like $Y_2$). This $\theta \to Y$ pathway is the core of validity.
+- Each **item** also carries an item-specific latent variable $z_j$: variance unique to that item and not shared with any construct---a source of construct-irrelevant variance.
+
+The constructs ultimately matter because they predict downstream outcomes we care about, such as deployment usefulness; relating scores to those outcomes is the province of criterion and predictive validity (@sec-criterion-validity).
 
 ## A Taxonomy of Validity Evidence {#sec-validity-taxonomy}
+
+The problem of the nomological network is that it is **not identifiable** from observational data alone: genuinely different networks can produce exactly the same observed data. @fig-nomological-equiv shows a multi-construct example. Four items split into two abilities, $\theta_1$ (measured by $Y_1, Y_2$) and $\theta_2$ (measured by $Y_3, Y_4$), whose scores are positively correlated. Panel (a) explains that correlation with two *correlated* factors. Panel (b) explains it with a **bifactor** model: a general factor $g$ that loads on all four items, together with orthogonal *specific* factors $s_1, s_2$ for each pair. These are substantively different theories of the construct space---"two related abilities" versus "one general ability running through everything, plus residual specifics"---yet they can imply the *identical* covariance over $Y_1, \dots, Y_4$, and nothing in the observed responses says which is right.
+
+![Two multi-construct latent networks that can imply the same observable data. Four items load on two abilities, $\theta_1$ ($Y_1, Y_2$) and $\theta_2$ ($Y_3, Y_4$). (a) Correlated-factors model: the two abilities simply covary. (b) Bifactor model: a general factor $g$ loads on every item, with orthogonal specific factors $s_1, s_2$. For suitable parameters both reproduce the same $\mathrm{Cov}(Y_1,\ldots,Y_4)$---indeed a proportionally constrained bifactor is mathematically the correlated two-factor model---so the data alone cannot tell us whether a general factor exists.](Figures/nomological_equiv.png){#fig-nomological-equiv width=45%}
+
+This is the classic ambiguity of the general factor. A positive correlation among abilities is explained equally well by "the abilities are simply related" (panel a) and by "a general ability runs through them all" (panel b); the bifactor even has *extra* freedom, so it fits at least as well by construction. The covariance can establish *that* $\theta_1$ and $\theta_2$ covary; it cannot establish *why*. The same indistinguishability afflicts the meaning of any single construct: whether a benchmark's shared variance reflects the ability we intend or a construct-irrelevant cause such as memorized text---the coding benchmark of @sec-reliability-to-validity is exactly this trap. Whenever we commit to one network, we are choosing among structures the data cannot separate.
+
+The nomological network thus gives us a *definition* of validity, but because the structure is underdetermined, it does not let us simply read validity off the data. Validation is instead a process of accumulating evidence. The evidence-accumulation tradition we adopt as our workflow---Cronbach, Messick, Kane, and the claim-centered view---answers an *epistemic* question: how do we come to know that a test supports its intended interpretation?
 
 The modern view of validity, following @messick1995validity and the Standards for Educational and Psychological Testing, treats validity as a *unitary concept*: the degree to which evidence supports the intended interpretation of test scores. However, the evidence for validity comes in several distinguishable forms. Following @salaudeen2025measurement and the classical framework, we organize validity evidence into five categories.
 
 ### Content Validity {#sec-content-validity}
 
-Content validity concerns whether the benchmark adequately *represents* the construct domain it claims to measure. The key questions are: Does the benchmark cover the full range of the construct? Are the items relevant? Are important aspects of the construct missing?
-
-For AI evaluation, content validity failures are pervasive. A benchmark labeled "reasoning" might contain only arithmetic word problems, missing logical reasoning, causal reasoning, analogical reasoning, and spatial reasoning entirely. A "coding ability" benchmark might test only Python function completion, neglecting debugging, system design, documentation, and code review.
-
-Content validity is established through *expert judgment* rather than statistical analysis. Domain experts review the construct definition, examine the item pool, and assess coverage. In AI evaluation, this step is frequently skipped: benchmarks are constructed from convenience samples of existing data rather than from principled domain specifications.
+Content validity concerns whether the benchmark adequately *represents* the construct domain it claims to measure. The key questions are: Does the benchmark cover the full range of the construct? Are the items relevant? Are important aspects of the construct missing? For AI evaluation, content validity failures are pervasive. A benchmark labeled "reasoning" might contain only arithmetic word problems, missing logical reasoning, causal reasoning, analogical reasoning, and spatial reasoning entirely. A "coding ability" benchmark might test only Python function completion, neglecting debugging, system design, documentation, and code review. Content validity is established through *expert judgment* rather than statistical analysis. Domain experts review the construct definition, examine the item pool, and assess coverage. In AI evaluation, this step is frequently skipped: benchmarks are constructed from convenience samples of existing data rather than from principled domain specifications.
 
 **AI example.** Suppose a benchmark claims to measure "scientific reasoning." Content validity requires asking: Does it include hypothesis generation? Experimental design? Data interpretation? Statistical inference? Causal reasoning? If it tests only factual recall of scientific knowledge, it has poor content validity for the "reasoning" claim, regardless of how reliable the scores are.
 
@@ -236,16 +139,14 @@ Criterion validity provides some of the most compelling evidence, but it require
 
 ### Construct Validity {#sec-construct-validity}
 
-Construct validity is the central and most encompassing form of validity evidence. It asks: does the benchmark actually measure the *theoretical construct* it claims to measure? This goes beyond content coverage and criterion correlation to the internal structure of the measurement.
-
-The classical approach to construct validity uses two kinds of evidence:
+Construct validity is the central and most encompassing form of validity evidence. It asks: does the benchmark actually measure the *theoretical construct* it claims to measure? This goes beyond content coverage and criterion correlation to the internal structure of the measurement. The classical approach to construct validity uses two kinds of evidence:
 
 - **Convergent validity**: scores on the benchmark should correlate *positively* with scores on other measures of the same or closely related constructs. If two different "reasoning" benchmarks produce uncorrelated scores, at least one of them has poor construct validity.
 - **Discriminant validity**: scores on the benchmark should *not* correlate strongly with measures of *different* constructs. If a "reasoning" benchmark correlates as highly with a "memorization" benchmark as with another reasoning benchmark, the construct is not well separated.
 
 The systematic study of convergent and discriminant validity was formalized by @campbell1959convergent through the **Multitrait-Multimethod (MTMM) matrix**, which we develop in @sec-mtmm.
 
-Under Borsboom's causal framework, construct validity requires a specific causal claim: variation in the latent attribute (reasoning ability) causally produces variation in benchmark scores. This is testable---if we could intervene to increase a model's reasoning ability while holding everything else constant, valid benchmark scores should increase. In practice, such clean interventions are rare, but the causal framing clarifies what we are asking.
+Under Borsboom's causal framework, construct validity requires a specific causal claim: variation in the latent construct (reasoning ability) causally produces variation in benchmark scores. This is testable---if we could intervene to increase a model's reasoning ability while holding everything else constant, valid benchmark scores should increase. In practice, such clean interventions are rare, but the causal framing clarifies what we are asking.
 
 **AI example.** Consider two benchmarks that both claim to measure "mathematical reasoning": GSM8K (grade-school math word problems) and MATH (competition-level problems). If they measure the same construct, models that excel on one should tend to excel on the other (convergent validity). If "mathematical reasoning" is distinct from "commonsense knowledge," then GSM8K scores should correlate less with commonsense benchmarks than with MATH (discriminant validity).
 
@@ -266,9 +167,7 @@ External validity connects closely to the problem of *distribution shift*, which
 
 ### Consequential Validity {#sec-consequential-validity}
 
-Consequential validity, introduced by @messick1995validity, asks whether the *social consequences* of using benchmark scores are appropriate. This is the most controversial form of validity evidence, as it extends validity beyond measurement science into ethics and policy.
-
-In AI evaluation, consequential validity is increasingly important:
+Consequential validity, introduced by @messick1995validity, asks whether the *social consequences* of using benchmark scores are appropriate. This is the most controversial form of validity evidence, as it extends validity beyond measurement science into ethics and policy. In AI evaluation, consequential validity is increasingly important:
 
 - **Goodhart's law**: When a benchmark becomes a target, models are optimized for it, and the benchmark ceases to measure the original construct. Training on benchmark-like data improves scores without improving capability.
 - **Development distortion**: Benchmarks that are easy to optimize attract disproportionate effort, even if they measure less important capabilities.
@@ -309,6 +208,14 @@ Sources of CIV in AI evaluation include:
 - **Language and cultural bias**: Items that assume specific cultural knowledge or linguistic patterns may be easier for models trained predominantly on certain data, independent of the target construct.
 
 CIV is particularly insidious because it is *systematic*: unlike random error, it does not average out with more items. A benchmark full of items with position bias has high reliability (the bias is consistent) but poor validity (the scores reflect position preference, not just the target ability).
+
+Graphically, systematic CIV is an *additional parent* of the items, sitting alongside the construct (@fig-civ). Writing the response of model $i$ to item $j$ as
+$$
+Y_{ij} \;=\; \underbrace{\lambda_j\,\theta_i}_{\text{construct}} \;+\; \underbrace{\gamma_j\, N_i}_{\text{construct-irrelevant}} \;+\; \underbrace{z_{ij}}_{\text{item-specific}},
+$$
+the nuisance cause $N$ (formatting sensitivity, position preference, $\ldots$) loads on *several* items through the $\gamma_j$. This sharing across items is what makes CIV *systematic*: a cause confined to a single item would collapse into that item's unique factor $z_{ij}$ and merely add noise, whereas a cause spread across items acts as a second common factor and biases the construct estimate. The practical consequence turns on whether $N$ is observed. If $N$ is *observed*---answer position, prompt length, language---it can be controlled for or randomized away (counterbalancing position decorrelates it from the score). If $N$ is *latent*, it is confounded with $\theta$: a single benchmark cannot separate the two, and the multitrait-multimethod design of @sec-mtmm is precisely the tool for doing so.
+
+![Systematic construct-irrelevant variance as a graphical model. The target construct $\theta$ (left, solid loadings $\lambda$) and a construct-irrelevant cause $N$ (right, dashed loadings $\gamma$) are *both* parents of the observed items. $N$ is a validity threat---rather than mere item noise---because it loads on several items at once; a cause acting on a single item would be absorbed into that item's unique factor $z_j$. When $N$ is latent it is confounded with $\theta$, and a single test cannot tell their contributions apart.](Figures/civ_graph.png){#fig-civ width=45%}
 
 ### Construct Underrepresentation {#sec-construct-underrepresentation}
 
@@ -774,10 +681,6 @@ The left panel shows the infit-outfit scatter: clean items (blue) cluster near t
 Item-fit analysis is a powerful diagnostic because it does not require knowing *which* models are contaminated or *which* items are compromised. The Rasch model's prediction residuals reveal anomalies regardless of their source.
 
 
-## Building Valid Benchmarks {#sec-building-valid}
-
-The diagnostic tools above detect validity problems in existing benchmarks. This section turns to *constructing* benchmarks with validity built in from the start.
-
 ### The Multitrait-Multimethod Matrix {#sec-mtmm}
 
 The Multitrait-Multimethod (MTMM) matrix, introduced by @campbell1959convergent, provides a systematic framework for assessing both convergent and discriminant validity simultaneously. The idea is to measure multiple *traits* (constructs) using multiple *methods* (measurement formats) and examine the resulting correlation structure.
@@ -938,6 +841,10 @@ The heatmap (left) shows the full MTMM correlation matrix with trait blocks sepa
 
 For AI evaluation, constructing an MTMM study requires measuring the same constructs with genuinely different methods. If all benchmarks use the same multiple-choice format, discriminant validity cannot be assessed because method variance is confounded with trait variance.
 
+
+## Building Valid AI Evaluations {#sec-valid-design-principles}
+
+Having developed tools to *detect* validity problems (@sec-validity-diagnostics), we turn to *building* benchmarks with validity designed in from the start. Those tools double as construction aids: the multitrait-multimethod analysis (@sec-mtmm) supplies evidence for the nomological network by testing whether the expected convergent and discriminant relationships hold, and the item-level diagnostics of @sec-dif-analysis and @sec-item-fit confirm that individual items behave as the construct theory predicts.
 
 ### Principled Item Construction and Revision {#sec-item-construction}
 
@@ -1102,34 +1009,11 @@ for flag, count in sorted(flag_counts.items()):
 The three panels show the item screening workflow. The difficulty-discrimination plot (left) reveals that low-discrimination items (red) cluster below the 0.2 threshold, providing little measurement information, while contaminated items (orange) show inflated proportion-correct values. The infit plot (center) highlights items that deviate from model predictions. The summary (right) shows the yield: how many candidate items survive screening. Items that are flagged should be revised or replaced before the benchmark is finalized.
 
 
-### Nomological Networks {#sec-nomological-networks}
-
-The concept of the **nomological network** was introduced by @cronbach1955construct as the broader theoretical context in which a construct's validity is established. A construct does not exist in isolation---it is defined by its lawful relationships with other constructs, observable behaviors, and experimental outcomes.
-
-For AI evaluation, a nomological network specifies:
-
-- **What the construct should predict**: "Mathematical reasoning" should predict success on novel math problems, performance in tutoring scenarios, and ability to verify proofs.
-- **What should predict the construct**: Training on diverse mathematical data, chain-of-thought prompting, and model scale should all increase mathematical reasoning scores.
-- **What the construct should be distinct from**: Mathematical reasoning should be separable from memorization of specific problem-solution pairs, linguistic fluency, and pattern matching on surface features.
-
-@salaudeen2025measurement operationalize this through their claim-centered framework: each benchmark should be accompanied by explicit claims about what the scores mean, and validity evidence should be gathered for each claim. This is more practical than the full nomological network, which requires specifying all theoretical relationships, but serves the same purpose of grounding scores in a web of meaning.
-
-The MTMM analysis from @sec-mtmm provides empirical evidence for the nomological network by testing whether the expected convergent and discriminant relationships actually hold. Item-level diagnostics from @sec-dif-analysis and @sec-item-fit ensure that individual items function as predicted by the construct theory.
-
-::: {.callout-note title="From Borsboom to Salaudeen: Two Views of Validity"}
-Borsboom's realist framework asks: *does the attribute exist, and does it causally produce score variation?* This is a strong ontological claim that requires causal evidence.
-
-Salaudeen et al.'s claim-centered framework asks: *what specific claims does this benchmark support, and what evidence exists for each?* This is more pragmatic, acknowledging that validity comes in degrees and depends on use.
-
-The two frameworks are complementary. Borsboom's framework sets the philosophical standard; Salaudeen et al.'s framework operationalizes it for practical AI evaluation. Both agree that validity is not a binary property and that multiple forms of evidence are needed.
-:::
-
-
-## Designing Valid AI Evaluations {#sec-valid-design-principles}
+### Design Principles
 
 We close with six design principles that synthesize the concepts developed in this chapter.
 
-**1. Start with the construct, not the data.** Define what you are measuring before collecting items. Write an explicit construct definition and content specification. This prevents construct underrepresentation and makes content validity assessable.
+**1. Start with the construct, not the data.** Define what is being measured before collecting items. Write an explicit construct definition and content specification. This prevents construct underrepresentation and makes content validity assessable.
 
 **2. Use multiple methods.** Measure each construct with at least two different formats (e.g., MCQ and open-ended). This enables MTMM analysis and separates trait variance from method variance. A construct that is robust across methods has stronger validity evidence.
 
@@ -1141,7 +1025,7 @@ We close with six design principles that synthesize the concepts developed in th
 
 **6. Document validity evidence.** Follow the claim-centered approach: for each claim the benchmark is intended to support, document the available validity evidence and its limitations. This transparency allows users to judge whether the benchmark supports *their* intended interpretation.
 
-**Worked example: evaluating summarization ability.** Suppose you want to build a benchmark for evaluating how well language models summarize documents.
+**Worked example: evaluating summarization ability.** Suppose the goal is to build a benchmark for evaluating how well language models summarize documents.
 
 - *Construct definition*: The ability to produce concise, accurate, and coherent summaries of source documents, preserving key information while omitting irrelevant details.
 - *Content specification*: Documents from 5 domains (news, scientific, legal, medical, conversational), 3 lengths (short, medium, long), 2 genres (informative, narrative).
@@ -1151,24 +1035,11 @@ We close with six design principles that synthesize the concepts developed in th
 - *Contamination check*: Use held-out documents not available online. Compare private vs. public document performance gaps.
 
 
-## Discussion Questions {#sec-validity-discussion}
-
-1. A coding benchmark produces scores with test-retest reliability of 0.95 and Cronbach's alpha of 0.93. Is this sufficient evidence for validity? What additional evidence would you want, and why?
-
-2. How does benchmark contamination differ from construct-irrelevant variance? Can you describe a scenario where training data overlap is actually *construct-relevant* rather than a validity threat?
-
-3. Design an MTMM study for evaluating "mathematical reasoning" in large language models. Specify the traits, methods, and the expected pattern of convergent and discriminant correlations.
-
-4. Goodhart's law suggests that any benchmark used as an optimization target will eventually lose validity. Does this make consequential validity fundamentally different from the other four forms? Or is it a special case of construct-irrelevant variance?
-
-5. DIF analysis identifies items that function differently across groups after controlling for ability. In AI evaluation, when should DIF be treated as a validity problem to be fixed, and when might it reflect a *genuine* group difference that the benchmark should capture?
-
-
 ## Bibliographic Notes {#sec-validity-biblio}
 
 The conceptual foundations of validity have evolved substantially over the past century. @cronbach1955construct introduced the notion of construct validity and the nomological network, arguing that validity requires embedding a construct in a web of theoretical relationships. @messick1995validity unified the previously separate types of validity into a single framework, arguing that all validity is construct validity, with content, criterion, and consequential evidence as *facets* of a unified concept. @kane2006validation formalized the argument-based approach to validation, which requires specifying the chain of inferences from observed scores to intended interpretations and gathering evidence for each link.
 
-@borsboom2005measuring challenged the orthodox framework with a realist account: a test is valid if and only if the target attribute exists and causally produces score variation. This causal perspective connects validity to the structural causal models discussed in @sec-causality.
+@borsboom2005measuring challenged the orthodox framework with a realist account: a test is valid if and only if the target construct exists and causally produces score variation. This causal perspective connects validity to the structural causal models discussed in @sec-causality.
 
 The Multitrait-Multimethod matrix was introduced by @campbell1959convergent and remains one of the most systematic approaches to convergent and discriminant validity. Differential Item Functioning methods are covered comprehensively by @holland1988differential and @zumbo1999handbook. Item-fit statistics for Rasch models are developed by @wright1982solving. Parallel analysis for dimensionality assessment was proposed by @horn1965rationale.
 
@@ -1199,4 +1070,14 @@ The relationship between reliability and validity was previewed in @sec-reliabil
 
 **Discussion**
 
-8. @salaudeen2025measurement argue that validity should be assessed relative to specific claims rather than as a global property of the benchmark. @borsboom2005measuring argues that validity is fundamentally about whether the target attribute exists and causally produces score variation. Compare these two frameworks. Under what conditions do they agree? Under what conditions might they disagree? Which framework is more useful for guiding practical benchmark design, and why?
+8. A coding benchmark produces scores with test-retest reliability of 0.95 and Cronbach's alpha of 0.93. Is this sufficient evidence for validity? What additional evidence would be needed, and why?
+
+9. How does benchmark contamination differ from construct-irrelevant variance? Describe a scenario where training data overlap is actually *construct-relevant* rather than a validity threat.
+
+10. Design an MTMM study for evaluating "mathematical reasoning" in large language models. Specify the traits, methods, and the expected pattern of convergent and discriminant correlations.
+
+11. Goodhart's law suggests that any benchmark used as an optimization target will eventually lose validity. Does this make consequential validity fundamentally different from the other four forms? Or is it a special case of construct-irrelevant variance?
+
+12. DIF analysis identifies items that function differently across groups after controlling for ability. In AI evaluation, when should DIF be treated as a validity problem to be fixed, and when might it reflect a *genuine* group difference that the benchmark should capture?
+
+13. @salaudeen2025measurement argue that validity should be assessed relative to specific claims rather than as a global property of the benchmark. @borsboom2005measuring argues that validity is fundamentally about whether the target construct exists and causally produces score variation. Compare these two frameworks. Under what conditions do they agree? Under what conditions might they disagree? Which framework is more useful for guiding practical benchmark design, and why?

@@ -40,7 +40,7 @@ pyodide:
 # Foundations of Measurement {#sec-foundations}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Distinguish** between Item Response Theory, factor models, paired comparison systems (Elo, Bradley-Terry), and network models (GGM, Ising).
 2. **Explain** why the Rasch model holds a special status as "the measurement model" through the sufficiency of sum scores, specific objectivity, and test-free measurement.
@@ -70,9 +70,9 @@ This chapter introduces the core notation used throughout the book: $\theta_i$ (
 
 ## The Measurement Problem in AI {#sec-measurement-problem}
 
-Consider the following scenario: You have evaluated 100 language models on a benchmark consisting of 1,000 multiple-choice questions. Each model either answers each question correctly (1) or incorrectly (0), producing a $100 \times 1000$ binary response matrix $Y$. You compute each model's accuracy---the proportion of correct answers---and rank the models accordingly.
+Consider the following scenario. An evaluator has tested 100 language models on a benchmark consisting of 1,000 multiple-choice questions. Each model either answers each question correctly (1) or incorrectly (0), producing a $100 \times 1000$ binary response matrix $Y$. Computing each model's accuracy---the proportion of correct answers---yields a ranking of the models.
 
-Have you *measured* anything? The answer is not as obvious as it might seem. You have certainly *scored* the models: you assigned numbers to them based on their performance. But measurement, in the scientific sense, requires more than assigning numbers. It requires that those numbers correspond to some underlying property---a *latent construct*---in a principled way. The distinction between scoring and measuring is fundamental to understanding why AI evaluation needs measurement science. Consider an analogy from physics: if you measure the temperature of water with a mercury thermometer, the height of the mercury column is a *score*---a number you can read off the instrument. But you trust this score as a *measurement* of temperature because you understand the relationship between mercury expansion and thermal energy.
+Has anything been *measured*? The answer is not as obvious as it might seem. The models have certainly been *scored*: numbers have been assigned to them based on their performance. But measurement, in the scientific sense, requires more than assigning numbers. It requires that those numbers correspond to some underlying property---a *latent construct*---in a principled way. The distinction between scoring and measuring is fundamental to understanding why AI evaluation needs measurement science. Consider an analogy from physics: when the temperature of water is measured with a mercury thermometer, the height of the mercury column is a *score*---a number that can be read off the instrument. That score is trusted as a *measurement* of temperature because the relationship between mercury expansion and thermal energy is understood.
 
 In AI evaluation, we often have scores without this deeper understanding. When GPT-4 achieves 86% accuracy on MMLU [@hendrycks2021mmlu] and Claude achieves 84%, we cannot immediately conclude that GPT-4 has more "intelligence" or "capability" than Claude. Several questions must be answered first:
 
@@ -313,6 +313,73 @@ plt.title('Comparison of IRT Models', fontsize=14)
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.show()
+```
+
+### Nonparametric Item Response Theory {#sec-nonparametric-irt}
+
+The Rasch, 2PL, and 3PL models all commit to a *logistic* shape for the item response function. Often we want to assume less. What if we only require that more able models are more likely to succeed---without fixing the curve's form? **Nonparametric item response theory** [@mokken1971theory], or Mokken scaling, asks exactly this, and it is a natural baseline for AI benchmarks whose item curves we have no reason to believe are logistic.
+
+The **monotone homogeneity model (MHM)** keeps three assumptions and drops the rest:
+
+1. **Unidimensionality** --- a single latent ability $\theta$.
+2. **Local independence** --- responses are conditionally independent given $\theta$ (@sec-local-independence).
+3. **Monotonicity** --- each item response function $P_j(\theta) = P(Y_{\cdot j} = 1 \mid \theta)$ is non-decreasing in $\theta$.
+
+No logistic form, no difficulty or discrimination parameters. Remarkably, these three suffice to justify the practice the whole field relies on: under the MHM the sum score *stochastically orders* models on $\theta$, so ranking models by accuracy is valid even when no parametric model fits. Adding a fourth assumption---**non-intersecting** item response functions, the *double monotonicity model*---yields an *invariant item ordering*: items rank by difficulty the same way at every ability level, the nonparametric echo of Rasch's specific objectivity (@sec-rasch-measurement).
+
+**Scalability coefficients.** How well a set of items conforms to such a scale is measured by counting **Guttman errors**---a model passing a hard item but failing an easier one. For a pair of items, $H_{jk} = \mathrm{Cov}(Y_{\cdot j}, Y_{\cdot k}) / \mathrm{Cov}_{\max}$, where $\mathrm{Cov}_{\max}$ is the largest covariance the marginals allow; the item coefficient $H_j$ aggregates this over all partners,
+
+$$
+H_j = \frac{\sum_{k \neq j} \mathrm{Cov}(Y_{\cdot j}, Y_{\cdot k})}{\sum_{k \neq j} \mathrm{Cov}_{\max}(Y_{\cdot j}, Y_{\cdot k})} .
+$$ {#eq-mokken-h}
+
+Conventionally $H_j < 0.3$ marks an unscalable item, $0.3$--$0.5$ a weak-to-moderate scale, and $> 0.5$ a strong one. A **low or negative $H_j$ flags an item that does not belong on the latent scale**---exactly the signal @truong2025bugs use to find broken benchmark items: a flipped answer key makes an item anti-correlate with ability ($H_j < 0$), and a randomly answered question carries no scale information ($H_j \approx 0$).
+
+Nonparametric IRT thus sits at the **least-committal end of the modeling dial**: Rasch fixes the slope, the 2PL frees it per item, and Mokken assumes only that the curve runs the right way. The weaker the assumption, the more benchmarks satisfy it---and monotonicity is about the least one can ask of a measurement and still order models by score.
+
+```{pyodide-python}
+#| label: nonpar-hj
+#| autorun: true
+#| fig-cap: "Mokken scalability $H_j$ for every item in a simulated Rasch benchmark with six planted off-scale items (red): flipped-key items anti-correlate with ability ($H_j < 0$) and randomly answered items carry no scale information ($H_j \\approx 0$), while sound items (blue) sit above the weak-scale threshold (dotted). Ranking by $H_j$ isolates the off-scale items."
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
+
+rng = np.random.RandomState(0)
+N, M, n_bad = 250, 50, 6
+theta = rng.normal(0, 2, N)                          # wide ability spread -> a benchmark that scales
+beta  = rng.normal(0, 1, M)
+Y = (rng.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)
+
+bad = rng.choice(M, n_bad, replace=False)
+for idx, j in enumerate(bad):
+    if idx < n_bad // 2:
+        Y[:, j] = 1 - Y[:, j]                        # flipped answer key
+    else:
+        Y[:, j] = (rng.rand(N) < 0.5).astype(float)  # random responses (off-dimension)
+
+def mokken_Hj(Y):
+    p = Y.mean(0)
+    C = np.cov(Y.T, bias=True)                                      # item covariance matrix
+    covmax = np.minimum(p[:, None], p[None, :]) - np.outer(p, p)    # max covariance given marginals
+    np.fill_diagonal(C, 0.0); np.fill_diagonal(covmax, 0.0)
+    return C.sum(1) / covmax.sum(1)
+
+H = mokken_Hj(Y)
+is_bad = np.zeros(M, bool); is_bad[bad] = True
+order = np.argsort(H)
+
+plt.figure(figsize=(3.6, 2.2))
+plt.scatter(range(M), H[order],
+            c=['#d62728' if is_bad[i] else '#1f77b4' for i in order], s=14)
+plt.axhline(0.3, color='gray', ls=':', lw=1)
+plt.axhline(0.0, color='black', lw=0.8)
+plt.xlabel('item (ranked by $H_j$)'); plt.ylabel('Mokken $H_j$')
+plt.title('Off-scale items have low $H_j$'); plt.grid(True, alpha=0.3)
+plt.tight_layout(); plt.show()
+print(f"sound items: median H_j = {np.median(H[~is_bad]):.2f};  off-scale items: median H_j = {np.median(H[is_bad]):.2f}")
 ```
 
 ### Factor Models {#sec-factor-models}
@@ -754,7 +821,7 @@ plt.tight_layout(); plt.show()
 print(f"precision@{n_bad} (flag the lowest-correlation items) = {precision:.2f}")
 ```
 
-The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice you would *inspect* the flagged items rather than delete them blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.
+The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice the flagged items should be *inspected* rather than deleted blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.
 
 Georg Rasch's central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of **specific objectivity**.
 
@@ -1064,7 +1131,7 @@ The measurement concepts from this chapter recur throughout. When we justify usi
 
 ### Theoretical Exercises
 
-**Exercise 1.1** (*): Explain in your own words why the sum score is a sufficient statistic in the Rasch model but not in the 2PL model. What information is lost when we reduce responses to sum scores under 2PL?
+**Exercise 1.1** (*): Explain why the sum score is a sufficient statistic in the Rasch model but not in the 2PL model. What information is lost when we reduce responses to sum scores under 2PL?
 
 **Exercise 1.2** (**): Prove that the Bradley-Terry model is equivalent to a Rasch model where each "person" is a comparison between two items.
 
@@ -1123,7 +1190,7 @@ def estimate_rasch_conditional(Y):
         Estimated item difficulties (identified by setting sum(beta) = 0)
     """
     N, M = Y.shape
-    # YOUR CODE HERE
+    # CODE HERE
     pass
 
 # Test on simulated data
@@ -1167,7 +1234,7 @@ def estimate_bradley_terry(comparisons, n_items):
     theta : np.ndarray, shape (n_items,)
         Estimated strength parameters (identified by setting theta[0] = 0)
     """
-    # YOUR CODE HERE
+    # CODE HERE
     pass
 
 # Test: Simulate comparisons and recover parameters
@@ -1201,7 +1268,30 @@ def andersen_lr_test(Y, n_groups=2):
     p_value : float
         p-value from chi-squared distribution
     """
-    # YOUR CODE HERE
+    # CODE HERE
+    pass
+```
+
+**Exercise 1.8** (***): Implement the benchmark item-bug diagnostic of @truong2025bugs.
+
+```python
+# Simulate a Rasch benchmark with planted defective items, then rank items by
+# three scalability diagnostics and measure how well each recovers the defects.
+#
+# Steps:
+# 1. Simulate Y (N = 80 models x M = 200 items) from a Rasch model.
+# 2. Plant 20 buggy items: 10 with flipped keys, 10 answered at random.
+# 3. Rank items by (a) item-total correlation, (b) average tetrachoric
+#    correlation, and (c) Mokken H_j (@eq-mokken-h).
+# 4. Report precision@20 and recall@20 for each ranking.
+# 5. Repeat as the model pool grows from N = 10 to N = 100 and plot how
+#    detection quality scales with the number of test-takers.
+
+import numpy as np
+
+def detect_buggy_items(N, M, n_bad, seed=0):
+    """Return precision@n_bad and recall@n_bad for each of the three diagnostics."""
+    # CODE HERE
     pass
 ```
 
@@ -1225,6 +1315,10 @@ The standard reference for IRT is Lord and Novick's *Statistical Theories of Men
 ### Rasch Measurement
 
 Rasch's original book *Probabilistic Models for Some Intelligence and Attainment Tests* (1960) remains influential. Wright and Stone's *Best Test Design* (1979) provides practical guidance. Fischer and Molenaar's *Rasch Models: Foundations, Recent Developments, and Applications* (1995) covers extensions and applications. For the philosophical foundations, see Rasch's papers on objectivity collected in the *Rasch Measurement Transactions* archive.
+
+### Nonparametric IRT and Item Analysis
+
+Nonparametric item response theory originates with @mokken1971theory; the monotone and double-monotonicity models, scalability coefficients, and their estimation are developed in Sijtsma and Molenaar's *Introduction to Nonparametric Item Response Theory* (2002). Classical item analysis---item--total correlations, inter-item (tetrachoric) correlations, and Mokken scalability coefficients to identify misfitting items---is a standard step in test development. @truong2025bugs apply these diagnostics to AI benchmarks at scale, showing that items flagged by negative tetrachoric correlations or low scalability coefficients frequently contain genuine errors (incorrect keys, ambiguous wording, grading bugs); their framework is grounded in the Rasch sufficiency property (@sec-rasch-measurement), and they recommend evaluating with 60--80 LLMs from at least 10 organizations for reliable detection.
 
 ### Historical Development
 

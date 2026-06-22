@@ -65,7 +65,7 @@ For readers seeking to strengthen their prerequisites or deepen their understand
 
 ## Citation {.unnumbered}
 
-Thanks for reading our book! We hope you find it useful in your research and teaching.
+Thanks for reading our book! We hope it proves useful for research and teaching.
 
 ::: {.content-visible when-format="html"}
 ::: {.quarto-title-citeas .csl-entry}

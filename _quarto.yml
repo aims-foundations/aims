@@ -154,6 +154,7 @@ book:
       chapters:
         - src/chap8.qmd
         - src/chap9.qmd
-    - src/chap10.qmd
+        - src/chap10.qmd
+    - src/chap11.qmd
   appendices:
     - src/notation.qmd

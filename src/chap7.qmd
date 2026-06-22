@@ -39,7 +39,7 @@ pyodide:
 # Causality and Distribution Shift {#sec-causality}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Formulate** causal models for AI evaluation and distinguish causal from associational claims about benchmark performance.
 2. **Apply** structural causal models (SCMs) to represent the data-generating process behind evaluation data, including the roles of training data, model architecture, and benchmark design.
@@ -839,11 +839,11 @@ This five-step causal audit integrates the tools from this chapter with the diag
 
 ## Discussion Questions {#sec-causality-discussion}
 
-1. A benchmark uses Computerized Adaptive Testing (@sec-cat) to select items. A critic argues that the resulting accuracy is "biased because models only answered items matched to their ability level." Using the off-policy evaluation framework, explain whether this criticism is valid and how you would correct the estimate if needed.
+1. A benchmark uses Computerized Adaptive Testing (@sec-cat) to select items. A critic argues that the resulting accuracy is "biased because models only answered items matched to their ability level." Using the off-policy evaluation framework, explain whether this criticism is valid and how the estimate could be corrected if needed.
 
 2. Two benchmarks both claim to measure "reasoning." On Benchmark A, Model X outperforms Model Y. On Benchmark B, the ranking reverses. Draw a DAG that explains this reversal (hint: consider Simpson's paradox). What causal assumptions would make the Benchmark A ranking the correct one?
 
-3. Prediction-powered inference assumes that the model predictions $\hat{Y}$ are informative about the true labels $Y$. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator's consistency, and how would you detect the failure?
+3. Prediction-powered inference assumes that the model predictions $\hat{Y}$ are informative about the true labels $Y$. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator's consistency, and how could the failure be detected?
 
 4. A company evaluates its model on an internal benchmark (source) and wants to predict performance on a customer-facing deployment (target). What information is needed to determine whether the benchmark results are transportable? Which assumptions are untestable from the source data alone?
 
@@ -887,4 +887,4 @@ The connection between Borsboom's causal validity and structural causal models w
 
 **Discussion**
 
-8. @angelopoulos2023prediction's PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the "expensive" labels are actual model runs and the "cheap" predictions are the PPE cold-start predictions from @sec-cold-start. Design a practical PPI pipeline for evaluating a new model on 10,000 items when you can only afford to run 500 actual evaluations. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?
+8. @angelopoulos2023prediction's PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the "expensive" labels are actual model runs and the "cheap" predictions are the PPE cold-start predictions from @sec-cold-start. Design a practical PPI pipeline for evaluating a new model on 10,000 items when only 500 actual evaluations can be afforded. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?

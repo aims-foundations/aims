@@ -29,7 +29,7 @@ DPI = 300
 PREAMBLE = r"""
 \documentclass[tikz,border=8pt]{standalone}
 \usepackage{amsmath,amssymb}
-\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,decorations.pathreplacing}
 
 % ── Node styles ──
 \tikzset{
@@ -290,6 +290,139 @@ HIERARCHICAL = r"""
 \end{tikzpicture}
 """
 
+# ═══════════════════════════════════════════════════════════════════════
+# 8. Nomological network (Chapter 6, Validity) — measurement model
+#    Two latent constructs (theta_1, theta_2) over four observed items:
+#      item 1 loads on theta_1; item 2 cross-loads on both; items 3,4 on theta_2.
+#    Each item also has an item-specific latent (unique factor) z_j.
+#    An intervention I_k points into each construct (do on the causes of theta_k).
+# ═══════════════════════════════════════════════════════════════════════
+NOMOLOGICAL = r"""
+\begin{tikzpicture}
+  % Interventions on the causes of each construct
+  \node[draw=black!70, thick, rounded corners=3pt,
+        minimum height=24pt, inner sep=5pt, fill=black!5] (I1) at (-2.6, 2)  {$I_1$};
+  \node[draw=black!70, thick, rounded corners=3pt,
+        minimum height=24pt, inner sep=5pt, fill=black!5] (I2) at (-2.6, -1) {$I_2$};
+  % Latent constructs
+  \node[latent] (t1) at (0.4, 2)  {$\theta_1$};
+  \node[latent] (t2) at (0.4, -1) {$\theta_2$};
+  % Observed items
+  \node[observed] (Y1) at (4, 3)  {$Y_1$};
+  \node[observed] (Y2) at (4, 1)  {$Y_2$};
+  \node[observed] (Y3) at (4, -1) {$Y_3$};
+  \node[observed] (Y4) at (4, -3) {$Y_4$};
+  % Item-specific latent variables (unique factors)
+  \node[latent, minimum size=20pt, font=\small] (z1) at (6.4, 3)  {$z_1$};
+  \node[latent, minimum size=20pt, font=\small] (z2) at (6.4, 1)  {$z_2$};
+  \node[latent, minimum size=20pt, font=\small] (z3) at (6.4, -1) {$z_3$};
+  \node[latent, minimum size=20pt, font=\small] (z4) at (6.4, -3) {$z_4$};
+
+  % Interventions -> constructs
+  \draw[->] (I1) -- (t1);
+  \draw[->] (I2) -- (t2);
+  % Construct 1 -> items 1, 2
+  \draw[->] (t1) -- (Y1);
+  \draw[->] (t1) -- (Y2);
+  % Construct 2 -> items 2, 3, 4  (item 2 cross-loads on both constructs)
+  \draw[->] (t2) -- (Y2);
+  \draw[->] (t2) -- (Y3);
+  \draw[->] (t2) -- (Y4);
+  % Item-specific latents -> items
+  \draw[->] (z1) -- (Y1);
+  \draw[->] (z2) -- (Y2);
+  \draw[->] (z3) -- (Y3);
+  \draw[->] (z4) -- (Y4);
+\end{tikzpicture}
+"""
+
+# ═══════════════════════════════════════════════════════════════════════
+# 9. Non-identifiability of the nomological network (Chapter 6, Validity)
+#    Two multi-construct latent models over the same four items. They differ in
+#    the construct space:
+#      (a) correlated-factors model: theta_1 -> Y1,Y2 ; theta_2 -> Y3,Y4 ; corr
+#      (b) bifactor model: a general factor g on all items, plus orthogonal
+#          specific factors s_1 -> Y1,Y2 and s_2 -> Y3,Y4
+#    For suitable parameters both reproduce the same covariance (a constrained
+#    bifactor is the correlated two-factor model), so the data alone cannot say
+#    whether a general factor exists.
+# ═══════════════════════════════════════════════════════════════════════
+NOMOLOGICAL_EQUIV = r"""
+\begin{tikzpicture}
+  % ===== Panel (a): two correlated factors =====
+  \node[font=\small] at (2.15, 3.7) {(a) correlated factors};
+  \node[latent]   (at1) at (0.65, 2.3) {$\theta_1$};
+  \node[latent]   (at2) at (3.65, 2.3) {$\theta_2$};
+  \node[observed] (aY1) at (0.0, 0.7) {$Y_1$};
+  \node[observed] (aY2) at (1.3, 0.7) {$Y_2$};
+  \node[observed] (aY3) at (3.0, 0.7) {$Y_3$};
+  \node[observed] (aY4) at (4.3, 0.7) {$Y_4$};
+  \draw[->] (at1) -- (aY1);
+  \draw[->] (at1) -- (aY2);
+  \draw[->] (at2) -- (aY3);
+  \draw[->] (at2) -- (aY4);
+  \draw[<->] (at1) to[bend left=45] (at2);
+
+  % ===== Panel (b): bifactor (general g + orthogonal specifics s1, s2) =====
+  \node[font=\small] at (8.65, 3.7) {(b) bifactor};
+  \node[latent]   (bs1) at (7.15, 2.3)  {$s_1$};
+  \node[latent]   (bs2) at (10.15, 2.3) {$s_2$};
+  \node[observed] (bY1) at (6.5, 0.7)  {$Y_1$};
+  \node[observed] (bY2) at (7.8, 0.7)  {$Y_2$};
+  \node[observed] (bY3) at (9.5, 0.7)  {$Y_3$};
+  \node[observed] (bY4) at (10.8, 0.7) {$Y_4$};
+  \node[latent]   (g)   at (8.65, -1.1) {$g$};
+  \draw[->] (bs1) -- (bY1);
+  \draw[->] (bs1) -- (bY2);
+  \draw[->] (bs2) -- (bY3);
+  \draw[->] (bs2) -- (bY4);
+  \draw[->] (g) -- (bY1);
+  \draw[->] (g) -- (bY2);
+  \draw[->] (g) -- (bY3);
+  \draw[->] (g) -- (bY4);
+
+  % ===== Shared observable data =====
+  \node[draw=black!70, thick, rounded corners=3pt, inner sep=6pt, fill=black!10]
+        (data) at (4.0, -2.7) {same $\mathrm{Cov}(Y_1, Y_2, Y_3, Y_4)$};
+  \draw[->, densely dashed] (2.15, -0.1) to[bend right=12] (data);
+  \draw[->, densely dashed] (6.6, -1.6) to[bend right=8] (data);
+\end{tikzpicture}
+"""
+
+# ═══════════════════════════════════════════════════════════════════════
+# 10. Systematic construct-irrelevant variance (Chapter 6, Validity)
+#     The target construct theta and a construct-irrelevant cause N are BOTH
+#     parents of the shared items: Y_j = lambda_j theta + gamma_j N + z_j.
+#     N is "systematic" because it loads on several items (not just one); if N
+#     were item-specific it would collapse into the unique factor z_j. Drawn with
+#     theta on the left (solid loadings) and N on the right (dashed loadings).
+# ═══════════════════════════════════════════════════════════════════════
+CIV_GRAPH = r"""
+\begin{tikzpicture}
+  % Observed items (vertical column)
+  \node[observed] (Y1) at (0, 3)  {$Y_1$};
+  \node[observed] (Y2) at (0, 1)  {$Y_2$};
+  \node[observed] (Y3) at (0, -1) {$Y_3$};
+  \node[observed] (Y4) at (0, -3) {$Y_4$};
+  % Target construct (left)
+  \node[latent] (th) at (-3.4, 0) {$\theta$};
+  \node[font=\small] at (-3.4, -1.15) {construct};
+  % Construct-irrelevant common cause (right)
+  \node[latent] (N) at (3.4, 0) {$N$};
+  \node[font=\small, align=center] at (3.4, -1.25) {construct-\\irrelevant};
+  % Construct loadings (solid)
+  \draw[->] (th) -- node[above, font=\scriptsize, pos=0.5]{$\lambda$} (Y1);
+  \draw[->] (th) -- (Y2);
+  \draw[->] (th) -- (Y3);
+  \draw[->] (th) -- (Y4);
+  % Nuisance loadings (dashed, to mark the unwanted source)
+  \draw[->, dashed] (N) -- node[above, font=\scriptsize, pos=0.5]{$\gamma$} (Y1);
+  \draw[->, dashed] (N) -- (Y2);
+  \draw[->, dashed] (N) -- (Y3);
+  \draw[->, dashed] (N) -- (Y4);
+\end{tikzpicture}
+"""
+
 
 if __name__ == "__main__":
     print("Generating plate diagrams (standalone TikZ -> PNG)...")
@@ -301,6 +434,9 @@ if __name__ == "__main__":
         ("plate_bt.png",           BRADLEY_TERRY),
         ("plate_ising.png",        ISING),
         ("plate_hierarchical.png", HIERARCHICAL),
+        ("nomological_network.png", NOMOLOGICAL),
+        ("nomological_equiv.png",   NOMOLOGICAL_EQUIV),
+        ("civ_graph.png",           CIV_GRAPH),
     ]
     for name, body in diagrams:
         compile_tikz(name, body)

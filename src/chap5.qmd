@@ -33,55 +33,61 @@ pyodide:
   packages:
     - numpy
     - matplotlib
-    - scipy
 ---
 
 # Reliability {#sec-reliability}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Decompose** a benchmark's response variance into person, item, person-by-item, and residual components, derived directly from the IRT response model.
 2. **Define** reliability as the person (signal) share of that variance---the generalizability coefficient---and distinguish it from validity.
-3. **Estimate** the components and the reliability they imply (ANOVA/method of moments, marginal MLE, bias-corrected plug-in), and **compute** the classical score-based coefficients (Cronbach's $\alpha$, split-half, test--retest, SEM), linked by Spearman--Brown.
+3. **Estimate** the components and the reliability they imply (ANOVA/method of moments, marginal MLE, bias-corrected plug-in), and **compute** the classical score-based coefficients (Cronbach's $\alpha$, McDonald's $\omega$, split-half, test--retest, SEM), linked by Spearman--Brown.
 4. **Diagnose** the sources of variability in AI evaluation---prompt sensitivity, sampling stochasticity, rater disagreement, item sampling---and map each to the component it feeds.
 5. **Apply** generalizability theory to multi-facet designs, using G- and D-studies to size items and raters to a target reliability, including LLM-as-a-judge protocols.
 6. **Explain** conditional reliability (precision varies with ability) and why systematic bias, such as a judge's position bias, escapes reliability analysis.
-7. **Audit** benchmarks with item-level diagnostics to flag broken items, and **design** evaluations that control the dominant sources of variability.
+7. **Select** a model's facet structure---deciding which terms a design can identify---and **design** evaluations that control the dominant sources of variability.
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
 This chapter can be covered in **3 lectures** (75-90 minutes each):
 
-**Lecture 1: From responses to variance components**
+**Lecture 1: From responses to variance components** (§5.1--5.5)
 
-- When leaderboards flicker: motivating reliability (15 min)
-- The response model and the four-term decomposition; reliability as the generalizability coefficient (25 min)
-- Estimating the components; conditional reliability across ability (20 min)
-- Hands-on: variance attribution and the plug-in bias (15 min)
+- Leaderboard flicker and the sources of variability (15 min)
+- The response model and the four-term decomposition; reliability as the generalizability coefficient (20 min)
+- Three estimators of the components: plug-in and its bias, Bayesian / empirical Bayes, and method of moments (30 min)
+- Hands-on: variance attribution, and why the interaction needs replication (25 min)
 
-**Lecture 2: Measuring and sourcing variability**
+**Lecture 2: Designing the evaluation** (§5.6--5.7)
 
-- Reliability coefficients from scores: $\alpha$, split-half, SEM, Spearman--Brown (20 min)
-- Sources of variability: prompt, stochasticity, raters, item sampling, mapped to components (25 min)
-- Hands-on: coefficients and the variability-by-mechanism simulation (15 min)
+- Generalizability theory and the D-study: sizing items and raters to a target reliability (35 min)
+- Model selection: which facets a design can identify; held-out likelihood and WAIC (30 min)
+- Hands-on: cost-optimal D-study and held-out model selection (25 min)
 
-**Lecture 3: Generalizability and design**
+**Lecture 3: Reliability across model families** (§5.8--5.11)
 
-- Generalizability theory: facets, G-studies, and D-studies (25 min)
-- LLM-as-a-judge: the rater facet, $\kappa$, and systematic bias (25 min)
-- Designing reliable evaluations (15 min)
-- Hands-on: cost-optimal D-study design (10 min)
+- Factor models and McDonald's $\omega$; the $\alpha$--$\omega$ gap (20 min)
+- Ordinal responses, LLM-as-a-judge, and agreement coefficients ($\kappa$, weighted $\kappa$, Krippendorff's $\alpha$) (25 min)
+- Classical test theory: $\alpha$, split-half, SEM, Spearman--Brown (15 min)
+- Design principles for reliable AI evaluation (10 min)
+- Hands-on: $\omega$ vs $\alpha$, and the agreement coefficients (20 min)
 :::
 
 ::: {.callout-note title="Notation"}
 This chapter is built on the response-model variance decomposition $\operatorname{Var}(Y) = V_{\text{person}} + V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}$, with reliability $\rho = V_{\text{person}} / \operatorname{Var}(Y)$---the **generalizability coefficient**. The same components appear as the random-effects variances $\sigma^2_p, \sigma^2_i, \sigma^2_{pi}$ (plus a rater facet $\sigma^2_r$), and collapse to classical test theory's $X = T + E$ with reliability $\rho_{XX'}$, Cronbach's $\alpha$, and the standard error of measurement (SEM). Other symbols: $\rho(\theta)$ and test information $I(\theta)$ for conditional reliability, and $\kappa$ (Cohen's kappa) for rater agreement. See the [notation appendix](notation.qmd) for the complete reference.
 :::
 
+::: {.callout-tip title="Video Overview" collapse="false"}
+A visual tour of the key concepts in this chapter — from why leaderboards flicker and the variance decomposition to estimating reliability, designing with G- and D-studies, LLM-judge agreement, and the classical coefficients.
+
+{{< video ../animations/ch5/chapter5_narrated.mp4 >}}
+:::
+
 
 ## Sources of Variability in AI Measurement {#sec-leaderboards-flicker}
 
-Imagine you evaluate ten language models on a reasoning benchmark. You report the rankings to your team. The next day, a colleague re-runs the same evaluation and gets a different ranking. The top two models swap places. A model that was fourth is now second. Nothing about the models changed---only the measurement procedure differed in small ways: a slightly different prompt template, a different random seed for sampling, a different subset of annotators scoring the open-ended responses.
+Imagine ten language models evaluated on a reasoning benchmark, with the rankings reported to a team. The next day, a colleague re-runs the same evaluation and gets a different ranking. The top two models swap places. A model that was fourth is now second. Nothing about the models changed---only the measurement procedure differed in small ways: a slightly different prompt template, a different random seed for sampling, a different subset of annotators scoring the open-ended responses.
 
 This is the reliability problem. Before we can ask whether a benchmark measures what it claims to measure (the validity question, addressed in @sec-validity), we must first ask a more basic question: *does the evaluation give the same answer when applied to the same thing twice?*
 
@@ -97,7 +103,7 @@ These swings have identifiable causes, and which one dominates decides the cure-
 
 **Prompt sensitivity.** Even at temperature 0, a model gives different responses under different prompt formats: "Let's think step by step," a multiple-choice versus open-ended answer format, or a reordering of the few-shot examples can shift rankings [@mizrahi2024state]. This is the *test-format effect* of educational testing---the same knowledge assessed differently by different instruments. If model $A$ beats $B$ on one template but not another, their standing is prompt-dependent, not ability-dependent.
 
-**Sampling stochasticity.** At temperature $> 0$ the same model gives different outputs to the same prompt on each run---the closest analogue to classical test--retest error. For binary items this is usually minimal (most models answer deterministically), but open-ended generations (summaries, code, essays) can earn different scores across runs. Replicated trials let you measure this run-to-run noise and average it down.
+**Sampling stochasticity.** At temperature $> 0$ the same model gives different outputs to the same prompt on each run---the closest analogue to classical test--retest error. For binary items this is usually minimal (most models answer deterministically), but open-ended generations (summaries, code, essays) can earn different scores across runs. Replicated trials make it possible to measure this run-to-run noise and average it down.
 
 **Annotator and judge disagreement.** For tasks that cannot be scored automatically---creative writing, safety, open-ended reasoning---human annotators or LLM judges assess quality, and they disagree. This is a distinct source that neither item difficulty nor model ability captures, so it needs its own treatment, which generalizability theory provides (@sec-gtheory); the special case of LLM judges---quantifying their agreement (Cohen's $\kappa$) and detecting their systematic biases---is the subject of @sec-ordinal.
 
@@ -234,9 +240,7 @@ With the estimand defined, the next three sections estimate it---plug-in from fi
 
 We now have the estimand---the components $\sigma_p^2, \sigma_i^2, \sigma_{pi}^2$ of @eq-random-effects and the reliability they define---but a finite benchmark only lets us *estimate* them. Three methods do so, and we take them in order of distance from the foundations of the earlier chapters. The most direct simply reuses the IRT machinery of @sec-foundations and @sec-efficient: fit each model's ability as a **fixed effect**, then ask how spread out the fitted abilities are.
 
-Fit the Rasch abilities $\hat\theta_1, \dots, \hat\theta_N$ by maximum likelihood with the item difficulties held fixed, and take their empirical variance as an estimate of $\sigma_p^2$. This is what much of the AI-evaluation literature does---and, uncorrected, it is biased upward.
-
-The bias has a precise form. Write each fitted ability as the truth plus estimation error, $\hat\theta_i = \theta_i + e_i$, with $\theta_i \sim \mathcal{N}(0, \sigma_p^2)$ the quantity of interest and $e_i$ the Rasch fit's error---mean zero, variance $\operatorname{Var}(e_i) = \operatorname{SE}(\hat\theta_i)^2$. The fit's error depends on the responses, not on the value of $\theta_i$, so the two are independent and their variances add:
+Fit the Rasch abilities $\hat\theta_1, \dots, \hat\theta_N$ by maximum likelihood with the item difficulties held fixed, and take their empirical variance as an estimate of $\sigma_p^2$. Without correction, this is a biased estimation. Write each fitted ability as the truth plus estimation error, $\hat\theta_i = \theta_i + e_i$, with $\theta_i \sim \mathcal{N}(0, \sigma_p^2)$ the quantity of interest and $e_i$ the Rasch fit's error---mean zero, variance $\operatorname{Var}(e_i) = \operatorname{SE}(\hat\theta_i)^2$. The fit's error depends on the responses, not on the value of $\theta_i$, so the two are independent and their variances add:
 
 $$
 \operatorname{Var}(\hat\theta_i) = \operatorname{Var}(\theta_i) + \operatorname{Var}(e_i) = \sigma_p^2 + \operatorname{SE}(\hat\theta_i)^2 .
@@ -367,7 +371,7 @@ plt.title('Reliability varies with ability'); plt.legend(fontsize=7); plt.ylim(0
 plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show()
 ```
 
-The fix is the design side of Chapter 4: pick items whose difficulty matches the ability range of interest, or select them adaptively per model (@sec-fisher-design, @sec-cat). Targeted items hold $\rho(\theta)$ high exactly where you need to tell models apart.
+The fix is the design side of Chapter 4: pick items whose difficulty matches the ability range of interest, or select them adaptively per model (@sec-fisher-design, @sec-cat). Targeted items hold $\rho(\theta)$ high exactly where models must be told apart.
 
 ## Variance Estimation via Bayesian Method {#sec-bayesian}
 
@@ -512,7 +516,7 @@ $$ {#eq-reliability-as-share}
 
 The same logic extends to more facets---raters, occasions---each adding its own variance components, the multi-facet decomposition of @eq-multifacet; generalizability theory (@sec-gtheory) estimates those components and designs around them.
 
-::: {.callout-important title="Why you need replicated trials"}
+::: {.callout-important title="Why replicated trials are needed"}
 With a *single* graded response per cell, the estimated cell probability $\hat P_{ij}$ is just $0$ or $1$, and the interaction $V_{\text{interaction}}$ is perfectly confounded with the Bernoulli residual $V_{\text{residual}}$---there is no way to tell an idiosyncratic person-item effect apart from a lucky guess. Separating them requires **replication**: multiple trials per person-item cell, so that $\hat P_{ij}$ is a within-cell average. This is the statistical reason a long-form evaluation record carries a `trial` field alongside the person and item identifiers, and it is exactly the move from a one-facet to a two-facet G-study.
 :::
 
@@ -650,7 +654,7 @@ $$
 \sigma^2_{\text{rel}} = \frac{\sigma^2_{pi}}{n_i} + \frac{\sigma^2_{pr}}{n_r} + \frac{\sigma^2_{pir,e}}{n_i \cdot n_r}
 $$
 
-The D-study plugs the estimated components into this coefficient for a *planned* design and asks how many items and raters it takes to reach, say, $G \geq 0.90$. The key insight is that you can trade off facets against each other. If rater variance dominates ($\sigma^2_{pr}$ is large), increasing $n_r$ is more cost-effective than increasing $n_i$. If item sampling variance dominates ($\sigma^2_{pi}$ is large), more items help more than more raters. The D-study makes these tradeoffs explicit and quantitative. Take the seven variance components of a simulated model×item×rater design as given (a G-study estimates them; @sec-method-of-moments, @sec-bayesian) and read off the breakdown.
+The D-study plugs the estimated components into this coefficient for a *planned* design and asks how many items and raters it takes to reach, say, $G \geq 0.90$. The key insight is that facets can be traded off against each other. If rater variance dominates ($\sigma^2_{pr}$ is large), increasing $n_r$ is more cost-effective than increasing $n_i$. If item sampling variance dominates ($\sigma^2_{pi}$ is large), more items help more than more raters. The D-study makes these tradeoffs explicit and quantitative. Take the seven variance components of a simulated model×item×rater design as given (a G-study estimates them; @sec-method-of-moments, @sec-bayesian) and read off the breakdown.
 
 ```{pyodide-python}
 #| label: gd-components
@@ -732,11 +736,11 @@ for B, g in zip(budgets, best_G):
 
 The D-study fixed *how many* items and raters to collect, but it took the **facet structure** as given---person and item main effects, a person-by-item interaction, perhaps a rater facet. Choosing that structure is the other half of design. The chapter opened with the slogan that controlling more sources of variation yields more dependable conclusions, and that is true for *bias*: a richer decomposition stops misattributing variance. But every added term costs **identifiability** and **estimation variance**, so more is not free. Deciding which terms earn their place is model selection.
 
-**Identifiability comes first.** A term you cannot separate from another cannot be selected, no matter how clever the criterion. The leading example is already in hand: with one trial per cell, the person-by-item interaction $\sigma^2_{pi}$ is perfectly confounded with the Bernoulli residual (@sec-method-of-moments)---no statistic distinguishes an idiosyncratic person--item effect from an unlucky draw. So model selection and design are coupled: *your design decides which models are even askable.* If you want to test for an interaction, the D-study must budget replicated trials per cell; otherwise the question is unanswerable and the honest move is to fuse interaction and residual into one term.
+**Identifiability comes first.** A term that cannot be separated from another cannot be selected, no matter how clever the criterion. The leading example is already in hand: with one trial per cell, the person-by-item interaction $\sigma^2_{pi}$ is perfectly confounded with the Bernoulli residual (@sec-method-of-moments)---no statistic distinguishes an idiosyncratic person--item effect from an unlucky draw. So model selection and design are coupled: *the design decides which models are even askable.* To test for an interaction, the D-study must budget replicated trials per cell; otherwise the question is unanswerable and the honest move is to fuse interaction and residual into one term.
 
 **Two interactions, two held-out tests.** "Do we need the interaction?" hides two very different questions. As an **iid** effect $\gamma_{ij}\sim\mathcal N(0,\sigma^2_{pi})$, the interaction says nothing about an unseen $(\text{model},\text{item})$ cell---its posterior there is the prior---so it is testable only by holding out *replicated trials* of seen cells. As a **structured** effect---unequal item discriminations (the 2PL of @sec-foundations) or extra latent dimensions---it changes predictions for unseen cells, and is tested by holding out *cells* with the masking schemes of @sec-masking-schemes. The second is usually the real question: "is Rasch enough, or do we need 2PL/multidimensional structure?" is prescriptive-vs-descriptive model choice in disguise.
 
-**The criterion.** Your instinct---compare likelihood on held-out data---is right, with three refinements. (i) Use the **marginal** predictive likelihood, integrating out the random effects, not the conditional likelihood at point estimates, which always flatters the richer model. (ii) Hold out the right thing (cells vs. trials, per the previous paragraph). (iii) **WAIC** and **PSIS-LOO** [@watanabe2010asymptotic; @vehtari2017practical] approximate that held-out likelihood cheaply and handle the random-effect integration; a likelihood-ratio test of $\sigma^2_{pi}=0$ is a *boundary* test (null on the edge of the parameter space), so its reference law is a $\tfrac12\chi^2_0+\tfrac12\chi^2_1$ mixture rather than a plain $\chi^2_1$---easy to misuse, another reason to prefer cross-validation. Pair any of these with residual diagnostics---Rasch infit/outfit, or the inter-item correlations of the item analysis (@sec-rasch-measurement)---which show *where* the main-effects model misfits, not merely that it does.
+**The criterion.** The natural starting point---comparing likelihood on held-out data---is correct, with three refinements. (i) Use the **marginal** predictive likelihood, integrating out the random effects, not the conditional likelihood at point estimates, which always flatters the richer model. (ii) Hold out the right thing (cells vs. trials, per the previous paragraph). (iii) **WAIC** and **PSIS-LOO** [@watanabe2010asymptotic; @vehtari2017practical] approximate that held-out likelihood cheaply and handle the random-effect integration; a likelihood-ratio test of $\sigma^2_{pi}=0$ is a *boundary* test (null on the edge of the parameter space), so its reference law is a $\tfrac12\chi^2_0+\tfrac12\chi^2_1$ mixture rather than a plain $\chi^2_1$---easy to misuse, another reason to prefer cross-validation. Pair any of these with residual diagnostics---Rasch infit/outfit, or the inter-item correlations of the item analysis (@sec-rasch-measurement)---which show *where* the main-effects model misfits, not merely that it does.
 
 The simulation generates replicated responses from an additive-plus-interaction model and compares two fits on held-out trials---a **main-effects** model (person and item effects only) and a **saturated** model (a free probability per cell, the interaction taken to the limit)---as replication grows.
 
@@ -782,7 +786,7 @@ print(f"no interaction, T=2 : main={a0[0]:.4f}  saturated={a0[1]:.4f}  (main win
 print(f"real interaction, T=32: main={a1[0]:.4f}  saturated={a1[1]:.4f}  (saturated wins)")
 ```
 
-**What actually decides it.** Held-out likelihood answers "does the term improve prediction," but the chapter's framing points at the sharper question: *does the term change the conclusion you care about*---the reliability number, the ranking? Adding $\sigma^2_{pi}$ lowers bias in the reliability estimate but raises its variance, and in the small-data regime the simpler model can yield a **more dependable** conclusion even while slightly biased. A term that is statistically "significant" yet leaves the ranking untouched has not earned its place; one that drops reliability from $0.9$ to $0.6$ plainly has. Select the model against the decision, not against fit in the abstract---which is exactly why model selection belongs next to design rather than apart from it.
+**What actually decides it.** Held-out likelihood answers "does the term improve prediction," but the chapter's framing points at the sharper question: *does the term change the conclusion of interest*---the reliability number, the ranking? Adding $\sigma^2_{pi}$ lowers bias in the reliability estimate but raises its variance, and in the small-data regime the simpler model can yield a **more dependable** conclusion even while slightly biased. A term that is statistically "significant" yet leaves the ranking untouched has not earned its place; one that drops reliability from $0.9$ to $0.6$ plainly has. Select the model against the decision, not against fit in the abstract---which is exactly why model selection belongs next to design rather than apart from it.
 
 ## Generalizability for Factor Models {#sec-factor}
 
@@ -1147,67 +1151,35 @@ print(f"inconsistency: no bias = {inconsistency[0]:.3f}, strong bias = {inconsis
 
 ## Generalizability for CTT {#sec-ctt}
 
-The estimators so far---plug-in (@sec-plug-in), Bayesian (@sec-bayesian), and method of moments (@sec-method-of-moments)---read the variance components off the full response matrix. Classical test theory (CTT) asks for less, estimating reliability from *total scores alone* through a coarser model.
+The estimators so far---plug-in (@sec-plug-in), Bayesian (@sec-bayesian), and method of moments (@sec-method-of-moments)---read the variance components off the full response matrix. Classical test theory (CTT), their early-twentieth-century antecedent, asks for less: it recovers reliability from *total scores alone*, with no fitted item parameters. It keeps the same decomposition but bundles every non-person term into a single *error*, writing the observed score $X = T + E$ with true score $T_i = \mathbb{E}[X_i]$, $\sigma_T^2 = V_{\text{person}}$, and $\sigma_E^2 = V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}$. Reliability is the true-score share $\rho_{XX'} = \sigma_T^2 / \sigma_X^2$---for a single graded response exactly the person share of @eq-reliability-as-share, the same object the response model and generalizability theory estimate, now read off the scores rather than fitted.
 
-Classical test theory (CTT), their early-twentieth-century antecedent, keeps the same decomposition with only one distinction: bundle every non-person term into a single *error* $E$ and write the observed score as $X = T + E$, with *true score* $T_i = \mathbb{E}[X_i]$ (the mean over hypothetical replications), $\sigma_T^2 = V_{\text{person}}$, and $\sigma_E^2 = V_{\text{item}} + V_{\text{interaction}} + V_{\text{residual}}$. Its reliability is the true-score share $\rho_{XX'} = \sigma_T^2 / \sigma_X^2$---for a single graded response exactly the person share of @eq-reliability-as-share, and for a benchmark total over many items higher still (the same ratio that appears as Chapter 3's CAT stopping rule $R = 1 - \sigma^2_{\text{post}}/\sigma^2_{\text{prior}}$). So the response model, CTT, and generalizability theory are three views of one object; what CTT adds is not a new decomposition but a toolkit of coefficients for estimating $\rho_{XX'}$ from scores alone.
-
-The method-of-moments decomposition (@sec-method-of-moments) used the full response matrix; in practice you often have only *total scores*---one accuracy number per model, with no fitted item parameters. The coefficients in this section, inherited from classical test theory, estimate the person share $\rho_{XX'}$ (@eq-reliability-as-share) directly from such scores. They also resolve a puzzle from that decomposition: the reliability of a *single* graded response came out around $0.09$, yet benchmarks with hundreds of items rank models stably. The reconciliation is aggregation---averaging over many items multiplies signal relative to noise---and the Spearman--Brown formula (@eq-spearman-brown) makes it quantitative. The standard error of measurement turns a reliability into an error bar on each model's score; the coefficients that follow---test--retest, split-half, and Cronbach's $\alpha$---estimate that reliability from data alone.
-
-### Standard Error of Measurement {#sec-sem}
-
-The standard error of measurement (SEM) translates reliability into a confidence interval around individual scores:
+Because true scores are unobservable, $\rho_{XX'}$ must be inferred from how scores covary, and the classical coefficients are just different cuts of that one quantity. They also settle a puzzle from @sec-method-of-moments: a *single* graded response had reliability near $0.09$, yet hundred-item benchmarks rank models stably. The reconciliation is aggregation, made exact by the **Spearman--Brown** length law---a test of $K$ parallel length-$M$ forms with per-form reliability $\rho$ has reliability
 
 $$
-\text{SEM} = \sigma_X \sqrt{1 - \rho_{XX'}}
-$$
+\rho_K = \frac{K \rho}{1 + (K-1)\rho},
+$$ {#eq-spearman-brown}
 
-For AI benchmarks, SEM has direct practical implications. Suppose a benchmark reports accuracy scores with a standard deviation of $\sigma_X = 5$ percentage points and reliability $\rho_{XX'} = 0.90$. Then:
+so reliability climbs predictably as items accumulate (a 50-item benchmark at $\rho = 0.80$ reaches $0.89$ at 100 items and $0.94$ at 200): averaging many noisy items multiplies signal over noise.
 
-$$
-\text{SEM} = 5 \sqrt{1 - 0.90} \approx 1.58 \text{ points}
-$$
+Three coefficients estimate the *same* $\rho_{XX'}$ from different data structures, each trading what it assumes for what it requires:
 
-A 95% confidence interval around any model's score spans approximately $\pm 2 \times \text{SEM} \approx \pm 3.2$ points. Two models whose scores differ by less than this margin may not be meaningfully different---their ranking could easily reverse on a replication. This is a common situation on crowded leaderboards where dozens of models cluster within a few percentage points of each other.
-
-
-### Reliability Coefficients {#sec-reliability-coefficients}
-
-Since true scores are unobservable, reliability must be estimated from data. Three classical approaches correspond to different experimental designs, each suited to different AI evaluation scenarios.
-
-**Test-retest reliability.** Administer the same benchmark to the same models on two occasions and correlate the scores. For AI: re-run the evaluation with temperature $> 0$ (different random seeds), or have the same annotators score the same outputs on two occasions. The Pearson correlation between the two sets of scores estimates $\rho_{XX'}$. This method is simple but conflates all sources of occasion-to-occasion variability into a single number.
-
-**Split-half reliability.** Randomly divide the benchmark items into two halves, score each half separately, and correlate the half-scores. The Spearman-Brown correction adjusts for the fact that each half is only half as long as the full test:
+- **Test--retest** correlates scores from two occasions---re-running at temperature $> 0$, or re-scoring the same outputs---so the Pearson correlation estimates $\rho_{XX'}$, but folds every occasion-to-occasion source into one number.
+- **Split-half** correlates two half-tests and rescales the half-length correlation by Spearman--Brown, $\rho_{XX'} = 2 r_{12}/(1 + r_{12})$, needing no re-run.
+- **Cronbach's $\alpha$** averages over *all* splits at once,
 
 $$
-\rho_{XX'} = \frac{2 r_{12}}{1 + r_{12}}
-$$
-
-where $r_{12}$ is the correlation between the two half-scores. For AI evaluation, this is easy to compute from existing data---no re-running required.
-
-**Internal consistency (Cronbach's alpha).** The most widely used reliability coefficient generalizes split-half reliability by averaging over all possible splits:
-
-$$
-\alpha = \frac{M}{M - 1} \left(1 - \frac{\sum_{j=1}^M \sigma^2_j}{\sigma^2_X}\right)
+\alpha = \frac{M}{M - 1}\left(1 - \frac{\sum_{j=1}^M \sigma^2_j}{\sigma^2_X}\right),
 $$ {#eq-cronbach-alpha}
 
-where $M$ is the number of items, $\sigma^2_j$ is the variance of item $j$ across models, and $\sigma^2_X$ is the variance of total scores.
+with $\sigma^2_j$ the variance of item $j$ and $\sigma^2_X$ the total-score variance---the internal-consistency coefficient, and (from @sec-factor) the tau-equivalent special case of McDonald's $\omega$.
 
-::: {.callout-warning title="What Cronbach's Alpha Does and Does Not Tell You"}
-Alpha measures how much items covary relative to total variance. High alpha means the items are measuring something in common. But alpha does *not* tell you: (a) whether that common thing is unidimensional, (b) whether that thing is the construct you intended, or (c) whether the test is free of systematic bias.
+::: {.callout-warning title="What Cronbach's Alpha Does and Does Not Reveal"}
+Alpha measures how much items covary relative to total variance. High alpha means the items are measuring something in common. But alpha does *not* indicate: (a) whether that common thing is unidimensional, (b) whether that thing is the intended construct, or (c) whether the test is free of systematic bias.
 
 A benchmark with $\alpha = 0.95$ might be reliably measuring training data contamination rather than the intended capability. High reliability is necessary but not sufficient for good measurement.
 :::
 
-
-**The Spearman-Brown prophecy formula** predicts how reliability changes with test length. If a test of $M$ items has reliability $\rho$, a test of $KM$ items (made of $K$ parallel forms) has reliability:
-
-$$
-\rho_K = \frac{K \rho}{1 + (K-1)\rho}
-$$ {#eq-spearman-brown}
-
-This formula is practically important: it tells you how many items you need to achieve a target reliability. If your 50-item benchmark has $\rho = 0.80$, you need $K = 2$ (100 items) to reach $\rho = 0.89$, or $K = 4$ (200 items) to reach $\rho = 0.94$.
-
-To see these coefficients in action, simulate a 100-model, 100-item Rasch benchmark and start with split-half reliability: correlate two half-test scores, then apply the Spearman--Brown correction.
+Simulate a 100-model, 100-item Rasch benchmark: split-half correlates two half-test scores, then Spearman--Brown rescales to the full length.
 
 ```{pyodide-python}
 #| label: rc-split-half
@@ -1215,7 +1187,6 @@ To see these coefficients in action, simulate a 100-model, 100-item Rasch benchm
 #| fig-cap: "Split-half reliability on a simulated 100-item Rasch benchmark: the two half-test scores correlate strongly, and the Spearman--Brown correction rescales the half-length correlation to the full test."
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import pearsonr
 
 def sigmoid(x):
     return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
@@ -1227,7 +1198,7 @@ beta  = np.random.normal(0, 1.5, M)
 Y = (np.random.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)
 
 half1, half2 = Y[:, :M // 2].mean(1), Y[:, M // 2:].mean(1)
-r12    = pearsonr(half1, half2)[0]
+r12    = np.corrcoef(half1, half2)[0, 1]
 rho_sb = 2 * r12 / (1 + r12)                        # Spearman-Brown correction
 
 plt.figure(figsize=(3.2, 2))
@@ -1263,7 +1234,13 @@ plt.legend(fontsize=7); plt.grid(True, alpha=0.3); plt.tight_layout(); plt.show(
 print(f"alpha: {M} items = {alphas[-1]:.3f};  Spearman-Brown from 5 items = {sb_pred[-1]:.3f}")
 ```
 
-Finally, the standard error of measurement shrinks as reliability rises with more items, tightening the error bar on each model's score.
+**From reliability to an error bar.** A coefficient earns its keep once turned into uncertainty on each score. The **standard error of measurement** does exactly that, shrinking the spread of observed scores by the fraction that is noise:
+
+$$
+\text{SEM} = \sigma_X \sqrt{1 - \rho_{XX'}}.
+$$
+
+A benchmark with score spread $\sigma_X = 5$ points and $\rho_{XX'} = 0.90$ has $\text{SEM} \approx 1.58$ points, so a 95% interval around any model spans $\pm 2\,\text{SEM} \approx \pm 3.2$ points: two models closer than that may swap ranks on a replication---the usual situation on crowded leaderboards where dozens of models cluster within a few points. As reliability rises with test length, the SEM shrinks in step.
 
 ```{pyodide-python}
 #| label: rc-sem
@@ -1284,15 +1261,15 @@ print(f"full test ({M} items): alpha = {alphas[-1]:.3f}, SEM = {sems[-1]:.4f}")
 
 The theory developed in this chapter yields concrete design principles:
 
-1. **Know your dominant source of variability** (@sec-gtheory). Run a G-study before committing to a design. If rater variability dominates, invest in more raters or clearer rubrics; if item-sampling variability dominates, use more items or D-optimal selection.
+1. **Identify the dominant source of variability** (@sec-gtheory). Run a G-study before committing to a design. If rater variability dominates, invest in more raters or clearer rubrics; if item-sampling variability dominates, use more items or D-optimal selection.
 
 2. **Match items to the ability range of interest** (@sec-plug-in). Conditional reliability varies across ability levels; ranking frontier models needs items hard enough to discriminate among them.
 
 3. **Use multiple judges when scoring is subjective** (@sec-ordinal). The D-study quantifies the gain: three independent judges with majority vote are substantially more reliable than one, and often cheaper than more items.
 
-4. **Report confidence intervals, not just point estimates** (@sec-sem). Two models whose scores overlap within $\pm 2\,\text{SEM}$ may not be meaningfully different; leaderboards should mark which ranking differences are reliable.
+4. **Report confidence intervals, not just point estimates** (@sec-ctt). Two models whose scores overlap within $\pm 2\,\text{SEM}$ may not be meaningfully different; leaderboards should mark which ranking differences are reliable.
 
-5. **Control what you can** (@sec-leaderboards-flicker). Score at temperature 0, randomize and average over prompt formats, standardize rubrics---these *eliminate* sources of variability rather than averaging over them.
+5. **Control what can be controlled** (@sec-leaderboards-flicker). Score at temperature 0, randomize and average over prompt formats, standardize rubrics---these *eliminate* sources of variability rather than averaging over them.
 
 6. **Separate reliability from validity** (@sec-validity). High reliability is necessary but not sufficient: a benchmark can be reliable while systematically measuring the wrong thing (contamination, shortcut features, length bias).
 
@@ -1300,7 +1277,9 @@ The theory developed in this chapter yields concrete design principles:
 
 ## Bibliographic Notes {#sec-reliability-bib}
 
-**Classical test theory.** The foundational reference is @lord1968statistical, which formalized CTT axiomatically. @cronbach1951coefficient introduced coefficient alpha, the most widely used reliability statistic. The Spearman-Brown formula dates to Spearman (1910) and Brown (1910) independently. For the connection between CTT and IRT-based reliability, see Chapter 7 of @hambleton1985irt.
+**Classical test theory.** The foundational reference is @lord1968statistical, which formalized CTT axiomatically. @cronbach1951coefficient introduced coefficient alpha, the most widely used reliability statistic. The Spearman--Brown formula dates to @spearman1910correlation and @brown1910some independently. For the connection between CTT and IRT-based reliability, see Chapter 7 of @hambleton1985irt.
+
+**Variance decomposition and component estimation.** The decomposition of a function's variance into additive main-effect and interaction terms---the *functional ANOVA* this chapter builds on---was introduced for $U$-statistics by @hoeffding1948class and, in the global-sensitivity literature, by @sobol2001global; @efron1981jackknife give the closely related variance bound. Estimating the resulting variance components from data is the subject of @searle1992variance: the method-of-moments (expected mean squares) route traces to @henderson1953estimation, and restricted maximum likelihood (REML)---the modern default for unbalanced designs---to @patterson1971recovery.
 
 **Generalizability theory.** G-theory was developed by @cronbach1972dependability, building on earlier work by Cronbach on the multiple sources of measurement error. @brennan2001generalizability provides the comprehensive modern treatment. @shavelson1991generalizability offers an accessible primer. The connection between G-theory and mixed-effects models makes modern software (e.g., `lme4` in R) directly applicable to G-studies.
 
@@ -1314,8 +1293,6 @@ The theory developed in this chapter yields concrete design principles:
 
 **LLM-as-a-judge.** @zheng2023judging introduced the LLM-as-a-judge paradigm and the MT-Bench evaluation framework. Position bias was documented by @wang2023large. @shankar2024validates addresses the question of validating LLM judges against human preferences. For prompt sensitivity in evaluation, see @mizrahi2024state. @biderman2024lessons discusses reproducibility challenges in language model evaluation more broadly.
 
-**Item-level diagnostics.** Classical item analysis --- computing item-total correlations, inter-item correlations, and Mokken scalability coefficients to identify misfitting items --- is a standard step in educational test development. @truong2025bugs apply these techniques to AI benchmarks at scale, showing that items flagged by negative tetrachoric correlations or low scalability coefficients frequently contain genuine errors (incorrect keys, ambiguous wording, grading bugs). Their framework is grounded in the Rasch model's sufficiency property: if sum scores are sufficient statistics for ability, all inter-item correlations must be non-negative, making violations a principled diagnostic signal (@sec-rasch-measurement). They recommend evaluating with 60--80 LLMs from at least 10 organizations for reliable detection.
-
 ## Exercises {#sec-reliability-exercises}
 
 The first six exercises are conceptual; the rest involve derivation or implementation, marked $\star$ (straightforward) to $\star\star\star$ (challenging).
@@ -1324,13 +1301,13 @@ The first six exercises are conceptual; the rest involve derivation or implement
 
 2. **Reliability vs. number of items.** Spearman--Brown predicts that longer tests are more reliable, and AI benchmarks often have thousands of items---far more than typical educational tests. Does this make them automatically reliable? What assumptions might be violated?
 
-3. **LLM-as-a-judge tradeoffs.** Using an LLM as a judge is cheaper than human annotation but introduces model-specific biases. Under what conditions would you prefer a less accurate but more reliable judge? How does generalizability theory formalize the tradeoff?
+3. **LLM-as-a-judge tradeoffs.** Using an LLM as a judge is cheaper than human annotation but introduces model-specific biases. Under what conditions is a less accurate but more reliable judge preferable? How does generalizability theory formalize the tradeoff?
 
 4. **Reliability across model generations.** When a new generation of models is released, a benchmark's reliability can change as item difficulties shift relative to model abilities. How should benchmark developers monitor and maintain reliability over time?
 
 5. **The reliability--validity tension.** A benchmark of 1000 copies of the same easy question would have extremely high internal consistency but near-zero validity. How does this illustrate the distinction, and what design principles prevent it?
 
-6. **Item removal and the Spearman--Brown tension.** @truong2025bugs find that removing items with negative item--total correlations improves both reliability and validity, yet removing items shortens the test, which Spearman--Brown says *reduces* reliability. When does item removal help on net, and how would you design an iterative screening procedure that balances the two?
+6. **The item-removal paradox.** Spearman--Brown says shortening a test *lowers* reliability, yet dropping an item that correlates poorly with the rest can *raise* Cronbach's $\alpha$. Reconcile these: when does removing an item help reliability on net, and what does that reveal about the equal-quality (parallel-items) assumption behind Spearman--Brown? (The item-quality diagnostics that flag such items are developed in @sec-nonparametric-irt.)
 
 7. **Deriving reliability** ($\star$). Starting from the CTT model $X = T + E$ with the standard assumptions ($\mathbb{E}[E] = 0$, $\operatorname{Cov}(T, E) = 0$), derive $\rho_{XX'} = \sigma^2_T / \sigma^2_X$, and show reliability equals the squared correlation between observed and true scores, $\rho_{XX'} = r^2_{XT}$.
 
@@ -1348,8 +1325,12 @@ The first six exercises are conceptual; the rest involve derivation or implement
 
 14. **Chatbot Arena reliability** ($\star\star$). The Chatbot Arena uses a single human preference judgment per comparison. Using generalizability theory, analyze the reliability of the resulting Elo ratings: how many comparisons per model pair would reach $G \geq 0.90$, and what are the cost implications?
 
-15. **Item-bug detection** ($\star\star$). Implement the diagnostic of @truong2025bugs: simulate a Rasch benchmark with $N = 80$ models and $M = 200$ items, introduce 20 buggy items (10 with flipped keys, 10 answered at random), and rank items by (a) item--total correlation, (b) average tetrachoric correlation, and (c) Mokken $H_j$. Report precision@20 and recall@20 for each, and study how performance varies as the number of models grows from 10 to 100.
+15. **Ordinal reliability: interval vs. latent** ($\star\star$). Simulate 1--5 judge ratings from the graded-response model of @eq-graded-response with a judge scale-usage effect. Compute the generalizability coefficient (a) by treating the scale as interval (@sec-ordinal) and (b) from the fitted latent threshold model. When do the two diverge, and how does the gap depend on the number of categories $K$ and the size of the scale-usage effect?
 
-16. **Ordinal reliability: interval vs. latent** ($\star\star$). Simulate 1--5 judge ratings from the graded-response model of @eq-graded-response with a judge scale-usage effect. Compute the generalizability coefficient (a) by treating the scale as interval (@sec-ordinal) and (b) from the fitted latent threshold model. When do the two diverge, and how does the gap depend on the number of categories $K$ and the size of the scale-usage effect?
+16. **Weighted kappa and the ICC** ($\star\star$). Show that quadratic-weighted kappa equals the intraclass correlation for two raters on an interval scale. Then simulate ordinal ratings and verify numerically that unweighted kappa understates agreement while quadratic-weighted kappa tracks the Pearson correlation between raters. Why does this make quadratic-weighted kappa the natural rater-facet generalizability coefficient for ordinal data?
 
-17. **Weighted kappa and the ICC** ($\star\star$). Show that quadratic-weighted kappa equals the intraclass correlation for two raters on an interval scale. Then simulate ordinal ratings and verify numerically that unweighted kappa understates agreement while quadratic-weighted kappa tracks the Pearson correlation between raters. Why does this make quadratic-weighted kappa the natural rater-facet generalizability coefficient for ordinal data?
+17. **McDonald's $\omega$ from first principles** ($\star\star$). Starting from the congeneric one-factor model $X_{ij} = \nu_j + \lambda_j\theta_i + \varepsilon_{ij}$ (@eq-factor-model), derive the total-score reliability $\omega = (\sum_j \lambda_j)^2\sigma_\theta^2 / [(\sum_j \lambda_j)^2\sigma_\theta^2 + \sum_j \psi_j]$. Simulate items with unequal loadings and verify numerically that $\alpha < \omega \approx$ the true reliability; then set all loadings equal and confirm $\omega$ collapses to the Spearman--Brown step-up of the single-item reliability (@eq-reliability-latent).
+
+18. **Does the interaction earn its place?** ($\star\star\star$). Generate replicated binary responses from a model with a person-by-item interaction ($\sigma^2_{pi} > 0$) and from one without. For each, fit a main-effects model and a saturated (per-cell) model and compare them by held-out log-likelihood on (a) masked cells and (b) masked trials. Show that the iid interaction is selectable only from held-out *trials*, and only once replication is sufficient (@sec-model-selection). Why does a held-out-*cell* comparison fail to detect it?
+
+19. **Empirical Bayes vs. full Bayes** ($\star\star$). With one binary trial per cell and abilities $\theta_i \sim \mathcal{N}(0, \sigma_p^2)$, estimate $\sigma_p$ two ways: by marginal maximum likelihood (the evidence peak) and by reporting the full posterior mean and 95\% credible interval under a flat hyperprior (@sec-bayesian). Explain why the two point estimates differ and why the credible interval is wide when there is only one trial per cell.

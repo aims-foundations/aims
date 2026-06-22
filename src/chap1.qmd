@@ -37,7 +37,7 @@ pyodide:
 # The Data Landscape {#sec-data-landscape}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Describe** the response matrix $Y_{ij}$ as the universal data structure underlying AI evaluation and identify what constitutes a "subject" and an "item" across different evaluation paradigms.
 2. **Classify** AI benchmarks along multiple axes: domain, response type, evaluation structure, and cultural scope.
@@ -701,17 +701,17 @@ The response matrices loaded by `torch_measure` are the raw material for everyth
 
 ## Discussion Questions {#sec-data-discussion}
 
-1. **The subject identity problem.** For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5 [@jimenez2023swe]. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How would you design a study to decompose these contributions? What does this imply for the dimensionality of the response matrix?
+1. **The subject identity problem.** For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5 [@jimenez2023swe]. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How could a study be designed to decompose these contributions? What does this imply for the dimensionality of the response matrix?
 
 2. **Cultural validity of benchmarks.** AfriMedQA evaluates medical knowledge in African healthcare contexts [@nimo2025afrimedqa]. A model trained primarily on US/European medical data might score poorly not because it lacks medical reasoning but because it lacks knowledge of local disease prevalence, treatment protocols, and healthcare infrastructure. Is this a validity threat (construct-irrelevant variance) or a genuine measurement of the construct (medical reasoning *in context*)? How does the answer depend on the intended use?
 
-3. **Dynamic vs. static benchmarks.** LiveCodeBench adds new problems from ongoing competitions to avoid contamination [@jain2024livecodebench]. But this means a model's "ability" is estimated from different items at different points in time. Under what conditions is this a problem? How would you use IRT equating procedures to maintain a common scale?
+3. **Dynamic vs. static benchmarks.** LiveCodeBench adds new problems from ongoing competitions to avoid contamination [@jain2024livecodebench]. But this means a model's "ability" is estimated from different items at different points in time. Under what conditions is this a problem? How can IRT equating procedures maintain a common scale?
 
-4. **Preference data and transitivity.** The Bradley-Terry model assumes transitive preferences: if $A \succ B$ and $B \succ C$, then $A \succ C$. But human preferences often violate transitivity. How would you detect and quantify transitivity violations in Chatbot Arena data? What are the implications for using Elo ratings as a measure of model quality?
+4. **Preference data and transitivity.** The Bradley-Terry model assumes transitive preferences: if $A \succ B$ and $B \succ C$, then $A \succ C$. But human preferences often violate transitivity. How can transitivity violations in Chatbot Arena data be detected and quantified? What are the implications for using Elo ratings as a measure of model quality?
 
-5. **The missing data problem.** In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density [@jimenez2023swe]) while others have systematic gaps (LiveCodeBench: 88.8% [@jain2024livecodebench]). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions would you trust ability estimates from a sparse matrix?
+5. **The missing data problem.** In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density [@jimenez2023swe]) while others have systematic gaps (LiveCodeBench: 88.8% [@jain2024livecodebench]). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions are ability estimates from a sparse matrix trustworthy?
 
-6. **Intervention matrices and causal inference.** The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam --- the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How would you design an evaluation framework that distinguishes AI-augmented performance from durable human capability? Consider the implications for domains beyond education --- for instance, would a doctor's diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?
+6. **Intervention matrices and causal inference.** The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam --- the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How could an evaluation framework distinguish AI-augmented performance from durable human capability? Consider the implications for domains beyond education --- for instance, would a doctor's diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?
 
 
 ## Bibliographic Notes {#sec-data-bib}

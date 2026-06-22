@@ -41,7 +41,7 @@ pyodide:
 # Learning {#sec-learning}
 
 ::: {.callout-note title="Intended Learning Outcomes"}
-By the end of this chapter, you will be able to:
+By the end of this chapter, the reader will be able to:
 
 1. **Derive** the log-likelihood function for the Rasch model and explain the role of person and item parameters.
 2. **Implement** maximum likelihood estimation (MLE) for IRT models using gradient ascent and L-BFGS optimization.

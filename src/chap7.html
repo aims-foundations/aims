@@ -826,21 +826,27 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Information and Mechanism Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Evaluation Ecosystem and Its Governance</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Red-Teaming and Adversarial Evaluation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Information and Mechanism Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Red-Teaming and Adversarial Evaluation</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/chap10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+  <a href="../src/chap11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -955,7 +961,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>By the end of this chapter, you will be able to:</p>
+<p>By the end of this chapter, the reader will be able to:</p>
 <ol type="1">
 <li><strong>Formulate</strong> causal models for AI evaluation and distinguish causal from associational claims about benchmark performance.</li>
 <li><strong>Apply</strong> structural causal models (SCMs) to represent the data-generating process behind evaluation data, including the roles of training data, model architecture, and benchmark design.</li>
@@ -1417,9 +1423,9 @@ P^{(t)}(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha
 <section id="sec-causality-discussion" class="level2" data-number="7.7">
 <h2 data-number="7.7" class="anchored" data-anchor-id="sec-causality-discussion"><span class="header-section-number">7.7</span> Discussion Questions</h2>
 <ol type="1">
-<li><p>A benchmark uses Computerized Adaptive Testing (<a href="chap4.html#sec-cat" class="quarto-xref"><span>Section 4.2.2</span></a>) to select items. A critic argues that the resulting accuracy is “biased because models only answered items matched to their ability level.” Using the off-policy evaluation framework, explain whether this criticism is valid and how you would correct the estimate if needed.</p></li>
+<li><p>A benchmark uses Computerized Adaptive Testing (<a href="chap4.html#sec-cat" class="quarto-xref"><span>Section 4.2.2</span></a>) to select items. A critic argues that the resulting accuracy is “biased because models only answered items matched to their ability level.” Using the off-policy evaluation framework, explain whether this criticism is valid and how the estimate could be corrected if needed.</p></li>
 <li><p>Two benchmarks both claim to measure “reasoning.” On Benchmark A, Model X outperforms Model Y. On Benchmark B, the ranking reverses. Draw a DAG that explains this reversal (hint: consider Simpson’s paradox). What causal assumptions would make the Benchmark A ranking the correct one?</p></li>
-<li><p>Prediction-powered inference assumes that the model predictions <span class="math inline">\(\hat{Y}\)</span> are informative about the true labels <span class="math inline">\(Y\)</span>. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator’s consistency, and how would you detect the failure?</p></li>
+<li><p>Prediction-powered inference assumes that the model predictions <span class="math inline">\(\hat{Y}\)</span> are informative about the true labels <span class="math inline">\(Y\)</span>. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator’s consistency, and how could the failure be detected?</p></li>
 <li><p>A company evaluates its model on an internal benchmark (source) and wants to predict performance on a customer-facing deployment (target). What information is needed to determine whether the benchmark results are transportable? Which assumptions are untestable from the source data alone?</p></li>
 <li><p>Conformal prediction guarantees <em>marginal</em> coverage: <span class="math inline">\(P(Y \in C_\alpha) \geq 1 - \alpha\)</span> on average over the test distribution. Why is this weaker than <em>conditional</em> coverage (<span class="math inline">\(P(Y \in C_\alpha \mid X = x) \geq 1 - \alpha\)</span> for each <span class="math inline">\(x\)</span>), and when does the distinction matter for AI evaluation?</p></li>
 </ol>
@@ -1450,7 +1456,7 @@ P^{(t)}(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha
 </ol>
 <p><strong>Discussion</strong></p>
 <ol start="8" type="1">
-<li><span class="citation" data-cites="angelopoulos2023prediction">Angelopoulos et al. (<a href="#ref-angelopoulos2023prediction" role="doc-biblioref">2023</a>)</span>’s PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the “expensive” labels are actual model runs and the “cheap” predictions are the PPE cold-start predictions from <span class="quarto-unresolved-ref">?sec-cold-start</span>. Design a practical PPI pipeline for evaluating a new model on 10,000 items when you can only afford to run 500 actual evaluations. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</li>
+<li><span class="citation" data-cites="angelopoulos2023prediction">Angelopoulos et al. (<a href="#ref-angelopoulos2023prediction" role="doc-biblioref">2023</a>)</span>’s PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the “expensive” labels are actual model runs and the “cheap” predictions are the PPE cold-start predictions from <span class="quarto-unresolved-ref">?sec-cold-start</span>. Design a practical PPI pipeline for evaluating a new model on 10,000 items when only 500 actual evaluations can be afforded. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</li>
 </ol>
 
 
@@ -1977,8 +1983,8 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/chap8.html" class="pagination-link" aria-label="Information and Mechanism Design">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Information and Mechanism Design</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/chap8.html" class="pagination-link" aria-label="The Evaluation Ecosystem and Its Governance">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Evaluation Ecosystem and Its Governance</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -2023,7 +2029,7 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
 <span id="cb1-39"><a href="#cb1-39"></a><span class="fu"># Causality and Distribution Shift {#sec-causality}</span></span>
 <span id="cb1-40"><a href="#cb1-40"></a></span>
 <span id="cb1-41"><a href="#cb1-41"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb1-42"><a href="#cb1-42"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb1-42"><a href="#cb1-42"></a>By the end of this chapter, the reader will be able to:</span>
 <span id="cb1-43"><a href="#cb1-43"></a></span>
 <span id="cb1-44"><a href="#cb1-44"></a><span class="ss">1. </span>**Formulate** causal models for AI evaluation and distinguish causal from associational claims about benchmark performance.</span>
 <span id="cb1-45"><a href="#cb1-45"></a><span class="ss">2. </span>**Apply** structural causal models (SCMs) to represent the data-generating process behind evaluation data, including the roles of training data, model architecture, and benchmark design.</span>
@@ -2823,11 +2829,11 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
 <span id="cb1-839"><a href="#cb1-839"></a></span>
 <span id="cb1-840"><a href="#cb1-840"></a><span class="fu">## Discussion Questions {#sec-causality-discussion}</span></span>
 <span id="cb1-841"><a href="#cb1-841"></a></span>
-<span id="cb1-842"><a href="#cb1-842"></a><span class="ss">1. </span>A benchmark uses Computerized Adaptive Testing (@sec-cat) to select items. A critic argues that the resulting accuracy is "biased because models only answered items matched to their ability level." Using the off-policy evaluation framework, explain whether this criticism is valid and how you would correct the estimate if needed.</span>
+<span id="cb1-842"><a href="#cb1-842"></a><span class="ss">1. </span>A benchmark uses Computerized Adaptive Testing (@sec-cat) to select items. A critic argues that the resulting accuracy is "biased because models only answered items matched to their ability level." Using the off-policy evaluation framework, explain whether this criticism is valid and how the estimate could be corrected if needed.</span>
 <span id="cb1-843"><a href="#cb1-843"></a></span>
 <span id="cb1-844"><a href="#cb1-844"></a><span class="ss">2. </span>Two benchmarks both claim to measure "reasoning." On Benchmark A, Model X outperforms Model Y. On Benchmark B, the ranking reverses. Draw a DAG that explains this reversal (hint: consider Simpson's paradox). What causal assumptions would make the Benchmark A ranking the correct one?</span>
 <span id="cb1-845"><a href="#cb1-845"></a></span>
-<span id="cb1-846"><a href="#cb1-846"></a><span class="ss">3. </span>Prediction-powered inference assumes that the model predictions $\hat{Y}$ are informative about the true labels $Y$. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator's consistency, and how would you detect the failure?</span>
+<span id="cb1-846"><a href="#cb1-846"></a><span class="ss">3. </span>Prediction-powered inference assumes that the model predictions $\hat{Y}$ are informative about the true labels $Y$. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator's consistency, and how could the failure be detected?</span>
 <span id="cb1-847"><a href="#cb1-847"></a></span>
 <span id="cb1-848"><a href="#cb1-848"></a><span class="ss">4. </span>A company evaluates its model on an internal benchmark (source) and wants to predict performance on a customer-facing deployment (target). What information is needed to determine whether the benchmark results are transportable? Which assumptions are untestable from the source data alone?</span>
 <span id="cb1-849"><a href="#cb1-849"></a></span>
@@ -2871,7 +2877,7 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
 <span id="cb1-887"><a href="#cb1-887"></a></span>
 <span id="cb1-888"><a href="#cb1-888"></a>**Discussion**</span>
 <span id="cb1-889"><a href="#cb1-889"></a></span>
-<span id="cb1-890"><a href="#cb1-890"></a><span class="ss">8. </span>@angelopoulos2023prediction's PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the "expensive" labels are actual model runs and the "cheap" predictions are the PPE cold-start predictions from @sec-cold-start. Design a practical PPI pipeline for evaluating a new model on 10,000 items when you can only afford to run 500 actual evaluations. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-890"><a href="#cb1-890"></a><span class="ss">8. </span>@angelopoulos2023prediction's PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the "expensive" labels are actual model runs and the "cheap" predictions are the PPE cold-start predictions from @sec-cold-start. Design a practical PPI pipeline for evaluating a new model on 10,000 items when only 500 actual evaluations can be afforded. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap7.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>

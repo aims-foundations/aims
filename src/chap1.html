@@ -826,21 +826,27 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Information and Mechanism Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">The Evaluation Ecosystem and Its Governance</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Red-Teaming and Adversarial Evaluation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Information and Mechanism Design</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Red-Teaming and Adversarial Evaluation</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../src/chap10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+  <a href="../src/chap11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -970,7 +976,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>By the end of this chapter, you will be able to:</p>
+<p>By the end of this chapter, the reader will be able to:</p>
 <ol type="1">
 <li><strong>Describe</strong> the response matrix <span class="math inline">\(Y_{ij}\)</span> as the universal data structure underlying AI evaluation and identify what constitutes a “subject” and an “item” across different evaluation paradigms.</li>
 <li><strong>Classify</strong> AI benchmarks along multiple axes: domain, response type, evaluation structure, and cultural scope.</li>
@@ -2212,7 +2218,7 @@ window.Quarto = {
 <section id="from-comparisons-to-response-matrices" class="level3" data-number="1.4.1">
 <h3 data-number="1.4.1" class="anchored" data-anchor-id="from-comparisons-to-response-matrices"><span class="header-section-number">1.4.1</span> From Comparisons to Response Matrices</h3>
 <p>Pairwise comparison data has a different structure from standard response matrices. Instead of “model <span class="math inline">\(i\)</span> on item <span class="math inline">\(j\)</span>,” we observe “model <span class="math inline">\(A\)</span> preferred over model <span class="math inline">\(B\)</span> on prompt <span class="math inline">\(k\)</span>.” The natural data structure is a <strong>comparison tensor</strong> <span class="math inline">\(C_{ABk} \in \{A, B, \text{tie}\}\)</span>.</p>
-<p>The Bradley-Terry model , <a href="chap2.html#sec-paired-comparison" class="quarto-xref"><span>Section 2.2.4</span></a> connects this structure to the response matrix framework. Under Bradley-Terry, the probability that model <span class="math inline">\(A\)</span> is preferred over model <span class="math inline">\(B\)</span> is:</p>
+<p>The Bradley-Terry model , <a href="chap2.html#sec-paired-comparison" class="quarto-xref"><span>Section 2.2.5</span></a> connects this structure to the response matrix framework. Under Bradley-Terry, the probability that model <span class="math inline">\(A\)</span> is preferred over model <span class="math inline">\(B\)</span> is:</p>
 <p><span class="math display">\[
 P(A \succ B) = \frac{\exp(\theta_A)}{\exp(\theta_A) + \exp(\theta_B)} = \sigma(\theta_A - \theta_B)
 \]</span></p>
@@ -2517,7 +2523,7 @@ Figure&nbsp;1.5: ChatGPT drift: model × task accuracy heatmap showing performan
 <p>The <code>torch_measure</code> library provides a PyTorch-native toolkit for loading, inspecting, and analyzing response matrices from real benchmarks. It is the companion software for this book.</p>
 <section id="loading-benchmarks" class="level3" data-number="1.8.1">
 <h3 data-number="1.8.1" class="anchored" data-anchor-id="loading-benchmarks"><span class="header-section-number">1.8.1</span> Loading Benchmarks</h3>
-<div id="e8e3b461" class="cell" data-execution_count="1">
+<div id="22438adb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> torch_measure.datasets <span class="im">import</span> load, list_datasets</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># See all available benchmarks</span></span>
@@ -2532,7 +2538,7 @@ Figure&nbsp;1.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="inspecting-the-response-matrix" class="level3" data-number="1.8.2">
 <h3 data-number="1.8.2" class="anchored" data-anchor-id="inspecting-the-response-matrix"><span class="header-section-number">1.8.2</span> Inspecting the Response Matrix</h3>
-<div id="a2edc518" class="cell" data-execution_count="2">
+<div id="8aa948e9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Per-subject (model) statistics</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="bu">print</span>(<span class="ss">f"Best model: </span><span class="sc">{</span>rm<span class="sc">.</span>subject_means<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="bu">print</span>(<span class="ss">f"Worst model: </span><span class="sc">{</span>rm<span class="sc">.</span>subject_means<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
@@ -2548,7 +2554,7 @@ Figure&nbsp;1.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="fitting-a-measurement-model" class="level3" data-number="1.8.3">
 <h3 data-number="1.8.3" class="anchored" data-anchor-id="fitting-a-measurement-model"><span class="header-section-number">1.8.3</span> Fitting a Measurement Model</h3>
-<div id="dc765017" class="cell" data-execution_count="3">
+<div id="ffd90077" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> torch_measure.models <span class="im">import</span> Rasch</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="co"># Fit a Rasch model to the response matrix</span></span>
@@ -2565,7 +2571,7 @@ Figure&nbsp;1.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="comparing-benchmarks" class="level3" data-number="1.8.4">
 <h3 data-number="1.8.4" class="anchored" data-anchor-id="comparing-benchmarks"><span class="header-section-number">1.8.4</span> Comparing Benchmarks</h3>
-<div id="00025769" class="cell" data-execution_count="4">
+<div id="571db823" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Load multiple benchmarks</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>benchmarks <span class="op">=</span> {</span>
 <span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"SWE-bench"</span>: load(<span class="st">"bench/swebench"</span>),</span>
@@ -2581,7 +2587,7 @@ Figure&nbsp;1.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="loading-paired-response-matrices" class="level3" data-number="1.8.5">
 <h3 data-number="1.8.5" class="anchored" data-anchor-id="loading-paired-response-matrices"><span class="header-section-number">1.8.5</span> Loading Paired Response Matrices</h3>
-<div id="e1770b63" class="cell" data-execution_count="5">
+<div id="48fce77f" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># List intervention datasets</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>list_datasets(<span class="st">"intervention"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
@@ -2606,12 +2612,12 @@ Figure&nbsp;1.5: ChatGPT drift: model × task accuracy heatmap showing performan
 <section id="sec-data-discussion" class="level2" data-number="1.9">
 <h2 data-number="1.9" class="anchored" data-anchor-id="sec-data-discussion"><span class="header-section-number">1.9</span> Discussion Questions</h2>
 <ol type="1">
-<li><p><strong>The subject identity problem.</strong> For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5 <span class="citation" data-cites="jimenez2023swe">(<a href="#ref-jimenez2023swe" role="doc-biblioref">Jimenez et al. 2023</a>)</span>. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How would you design a study to decompose these contributions? What does this imply for the dimensionality of the response matrix?</p></li>
+<li><p><strong>The subject identity problem.</strong> For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5 <span class="citation" data-cites="jimenez2023swe">(<a href="#ref-jimenez2023swe" role="doc-biblioref">Jimenez et al. 2023</a>)</span>. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How could a study be designed to decompose these contributions? What does this imply for the dimensionality of the response matrix?</p></li>
 <li><p><strong>Cultural validity of benchmarks.</strong> AfriMedQA evaluates medical knowledge in African healthcare contexts <span class="citation" data-cites="nimo2025afrimedqa">(<a href="#ref-nimo2025afrimedqa" role="doc-biblioref">Nimo et al. 2025</a>)</span>. A model trained primarily on US/European medical data might score poorly not because it lacks medical reasoning but because it lacks knowledge of local disease prevalence, treatment protocols, and healthcare infrastructure. Is this a validity threat (construct-irrelevant variance) or a genuine measurement of the construct (medical reasoning <em>in context</em>)? How does the answer depend on the intended use?</p></li>
-<li><p><strong>Dynamic vs.&nbsp;static benchmarks.</strong> LiveCodeBench adds new problems from ongoing competitions to avoid contamination <span class="citation" data-cites="jain2024livecodebench">(<a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span>. But this means a model’s “ability” is estimated from different items at different points in time. Under what conditions is this a problem? How would you use IRT equating procedures to maintain a common scale?</p></li>
-<li><p><strong>Preference data and transitivity.</strong> The Bradley-Terry model assumes transitive preferences: if <span class="math inline">\(A \succ B\)</span> and <span class="math inline">\(B \succ C\)</span>, then <span class="math inline">\(A \succ C\)</span>. But human preferences often violate transitivity. How would you detect and quantify transitivity violations in Chatbot Arena data? What are the implications for using Elo ratings as a measure of model quality?</p></li>
-<li><p><strong>The missing data problem.</strong> In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density <span class="citation" data-cites="jimenez2023swe">(<a href="#ref-jimenez2023swe" role="doc-biblioref">Jimenez et al. 2023</a>)</span>) while others have systematic gaps (LiveCodeBench: 88.8% <span class="citation" data-cites="jain2024livecodebench">(<a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span>). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions would you trust ability estimates from a sparse matrix?</p></li>
-<li><p><strong>Intervention matrices and causal inference.</strong> The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam — the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How would you design an evaluation framework that distinguishes AI-augmented performance from durable human capability? Consider the implications for domains beyond education — for instance, would a doctor’s diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?</p></li>
+<li><p><strong>Dynamic vs.&nbsp;static benchmarks.</strong> LiveCodeBench adds new problems from ongoing competitions to avoid contamination <span class="citation" data-cites="jain2024livecodebench">(<a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span>. But this means a model’s “ability” is estimated from different items at different points in time. Under what conditions is this a problem? How can IRT equating procedures maintain a common scale?</p></li>
+<li><p><strong>Preference data and transitivity.</strong> The Bradley-Terry model assumes transitive preferences: if <span class="math inline">\(A \succ B\)</span> and <span class="math inline">\(B \succ C\)</span>, then <span class="math inline">\(A \succ C\)</span>. But human preferences often violate transitivity. How can transitivity violations in Chatbot Arena data be detected and quantified? What are the implications for using Elo ratings as a measure of model quality?</p></li>
+<li><p><strong>The missing data problem.</strong> In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density <span class="citation" data-cites="jimenez2023swe">(<a href="#ref-jimenez2023swe" role="doc-biblioref">Jimenez et al. 2023</a>)</span>) while others have systematic gaps (LiveCodeBench: 88.8% <span class="citation" data-cites="jain2024livecodebench">(<a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span>). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions are ability estimates from a sparse matrix trustworthy?</p></li>
+<li><p><strong>Intervention matrices and causal inference.</strong> The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam — the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How could an evaluation framework distinguish AI-augmented performance from durable human capability? Consider the implications for domains beyond education — for instance, would a doctor’s diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?</p></li>
 </ol>
 </section>
 <section id="sec-data-bib" class="level2" data-number="1.10">
@@ -3517,7 +3523,7 @@ Zhuo, Terry Yue, Minh Chien Vu, Jenny Chim, et al. 2025. <em>BigCodeBench: Bench
 <span id="cb6-37"><a href="#cb6-37"></a><span class="fu"># The Data Landscape {#sec-data-landscape}</span></span>
 <span id="cb6-38"><a href="#cb6-38"></a></span>
 <span id="cb6-39"><a href="#cb6-39"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb6-40"><a href="#cb6-40"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb6-40"><a href="#cb6-40"></a>By the end of this chapter, the reader will be able to:</span>
 <span id="cb6-41"><a href="#cb6-41"></a></span>
 <span id="cb6-42"><a href="#cb6-42"></a><span class="ss">1. </span>**Describe** the response matrix $Y_{ij}$ as the universal data structure underlying AI evaluation and identify what constitutes a "subject" and an "item" across different evaluation paradigms.</span>
 <span id="cb6-43"><a href="#cb6-43"></a><span class="ss">2. </span>**Classify** AI benchmarks along multiple axes: domain, response type, evaluation structure, and cultural scope.</span>
@@ -4181,17 +4187,17 @@ Zhuo, Terry Yue, Minh Chien Vu, Jenny Chim, et al. 2025. <em>BigCodeBench: Bench
 <span id="cb6-711"><a href="#cb6-711"></a></span>
 <span id="cb6-712"><a href="#cb6-712"></a><span class="fu">## Discussion Questions {#sec-data-discussion}</span></span>
 <span id="cb6-713"><a href="#cb6-713"></a></span>
-<span id="cb6-714"><a href="#cb6-714"></a><span class="ss">1. </span>**The subject identity problem.** For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5 <span class="co">[</span><span class="ot">@jimenez2023swe</span><span class="co">]</span>. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How would you design a study to decompose these contributions? What does this imply for the dimensionality of the response matrix?</span>
+<span id="cb6-714"><a href="#cb6-714"></a><span class="ss">1. </span>**The subject identity problem.** For SWE-bench, the top-performing entry uses a proprietary scaffold with Claude Opus 4.5 <span class="co">[</span><span class="ot">@jimenez2023swe</span><span class="co">]</span>. A competing entry uses an open-source scaffold with the same model and scores 15% lower. Is the difference attributable to the model, the scaffold, or the interaction? How could a study be designed to decompose these contributions? What does this imply for the dimensionality of the response matrix?</span>
 <span id="cb6-715"><a href="#cb6-715"></a></span>
 <span id="cb6-716"><a href="#cb6-716"></a><span class="ss">2. </span>**Cultural validity of benchmarks.** AfriMedQA evaluates medical knowledge in African healthcare contexts <span class="co">[</span><span class="ot">@nimo2025afrimedqa</span><span class="co">]</span>. A model trained primarily on US/European medical data might score poorly not because it lacks medical reasoning but because it lacks knowledge of local disease prevalence, treatment protocols, and healthcare infrastructure. Is this a validity threat (construct-irrelevant variance) or a genuine measurement of the construct (medical reasoning *in context*)? How does the answer depend on the intended use?</span>
 <span id="cb6-717"><a href="#cb6-717"></a></span>
-<span id="cb6-718"><a href="#cb6-718"></a><span class="ss">3. </span>**Dynamic vs. static benchmarks.** LiveCodeBench adds new problems from ongoing competitions to avoid contamination <span class="co">[</span><span class="ot">@jain2024livecodebench</span><span class="co">]</span>. But this means a model's "ability" is estimated from different items at different points in time. Under what conditions is this a problem? How would you use IRT equating procedures to maintain a common scale?</span>
+<span id="cb6-718"><a href="#cb6-718"></a><span class="ss">3. </span>**Dynamic vs. static benchmarks.** LiveCodeBench adds new problems from ongoing competitions to avoid contamination <span class="co">[</span><span class="ot">@jain2024livecodebench</span><span class="co">]</span>. But this means a model's "ability" is estimated from different items at different points in time. Under what conditions is this a problem? How can IRT equating procedures maintain a common scale?</span>
 <span id="cb6-719"><a href="#cb6-719"></a></span>
-<span id="cb6-720"><a href="#cb6-720"></a><span class="ss">4. </span>**Preference data and transitivity.** The Bradley-Terry model assumes transitive preferences: if $A \succ B$ and $B \succ C$, then $A \succ C$. But human preferences often violate transitivity. How would you detect and quantify transitivity violations in Chatbot Arena data? What are the implications for using Elo ratings as a measure of model quality?</span>
+<span id="cb6-720"><a href="#cb6-720"></a><span class="ss">4. </span>**Preference data and transitivity.** The Bradley-Terry model assumes transitive preferences: if $A \succ B$ and $B \succ C$, then $A \succ C$. But human preferences often violate transitivity. How can transitivity violations in Chatbot Arena data be detected and quantified? What are the implications for using Elo ratings as a measure of model quality?</span>
 <span id="cb6-721"><a href="#cb6-721"></a></span>
-<span id="cb6-722"><a href="#cb6-722"></a><span class="ss">5. </span>**The missing data problem.** In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density <span class="co">[</span><span class="ot">@jimenez2023swe</span><span class="co">]</span>) while others have systematic gaps (LiveCodeBench: 88.8% <span class="co">[</span><span class="ot">@jain2024livecodebench</span><span class="co">]</span>). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions would you trust ability estimates from a sparse matrix?</span>
+<span id="cb6-722"><a href="#cb6-722"></a><span class="ss">5. </span>**The missing data problem.** In the torch_measure collection, some benchmarks are nearly complete (SWE-bench: 100% density <span class="co">[</span><span class="ot">@jimenez2023swe</span><span class="co">]</span>) while others have systematic gaps (LiveCodeBench: 88.8% <span class="co">[</span><span class="ot">@jain2024livecodebench</span><span class="co">]</span>). How does the missingness pattern affect the validity of IRT ability estimates? Under what conditions are ability estimates from a sparse matrix trustworthy?</span>
 <span id="cb6-723"><a href="#cb6-723"></a></span>
-<span id="cb6-724"><a href="#cb6-724"></a><span class="ss">6. </span>**Intervention matrices and causal inference.** The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam --- the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How would you design an evaluation framework that distinguishes AI-augmented performance from durable human capability? Consider the implications for domains beyond education --- for instance, would a doctor's diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?</span>
+<span id="cb6-724"><a href="#cb6-724"></a><span class="ss">6. </span>**Intervention matrices and causal inference.** The GenAI Learning dataset shows that students practicing with ChatGPT score 0.69 during practice but only 0.36 on a no-AI exam --- the same as the 0.36 of controls. A naive analysis of the practice phase alone would conclude that AI dramatically improves performance. What does this imply for interpreting human-AI benchmark scores? How could an evaluation framework distinguish AI-augmented performance from durable human capability? Consider the implications for domains beyond education --- for instance, would a doctor's diagnostic ability genuinely improve after years of AI-assisted practice, or would it atrophy?</span>
 <span id="cb6-725"><a href="#cb6-725"></a></span>
 <span id="cb6-726"><a href="#cb6-726"></a></span>
 <span id="cb6-727"><a href="#cb6-727"></a><span class="fu">## Bibliographic Notes {#sec-data-bib}</span></span>

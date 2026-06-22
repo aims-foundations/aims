@@ -1325,7 +1325,7 @@ P(Y_{ij} = 1 \mid U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
 <p>When <span class="math inline">\(K=1\)</span> and <span class="math inline">\(V_j = 1\)</span> for all <span class="math inline">\(j\)</span>, this reduces to the Rasch model.</p>
 <section id="implementation" class="level4" data-number="4.4.3.1">
 <h4 data-number="4.4.3.1" class="anchored" data-anchor-id="implementation"><span class="header-section-number">4.4.3.1</span> Implementation</h4>
-<div id="0db59c16" class="cell" data-execution_count="1">
+<div id="87e703b5" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">from</span> torch.optim <span class="im">import</span> LBFGS</span>
@@ -1364,7 +1364,7 @@ P(Y_{ij} = 1 \mid U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
 <section id="training-with-lbfgs" class="level4" data-number="4.4.3.2">
 <h4 data-number="4.4.3.2" class="anchored" data-anchor-id="training-with-lbfgs"><span class="header-section-number">4.4.3.2</span> Training with LBFGS</h4>
 <p>We train the model by minimizing binary cross-entropy loss:</p>
-<div id="700a304d" class="cell" data-execution_count="2">
+<div id="66d0b978" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Training setup</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>N, M <span class="op">=</span> Y.shape</span>
 <span id="cb2-3"><a href="#cb2-3"></a>K <span class="op">=</span> <span class="dv">2</span>  <span class="co"># Number of latent dimensions</span></span>
@@ -1552,7 +1552,7 @@ p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(
 </section>
 <section id="implementation-of-masking-functions" class="level3" data-number="4.7.2">
 <h3 data-number="4.7.2" class="anchored" data-anchor-id="implementation-of-masking-functions"><span class="header-section-number">4.7.2</span> Implementation of Masking Functions</h3>
-<div id="fab6ad76" class="cell" data-execution_count="3">
+<div id="6fb87f30" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="kw">def</span> random_mask(data_idtor, pct<span class="op">=</span><span class="fl">0.8</span>):</span>
@@ -1602,7 +1602,7 @@ p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(
 <li><strong>Stage 2:</strong> Freeze <span class="math inline">\((V, Z)\)</span> and estimate ability parameters <span class="math inline">\(U\)</span> for held-out models using their limited exposed responses</li>
 </ol>
 <p>This ensures item parameters are learned without information from test models.</p>
-<div id="8a762247" class="cell" data-execution_count="4">
+<div id="75065d55" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Stage 1: Train on known models</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>test_row <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>).values  <span class="co"># Identify held-out models</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>model_stage1 <span class="op">=</span> train_model(Y[<span class="op">~</span>test_row, :], mask<span class="op">=</span>train_idtor[<span class="op">~</span>test_row, :])</span>
@@ -1623,7 +1623,7 @@ p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(
 <li><strong>Stage 1:</strong> Train on known items to learn model parameters <span class="math inline">\(U\)</span></li>
 <li><strong>Stage 2:</strong> Freeze <span class="math inline">\(U\)</span> and estimate item parameters <span class="math inline">\((V, Z)\)</span> for held-out items</li>
 </ol>
-<div id="d8733187" class="cell" data-execution_count="5">
+<div id="ffdbd5bf" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Stage 1: Train on known items</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>test_col <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">0</span>).values  <span class="co"># Identify held-out items</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>model_stage1 <span class="op">=</span> train_model(Y[:, <span class="op">~</span>test_col], mask<span class="op">=</span>train_idtor[:, <span class="op">~</span>test_col])</span>
@@ -1658,7 +1658,7 @@ p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(
 <section id="evaluation-across-masking-schemes" class="level3" data-number="4.7.4">
 <h3 data-number="4.7.4" class="anchored" data-anchor-id="evaluation-across-masking-schemes"><span class="header-section-number">4.7.4</span> Evaluation Across Masking Schemes</h3>
 <p>For each masking scheme, we compute AUC on the held-out entries:</p>
-<div id="76062cf9" class="cell" data-execution_count="6">
+<div id="ae51a5fa" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> torchmetrics <span class="im">import</span> AUROC</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a>masking_schemes <span class="op">=</span> {</span>

@@ -789,31 +789,43 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Causality</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discovery</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Predictability</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intervention</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Application</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Design</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Application</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -1060,7 +1072,7 @@ I_{\text{total}}(\theta) = \sum_{k=1}^K I_{j_k}(\theta)
 <div class="callout-body-container callout-body">
 <p>Traditional CAT assumes deterministic responses: a human test-taker gives the same answer if asked the same question twice. AI models may or may not satisfy this depending on temperature and sampling settings.</p>
 <p>For deterministic evaluation (temperature = 0), CAT applies directly. For stochastic evaluation, we may need multiple samples per item, or methods that account for response variability.</p>
-<p>CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in <a href="chap3.html#sec-cold-start" class="quarto-xref"><span>Section 3.2.4</span></a>.</p>
+<p>CAT also requires pre-calibrated item parameters. In a cold-start scenario (new benchmark), we must first collect data on a pilot sample of models before CAT can be deployed. This connects to the cold-start prediction problem addressed in <a href="chap8.html#sec-cold-start" class="quarto-xref"><span>Section 8.1</span></a>.</p>
 </div>
 </div>
 </section>
@@ -1116,7 +1128,7 @@ I_{ik}(\theta) = P_{ik}(1 - P_{ik}), \quad P_{ik} = \sigma(\theta_i - \theta_k)
 <section id="theoretical-exercises" class="level3" data-number="6.5.1">
 <h3 data-number="6.5.1" class="anchored" data-anchor-id="theoretical-exercises"><span class="header-section-number">6.5.1</span> Theoretical Exercises</h3>
 <p><strong>Exercise 3.1</strong> (<span class="math inline">\(\star\)</span>): Show that Fisher information <span class="math inline">\(I_j(\theta) = P_j(\theta)(1 - P_j(\theta))\)</span> is maximized when <span class="math inline">\(\theta = \beta_j\)</span>, and that the maximum value is <span class="math inline">\(1/4\)</span>.</p>
-<p><strong>Exercise 3.2</strong> (<span class="math inline">\(\star\star\)</span>): For the 2PL model <span class="math inline">\(P_j(\theta) = \sigma(a_j(\theta - \beta_j))\)</span>, derive the Fisher information and show that it equals <span class="math inline">\(a_j^2 P_j(1 - P_j)\)</span>. How does discrimination <span class="math inline">\(a_j\)</span> affect optimal item selection?</p>
+<p><strong>Exercise 3.2</strong> (<span class="math inline">\(\star\star\)</span>): For the 2PL model <span class="math inline">\(P_j(\theta) = \sigma(\beta_{j2}(\theta - \beta_{j1}))\)</span>, derive the Fisher information and show that it equals <span class="math inline">\(\beta_{j2}^2 P_j(1 - P_j)\)</span>. How does discrimination <span class="math inline">\(\beta_{j2}\)</span> affect optimal item selection?</p>
 <p><strong>Exercise 3.3</strong> (<span class="math inline">\(\star\star\)</span>): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs $0.01 and the value of reducing standard error by one unit is $1. Find the cost-optimal stopping point.</p>
 </section>
 <section id="computational-exercises" class="level3" data-number="6.5.2">
@@ -1638,8 +1650,8 @@ Wright, Benjamin D., and Mark H. Stone. 1979. <em>Best Test Design</em>. MESA Pr
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/chap7.html" class="pagination-link" aria-label="Causality">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Causality</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/chap7.html" class="pagination-link" aria-label="Discovery">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discovery</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -2253,7 +2265,7 @@ Wright, Benjamin D., and Mark H. Stone. 1979. <em>Best Test Design</em>. MESA Pr
 <span id="cb1-608"><a href="#cb1-608"></a></span>
 <span id="cb1-609"><a href="#cb1-609"></a>**Exercise 3.1** ($\star$): Show that Fisher information $I_j(\theta) = P_j(\theta)(1 - P_j(\theta))$ is maximized when $\theta = \beta_j$, and that the maximum value is $1/4$.</span>
 <span id="cb1-610"><a href="#cb1-610"></a></span>
-<span id="cb1-611"><a href="#cb1-611"></a>**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(a_j(\theta - \beta_j))$, derive the Fisher information and show that it equals $a_j^2 P_j(1 - P_j)$. How does discrimination $a_j$ affect optimal item selection?</span>
+<span id="cb1-611"><a href="#cb1-611"></a>**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(\beta_{j2}(\theta - \beta_{j1}))$, derive the Fisher information and show that it equals $\beta_{j2}^2 P_j(1 - P_j)$. How does discrimination $\beta_{j2}$ affect optimal item selection?</span>
 <span id="cb1-612"><a href="#cb1-612"></a></span>
 <span id="cb1-613"><a href="#cb1-613"></a>**Exercise 3.3** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.</span>
 <span id="cb1-614"><a href="#cb1-614"></a></span>

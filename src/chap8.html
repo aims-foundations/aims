@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Ecosystem – AI Measurement Science</title>
+<title>8&nbsp; Predictability – AI Measurement Science</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -58,26 +58,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -150,359 +131,36 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/editor/editor.main.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  
-<style type="text/css">
-.monaco-editor pre {
-  background-color: unset !important;
-}
 
-.qpyodide-editor-toolbar {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-.qpyodide-editor-toolbar-left-buttons, .qpyodide-editor-toolbar-right-buttons {
-  display: flex;
-}
-
-.qpyodide-non-interactive-loading-container.qpyodide-cell-needs-evaluation, .qpyodide-non-interactive-loading-container.qpyodide-cell-evaluated {
-  justify-content: center;
-  display: flex;
-  background-color: rgba(250, 250, 250, 0.65);
-  border: 1px solid rgba(233, 236, 239, 0.65);
-  border-radius: 0.5rem;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.qpyodide-r-project-logo {
-  color: #2767B0; /* R Project's blue color */
-}
-
-.qpyodide-icon-status-spinner {
-  color: #7894c4;
-}
-
-.qpyodide-icon-run-code {
-  color: #0d9c29
-}
-
-.qpyodide-output-code-stdout {
-  color: #111;
-}
-
-.qpyodide-output-code-stderr {
-  color: #db4133;
-}
-
-.qpyodide-editor {
-  border: 1px solid #EEEEEE;
-}
-
-.qpyodide-editor-toolbar {
-  background-color: #EEEEEE;
-  padding: 0.2rem 0.5rem;
-}
-
-.qpyodide-button {
-  background-color: #EEEEEE;
-  display: inline-block;
-  font-weight: 400;
-  line-height: 1;
-  text-decoration: none;
-  text-align: center;
-  color: #000;
-  border-color: #dee2e6;
-  border: 1px solid rgba(0,0,0,0);
-  padding: 0.375rem 0.75rem;
-  font-size: .9rem;
-  border-radius: 0.25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.qpyodide-button:hover {
-  color: #000;
-  background-color: #d9dce0;
-  border-color: #c8ccd0;
-}
-
-.qpyodide-button:disabled,.qpyodide-button.disabled,fieldset:disabled .qpyodide-button {
-  pointer-events: none;
-  opacity: .65
-}
-
-.qpyodide-button-reset {
-  color: #696969; /*#4682b4;*/
-}
-
-.qpyodide-button-copy {
-  color: #696969;
-}
-
-
-/* Custom styling for RevealJS Presentations*/
-
-/* Reset the style of the interactive area */
-.reveal div.qpyodide-interactive-area {
-  display: block;
-  box-shadow: none;
-  max-width: 100%;
-  max-height: 100%;
-  margin: 0;
-  padding: 0;
-} 
-
-/* Provide space to entries */
-.reveal div.qpyodide-output-code-area pre div {
-  margin: 1px 2px 1px 10px;
-}
-
-/* Collapse the inside code tags to avoid extra space between line outputs */
-.reveal pre div code.qpyodide-output-code-stdout, .reveal pre div code.qpyodide-output-code-stderr {
-  padding: 0;
-  display: contents;
-}
-
-.reveal pre div code.qpyodide-output-code-stdout {
-  color: #111;
-}
-
-.reveal pre div code.qpyodide-output-code-stderr {
-  color: #db4133;
-}
-
-
-/* Create a border around console and output (does not effect graphs) */
-.reveal div.qpyodide-console-area {
-  border: 1px solid #EEEEEE;
-  box-shadow: 2px 2px 10px #EEEEEE;
-}
-
-/* Cap output height and allow text to scroll */
-/* TODO: Is there a better way to fit contents/max it parallel to the monaco editor size? */
-.reveal div.qpyodide-output-code-area pre {
-  max-height: 400px;
-  overflow: scroll;
-}
-</style>
-<script type="module">
-// Document level settings ----
-
-// Determine if we need to install python packages
-globalThis.qpyodideInstallPythonPackagesList = ['numpy', 'matplotlib'];
-
-// Check to see if we have an empty array, if we do set to skip the installation.
-globalThis.qpyodideSetupPythonPackages = !(qpyodideInstallPythonPackagesList.indexOf("") !== -1);
-
-// Display a startup message?
-globalThis.qpyodideShowStartupMessage = true;
-
-// Describe the webR settings that should be used
-globalThis.qpyodideCustomizedPyodideOptions = {
-  "indexURL": "https://cdn.jsdelivr.net/pyodide/v0.27.2/full/",
-  "env": {
-    "HOME": "/home/pyodide",
-  }, 
-  stdout: (text) => {qpyodideAddToOutputArray(text, "out");},
-  stderr: (text) => {qpyodideAddToOutputArray(text, "error");}
-}
-
-// Store cell data
-globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport matplotlib.pyplot as plt\n\ndef spearman(a, b):\n    # Spearman rank correlation = Pearson correlation of the ranks.\n    ra, rb = np.argsort(np.argsort(a)), np.argsort(np.argsort(b))\n    return np.corrcoef(ra, rb)[0, 1]\n\nnp.random.seed(0)\n\n# A simple illustration of the chapter's thesis:\n# as \"gaming\" becomes cheaper, the benchmark decouples from true utility.\nM = 200                                   # number of models\ntrue_utility = np.random.normal(0, 1, M)  # what society actually cares about\n\ngaming_strengths = np.linspace(0, 3.0, 25)  # how much a model can boost its score by gaming\nnoise = 0.3\ncorrs = []\nfor g in gaming_strengths:\n    gaming_effort = np.random.uniform(0, 1, M)     # heterogeneous propensity to game\n    bench = true_utility + g * gaming_effort + np.random.normal(0, noise, M)\n    corrs.append(spearman(bench, true_utility))\n\nfig, ax = plt.subplots(1, 1, figsize=(3.5, 2.6))\nax.plot(gaming_strengths, corrs, color='#5B8DEE', lw=2)\nax.axhline(1.0, color='#888888', ls=':', lw=1)\nax.set_xlabel('Gaming strength (cheapness of the proxy)')\nax.set_ylabel(\"Benchmark–utility rank corr.\")\nax.set_title('Decoupling under gaming')\nax.set_ylim(0, 1.05)\nplt.tight_layout()\nplt.show()","id":1,"options":{"autorun":"true","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"signal-decoupling","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
-
-
-</script>
-<script type="module">
-// Declare startupMessageqpyodide globally
-globalThis.qpyodideStartupMessage = document.createElement("p");
-
-// Function to set the button text
-globalThis.qpyodideSetInteractiveButtonState = function(buttonText, enableCodeButton = true) {
-  document.querySelectorAll(".qpyodide-button-run").forEach((btn) => {
-    btn.innerHTML = buttonText;
-    btn.disabled = !enableCodeButton;
-  });
-}
-
-// Function to update the status message in non-interactive cells
-globalThis.qpyodideUpdateStatusMessage = function(message) {
-  document.querySelectorAll(".qpyodide-status-text.qpyodide-cell-needs-evaluation").forEach((elem) => {
-    elem.innerText = message;
-  });
-}
-
-// Function to update the status message
-globalThis.qpyodideUpdateStatusHeader = function(message) {
-
-  if (!qpyodideShowStartupMessage) return;
-
-  qpyodideStartupMessage.innerHTML = message;
-}
-
-// Status header update with customized spinner message
-globalThis.qpyodideUpdateStatusHeaderSpinner = function(message) {
-
-  qpyodideUpdateStatusHeader(`
-    <i class="fa-solid fa-spinner fa-spin qpyodide-icon-status-spinner"></i>
-    <span>${message}</span>
-  `);
-}
-
-
-// Function that attaches the document status message
-function qpyodideDisplayStartupMessage(showStartupMessage) {
-  if (!showStartupMessage) {
-    return;
-  }
-
-  // Get references to header elements
-  const headerHTML = document.getElementById("title-block-header");
-  const headerRevealJS = document.getElementById("title-slide");
-
-  // Create the outermost div element for metadata
-  const quartoTitleMeta = document.createElement("div");
-  quartoTitleMeta.classList.add("quarto-title-meta");
-
-  // Create the first inner div element
-  const firstInnerDiv = document.createElement("div");
-  firstInnerDiv.setAttribute("id", "qpyodide-status-message-area");
-
-  // Create the second inner div element for "Pyodide Status" heading and contents
-  const secondInnerDiv = document.createElement("div");
-  secondInnerDiv.setAttribute("id", "qpyodide-status-message-title");
-  secondInnerDiv.classList.add("quarto-title-meta-heading");
-  secondInnerDiv.innerText = "Pyodide Status";
-
-  // Create another inner div for contents
-  const secondInnerDivContents = document.createElement("div");
-  secondInnerDivContents.setAttribute("id", "qpyodide-status-message-body");
-  secondInnerDivContents.classList.add("quarto-title-meta-contents");
-
-  // Describe the Pyodide state
-  qpyodideStartupMessage.innerText = "🟡 Loading...";
-  qpyodideStartupMessage.setAttribute("id", "qpyodide-status-message-text");
-  // Add `aria-live` to auto-announce the startup status to screen readers
-  qpyodideStartupMessage.setAttribute("aria-live", "assertive");
-
-  // Append the startup message to the contents
-  secondInnerDivContents.appendChild(qpyodideStartupMessage);
-
-  // Combine the inner divs and contents
-  firstInnerDiv.appendChild(secondInnerDiv);
-  firstInnerDiv.appendChild(secondInnerDivContents);
-  quartoTitleMeta.appendChild(firstInnerDiv);
-
-  // Determine where to insert the quartoTitleMeta element
-  if (headerHTML || headerRevealJS) {
-    // Append to the existing "title-block-header" element or "title-slide" div
-    (headerHTML || headerRevealJS).appendChild(quartoTitleMeta);
-  } else {
-    // If neither headerHTML nor headerRevealJS is found, insert after "Pyodide-monaco-editor-init" script
-    const monacoScript = document.getElementById("qpyodide-monaco-editor-init");
-    const header = document.createElement("header");
-    header.setAttribute("id", "title-block-header");
-    header.appendChild(quartoTitleMeta);
-    monacoScript.after(header);
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
   }
 }
-
-qpyodideDisplayStartupMessage(qpyodideShowStartupMessage);
+window.Quarto = {
+  typesetMath
+};
 </script>
-<script type="module">
-// Create a logging setup
-globalThis.qpyodideMessageArray = []
-
-// Add messages to array
-globalThis.qpyodideAddToOutputArray = function(message, type) {
-  qpyodideMessageArray.push({ message, type });
-}
-
-// Function to reset the output array
-globalThis.qpyodideResetOutputArray = function() {
-  qpyodideMessageArray = [];
-}
-
-globalThis.qpyodideRetrieveOutput = function() {
-  return qpyodideMessageArray.map(entry => entry.message).join('\n');
-}
-
-// Start a timer
-const initializePyodideTimerStart = performance.now();
-
-// Encase with a dynamic import statement
-globalThis.qpyodideInstance = await import(
-  qpyodideCustomizedPyodideOptions.indexURL + "pyodide.mjs").then(
-   async({ loadPyodide }) => {
-
-    console.log("Start loading Pyodide");
-    
-    // Populate Pyodide options with defaults or new values based on `pyodide`` meta
-    let mainPyodide = await loadPyodide(
-      qpyodideCustomizedPyodideOptions
-    );
-    
-    // Setup a namespace for global scoping
-    // await loadedPyodide.runPythonAsync("globalScope = {}"); 
-    
-    // Update status to reflect the next stage of the procedure
-    qpyodideUpdateStatusHeaderSpinner("Initializing Python Packages");
-
-    // Load the `micropip` package to allow installation of packages.
-    await mainPyodide.loadPackage("micropip");
-    await mainPyodide.runPythonAsync(`import micropip`);
-
-    // Load the `pyodide_http` package to shim uses of `requests` and `urllib3`.
-    // This allows for `pd.read_csv(url)` to work flawlessly.
-    // Details: https://github.com/coatless-quarto/pyodide/issues/9
-    await mainPyodide.loadPackage("pyodide_http");
-    await mainPyodide.runPythonAsync(`
-    import pyodide_http
-    pyodide_http.patch_all()  # Patch all libraries
-    `);
-
-    // Load the `matplotlib` package with necessary environment hook
-    await mainPyodide.loadPackage("matplotlib");
-
-    // Set the backend for matplotlib to be interactive.
-    await mainPyodide.runPythonAsync(`
-    import matplotlib
-    matplotlib.use("module://matplotlib_pyodide.html5_canvas_backend")
-    from matplotlib import pyplot as plt
-    `);
-
-    // Unlock interactive buttons
-    qpyodideSetInteractiveButtonState(
-      `<i class="fa-solid fa-play qpyodide-icon-run-code"></i> <span>Run Code</span>`, 
-      true
-    );
-
-    // Set document status to viable
-    qpyodideUpdateStatusHeader(
-      "🟢 Ready!"
-    );
-
-    // Assign Pyodide into the global environment
-    globalThis.mainPyodide = mainPyodide;
-
-    console.log("Completed loading Pyodide");
-    return mainPyodide;
-  }
-);
-
-// Stop timer
-const initializePyodideTimerEnd = performance.now();
-
-// Create a function to retrieve the promise object.
-globalThis._qpyodideGetInstance = function() {
-    return qpyodideInstance;
-}
-
-</script>
-
 
 </head>
 
@@ -703,7 +361,7 @@ globalThis._qpyodideGetInstance = function() {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../src/chap8.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ecosystem</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../src/chap8.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Predictability</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -760,31 +418,43 @@ globalThis._qpyodideGetInstance = function() {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Causality</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discovery</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap8.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Predictability</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Design</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intervention</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap10.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Application</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/chap11.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Design</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Application</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../src/chap13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -816,47 +486,17 @@ globalThis._qpyodideGetInstance = function() {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-scoreboard-to-target" id="toc-sec-scoreboard-to-target" class="nav-link active" data-scroll-target="#sec-scoreboard-to-target"><span class="header-section-number">8.1</span> From Scoreboard to Target</a></li>
-  <li><a href="#sec-actors" id="toc-sec-actors" class="nav-link" data-scroll-target="#sec-actors"><span class="header-section-number">8.2</span> The Actors and Their Incentives</a>
-  <ul class="collapse">
-  <li><a href="#sec-benchmark-signaling" id="toc-sec-benchmark-signaling" class="nav-link" data-scroll-target="#sec-benchmark-signaling"><span class="header-section-number">8.2.1</span> Benchmarks as Signaling and the Market for Lemons</a></li>
-  </ul></li>
-  <li><a href="#sec-gaming-taxonomy" id="toc-sec-gaming-taxonomy" class="nav-link" data-scroll-target="#sec-gaming-taxonomy"><span class="header-section-number">8.3</span> A Taxonomy of Gaming</a>
-  <ul class="collapse">
-  <li><a href="#sec-builder-gaming" id="toc-sec-builder-gaming" class="nav-link" data-scroll-target="#sec-builder-gaming"><span class="header-section-number">8.3.1</span> Builders Game the Metric</a></li>
-  <li><a href="#sec-evaluator-gaming" id="toc-sec-evaluator-gaming" class="nav-link" data-scroll-target="#sec-evaluator-gaming"><span class="header-section-number">8.3.2</span> Evaluators Game the Audience</a></li>
-  </ul></li>
-  <li><a href="#sec-gaming-defense-map" id="toc-sec-gaming-defense-map" class="nav-link" data-scroll-target="#sec-gaming-defense-map"><span class="header-section-number">8.4</span> The Gaming-Channel / Design-Lever Map</a></li>
-  <li><a href="#sec-governance-frontier" id="toc-sec-governance-frontier" class="nav-link" data-scroll-target="#sec-governance-frontier"><span class="header-section-number">8.5</span> The Governance Frontier</a>
-  <ul class="collapse">
-  <li><a href="#sec-multi-principal" id="toc-sec-multi-principal" class="nav-link" data-scroll-target="#sec-multi-principal"><span class="header-section-number">8.5.1</span> Multi-Principal Evaluation and the Strategic Evaluator</a></li>
-  <li><a href="#sec-open-source" id="toc-sec-open-source" class="nav-link" data-scroll-target="#sec-open-source"><span class="header-section-number">8.5.2</span> The Role of Open-Source Models</a></li>
-  <li><a href="#sec-organizing" id="toc-sec-organizing" class="nav-link" data-scroll-target="#sec-organizing"><span class="header-section-number">8.5.3</span> Organizing for Trustworthy Evaluation</a></li>
-  </ul></li>
-  <li><a href="#sec-ecosystem-discussion" id="toc-sec-ecosystem-discussion" class="nav-link" data-scroll-target="#sec-ecosystem-discussion"><span class="header-section-number">8.6</span> Discussion Questions</a></li>
-  <li><a href="#sec-ecosystem-biblio" id="toc-sec-ecosystem-biblio" class="nav-link" data-scroll-target="#sec-ecosystem-biblio"><span class="header-section-number">8.7</span> Bibliographic Notes</a></li>
-  <li><a href="#sec-ecosystem-exercises" id="toc-sec-ecosystem-exercises" class="nav-link" data-scroll-target="#sec-ecosystem-exercises"><span class="header-section-number">8.8</span> Exercises</a></li>
-  <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
+  <li><a href="#sec-cold-start" id="toc-sec-cold-start" class="nav-link active" data-scroll-target="#sec-cold-start"><span class="header-section-number">8.1</span> Amortized Models</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap8.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
-<script type="module" id="qpyodide-monaco-editor-init">
-
-  // Configure the Monaco Editor's loader
-  require.config({
-    paths: {
-      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs'
-    }
-  });
-</script>
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-ecosystem" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-discovery" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Predictability</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -873,397 +513,45 @@ globalThis._qpyodideGetInstance = function() {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
+<section id="sec-cold-start" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-cold-start"><span class="header-section-number">8.1</span> Amortized Models</h2>
+<p>A <strong>factor model</strong> generalizes the IRT models of this chapter to several latent dimensions, assigning each model <span class="math inline">\(i\)</span> an ability vector <span class="math inline">\(U_i \in \mathbb{R}^K\)</span> and each item <span class="math inline">\(j\)</span> a loading vector <span class="math inline">\(V_j \in \mathbb{R}^K\)</span> and intercept <span class="math inline">\(Z_j\)</span>, with <span class="math inline">\(P(Y_{ij} = 1) = \sigma(U_i^\top V_j + Z_j)\)</span>; we develop it as an instrument for <em>discovering</em> latent structure in <a href="chap7.html#sec-factor-models" class="quarto-xref"><span>Section 7.2</span></a>. Fit to a benchmark in the usual way, it learns a latent parameter vector for each person (<span class="math inline">\(U_i\)</span>) and each item (<span class="math inline">\(V_j\)</span>, <span class="math inline">\(Z_j\)</span>) by optimizing over the observed response matrix. This works well when we have enough responses for every entity, but it has two limitations: (1) the number of parameters grows linearly with the number of persons and items, and (2) new persons or items that were not present during training have no learned representation. <strong>Amortized models</strong> address both limitations by replacing per-entity parameter optimization with a learned function that maps observable features to latent parameters.</p>
+<p>In the standard factor model, each item <span class="math inline">\(j\)</span> has its own learned parameters <span class="math inline">\(V_j\)</span> and <span class="math inline">\(Z_j\)</span>. An amortized model instead learns a function <span class="math inline">\(f_\theta\)</span> that predicts these parameters from item features:</p>
+<p><span class="math display">\[
+[\hat{V}_j, \hat{Z}_j] = f_\theta(x_j)
+\]</span></p>
+<p>where <span class="math inline">\(x_j\)</span> is a feature vector for item <span class="math inline">\(j\)</span> (e.g., a text embedding of the question). Similarly, person parameters can be amortized via a function <span class="math inline">\(g_\phi\)</span>:</p>
+<p><span class="math display">\[
+\hat{U}_i = g_\phi(m_i)
+\]</span></p>
+<p>where <span class="math inline">\(m_i\)</span> is a feature vector for person <span class="math inline">\(i\)</span> (e.g., model metadata such as parameter count, architecture family, and release date). The predicted correctness probability is then:</p>
+<p><span class="math display">\[
+\hat{P}_{ij} = \sigma(\hat{U}_i^\top \hat{V}_j + \hat{Z}_j)
+\]</span></p>
+<p>The key advantage is that <span class="math inline">\(f_\theta\)</span> and <span class="math inline">\(g_\phi\)</span> generalize to <em>new</em> items and persons not seen during training, as long as their features are available.</p>
+<p>Amortized measurement models are closely related to <strong>neural collaborative filtering</strong> (NCF), a family of methods from recommendation systems that use neural networks to model user-item interactions. In the recommender systems literature, the response matrix <span class="math inline">\(Y\)</span> records user preferences (ratings, clicks); in our setting, it records model correctness. Both problems share the same structure: predicting missing entries of a sparse matrix.</p>
+<p>Classical matrix factorization decomposes the response matrix as <span class="math inline">\(Y \approx U V^\top + Z\)</span>, which is exactly the logistic factor model from <a href="chap7.html#sec-factor-models" class="quarto-xref"><span>Section 7.2</span></a> without the sigmoid. NCF extends this by replacing the inner product <span class="math inline">\(U_i^\top V_j\)</span> with a neural network <span class="math inline">\(h_\psi(U_i, V_j)\)</span> that can learn non-linear interactions between person and item latent factors. In the measurement context, this corresponds to replacing the linear logit <span class="math inline">\(U_i^\top V_j + Z_j\)</span> with a more flexible function:</p>
+<p><span class="math display">\[
+P(Y_{ij} = 1) = \sigma(h_\psi(U_i, V_j, Z_j))
+\]</span></p>
+<p>This increased flexibility can capture complex interaction patterns—for instance, a model that is strong on reasoning but specifically weak on multi-step arithmetic—that a linear factor model would need many dimensions to approximate. The cost is reduced interpretability: the latent factors no longer have a clean geometric interpretation as “ability axes.”</p>
+<div class="callout callout-style-default callout-note callout-titled" title="NCF and Amortized Models">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Intended Learning Outcomes
+<span class="screen-reader-only">Note</span>NCF and Amortized Models
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>By the end of this chapter, the reader will be able to:</p>
-<ol type="1">
-<li><strong>Map</strong> the stakeholders of a modern AI benchmark—builders, evaluators/platforms, adopters, investors, and regulators—and identify the decision each one delegates to the metric and the incentive each has to distort it.</li>
-<li><strong>Explain</strong> why an expanding audience turns Goodhart’s Law from an academic curiosity into a structural force, using the economics of <em>signaling</em> and the <em>market for lemons</em>.</li>
-<li><strong>Distinguish</strong> the two directions of gaming: builders who game the metric and evaluators/platforms who game the audience, and classify real episodes into a mechanism-based taxonomy.</li>
-<li><strong>Connect</strong> each gaming channel to a design lever from <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>, and identify which channels remain open research problems.</li>
-<li><strong>Articulate</strong> the governance frontier: multi-principal evaluation, the role of open-source models, and how to organize a trustworthy third-party evaluation ecosystem.</li>
-</ol>
+<p>Neural collaborative filtering and amortized models address complementary problems. NCF uses neural networks to model the <em>interaction</em> between latent factors (replacing <span class="math inline">\(U_i^\top V_j\)</span> with a learned function). Amortized models use neural networks to <em>predict</em> the latent factors from features (replacing per-entity <span class="math inline">\(U_i\)</span>, <span class="math inline">\(V_j\)</span> with functions of observable features). The two ideas can be combined: use amortized encoders to produce latent factors, then a neural interaction function to produce predictions.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled" title="Suggested Lecture Plan">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Suggested Lecture Plan
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>This chapter can be covered in <strong>2 lectures</strong> (75–90 minutes each):</p>
-<p><strong>Lecture 1: The Ecosystem and Its Failures</strong></p>
-<ul>
-<li>From scoreboard to target: the expanding audience (15 min)</li>
-<li>Benchmarks as signaling and the market for lemons (20 min)</li>
-<li>A taxonomy of gaming: builder-side and evaluator-side (35 min)</li>
-</ul>
-<p><strong>Lecture 2: Governance</strong></p>
-<ul>
-<li>The gaming-channel / design-lever map (20 min)</li>
-<li>Multi-principal evaluation and the strategic evaluator (25 min)</li>
-<li>The role of open-source; organizing the community (25 min)</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Chapter Roadmap">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Chapter Roadmap
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This chapter is the <em>diagnosis</em> that motivates the <em>design</em> of <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>. We ask three questions in sequence: <strong>who are the actors</strong> (<a href="#sec-actors" class="quarto-xref"><span>Section 8.2</span></a>), <strong>what game do they play</strong> (<a href="#sec-gaming-taxonomy" class="quarto-xref"><span>Section 8.3</span></a>), and <strong>how should the system be governed</strong> (<a href="#sec-governance-frontier" class="quarto-xref"><span>Section 8.5</span></a>). The technical machinery for re-engineering the game—randomization, distribution correction, holdout mechanisms, welfare-aligned metrics—is developed in <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>; here we establish <em>why</em> that machinery is needed and <em>which</em> failures it must close.</p>
-</div>
-</div>
-<section id="sec-scoreboard-to-target" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="sec-scoreboard-to-target"><span class="header-section-number">8.1</span> From Scoreboard to Target</h2>
-<blockquote class="blockquote">
-<p>“When a measure becomes a target, it ceases to be a good measure.” — Charles Goodhart (1975)</p>
-</blockquote>
-<p>A benchmark begins life as an <em>internal</em> instrument: a model developer’s private scoreboard for tracking research progress. In that regime Goodhart’s Law is mostly latent—the only party who can optimize against the metric is the same party who benefits from an honest reading of it. The structural shift of the past few years is that the <em>audience</em> of a benchmark has expanded far beyond the developer who builds the model.</p>
-<p>Today a single leaderboard number is consumed by:</p>
-<ul>
-<li><strong>Builders</strong>, who use it to allocate research effort and to claim state-of-the-art.</li>
-<li><strong>Adopters</strong> (enterprises, agencies, application developers), who use it as a procurement and due-diligence signal in build-vs-buy and vendor-selection decisions.</li>
-<li><strong>Investors</strong>, who read benchmark leadership as a proxy for a technical moat when pricing funding rounds.</li>
-<li><strong>Governments and regulators</strong>, who increasingly reference capability and safety evaluations in policy. <em>(TODO: cite the specific provisions to lean on—e.g., the EU AI Act’s general-purpose-AI obligations and codes of practice, and the relevant US framework. Verify current status as of the writing date; the policy landscape moves quickly.)</em></li>
-</ul>
-<p>Once any of these parties can move resources on the basis of a score, the developer’s reputation, funding, or regulatory standing depends on that score—and the data-generating process is no longer fixed. This is exactly the setting in which Goodhart’s adversarial variant dominates (<a href="chap9.html#sec-goodhart" class="quarto-xref"><span>Section 9.1</span></a>). The remainder of this chapter takes the audience expansion as the root cause and traces its consequences.</p>
-<div class="callout callout-style-default callout-important callout-titled" title="The chapter's thesis">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>The chapter’s thesis
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>A public benchmark is a <strong>signaling instrument</strong>. As its audience expands beyond builders, <em>both sides</em> of the market acquire an incentive to game it: builders game the metric, and benchmark providers game the audience. Restoring trust is therefore not only a statistical problem (<a href="chap5.html" class="quarto-xref"><span>Chapter 5</span></a>, <a href="chap1.html" class="quarto-xref"><span>Chapter 1</span></a>) but an <strong>institutional design</strong> problem—the subject of <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> and of this chapter’s governance discussion.</p>
-</div>
-</div>
-</section>
-<section id="sec-actors" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="sec-actors"><span class="header-section-number">8.2</span> The Actors and Their Incentives</h2>
-<p>We organize the ecosystem as a set of principals, each delegating a decision to the metric, each with a characteristic way of distorting it.</p>
-<div id="tbl-actors" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-actors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8.1: Stakeholders of a modern benchmark and how each can distort it
-</figcaption>
-<div aria-describedby="tbl-actors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Actor</th>
-<th>Decision delegated to the metric</th>
-<th>Incentive to distort</th>
-<th>Primary failure mode</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Builder / developer</strong></td>
-<td>Where to allocate training effort; what to claim</td>
-<td>Reputation, funding, market share</td>
-<td>Optimize to the test (<a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a>)</td>
-</tr>
-<tr class="even">
-<td><strong>Evaluator / platform</strong></td>
-<td>What to publish and how to rank</td>
-<td>Relevance, traffic, revenue, own-model favoritism</td>
-<td>Game the audience (<a href="#sec-evaluator-gaming" class="quarto-xref"><span>Section 8.3.2</span></a>)</td>
-</tr>
-<tr class="odd">
-<td><strong>Adopter</strong></td>
-<td>Build vs.&nbsp;buy; which vendor</td>
-<td>Lower procurement risk cheaply</td>
-<td>Over-trust a decoupled proxy</td>
-</tr>
-<tr class="even">
-<td><strong>Investor</strong></td>
-<td>How to price a round</td>
-<td>Back the apparent leader</td>
-<td>Reward narrative over capability</td>
-</tr>
-<tr class="odd">
-<td><strong>Regulator</strong></td>
-<td>Whether a system is safe to deploy</td>
-<td>Public safety, accountability</td>
-<td>Incentivize <em>sandbagging</em> (<a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a>)</td>
-</tr>
-</tbody>
-</table>
-</div>
-</figure>
-</div>
-<p>The classical evaluation model—and the formal game of <a href="chap9.html#sec-evaluation-game" class="quarto-xref"><span>Section 9.2</span></a>—contains only the first two rows, and assumes the evaluator is a <em>benevolent social planner</em>. The central move of this chapter is to <strong>relax that assumption</strong>: the lower three rows add principals on the demand side, and the second row, once the evaluator has its own commercial incentives, becomes strategic. This is the multi-principal setting we return to in <a href="#sec-multi-principal" class="quarto-xref"><span>Section 8.5.1</span></a>.</p>
-<section id="sec-benchmark-signaling" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="sec-benchmark-signaling"><span class="header-section-number">8.2.1</span> Benchmarks as Signaling and the Market for Lemons</h3>
-<p>Why should adopters and investors—parties who never train a model—rely on benchmarks at all? Because a benchmark is a <em>certification technology</em> that reduces an information asymmetry. The buyer cannot directly observe a model’s quality before deploying it; the seller can. This is precisely <span class="citation" data-cites="akerlof1970market">Akerlof (<a href="#ref-akerlof1970market" role="doc-biblioref">1970</a>)</span>’s market for lemons: absent a credible quality signal, buyers rationally discount all sellers toward the average, and high-quality producers are driven out. A trustworthy benchmark is the device that lets a high-quality model <em>separate</em> itself—the AI analogue of <span class="citation" data-cites="spence1973job">Spence (<a href="#ref-spence1973job" role="doc-biblioref">1973</a>)</span>’s job-market signaling.</p>
-<p>This framing does real work in the chapter:</p>
-<ul>
-<li>It explains the adopter and investor rows of <a href="#tbl-actors" class="quarto-xref">Table&nbsp;<span>8.1</span></a> without hand-waving: both are <em>receivers</em> in a signaling game, differing only in the decision they take.</li>
-<li>It makes the cost of gaming precise. Gaming works by making the <em>cheap</em> signal (a tuned benchmark score) imitate the <em>expensive</em> one (genuine capability). When gaming is cheap relative to real improvement, the separating equilibrium collapses back to pooling—and the benchmark stops carrying information for <em>all</em> downstream audiences, even though it may still be locally useful to guide a builder’s own research.</li>
-<li>It connects directly to <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>: the design levers there (randomization, correction, holdout, welfare-aligned metrics) are all attempts to <em>raise the cost of the cheap signal</em> until separation is restored.</li>
-</ul>
-<div id="qpyodide-insertion-location-1"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p><strong>Figure.</strong> A deliberately simple illustration of the thesis: each model’s benchmark score is its true utility plus a gaming term plus noise. As gaming becomes cheaper (x-axis), the rank correlation between the benchmark and true utility decays—the metric <em>decouples</em> from what downstream audiences care about. <em>(TODO: replace with a proper separating-vs-pooling signaling figure to make the Spence connection explicit.)</em></p>
-</section>
-</section>
-<section id="sec-gaming-taxonomy" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="sec-gaming-taxonomy"><span class="header-section-number">8.3</span> A Taxonomy of Gaming</h2>
-<p>The single most important organizing decision for this chapter is to classify gaming <strong>by mechanism, not by anecdote</strong>. Two episodes that look different in the press (a contaminated math benchmark, a leaderboard scandal) may exploit the same channel—or the same-looking episodes may exploit different channels that need different defenses. We split the taxonomy by <em>who is gaming whom</em>.</p>
-<section id="sec-builder-gaming" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="sec-builder-gaming"><span class="header-section-number">8.3.1</span> Builders Game the Metric</h3>
-<p>This is the direction modeled formally in <a href="chap9.html#sec-evaluation-game" class="quarto-xref"><span>Section 9.2</span></a>. Each sub-type names a distinct exploitable channel:</p>
-<ol type="1">
-<li><strong>Contamination / memorization.</strong> Training data includes (or overlaps) evaluation items, so the benchmark measures recall rather than capability. Concrete: the OpenLLM Leaderboard’s eventual archival amid contamination and overfitting concerns <span class="citation" data-cites="myrzakhan2024openllmleaderboard">(<a href="#ref-myrzakhan2024openllmleaderboard" role="doc-biblioref">Aidar Myrzakhan 2024</a>)</span>; clean evidence from holdout re-tests such as the GSM1k re-examination of grade-school arithmetic <span class="citation" data-cites="zhang2024careful">(<a href="#ref-zhang2024careful" role="doc-biblioref"><span class="nocase">Zhang et al.</span> 2024</a>)</span>; and detection methods such as black-box contamination proofs <span class="citation" data-cites="oren2023proving">(<a href="#ref-oren2023proving" role="doc-biblioref">Oren et al. 2023</a>)</span>. <em>Channel: the test items are public text that leaks into pretraining.</em></li>
-<li><strong>Adaptive overfitting via repeated querying.</strong> Even without seeing the test items, repeated submissions against a fixed holdout let a builder overfit the leaderboard. This is the failure the Ladder mechanism and reusable-holdout techniques were designed to bound <span class="citation" data-cites="blum2015ladder">(<a href="#ref-blum2015ladder" role="doc-biblioref">Blum and Hardt 2015</a>)</span>. <em>Channel: information leaks through the score itself across rounds (<a href="chap9.html#sec-restoring-alignment" class="quarto-xref"><span>Section 9.4</span></a>).</em></li>
-<li><strong>Strategic submission and selection.</strong> A builder deploys models tuned for the queries a platform tends to surface, or selectively reports favorable runs. <em>(TODO: cite the Llama-4 Chatbot Arena episode <span class="citation" data-cites="singh2025leaderboard">(<a href="#ref-singh2025leaderboard" role="doc-biblioref"><span class="nocase">Singh et al.</span> 2025</a>)</span> and the Terminal-Bench case once the references are settled.)</em> <em>Channel: the builder learns and targets the evaluation distribution.</em></li>
-<li><strong>Strategic post-training.</strong> Ranking-aware fine-tuning shifts a model up a leaderboard without broad capability gains. <em>(TODO: cite “Model Rankings under Strategic Post-Training,” <code>strategicposttraining2026</code>—verify authors/venue.)</em> <em>Channel: optimization directed at the rank statistic rather than the construct.</em></li>
-<li><strong>Sandbagging (the inverse).</strong> When the audience is a <em>regulator</em>, the incentive flips: a developer (or a model) may <em>underperform</em> on a dangerous-capability evaluation to appear safe <span class="citation" data-cites="vanderweij2024sandbagging">(<a href="#ref-vanderweij2024sandbagging" role="doc-biblioref">Weij et al. 2024</a>)</span>. This is why government-facing evaluations need different safeguards than capability leaderboards; see the frontier dangerous-capability evaluation program of <span class="citation" data-cites="phuong2024evaluating"><span class="nocase">Phuong et al.</span> (<a href="#ref-phuong2024evaluating" role="doc-biblioref">2024</a>)</span> and the red-teaming methodology of <a href="chap10.html" class="quarto-xref"><span>Chapter 10</span></a>. <em>Channel: strategic concealment rather than strategic exaggeration.</em></li>
-</ol>
-</section>
-<section id="sec-evaluator-gaming" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="sec-evaluator-gaming"><span class="header-section-number">8.3.2</span> Evaluators Game the Audience</h3>
-<p>This is the direction the formal game of <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> does <strong>not</strong> yet model, and it is the chapter’s novel thread. Once a benchmark provider has commercial or reputational incentives, the provider is itself a strategic player:</p>
-<ul>
-<li><strong>Selective disclosure / pay-to-play.</strong> Privileged providers obtain more matches, private pre-testing, or the ability to retract unfavorable results—asymmetries documented in the Chatbot Arena analysis of <span class="citation" data-cites="singh2025leaderboard chiang2024chatbotarena"><span class="nocase">Singh et al.</span> (<a href="#ref-singh2025leaderboard" role="doc-biblioref">2025</a>; see also <a href="#ref-chiang2024chatbotarena" role="doc-biblioref">Chiang et al. 2024</a> for the platform)</span>. <em>Channel: the evaluator controls what the audience sees.</em></li>
-<li><strong>Conflicts of interest.</strong> A platform that ranks models while also building or investing in one of them has an incentive to tilt the playing field.</li>
-<li><strong>Market structure.</strong> Why is trustworthy third-party evaluation hard to sustain as a business? The economics of the eval market—who pays, and whether the payer wants an honest signal—explain the recurring failure of independent eval startups <span class="citation" data-cites="liao2025evalstartups">(<a href="#ref-liao2025evalstartups" role="doc-biblioref">Liao 2025</a>)</span>. This is a <em>governance</em> observation: the party best positioned to certify quality is often the party with the least incentive to do so honestly.</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled" title="Why this split matters">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Why this split matters
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Every defense in <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> assumes a benevolent evaluator and targets <em>builder-side</em> gaming. The evaluator-side failures of <a href="#sec-evaluator-gaming" class="quarto-xref"><span>Section 8.3.2</span></a> are therefore <strong>largely unaddressed by current mechanism design</strong>—they are an open frontier (<a href="#sec-governance-frontier" class="quarto-xref"><span>Section 8.5</span></a>). Naming them as a separate direction is what keeps this chapter an argument rather than a list.</p>
-</div>
-</div>
-</section>
-</section>
-<section id="sec-gaming-defense-map" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="sec-gaming-defense-map"><span class="header-section-number">8.4</span> The Gaming-Channel / Design-Lever Map</h2>
-<p>This table is the spine that ties diagnosis (this chapter) to design (<a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>). Each gaming channel from <a href="#sec-gaming-taxonomy" class="quarto-xref"><span>Section 8.3</span></a> is closed—or left open—by a specific lever. The unclosed cells <em>are</em> the chapter’s research agenda.</p>
-<div id="tbl-gaming-defense" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-gaming-defense-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8.2: Mapping each gaming channel to its design lever. Bold rows are evaluator-side failures not yet covered by the formal game.
-</figcaption>
-<div aria-describedby="tbl-gaming-defense-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Gaming channel</th>
-<th>Section</th>
-<th>Design lever</th>
-<th>Where developed</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Contamination / memorization</td>
-<td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a></td>
-<td>Randomize &amp; refresh tasks; live benchmarks</td>
-<td><a href="chap9.html#sec-one-shot-alignment" class="quarto-xref"><span>Section 9.2.3</span></a>; <span class="citation" data-cites="white2025livebench jain2024livecodebench">(<a href="#ref-white2025livebench" role="doc-biblioref">White et al. 2025</a>; <a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span></td>
-</tr>
-<tr class="even">
-<td>Adaptive overfitting (repeated querying)</td>
-<td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a></td>
-<td>Noise-gated holdout; differential privacy</td>
-<td><a href="chap9.html#sec-holdout" class="quarto-xref"><span>Section 9.4.3</span></a></td>
-</tr>
-<tr class="odd">
-<td>Learning the evaluation distribution</td>
-<td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a></td>
-<td>Distribution correction toward uniform</td>
-<td><a href="chap9.html#sec-distribution-correction" class="quarto-xref"><span>Section 9.4.1</span></a></td>
-</tr>
-<tr class="even">
-<td>Rank-targeted / metric gaming</td>
-<td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a></td>
-<td>Welfare-aligned (counterfactual) metrics</td>
-<td><a href="chap9.html#sec-metric-design" class="quarto-xref"><span>Section 9.5</span></a></td>
-</tr>
-<tr class="odd">
-<td>Sandbagging on safety evals</td>
-<td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a></td>
-<td>Adversarial / red-team elicitation</td>
-<td><a href="chap10.html" class="quarto-xref"><span>Chapter 10</span></a></td>
-</tr>
-<tr class="even">
-<td><strong>Selective disclosure, pay-to-play</strong></td>
-<td><a href="#sec-evaluator-gaming" class="quarto-xref"><span>Section 8.3.2</span></a></td>
-<td><em>(open)</em> audit, transparency, conflict rules</td>
-<td><a href="#sec-governance-frontier" class="quarto-xref"><span>Section 8.5</span></a></td>
-</tr>
-<tr class="odd">
-<td><strong>Evaluator conflicts of interest</strong></td>
-<td><a href="#sec-evaluator-gaming" class="quarto-xref"><span>Section 8.3.2</span></a></td>
-<td><em>(open)</em> institutional separation</td>
-<td><a href="#sec-multi-principal" class="quarto-xref"><span>Section 8.5.1</span></a></td>
-</tr>
-</tbody>
-</table>
-</div>
-</figure>
-</div>
-<p>A practical reading of <a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>8.2</span></a>: the builder-side rows are well-served by the mechanisms of <a href="chap9.html#sec-design-principles" class="quarto-xref"><span>Section 9.7</span></a>, while the evaluator-side rows require <em>governance</em> rather than <em>mechanism design</em>—rules about who may run a benchmark, what they must disclose, and who audits them.</p>
-</section>
-<section id="sec-governance-frontier" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="sec-governance-frontier"><span class="header-section-number">8.5</span> The Governance Frontier</h2>
-<p>The remaining sections promote the chapter’s hardest questions to first-class topics. These are genuinely open; we mark them as such.</p>
-<section id="sec-multi-principal" class="level3" data-number="8.5.1">
-<h3 data-number="8.5.1" class="anchored" data-anchor-id="sec-multi-principal"><span class="header-section-number">8.5.1</span> Multi-Principal Evaluation and the Strategic Evaluator</h3>
-<p>The formal game of <a href="chap9.html#sec-evaluation-game" class="quarto-xref"><span>Section 9.2</span></a> has one evaluator and one builder, with the evaluator acting as a benevolent social planner. The ecosystem of <a href="#tbl-actors" class="quarto-xref">Table&nbsp;<span>8.1</span></a> has <em>many</em> principals with conflicting objectives, and an evaluator who may itself be strategic. Open questions:</p>
-<ul>
-<li><strong>What is the right model of an evaluator with its own utility?</strong> If the evaluator maximizes traffic or favors an affiliated model, what mechanism keeps its published ranking informative? (This is Discussion Question 1 of <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>, promoted here to a research direction.)</li>
-<li><strong>What is a model of adopter and government behavior?</strong> Both are receivers in the signaling game of <a href="#sec-benchmark-signaling" class="quarto-xref"><span>Section 8.2.1</span></a>, but with different loss functions and different abilities to audit. A formal account would let us ask which guarantees a benchmark must offer each.</li>
-<li><strong>Who watches the watchers?</strong> Independent audit, reproducible evaluation infrastructure <span class="citation" data-cites="biderman2024lessons">(<a href="#ref-biderman2024lessons" role="doc-biblioref"><span class="nocase">Biderman et al.</span> 2024</a>)</span>, and conflict-of-interest rules are the institutional analogues of the technical levers in <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>.</li>
-</ul>
-</section>
-<section id="sec-open-source" class="level3" data-number="8.5.2">
-<h3 data-number="8.5.2" class="anchored" data-anchor-id="sec-open-source"><span class="header-section-number">8.5.2</span> The Role of Open-Source Models</h3>
-<p>Open weights change the governance calculus in both directions, and it is worth stating the tension plainly:</p>
-<ul>
-<li><strong>For trust:</strong> open weights enable independent third-party auditing, reproducible evaluation, and inspection that closed APIs preclude.</li>
-<li><strong>Against trust:</strong> open weights make contamination and targeted gaming <em>easier</em>, since the model can be fine-tuned directly against any public benchmark.</li>
-</ul>
-<p><em>(TODO: take a position here, and connect to the public/private benchmark work—the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; <code>truong2025guard</code> covers the private-benchmark design.)</em></p>
-</section>
-<section id="sec-organizing" class="level3" data-number="8.5.3">
-<h3 data-number="8.5.3" class="anchored" data-anchor-id="sec-organizing"><span class="header-section-number">8.5.3</span> Organizing for Trustworthy Evaluation</h3>
-<p>A closing, deliberately normative section: how should the research community organize a future in which capable AI is evaluated in ways that serve all of its audiences, not just its builders? <em>(TODO: this is the “intelligence serves all” theme—write the vision to leave the reader with, and connect it back to the predictive-evaluation half of the book.)</em></p>
-</section>
-</section>
-<section id="sec-ecosystem-discussion" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="sec-ecosystem-discussion"><span class="header-section-number">8.6</span> Discussion Questions</h2>
-<ol type="1">
-<li>The market-for-lemons framing (<a href="#sec-benchmark-signaling" class="quarto-xref"><span>Section 8.2.1</span></a>) predicts that high-quality models exit when no credible signal exists. Has the <em>opposite</em> been observed—a credible benchmark causing a flight to quality? What made it credible?</li>
-<li><a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>8.2</span></a> leaves the evaluator-side rows open. Sketch a mechanism (technical or institutional) that would make selective disclosure costly for a platform.</li>
-<li>Sandbagging (<a href="#sec-builder-gaming" class="quarto-xref"><span>Section 8.3.1</span></a>) inverts the usual gaming direction. Does <em>any</em> of the design machinery in <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> help against strategic <em>under</em>-performance, or is it fundamentally a red-teaming problem (<a href="chap10.html" class="quarto-xref"><span>Chapter 10</span></a>)?</li>
-<li>Adopters and investors consume the same number but take different decisions. Should a benchmark report <em>different</em> statistics to different audiences, and does that reintroduce the garbling problem of <a href="chap9.html#sec-metric-design" class="quarto-xref"><span>Section 9.5</span></a>?</li>
-<li>Argue both sides of <a href="#sec-open-source" class="quarto-xref"><span>Section 8.5.2</span></a>: does open-sourcing models make the evaluation ecosystem more or less trustworthy on net?</li>
-<li>The Kaggle era had a benevolent evaluator who <em>owned the test set</em> and <em>controlled submission</em>. List the structural features of the LLM era that break this, and rank them by how much damage each does.</li>
-</ol>
-</section>
-<section id="sec-ecosystem-biblio" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="sec-ecosystem-biblio"><span class="header-section-number">8.7</span> Bibliographic Notes</h2>
-<p><strong>Goodhart’s Law and its variants</strong> are treated formally in <a href="chap9.html#sec-goodhart" class="quarto-xref"><span>Section 9.1</span></a>; the strategic-classification and performative-prediction foundations are <span class="citation" data-cites="hardt2016strategic">Hardt et al. (<a href="#ref-hardt2016strategic" role="doc-biblioref">2016</a>)</span> and <span class="citation" data-cites="perdomo2020performative">Perdomo et al. (<a href="#ref-perdomo2020performative" role="doc-biblioref">2020</a>)</span>.</p>
-<p><strong>Signaling and information economics.</strong> The market-for-lemons and signaling framing is <span class="citation" data-cites="akerlof1970market">Akerlof (<a href="#ref-akerlof1970market" role="doc-biblioref">1970</a>)</span> and <span class="citation" data-cites="spence1973job">Spence (<a href="#ref-spence1973job" role="doc-biblioref">1973</a>)</span>. The information-design view of disclosure is developed in <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a> via <span class="citation" data-cites="kamenica2011bayesian">Kamenica and Gentzkow (<a href="#ref-kamenica2011bayesian" role="doc-biblioref">2011</a>)</span>.</p>
-<p><strong>Gaming in the wild.</strong> Leaderboard-platform asymmetries are analyzed by <span class="citation" data-cites="singh2025leaderboard chiang2024chatbotarena"><span class="nocase">Singh et al.</span> (<a href="#ref-singh2025leaderboard" role="doc-biblioref">2025</a>; platform background: <a href="#ref-chiang2024chatbotarena" role="doc-biblioref">Chiang et al. 2024</a>)</span>; contamination evidence and detection by <span class="citation" data-cites="zhang2024careful"><span class="nocase">Zhang et al.</span> (<a href="#ref-zhang2024careful" role="doc-biblioref">2024</a>)</span> and <span class="citation" data-cites="oren2023proving">Oren et al. (<a href="#ref-oren2023proving" role="doc-biblioref">2023</a>)</span>; the OpenLLM Leaderboard’s archival by <span class="citation" data-cites="myrzakhan2024openllmleaderboard">Aidar Myrzakhan (<a href="#ref-myrzakhan2024openllmleaderboard" role="doc-biblioref">2024</a>)</span>. Contamination-resistant “live” benchmarks include <span class="citation" data-cites="white2025livebench">White et al. (<a href="#ref-white2025livebench" role="doc-biblioref">2025</a>)</span> and <span class="citation" data-cites="jain2024livecodebench">Jain et al. (<a href="#ref-jain2024livecodebench" role="doc-biblioref">2024</a>)</span>. Sandbagging and dangerous-capability evaluation are <span class="citation" data-cites="vanderweij2024sandbagging">Weij et al. (<a href="#ref-vanderweij2024sandbagging" role="doc-biblioref">2024</a>)</span> and <span class="citation" data-cites="phuong2024evaluating"><span class="nocase">Phuong et al.</span> (<a href="#ref-phuong2024evaluating" role="doc-biblioref">2024</a>)</span>. The construct-validity critique of general benchmarks is <span class="citation" data-cites="raji2021everything">Raji et al. (<a href="#ref-raji2021everything" role="doc-biblioref">2021</a>)</span>. The economics of the eval market is discussed by <span class="citation" data-cites="liao2025evalstartups">Liao (<a href="#ref-liao2025evalstartups" role="doc-biblioref">2025</a>)</span>.</p>
-<p><strong>Design levers</strong> for every channel in <a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>8.2</span></a> are developed in <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>. Reproducible evaluation infrastructure is <span class="citation" data-cites="biderman2024lessons"><span class="nocase">Biderman et al.</span> (<a href="#ref-biderman2024lessons" role="doc-biblioref">2024</a>)</span>.</p>
-</section>
-<section id="sec-ecosystem-exercises" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="sec-ecosystem-exercises"><span class="header-section-number">8.8</span> Exercises</h2>
-<ol type="1">
-<li><strong>(Easy)</strong> Fill in <a href="#tbl-actors" class="quarto-xref">Table&nbsp;<span>8.1</span></a> for a familiar benchmark: for each actor, name the concrete decision and the concrete distortion.</li>
-<li><strong>(Easy)</strong> Modify the decoupling simulation (<a href="#sec-benchmark-signaling" class="quarto-xref"><span>Section 8.2.1</span></a>) so that gaming effort is correlated with low true utility (the worst models game hardest). How does the decoupling curve change?</li>
-<li><strong>(Medium)</strong> Formalize a one-shot signaling game between a builder (high- or low-quality) and an adopter, where a benchmark score is a costly signal. Derive the condition on gaming cost under which a separating equilibrium exists, and relate it to the design levers of <a href="chap9.html" class="quarto-xref"><span>Chapter 9</span></a>.</li>
-<li><strong>(Medium)</strong> Pick one bold (evaluator-side) row of <a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>8.2</span></a> and write a half-page design proposal that would move it from <em>open</em> to <em>closed</em>.</li>
-<li><strong>(Hard)</strong> Extend the Stackelberg game of <a href="chap9.html#sec-evaluation-game" class="quarto-xref"><span>Section 9.2</span></a> to a <em>strategic</em> evaluator whose utility is a convex combination of social welfare and own-traffic. Characterize when the evaluator’s optimal mechanism still incentivizes broad builder capability.</li>
-</ol>
 
 
 <!-- -->
 
-</section>
-<section id="bibliography" class="level1 unnumbered">
-<h1 class="unnumbered">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-myrzakhan2024openllmleaderboard" class="csl-entry" role="listitem">
-Aidar Myrzakhan, Zhiqiang Shen, Sondos Mahmoud Bsharat. 2024. <span>“Open-LLM-Leaderboard: From Multi-Choice to Open-Style Questions for LLMs Evaluation, Benchmark, and Arena.”</span> <em>arXiv Preprint arXiv:2406.07545</em>.
-</div>
-<div id="ref-akerlof1970market" class="csl-entry" role="listitem">
-Akerlof, George A. 1970. <span>“The Market for <span>‘Lemons’</span>: Quality Uncertainty and the Market Mechanism.”</span> <em>The Quarterly Journal of Economics</em> 84 (3): 488–500.
-</div>
-<div id="ref-biderman2024lessons" class="csl-entry" role="listitem">
-<span class="nocase">Biderman, Stella et al.</span> 2024. <span>“Lessons from the Trenches on Reproducible Evaluation of Language Models.”</span> <em>arXiv Preprint arXiv:2405.14782</em>.
-</div>
-<div id="ref-blum2015ladder" class="csl-entry" role="listitem">
-Blum, Avrim, and Moritz Hardt. 2015. <span>“The Ladder: A Reliable Leaderboard for Machine Learning Competitions.”</span> <em>Proceedings of the 32nd International Conference on Machine Learning</em>, 1006–14.
-</div>
-<div id="ref-chiang2024chatbotarena" class="csl-entry" role="listitem">
-Chiang, Wei-Lin, Lianmin Zheng, Ying Sheng, et al. 2024. <em>Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference</em>. <a href="https://arxiv.org/abs/2403.04132">https://arxiv.org/abs/2403.04132</a>.
-</div>
-<div id="ref-hardt2016strategic" class="csl-entry" role="listitem">
-Hardt, Moritz, Nimrod Megiddo, Christos Papadimitriou, and Mary Wootters. 2016. <span>“Strategic Classification.”</span> <em>Proceedings of the 2016 ACM Conference on Innovations in Theoretical Computer Science</em>, 111–22.
-</div>
-<div id="ref-jain2024livecodebench" class="csl-entry" role="listitem">
-Jain, Naman, King Han, Alex Gu, et al. 2024. <span>“<span>LiveCodeBench</span>: Holistic and Contamination Free Evaluation of Large Language Models for Code.”</span> <em>arXiv Preprint arXiv:2403.07974</em>.
-</div>
-<div id="ref-kamenica2011bayesian" class="csl-entry" role="listitem">
-Kamenica, Emir, and Matthew Gentzkow. 2011. <span>“Bayesian Persuasion.”</span> <em>American Economic Review</em> 101 (6): 2590–615.
-</div>
-<div id="ref-liao2025evalstartups" class="csl-entry" role="listitem">
-Liao, Thomas. 2025. <em>Why Do Eval Startups Fail?</em> <a href="https://thomasliao.com/eval-startups" class="uri">Https://thomasliao.com/eval-startups</a>.
-</div>
-<div id="ref-oren2023proving" class="csl-entry" role="listitem">
-Oren, Yonatan, Nicole Meister, Niladri Chatterji, Faisal Ladhak, and Tatsunori B. Hashimoto. 2023. <em>Proving Test Set Contamination in Black Box Language Models</em>. <a href="https://arxiv.org/abs/2310.17623">https://arxiv.org/abs/2310.17623</a>.
-</div>
-<div id="ref-perdomo2020performative" class="csl-entry" role="listitem">
-Perdomo, Juan, Tijana Zrnic, Celestine Mendler-Dünner, and Moritz Hardt. 2020. <span>“Performative Prediction.”</span> <em>Proceedings of the 37th International Conference on Machine Learning</em>, 7599–609.
-</div>
-<div id="ref-phuong2024evaluating" class="csl-entry" role="listitem">
-<span class="nocase">Phuong, Mary et al.</span> 2024. <em>Evaluating Frontier Models for Dangerous Capabilities</em>. <a href="https://arxiv.org/abs/2403.13793">https://arxiv.org/abs/2403.13793</a>.
-</div>
-<div id="ref-raji2021everything" class="csl-entry" role="listitem">
-Raji, Inioluwa Deborah, Emily M. Bender, Amandalynne Paullada, Emily Denton, and Alex Hanna. 2021. <span>“AI and the Everything in the Whole Wide World Benchmark.”</span> <em>Proceedings of the NeurIPS Track on Datasets and Benchmarks</em>.
-</div>
-<div id="ref-singh2025leaderboard" class="csl-entry" role="listitem">
-<span class="nocase">Singh, Shivalika et al.</span> 2025. <em>The Leaderboard Illusion</em>. <a href="https://arxiv.org/abs/2504.20879">https://arxiv.org/abs/2504.20879</a>.
-</div>
-<div id="ref-spence1973job" class="csl-entry" role="listitem">
-Spence, Michael. 1973. <span>“Job Market Signaling.”</span> <em>The Quarterly Journal of Economics</em> 87 (3): 355–74.
-</div>
-<div id="ref-vanderweij2024sandbagging" class="csl-entry" role="listitem">
-Weij, Teun van der, Felix Hofstätter, Ollie Jaffe, Samuel F. Brown, and Francis Rhys Ward. 2024. <em>AI Sandbagging: Language Models Can Strategically Underperform on Evaluations</em>. <a href="https://arxiv.org/abs/2406.07358">https://arxiv.org/abs/2406.07358</a>.
-</div>
-<div id="ref-white2025livebench" class="csl-entry" role="listitem">
-White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Challenging, Contamination-Limited LLM Benchmark</em>. <a href="https://arxiv.org/abs/2406.19314">https://arxiv.org/abs/2406.19314</a>.
-</div>
-<div id="ref-zhang2024careful" class="csl-entry" role="listitem">
-<span class="nocase">Zhang, Hugh et al.</span> 2024. <em>A Careful Examination of Large Language Model Performance on Grade School Arithmetic</em>. <a href="https://arxiv.org/abs/2405.00332">https://arxiv.org/abs/2405.00332</a>.
-</div>
-</div>
 </section>
 
 </main> <!-- /main -->
@@ -1733,13 +1021,13 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../src/chap7.html" class="pagination-link" aria-label="Causality">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Causality</span></span>
+      <a href="../src/chap7.html" class="pagination-link" aria-label="Discovery">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discovery</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../src/chap9.html" class="pagination-link" aria-label="Design">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Design</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../src/chap9.html" class="pagination-link" aria-label="Intervention">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intervention</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -1780,225 +1068,45 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
 <span id="cb1-35"><a href="#cb1-35"></a><span class="co">    - matplotlib</span></span>
 <span id="cb1-36"><a href="#cb1-36"></a><span class="co">---</span></span>
 <span id="cb1-37"><a href="#cb1-37"></a></span>
-<span id="cb1-38"><a href="#cb1-38"></a><span class="fu"># Ecosystem {#sec-ecosystem}</span></span>
+<span id="cb1-38"><a href="#cb1-38"></a><span class="fu"># Predictability {#sec-discovery}</span></span>
 <span id="cb1-39"><a href="#cb1-39"></a></span>
-<span id="cb1-40"><a href="#cb1-40"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb1-41"><a href="#cb1-41"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb1-42"><a href="#cb1-42"></a></span>
-<span id="cb1-43"><a href="#cb1-43"></a><span class="ss">1. </span>**Map** the stakeholders of a modern AI benchmark---builders, evaluators/platforms, adopters, investors, and regulators---and identify the decision each one delegates to the metric and the incentive each has to distort it.</span>
-<span id="cb1-44"><a href="#cb1-44"></a><span class="ss">2. </span>**Explain** why an expanding audience turns Goodhart's Law from an academic curiosity into a structural force, using the economics of *signaling* and the *market for lemons*.</span>
-<span id="cb1-45"><a href="#cb1-45"></a><span class="ss">3. </span>**Distinguish** the two directions of gaming: builders who game the metric and evaluators/platforms who game the audience, and classify real episodes into a mechanism-based taxonomy.</span>
-<span id="cb1-46"><a href="#cb1-46"></a><span class="ss">4. </span>**Connect** each gaming channel to a design lever from @sec-design, and identify which channels remain open research problems.</span>
-<span id="cb1-47"><a href="#cb1-47"></a><span class="ss">5. </span>**Articulate** the governance frontier: multi-principal evaluation, the role of open-source models, and how to organize a trustworthy third-party evaluation ecosystem.</span>
-<span id="cb1-48"><a href="#cb1-48"></a>:::</span>
+<span id="cb1-40"><a href="#cb1-40"></a><span class="fu">## Amortized Models {#sec-cold-start}</span></span>
+<span id="cb1-41"><a href="#cb1-41"></a></span>
+<span id="cb1-42"><a href="#cb1-42"></a>A **factor model** generalizes the IRT models of this chapter to several latent dimensions, assigning each model $i$ an ability vector $U_i \in \mathbb{R}^K$ and each item $j$ a loading vector $V_j \in \mathbb{R}^K$ and intercept $Z_j$, with $P(Y_{ij} = 1) = \sigma(U_i^\top V_j + Z_j)$; we develop it as an instrument for *discovering* latent structure in @sec-factor-models. Fit to a benchmark in the usual way, it learns a latent parameter vector for each person ($U_i$) and each item ($V_j$, $Z_j$) by optimizing over the observed response matrix. This works well when we have enough responses for every entity, but it has two limitations: (1) the number of parameters grows linearly with the number of persons and items, and (2) new persons or items that were not present during training have no learned representation. **Amortized models** address both limitations by replacing per-entity parameter optimization with a learned function that maps observable features to latent parameters.</span>
+<span id="cb1-43"><a href="#cb1-43"></a></span>
+<span id="cb1-44"><a href="#cb1-44"></a>In the standard factor model, each item $j$ has its own learned parameters $V_j$ and $Z_j$. An amortized model instead learns a function $f_\theta$ that predicts these parameters from item features:</span>
+<span id="cb1-45"><a href="#cb1-45"></a></span>
+<span id="cb1-46"><a href="#cb1-46"></a>$$</span>
+<span id="cb1-47"><a href="#cb1-47"></a><span class="co">[</span><span class="ot">\hat{V}_j, \hat{Z}_j</span><span class="co">]</span> = f_\theta(x_j)</span>
+<span id="cb1-48"><a href="#cb1-48"></a>$$</span>
 <span id="cb1-49"><a href="#cb1-49"></a></span>
-<span id="cb1-50"><a href="#cb1-50"></a>::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}</span>
-<span id="cb1-51"><a href="#cb1-51"></a>This chapter can be covered in **2 lectures** (75--90 minutes each):</span>
-<span id="cb1-52"><a href="#cb1-52"></a></span>
-<span id="cb1-53"><a href="#cb1-53"></a>**Lecture 1: The Ecosystem and Its Failures**</span>
-<span id="cb1-54"><a href="#cb1-54"></a></span>
-<span id="cb1-55"><a href="#cb1-55"></a><span class="ss">- </span>From scoreboard to target: the expanding audience (15 min)</span>
-<span id="cb1-56"><a href="#cb1-56"></a><span class="ss">- </span>Benchmarks as signaling and the market for lemons (20 min)</span>
-<span id="cb1-57"><a href="#cb1-57"></a><span class="ss">- </span>A taxonomy of gaming: builder-side and evaluator-side (35 min)</span>
-<span id="cb1-58"><a href="#cb1-58"></a></span>
-<span id="cb1-59"><a href="#cb1-59"></a>**Lecture 2: Governance**</span>
-<span id="cb1-60"><a href="#cb1-60"></a></span>
-<span id="cb1-61"><a href="#cb1-61"></a><span class="ss">- </span>The gaming-channel / design-lever map (20 min)</span>
-<span id="cb1-62"><a href="#cb1-62"></a><span class="ss">- </span>Multi-principal evaluation and the strategic evaluator (25 min)</span>
-<span id="cb1-63"><a href="#cb1-63"></a><span class="ss">- </span>The role of open-source; organizing the community (25 min)</span>
-<span id="cb1-64"><a href="#cb1-64"></a>:::</span>
+<span id="cb1-50"><a href="#cb1-50"></a>where $x_j$ is a feature vector for item $j$ (e.g., a text embedding of the question). Similarly, person parameters can be amortized via a function $g_\phi$:</span>
+<span id="cb1-51"><a href="#cb1-51"></a></span>
+<span id="cb1-52"><a href="#cb1-52"></a>$$</span>
+<span id="cb1-53"><a href="#cb1-53"></a>\hat{U}_i = g_\phi(m_i)</span>
+<span id="cb1-54"><a href="#cb1-54"></a>$$</span>
+<span id="cb1-55"><a href="#cb1-55"></a></span>
+<span id="cb1-56"><a href="#cb1-56"></a>where $m_i$ is a feature vector for person $i$ (e.g., model metadata such as parameter count, architecture family, and release date). The predicted correctness probability is then:</span>
+<span id="cb1-57"><a href="#cb1-57"></a></span>
+<span id="cb1-58"><a href="#cb1-58"></a>$$</span>
+<span id="cb1-59"><a href="#cb1-59"></a>\hat{P}_{ij} = \sigma(\hat{U}_i^\top \hat{V}_j + \hat{Z}_j)</span>
+<span id="cb1-60"><a href="#cb1-60"></a>$$</span>
+<span id="cb1-61"><a href="#cb1-61"></a></span>
+<span id="cb1-62"><a href="#cb1-62"></a>The key advantage is that $f_\theta$ and $g_\phi$ generalize to *new* items and persons not seen during training, as long as their features are available.</span>
+<span id="cb1-63"><a href="#cb1-63"></a></span>
+<span id="cb1-64"><a href="#cb1-64"></a>Amortized measurement models are closely related to **neural collaborative filtering** (NCF), a family of methods from recommendation systems that use neural networks to model user-item interactions. In the recommender systems literature, the response matrix $Y$ records user preferences (ratings, clicks); in our setting, it records model correctness. Both problems share the same structure: predicting missing entries of a sparse matrix.</span>
 <span id="cb1-65"><a href="#cb1-65"></a></span>
-<span id="cb1-66"><a href="#cb1-66"></a>::: {.callout-note title="Chapter Roadmap"}</span>
-<span id="cb1-67"><a href="#cb1-67"></a>This chapter is the *diagnosis* that motivates the *design* of @sec-design. We ask three questions in sequence: **who are the actors** (@sec-actors), **what game do they play** (@sec-gaming-taxonomy), and **how should the system be governed** (@sec-governance-frontier). The technical machinery for re-engineering the game---randomization, distribution correction, holdout mechanisms, welfare-aligned metrics---is developed in @sec-design; here we establish *why* that machinery is needed and *which* failures it must close.</span>
-<span id="cb1-68"><a href="#cb1-68"></a>:::</span>
-<span id="cb1-69"><a href="#cb1-69"></a></span>
-<span id="cb1-70"><a href="#cb1-70"></a></span>
-<span id="cb1-71"><a href="#cb1-71"></a><span class="fu">## From Scoreboard to Target {#sec-scoreboard-to-target}</span></span>
-<span id="cb1-72"><a href="#cb1-72"></a></span>
-<span id="cb1-73"><a href="#cb1-73"></a><span class="at">&gt; "When a measure becomes a target, it ceases to be a good measure." --- Charles Goodhart (1975)</span></span>
-<span id="cb1-74"><a href="#cb1-74"></a></span>
-<span id="cb1-75"><a href="#cb1-75"></a>A benchmark begins life as an *internal* instrument: a model developer's private scoreboard for tracking research progress. In that regime Goodhart's Law is mostly latent---the only party who can optimize against the metric is the same party who benefits from an honest reading of it. The structural shift of the past few years is that the *audience* of a benchmark has expanded far beyond the developer who builds the model.</span>
-<span id="cb1-76"><a href="#cb1-76"></a></span>
-<span id="cb1-77"><a href="#cb1-77"></a>Today a single leaderboard number is consumed by:</span>
-<span id="cb1-78"><a href="#cb1-78"></a></span>
-<span id="cb1-79"><a href="#cb1-79"></a><span class="ss">- </span>**Builders**, who use it to allocate research effort and to claim state-of-the-art.</span>
-<span id="cb1-80"><a href="#cb1-80"></a><span class="ss">- </span>**Adopters** (enterprises, agencies, application developers), who use it as a procurement and due-diligence signal in build-vs-buy and vendor-selection decisions.</span>
-<span id="cb1-81"><a href="#cb1-81"></a><span class="ss">- </span>**Investors**, who read benchmark leadership as a proxy for a technical moat when pricing funding rounds.</span>
-<span id="cb1-82"><a href="#cb1-82"></a><span class="ss">- </span>**Governments and regulators**, who increasingly reference capability and safety evaluations in policy. *(TODO: cite the specific provisions to lean on---e.g., the EU AI Act's general-purpose-AI obligations and codes of practice, and the relevant US framework. Verify current status as of the writing date; the policy landscape moves quickly.)*</span>
-<span id="cb1-83"><a href="#cb1-83"></a></span>
-<span id="cb1-84"><a href="#cb1-84"></a>Once any of these parties can move resources on the basis of a score, the developer's reputation, funding, or regulatory standing depends on that score---and the data-generating process is no longer fixed. This is exactly the setting in which Goodhart's adversarial variant dominates (@sec-goodhart). The remainder of this chapter takes the audience expansion as the root cause and traces its consequences.</span>
-<span id="cb1-85"><a href="#cb1-85"></a></span>
-<span id="cb1-86"><a href="#cb1-86"></a>::: {.callout-important title="The chapter's thesis"}</span>
-<span id="cb1-87"><a href="#cb1-87"></a>A public benchmark is a **signaling instrument**. As its audience expands beyond builders, *both sides* of the market acquire an incentive to game it: builders game the metric, and benchmark providers game the audience. Restoring trust is therefore not only a statistical problem (@sec-reliability, @sec-validity) but an **institutional design** problem---the subject of @sec-design and of this chapter's governance discussion.</span>
-<span id="cb1-88"><a href="#cb1-88"></a>:::</span>
-<span id="cb1-89"><a href="#cb1-89"></a></span>
-<span id="cb1-90"><a href="#cb1-90"></a></span>
-<span id="cb1-91"><a href="#cb1-91"></a><span class="fu">## The Actors and Their Incentives {#sec-actors}</span></span>
-<span id="cb1-92"><a href="#cb1-92"></a></span>
-<span id="cb1-93"><a href="#cb1-93"></a>We organize the ecosystem as a set of principals, each delegating a decision to the metric, each with a characteristic way of distorting it.</span>
-<span id="cb1-94"><a href="#cb1-94"></a></span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="pp">|</span> Actor <span class="pp">|</span> Decision delegated to the metric <span class="pp">|</span> Incentive to distort <span class="pp">|</span> Primary failure mode <span class="pp">|</span></span>
-<span id="cb1-96"><a href="#cb1-96"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb1-97"><a href="#cb1-97"></a><span class="pp">|</span> **Builder / developer** <span class="pp">|</span> Where to allocate training effort; what to claim <span class="pp">|</span> Reputation, funding, market share <span class="pp">|</span> Optimize to the test (@sec-builder-gaming) <span class="pp">|</span></span>
-<span id="cb1-98"><a href="#cb1-98"></a><span class="pp">|</span> **Evaluator / platform** <span class="pp">|</span> What to publish and how to rank <span class="pp">|</span> Relevance, traffic, revenue, own-model favoritism <span class="pp">|</span> Game the audience (@sec-evaluator-gaming) <span class="pp">|</span></span>
-<span id="cb1-99"><a href="#cb1-99"></a><span class="pp">|</span> **Adopter** <span class="pp">|</span> Build vs. buy; which vendor <span class="pp">|</span> Lower procurement risk cheaply <span class="pp">|</span> Over-trust a decoupled proxy <span class="pp">|</span></span>
-<span id="cb1-100"><a href="#cb1-100"></a><span class="pp">|</span> **Investor** <span class="pp">|</span> How to price a round <span class="pp">|</span> Back the apparent leader <span class="pp">|</span> Reward narrative over capability <span class="pp">|</span></span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="pp">|</span> **Regulator** <span class="pp">|</span> Whether a system is safe to deploy <span class="pp">|</span> Public safety, accountability <span class="pp">|</span> Incentivize *sandbagging* (@sec-builder-gaming) <span class="pp">|</span></span>
-<span id="cb1-102"><a href="#cb1-102"></a></span>
-<span id="cb1-103"><a href="#cb1-103"></a>: Stakeholders of a modern benchmark and how each can distort it {#tbl-actors}</span>
-<span id="cb1-104"><a href="#cb1-104"></a></span>
-<span id="cb1-105"><a href="#cb1-105"></a>The classical evaluation model---and the formal game of @sec-evaluation-game---contains only the first two rows, and assumes the evaluator is a *benevolent social planner*. The central move of this chapter is to **relax that assumption**: the lower three rows add principals on the demand side, and the second row, once the evaluator has its own commercial incentives, becomes strategic. This is the multi-principal setting we return to in @sec-multi-principal.</span>
-<span id="cb1-106"><a href="#cb1-106"></a></span>
-<span id="cb1-107"><a href="#cb1-107"></a><span class="fu">### Benchmarks as Signaling and the Market for Lemons {#sec-benchmark-signaling}</span></span>
-<span id="cb1-108"><a href="#cb1-108"></a></span>
-<span id="cb1-109"><a href="#cb1-109"></a>Why should adopters and investors---parties who never train a model---rely on benchmarks at all? Because a benchmark is a *certification technology* that reduces an information asymmetry. The buyer cannot directly observe a model's quality before deploying it; the seller can. This is precisely @akerlof1970market's market for lemons: absent a credible quality signal, buyers rationally discount all sellers toward the average, and high-quality producers are driven out. A trustworthy benchmark is the device that lets a high-quality model *separate* itself---the AI analogue of @spence1973job's job-market signaling.</span>
-<span id="cb1-110"><a href="#cb1-110"></a></span>
-<span id="cb1-111"><a href="#cb1-111"></a>This framing does real work in the chapter:</span>
-<span id="cb1-112"><a href="#cb1-112"></a></span>
-<span id="cb1-113"><a href="#cb1-113"></a><span class="ss">- </span>It explains the adopter and investor rows of @tbl-actors without hand-waving: both are *receivers* in a signaling game, differing only in the decision they take.</span>
-<span id="cb1-114"><a href="#cb1-114"></a><span class="ss">- </span>It makes the cost of gaming precise. Gaming works by making the *cheap* signal (a tuned benchmark score) imitate the *expensive* one (genuine capability). When gaming is cheap relative to real improvement, the separating equilibrium collapses back to pooling---and the benchmark stops carrying information for *all* downstream audiences, even though it may still be locally useful to guide a builder's own research.</span>
-<span id="cb1-115"><a href="#cb1-115"></a><span class="ss">- </span>It connects directly to @sec-design: the design levers there (randomization, correction, holdout, welfare-aligned metrics) are all attempts to *raise the cost of the cheap signal* until separation is restored.</span>
-<span id="cb1-116"><a href="#cb1-116"></a></span>
-<span id="cb1-117"><a href="#cb1-117"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-118"><a href="#cb1-118"></a><span class="co">#| label: signal-decoupling</span></span>
-<span id="cb1-119"><a href="#cb1-119"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-120"><a href="#cb1-120"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-121"><a href="#cb1-121"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-122"><a href="#cb1-122"></a></span>
-<span id="cb1-123"><a href="#cb1-123"></a><span class="kw">def</span> spearman(a, b):</span>
-<span id="cb1-124"><a href="#cb1-124"></a>    <span class="co"># Spearman rank correlation = Pearson correlation of the ranks.</span></span>
-<span id="cb1-125"><a href="#cb1-125"></a>    ra, rb <span class="op">=</span> np.argsort(np.argsort(a)), np.argsort(np.argsort(b))</span>
-<span id="cb1-126"><a href="#cb1-126"></a>    <span class="cf">return</span> np.corrcoef(ra, rb)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-127"><a href="#cb1-127"></a></span>
-<span id="cb1-128"><a href="#cb1-128"></a>np.random.seed(<span class="dv">0</span>)</span>
-<span id="cb1-129"><a href="#cb1-129"></a></span>
-<span id="cb1-130"><a href="#cb1-130"></a><span class="co"># A simple illustration of the chapter's thesis:</span></span>
-<span id="cb1-131"><a href="#cb1-131"></a><span class="co"># as "gaming" becomes cheaper, the benchmark decouples from true utility.</span></span>
-<span id="cb1-132"><a href="#cb1-132"></a>M <span class="op">=</span> <span class="dv">200</span>                                   <span class="co"># number of models</span></span>
-<span id="cb1-133"><a href="#cb1-133"></a>true_utility <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)  <span class="co"># what society actually cares about</span></span>
-<span id="cb1-134"><a href="#cb1-134"></a></span>
-<span id="cb1-135"><a href="#cb1-135"></a>gaming_strengths <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="fl">3.0</span>, <span class="dv">25</span>)  <span class="co"># how much a model can boost its score by gaming</span></span>
-<span id="cb1-136"><a href="#cb1-136"></a>noise <span class="op">=</span> <span class="fl">0.3</span></span>
-<span id="cb1-137"><a href="#cb1-137"></a>corrs <span class="op">=</span> []</span>
-<span id="cb1-138"><a href="#cb1-138"></a><span class="cf">for</span> g <span class="kw">in</span> gaming_strengths:</span>
-<span id="cb1-139"><a href="#cb1-139"></a>    gaming_effort <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, M)     <span class="co"># heterogeneous propensity to game</span></span>
-<span id="cb1-140"><a href="#cb1-140"></a>    bench <span class="op">=</span> true_utility <span class="op">+</span> g <span class="op">*</span> gaming_effort <span class="op">+</span> np.random.normal(<span class="dv">0</span>, noise, M)</span>
-<span id="cb1-141"><a href="#cb1-141"></a>    corrs.append(spearman(bench, true_utility))</span>
-<span id="cb1-142"><a href="#cb1-142"></a></span>
-<span id="cb1-143"><a href="#cb1-143"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="fl">3.5</span>, <span class="fl">2.6</span>))</span>
-<span id="cb1-144"><a href="#cb1-144"></a>ax.plot(gaming_strengths, corrs, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, lw<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb1-145"><a href="#cb1-145"></a>ax.axhline(<span class="fl">1.0</span>, color<span class="op">=</span><span class="st">'#888888'</span>, ls<span class="op">=</span><span class="st">':'</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-146"><a href="#cb1-146"></a>ax.set_xlabel(<span class="st">'Gaming strength (cheapness of the proxy)'</span>)</span>
-<span id="cb1-147"><a href="#cb1-147"></a>ax.set_ylabel(<span class="st">"Benchmark–utility rank corr."</span>)</span>
-<span id="cb1-148"><a href="#cb1-148"></a>ax.set_title(<span class="st">'Decoupling under gaming'</span>)</span>
-<span id="cb1-149"><a href="#cb1-149"></a>ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span>
-<span id="cb1-150"><a href="#cb1-150"></a>plt.tight_layout()</span>
-<span id="cb1-151"><a href="#cb1-151"></a>plt.show()</span>
-<span id="cb1-152"><a href="#cb1-152"></a><span class="in">```</span></span>
-<span id="cb1-153"><a href="#cb1-153"></a></span>
-<span id="cb1-154"><a href="#cb1-154"></a>**Figure.** A deliberately simple illustration of the thesis: each model's benchmark score is its true utility plus a gaming term plus noise. As gaming becomes cheaper (x-axis), the rank correlation between the benchmark and true utility decays---the metric *decouples* from what downstream audiences care about. *(TODO: replace with a proper separating-vs-pooling signaling figure to make the Spence connection explicit.)*</span>
-<span id="cb1-155"><a href="#cb1-155"></a></span>
-<span id="cb1-156"><a href="#cb1-156"></a></span>
-<span id="cb1-157"><a href="#cb1-157"></a><span class="fu">## A Taxonomy of Gaming {#sec-gaming-taxonomy}</span></span>
-<span id="cb1-158"><a href="#cb1-158"></a></span>
-<span id="cb1-159"><a href="#cb1-159"></a>The single most important organizing decision for this chapter is to classify gaming **by mechanism, not by anecdote**. Two episodes that look different in the press (a contaminated math benchmark, a leaderboard scandal) may exploit the same channel---or the same-looking episodes may exploit different channels that need different defenses. We split the taxonomy by *who is gaming whom*.</span>
-<span id="cb1-160"><a href="#cb1-160"></a></span>
-<span id="cb1-161"><a href="#cb1-161"></a><span class="fu">### Builders Game the Metric {#sec-builder-gaming}</span></span>
-<span id="cb1-162"><a href="#cb1-162"></a></span>
-<span id="cb1-163"><a href="#cb1-163"></a>This is the direction modeled formally in @sec-evaluation-game. Each sub-type names a distinct exploitable channel:</span>
-<span id="cb1-164"><a href="#cb1-164"></a></span>
-<span id="cb1-165"><a href="#cb1-165"></a><span class="ss">1. </span>**Contamination / memorization.** Training data includes (or overlaps) evaluation items, so the benchmark measures recall rather than capability. Concrete: the OpenLLM Leaderboard's eventual archival amid contamination and overfitting concerns <span class="co">[</span><span class="ot">@myrzakhan2024openllmleaderboard</span><span class="co">]</span>; clean evidence from holdout re-tests such as the GSM1k re-examination of grade-school arithmetic <span class="co">[</span><span class="ot">@zhang2024careful</span><span class="co">]</span>; and detection methods such as black-box contamination proofs <span class="co">[</span><span class="ot">@oren2023proving</span><span class="co">]</span>. *Channel: the test items are public text that leaks into pretraining.*</span>
-<span id="cb1-166"><a href="#cb1-166"></a><span class="ss">2. </span>**Adaptive overfitting via repeated querying.** Even without seeing the test items, repeated submissions against a fixed holdout let a builder overfit the leaderboard. This is the failure the Ladder mechanism and reusable-holdout techniques were designed to bound <span class="co">[</span><span class="ot">@blum2015ladder</span><span class="co">]</span>. *Channel: information leaks through the score itself across rounds (@sec-restoring-alignment).*</span>
-<span id="cb1-167"><a href="#cb1-167"></a><span class="ss">3. </span>**Strategic submission and selection.** A builder deploys models tuned for the queries a platform tends to surface, or selectively reports favorable runs. *(TODO: cite the Llama-4 Chatbot Arena episode [@singh2025leaderboard] and the Terminal-Bench case once the references are settled.)* *Channel: the builder learns and targets the evaluation distribution.*</span>
-<span id="cb1-168"><a href="#cb1-168"></a><span class="ss">4. </span>**Strategic post-training.** Ranking-aware fine-tuning shifts a model up a leaderboard without broad capability gains. *(TODO: cite "Model Rankings under Strategic Post-Training," `strategicposttraining2026`---verify authors/venue.)* *Channel: optimization directed at the rank statistic rather than the construct.*</span>
-<span id="cb1-169"><a href="#cb1-169"></a><span class="ss">5. </span>**Sandbagging (the inverse).** When the audience is a *regulator*, the incentive flips: a developer (or a model) may *underperform* on a dangerous-capability evaluation to appear safe [@vanderweij2024sandbagging]. This is why government-facing evaluations need different safeguards than capability leaderboards; see the frontier dangerous-capability evaluation program of @phuong2024evaluating and the red-teaming methodology of @sec-redteaming. *Channel: strategic concealment rather than strategic exaggeration.*</span>
-<span id="cb1-170"><a href="#cb1-170"></a></span>
-<span id="cb1-171"><a href="#cb1-171"></a><span class="fu">### Evaluators Game the Audience {#sec-evaluator-gaming}</span></span>
-<span id="cb1-172"><a href="#cb1-172"></a></span>
-<span id="cb1-173"><a href="#cb1-173"></a>This is the direction the formal game of @sec-design does **not** yet model, and it is the chapter's novel thread. Once a benchmark provider has commercial or reputational incentives, the provider is itself a strategic player:</span>
-<span id="cb1-174"><a href="#cb1-174"></a></span>
-<span id="cb1-175"><a href="#cb1-175"></a><span class="ss">- </span>**Selective disclosure / pay-to-play.** Privileged providers obtain more matches, private pre-testing, or the ability to retract unfavorable results---asymmetries documented in the Chatbot Arena analysis of @singh2025leaderboard <span class="co">[</span><span class="ot">see also @chiang2024chatbotarena for the platform</span><span class="co">]</span>. *Channel: the evaluator controls what the audience sees.*</span>
-<span id="cb1-176"><a href="#cb1-176"></a><span class="ss">- </span>**Conflicts of interest.** A platform that ranks models while also building or investing in one of them has an incentive to tilt the playing field.</span>
-<span id="cb1-177"><a href="#cb1-177"></a><span class="ss">- </span>**Market structure.** Why is trustworthy third-party evaluation hard to sustain as a business? The economics of the eval market---who pays, and whether the payer wants an honest signal---explain the recurring failure of independent eval startups <span class="co">[</span><span class="ot">@liao2025evalstartups</span><span class="co">]</span>. This is a *governance* observation: the party best positioned to certify quality is often the party with the least incentive to do so honestly.</span>
-<span id="cb1-178"><a href="#cb1-178"></a></span>
-<span id="cb1-179"><a href="#cb1-179"></a>::: {.callout-note title="Why this split matters"}</span>
-<span id="cb1-180"><a href="#cb1-180"></a>Every defense in @sec-design assumes a benevolent evaluator and targets *builder-side* gaming. The evaluator-side failures of @sec-evaluator-gaming are therefore **largely unaddressed by current mechanism design**---they are an open frontier (@sec-governance-frontier). Naming them as a separate direction is what keeps this chapter an argument rather than a list.</span>
-<span id="cb1-181"><a href="#cb1-181"></a>:::</span>
-<span id="cb1-182"><a href="#cb1-182"></a></span>
-<span id="cb1-183"><a href="#cb1-183"></a></span>
-<span id="cb1-184"><a href="#cb1-184"></a><span class="fu">## The Gaming-Channel / Design-Lever Map {#sec-gaming-defense-map}</span></span>
-<span id="cb1-185"><a href="#cb1-185"></a></span>
-<span id="cb1-186"><a href="#cb1-186"></a>This table is the spine that ties diagnosis (this chapter) to design (@sec-design). Each gaming channel from @sec-gaming-taxonomy is closed---or left open---by a specific lever. The unclosed cells *are* the chapter's research agenda.</span>
-<span id="cb1-187"><a href="#cb1-187"></a></span>
-<span id="cb1-188"><a href="#cb1-188"></a><span class="pp">|</span> Gaming channel <span class="pp">|</span> Section <span class="pp">|</span> Design lever <span class="pp">|</span> Where developed <span class="pp">|</span></span>
-<span id="cb1-189"><a href="#cb1-189"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb1-190"><a href="#cb1-190"></a><span class="pp">|</span> Contamination / memorization <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Randomize &amp; refresh tasks; live benchmarks <span class="pp">|</span> @sec-one-shot-alignment; <span class="co">[</span><span class="ot">@white2025livebench; @jain2024livecodebench</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-191"><a href="#cb1-191"></a><span class="pp">|</span> Adaptive overfitting (repeated querying) <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Noise-gated holdout; differential privacy <span class="pp">|</span> @sec-holdout <span class="pp">|</span></span>
-<span id="cb1-192"><a href="#cb1-192"></a><span class="pp">|</span> Learning the evaluation distribution <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Distribution correction toward uniform <span class="pp">|</span> @sec-distribution-correction <span class="pp">|</span></span>
-<span id="cb1-193"><a href="#cb1-193"></a><span class="pp">|</span> Rank-targeted / metric gaming <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Welfare-aligned (counterfactual) metrics <span class="pp">|</span> @sec-metric-design <span class="pp">|</span></span>
-<span id="cb1-194"><a href="#cb1-194"></a><span class="pp">|</span> Sandbagging on safety evals <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Adversarial / red-team elicitation <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-195"><a href="#cb1-195"></a><span class="pp">|</span> **Selective disclosure, pay-to-play** <span class="pp">|</span> @sec-evaluator-gaming <span class="pp">|</span> *(open)* audit, transparency, conflict rules <span class="pp">|</span> @sec-governance-frontier <span class="pp">|</span></span>
-<span id="cb1-196"><a href="#cb1-196"></a><span class="pp">|</span> **Evaluator conflicts of interest** <span class="pp">|</span> @sec-evaluator-gaming <span class="pp">|</span> *(open)* institutional separation <span class="pp">|</span> @sec-multi-principal <span class="pp">|</span></span>
-<span id="cb1-197"><a href="#cb1-197"></a></span>
-<span id="cb1-198"><a href="#cb1-198"></a>: Mapping each gaming channel to its design lever. Bold rows are evaluator-side failures not yet covered by the formal game. {#tbl-gaming-defense}</span>
-<span id="cb1-199"><a href="#cb1-199"></a></span>
-<span id="cb1-200"><a href="#cb1-200"></a>A practical reading of @tbl-gaming-defense: the builder-side rows are well-served by the mechanisms of @sec-design-principles, while the evaluator-side rows require *governance* rather than *mechanism design*---rules about who may run a benchmark, what they must disclose, and who audits them.</span>
-<span id="cb1-201"><a href="#cb1-201"></a></span>
-<span id="cb1-202"><a href="#cb1-202"></a></span>
-<span id="cb1-203"><a href="#cb1-203"></a><span class="fu">## The Governance Frontier {#sec-governance-frontier}</span></span>
-<span id="cb1-204"><a href="#cb1-204"></a></span>
-<span id="cb1-205"><a href="#cb1-205"></a>The remaining sections promote the chapter's hardest questions to first-class topics. These are genuinely open; we mark them as such.</span>
-<span id="cb1-206"><a href="#cb1-206"></a></span>
-<span id="cb1-207"><a href="#cb1-207"></a><span class="fu">### Multi-Principal Evaluation and the Strategic Evaluator {#sec-multi-principal}</span></span>
-<span id="cb1-208"><a href="#cb1-208"></a></span>
-<span id="cb1-209"><a href="#cb1-209"></a>The formal game of @sec-evaluation-game has one evaluator and one builder, with the evaluator acting as a benevolent social planner. The ecosystem of @tbl-actors has *many* principals with conflicting objectives, and an evaluator who may itself be strategic. Open questions:</span>
-<span id="cb1-210"><a href="#cb1-210"></a></span>
-<span id="cb1-211"><a href="#cb1-211"></a><span class="ss">- </span>**What is the right model of an evaluator with its own utility?** If the evaluator maximizes traffic or favors an affiliated model, what mechanism keeps its published ranking informative? (This is Discussion Question 1 of @sec-design, promoted here to a research direction.)</span>
-<span id="cb1-212"><a href="#cb1-212"></a><span class="ss">- </span>**What is a model of adopter and government behavior?** Both are receivers in the signaling game of @sec-benchmark-signaling, but with different loss functions and different abilities to audit. A formal account would let us ask which guarantees a benchmark must offer each.</span>
-<span id="cb1-213"><a href="#cb1-213"></a><span class="ss">- </span>**Who watches the watchers?** Independent audit, reproducible evaluation infrastructure <span class="co">[</span><span class="ot">@biderman2024lessons</span><span class="co">]</span>, and conflict-of-interest rules are the institutional analogues of the technical levers in @sec-design.</span>
-<span id="cb1-214"><a href="#cb1-214"></a></span>
-<span id="cb1-215"><a href="#cb1-215"></a><span class="fu">### The Role of Open-Source Models {#sec-open-source}</span></span>
-<span id="cb1-216"><a href="#cb1-216"></a></span>
-<span id="cb1-217"><a href="#cb1-217"></a>Open weights change the governance calculus in both directions, and it is worth stating the tension plainly:</span>
-<span id="cb1-218"><a href="#cb1-218"></a></span>
-<span id="cb1-219"><a href="#cb1-219"></a><span class="ss">- </span>**For trust:** open weights enable independent third-party auditing, reproducible evaluation, and inspection that closed APIs preclude.</span>
-<span id="cb1-220"><a href="#cb1-220"></a><span class="ss">- </span>**Against trust:** open weights make contamination and targeted gaming *easier*, since the model can be fine-tuned directly against any public benchmark.</span>
-<span id="cb1-221"><a href="#cb1-221"></a></span>
-<span id="cb1-222"><a href="#cb1-222"></a>*(TODO: take a position here, and connect to the public/private benchmark work---the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; `truong2025guard` covers the private-benchmark design.)*</span>
-<span id="cb1-223"><a href="#cb1-223"></a></span>
-<span id="cb1-224"><a href="#cb1-224"></a><span class="fu">### Organizing for Trustworthy Evaluation {#sec-organizing}</span></span>
-<span id="cb1-225"><a href="#cb1-225"></a></span>
-<span id="cb1-226"><a href="#cb1-226"></a>A closing, deliberately normative section: how should the research community organize a future in which capable AI is evaluated in ways that serve all of its audiences, not just its builders? *(TODO: this is the "intelligence serves all" theme---write the vision to leave the reader with, and connect it back to the predictive-evaluation half of the book.)*</span>
-<span id="cb1-227"><a href="#cb1-227"></a></span>
-<span id="cb1-228"><a href="#cb1-228"></a></span>
-<span id="cb1-229"><a href="#cb1-229"></a><span class="fu">## Discussion Questions {#sec-ecosystem-discussion}</span></span>
-<span id="cb1-230"><a href="#cb1-230"></a></span>
-<span id="cb1-231"><a href="#cb1-231"></a><span class="ss">1. </span>The market-for-lemons framing (@sec-benchmark-signaling) predicts that high-quality models exit when no credible signal exists. Has the *opposite* been observed---a credible benchmark causing a flight to quality? What made it credible?</span>
-<span id="cb1-232"><a href="#cb1-232"></a><span class="ss">2. </span>@tbl-gaming-defense leaves the evaluator-side rows open. Sketch a mechanism (technical or institutional) that would make selective disclosure costly for a platform.</span>
-<span id="cb1-233"><a href="#cb1-233"></a><span class="ss">3. </span>Sandbagging (@sec-builder-gaming) inverts the usual gaming direction. Does *any* of the design machinery in @sec-design help against strategic *under*-performance, or is it fundamentally a red-teaming problem (@sec-redteaming)?</span>
-<span id="cb1-234"><a href="#cb1-234"></a><span class="ss">4. </span>Adopters and investors consume the same number but take different decisions. Should a benchmark report *different* statistics to different audiences, and does that reintroduce the garbling problem of @sec-metric-design?</span>
-<span id="cb1-235"><a href="#cb1-235"></a><span class="ss">5. </span>Argue both sides of @sec-open-source: does open-sourcing models make the evaluation ecosystem more or less trustworthy on net?</span>
-<span id="cb1-236"><a href="#cb1-236"></a><span class="ss">6. </span>The Kaggle era had a benevolent evaluator who *owned the test set* and *controlled submission*. List the structural features of the LLM era that break this, and rank them by how much damage each does.</span>
-<span id="cb1-237"><a href="#cb1-237"></a></span>
-<span id="cb1-238"><a href="#cb1-238"></a></span>
-<span id="cb1-239"><a href="#cb1-239"></a><span class="fu">## Bibliographic Notes {#sec-ecosystem-biblio}</span></span>
-<span id="cb1-240"><a href="#cb1-240"></a></span>
-<span id="cb1-241"><a href="#cb1-241"></a>**Goodhart's Law and its variants** are treated formally in @sec-goodhart <span class="co">[</span><span class="ot">@goodhart1984problems; @manheim2018categorizing</span><span class="co">]</span>; the strategic-classification and performative-prediction foundations are @hardt2016strategic and @perdomo2020performative.</span>
-<span id="cb1-242"><a href="#cb1-242"></a></span>
-<span id="cb1-243"><a href="#cb1-243"></a>**Signaling and information economics.** The market-for-lemons and signaling framing is @akerlof1970market and @spence1973job. The information-design view of disclosure is developed in @sec-design via @kamenica2011bayesian.</span>
-<span id="cb1-244"><a href="#cb1-244"></a></span>
-<span id="cb1-245"><a href="#cb1-245"></a>**Gaming in the wild.** Leaderboard-platform asymmetries are analyzed by @singh2025leaderboard <span class="co">[</span><span class="ot">platform background: @chiang2024chatbotarena</span><span class="co">]</span>; contamination evidence and detection by @zhang2024careful and @oren2023proving; the OpenLLM Leaderboard's archival by @myrzakhan2024openllmleaderboard. Contamination-resistant "live" benchmarks include @white2025livebench and @jain2024livecodebench. Sandbagging and dangerous-capability evaluation are @vanderweij2024sandbagging and @phuong2024evaluating. The construct-validity critique of general benchmarks is @raji2021everything. The economics of the eval market is discussed by @liao2025evalstartups.</span>
-<span id="cb1-246"><a href="#cb1-246"></a></span>
-<span id="cb1-247"><a href="#cb1-247"></a>**Design levers** for every channel in @tbl-gaming-defense are developed in @sec-design <span class="co">[</span><span class="ot">@truong2025guard; @blum2015ladder; @procaccia2025metritocracy</span><span class="co">]</span>. Reproducible evaluation infrastructure is @biderman2024lessons.</span>
-<span id="cb1-248"><a href="#cb1-248"></a></span>
-<span id="cb1-249"><a href="#cb1-249"></a></span>
-<span id="cb1-250"><a href="#cb1-250"></a><span class="fu">## Exercises {#sec-ecosystem-exercises}</span></span>
-<span id="cb1-251"><a href="#cb1-251"></a></span>
-<span id="cb1-252"><a href="#cb1-252"></a><span class="ss">1. </span>**(Easy)** Fill in @tbl-actors for a familiar benchmark: for each actor, name the concrete decision and the concrete distortion.</span>
-<span id="cb1-253"><a href="#cb1-253"></a><span class="ss">2. </span>**(Easy)** Modify the decoupling simulation (@sec-benchmark-signaling) so that gaming effort is correlated with low true utility (the worst models game hardest). How does the decoupling curve change?</span>
-<span id="cb1-254"><a href="#cb1-254"></a><span class="ss">3. </span>**(Medium)** Formalize a one-shot signaling game between a builder (high- or low-quality) and an adopter, where a benchmark score is a costly signal. Derive the condition on gaming cost under which a separating equilibrium exists, and relate it to the design levers of @sec-design.</span>
-<span id="cb1-255"><a href="#cb1-255"></a><span class="ss">4. </span>**(Medium)** Pick one bold (evaluator-side) row of @tbl-gaming-defense and write a half-page design proposal that would move it from *open* to *closed*.</span>
-<span id="cb1-256"><a href="#cb1-256"></a><span class="ss">5. </span>**(Hard)** Extend the Stackelberg game of @sec-evaluation-game to a *strategic* evaluator whose utility is a convex combination of social welfare and own-traffic. Characterize when the evaluator's optimal mechanism still incentivizes broad builder capability.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-66"><a href="#cb1-66"></a>Classical matrix factorization decomposes the response matrix as $Y \approx U V^\top + Z$, which is exactly the logistic factor model from @sec-factor-models without the sigmoid. NCF extends this by replacing the inner product $U_i^\top V_j$ with a neural network $h_\psi(U_i, V_j)$ that can learn non-linear interactions between person and item latent factors. In the measurement context, this corresponds to replacing the linear logit $U_i^\top V_j + Z_j$ with a more flexible function:</span>
+<span id="cb1-67"><a href="#cb1-67"></a></span>
+<span id="cb1-68"><a href="#cb1-68"></a>$$</span>
+<span id="cb1-69"><a href="#cb1-69"></a>P(Y_{ij} = 1) = \sigma(h_\psi(U_i, V_j, Z_j))</span>
+<span id="cb1-70"><a href="#cb1-70"></a>$$</span>
+<span id="cb1-71"><a href="#cb1-71"></a></span>
+<span id="cb1-72"><a href="#cb1-72"></a>This increased flexibility can capture complex interaction patterns---for instance, a model that is strong on reasoning but specifically weak on multi-step arithmetic---that a linear factor model would need many dimensions to approximate. The cost is reduced interpretability: the latent factors no longer have a clean geometric interpretation as "ability axes."</span>
+<span id="cb1-73"><a href="#cb1-73"></a></span>
+<span id="cb1-74"><a href="#cb1-74"></a>::: {.callout-note title="NCF and Amortized Models"}</span>
+<span id="cb1-75"><a href="#cb1-75"></a>Neural collaborative filtering and amortized models address complementary problems. NCF uses neural networks to model the *interaction* between latent factors (replacing $U_i^\top V_j$ with a learned function). Amortized models use neural networks to *predict* the latent factors from features (replacing per-entity $U_i$, $V_j$ with functions of observable features). The two ideas can be combined: use amortized encoders to produce latent factors, then a neural interaction function to produce predictions.</span>
+<span id="cb1-76"><a href="#cb1-76"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap8.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
@@ -2057,542 +1165,6 @@ document.addEventListener('DOMContentLoaded', function() {
     })(document);
     </script>
   
-<script type="module">
-/**
- * Factory function to create different types of cells based on options.
- * @param {Object} cellData - JSON object containing code, id, and options.
- * @returns {BaseCell} Instance of the appropriate cell class.
- */
-globalThis.qpyodideCreateCell = function(cellData) {
-    switch (cellData.options.context) {
-        case 'interactive':
-            return new InteractiveCell(cellData);
-        case 'output':
-            return new OutputCell(cellData);
-        case 'setup':
-            return new SetupCell(cellData);
-        default:
-            return new InteractiveCell(cellData);
-            // throw new Error('Invalid cell type specified in options.');
-    }
-}  
-
-/**
- * CellContainer class for managing a collection of cells.
- * @class
- */
-class CellContainer {
-    /**
-     * Constructor for CellContainer.
-     * Initializes an empty array to store cells.
-     * @constructor
-     */
-    constructor() {
-        this.cells = [];
-    }
-
-    /**
-     * Add a cell to the container.
-     * @param {BaseCell} cell - Instance of a cell (BaseCell or its subclasses).
-     */
-    addCell(cell) {
-        this.cells.push(cell);
-    }
-
-    /**
-     * Execute all cells in the container.
-     */
-    async executeAllCells() {
-        for (const cell of this.cells) {
-            await cell.executeCode();
-        }
-    }
-
-    /**
-     * Execute all cells in the container.
-     */
-    async autoRunExecuteAllCells() {
-        for (const cell of this.cells) {
-            await cell.autoRunExecuteCode();
-        }
-    }
-}
-  
-
-/**
- * BaseCell class for handling code execution using Pyodide.
- * @class
- */
-class BaseCell {
-    /**
-     * Constructor for BaseCell.
-     * @constructor
-     * @param {Object} cellData - JSON object containing code, id, and options.
-     */
-    constructor(cellData) {
-        this.code = cellData.code;
-        this.id = cellData.id;
-        this.options = cellData.options;
-        this.insertionLocation = document.getElementById(`qpyodide-insertion-location-${this.id}`);
-        this.executionLock = false;
-    }
-
-    cellOptions() {
-        // Subclass this? 
-        console.log(this.options);
-        return this.options;
-    }
-
-    /**
-     * Execute the Python code using Pyodide.
-     * @returns {*} Result of the code execution.
-     */
-    async executeCode() {
-        // Execute code using Pyodide
-        const result = getPyodide().runPython(this.code);
-        return result;
-    }
-};
-
-/**
- * InteractiveCell class for creating editable code editor with Monaco Editor.
- * @class
- * @extends BaseCell
- */
-class InteractiveCell extends BaseCell {
-
-    /**
-     * Constructor for InteractiveCell.
-     * @constructor
-     * @param {Object} cellData - JSON object containing code, id, and options.
-     */
-    constructor(cellData) {
-        super(cellData);
-        this.editor = null;
-        this.setupElement();
-        this.setupMonacoEditor();
-    }
-
-    /**
-     * Set up the interactive cell elements
-     */
-    setupElement() {
-
-        // Create main div element
-        var mainDiv = document.createElement('div');
-        mainDiv.id = `qpyodide-interactive-area-${this.id}`;
-        mainDiv.className = `qpyodide-interactive-area`;
-        if (this.options.classes) {
-            mainDiv.className += " " + this.options.classes
-        }
-
-        // Add a unique cell identifier that users can customize
-        if (this.options.label) {
-            mainDiv.setAttribute('data-id', this.options.label);
-        }
-
-        // Create toolbar div
-        var toolbarDiv = document.createElement('div');
-        toolbarDiv.className = 'qpyodide-editor-toolbar';
-        toolbarDiv.id = `qpyodide-editor-toolbar-${this.id}`;
-
-        // Create a div to hold the left buttons
-        var leftButtonsDiv = document.createElement('div');
-        leftButtonsDiv.className = 'qpyodide-editor-toolbar-left-buttons';
-
-        // Create a div to hold the right buttons
-        var rightButtonsDiv = document.createElement('div');
-        rightButtonsDiv.className = 'qpyodide-editor-toolbar-right-buttons';
-
-        // Create Run Code button
-        var runCodeButton = document.createElement('button');
-        runCodeButton.className = 'btn btn-default qpyodide-button qpyodide-button-run';
-        runCodeButton.disabled = true;
-        runCodeButton.type = 'button';
-        runCodeButton.id = `qpyodide-button-run-${this.id}`;
-        runCodeButton.textContent = '🟡 Loading Pyodide...';
-        runCodeButton.title = `Run code (Shift + Enter)`;
-
-        // Append buttons to the leftButtonsDiv
-        leftButtonsDiv.appendChild(runCodeButton);
-
-        // Create Reset button
-        var resetButton = document.createElement('button');
-        resetButton.className = 'btn btn-light btn-xs qpyodide-button qpyodide-button-reset';
-        resetButton.type = 'button';
-        resetButton.id = `qpyodide-button-reset-${this.id}`;
-        resetButton.title = 'Start over';
-        resetButton.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
-
-        // Create Copy button
-        var copyButton = document.createElement('button');
-        copyButton.className = 'btn btn-light btn-xs qpyodide-button qpyodide-button-copy';
-        copyButton.type = 'button';
-        copyButton.id = `qpyodide-button-copy-${this.id}`;
-        copyButton.title = 'Copy code';
-        copyButton.innerHTML = '<i class="fa-regular fa-copy"></i>';
-
-        // Append buttons to the rightButtonsDiv
-        rightButtonsDiv.appendChild(resetButton);
-        rightButtonsDiv.appendChild(copyButton);
-
-        // Create console area div
-        var consoleAreaDiv = document.createElement('div');
-        consoleAreaDiv.id = `qpyodide-console-area-${this.id}`;
-        consoleAreaDiv.className = 'qpyodide-console-area';
-
-        // Create editor div
-        var editorDiv = document.createElement('div');
-        editorDiv.id = `qpyodide-editor-${this.id}`;
-        editorDiv.className = 'qpyodide-editor';
-
-        // Create output code area div
-        var outputCodeAreaDiv = document.createElement('div');
-        outputCodeAreaDiv.id = `qpyodide-output-code-area-${this.id}`;
-        outputCodeAreaDiv.className = 'qpyodide-output-code-area';
-        outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
-
-        // Create pre element inside output code area
-        var preElement = document.createElement('pre');
-        preElement.style.visibility = 'hidden';
-        outputCodeAreaDiv.appendChild(preElement);
-
-        // Create output graph area div
-        var outputGraphAreaDiv = document.createElement('div');
-        outputGraphAreaDiv.id = `qpyodide-output-graph-area-${this.id}`;
-        outputGraphAreaDiv.className = 'qpyodide-output-graph-area';
-
-        // Append buttons to the toolbar
-        toolbarDiv.appendChild(leftButtonsDiv);
-        toolbarDiv.appendChild(rightButtonsDiv);
-
-        // Append all elements to the main div
-        mainDiv.appendChild(toolbarDiv);
-        consoleAreaDiv.appendChild(editorDiv);
-        consoleAreaDiv.appendChild(outputCodeAreaDiv);
-        mainDiv.appendChild(consoleAreaDiv);
-        mainDiv.appendChild(outputGraphAreaDiv);
-
-        // Insert the dynamically generated object at the document location.
-        this.insertionLocation.appendChild(mainDiv);
-    }
-
-    /**
-     * Set up Monaco Editor for code editing.
-     */
-    setupMonacoEditor() {
-
-        // Retrieve the previously created document elements
-        this.runButton = document.getElementById(`qpyodide-button-run-${this.id}`);
-        this.resetButton = document.getElementById(`qpyodide-button-reset-${this.id}`);
-        this.copyButton = document.getElementById(`qpyodide-button-copy-${this.id}`);
-        this.editorDiv = document.getElementById(`qpyodide-editor-${this.id}`);
-        this.outputCodeDiv = document.getElementById(`qpyodide-output-code-area-${this.id}`);
-        this.outputGraphDiv = document.getElementById(`qpyodide-output-graph-area-${this.id}`);
-        
-        // Store reference to the object
-        var thiz = this;
-
-        // Load the Monaco Editor and create an instance
-        require(['vs/editor/editor.main'], function () {
-            thiz.editor = monaco.editor.create(
-                thiz.editorDiv, {
-                    value: thiz.code,
-                    language: 'python',
-                    theme: 'vs-light',
-                    automaticLayout: true,           // Works wonderfully with RevealJS
-                    scrollBeyondLastLine: false,
-                    minimap: {
-                        enabled: false
-                    },
-                    fontSize: '17.5pt',              // Bootstrap is 1 rem
-                    renderLineHighlight: "none",     // Disable current line highlighting
-                    hideCursorInOverviewRuler: true,  // Remove cursor indictor in right hand side scroll bar
-                    readOnly: thiz.options['read-only'] ?? false
-                }
-            );
-        
-            // Store the official counter ID to be used in keyboard shortcuts
-            thiz.editor.__qpyodideCounter = thiz.id;
-        
-            // Store the official div container ID
-            thiz.editor.__qpyodideEditorId = `qpyodide-editor-${thiz.id}`;
-        
-            // Store the initial code value and options
-            thiz.editor.__qpyodideinitialCode = thiz.code;
-            thiz.editor.__qpyodideOptions = thiz.options;
-        
-            // Set at the model level the preferred end of line (EOL) character to LF.
-            // This prevent `\r\n` from being given to the Pyodide engine if the user is on Windows.
-            // See details in: https://github.com/coatless/quarto-Pyodide/issues/94
-            // Associated error text: 
-            // Error: <text>:1:7 unexpected input
-        
-            // Retrieve the underlying model
-            const model = thiz.editor.getModel();
-            // Set EOL for the model
-            model.setEOL(monaco.editor.EndOfLineSequence.LF);
-        
-            // Dynamically modify the height of the editor window if new lines are added.
-            let ignoreEvent = false;
-            const updateHeight = () => {
-            const contentHeight = thiz.editor.getContentHeight();
-            // We're avoiding a width change
-            //editorDiv.style.width = `${width}px`;
-            thiz.editorDiv.style.height = `${contentHeight}px`;
-                try {
-                    ignoreEvent = true;
-            
-                    // The key to resizing is this call
-                    thiz.editor.layout();
-                } finally {
-                    ignoreEvent = false;
-                }
-            };
-        
-            // Helper function to check if selected text is empty
-            function isEmptyCodeText(selectedCodeText) {
-                return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
-            }
-        
-            // Registry of keyboard shortcuts that should be re-added to each editor window
-            // when focus changes.
-            const addPyodideKeyboardShortCutCommands = () => {
-            // Add a keydown event listener for Shift+Enter to run all code in cell
-            thiz.editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
-                // Retrieve all text inside the editor
-                thiz.runCode(thiz.editor.getValue());
-            });
-        
-            // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
-            thiz.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-                    // Get the selected text from the editor
-                    const selectedText = thiz.editor.getModel().getValueInRange(thiz.editor.getSelection());
-                    // Check if no code is selected
-                    if (isEmptyCodeText(selectedText)) {
-                        // Obtain the current cursor position
-                        let currentPosition = thiz.editor.getPosition();
-                        // Retrieve the current line content
-                        let currentLine = thiz.editor.getModel().getLineContent(currentPosition.lineNumber);
-                
-                        // Propose a new position to move the cursor to
-                        let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
-                
-                        // Check if the new position is beyond the last line of the editor
-                        if (newPosition.lineNumber > thiz.editor.getModel().getLineCount()) {
-                            // Add a new line at the end of the editor
-                            thiz.editor.executeEdits("addNewLine", [{
-                            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
-                            text: "\n", 
-                            forceMoveMarkers: true,
-                            }]);
-                        }
-                        
-                        // Run the entire line of code.
-                        thiz.runCode(currentLine);
-                
-                        // Move cursor to new position
-                        thiz.editor.setPosition(newPosition);
-                    } else {
-                        // Code to run when Ctrl+Enter is pressed with selected code
-                        thiz.runCode(selectedText);
-                    }
-                });
-            }
-        
-            // Register an on focus event handler for when a code cell is selected to update
-            // what keyboard shortcut commands should work.
-            // This is a workaround to fix a regression that happened with multiple
-            // editor windows since Monaco 0.32.0 
-            // https://github.com/microsoft/monaco-editor/issues/2947
-            thiz.editor.onDidFocusEditorText(addPyodideKeyboardShortCutCommands);
-        
-            // Register an on change event for when new code is added to the editor window
-            thiz.editor.onDidContentSizeChange(updateHeight);
-        
-            // Manually re-update height to account for the content we inserted into the call
-            updateHeight();
-                
-        });
-
-        
-        // Add a click event listener to the run button
-        thiz.runButton.onclick = function () {
-            thiz.runCode(
-                thiz.editor.getValue()
-            );
-        };
-        
-        // Add a click event listener to the reset button
-        thiz.copyButton.onclick = function () {
-            // Retrieve current code data
-            const data = thiz.editor.getValue();
-            
-            // Write code data onto the clipboard.
-            navigator.clipboard.writeText(data || "");
-        };
-        
-        // Add a click event listener to the copy button
-        thiz.resetButton.onclick = function () {
-            thiz.editor.setValue(thiz.editor.__qpyodideinitialCode);
-        };
-    }
-
-    disableInteractiveCells() {
-        // Enable locking of execution for the cell
-        this.executionLock = true;
-
-        // Disallowing execution of other code cells
-        document.querySelectorAll(".qpyodide-button-run").forEach((btn) => {
-            btn.disabled = true;
-        });
-    }
-
-    enableInteractiveCells() {
-        // Remove locking of execution for the cell
-        this.executionLock = false;
-
-        // All execution of other code cells
-        document.querySelectorAll(".qpyodide-button-run").forEach((btn) => {
-            btn.disabled = false;
-        });
-    }
-
-    /**
-     * Execute the Python code inside the editor.
-     */
-    async runCode(code) {
-        
-        // Check if we have an execution lock
-        if (this.executeLock) return; 
-        
-        this.disableInteractiveCells();
-
-        // Force wait procedure
-        await mainPyodide;
-
-        // Clear the output stock
-        qpyodideResetOutputArray();
-
-        // Generate a new canvas element, avoid attaching until the end
-        let graphFigure = document.createElement("figure");
-        document.pyodideMplTarget = graphFigure;
-
-        console.log("Running code!");
-        // Obtain results from the base class
-        try {
-            // Always check to see if the user adds new packages
-            await mainPyodide.loadPackagesFromImports(code);
-
-            // Process result
-            const output = await mainPyodide.runPythonAsync(code);
-
-            // Add output
-            qpyodideAddToOutputArray(output, "stdout");
-        } catch (err) {
-            // Add error message
-            qpyodideAddToOutputArray(err, "stderr");
-            // TODO: There has to be a way to remove the Pyodide portion of the errors... 
-        }
-
-        const result = qpyodideRetrieveOutput();
-
-        // Nullify the output area of content
-        this.outputCodeDiv.innerHTML = "";
-        this.outputGraphDiv.innerHTML = "";        
-
-        // Design an output object for messages
-        const pre = document.createElement("pre");
-        if (/\S/.test(result)) {
-            // Display results as HTML elements to retain output styling
-            const div = document.createElement("div");
-            div.innerHTML = result;
-            pre.appendChild(div);
-        } else {
-            // If nothing is present, hide the element.
-            pre.style.visibility = "hidden";
-        }
-
-        // Add output under interactive div
-        this.outputCodeDiv.appendChild(pre);
-
-        // Place the graphics onto the page
-        if (graphFigure) {
-
-            if (this.options['fig-cap']) {
-                // Create figcaption element
-                const figcaptionElement = document.createElement('figcaption');
-                figcaptionElement.innerText = this.options['fig-cap'];
-                // Append figcaption to figure
-                graphFigure.appendChild(figcaptionElement);    
-            }
-
-            this.outputGraphDiv.appendChild(graphFigure);
-        }
-
-        // Re-enable execution
-        this.enableInteractiveCells();
-    }
-};
-
-/**
- * OutputCell class for customizing and displaying output.
- * @class
- * @extends BaseCell
- */
-class OutputCell extends BaseCell {
-    /**
-     * Constructor for OutputCell.
-     * @constructor
-     * @param {Object} cellData - JSON object containing code, id, and options.
-     */
-    constructor(cellData) {
-      super(cellData);
-    }
-  
-    /**
-     * Display customized output on the page.
-     * @param {*} output - Result to be displayed.
-     */
-    displayOutput(output) {
-        const results = this.executeCode();
-        return results;
-    }
-  }
-
-/**
- * SetupCell class for suppressed output.
- * @class
- * @extends BaseCell
- */
-class SetupCell extends BaseCell {
-    /**
-     * Constructor for SetupCell.
-     * @constructor
-     * @param {Object} cellData - JSON object containing code, id, and options.
-     */
-    constructor(cellData) {
-        super(cellData);
-    }
-
-    /**
-     * Execute the Python code without displaying the results.
-     */
-    runSetupCode() {
-        // Execute code without displaying output
-        this.executeCode();
-    }
-};
-</script>
-<script type="module">
-// Handle cell initialization initialization
-qpyodideCellDetails.map(
-    (entry) => {
-      // Handle the creation of the element
-      qpyodideCreateCell(entry);
-    }
-  );
-</script>
 
 
 

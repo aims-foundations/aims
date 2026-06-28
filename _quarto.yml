@@ -143,12 +143,13 @@ book:
     - src/chap3.qmd  # Models
     - src/chap4.qmd  # Learning
     - src/chap5.qmd  # Reliability
-    - src/chap_discovery.qmd  # Discovery
     - src/chap6.qmd  # Efficiency
-    - src/chap7.qmd  # Causality
-    - src/chap8.qmd  # Ecosystem
-    - src/chap9.qmd  # Design
-    - src/chap10.qmd # Application
-    - src/chap11.qmd # Conclusion
+    - src/chap7.qmd  # Discovery
+    - src/chap8.qmd  # Predictability
+    - src/chap9.qmd  # Intervention
+    - src/chap10.qmd # Ecosystem
+    - src/chap11.qmd # Design
+    - src/chap12.qmd # Application
+    - src/chap13.qmd # Conclusion
   appendices:
     - src/notation.qmd

@@ -43,14 +43,16 @@ pyodide:
 By the end of this chapter, the reader will be able to:
 
 1. **Distinguish** between Item Response Theory, factor models, paired comparison systems (Elo, Bradley-Terry), and network models (GGM, Ising).
-2. **Explain** why the Rasch model holds a special status as "the measurement model" through the sufficiency of sum scores, specific objectivity, and test-free measurement.
-3. **Derive** the sufficiency theorem for the Rasch model and explain its implications for AI benchmark evaluation.
-4. **Compare** the prescriptive (Rasch school) and descriptive (general IRT) approaches to measurement and articulate when each is appropriate.
-5. **Trace** the historical development from Thurstone (1927) through Rasch (1960) to modern network psychometrics.
-6. **Connect** classical measurement concepts (reliability, validity, dimensionality) to contemporary AI benchmark evaluation.
-7. **Apply** measurement theory to analyze whether AI benchmarks satisfy the requirements for scientific measurement.
-8. **Implement** basic IRT models in Python and visualize item characteristic curves.
-9. **Evaluate** the assumptions underlying AI leaderboards and identify potential violations of measurement principles.
+2. **Explain** measurement as a homomorphism (representational measurement theory) and additive conjoint measurement, and map their elements onto the Rasch model.
+3. **Explain** why the Rasch model holds a special status as "the measurement model" through the sufficiency of sum scores, specific objectivity, and test-free measurement.
+4. **Explain** why observable response probabilities make the conjoint cancellation axioms empirically testable in AI evaluation, and state the caveats (link freedom, multidimensionality, sampling error, and the separation of measurement from validity).
+5. **Derive** the sufficiency theorem for the Rasch model and explain its implications for AI benchmark evaluation.
+6. **Compare** the prescriptive (Rasch school) and descriptive (general IRT) approaches to measurement and articulate when each is appropriate.
+7. **Trace** the historical development from Thurstone (1927) through Rasch (1960) to modern network psychometrics.
+8. **Connect** classical measurement concepts (reliability, validity, dimensionality) to contemporary AI benchmark evaluation.
+9. **Apply** measurement theory to analyze whether AI benchmarks satisfy the requirements for scientific measurement.
+10. **Implement** basic IRT models in Python and visualize item characteristic curves.
+11. **Evaluate** the assumptions underlying AI leaderboards and identify potential violations of measurement principles.
 :::
 
 ::: {.callout-important title="Scope of This Chapter"}
@@ -64,105 +66,136 @@ A visual tour of the key concepts in this chapter — from response matrices and
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces the core notation used throughout the book: $\theta_i$ (model ability), $\beta_j$ (item difficulty), $a_j$ (discrimination), $c_j$ (guessing), $Y_{ij}$ (binary response), and $\sigma(\cdot)$ (logistic sigmoid). @sec-notation collects every symbol in one place---refer to it whenever a symbol is unfamiliar. Readers coming from psychology or education may also find the **translation table** in @sec-transfer helpful; it maps classical psychometric terminology (test taker, item, reliability, validity) to AI evaluation counterparts.
+This chapter introduces the core notation used throughout the book: $\theta_i$ (model ability), $\beta_j$ (item difficulty), $\boldsymbol{\beta}_j = (\beta_{j1}, \beta_{j2}, \beta_{j3})$ (the item-parameter vector collecting difficulty, discrimination, and guessing), $Y_{ij}$ (binary response), and $\sigma(\cdot)$ (logistic sigmoid). @sec-notation collects every symbol in one place---refer to it whenever a symbol is unfamiliar.
 :::
 
 
-## The Measurement Problem in AI {#sec-measurement-problem}
+@sec-validity drew the nomological network as a causal diagram: latent constructs $\theta$ that produce a system's responses $Y$, with the loading edges $\theta \to Y$ carrying the meaning we intend to measure. That chapter was conceptual---it said what a valid measurement *requires* (the construct exists and causally produces the responses) but left the edges as bare arrows, with no functional form and no way to recover $\theta$ from data. This chapter supplies the form. For the most part of this chapter, we will assume that we have already decided on a construct to be measured and a set of items to target that construct.
 
-Consider the following scenario. An evaluator has tested 100 language models on a benchmark consisting of 1,000 multiple-choice questions. Each model either answers each question correctly (1) or incorrectly (0), producing a $100 \times 1000$ binary response matrix $Y$. Computing each model's accuracy---the proportion of correct answers---yields a ranking of the models.
+The goal is modest: assign each model a single number $\theta_i$ that represents its standing on one construct---an *ability*---on a *unidimensional* scale. The hard part is the word *represents*. Computing a model's accuracy already assigns it a number, but a number is not yet a measurement. A bathroom scale reading off body mass and a leaderboard reading off accuracy both produce numbers; only one is trusted to support arithmetic, comparison across instruments, and prediction. This section asks what separates the two---what it takes for "assign a number" to mean *measure*---and arrives at the model that, on one influential account, uniquely delivers it: the Rasch model. We build up in three steps: the general theory of when numbers measure (representational measurement theory, @sec-rmt); the specific structure that yields an interval scale for an attribute like ability, and the Rasch model that realizes it (additive conjoint measurement, @sec-acm); and the respect in which AI evaluation can *test* that structure rather than merely assume it (@sec-acm-ai).
 
-Has anything been *measured*? The answer is not as obvious as it might seem. The models have certainly been *scored*: numbers have been assigned to them based on their performance. But measurement, in the scientific sense, requires more than assigning numbers. It requires that those numbers correspond to some underlying property---a *latent construct*---in a principled way. The distinction between scoring and measuring is fundamental to understanding why AI evaluation needs measurement science. Consider an analogy from physics: when the temperature of water is measured with a mercury thermometer, the height of the mercury column is a *score*---a number that can be read off the instrument. That score is trusted as a *measurement* of temperature because the relationship between mercury expansion and thermal energy is understood.
+## What Does It Mean to Measure? {#sec-rmt}
 
-In AI evaluation, we often have scores without this deeper understanding. When GPT-4 achieves 86% accuracy on MMLU [@hendrycks2021mmlu] and Claude achieves 84%, we cannot immediately conclude that GPT-4 has more "intelligence" or "capability" than Claude. Several questions must be answered first:
+Representational measurement theory [@krantz1971foundations] makes precise what it means for numbers to measure. Its central idea: to measure is to construct a structure-preserving map---a *homomorphism*---from an **empirical relational structure** (the objects and the qualitative relations we can actually observe among them) into a **numerical relational structure** (the real numbers with their order and arithmetic).
 
-1. **What latent construct does MMLU measure?** Is it general intelligence, factual knowledge, test-taking ability, or something else entirely?
+Why should this be the *central* idea, rather than just "attach a number to each object"? Because the numbers we attach come with a great deal of built-in structure that we cannot help but use. As soon as a model has "ability 1.8" and another "ability 0.9", we are tempted to say the first is *twice* as able, or that the *gap* between them equals some other gap---statements that borrow the order, differences, and ratios of the real line. Those statements are only trustworthy if the objects genuinely stand in relations that mirror the numerical ones. The empirical relations come *first*: before any numbers, we can observe that this rod balances those two end to end, or that this model beats that one on item after item. A homomorphism is the promise that the numbers are a faithful stand-in for exactly those observations---order maps to order ($\ge$), physical combination maps to addition ($+$)---so that whatever we compute on the numbers can be read back as a true statement about the objects. Measurement, on this view, is not *imposing* a scale but *discovering* a numerical representation that the empirical structure already supports; the numbers are a model of reality the way a map is a model of terrain, trustworthy precisely because distances and directions on the map preserve those on the ground. Assigning numbers that do *not* preserve the structure (jersey numbers on athletes, area codes) is labeling, not measuring: arithmetic on them carries no information back to the world.
 
-2. **Is the construct unidimensional?** Can model performance be characterized by a single number, or do different questions tap into different capabilities?
-
-3. **Are the scores comparable across different test conditions?** Would the ranking change if we used different questions from the same domain?
-
-4. **What is the measurement error?** How much of the score difference reflects true differences in capability versus noise?
-
-These questions have been central to psychology and education for over a century. The field of *psychometrics* developed sophisticated tools---Item Response Theory, factor analysis, validity frameworks---precisely to address them. AI evaluation is now confronting the same fundamental challenges.
-
-Every AI evaluation produces a *response matrix* $Y$ recording which subjects (models) answered which items correctly --- see @sec-response-matrix for the formal definition and a discussion of its shape across benchmark types. What matters here is that the matrix contains far more information than its row means: the *pattern* of responses reveals structure that aggregate accuracy obscures.
-
-{{< include _plt_setup.qmd >}}
-
-```{pyodide-python}
-#| label: response-matrix-visualization
-#| autorun: true
-#| fig-cap: "Response matrix from a language model evaluation. Rows are models (sorted by total score), columns are questions (sorted by difficulty). The diagonal structure suggests underlying ability and difficulty parameters."
-
-# Simulate a response matrix with Rasch model structure
-N, M = 50, 200  # 50 models, 200 questions
-
-# Generate latent abilities and difficulties
-theta = np.random.normal(0, 1, N)  # model abilities
-beta = np.random.normal(0, 1.5, M)  # question difficulties
-
-# Generate responses via Rasch model
-prob = 1 / (1 + np.exp(-(theta[:, None] - beta[None, :])))
-Y = (np.random.random((N, M)) < prob).astype(int)
-
-# Sort by row and column sums
-row_order = np.argsort(Y.sum(axis=1))[::-1]
-col_order = np.argsort(Y.sum(axis=0))[::-1]
-Y_sorted = Y[row_order][:, col_order]
-
-# Plot
-fig, ax = plt.subplots(1, 1)
-ax.imshow(Y_sorted, aspect='auto', cmap='Blues', interpolation='nearest')
-ax.set_xlabel('Questions (sorted by difficulty)')
-ax.set_ylabel('Models (sorted by ability)')
-ax.set_title('Sorted Response Matrix')
-
-plt.show()
-```
-
-When we sort the rows and columns by marginal sums, a characteristic diagonal structure emerges: high-ability models answer most questions correctly, and easy questions are answered correctly by most models. This structure is not guaranteed, but when present it suggests that a simple latent variable model may adequately describe the data.
-
-The problems facing AI evaluation today mirror those that psychology confronted in the early 20th century:
-
-1. **Construct definition:** What does it mean to measure "reasoning" or "common sense"? Psychology developed validity frameworks to address this question.
-
-2. **Test bias:** Are some benchmark questions unfair to certain models due to training data or architecture? Educational testing developed differential item functioning (DIF) analysis.
-
-3. **Score comparability:** Can we compare models evaluated on different benchmark subsets? Psychometrics developed test equating methods.
-
-4. **Efficiency:** How can we evaluate models with fewer questions? Computerized adaptive testing (CAT) emerged from IRT.
-
-5. **Reliability:** How stable are our rankings under different conditions? Test-retest reliability and standard error of measurement quantify this.
-
-The tools developed in psychometrics are directly applicable to AI evaluation: the statistical models that describe human test performance can describe AI benchmark performance.
-
-## Probabilistic Models for Measurement {#sec-probabilistic-models}
-
-Measurement requires a model connecting observable responses to latent constructs. This section surveys the major families of probabilistic models used in measurement: Item Response Theory, factor models, paired comparison systems, network models, and hierarchical models. These models provide the statistical machinery for extracting latent variables from response data.
-
-### Item Response Theory {#sec-irt}
-
-Item Response Theory (IRT) models the probability of a correct response as a function of person ability and item characteristics. The key insight is that both persons and items can be characterized by parameters on a common scale.
-
-The simplest IRT model is the **Rasch model**, also called the one-parameter logistic (1PL) model:
-
-::: {.callout-note title="Definition: Rasch Model"}
+::: {.callout-note title="Definition: Measurement (representational)"}
+An **empirical relational structure** $\mathcal{E} = \langle A, \succeq, \circ, \dots \rangle$ is a set of objects $A$ with observed relations---an order $\succeq$, perhaps a concatenation operation $\circ$. A **numerical relational structure** is $\mathcal{N} = \langle \mathbb{R}, \ge, +, \dots \rangle$. A **measurement** is a homomorphism $\phi: A \to \mathbb{R}$ preserving those relations:
 $$
-P(Y_{ij} = 1 | \theta_i, \beta_j) = \frac{\exp(\theta_i - \beta_j)}{1 + \exp(\theta_i - \beta_j)} = \sigma(\theta_i - \beta_j)
+a \succeq b \iff \phi(a) \ge \phi(b), \qquad \phi(a \circ b) = \phi(a) + \phi(b).
 $$
-
-where:
-
-- $\theta_i \in \mathbb{R}$ is the ability of person $i$
-- $\beta_j \in \mathbb{R}$ is the difficulty of item $j$
-- $\sigma(\cdot)$ is the logistic sigmoid function
 :::
 
-In the Rasch model, the probability of success depends only on the *difference* between ability and difficulty. When $\theta_i = \beta_j$, the probability is exactly 0.5---the person has a 50% chance of answering correctly. When $\theta_i > \beta_j$, the probability exceeds 0.5; when $\theta_i < \beta_j$, it falls below 0.5.
+Two theorems govern any such map.
+
+A **representation theorem** has the form: *if* the empirical structure $\mathcal{E}$ satisfies a list of qualitative axioms, *then* a homomorphism $\phi$ into the reals exists (and the proof usually constructs one). The axioms are conditions stated entirely in terms of the observable relations---no numbers appear in them---and they are precisely the *empirical shadow* of the properties the number system already has. Real-number order is transitive and complete, so the empirical order $\succeq$ must be too: if $a \succeq b$ and $b \succeq c$ then $a \succeq c$. Real addition is associative and commutative, so if concatenation $\circ$ is to map to $+$, combining objects must be observably associative and commutative---$a \circ b$ must land at the same place on the scale as $b \circ a$. 
+
+How rich a scale $\mathcal{E}$ supports depends on how many axioms it satisfies. The recurring ones are:
+
+- **Weak order.** The relation $\succeq$ is *transitive* ($a \succeq b$ and $b \succeq c$ imply $a \succeq c$) and *complete* (every pair is comparable: $a \succeq b$ or $b \succeq a$). Informally: "rank everything, ties allowed."
+- **Concatenation** ($\circ$). A way to combine two objects into a third---rods laid end to end, masses heaped on one pan---required to be *associative* ($(a \circ b) \circ c \sim a \circ (b \circ c)$) and *commutative* ($a \circ b \sim b \circ a$), mirroring the same properties of $+$.
+- **Monotonicity.** Combining preserves order: $a \succeq b \iff a \circ c \succeq b \circ c$.
+- **Archimedean.** No object is infinitely larger than another: enough copies of any object eventually exceed any other.
+- **Density** (technical). A countable subset lies order-dense in $\succeq$; needed only to embed *infinite* object sets into $\mathbb{R}$, and automatic for finite benchmarks.
+
+Which scale these buy:
+
+- An **ordinal** scale follows from a weak order (plus density) alone: $\phi$ preserves order and nothing more, $a \succeq b \iff \phi(a) \ge \phi(b)$.
+- A **ratio** scale follows from a weak order *together with* a concatenation operation satisfying associativity, commutativity, monotonicity, and the Archimedean condition; then $\phi$ also satisfies $\phi(a \circ b) = \phi(a) + \phi(b)$. The construction is essentially counting: fix a unit, lay down copies of it, and record how many balance the object---which is how length and mass are measured.
+- An **interval** scale is the awkward middle: it needs additive structure but has *no* concatenation operation to supply it. The next section shows how *two conjoint factors* can play the role concatenation plays here (additive conjoint measurement, @sec-acm).
+
+A **uniqueness theorem** then states how unique the resulting $\phi$ is---the class of admissible transformations carrying one valid homomorphism to another---and this fixes the **scale type**:
+
+- **Ordinal:** any strictly increasing transformation is admissible; only the *order* of the numbers is meaningful.
+- **Interval:** admissible transformations are positive affine, $\phi \mapsto a\phi + b$ with $a>0$; *differences* (and ratios of differences) are meaningful, but neither the zero nor the unit.
+- **Ratio:** admissible transformations are $\phi \mapsto a\phi$; *ratios* are meaningful and there is a true zero.
+
+These types form a hierarchy of increasing structure, each licensing more arithmetic than the last [@stevens1946theory]. (Below them sits the **nominal** scale---mere labels, like benchmark names or task categories, where only equality is meaningful.) An **ordinal** scale records only rank: medians and percentiles are meaningful, but the spacing between values is not, so a model that ranks first is *better* than the runner-up without being better *by any stated amount*---a raw leaderboard position is ordinal. An **interval** scale adds meaningful distances while keeping an arbitrary zero: differences and averages are licensed but ratios are not, the textbook case being temperature in degrees Celsius (the gap from $10°$ to $20°$ equals the gap from $20°$ to $30°$, yet $20°$ is not "twice as hot" as $10°$); an IRT ability $\theta$ on the logit scale is interval in just this sense, its zero a convention. A **ratio** scale adds a true zero, so ratios carry content and "twice as much" means something: length, mass, reaction time, and a raw *count* of items answered correctly are all ratio. The practical warning is that the scale type is fixed by the empirical structure, not by how the numbers look. An accuracy of $0.86$ is a perfectly good ratio-scale *count* of correct answers; but read as a measure of *ability* it is at best interval, and without a fitted model only ordinal---the decimals invite ratio and difference comparisons the construct may not support.
+
+This gives "a meaningful numerical value" a precise sense: a numerical statement is **meaningful** exactly when its truth is invariant under the admissible transformations of the scale [@krantz1971foundations]. "Model A scored twice model B" is meaningful on a ratio scale, not an interval one; "the gap from A to B exceeds the gap from C to D" is meaningful on an interval scale, not an ordinal one. Scoring assigns numbers; measurement assigns numbers *and* certifies which statements about them survive rescaling.
+
+Where do our objects of interest fall on this spectrum? Physical *extensive* quantities---length, mass, duration---come with a concatenation operation (lay rods end to end, pile masses on a balance), and that operation is what earns them a *ratio* scale; physical measurement sits at the rich end. Ability has no such operation: there is no way to concatenate two models', or two people's, abilities into a third. The most an ability scale can aspire to is therefore an *interval* scale, reachable only by the indirect, two-factor route of additive conjoint measurement (@sec-acm). Here human and AI measurement part ways. For human test-takers the conjoint axioms can only be *assumed*, because a response probability is never directly observed---each person meets each item essentially once---so interval status is a modeling commitment, and absent that commitment the defensible reading of a test score is merely *ordinal*. For AI systems the same axioms are *testable*: a model's response probability can be estimated by repeated sampling (@sec-acm-ai), so interval measurement can be earned from data rather than presumed. A leaderboard that only reports who outranked whom sits at the ordinal floor for both.
+
+## Additive Conjoint Measurement {#sec-acm}
+
+Classical extensive measurement (length, mass) earns its scale from a physical concatenation operation: lay rods end to end and length adds. Latent attributes have no such operation---there is no way to physically concatenate two models' abilities. Additive conjoint measurement [@luce1964simultaneous] is the branch of representational theory that recovers an interval scale for an attribute jointly determined by two **conjoint factors** from the order of their combined effect. (We call $A$ and $X$ *conjoint factors* to keep them distinct from the unrelated *factor model* of @sec-factor-models.) Let the conjoint factors be $A$ (models) and $X$ (items), and suppose we can observe, for each pair $(a,x) \in A \times X$, an ordering $\succeq$ by how much of the attribute results (how likely a correct response). Additive conjoint measurement asks when this order on the *product set* admits an additive representation.
+
+::: {.callout-note title="Definition: Cancellation axioms"}
+The order $\succeq$ on $A \times X$ satisfies:
+
+- **Single cancellation (independence):** the order induced on $A$ by holding $x$ fixed does not depend on which $x$ is fixed, and symmetrically for $X$. So $(a_1, x) \succeq (a_2, x)$ for some $x$ implies $(a_1, x') \succeq (a_2, x')$ for every $x'$.
+- **Double cancellation (the Thomsen condition):** for all $a_1, a_2, a_3 \in A$ and $x_1, x_2, x_3 \in X$,
+$$
+(a_1, x_2) \succeq (a_2, x_1) \;\text{ and }\; (a_2, x_3) \succeq (a_3, x_2) \;\Longrightarrow\; (a_1, x_3) \succeq (a_3, x_1).
+$$
+:::
+
+Single cancellation implies parameter separation. Fixing an item $x$ induces a ranking of models, $a \succeq_x a' :\Leftrightarrow (a,x) \succeq (a',x)$; single cancellation says this ranking is the *same for every* $x$, so there is one item-independent order on models (and, symmetrically, one model-independent order on items). The conjoint factors decouple ---one can speak of "the stronger model" without naming an item. Equivalently, in the additive form the item's contribution is the same constant for both models and cancels: $f(a_1) + g(x) \ge f(a_2) + g(x) \iff f(a_1) \ge f(a_2)$, free of $x$. A model$\times$item *interaction*---a model strong on mathematics but weak on coding, outranking a rival on some items and trailing it on others---violates single cancellation outright. Double cancellation then forces the *spacings* of the two conjoint factors to agree, upgrading two separate orderings into one shared additive scale (the content made visible on the $3 \times 3$ grid below).
+
+::: {.callout-note title="Definition: Solvability and the Archimedean condition"}
+Two further *structural* conditions make the conjoint factors rich enough to carry a real-valued scale:
+
+- **Restricted solvability:** the conjoint factors are finely graded---given a target cell, one can find a level of either factor that matches it, so intervals can always be bisected.
+- **Archimedean:** no level is infinitely larger than another---enough equal steps along one factor eventually overtake any difference.
+
+Unlike the cancellation axioms, these are not separately testable on coarse data; they are idealizations that guarantee the construction terminates in $\mathbb{R}$.
+:::
+
+::: {.callout-note title="Theorem: Additive representation"}
+If $\succeq$ on $A \times X$ satisfies the cancellation, solvability, and Archimedean axioms, then there exist real functions $f: A \to \mathbb{R}$ and $g: X \to \mathbb{R}$ with
+$$
+(a,x) \succeq (a',x') \iff f(a) + g(x) \ge f(a') + g(x').
+$$
+$f$ and $g$ are unique up to a common positive affine transformation ($f \mapsto \alpha f + \beta_1$, $g \mapsto \alpha g + \beta_2$ with the same $\alpha > 0$). They are therefore **interval scales sharing a common unit.**
+:::
+
+::: {.callout-note title="Proof idea" collapse="true"}
+Single cancellation lets each factor be ordered consistently on its own. Double cancellation is the binding constraint: it forces the *spacings* on $A$ and $X$ to be mutually consistent, so a unit defined on one factor transfers to the other. Restricted solvability supplies intermediate elements to bisect intervals; the Archimedean axiom guarantees the bisection terminates, pinning the scale to the reals. One builds a standard sequence of equally spaced elements and shows the additive representation is forced; common-unit interval uniqueness follows because only the shared unit and the two zeros are free. See @krantz1971foundations for the full construction.
+:::
+
+The content of double cancellation is easiest to see on a $3 \times 3$ grid: three models $a_1, a_2, a_3$ crossed with three items $x_1, x_2, x_3$. Each cell $(a_i, x_j)$ has an observed propensity (how likely model $i$ is to get item $j$ right), and *if* the structure is additive that propensity is ordered by $f(a_i) + g(x_j)$. Writing $f_i = f(a_i)$ and $g_j = g(x_j)$, the grid of additive values is:
+
+|       | $x_1$       | $x_2$       | $x_3$       |
+|:-----:|:-----------:|:-----------:|:-----------:|
+| $a_1$ | $f_1 + g_1$ | $f_1 + g_2$ | $f_1 + g_3$ |
+| $a_2$ | $f_2 + g_1$ | $f_2 + g_2$ | $f_2 + g_3$ |
+| $a_3$ | $f_3 + g_1$ | $f_3 + g_2$ | $f_3 + g_3$ |
+
+Now suppose we observe two comparisons across the off-diagonal cells: $(a_1, x_2) \succeq (a_2, x_1)$ and $(a_2, x_3) \succeq (a_3, x_2).$ Under the additive representation these read $f_1 + g_2 \ge f_2 + g_1$ and $f_2 + g_3 \ge f_3 + g_2$. Add the two inequalities and cancel the common terms $f_2$ and $g_2$ from both sides---the two cancellations that give the axiom its name---and what survives is $f_1 + g_3 \ge f_3 + g_1,$ or $(a_1, x_3) \succeq (a_3, x_1).$ So additivity forces the third comparison once the first two are seen: the two premises chain $a_1 \to a_2 \to a_3$ across the items, and the conclusion connects the endpoints. If a data set instead shows $(a_3, x_1) \succ (a_1, x_3)$, no functions $f, g$ whatsoever can reproduce it. The violation lives in the ordering of the cells, before any numbers are assigned---which is exactly what makes double cancellation an empirical claim rather than a modeling convenience.
+
+Writing the additive structure inside a monotone link $\Phi$ that turns it into a probability gives
+$$
+P(Y_{ij} = 1) = \Phi(\theta_i - \beta_j).
+$$
+Taking $\Phi$ to be the logistic $\sigma(z) = 1/(1 + e^{-z})$ yields the Rasch model; taking the standard normal CDF yields the probit model. The additive structure makes the model a *measurement* model of $i$ (and $j$) -- the scale constructed is an interval scale. The monotone link re-expresses the same order as a probability.
+
+In the Rasch model, parameter separation is also discussed as specific objectivity. The additive structure already made model comparisons item-free on the latent scale; the logistic link makes the cancellation in the observable odds,
+$$
+\frac{P(Y_{ij} = 1)/P(Y_{ij} = 0)}{P(Y_{kj} = 1)/P(Y_{kj} = 0)} = \exp(\theta_i - \theta_k),
+$$
+with the difficulty $\beta_j$ dropping out entirely. Operationally this is test-free comparison and subject-free calibration --- a model's ability can be estimated from any subset of calibrated items and an item's difficulty from any sample of models---which the sufficiency of @sec-rasch-measurement makes practical (items calibrate without knowing abilities, and conversely). It is what licenses comparing models across different set of items, building reusable item banks, adaptive testing (@sec-efficient), and equating benchmarks to a common scale---all contingent, as @sec-acm-ai stresses, on the Rasch model actually fitting the data.
+
+## Sufficiency and Rasch Model {#sec-rasch-measurement}
+
+In AI evaluation we almost always report a model's accuracy collapsing an entire response vector of a subject into a single number. When is that collapse harmless? Only if the detail we throw away--- which items were answered correctly, not merely how many---carries no further information about the model's ability. This is the sufficiency assumption, and reporting an average score is only justified if this assumption is valid. Here, we demonstrate that sufficiency assumption further specify the link function $\phi$ that is unspecified in ACM to be the logistic function $\sigma(\cdot)$. The resulting model is known as the Rasch model:
+
+$$
+P(Y_{ij} = 1 | \theta_i, \beta_j) = \sigma(\theta_i - \beta_j)
+$$
+
+Given the latent parameters $\theta_i$ and $\beta_j$, we assume that responses are conditionally independent. This is also referred to as local independence:
+
+$$
+P(Y_{i1}, \ldots, Y_{iM} \mid \theta_i, \beta) = \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j).
+$$
+
+Local independence can be tested by residual correlations analysis between item pairs. Local independence can be violated in practice via shared context between items, where multiple items on the same reading passage, dataset split, or few-shot prompt template share information that $\theta_i$ does not model.
+
+Below is the plate diagram of the Rasch model:
 
 ::: {.callout-tip title="Reading Plate Diagrams" collapse="false"}
-Throughout this chapter we use **plate diagrams** (also called plate notation) to visualize probabilistic models. The conventions are:
+Throughout this chapter we use **plate diagrams** to visualize probabilistic models, extending the graphical-model conventions of @sec-validity (open = latent, shaded = observed, arrows = dependence) with one new element---*plates* for replication. The full set of conventions:
 
 - **Shaded (gray) nodes** represent *observed* variables (e.g., responses $Y_{ij}$).
 - **Open (white) nodes** represent *latent* (unobserved) variables or parameters (e.g., ability $\theta_i$).
@@ -172,598 +205,123 @@ Throughout this chapter we use **plate diagrams** (also called plate notation) t
 Nested plates represent crossed or hierarchical structure. For example, the response $Y_{ij}$ sits inside both the person plate ($i$) and the item plate ($j$), indicating one observation per person-item pair. For a comprehensive treatment of graphical models, see @koller2009pgm.
 :::
 
-![Plate diagram for the Rasch model. Shaded nodes are observed; open nodes are latent. Plates indicate replication over persons ($i$) and items ($j$).](Figures/plate_rasch.png){#fig-rasch-plate width=50%}
+![Plate diagram for the Rasch model. Shaded nodes are observed; open nodes are latent. Plates indicate replication over persons ($i$) and items ($j$).](Figures/plate_rasch.png){#fig-rasch-plate width=41%}
 
-The function $P(\theta) = \sigma(\theta - \beta)$ is called the **Item Characteristic Curve (ICC)**. It describes how the probability of success changes with ability for a fixed item.
+Next, we show that ACM and sufficiency assumption implies the Rasch model.
 
-```{pyodide-python}
-#| label: icc-rasch
-#| autorun: true
-#| fig-cap: "Item Characteristic Curves for Rasch model items with different difficulties. All curves have the same shape (slope), differing only in their location."
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-theta = np.linspace(-4, 4, 200)
-difficulties = [-2, -1, 0, 1, 2]
-
-plt.figure()
-for beta in difficulties:
-    prob = sigmoid(theta - beta)
-    plt.plot(theta, prob, label=f'$\\beta = {beta}$', linewidth=2)
-
-plt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
-plt.xlabel('Ability ($\\theta$)', fontsize=12)
-plt.ylabel('$P(Y = 1)$', fontsize=12)
-plt.legend(title='Item Difficulty')
-plt.grid(True, alpha=0.3)
-plt.show()
-```
-
-#### Local Independence {#sec-local-independence}
-
-The Rasch model (and every other IRT and factor model in this chapter) specifies a probability for a *single* response $Y_{ij}$. To make the jump from per-item probabilities to a joint distribution over a person's entire response vector, we need an additional modeling assumption.
-
-::: {.callout-warning title="Assumption: Local Independence and Its Limits"}
-**Local independence** states that, given the latent parameters, responses are conditionally independent:
-
+::: {.callout-note title="Theorem: Additivity + sufficiency imply Rasch"}
+Take an additive latent-trait model in which each response depends on ability and difficulty only through their difference,
 $$
-P(Y_{i1}, \ldots, Y_{iM} \mid \theta_i, \beta) = \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j).
+P(Y_{ij} = 1 \mid \theta_i, \beta_j) = \Phi(\theta_i - \beta_j),
 $$
-
-All systematic co-variation across a person's responses should be absorbed into the ability $\theta_i$, leaving only item-specific noise. This is what lets us multiply per-item probabilities into a tractable likelihood in @sec-likelihood.
-
-**When do we expect it to hold?** When $\theta_i$ genuinely captures the single construct driving performance on every item, so that what is left between items is unrelated noise. For a well-designed unidimensional test, this is a reasonable first approximation.
-
-**When does it fail?** Several things routinely break it in practice:
-
-- **Shared context (*testlet effects*).** Multiple questions on the same reading passage, dataset split, or few-shot prompt template share information that $\theta_i$ does not model.
-- **Item chaining.** Later items leak answers to earlier ones, or solving $j$ depends on the technique used in $k$.
-- **Training contamination.** For AI evaluation, items scraped from the web may appear in a model's training data; correlated memorization looks like an extra latent factor.
-- **Multidimensionality.** If the test actually measures several skills, a single $\theta_i$ leaves residual item-item dependence that only a multidimensional model can remove.
-
-Local independence is testable: fit the model, then check residual correlations between item pairs. Persistent residuals are a signal to enrich the model---with more factors or testlet/bifactor structure (@sec-hierarchical-models)---rather than a reason to ignore the violation.
-:::
-
-#### The Two-Parameter Logistic Model (2PL)
-
-The Rasch model assumes all items have the same *discrimination*---the same slope of the ICC. The **two-parameter logistic model** relaxes this assumption:
-
-::: {.callout-note title="Definition: 2PL Model"}
-$$
-P(Y_{ij} = 1 | \theta_i, a_j, \beta_j) = \sigma(a_j(\theta_i - \beta_j))
-$$
-
-where $a_j > 0$ is the discrimination parameter for item $j$.
-:::
-
-Items with higher discrimination are better at distinguishing between persons of different abilities. Their ICCs are steeper, meaning small changes in ability produce large changes in response probability.
-
-![Plate diagram for the 2PL model. Each item now has both a difficulty $\beta_j$ and a discrimination $a_j$ parameter.](Figures/plate_2pl.png){#fig-2pl-plate width=50%}
-
-```{pyodide-python}
-#| label: icc-2pl
-#| autorun: true
-#| fig-cap: "Item Characteristic Curves for 2PL model items with different discriminations. Higher discrimination (steeper slope) means the item better distinguishes between ability levels."
-
-theta = np.linspace(-4, 4, 200)
-
-# Items with same difficulty but different discriminations
-beta = 0
-discriminations = [0.5, 1.0, 1.5, 2.0]
-
-plt.figure()
-for a in discriminations:
-    prob = sigmoid(a * (theta - beta))
-    plt.plot(theta, prob, label=f'$a = {a}$', linewidth=2)
-
-plt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
-plt.axvline(x=0, color='gray', linestyle='--', alpha=0.5)
-plt.xlabel('Ability ($\\theta$)', fontsize=12)
-plt.ylabel('$P(Y = 1)$', fontsize=12)
-plt.title('2PL Model: Effect of Discrimination ($\\beta = 0$)', fontsize=14)
-plt.legend(title='Discrimination')
-plt.grid(True, alpha=0.3)
-plt.show()
-```
-
-#### The Three-Parameter Logistic Model (3PL)
-
-For multiple-choice tests, even low-ability test-takers may answer correctly by guessing. The **three-parameter logistic model** adds a lower asymptote:
-
-::: {.callout-note title="Definition: 3PL Model"}
-$$
-P(Y_{ij} = 1 | \theta_i, a_j, \beta_j, c_j) = c_j + (1 - c_j) \sigma(a_j(\theta_i - \beta_j))
-$$
-
-where $c_j \in [0, 1]$ is the guessing (or pseudo-chance) parameter.
-:::
-
-For a 4-option multiple-choice item, we might expect $c_j \approx 0.25$ if low-ability test-takers guess randomly.
-
-![Plate diagram for the 3PL model. The guessing parameter $c_j$ sets a lower asymptote on the response probability.](Figures/plate_3pl.png){#fig-3pl-plate width=50%}
-
-```{pyodide-python}
-#| label: icc-3pl
-#| autorun: true
-#| fig-cap: "Comparison of 1PL, 2PL, and 3PL models. The 3PL has a non-zero lower asymptote representing guessing."
-
-theta = np.linspace(-4, 4, 200)
-
-# Compare the three models
-a, beta, c = 1.5, 0, 0.25
-
-p_1pl = sigmoid(theta - beta)
-p_2pl = sigmoid(a * (theta - beta))
-p_3pl = c + (1 - c) * sigmoid(a * (theta - beta))
-
-plt.figure()
-plt.plot(theta, p_1pl, label='1PL (Rasch)', linewidth=2)
-plt.plot(theta, p_2pl, label='2PL', linewidth=2)
-plt.plot(theta, p_3pl, label='3PL', linewidth=2)
-
-plt.axhline(y=0.5, color='gray', linestyle='--', alpha=0.3)
-plt.axhline(y=c, color='gray', linestyle=':', alpha=0.5, label=f'Guessing = {c}')
-plt.xlabel('Ability ($\\theta$)', fontsize=12)
-plt.ylabel('$P(Y = 1)$', fontsize=12)
-plt.title('Comparison of IRT Models', fontsize=14)
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.show()
-```
-
-### Nonparametric Item Response Theory {#sec-nonparametric-irt}
-
-The Rasch, 2PL, and 3PL models all commit to a *logistic* shape for the item response function. Often we want to assume less. What if we only require that more able models are more likely to succeed---without fixing the curve's form? **Nonparametric item response theory** [@mokken1971theory], or Mokken scaling, asks exactly this, and it is a natural baseline for AI benchmarks whose item curves we have no reason to believe are logistic.
-
-The **monotone homogeneity model (MHM)** keeps three assumptions and drops the rest:
-
-1. **Unidimensionality** --- a single latent ability $\theta$.
-2. **Local independence** --- responses are conditionally independent given $\theta$ (@sec-local-independence).
-3. **Monotonicity** --- each item response function $P_j(\theta) = P(Y_{\cdot j} = 1 \mid \theta)$ is non-decreasing in $\theta$.
-
-No logistic form, no difficulty or discrimination parameters. Remarkably, these three suffice to justify the practice the whole field relies on: under the MHM the sum score *stochastically orders* models on $\theta$, so ranking models by accuracy is valid even when no parametric model fits. Adding a fourth assumption---**non-intersecting** item response functions, the *double monotonicity model*---yields an *invariant item ordering*: items rank by difficulty the same way at every ability level, the nonparametric echo of Rasch's specific objectivity (@sec-rasch-measurement).
-
-**Scalability coefficients.** How well a set of items conforms to such a scale is measured by counting **Guttman errors**---a model passing a hard item but failing an easier one. For a pair of items, $H_{jk} = \mathrm{Cov}(Y_{\cdot j}, Y_{\cdot k}) / \mathrm{Cov}_{\max}$, where $\mathrm{Cov}_{\max}$ is the largest covariance the marginals allow; the item coefficient $H_j$ aggregates this over all partners,
-
-$$
-H_j = \frac{\sum_{k \neq j} \mathrm{Cov}(Y_{\cdot j}, Y_{\cdot k})}{\sum_{k \neq j} \mathrm{Cov}_{\max}(Y_{\cdot j}, Y_{\cdot k})} .
-$$ {#eq-mokken-h}
-
-Conventionally $H_j < 0.3$ marks an unscalable item, $0.3$--$0.5$ a weak-to-moderate scale, and $> 0.5$ a strong one. A **low or negative $H_j$ flags an item that does not belong on the latent scale**---exactly the signal @truong2025bugs use to find broken benchmark items: a flipped answer key makes an item anti-correlate with ability ($H_j < 0$), and a randomly answered question carries no scale information ($H_j \approx 0$).
-
-Nonparametric IRT thus sits at the **least-committal end of the modeling dial**: Rasch fixes the slope, the 2PL frees it per item, and Mokken assumes only that the curve runs the right way. The weaker the assumption, the more benchmarks satisfy it---and monotonicity is about the least one can ask of a measurement and still order models by score.
-
-```{pyodide-python}
-#| label: nonpar-hj
-#| autorun: true
-#| fig-cap: "Mokken scalability $H_j$ for every item in a simulated Rasch benchmark with six planted off-scale items (red): flipped-key items anti-correlate with ability ($H_j < 0$) and randomly answered items carry no scale information ($H_j \\approx 0$), while sound items (blue) sit above the weak-scale threshold (dotted). Ranking by $H_j$ isolates the off-scale items."
-import numpy as np
-import matplotlib.pyplot as plt
-
-def sigmoid(x):
-    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
-
-rng = np.random.RandomState(0)
-N, M, n_bad = 250, 50, 6
-theta = rng.normal(0, 2, N)                          # wide ability spread -> a benchmark that scales
-beta  = rng.normal(0, 1, M)
-Y = (rng.rand(N, M) < sigmoid(theta[:, None] - beta[None, :])).astype(float)
-
-bad = rng.choice(M, n_bad, replace=False)
-for idx, j in enumerate(bad):
-    if idx < n_bad // 2:
-        Y[:, j] = 1 - Y[:, j]                        # flipped answer key
-    else:
-        Y[:, j] = (rng.rand(N) < 0.5).astype(float)  # random responses (off-dimension)
-
-def mokken_Hj(Y):
-    p = Y.mean(0)
-    C = np.cov(Y.T, bias=True)                                      # item covariance matrix
-    covmax = np.minimum(p[:, None], p[None, :]) - np.outer(p, p)    # max covariance given marginals
-    np.fill_diagonal(C, 0.0); np.fill_diagonal(covmax, 0.0)
-    return C.sum(1) / covmax.sum(1)
-
-H = mokken_Hj(Y)
-is_bad = np.zeros(M, bool); is_bad[bad] = True
-order = np.argsort(H)
-
-plt.figure(figsize=(3.6, 2.2))
-plt.scatter(range(M), H[order],
-            c=['#d62728' if is_bad[i] else '#1f77b4' for i in order], s=14)
-plt.axhline(0.3, color='gray', ls=':', lw=1)
-plt.axhline(0.0, color='black', lw=0.8)
-plt.xlabel('item (ranked by $H_j$)'); plt.ylabel('Mokken $H_j$')
-plt.title('Off-scale items have low $H_j$'); plt.grid(True, alpha=0.3)
-plt.tight_layout(); plt.show()
-print(f"sound items: median H_j = {np.median(H[~is_bad]):.2f};  off-scale items: median H_j = {np.median(H[is_bad]):.2f}")
-```
-
-### Factor Models {#sec-factor-models}
-
-Factor models provide an alternative perspective on latent variable measurement. While IRT focuses on item-level response probabilities, factor models focus on the covariance structure of responses.
-
-#### The Linear Factor Model
-
-The classical linear factor model assumes observed variables are linear combinations of latent factors plus noise:
-
-::: {.callout-note title="Definition: Linear Factor Model"}
-$$
-X_j = \lambda_{j1} F_1 + \lambda_{j2} F_2 + \cdots + \lambda_{jK} F_K + \epsilon_j
-$$
-
-where:
-
-- $X_j$ is the observed score on item $j$
-- $F_k$ are latent factors (abilities, traits)
-- $\lambda_{jk}$ are factor loadings
-- $\epsilon_j$ is item-specific error
-:::
-
-In matrix notation: $X = \Lambda F + \epsilon$, where $\Lambda$ is the $M \times K$ matrix of factor loadings.
-
-#### The Logistic Factor Model
-
-For binary data, we use a logistic link function:
-
-::: {.callout-note title="Definition: Logistic Factor Model"}
-$$
-P(Y_{ij} = 1 | U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
-$$
-
-where:
-
-- $U_i \in \mathbb{R}^K$ is the latent factor vector for person $i$
-- $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$
-- $Z_j \in \mathbb{R}$ is the item intercept
-:::
-
-The parameters of the logistic factor model correspond directly to those of the linear factor model:
-
-| Linear Factor Model | Logistic Factor Model | Interpretation |
-|---------------------|-----------------------|----------------|
-| Latent factors $F_k$ | Entries of $U_i \in \mathbb{R}^K$ | Abilities of person $i$ on each of the $K$ factors |
-| Factor loadings $\lambda_{jk}$ | Entries of $V_j \in \mathbb{R}^K$ | How strongly item $j$ loads on factor $k$ |
-| Item-specific error $\epsilon_j$ | Item intercept $Z_j \in \mathbb{R}$ | Baseline easiness of item $j$ (analogous to $-\beta_j$ in IRT) |
-
-The key difference is the link function: the linear model uses an identity link ($X_j = \ldots$) for continuous responses, while the logistic model passes the linear predictor through the sigmoid $\sigma(\cdot)$ to produce a probability for binary responses.
-
-This is the model used in later chapters of AIMS for multidimensional AI evaluation.
-
-![Plate diagram for the logistic factor model. The latent factor vector $U_i$ interacts with item-specific loadings $V_j$ and intercepts $Z_j$ to produce responses.](Figures/plate_factor.png){#fig-factor-plate width=50%}
-
-#### Connection Between IRT and Factor Analysis
-
-The Rasch model is equivalent to a one-factor logistic model with equal loadings:
-
-::: {.callout-note title="Theorem: Rasch-Factor Equivalence"}
-The Rasch model $P(Y_{ij} = 1) = \sigma(\theta_i - \beta_j)$ is equivalent to a single-factor logistic model with $U_i = \theta_i$, $V_j = 1$ for all $j$, and $Z_j = -\beta_j$.
-:::
-
-More generally, multidimensional IRT models and logistic factor models are closely related, differing primarily in parameterization and estimation approach.
-
-#### The Structure Matrix {#sec-structure-matrix}
-
-After fitting a multidimensional factor model, we obtain estimated item loadings $\hat{V}_j$ that describe how each item relates to the latent factors. However, raw factor loadings require standardization for interpretable comparisons across items and benchmarks.
-
-The **structure matrix** $S$ captures the correlation between each item's latent response and each factor:
-
-::: {.callout-note title="Definition: Structure Matrix"}
-For a logistic factor model, the latent response $Y^*_{ij}$ can be written as $Y^*_{ij} = U_i^\top V_j + Z_j + \epsilon_{ij}$, where $\epsilon_{ij}$ follows a logistic distribution with variance $\pi^2/3$. The structure matrix entry $S_{jk}$ is the correlation between item $j$'s latent response and factor $k$:
-
-$$
-S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_{kk}} \sqrt{V_j^\top \Sigma V_j + \pi^2/3}}
-$$
-
-where $\Sigma = \text{Cov}(U)$ is the factor covariance matrix.
-:::
-
-**Intuition.** The formula for $S_{jk}$ is just a Pearson correlation, built from the standard recipe
-
-$$
-\text{Cor}(A, B) = \frac{\text{Cov}(A, B)}{\text{SD}(A) \cdot \text{SD}(B)},
-$$
-
-applied to $A = Y^*_{ij}$ and $B = U_{ik}$. Reading the three pieces in turn:
-
-- **Numerator — the covariance.** Of the three terms in $Y^*_{ij} = U_i^\top V_j + Z_j + \epsilon_{ij}$, only $U_i^\top V_j$ depends on $U$; the item difficulty $Z_j$ and logistic noise $\epsilon_{ij}$ are independent of $U$ and drop out. This leaves
-$$
-\text{Cov}(Y^*_{ij}, U_{ik}) = \text{Cov}(U_i^\top V_j,\, U_{ik}) = (V_j^\top \Sigma)_k.
-$$
-
-- **Denominator — the two standard deviations.** The factor has $\text{SD}(U_{ik}) = \sqrt{\Sigma_{kk}}$, and the latent response has
-$$
-\text{SD}(Y^*_{ij}) = \sqrt{\underbrace{V_j^\top \Sigma V_j}_{\text{from } U_i^\top V_j} + \underbrace{\pi^2/3}_{\text{from } \epsilon_{ij}}},
-$$
-since $Z_j$ is a constant offset and the logistic error contributes variance $\pi^2/3$.
-
-- **Why standardize.** The resulting $S_{jk} \in [-1, 1]$ is directly comparable across items, unlike the raw loadings $V_j$, which depend on the arbitrary scale of the factors.
-
-A detailed derivation is given in @sec-learning.
-
-We define the **structure vector** for item $j$ as $S_j = (S_{j1}, S_{j2}, \ldots, S_{jK})^\top \in \mathbb{R}^K$, where each entry $S_{jk}$ is given by the formula above. Stacking these row vectors yields the $M \times K$ **structure matrix** $S$, whose $j$-th row is $S_j^\top$. The structure vector $S_j$ serves as a standardized fingerprint of item $j$: it tells us how strongly the item's latent response correlates with each factor, on a $[-1, 1]$ scale that is comparable across items.
-
-The structure matrix has several important properties:
-
-1. **Bounded values:** Each entry $S_{jk} \in [-1, 1]$, making comparisons intuitive.
-2. **Interpretability:** High positive values indicate the item strongly measures that factor; negative values indicate inverse relationships.
-3. **Clustering:** Items with similar structure vectors measure similar constructs and can be grouped together.
-
-For AI benchmarks, the structure matrix reveals which questions tap into which capabilities. Two questions may both be "correct/incorrect" but load on different factors---one measuring reasoning, another measuring factual recall. This has important implications for how we interpret aggregate benchmark scores.
-
-#### Item Clustering and Benchmark Heterogeneity {#sec-item-clustering}
-
-With the structure matrix in hand, we can cluster items into latent subgroups using standard clustering algorithms such as Gaussian Mixture Models (GMM). Each cluster represents a group of items sharing similar factor loadings---analogous to "skills" or "themes" within the benchmark. This approach is analogous to exploratory factor analysis in psychometrics, revealing whether benchmarks are essentially unidimensional or composed of multiple, potentially antagonistic, latent skills.
-
-::: {.callout-important title="Benchmark Heterogeneity"}
-A key insight from factor analysis applied to AI benchmarks is that **benchmarks are rarely homogeneous**. Intentionally or not, they often combine items that test different capabilities, and even a single benchmark item may test a combination of capabilities.
-
-Two models with identical mean scores may excel on different capability dimensions. For example, one model might be strong in reasoning but weak in factual recall, while another may have the reverse profile. When item clusters show weak or negative correlations with each other, the benchmark-level mean score becomes neither informative nor accurate about subgroup performance.
-:::
-
-Within each benchmark, we can quantify inter-construct correlations by:
-
-1. **Clustering items** based on their structure vectors using GMM with BIC for model selection
-2. **Computing cluster means** for each model (average accuracy on items in each cluster)
-3. **Correlating cluster means** across models to assess construct overlap
-
-Strongly positive inter-cluster correlations indicate overlapping constructs, while weak or negative correlations suggest distinct and possibly conflicting capabilities being aggregated by the benchmark's mean score. This multidimensional pattern explains why two models with identical overall accuracies may excel on entirely different skill axes.
-
-Factor models assign a feature vector to each item (the structure vector), allowing items to be clustered via standard algorithms. This helps interpret evaluation results that would otherwise be obscured by aggregate scores.
-
-### Amortized Models {#sec-cold-start}
-
-The factor models introduced in @sec-factor-models learn a latent parameter vector for each person ($U_i$) and each item ($V_j$, $Z_j$) by optimizing over the observed response matrix. This works well when we have enough responses for every entity, but it has two limitations: (1) the number of parameters grows linearly with the number of persons and items, and (2) new persons or items that were not present during training have no learned representation. **Amortized models** address both limitations by replacing per-entity parameter optimization with a learned function that maps observable features to latent parameters.
-
-In the standard factor model, each item $j$ has its own learned parameters $V_j$ and $Z_j$. An amortized model instead learns a function $f_\theta$ that predicts these parameters from item features:
-
-$$
-[\hat{V}_j, \hat{Z}_j] = f_\theta(x_j)
-$$
-
-where $x_j$ is a feature vector for item $j$ (e.g., a text embedding of the question). Similarly, person parameters can be amortized via a function $g_\phi$:
-
-$$
-\hat{U}_i = g_\phi(m_i)
-$$
-
-where $m_i$ is a feature vector for person $i$ (e.g., model metadata such as parameter count, architecture family, and release date). The predicted correctness probability is then:
-
-$$
-\hat{P}_{ij} = \sigma(\hat{U}_i^\top \hat{V}_j + \hat{Z}_j)
-$$
-
-The key advantage is that $f_\theta$ and $g_\phi$ generalize to *new* items and persons not seen during training, as long as their features are available.
-
-Amortized measurement models are closely related to **neural collaborative filtering** (NCF), a family of methods from recommendation systems that use neural networks to model user-item interactions. In the recommender systems literature, the response matrix $Y$ records user preferences (ratings, clicks); in our setting, it records model correctness. Both problems share the same structure: predicting missing entries of a sparse matrix.
-
-Classical matrix factorization decomposes the response matrix as $Y \approx U V^\top + Z$, which is exactly the logistic factor model from @sec-factor-models without the sigmoid. NCF extends this by replacing the inner product $U_i^\top V_j$ with a neural network $h_\psi(U_i, V_j)$ that can learn non-linear interactions between person and item latent factors. In the measurement context, this corresponds to replacing the linear logit $U_i^\top V_j + Z_j$ with a more flexible function:
-
-$$
-P(Y_{ij} = 1) = \sigma(h_\psi(U_i, V_j, Z_j))
-$$
-
-This increased flexibility can capture complex interaction patterns---for instance, a model that is strong on reasoning but specifically weak on multi-step arithmetic---that a linear factor model would need many dimensions to approximate. The cost is reduced interpretability: the latent factors no longer have a clean geometric interpretation as "ability axes."
-
-::: {.callout-note title="NCF and Amortized Models"}
-Neural collaborative filtering and amortized models address complementary problems. NCF uses neural networks to model the *interaction* between latent factors (replacing $U_i^\top V_j$ with a learned function). Amortized models use neural networks to *predict* the latent factors from features (replacing per-entity $U_i$, $V_j$ with functions of observable features). The two ideas can be combined: use amortized encoders to produce latent factors, then a neural interaction function to produce predictions.
-:::
-
-
-### Preference Models {#sec-paired-comparison}
-
-Not all measurement data comes in the form of item responses. In many settings, we observe *pairwise comparisons*: which of two items is preferred, which of two players wins. These settings require different models.
-
-#### The Bradley-Terry Model
-
-The Bradley-Terry model (1952) is the foundational model for paired comparisons:
-
-::: {.callout-note title="Definition: Bradley-Terry Model"}
-$$
-P(\text{item } i \text{ beats item } j) = \frac{\exp(\theta_i)}{\exp(\theta_i) + \exp(\theta_j)} = \sigma(\theta_i - \theta_j)
-$$
-
-where $\theta_i$ is the "strength" or "quality" of item $i$.
-:::
-
-The model has the same mathematical form as the Rasch model, but the interpretation differs: instead of a person answering an item, we have two items competing against each other.
-
-![Plate diagram for the Bradley-Terry model. A comparison outcome $Y_c$ depends on the strengths $\theta_i$ and $\theta_j$ of the two competitors in each pair.](Figures/plate_bt.png){#fig-bt-plate width=50%}
-
-#### Online Measurement Model
-
-The Elo rating system, developed by Arpad Elo for chess ratings, is essentially a Bradley-Terry model with online updates:
-
-::: {.callout-note title="Definition: Elo Rating System"}
-After player $i$ with rating $R_i$ plays player $j$ with rating $R_j$, the ratings are updated:
-
-$$
-R_i^{\text{new}} = R_i + K(S_i - E_i)
-$$
-
-where:
-
-- $S_i \in \{0, 0.5, 1\}$ is the actual outcome (loss, draw, win)
-- $E_i = \sigma((R_j - R_i)/400 \cdot \ln 10)$ is the expected outcome
-- $K$ is a learning rate parameter
-:::
-
-The Elo system is widely used in competitive games and has been adopted for AI evaluation in settings like the Chatbot Arena, where humans compare model outputs pairwise.
-
-#### Connection to AI Evaluation
-
-The Chatbot Arena (LMSYS) uses Elo ratings to rank language models based on human preferences. When a user prefers model A's response over model B's, this is treated as a "win" for model A. The resulting ratings provide a preference-based complement to accuracy-based benchmarks.
-
-::: {.callout-note title="Chatbot Arena as Thurstone's Comparative Judgment"}
-The Chatbot Arena implements exactly the paradigm that L.L. Thurstone proposed in 1927: measuring psychological attributes through pairwise comparisons. Thurstone developed this method to scale attitudes, preferences, and other subjective quantities. A century later, the same mathematics underlies how we rank AI systems.
-:::
-
-### Network Models {#sec-network-models}
-
-The models discussed so far assume a *common cause* structure: latent variables cause observed responses. Network models propose an alternative: observed variables are directly connected to each other, and correlations arise from these connections rather than common latent causes.
-
-#### The Gaussian Graphical Model (GGM)
-
-For continuous data, the Gaussian Graphical Model represents conditional independence relationships:
-
-::: {.callout-note title="Definition: Gaussian Graphical Model"}
-Variables $X = (X_1, \ldots, X_M)$ follow a multivariate normal distribution with precision matrix $\Omega = \Sigma^{-1}$. The partial correlation between $X_j$ and $X_k$ given all other variables is:
-
-$$
-\rho_{jk \cdot \text{rest}} = -\frac{\Omega_{jk}}{\sqrt{\Omega_{jj} \Omega_{kk}}}
-$$
-
-Two variables are conditionally independent if and only if $\Omega_{jk} = 0$.
-:::
-
-The GGM can be visualized as a network where nodes are variables and edges represent non-zero partial correlations.
-
-#### The Ising Model
-
-For binary data, the Ising model (borrowed from statistical physics) provides an analogous framework:
-
-::: {.callout-note title="Definition: Ising Model"}
-$$
-P(Y = y) = \frac{1}{Z} \exp\left(\sum_j \tau_j y_j + \sum_{j < k} \omega_{jk} y_j y_k\right)
-$$
-
-where:
-
-- $\tau_j$ are threshold parameters (similar to item difficulties)
-- $\omega_{jk}$ are interaction parameters (edge weights)
-- $Z$ is a normalizing constant
-:::
-
-**Interpreting the network.** The Ising model defines a network (undirected graph) over items: each item $j$ is a node, and each non-zero interaction weight $\omega_{jk}$ is an edge between items $j$ and $k$. The network captures *conditional* dependencies: $\omega_{jk} \neq 0$ means that knowing the response to item $j$ changes the probability of a correct response to item $k$, even after conditioning on all other items.
-
-The two sums in the probability have distinct roles:
-
-- $\sum_j \tau_j y_j$ is the **node term**: each item $j$ has a threshold $\tau_j$ that plays a role analogous to item difficulty. A large positive $\tau_j$ makes $y_j = 1$ (correct) more probable, independent of other items.
-- $\sum_{j < k} \omega_{jk} y_j y_k$ is the **edge term**: it sums the interaction weights over all pairs of items that are *both* answered correctly. A positive weight $\omega_{jk} > 0$ means items $j$ and $k$ tend to be answered correctly together (e.g., they share a common skill), while $\omega_{jk} < 0$ means success on one is associated with failure on the other (e.g., they require competing strategies). The total edge sum captures the overall "alignment" of the response pattern with the dependency structure.
-
-In the Ising model, the correlation between two items arises from their direct connection $\omega_{jk}$, not from a common latent factor. Moreover, correlations can propagate through chains of connections: items $j$ and $k$ may be correlated even if $\omega_{jk} = 0$, provided there is a path of non-zero edges connecting them.
-
-![Graphical model for the Ising model. Unlike latent variable models, all nodes are observed and correlations arise from direct pairwise connections $\omega_{jk}$.](Figures/plate_ising.png){#fig-network-diagram width=50%}
-
-#### Network vs. Latent Variable Models
-
-The choice between network and latent variable models reflects different theories about what causes observed correlations:
-
-| Aspect | Latent Variable Model | Network Model |
-|--------|----------------------|---------------|
-| Cause of correlations | Common latent factor | Direct connections |
-| Removing an item | No effect on other correlations | May reduce correlations |
-| Theoretical commitment | Constructs exist and cause responses | Constructs are summaries |
-| Example | "Intelligence" causes good performance | Skills directly cause each other |
-
-For AI evaluation, the question is whether benchmark items are indicators of a common capability (latent variable view) or whether they form a network of related but distinct skills (network view). This distinction has implications for how we aggregate performance across items.
-
-::: {.callout-note title="Which Model for AI?"}
-The choice between latent variable and network models is not merely technical---it reflects different beliefs about AI capabilities:
-
-- **Latent variable view:** Models have underlying capabilities (reasoning, knowledge, language understanding) that cause their benchmark performance.
-- **Network view:** Benchmark items measure distinct skills that may reinforce each other but do not share a common cause.
-
-Both views may be partially correct. AIMS primarily adopts the latent variable view but acknowledges that some benchmark items may not fit this framework.
-:::
-
-### Hierarchical Models {#sec-hierarchical-models}
-
-The models introduced so far treat all items as exchangeable---a single set of item parameters enters the likelihood without any grouping structure. In practice, AI evaluations are *nested*: items belong to benchmarks, benchmarks belong to suites or domains, and suites may be grouped into broader capability areas. Hierarchical (multilevel) models make this nesting explicit in the model specification, treating it as part of the data-generating process rather than an afterthought of analysis.
-
-::: {.callout-note title="Definition: Hierarchical IRT Model"}
-Consider item $i$ nested within benchmark $j$. A hierarchical extension of the Rasch model specifies:
-
-$$
-\text{logit}\, P(Y_{ij} = 1 \mid \theta, b_{ij}) = \theta - b_{ij}
-$$
-
-where item difficulties are drawn from a benchmark-level distribution:
-
-$$
-b_{ij} \sim \mathcal{N}(\mu_j, \sigma_j^2)
-$$
-
-The benchmark means $\mu_j$ may themselves follow a domain-level distribution $\mu_j \sim \mathcal{N}(\mu_0, \tau^2)$, creating a three-level hierarchy: items within benchmarks within domains. The same hierarchical extension applies to 2PL, 3PL, and factor models.
-:::
-
-![Plate diagram for the hierarchical IRT model. Item difficulties $b_{ij}$ are drawn from benchmark-level distributions parameterized by $\mu_j$ and $\sigma_j$, which may themselves be drawn from domain-level hyperparameters $\mu_0$ and $\tau$. Nested plates reflect the hierarchical data structure.](Figures/plate_hierarchical.png){#fig-hierarchical-plate width=50%}
-
-The decision to include hierarchical structure is a *modeling* choice, analogous to the decision between the 1PL and 2PL. It encodes the assumption that items within the same benchmark share difficulty characteristics---their parameters are not independent draws from a single global distribution, but cluster by benchmark. Ignoring this structure and treating all items as exchangeable conflates within-benchmark and between-benchmark variation, producing estimates that may not generalize beyond the specific items observed [@luettgau2025hibayes].
-
-::: {.callout-note title="Hierarchical Structure in AI Evaluation"}
-Modern AI evaluations exhibit natural hierarchy at multiple levels:
-
-- **MMLU:** 15,908 items $\to$ 57 subjects $\to$ 4 domains (humanities, social sciences, STEM, other)
-- **GAIA:** agentic tasks $\to$ 3 difficulty levels $\to$ capability domain
-- **Coding benchmarks:** problems $\to$ benchmarks (HumanEval, MBPP, DS-1000) $\to$ coding capability
-
-Explicitly modeling these levels separates the sources of variation at each level. This enables principled generalization from the benchmarks actually tested to the broader construct they are intended to measure. Estimation methods for hierarchical models, including partial pooling and Bayesian inference, are covered in @sec-learning.
-:::
-
-
-## Measurement Model {#sec-rasch-measurement}
-
-Among the many probabilistic models for measurement, the Rasch model holds a special status. Georg Rasch and his followers argue that it is not merely *one* measurement model among many---it is *the* measurement model, the only model that satisfies the requirements for fundamental measurement. This section examines this claim carefully.
-
-The most remarkable property of the Rasch model is that the **sum score is a sufficient statistic** for the ability parameter. This means that the total number of correct responses contains all the information about a person's ability; knowing *which* items were answered correctly adds nothing.
-
-::: {.callout-note title="Theorem: Sufficiency in the Rasch Model"}
-In the Rasch model, the total score $S_i = \sum_{j=1}^M Y_{ij}$ is a sufficient statistic for the ability parameter $\theta_i$. That is:
-
-$$
-P(Y_i | S_i, \theta_i) = P(Y_i | S_i)
-$$
-
-The conditional distribution of the response pattern given the sum score does not depend on $\theta$.
+for some strictly increasing link $\Phi$---the additive conjoint structure of @sec-acm, which leaves $\Phi$ free. If the raw sum score $S_i = \sum_{j=1}^M Y_{ij}$ is a sufficient statistic for $\theta_i$, then $\Phi$ must be logistic, so the model is the **Rasch model**. The converse also holds, so among additive models sum-score sufficiency *characterizes* Rasch [@andersen1973conditional; @fischer1995rasch]. Additive structure alone does not deliver sufficiency---the logistic link, singled out here, is what does. (Allowing items to differ in discrimination---the 2PL model---would make a discrimination-weighted score sufficient instead of the raw count.)
 :::
 
 ::: {.callout-note title="Proof" collapse="true"}
-The joint probability of response pattern $Y_i = (Y_{i1}, \ldots, Y_{iM})$ is:
-
+Assume local independence, so the joint probability of a pattern $Y_i$ is $\prod_j \Phi(\theta_i - \beta_j)^{Y_{ij}}\,(1 - \Phi(\theta_i - \beta_j))^{1 - Y_{ij}}$, with log-likelihood
 $$
-P(Y_i | \theta_i, \boldsymbol{\beta}) = \prod_{j=1}^M \frac{\exp(Y_{ij}(\theta_i - \beta_j))}{1 + \exp(\theta_i - \beta_j)}
+\sum_j Y_{ij}\,\operatorname{logit}\Phi(\theta_i - \beta_j) \;+\; \sum_j \log\!\big(1 - \Phi(\theta_i - \beta_j)\big), \qquad \operatorname{logit}(p) = \log\tfrac{p}{1-p}.
 $$
+The second sum depends on $\theta_i$ but not on *which* items were correct, so it enters only the normalizer. By the factorization theorem, $S_i = \sum_j Y_{ij}$ is sufficient for $\theta_i$ exactly when $\theta_i$ enters the first sum *only through* $S_i$---that is, when $\operatorname{logit}\Phi(\theta_i - \beta_j)$ splits as $c\,\theta_i + d_j$ with the *same* slope $c$ for every item. A function of the single argument $\theta_i - \beta_j$ has that form only if $\operatorname{logit}\Phi$ is linear, i.e. $\Phi(z) = 1/(1 + e^{-cz})$; absorbing $c$ into the scale gives the logistic link---the Rasch model.
 
-Expanding:
-
+Conversely, in the Rasch model
 $$
-= \frac{\exp(\theta_i \sum_j Y_{ij}) \cdot \exp(-\sum_j Y_{ij} \beta_j)}{\prod_j (1 + \exp(\theta_i - \beta_j))}
+P(Y_i \mid \theta_i, \boldsymbol{\beta}) = \frac{\exp\!\big(\theta_i S_i - \sum_j Y_{ij}\beta_j\big)}{\prod_j \big(1 + \exp(\theta_i - \beta_j)\big)}
 $$
-
-$$
-= \frac{\exp(\theta_i S_i) \cdot \exp(-\sum_j Y_{ij} \beta_j)}{\prod_j (1 + \exp(\theta_i - \beta_j))}
-$$
-
-The likelihood factors as $L(\theta | Y) = g(S, \theta) \cdot h(Y, \boldsymbol{\beta})$, where $g$ depends on $\theta$ only through $S$.
-
-By the factorization theorem, $S$ is sufficient for $\theta$.
-
-To see that the conditional distribution $P(Y_i | S_i)$ does not depend on $\theta$:
-
-$$
-P(Y_i | S_i, \theta_i) = \frac{P(Y_i | \theta_i, \boldsymbol{\beta})}{P(S_i | \theta_i, \boldsymbol{\beta})}
-$$
-
-Both numerator and denominator contain the factor $\exp(\theta_i S_i)$, which cancels when $S_i$ is fixed.
+factors as $g(S_i, \theta_i)\,h(Y_i, \boldsymbol{\beta})$, so $S_i$ is sufficient; and the $\exp(\theta_i S_i)$ factor cancels in $P(Y_i \mid S_i, \theta_i) = P(Y_i \mid \theta_i) / P(S_i \mid \theta_i)$, leaving the conditional pattern distribution free of $\theta$.
 :::
 
-Sufficiency has the following implications:
+The implication is that, before trusting average benchmark scores, we should test whether the Rasch model fits the data.
 
-1. **Data reduction without information loss.** We can summarize each person's responses by a single number (the sum score) without losing any information about their ability.
+## Reinterpreting the Second Conjoint Factor {#sec-paired-comparison}
 
-2. **Justification for sum scores.** The common practice of computing total scores is justified *only if* the Rasch model holds. Under other models, sum scores discard information.
+In some evaluation settings, we observe *pairwise comparisons*: which of two items is preferred, which of two players wins. The Bradley-Terry model (1952) is the foundational model for paired comparisons. As we will see, it is not a new model at all but the Rasch structure of @sec-acm with its **second conjoint factor reinterpreted**---the second slot holds not an item (carrying a difficulty) but a competitor (carrying a strength), drawn from the same pool as the first:
 
-3. **Conditional inference.** We can estimate item parameters without knowing person parameters, and vice versa, by conditioning on sufficient statistics.
+$$
+P(i \succ j) = \sigma(\theta_i - \theta_j)
+$$
 
-::: {.callout-note title="Sufficiency and AI Benchmarks"}
-When we compute a model's accuracy on a benchmark, we are computing a sum score (proportion correct = sum / number of items). This is appropriate if the Rasch model holds. But if items have different discriminations, the sum score loses information---we should weight some items more than others.
+where $i \succ j$ reads "$i$ is preferred to (beats) $j$" and $\theta_i, \theta_j$ are the "strength" or "quality" of competitors $i$ and $j$, both drawn from the same pool. Mathematically this *is* the Rasch model; only the reading of the second conjoint factor changes---instead of a subject answering an item, we have two subjects competing against each other.
 
-Implication: Before trusting aggregate benchmark scores, we should test whether the Rasch model fits the data.
+![Plate diagram for the Bradley-Terry model, sharing the crossed-plate structure of the Rasch model (@fig-rasch-plate): the comparison outcome $Y_{ij}$ sits in the overlap of two competitor plates and depends on the strengths $\theta_i$ and $\theta_j$. Bradley-Terry is exactly Rasch with the item difficulty $\beta_j$ replaced by a second competitor strength $\theta_j$, both competitors drawn from the same pool of $N$.](Figures/plate_bt.png){#fig-bt-plate width=41%}
+
+The shared form with Rasch is not a coincidence of notation---it means the Bradley-Terry strength inherits the *interval* scale that additive conjoint measurement earns for Rasch ability (@sec-acm). Because the win probability depends only on the *difference* $\theta_i - \theta_j$ passed through a monotone link, it carries exactly the additive conjoint structure of @sec-acm, now with the two conjoint factors being the two *roles* of a comparison---the competitor in the first slot and the competitor in the second---so that the log-odds $\theta_i - \theta_j$ splits additively into a first-role contribution $f(i) = \theta_i$ and a second-role contribution $g(j) = -\theta_j$. Single cancellation holds: the ranking of first-slot competitors induced by any fixed opponent is the same opponent-independent order, because it depends on $\theta_i$ alone. Double cancellation holds because the structure is additive by construction. By the representation theorem (@sec-acm; @krantz1971foundations), the strengths $\theta$ therefore form an interval scale. Because the two roles range over the *same* set of competitors, this is the special "difference measurement" case of conjoint measurement [@krantz1971foundations], in which a single scale $\theta$ plays both conjoint factors at once.
+
+The interval reading has teeth. *Differences* are meaningful---$\theta_i - \theta_j$ is precisely what fixes the win probability $\sigma(\theta_i - \theta_j)$---but there is no true zero, so *ratios* are not: a fixed rating gap means the same win probability wherever it sits on the scale, yet a competitor rated $1600$ is not "twice as strong" as one rated $800$. Only the origin is conventional (the logistic link pins the unit, exactly as in Rasch; Elo fixes the origin near $1500$). This is the paired-comparison counterpart of Rasch's specific objectivity: just as a model's Rasch ability can be estimated from any subset of items, a competitor's strength can be estimated from any schedule of opponents. And as with Rasch, AI evaluation can *test* this structure rather than assume it: repeated comparisons estimate each $P(i \succ j)$ directly, so additivity (double cancellation) can be checked on the array of win rates by the argument of @sec-acm-ai. When the check fails the diagnosis parallels the Rasch case: inconsistent *spacings* cost only the interval scale while leaving a consistent ranking, but *non-transitive* matchups---$A$ beats $B$, $B$ beats $C$, yet $C$ beats $A$, the paired-comparison signature of multidimensional or "rock--paper--scissors" capabilities---break even the ranking, signalling that no single strength number can order the field.
+
+The Elo rating system, developed by Arpad Elo for chess ratings, is a Bradley-Terry model with online updates. After player $i$ with rating $R_i$ plays player $j$ with rating $R_j$, the ratings are updated: $R_i^{\text{new}} = R_i + K(y_i - E_i)$, where $Y_i \in \{0, 0.5, 1\}$ is the outcome (loss, draw, win), $E_i = \sigma((R_j - R_i)/400 \cdot \ln 10)$ is the expected outcome, and $K$ is a learning rate parameter. The Elo system is widely used in competitive games and has been adopted for AI evaluation in settings like the Chatbot Arena, where humans compare model outputs pairwise. The Chatbot Arena (LMSYS) uses Elo ratings to rank language models based on human preferences. When a user prefers model A's response over model B's, this is treated as a "win" for model A. The resulting ratings provide a preference-based complement to accuracy-based benchmarks.
+
+## Testing for an Interval Scale {#sec-acm-ai}
+
+In human testing, the response probability $p_{ij} = P(Y_{ij}=1)$ is unobservable. A person cannot be given the same item repeatedly under independent conditions---memory, learning, and fatigue destroy the independence---so only a single binary $Y_{ij}$ is ever seen, and $p_{ij}$ must be *inferred* through a model rather than measured. This is why the conjoint axioms of @sec-acm could only be assumed for human testing: the deterministic order on $A \times X$ that the axioms constrain was never directly observable. AI evaluation breaks this premise. A stateless model queried at sampling temperature $>0$ can be given the same item $T$ times with genuinely independent responses, so $\hat{p}_{ij} = \tfrac{1}{T}\sum_t Y_{ijt}$ estimates $p_{ij}$ *itself*, and $T$ can be made large. The observable object is then not a single bit but a real-valued array $[\hat{p}_{ij}]$ over the model$\times$item grid---exactly the conjoint structure the cancellation axioms describe. The deterministic-versus-probabilistic gap of @sec-acm narrows to a testable question:
+$$
+\text{additive conjoint structure holds} \iff \exists\ \text{monotone } \Phi:\ \Phi^{-1}(p_{ij}) \text{ is additive } (\theta_i + \delta_j),
+$$
+equivalently, the array $[p_{ij}]$ satisfies double cancellation. The Rasch model is the special case in which the additive scale is the logit. So in AI evaluation we can, for the first time, *test* whether ability and difficulty realize additive conjoint measurement instead of assuming it---by checking double cancellation directly, or by finding the monotone transform that minimizes departure from additivity and asking whether the residual interaction is within sampling error.
+
+That phrase---"find the monotone transform that minimizes departure from additivity"---is, concretely, an **isotonic regression**, and naming it that way makes the whole test transparent. The Rasch model bundles two assumptions: the additive index $\theta_i - \beta_j$ and the logistic *shape* $\sigma$. A bad Rasch fit cannot tell you which one broke. To test additivity *alone*, keep the index and let the shape go free.
+
+::: {.callout-note title="Definition: Nonparametric additive model (ADISOP)"}
+$$
+P(Y_{ij}=1 \mid \theta_i, \beta_j) = F(\theta_i - \beta_j),
+$$
+where $\theta_i$ (ability) and $\beta_j$ (difficulty) lie on a common scale and $F$ is a *single, unknown, non-decreasing* function---the link---estimated from the data rather than assumed. Every item is the same curve $F$ shifted by $\beta_j$, so the item characteristic curves are **parallel**; only their shared shape is free. Equivalently, this is a monotone *single-index* model: the entire $\text{model}\times\text{item}$ grid is summarized by one scalar index $s_{ij} = \theta_i - \beta_j$, and the response probability depends on the grid *only* through $s_{ij}$, monotonically. It is Scheiblechner's ADISOP [@scheiblechner1999additive]; the order-restricted conjoint tests of @karabatsos2001rasch ask the same question.
 :::
+
+Estimating $F$ *is* an isotonic regression. Hold the parameters fixed, place every cell's observed $\hat{p}_{ij}$ on the axis given by its index $s_{ij} = \theta_i - \beta_j$, and fit the non-decreasing step function that best matches them---the pool-adjacent-violators solution. Then update $\theta, \beta$ to sharpen the fit and iterate. Because the *only* freedom beyond the additive index is the monotone shape, this can reproduce $[\hat{p}_{ij}]$ **if and only if** the response probability really does depend on the grid through $\theta_i - \beta_j$ alone---which is double cancellation. What the isotonic fit *cannot* absorb is any dependence on the grid *beyond* the one-dimensional index: a genuine $\text{model}\times\text{item}$ interaction. So the **residual of the isotonic regression is the additivity test**, and it forks the Rasch ambiguity cleanly:
+
+- **Small residual, but Rasch fit badly.** The data are additive; Rasch's misfit was the logistic *shape*, which the isotonic $F$ has now replaced. Additive conjoint measurement holds---the interval scale stands---you have merely *estimated* the link instead of assuming it, forgoing the sum-score sufficiency that was the logistic's private bonus (@sec-rasch-measurement).
+- **Large residual even after the best isotonic $F$.** No monotone link makes the data additive; the dependence on the grid is genuinely two-dimensional, and additive conjoint measurement is rejected (what that costs, and how to localize it, is the next question).
+
+One discipline keeps this honest. The isotonic $F$ is flexible---it will fit *at least* as well as Rasch---so a smaller residual alone proves nothing. The sharp comparison is against the model that breaks additivity with the *fewest* extra knobs: the 2PL, which adds one slope $a_j$ per item. On the logit scale the 2PL index is $a_j \theta_i - b_j$, whose slope varies by item; that item-specific stretching is exactly the dependence a single index $\theta_i - \beta_j$ cannot carry, and it makes the parallel curves cross. So if the parallel single-index fit already suffices, additivity holds; if you genuinely need per-item slopes, the unit of $\theta$ is item-dependent and additivity fails.
+
+The model sits on a ladder of decreasing commitment, each rung an isotonic constraint loosened: Rasch (additive index $+$ logistic link) $\subset$ the nonparametric additive model (additive index $+$ isotonic link, still interval) $\subset$ the doubly-monotone model (non-crossing curves, ordinal specific objectivity) $\subset$ the monotone model. Each step right gives up an assumption and weakens the scale, interval to ordinal. In practice these isotonic models are measurement-theory tools with limited software; probit is the cheap parametric stand-in that keeps the additive index while only swapping the link.
+
+What does *failing* mean? Only that no monotone $\Phi$ makes $[\hat{p}_{ij}]$ additive: the items admit no common interval scale on which a single ability orders every model. A failed test withdraws exactly one claim---that this item set measures *one* latent quantity, on these models, at the interval level---and it is a verdict on the *grid* tested (these items crossed with these models), not on the instrument in the abstract: a different population of models, or a unidimensional sub-domain of items, may still pass. Nor does it cost everything. If models rank the same way on every item but the *spacings* fail to align, one keeps a consistent *ordinal* ranking---accuracy still orders models, in the stochastic-ordering sense---and forfeits only the interval scale; the ranking itself breaks down only when models *reorder* across items.
+
+These two cases are distinguished by their cause:
+
+1. **Bad items.** Miskeyed, contaminated, or off-construct items create cancellation violations; removing them may restore additivity. This is the curation the diagnostics of @sec-rasch-measurement perform.
+2. **Genuine multidimensionality.** A model strong at mathematics but weak at coding produces systematic interactions that *no* monotone transform removes. Here the failure is substantive: ability is not one quantity on this item set, and the honest response is to restrict the claim to a unidimensional sub-domain or adopt a multidimensional model (@sec-factor-models).
+
+Three caveats keep the test honest. First, the link is free: passing double cancellation gives additive conjoint measurement, of which Rasch (logit) and probit are two coordinate systems---not Rasch specifically. Second, one observes $\hat{p}_{ij}$ with $O(1/\sqrt{T})$ error, so the deterministic axioms must be tested in their order-restricted, probabilistic form [@karabatsos2001rasch; @scheiblechner1995isotonic]; the remedy---raise $T$---is available in AI but not in human testing. Third, one can almost always *force* additivity by deleting enough items, even from noise, so a "pass" counts only if the curation was principled and additivity survives beyond chance.
+
+Finally, passing the test certifies *quantitative structure*, not *validity*. An array can be perfectly additive in an attribute that is not the construct we intended---the scraped-coding benchmark of @sec-validity has additive structure in *memorization*, not coding ability. Additive conjoint measurement answers "is this a quantity, and may I do interval arithmetic on it?"; it does not answer "is it the quantity I claim?" That second license is construct validity, and it must be earned separately.
+
+The additive structure leaves a visible fingerprint. Take a real response matrix $Y$ (@sec-response-matrix): 50 models from the Open LLM Leaderboard, each scored on the same 100-item sample, with entry $1$ for a correct answer and $0$ otherwise. The raw matrix looks unstructured, but sorting its rows and columns by their totals exposes the conjoint order.
+
+{{< include _plt_setup.qmd >}}
+
+```{pyodide-python}
+#| label: response-matrix-visualization
+#| autorun: true
+#| fig-cap: "A real response matrix: 50 models from the Open LLM Leaderboard scored on a 100-item sample. Rows are sorted by model accuracy, columns by item proportion-correct. The near-triangular gradient is the empirical signature of an additive ability--difficulty structure ordering both models and items."
+
+import json
+from pyodide.http import open_url
+
+# Real 50-model x 100-item slice of the Open LLM Leaderboard (binary scored).
+# Loaded from a precomputed resource shipped with the book.
+raw = json.loads(open_url("data/openllm_subset.json").read())
+Y = np.array(raw["data"], dtype=float)
+
+# Sort models (rows) and items (columns) by their totals
+row_order = np.argsort(Y.sum(axis=1))[::-1]
+col_order = np.argsort(Y.sum(axis=0))[::-1]
+Y_sorted = Y[row_order][:, col_order]
+
+fig, ax = plt.subplots(1, 1)
+ax.imshow(Y_sorted, aspect='auto', cmap='Blues', interpolation='nearest')
+ax.set_xlabel('Items (sorted by proportion correct)')
+ax.set_ylabel('Models (sorted by accuracy)')
+ax.set_title('Open LLM Leaderboard: sorted response matrix (50 × 100)')
+
+plt.show()
+```
+
+In the sorted matrix the correct answers concentrate toward one corner and thin out toward the opposite---a near-triangular gradient rather than a uniform scatter. This is the conjoint order made visible: models range from those that succeed on nearly every item to those that succeed only on the easiest, items range from those nearly every model solves to those almost none do, and a single additive $\theta_i - \beta_j$ orders the whole grid. The gradient need not appear---multidimensional or noisy data wash it out---which is precisely the point: additivity is a property the data can fail to have.
+
+A caution about the word "realization." The Rasch model is the *probabilistic analogue* of additive conjoint measurement [@brogden1977rasch; @perline1979rasch], not a deduction from its axioms. The cancellation axioms describe a deterministic order on $A \times X$; the Rasch model specifies probabilities. Bridging the two---reading a deterministic conjoint structure off stochastic responses---is exactly the contested step [@michell2008pathological; @kyngdon2008rasch]. The additivity lives in the model's parameters, not, without further work, demonstrably in the world. The next two sections close this gap from both sides: the statistical characterization that makes the structure *internal* to the model (@sec-rasch-measurement), and the feature of AI evaluation that makes the conjoint axioms *empirically testable* (@sec-acm-ai).
 
 ::: {.callout-tip title="Application: Using Sufficiency to Find Benchmark Bugs"}
 @truong2025bugs turn the sufficiency property into a practical diagnostic tool. Their argument: if the AI evaluation community reports mean scores as the primary metric, it is *implicitly assuming* that the sum score is a sufficient statistic for ability --- which, by the theorem above, implies the Rasch model is the data-generating process. Under the Rasch model, two testable consequences follow:
@@ -823,313 +381,85 @@ print(f"precision@{n_bad} (flag the lowest-correlation items) = {precision:.2f}"
 
 The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice the flagged items should be *inspected* rather than deleted blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.
 
-Georg Rasch's central contribution was not the mathematical model itself (which had been proposed earlier by others) but the philosophical framework of **specific objectivity**.
+## The $n$-Parameter Logistic Model {#sec-irt}
+Sometimes, the data does not fit the Rasch model, even for the isotonic version. In that case, we cannot license an interval scale, but we can still construct a useful ordinal scale with a more statistically expressive class of models. The $n$-parameter logistic model is such a class of model. The $n$-parameter logistic model equips each item with a parameter vector $\boldsymbol{\beta}_j = [\beta_{j1}, \ldots, \beta_{jn}] \in \mathbb{R}^n$, letting items differ along more than one axis. Rasch is the case $n=1$; the cases $n=2$ and $n=3$ below add a discrimination and a guessing component, respectively. Because every variant still attaches a single parameter object to each item, the plate diagram is structurally identical to the Rasch model (@fig-rasch-plate)---the lone item node $\beta_j$ now standing for the full vector $\boldsymbol{\beta}_j$ rather than a scalar difficulty.
 
-::: {.callout-note title="Definition: Specific Objectivity"}
-A measurement procedure exhibits **specific objectivity** if comparisons between persons are independent of which items are used:
-
-$$
-\frac{P(Y_{ij} = 1)}{P(Y_{ij} = 0)} \bigg/ \frac{P(Y_{kj} = 1)}{P(Y_{kj} = 0)} = \frac{\exp(\theta_i)}{\exp(\theta_k)}
-$$
-
-The item parameter $\beta_j$ cancels completely. Similarly, comparisons between items are independent of which persons are used.
-:::
-
-In the Rasch model, the odds ratio for two persons on the same item is:
+The two-parameter logistic model gives item $j$ a discrimination $\beta_{j2}$ alongside its difficulty $\beta_{j1}$:
 
 $$
-\frac{P(Y_{ij} = 1) / P(Y_{ij} = 0)}{P(Y_{kj} = 1) / P(Y_{kj} = 0)} = \frac{\exp(\theta_i - \beta_j)}{\exp(\theta_k - \beta_j)} = \exp(\theta_i - \theta_k)
+P(Y_{ij} = 1 | \theta_i, \boldsymbol{\beta}_j) = \sigma(\beta_{j2}(\theta_i - \beta_{j1}))
 $$
+Items with higher discrimination are better at distinguishing between persons of different abilities. Their ICCs are steeper, meaning small changes in ability produce large changes in response probability.
 
-The item difficulty $\beta_j$ cancels! This means person comparisons are the same regardless of which item we use.
+The per-item discrimination has a precise consequence for the *scale type* of the ability estimate. In the 2PL model, $\operatorname{logit} P(Y_{ij}=1) = \beta_{j2}(\theta_i - \beta_{j1})$, so the log-odds gap between two models on item $j$ is $\beta_{j2}(\theta_i - \theta_k)$. Its *sign* is the same on every item (discriminations are positive), so models keep a consistent ordering---single cancellation, the ordinal separation of @sec-acm, survives. But its *magnitude* is scaled by the item's discrimination $\beta_{j2}$: each item converts $\theta$-differences into log-odds at its own rate, so the *unit* of $\theta$ is item-dependent. Double cancellation fails, no additive representation exists, and $\theta$ is therefore **not a fundamental (additive conjoint) interval scale**. It is identified only up to a positive affine transformation---one fixes its origin and unit by convention, typically $\theta \sim \mathcal{N}(0,1)$---so it is *interval by parametric stipulation*, not because the data carry an item-independent unit. Rasch is exactly the case $\beta_{j2} \equiv 1$: one common exchange rate, an item-independent unit, a genuine interval scale. This sharpens both camps. The prescriptive claim becomes precise---only Rasch earns the interval scale from structure, while the 2PL borrows it from the assumed logistic--Gaussian form. So does the descriptive reply: an affine-identified $\theta$ that fits the data is interval enough for ranking and selection, and discarding items to force $\beta_{j2} \equiv 1$ throws away real information about which items discriminate.
 
-Rasch identified two levels of objectivity:
-
-1. **Local objectivity:** Comparisons are item-independent for a specific pair of persons.
-
-2. **General objectivity:** The entire ability scale is sample-independent. Ability estimates remain valid regardless of which items were administered.
-
-Specific objectivity enables what Rasch called **test-free person measurement** and **sample-free item calibration**:
-
-- **Test-free person measurement:** A person's ability can be estimated from *any* subset of calibrated items, and the estimate will be the same (within sampling error).
-
-- **Sample-free item calibration:** An item's difficulty can be estimated from *any* sample of persons, and the estimate will be the same.
-
-This is remarkable because it mirrors the properties of physical measurement:
-
-::: {.callout-note title="The Analogy to Physical Measurement"}
-Consider measuring temperature with different thermometers:
-
-- A mercury thermometer in New York should give the same reading as an alcohol thermometer in London for the same temperature.
-- Calibrating a thermometer on hot water should yield parameters that work equally well for cold water.
-
-The Rasch model claims the same properties for psychological measurement: calibrated tests yield the same ability estimates regardless of which specific items are used.
-:::
-
-If AI benchmarks satisfy Rasch model assumptions:
-
-1. **Benchmark subset comparisons are valid.** We can compare a model tested on MMLU subset A with a model tested on MMLU subset B, as long as both subsets are calibrated to the same scale.
-
-2. **New questions can be calibrated on any models.** We can add new questions to a benchmark by testing them on a sample of models, then use them to evaluate future models.
-
-3. **Adaptive testing becomes possible.** We can select questions dynamically based on a model's performance, arriving at an accurate ability estimate with fewer questions.
-
-4. **Cross-benchmark comparisons may be possible.** If different benchmarks measure the same construct, we can equate their scales.
-
-These properties are not guaranteed---they hold only if the Rasch model fits the data. Testing model fit becomes essential.
-
-The claim that Rasch is "the" measurement model is controversial. The debate centers on the **prescriptive vs. descriptive** approaches to measurement.
-
-#### The Prescriptive Approach (Rasch School)
-
-The Rasch school argues:
-
-1. **Measurement requires specific objectivity.** Without it, we cannot make person comparisons that are independent of the test used.
-
-2. **The model is a requirement, not a description.** If data do not fit the Rasch model, the items do not measure the same construct. We should discard misfitting items, not adopt a more complex model.
-
-3. **Discrimination variation is a problem, not a feature.** Items with different discriminations measure the construct with different precision. Mixing them produces a heterogeneous test that does not measure a single thing.
-
-4. **Sufficiency is non-negotiable.** The sum score must be sufficient for ability, or we are not measuring anything meaningful.
-
-#### The Descriptive Approach (General IRT)
-
-The general IRT school responds:
-
-1. **Models should fit data.** The purpose of a statistical model is to describe the data accurately. If items have different discriminations, we should model this, not ignore it.
-
-2. **Perfect fit is unrealistic.** Real data never perfectly fit any model. The Rasch school's insistence on exact fit is impractical.
-
-3. **Information is lost by forcing Rasch.** Discarding items that don't fit Rasch means discarding information. Better to use all items and model their characteristics.
-
-4. **2PL/3PL models are more realistic.** Most tests have items with varying discrimination and guessing. Pretending otherwise does not make it true.
-
-::: {.callout-note title="The Fundamental Tension"}
-**Prescriptive view:** The Rasch model defines what measurement IS. Items that don't fit should be discarded because they don't measure the same thing.
-
-**Descriptive view:** Use whatever model fits the data best. The 2PL/3PL models are more realistic for most applications.
-
-This is not merely a statistical disagreement---it reflects different philosophies of science. The Rasch school treats measurement theory as providing *requirements* that data must satisfy. The IRT school treats models as *tools* that should be chosen based on fit.
-:::
-
-#### Implications for AI Evaluation
-
-This debate has direct implications for AI benchmark design:
-
-| Question | Rasch School Answer | General IRT Answer |
-|----------|--------------------|--------------------|
-| Should we allow items with different discriminations? | No---they measure different constructs | Yes---model the discrimination |
-| What if data don't fit Rasch? | Remove misfitting items | Use 2PL or 3PL |
-| Is sum score the right metric? | Yes, if Rasch fits | Only approximately |
-| Can we compare models across benchmarks? | Yes, with Rasch | Requires complex equating |
-
-AIMS takes a pragmatic position: we test whether data fit Rasch-like models, use the simpler model when it fits adequately, and acknowledge when more complex models are needed. The key insight is that the choice has *consequences* for what we can conclude from evaluation results.
-
-
-## Historical Development {#sec-history}
-
-The probabilistic models we use today emerged from over a century of work across psychology, education, economics, and statistics. Understanding this history illuminates why certain models dominate and what problems they were designed to solve.
-
-The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the **Law of Comparative Judgment** [@thurstone]. Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values.
-
-::: {.callout-note title="Thurstone's Model (Case V)"}
-Each stimulus $i$ has a true scale value $\theta_i$. When comparing stimuli $i$ and $j$, each is perceived with Gaussian noise:
+For multiple-choice tests, even low-ability test-takers may answer correctly by guessing. The **three-parameter logistic model** adds a lower asymptote, a guessing parameter $\beta_{j3}$, so $\boldsymbol{\beta}_j = (\beta_{j1}, \beta_{j2}, \beta_{j3})$:
 
 $$
-\tilde{\theta}_i \sim \mathcal{N}(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim \mathcal{N}(\theta_j, \sigma^2)
+P(Y_{ij} = 1 | \theta_i, \boldsymbol{\beta}_j) = \beta_{j3} + (1 - \beta_{j3}) \sigma(\beta_{j2}(\theta_i - \beta_{j1}))
 $$
 
-The probability that $i$ is judged greater than $j$ is:
-
-$$
-P(i \succ j) = \Phi\left(\frac{\theta_i - \theta_j}{\sqrt{2}\sigma}\right)
-$$
-
-where $\Phi$ is the standard normal CDF.
-:::
-
-Thurstone's method was revolutionary: it showed that subjective quantities could be measured scientifically. The same mathematics now underlies how we rank AI systems from human preferences.
-
-In 1952, Ralph Bradley and Milton Terry developed a model for ranking from paired comparisons in the context of incomplete block designs [@bradley-terry-model]. Their model:
-
-$$
-P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}
-$$
-
-where $\pi_i > 0$ are "worth" parameters. With $\theta_i = \log \pi_i$, this becomes the familiar logistic form.
-
-In 1959, R. Duncan Luce provided an axiomatic foundation through his **Choice Axiom**: the ratio of choice probabilities for two alternatives should be independent of what other alternatives are available. This axiom leads directly to the Bradley-Terry/logistic model.
-
-Georg Rasch was a Danish mathematician who worked on problems in educational testing. In 1960, he published "Probabilistic Models for Some Intelligence and Attainment Tests," which introduced what we now call the Rasch model [@rasch1960probabilistic].
-
-Rasch's contribution was not the mathematical model itself---the same formula had appeared earlier in other contexts. His contribution was the *philosophical framework* of specific objectivity: the requirement that person and item parameters must be separable.
-
-Rasch's work was introduced to the United States by Benjamin Wright at the University of Chicago, who heard Rasch lecture in 1960. Wright became the leading advocate for Rasch measurement in the English-speaking world, founding the MESA (Measurement, Evaluation, Statistical Analysis) program and the journal *Rasch Measurement Transactions*.
-
-Other important figures in the Rasch tradition:
-
-- **Erling Andersen** (Copenhagen): Developed the theory of conditional maximum likelihood estimation for Rasch models.
-- **Gerhard Fischer** (Vienna): Extended the Rasch model to the Linear Logistic Test Model (LLTM) and developed software for estimation.
-- **David Andrich** (Australia): Extended Rasch models to polytomous data (rating scales) and developed the RUMM software.
-
-In 1974, Daniel McFadden (who later won the Nobel Prize in Economics) developed the random utility framework for discrete choice. His insight was that choices could be modeled as utility maximization with random error:
-
-A person chooses alternative $i$ over $j$ if $U_i + \epsilon_i > U_j + \epsilon_j$, where $U$ is deterministic utility and $\epsilon$ is random. If the errors are i.i.d. Gumbel distributed, this yields the logistic choice model [@mcfadden1974conditional].
-
-McFadden's work connected preference models to economics and provided a theoretical justification for the Bradley-Terry model: it arises from random utility maximization under specific distributional assumptions.
-
-Modern Developments
-
-**Network Psychometrics (2010s):** Borsboom and colleagues proposed that psychological constructs might be better understood as networks of causally connected symptoms rather than reflections of underlying latent variables [@borsboom2013network]. The Ising model and Gaussian Graphical Model provide statistical tools for this perspective.
-
-**AI Evaluation (2020s):** The application of psychometric methods to AI evaluation is recent. Key developments include:
-
-- Chatbot Arena using Elo ratings for LLM ranking [@chiang2024chatbotarena]
-- Application of IRT to benchmark analysis [@polo2024tinybenchmarks]
-- Multidimensional factor models for AI capabilities (this textbook)
-
-::: {.callout-note title="Key Historical Papers"}
-
-**Foundations:**
-
-- @thurstone . A law of comparative judgment. *Psychological Review*, 34, 273-286.
-- @bradley-terry-model . Rank analysis of incomplete block designs. *Biometrika*, 39, 324-345.
-- @luce1959individual . *Individual Choice Behavior: A Theoretical Analysis*. Wiley.
-- @rasch1960probabilistic . *Probabilistic Models for Some Intelligence and Attainment Tests*. Danish Institute for Educational Research.
-- @mcfadden1974conditional . Conditional logit analysis of qualitative choice behavior. In *Frontiers in Econometrics* (pp. 105-142). Academic Press.
-
-**Modern:**
-
-- @borsboom2005measuring . *Measuring the Mind: Conceptual Issues in Contemporary Psychometrics*. Cambridge University Press.
-- @epskamp2018gaussian . The Gaussian graphical model in cross-sectional and time-series data. *Multivariate Behavioral Research*, 53, 453-480.
-:::
-
-
-## From Psychology to AI: Transferring Measurement Science {#sec-transfer}
-
-The concepts developed in psychology and education transfer directly to AI evaluation. This section makes the mapping explicit and highlights both the parallels and the differences.
-
-### The Translation Table
-
-| Psychology/Education | AI Evaluation | Symbol |
-|---------------------|---------------|--------|
-| Test taker (person, examinee) | AI model | $i$ |
-| Test item (question, problem) | Benchmark question | $j$ |
-| Ability, trait, latent construct | Capability, skill | $\theta_i$ or $U_i$ |
-| Item difficulty | Question difficulty | $\beta_j$ or $V_j$ |
-| Item discrimination | Question informativeness | $a_j$ |
-| Response (correct/incorrect) | Model output (correct/incorrect) | $Y_{ij}$ |
-| Test (collection of items) | Benchmark (collection of questions) | - |
-| Sum score (number correct) | Accuracy | $S_i$ |
-| Reliability | Evaluation consistency | - |
-| Validity | Measuring intended capability | - |
-| Test bias (DIF) | Benchmark contamination/bias | - |
-| Adaptive testing (CAT) | Efficient evaluation | - |
-
-### Key Parallels
-
-**Reliability.** In educational testing, reliability refers to the consistency of scores across different conditions:
-
-- *Test-retest reliability:* Does the same person get the same score on repeated testing?
-- *Internal consistency:* Do items within the test correlate with each other?
-- *Standard error of measurement:* How precise is the score estimate?
-
-For AI evaluation:
-
-- *Run-to-run consistency:* Does the same model get the same score with different random seeds?
-- *Item consistency:* Do benchmark questions correlate with each other?
-- *Confidence intervals:* How uncertain is the accuracy estimate?
-
-**Validity.** In educational testing, validity concerns whether the test measures what it claims to measure:
-
-- *Content validity:* Do the items adequately sample the domain?
-- *Criterion validity:* Does the score predict relevant outcomes?
-- *Construct validity:* Does the score behave as theory predicts?
-
-For AI evaluation:
-
-- *Content validity:* Does the benchmark cover the intended capability domain?
-- *Criterion validity:* Does benchmark performance predict real-world usefulness?
-- *Construct validity:* Do models that score high actually have the intended capability?
-
-**Fairness and Bias.** In educational testing, differential item functioning (DIF) analysis checks whether items are biased against certain groups:
-
-- An item shows DIF if persons with equal ability but different group membership have different probabilities of answering correctly.
-
-For AI evaluation:
-
-- *Training data contamination:* Did some models see the test questions during training?
-- *Architecture bias:* Are some questions easier for certain model architectures?
-- *Prompt sensitivity:* Do different prompt formats advantage different models?
-
-### Key Differences
-
-While the mathematical framework transfers directly, some differences are worth noting:
-
-1. **Number of items.** Psychological tests typically have tens to hundreds of items. AI benchmarks may have thousands or hundreds of thousands. This affects estimation and model fitting.
-
-2. **Deterministic responses.** Human test-takers show stochastic variation---they may answer the same question differently on different occasions. AI models (with temperature 0) are often deterministic. This changes how we interpret probability models.
-
-3. **Construct definition.** Psychological constructs like "intelligence" or "anxiety" have extensive theoretical literature. AI capabilities like "reasoning" or "common sense" are less well defined.
-
-4. **Speed of change.** Human abilities change slowly. AI capabilities can change dramatically with each model release. This affects the stability of calibrations.
-
-5. **Population structure.** Human populations have known demographic structures. The "population" of AI models is arbitrary---determined by which models researchers choose to evaluate.
-
-### Case Study: The Chatbot Arena
-
-The Chatbot Arena (LMSYS) [@liang_holistic_2023] provides a concrete example of measurement concepts applied to AI:
-
-**Setting:** Users interact with two anonymous language models and vote for the one they prefer. Models are ranked using Elo ratings computed from these pairwise comparisons.
-
-**Measurement framework:** This is exactly Thurstone's comparative judgment paradigm from 1927. The Elo rating system implements Bradley-Terry maximum likelihood estimation with online updates.
-
-**Validity questions:**
-
-- What construct do the ratings measure? "Human preference" is vague. Preferences for what---helpfulness, harmlessness, style, factual accuracy?
-- Are ratings stable across different user populations?
-- Do ratings predict performance on other benchmarks or real-world tasks?
-
-**Reliability questions:**
-
-- How many comparisons are needed for stable ratings?
-- How sensitive are ratings to the specific prompts used?
-- Do ratings fluctuate as new models enter the arena?
-
-The Arena demonstrates both the power and limitations of measurement approaches. The Elo ratings provide a principled summary of human preferences, but interpreting what they mean requires the full apparatus of validity theory.
-
-## Summary and Preview {#sec-summary}
-
-This chapter has introduced the measurement science framework that underlies the rest of AIMS. The key ideas are:
-
-### Key Takeaways
-
-1. **Measurement requires more than scoring.** Assigning numbers to models based on benchmark performance is scoring, not measuring. Measurement requires a theory connecting scores to latent constructs.
-
-2. **Validity matters.** A benchmark measures a construct only if the construct exists and causally produces variation in scores. The philosophical and diagnostic foundations of validity are developed in @sec-validity.
-
-3. **The Rasch model has special properties.** Sufficiency of sum scores and specific objectivity make Rasch uniquely suitable for fundamental measurement. These properties justify treating sum scores as measurements.
-
-4. **Multiple models exist for different purposes.** IRT models (1PL, 2PL, 3PL), factor models, paired comparison models (Bradley-Terry, Elo), network models (GGM, Ising), and hierarchical models serve different purposes. The choice of model---including whether to represent nested evaluation structure---has implications for what we can conclude.
-
-5. **Psychology solved these problems decades ago.** The tools developed in psychometrics---reliability, validity, dimensionality analysis, adaptive testing---apply directly to AI evaluation.
-
-### Preview of Following Chapters
-
-The chapters that follow apply this framework to specific AI evaluation challenges:
-
-- **@sec-learning** covers parameter estimation for IRT and factor models, including maximum likelihood, EM algorithms, Bayesian inference, regularization, and model selection. It also develops generalization experiments---evaluating how well learned models transfer to unseen data under various masking schemes---and presents empirical results for the amortized models introduced in this chapter.
-
-- **@sec-efficient** applies measurement principles to efficient benchmark design, addressing how to construct informative AI evaluations.
-
-- **@sec-reliability** develops the theory of measurement precision, including classical and IRT-based reliability, standard errors, and information functions.
-
-The measurement concepts from this chapter recur throughout. When we justify using sum scores, we appeal to sufficiency in the Rasch sense. When we analyze benchmark dimensionality, we apply the factor models introduced in this chapter and trained using methods from @sec-learning. The question of whether benchmarks measure what they claim to measure --- validity --- is developed in @sec-validity.
-
+where $\beta_{j3} \in [0, 1]$ is the guessing (or pseudo-chance) parameter. For a 4-option multiple-choice item, we might expect $\beta_{j3} \approx 0.25$ if low-ability test-takers guess randomly.
+
+
+```{pyodide-python}
+#| label: icc-models
+#| autorun: true
+#| fig-cap: "Item characteristic curves (ICCs) across the logistic IRT models---each curve gives the probability of a correct response as a function of ability for a fixed item. Left: Rasch (1PL) at several difficulties, the same curve shifted in location. Middle: 2PL at a common difficulty but different discriminations, where a steeper slope distinguishes ability levels more sharply. Right: 1PL, 2PL, and 3PL compared, the 3PL adding a non-zero lower asymptote for guessing."
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+theta = np.linspace(-4, 4, 200)
+
+fig, axes = plt.subplots(1, 3, figsize=(6, 2), sharey=True)
+legend_kw = dict(loc='upper left', fontsize=6, framealpha=0.9,
+                 borderpad=0.2, labelspacing=0.2, handlelength=1.2, handletextpad=0.4)
+
+# Left panel: Rasch (1PL), varying difficulty
+for beta in [-2, -1, 0, 1, 2]:
+    axes[0].plot(theta, sigmoid(theta - beta), label=f'$\\beta = {beta}$', linewidth=1.5)
+axes[0].axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+axes[0].set_xlabel('Ability ($\\theta$)', fontsize=8)
+axes[0].set_ylabel('$P(Y = 1)$', fontsize=8)
+axes[0].set_title('1PL: effect of difficulty', fontsize=9)
+axes[0].legend(title='Difficulty', title_fontsize=6, **legend_kw)
+axes[0].tick_params(labelsize=7)
+axes[0].grid(True, alpha=0.3)
+
+# Middle panel: 2PL, common difficulty, varying discrimination (y-axis shared)
+beta = 0
+for a in [0.5, 1.0, 1.5, 2.0]:
+    axes[1].plot(theta, sigmoid(a * (theta - beta)), label=f'$a = {a}$', linewidth=1.5)
+axes[1].axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+axes[1].axvline(x=0, color='gray', linestyle='--', alpha=0.5)
+axes[1].set_xlabel('Ability ($\\theta$)', fontsize=8)
+axes[1].set_title('2PL: effect of discrimination', fontsize=9)
+axes[1].legend(title='Discrimination', title_fontsize=6, **legend_kw)
+axes[1].tick_params(labelsize=7)
+axes[1].grid(True, alpha=0.3)
+
+# Right panel: 1PL vs 2PL vs 3PL at a fixed difficulty (y-axis shared)
+a, beta, c = 1.5, 0, 0.25
+axes[2].plot(theta, sigmoid(theta - beta), label='1PL (Rasch)', linewidth=1.5)
+axes[2].plot(theta, sigmoid(a * (theta - beta)), label='2PL', linewidth=1.5)
+axes[2].plot(theta, c + (1 - c) * sigmoid(a * (theta - beta)), label='3PL', linewidth=1.5)
+axes[2].axhline(y=0.5, color='gray', linestyle='--', alpha=0.3)
+axes[2].axhline(y=c, color='gray', linestyle=':', alpha=0.5, label=f'Guessing = {c}')
+axes[2].set_xlabel('Ability ($\\theta$)', fontsize=8)
+axes[2].set_title('1PL vs 2PL vs 3PL', fontsize=9)
+axes[2].legend(**legend_kw)
+axes[2].tick_params(labelsize=7)
+axes[2].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
 
 ## Exercises {#sec-irt-exercises}
-
-### Theoretical Exercises
 
 **Exercise 1.1** (*): Explain why the sum score is a sufficient statistic in the Rasch model but not in the 2PL model. What information is lost when we reduce responses to sum scores under 2PL?
 
@@ -1154,8 +484,6 @@ independent of the item difficulty $\beta_j$. Explain why this property is calle
 (c) Under what conditions might each model be appropriate for AI evaluation?
 
 (d) Propose an empirical test that could distinguish between them.
-
-### Computational Exercises
 
 **Exercise 1.5** (**): Implement Rasch model estimation using conditional maximum likelihood.
 
@@ -1295,8 +623,6 @@ def detect_buggy_items(N, M, n_bad, seed=0):
     pass
 ```
 
-### Discussion Questions
-
 **Discussion 1.1:** The Rasch model's sufficiency property justifies using sum scores as measurements. But most AI benchmarks use items with varying discriminations, which violates the Rasch assumption. Does this mean that current benchmark rankings are fundamentally flawed, or can they still be useful approximations? Under what conditions would adopting Rasch-based measurement change the ranking of frontier models?
 
 **Discussion 1.2:** The Rasch school argues that items not fitting the Rasch model should be discarded because they do not measure the same construct. What are the implications of this view for AI benchmark design? Should we design benchmarks to fit Rasch, or should we use more flexible models that accommodate heterogeneous items?
@@ -1308,34 +634,26 @@ def detect_buggy_items(N, M, n_bad, seed=0):
 
 ## Bibliographic Notes {#sec-irt-bib}
 
-### Item Response Theory
+The probabilistic models we use today emerged from over a century of work across psychology, education, economics, and statistics. Understanding this history illuminates why certain models dominate and what problems they were designed to solve.
 
-The standard reference for IRT is Lord and Novick's *Statistical Theories of Mental Test Scores* (1968), though it predates modern computational methods. More accessible introductions include Hambleton and Swaminathan's *Item Response Theory* (1985) and de Ayala's *The Theory and Practice of Item Response Theory* (2009). The *Handbook of Modern Item Response Theory* (van der Linden & Hambleton, 1997) provides comprehensive coverage.
+The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the Law of Comparative Judgment [@thurstone]. Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values. Acording to Thurstone's model, each stimulus $i$ has a true scale value $\theta_i$. When comparing stimuli $i$ and $j$, each is perceived with Gaussian noise: $\tilde{\theta}_i \sim \mathcal{N}(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim \mathcal{N}(\theta_j, \sigma^2)$. The probability that $i$ is judged greater than $j$ is:
 
-### Rasch Measurement
+$$
+P(i \succ j) = \Phi\left(\frac{\theta_i - \theta_j}{\sqrt{2}\sigma}\right)
+$$
 
-Rasch's original book *Probabilistic Models for Some Intelligence and Attainment Tests* (1960) remains influential. Wright and Stone's *Best Test Design* (1979) provides practical guidance. Fischer and Molenaar's *Rasch Models: Foundations, Recent Developments, and Applications* (1995) covers extensions and applications. For the philosophical foundations, see Rasch's papers on objectivity collected in the *Rasch Measurement Transactions* archive.
+where $\Phi$ is the standard normal CDF. Thurstone's method showed that subjective quantities could be measured scientifically. The same mathematics now underlies how we rank AI systems from human preferences.
 
-### Nonparametric IRT and Item Analysis
+In 1952, Ralph Bradley and Milton Terry developed a model for ranking from paired comparisons in the context of incomplete block designs [@bradley-terry-model]. Their model:
 
-Nonparametric item response theory originates with @mokken1971theory; the monotone and double-monotonicity models, scalability coefficients, and their estimation are developed in Sijtsma and Molenaar's *Introduction to Nonparametric Item Response Theory* (2002). Classical item analysis---item--total correlations, inter-item (tetrachoric) correlations, and Mokken scalability coefficients to identify misfitting items---is a standard step in test development. @truong2025bugs apply these diagnostics to AI benchmarks at scale, showing that items flagged by negative tetrachoric correlations or low scalability coefficients frequently contain genuine errors (incorrect keys, ambiguous wording, grading bugs); their framework is grounded in the Rasch sufficiency property (@sec-rasch-measurement), and they recommend evaluating with 60--80 LLMs from at least 10 organizations for reliable detection.
+$$
+P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}
+$$
 
-### Historical Development
+where $\pi_i > 0$ are "worth" parameters. With $\theta_i = \log \pi_i$, this becomes the familiar logistic form. In 1959, R. Duncan Luce provided an axiomatic foundation through Choice Axiom: the ratio of choice probabilities for two alternatives should be independent of what other alternatives are available. This axiom leads directly to the Bradley-Terry/logistic model.
 
-Thurstone's seminal paper "A Law of Comparative Judgment" (1927) launched the quantitative study of preferences. Bradley and Terry's "Rank Analysis of Incomplete Block Designs" (1952) and Luce's *Individual Choice Behavior* (1959) established the axiomatic foundations. McFadden's "Conditional Logit Analysis" (1974) connected these to economic theory. For a history of psychometrics, see Boring's *A History of Experimental Psychology* (1950).
+In 1960, Danish mathematician Georg Rasch published "Probabilistic Models for Some Intelligence and Attainment Tests," which introduced what we now call the Rasch model [@rasch1960probabilistic]. Rasch's contribution was the philosophical framework of specific objectivity: the requirement that person and item parameters must be separable. Rasch's work was introduced to the United States by Benjamin Wright at the University of Chicago, who heard Rasch lecture in 1960. Wright became the leading advocate for Rasch measurement in the English-speaking world, founding the MESA (Measurement, Evaluation, Statistical Analysis) program and the journal Rasch Measurement Transactions.
 
-### Probabilistic Graphical Models
+The view of measurement as a homomorphism from an empirical relational structure onto the numbers is *representational measurement theory*, given its canonical treatment in Krantz, Luce, Suppes, and Tversky's Foundations of Measurement [@krantz1971foundations]; @stevens1946theory provides the older scale-typology (nominal/ordinal/interval/ratio) that it refines. Additive conjoint measurement originates with Luce and Tukey's "Simultaneous Conjoint Measurement" [@luce1964simultaneous], which showed that the cancellation axioms on an ordered two-factor structure suffice to construct interval scales without a prior unit. That the Rasch model realizes this structure was argued by @brogden1977rasch and @perline1979rasch. The inference is contested: @michell2008pathological and @kyngdon2008rasch dispute whether reading a *deterministic* conjoint order off *stochastic* responses is licensed, a debate the chapter treats as open. The order-restricted, probabilistic formulations that make the axioms empirically testable---rather than assumed---are developed in @karabatsos2001rasch and @scheiblechner1995isotonic; these are the tools behind this chapter's claim that AI evaluation, by resampling at temperature $>0$, can *test* additive conjoint structure where human testing could only posit it.
 
-This chapter uses plate diagrams and concepts from probabilistic graphical models (PGMs). @koller2009pgm provide a comprehensive reference covering directed and undirected graphical models, plate notation, and inference algorithms. Readers seeking deeper background on the graphical model foundations underlying IRT and network models will find Chapters 3--4 (Bayesian networks) and Chapter 5 (undirected models / Markov random fields) especially relevant.
-
-### Network Psychometrics
-
-The network approach is developed in Borsboom and Cramer's "Network Analysis: An Integrative Approach" (2013) and formalized in Epskamp et al.'s papers on the Gaussian graphical model and Ising model (2018). The *Network Psychometrics with R* book (Epskamp et al., 2022) provides practical guidance.
-
-### AI Evaluation
-
-The application of psychometric methods to AI is recent. For IRT applied to LLMs, see Polo et al.'s "Efficient Multi-Prompt Evaluation" (2024). For factor models, see the methods developed in this textbook. The Chatbot Arena is described in Zheng et al.'s "Judging LLM-as-a-Judge" (2023).
-
-### Scaling Laws and IRT
-
-@truong2025irsl introduce Item Response Scaling Laws (IRSL), which embed IRT within the scaling law framework. By factorizing model ability from question difficulty, IRSL reduces scaling law estimation from $O(M \times N)$ to $O(M + N)$ parameters, with the estimated ability transferring across benchmarks. Their Beta-IRT formulation models empirical probability responses (token probabilities, pass rates) rather than binary correctness, using a Beta loss that achieves reliable calibration with as few as 2 test takers. @schaeffer2025monkeys provide the distributional theory explaining why per-problem exponential scaling aggregates to power-law scaling: the exponent is determined by the left-tail shape parameter of the success probability distribution, connecting the heterogeneity of item difficulty to aggregate scaling behavior.
+In the 2010s, these methods reached AI evaluation---the application of IRT to benchmark analysis [@polo2024tinybenchmarks], multidimensional factor models for AI capabilities (this textbook), and the Chatbot Arena's use of Elo ratings to rank language models [@chiang2024chatbotarena].

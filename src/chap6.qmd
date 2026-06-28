@@ -608,7 +608,7 @@ CAT has a rich history beginning with @lord1970some. The Fisher information crit
 
 **Exercise 3.1** ($\star$): Show that Fisher information $I_j(\theta) = P_j(\theta)(1 - P_j(\theta))$ is maximized when $\theta = \beta_j$, and that the maximum value is $1/4$.
 
-**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(a_j(\theta - \beta_j))$, derive the Fisher information and show that it equals $a_j^2 P_j(1 - P_j)$. How does discrimination $a_j$ affect optimal item selection?
+**Exercise 3.2** ($\star\star$): For the 2PL model $P_j(\theta) = \sigma(\beta_{j2}(\theta - \beta_{j1}))$, derive the Fisher information and show that it equals $\beta_{j2}^2 P_j(1 - P_j)$. How does discrimination $\beta_{j2}$ affect optimal item selection?
 
 **Exercise 3.3** ($\star\star$): Design a stopping rule for CAT that balances measurement precision with evaluation cost. Assume each API call costs \$0.01 and the value of reducing standard error by one unit is \$1. Find the cost-optimal stopping point.
 

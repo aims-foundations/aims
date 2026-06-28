@@ -52,7 +52,6 @@ By the end of this chapter, the reader will be able to:
 7. **Implement** MAP estimation and MCMC sampling for IRT models.
 8. **Explain** regularization in IRT as a Bayesian prior and apply cross-validation for hyperparameter selection.
 9. **Apply** MLE and Bayesian methods to real AI benchmark data and compare their efficiency.
-10. **Evaluate** the generalization of learned factor models under various masking schemes (entry-wise, row holdout, column holdout).
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
@@ -71,12 +70,11 @@ This chapter can be covered in **3 lectures** (75-90 minutes each):
 - EM algorithm for IRT (30 min)
 - Hands-on: EM implementation (25 min)
 
-**Lecture 3: Bayesian Approaches and Generalization**
+**Lecture 3: Bayesian Approaches**
 
 - Prior specification for IRT (15 min)
 - MAP estimation and MCMC (30 min)
 - Regularization and cross-validation (15 min)
-- Generalization experiments and masking schemes (15 min)
 :::
 
 ::: {.callout-note title="Notation"}
@@ -91,7 +89,7 @@ A visual tour of the key concepts in this chapter — from maximum likelihood es
 
 ## Why Learning Matters for AI Measurement {#sec-why-learning}
 
-@sec-foundations introduced the measurement models---Rasch, 2PL, factor models---that describe how latent abilities generate observed responses. But knowing the *form* of a model is not enough. To actually *use* these models for AI evaluation, we must estimate their parameters from data.
+@sec-foundations introduced the measurement models---Rasch, 2PL, Bradley-Terry---that describe how latent abilities generate observed responses. But knowing the *form* of a model is not enough. To actually *use* these models for AI evaluation, we must estimate their parameters from data. This chapter develops estimation for the unidimensional IRT models; the multidimensional factor model and the experiments that probe its generalization are estimated and analyzed in @sec-factor-models and @sec-generalization.
 
 ::: {.callout-important title="The Central Learning Problem in AI Measurement"}
 Given a response matrix $Y \in \{0,1\}^{N \times M}$ where $Y_{ij} = 1$ indicates model $i$ answered question $j$ correctly:
@@ -113,7 +111,7 @@ Parameter estimation serves several critical purposes in AI measurement:
 
 4. **Prediction:** With learned parameters, we can predict how a model will perform on questions it has never seen, enabling efficient evaluation of new benchmarks.
 
-This chapter focuses on **passive learning**: given a fixed dataset, estimate all parameters simultaneously. This includes maximum likelihood estimation (MLE), expectation-maximization (EM), and Bayesian inference. We also introduce generalization experiments that evaluate how well learned models transfer to unseen data. The design of *which* items to include in a benchmark, including active item selection, is the subject of @sec-efficient.
+This chapter focuses on **passive learning**: given a fixed dataset, estimate all parameters simultaneously. This includes maximum likelihood estimation (MLE), expectation-maximization (EM), and Bayesian inference. The design of *which* items to include in a benchmark, including active item selection, is the subject of @sec-efficient.
 
 
 ## Maximum Likelihood Estimation {#sec-mle}
@@ -668,86 +666,6 @@ print(f"Correlation (difficulties): {np.corrcoef(beta_true_centered, beta_em)[0,
 ```
 
 
-### Multidimensional Extension: The Logistic Factor Model {#sec-logistic-fm}
-
-The methods above focused on the Rasch model, which assumes a single latent dimension. For AI benchmarks that measure multiple capabilities, we extend to the **Logistic Factor Model**:
-
-$$
-P(Y_{ij} = 1 \mid U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)
-$$
-
-where:
-
-- $U_i \in \mathbb{R}^K$ is the $K$-dimensional latent ability vector for model $i$
-- $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$
-- $Z_j \in \mathbb{R}$ is the item intercept (capturing overall difficulty)
-
-When $K=1$ and $V_j = 1$ for all $j$, this reduces to the Rasch model.
-
-#### Implementation
-
-```{python}
-#| eval: false
-
-import torch
-import torch.nn as nn
-from torch.optim import LBFGS
-import torch.nn.functional as F
-
-class LogisticFM(nn.Module):
-    """Logistic Factor Model for binary response data."""
-    def __init__(self, N, M, K):
-        super().__init__()
-        self.U = nn.Parameter(torch.randn(N, K))  # Model abilities
-        self.V = nn.Parameter(torch.randn(M, K))  # Item loadings
-        self.Z = nn.Parameter(torch.randn(M, 1))  # Item intercepts
-
-    def forward(self):
-        return torch.sigmoid(self.U @ self.V.T + self.Z.T)
-```
-
-::: {.callout-note title="Interpretation"}
-- $U_i$: latent ability vector of model $i$ (position in $K$-dimensional capability space)
-- $V_j$: latent property vector of item $j$ (which capabilities the item measures)
-- $Z_j$: overall item difficulty (independent of capability dimensions)
-- $\sigma$: sigmoid function ensuring probabilities in $[0,1]$
-:::
-
-#### Training with LBFGS
-
-We train the model by minimizing binary cross-entropy loss:
-
-```{python}
-#| eval: false
-
-# Training setup
-N, M = Y.shape
-K = 2  # Number of latent dimensions
-model = LogisticFM(N, M, K)
-
-opt = LBFGS(
-    model.parameters(),
-    lr=0.1,
-    max_iter=20,
-    history_size=10,
-    line_search_fn="strong_wolfe"
-)
-
-def closure():
-    opt.zero_grad()
-    probs = model()
-    loss = F.binary_cross_entropy(probs[train_mask], Y[train_mask].float())
-    loss.backward()
-    return loss
-
-# Training loop
-for iteration in range(20):
-    loss = opt.step(closure)
-```
-
-The model learns to decompose the response matrix into latent factors that capture the underlying structure of model capabilities and item characteristics.
-
-
 ## Bayesian Inference {#sec-bayesian}
 
 Bayesian inference provides an alternative to maximum likelihood that naturally incorporates prior information and quantifies uncertainty. Instead of finding a single point estimate, we characterize the entire posterior distribution over parameters.
@@ -764,9 +682,43 @@ $$\theta_i \sim \mathcal{N}(0, \sigma^2_\theta), \quad \sigma_\theta = 1 \text{ 
 $$\beta_j \sim \mathcal{N}(0, \sigma^2_\beta), \quad \sigma_\beta = 1\text{-}2 \text{ (depending on expected range)}$$
 
 **For discrimination (2PL model):**
-$$a_j \sim \text{LogNormal}(0, 0.5) \text{ or } a_j \sim \text{Gamma}(2, 0.5)$$
+$$\beta_{j2} \sim \text{LogNormal}(0, 0.5) \text{ or } \beta_{j2} \sim \text{Gamma}(2, 0.5)$$
 
 These priors are **weakly informative**: they regularize estimates without dominating the data. They encode the belief that most abilities and difficulties are within a few units of zero, which is appropriate when the scale is defined by convention.
+:::
+
+### Hierarchical Priors and Partial Pooling {#sec-hierarchical-models}
+
+The priors above are *fixed*: we choose $\sigma_\beta$ once and apply it to every item. But AI evaluations are *nested*---items belong to benchmarks, benchmarks to suites or domains---and items within a benchmark tend to share difficulty characteristics. A **hierarchical prior** turns the fixed prior into one whose hyperparameters are *learned* from the data, letting items borrow strength within their group.
+
+::: {.callout-note title="Definition: Hierarchical IRT Model"}
+Consider item $i$ nested within benchmark $j$. A hierarchical extension of the Rasch model specifies:
+
+$$
+\text{logit}\, P(Y_{ij} = 1 \mid \theta, b_{ij}) = \theta - b_{ij}
+$$
+
+where item difficulties are drawn from a benchmark-level prior:
+
+$$
+b_{ij} \sim \mathcal{N}(\mu_j, \sigma_j^2)
+$$
+
+The benchmark means $\mu_j$ may themselves follow a domain-level distribution $\mu_j \sim \mathcal{N}(\mu_0, \tau^2)$, creating a three-level hierarchy: items within benchmarks within domains. The same hierarchical extension applies to 2PL, 3PL, and factor models.
+:::
+
+![Plate diagram for the hierarchical IRT model. Item difficulties $b_{ij}$ are drawn from benchmark-level distributions parameterized by $\mu_j$ and $\sigma_j$, which may themselves be drawn from domain-level hyperparameters $\mu_0$ and $\tau$. Nested plates reflect the hierarchical data structure.](Figures/plate_hierarchical.png){#fig-hierarchical-plate width=50%}
+
+Estimating this model performs **partial pooling**, interpolating between two extremes. *No pooling* estimates each benchmark's difficulties independently---noisy for small benchmarks. *Complete pooling* uses one global difficulty distribution---ignoring real between-benchmark differences. The hierarchical prior sits between them: an item's difficulty is shrunk toward its benchmark mean $\mu_j$ by an amount that depends on how sharply the data pin it down, and the benchmark means are themselves shrunk toward the global mean $\mu_0$. Items in small or noisy benchmarks borrow strength from their group, and because the hyperparameters $\sigma_j, \tau$ are learned (by MAP or MCMC; @sec-map, @sec-mcmc), the *amount* of shrinkage is set by the data rather than fixed in advance. This is the same move as L2 regularization (@sec-l2-reg)---a Gaussian prior on the parameters---but with the prior's scale estimated rather than chosen. Treating all items as exchangeable under a single global prior instead conflates within-benchmark and between-benchmark variation and yields estimates that may not generalize beyond the items observed [@luettgau2025hibayes].
+
+::: {.callout-note title="Hierarchical Structure in AI Evaluation"}
+Modern AI evaluations exhibit natural hierarchy at multiple levels:
+
+- **MMLU:** 15,908 items $\to$ 57 subjects $\to$ 4 domains (humanities, social sciences, STEM, other)
+- **GAIA:** agentic tasks $\to$ 3 difficulty levels $\to$ capability domain
+- **Coding benchmarks:** problems $\to$ benchmarks (HumanEval, MBPP, DS-1000) $\to$ coding capability
+
+Modeling these levels separates the sources of variation at each, which supports principled generalization from the benchmarks actually tested to the broader construct they are intended to measure.
 :::
 
 ### Posterior Computation {#sec-posterior}
@@ -1120,181 +1072,6 @@ print(f"\nBest regularization: lambda = {best_lambda}")
 ```
 
 
-## Generalization Experiments {#sec-generalization}
-
-The estimation methods developed in this chapter produce learned factor models with latent parameters $(U, V, Z)$. But how well do these models generalize? To evaluate the robustness and transferability of learned factor models, we train and test them under various **masking schemes**, each representing a different notion of generalization. These masks determine which parts of the response matrix $Y$ are visible during training and which are held out for evaluation.
-
-### Masking Schemes for Evaluation {#sec-masking-schemes}
-
-| **Masking Type** | **Train Set** | **Test Set** | **Purpose** |
-|------------------|---------------|--------------|-------------|
-| Entry-wise random | 80% random entries | 20% random entries | Interpolation under missing-at-random |
-| Row holdout (random) | 80% of models, all items | 20% of models, all items | Generalization to unseen models |
-| Row holdout (shifted) | Slice of models (small→large) | Disjoint slice | Covariate-shift generalization |
-| Column holdout (random) | All models, 80% of items | All models, 20% of items | Generalization to unseen items |
-| Column holdout (shifted) | Subset of benchmarks | Held-out benchmarks | Cross-domain transfer |
-| Row-column block (L-mask) | $R_{tr} \times C_{tr}$ | $R_{te} \times C_{te}$ | Compositional generalization |
-| Temporal split | Models before cutoff | Models after cutoff | Temporal generalization |
-
-These settings parallel psychometric validation tests where new examinees, items, or contexts probe the invariance of latent constructs.
-
-### Implementation of Masking Functions
-
-```{python}
-#| eval: false
-
-import torch
-
-def random_mask(data_idtor, pct=0.8):
-    """Entry-wise random masking."""
-    train_idtor = torch.bernoulli(data_idtor * pct).int()
-    test_idtor = data_idtor.int() - train_idtor
-    return train_idtor, test_idtor
-
-def model_mask(data_idtor, pct_models=0.8, exposure_rate=0.3):
-    """Row holdout: hold out unseen models."""
-    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[train_row_mask, :] = data_idtor[train_row_mask, :]
-    train_idtor[~train_row_mask, :], _ = random_mask(data_idtor[~train_row_mask, :], pct=exposure_rate)
-    test_idtor = data_idtor - train_idtor
-    return train_idtor, test_idtor
-
-def item_mask(data_idtor, pct_items=0.8, exposure_rate=0.3):
-    """Column holdout: hold out unseen items."""
-    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[:, train_col_mask] = data_idtor[:, train_col_mask]
-    train_idtor[:, ~train_col_mask], _ = random_mask(data_idtor[:, ~train_col_mask], pct=exposure_rate)
-    test_idtor = data_idtor - train_idtor
-    return train_idtor, test_idtor
-
-def L_mask(data_idtor, pct_models=0.8, pct_items=0.8):
-    """Row-column block (L-mask): compositional generalization."""
-    train_row_mask = torch.bernoulli(torch.ones(data_idtor.shape[0]) * pct_models).bool()
-    train_col_mask = torch.bernoulli(torch.ones(data_idtor.shape[1]) * pct_items).bool()
-    train_idtor = torch.zeros_like(data_idtor).int()
-    train_idtor[train_row_mask][:, train_col_mask] = data_idtor[train_row_mask][:, train_col_mask]
-    test_idtor = data_idtor - train_idtor
-    test_idtor[train_row_mask, :] = 0
-    test_idtor[:, train_col_mask] = 0
-    return train_idtor, test_idtor
-```
-
-### Two-Stage Training for Holdout Generalization {#sec-two-stage}
-
-To avoid data contamination in row and column holdout experiments, we use a **two-stage training procedure**:
-
-#### Row Holdout: Estimating Parameters for Unseen Models
-
-When testing generalization to unseen models, we:
-
-1. **Stage 1:** Train on known models to learn item parameters $(V, Z)$
-2. **Stage 2:** Freeze $(V, Z)$ and estimate ability parameters $U$ for held-out models using their limited exposed responses
-
-This ensures item parameters are learned without information from test models.
-
-```{python}
-#| eval: false
-
-# Stage 1: Train on known models
-test_row = test_idtor.max(axis=1).values  # Identify held-out models
-model_stage1 = train_model(Y[~test_row, :], mask=train_idtor[~test_row, :])
-
-# Freeze V, Z from Stage 1
-V_frozen = model_stage1.V.detach()
-Z_frozen = model_stage1.Z.detach()
-
-# Stage 2: Estimate U for unseen models with frozen item parameters
-model_stage2 = train_model(Y[test_row, :], mask=train_idtor[test_row, :],
-                           V_fixed=V_frozen, Z_fixed=Z_frozen)
-```
-
-#### Column Holdout: Estimating Parameters for Unseen Items
-
-When testing generalization to unseen items, we:
-
-1. **Stage 1:** Train on known items to learn model parameters $U$
-2. **Stage 2:** Freeze $U$ and estimate item parameters $(V, Z)$ for held-out items
-
-```{python}
-#| eval: false
-
-# Stage 1: Train on known items
-test_col = test_idtor.max(axis=0).values  # Identify held-out items
-model_stage1 = train_model(Y[:, ~test_col], mask=train_idtor[:, ~test_col])
-
-# Freeze U from Stage 1
-U_frozen = model_stage1.U.detach()
-
-# Stage 2: Estimate V, Z for unseen items with frozen model parameters
-model_stage2 = train_model(Y[:, test_col], mask=train_idtor[:, test_col],
-                           U_fixed=U_frozen)
-```
-
-::: {.callout-note title="Why Two-Stage Training?"}
-The two-stage procedure prevents information leakage:
-
-- **Row holdout:** Item parameters learned from training models should not contain information about test models
-- **Column holdout:** Model parameters learned from training items should not contain information about test items
-
-This mirrors the real-world scenario where we want to evaluate new models on pre-calibrated items, or calibrate new items using established models.
-:::
-
-### Evaluation Across Masking Schemes
-
-For each masking scheme, we compute AUC on the held-out entries:
-
-```{python}
-#| eval: false
-
-from torchmetrics import AUROC
-
-masking_schemes = {
-    "entry_random": random_mask,
-    "row_holdout": model_mask,
-    "col_holdout": item_mask,
-    "L_mask": L_mask,
-}
-
-results = {}
-auroc = AUROC(task="binary")
-
-for name, mask_fn in masking_schemes.items():
-    train_mask, test_mask = mask_fn(data_idtor)
-
-    # Train model (with two-stage for row/col holdout)
-    model = train_with_appropriate_stages(Y, train_mask, test_mask, name)
-
-    # Evaluate on held-out entries
-    P_hat = model().detach()
-    auc = auroc(P_hat[test_mask.bool()], Y[test_mask.bool()])
-    results[name] = auc.item()
-    print(f"{name}: AUC = {auc:.3f}")
-```
-
-The factor model typically achieves AUC of 92-97% on random masking across benchmarks, demonstrating strong predictive power. Performance on row and column holdout tests the model's ability to generalize to new models and new items, respectively.
-
-::: {.callout-tip title="Application: Item Response Scaling Laws"}
-The separability of model ability from item difficulty — the core property of IRT — has a powerful application to scaling laws. @truong2025irsl show that by embedding IRT within the scaling law framework, one can factorize scaling law estimation from $O(M \times N)$ to $O(M + N)$, where $M$ is the number of models (or checkpoints) and $N$ is the number of questions.
-
-Their key finding is that the IRT ability parameter $\theta$ scales linearly with the logarithm of pre-training compute: $\theta \approx a \cdot \log(\text{FLOP}) + b$. Combined with calibrated item parameters, this yields per-question scaling predictions: $\hat{R}_{ij}(x) = \sigma(d_j(\theta_i(x) - z_j))$. Because item parameters transfer across benchmarks that share the same measurement objective, ability estimated on one benchmark can predict performance on another — a direct validation of the cross-benchmark transfer tested in the masking experiments above.
-
-In a study of 6,612 model checkpoints and 37,682 questions, this approach achieves comparable or superior decision accuracy to traditional scaling laws using only 50 questions per benchmark — a 99.9% reduction in queries. The approach uses Beta-IRT, which models empirical probability responses (token probabilities, pass rates) rather than binary correctness, capturing richer scaling signals.
-:::
-
-### Amortized Model Evaluation {#sec-amortized-eval}
-
-The amortized models introduced in @sec-cold-start (Prediction-Powered Evaluation) can also be evaluated under the masking framework. In the PPE pipeline, the item-side predictor $f_\theta$ maps question embeddings to latent parameters, and the model-side predictor $g_\phi$ maps model metadata to ability vectors. We evaluate these amortized predictors on held-out data using the same AUC metric:
-
-| **Split**          | **AUC** |
-|--------------------|---------|
-| Column holdout (random)    | 0.804   |
-| Row holdout (random)    | 0.848   |
-
-The strong AUC on row holdout (unseen models) confirms that model behavior is well-predicted by simple metadata features (parameter count, architecture, release date), enabling reliable evaluation without running models on every benchmark item. The column holdout result shows that question embeddings carry enough information to predict behavioral patterns for unseen items, though the gap between column and row holdout suggests that item-level prediction is the harder task --- consistent with the semantic--behavioral gap discussed in @sec-cold-start.
-
-
 ## Discussion Questions {#sec-discussion}
 
 1. **Identifiability and Interpretation:** In AI evaluation, should we anchor the ability scale by fixing one model (e.g., GPT-4 = 0) or by centering all models? What are the implications for interpreting ability scores over time as new models are released?
@@ -1304,8 +1081,6 @@ The strong AUC on row holdout (unseen models) confirms that model behavior is we
 3. **From Learning to Design:** This chapter focuses on estimating parameters from a fixed dataset. @sec-efficient considers how to *design* the evaluation---choosing which items to include, how to allocate testing effort, and how to ensure robustness. What aspects of the estimation methods learned here would inform good benchmark design?
 
 4. **Transfer of Item Parameters:** If we calibrate item difficulties on one set of models (e.g., 2023 models), can we use these parameters to evaluate 2024 models? What assumptions does this require, and when might they fail?
-
-5. **Multidimensional Extensions:** The chapter focused on unidimensional models (single ability). How would the learning procedures change for multidimensional factor models? What additional challenges arise?
 
 
 ## Bibliographic Notes {#sec-learning-bib}
@@ -1368,5 +1143,3 @@ Compare the posterior estimates to those from Metropolis-Hastings.
 **Exercise 2.9:** Compare the convergence of gradient ascent, L-BFGS, and Adam on a Rasch model estimation problem. Which converges fastest? Which is most robust to different initializations?
 
 **Exercise 2.10:** Investigate the sensitivity of MLE and Bayesian estimation to model misspecification. Generate data from a 2PL model but fit a Rasch model. How do the estimated abilities compare? When does the misspecification matter most?
-
-**Exercise 2.11:** Implement a cross-validation procedure for selecting between the Rasch, 2PL, and factor models. Apply it to benchmark data with different numbers of items and models. When does the additional complexity of the 2PL or factor model improve out-of-sample prediction?

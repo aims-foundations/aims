@@ -11,7 +11,7 @@ This appendix collects the notation used throughout the book. Symbols are groupe
 | $Y_{ij}$ | Binary response of model $i$ to item $j$ (0 = incorrect, 1 = correct) | $\{0,1\}$ | @sec-foundations |
 | $S_i = \sum_j Y_{ij}$ | Sum score (total correct) for model $i$ | $\{0, 1, \ldots, M\}$ | @sec-foundations |
 | $\sigma(x) = \frac{1}{1+e^{-x}}$ | Logistic sigmoid function | $(0,1)$ | @sec-foundations |
-| $\Phi(x)$ | Standard normal CDF | $(0,1)$ | @sec-foundations |
+| $\Phi(x)$ | Standard normal CDF; also a generic monotone link in @sec-acm | $(0,1)$ | @sec-foundations |
 
 ## Item Response Theory
 
@@ -19,8 +19,11 @@ This appendix collects the notation used throughout the book. Symbols are groupe
 |--------|---------|--------|------------|
 | $\theta_i$ or $U_i$ | Latent ability of model $i$ | $\mathbb{R}$ | @sec-foundations |
 | $\beta_j$ or $V_j$ | Difficulty of item $j$ | $\mathbb{R}$ | @sec-foundations |
-| $a_j$ | Discrimination parameter of item $j$ | $\mathbb{R}^+$ | @sec-foundations |
-| $c_j$ | Guessing (pseudo-chance) parameter of item $j$ | $[0,1]$ | @sec-foundations |
+| $\boldsymbol{\beta}_j$ | Item-parameter vector $(\beta_{j1}, \beta_{j2}, \beta_{j3})$ = (difficulty, discrimination, guessing); $\beta_{j1} = \beta_j$ | $\mathbb{R}^n$ | @sec-foundations |
+| $p_{ij}$, $\hat{p}_{ij}$ | Response probability $P(Y_{ij}=1)$ and its empirical estimate | $[0,1]$ | @sec-foundations |
+| $f, g$ | Additive conjoint component functions (ability, difficulty factors) | $\mathbb{R}$ | @sec-foundations |
+| $\beta_{j2}$ | Discrimination parameter of item $j$ (component of $\boldsymbol{\beta}_j$; conventionally $a_j$) | $\mathbb{R}^+$ | @sec-foundations |
+| $\beta_{j3}$ | Guessing (pseudo-chance) parameter of item $j$ (component of $\boldsymbol{\beta}_j$; conventionally $c_j$) | $[0,1]$ | @sec-foundations |
 | $d_j$ | Discrimination parameter (alternative notation, as in 1PL/2PL) | $\mathbb{R}^+$ | @sec-foundations |
 | $z_j$ | Difficulty parameter (alternative notation) | $\mathbb{R}$ | @sec-foundations |
 | $I_j(\theta)$ | Fisher information for item $j$ at ability $\theta$ | $\mathbb{R}^+$ | @sec-efficient |

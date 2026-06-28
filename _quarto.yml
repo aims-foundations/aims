@@ -143,6 +143,7 @@ book:
     - src/chap3.qmd  # Models
     - src/chap4.qmd  # Learning
     - src/chap5.qmd  # Reliability
+    - src/chap_discovery.qmd  # Discovery
     - src/chap6.qmd  # Efficiency
     - src/chap7.qmd  # Causality
     - src/chap8.qmd  # Ecosystem

@@ -101,84 +101,26 @@ RASCH = r"""
   % Person parameter (i-plate only)
   \node[latent]   (theta) at (0, 2.2)   {$\theta_i$};
   % Item parameter (j-plate only)
-  \node[latent]   (beta)  at (3.5, 2.2) {$\beta_j$};
+  \node[latent]   (beta)  at (3.9, 2.2) {$\beta_j$};
   % Observed response (overlap of both plates)
-  \node[observed] (Y)     at (1.75, 0)  {$Y_{ij}$};
+  \node[observed] (Y)     at (2.0, 0)   {$Y_{ij}$};
 
   % Edges
   \draw[->] (theta) -- (Y);
   \draw[->] (beta)  -- (Y);
 
   % i-plate (persons) — overlap 1.6, clearance 0.3 around Y
-  \draw[platebox] (-0.7, -1.4) rectangle (2.55, 3.0);
+  \draw[platebox] (-0.7, -1.4) rectangle (2.8, 3.0);
   \node[platelabel] at (-0.55, -1.25) [above right] {$i{=}1,\ldots,N$};
 
-  % j-plate (items) — offset upward
-  \draw[platebox] (0.95, -1.0) rectangle (4.2, 3.4);
-  \node[platelabel] at (2.7, -0.85) [above right] {$j{=}1,\ldots,M$};
+  % j-plate (items) — widened so the bottom-right label clears both borders
+  \draw[platebox] (1.2, -1.0) rectangle (4.9, 3.4);
+  \node[platelabel] at (2.95, -0.85) [above right] {$j{=}1,\ldots,M$};
 \end{tikzpicture}
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 2. Two-Parameter Logistic (2PL) — crossed plates
-# ═══════════════════════════════════════════════════════════════════════
-TWO_PL = r"""
-\begin{tikzpicture}
-  % Person parameter (i-plate only)
-  \node[latent]   (theta) at (0, 2.2)   {$\theta_i$};
-  % Item parameters (j-plate only) — placed right of i-plate edge (3.3)
-  \node[latent]   (beta)  at (4.0, 2.2) {$\beta_j$};
-  \node[latent]   (a)     at (5.5, 2.2) {$a_j$};
-  % Observed response (overlap)
-  \node[observed] (Y)     at (2.5, 0)   {$Y_{ij}$};
-
-  % Edges
-  \draw[->] (theta) -- (Y);
-  \draw[->] (beta)  -- (Y);
-  \draw[->] (a)     -- (Y);
-
-  % i-plate (persons) — overlap 1.6, clearance 0.3 around Y
-  \draw[platebox] (-0.7, -1.4) rectangle (3.3, 3.0);
-  \node[platelabel] at (-0.55, -1.25) [above right] {$i{=}1,\ldots,N$};
-
-  % j-plate (items) — offset upward
-  \draw[platebox] (1.7, -1.0) rectangle (6.2, 3.4);
-  \node[platelabel] at (3.45, -0.85) [above right] {$j{=}1,\ldots,M$};
-\end{tikzpicture}
-"""
-
-# ═══════════════════════════════════════════════════════════════════════
-# 3. Three-Parameter Logistic (3PL) — crossed plates
-# ═══════════════════════════════════════════════════════════════════════
-THREE_PL = r"""
-\begin{tikzpicture}
-  % Person parameter (i-plate only)
-  \node[latent]   (theta) at (0, 2.2)   {$\theta_i$};
-  % Item parameters (j-plate only) — placed right of i-plate edge (4.3)
-  \node[latent]   (a)     at (5.0, 2.2) {$a_j$};
-  \node[latent]   (beta)  at (6.3, 2.2) {$\beta_j$};
-  \node[latent]   (c)     at (7.6, 2.2) {$c_j$};
-  % Observed response (overlap)
-  \node[observed] (Y)     at (3.5, 0)   {$Y_{ij}$};
-
-  % Edges
-  \draw[->] (theta) -- (Y);
-  \draw[->] (a)     -- (Y);
-  \draw[->] (beta)  -- (Y);
-  \draw[->] (c)     -- (Y);
-
-  % i-plate (persons) — overlap 1.6, clearance 0.3 around Y
-  \draw[platebox] (-0.7, -1.4) rectangle (4.3, 3.0);
-  \node[platelabel] at (-0.55, -1.25) [above right] {$i{=}1,\ldots,N$};
-
-  % j-plate (items) — offset upward
-  \draw[platebox] (2.7, -1.0) rectangle (8.3, 3.4);
-  \node[platelabel] at (4.45, -0.85) [above right] {$j{=}1,\ldots,M$};
-\end{tikzpicture}
-"""
-
-# ═══════════════════════════════════════════════════════════════════════
-# 4. Logistic Factor Model — crossed plates
+# 2. Logistic Factor Model — crossed plates
 # ═══════════════════════════════════════════════════════════════════════
 FACTOR = r"""
 \begin{tikzpicture}
@@ -206,28 +148,37 @@ FACTOR = r"""
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 5. Bradley-Terry
-#    Single plate for comparisons, symmetric layout
+# 3. Bradley-Terry — crossed plates, identical layout to Rasch
+#    Bradley-Terry IS the Rasch structure with the item difficulty beta_j
+#    replaced by a second competitor strength theta_j: the two factors are the
+#    two competitors (both drawn from the same N-pool), and the comparison
+#    outcome Y_{ij} sits in the overlap of the two competitor plates.
 # ═══════════════════════════════════════════════════════════════════════
 BRADLEY_TERRY = r"""
 \begin{tikzpicture}
-  % Nodes
-  \node[latent]   (ti) {$\theta_i$};
-  \node[latent]   (tj) [right=24mm of ti] {$\theta_j$};
-  \node[observed] (Y)  [below=18mm of $(ti)!0.5!(tj)$] {$Y_c$};
+  % First competitor (i-plate only)
+  \node[latent]   (ti) at (0, 2.2)   {$\theta_i$};
+  % Second competitor (j-plate only)
+  \node[latent]   (tj) at (3.9, 2.2) {$\theta_j$};
+  % Observed comparison outcome (overlap of both plates)
+  \node[observed] (Y)  at (2.0, 0)   {$Y_{ij}$};
 
   % Edges
   \draw[->] (ti) -- (Y);
   \draw[->] (tj) -- (Y);
 
-  % Single plate
-  \node[plate, fit=(ti)(tj)(Y),
-        label={[platelabel, anchor=south east]below right:$c{=}1,\ldots,C$}] {};
+  % i-plate (first competitor) — overlap 1.6, clearance 0.3 around Y
+  \draw[platebox] (-0.7, -1.4) rectangle (2.8, 3.0);
+  \node[platelabel] at (-0.55, -1.25) [above right] {$i{=}1,\ldots,N$};
+
+  % j-plate (second competitor) — widened so the bottom-right label clears both borders
+  \draw[platebox] (1.2, -1.0) rectangle (4.9, 3.4);
+  \node[platelabel] at (2.95, -0.85) [above right] {$j{=}1,\ldots,N$};
 \end{tikzpicture}
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 6. Ising / Network Model (undirected, no latent variables)
+# 4. Ising / Network Model (undirected, no latent variables)
 # ═══════════════════════════════════════════════════════════════════════
 ISING = r"""
 \begin{tikzpicture}[node distance=20mm]
@@ -250,7 +201,7 @@ ISING = r"""
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 7. Hierarchical IRT (three-level nesting)
+# 5. Hierarchical IRT (three-level nesting)
 #    Domain hyperparams outside all plates;
 #    outer plate for benchmarks (j), inner plate for items (i)
 # ═══════════════════════════════════════════════════════════════════════
@@ -291,22 +242,22 @@ HIERARCHICAL = r"""
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 8. Nomological network (Chapter 6, Validity) — measurement model
-#    Two latent constructs (theta_1, theta_2) over four observed items:
-#      item 1 loads on theta_1; item 2 cross-loads on both; items 3,4 on theta_2.
+# 6. Nomological network (Chapter 6, Validity) — measurement model
+#    Two latent constructs (theta, theta') over four observed items:
+#      item 1 loads on theta; item 2 cross-loads on both; items 3,4 on theta'.
 #    Each item also has an item-specific latent (unique factor) z_j.
-#    An intervention I_k points into each construct (do on the causes of theta_k).
+#    An intervention (I, I') points into each construct (do on the causes of theta).
 # ═══════════════════════════════════════════════════════════════════════
 NOMOLOGICAL = r"""
 \begin{tikzpicture}
   % Interventions on the causes of each construct
   \node[draw=black!70, thick, rounded corners=3pt,
-        minimum height=24pt, inner sep=5pt, fill=black!5] (I1) at (-2.6, 2)  {$I_1$};
+        minimum height=24pt, inner sep=5pt, fill=black!5] (I1) at (-2.6, 2)  {$I$};
   \node[draw=black!70, thick, rounded corners=3pt,
-        minimum height=24pt, inner sep=5pt, fill=black!5] (I2) at (-2.6, -1) {$I_2$};
+        minimum height=24pt, inner sep=5pt, fill=black!5] (I2) at (-2.6, -1) {$I'$};
   % Latent constructs
-  \node[latent] (t1) at (0.4, 2)  {$\theta_1$};
-  \node[latent] (t2) at (0.4, -1) {$\theta_2$};
+  \node[latent] (t1) at (0.4, 2)  {$\theta$};
+  \node[latent] (t2) at (0.4, -1) {$\theta'$};
   % Observed items
   \node[observed] (Y1) at (4, 3)  {$Y_1$};
   \node[observed] (Y2) at (4, 1)  {$Y_2$};
@@ -337,10 +288,10 @@ NOMOLOGICAL = r"""
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 9. Non-identifiability of the nomological network (Chapter 6, Validity)
+# 7. Non-identifiability of the nomological network (Chapter 6, Validity)
 #    Two multi-construct latent models over the same four items. They differ in
 #    the construct space:
-#      (a) correlated-factors model: theta_1 -> Y1,Y2 ; theta_2 -> Y3,Y4 ; corr
+#      (a) correlated-factors model: theta -> Y1,Y2 ; theta' -> Y3,Y4 ; corr
 #      (b) bifactor model: a general factor g on all items, plus orthogonal
 #          specific factors s_1 -> Y1,Y2 and s_2 -> Y3,Y4
 #    For suitable parameters both reproduce the same covariance (a constrained
@@ -351,8 +302,8 @@ NOMOLOGICAL_EQUIV = r"""
 \begin{tikzpicture}
   % ===== Panel (a): two correlated factors =====
   \node[font=\small] at (2.15, 3.7) {(a) correlated factors};
-  \node[latent]   (at1) at (0.65, 2.3) {$\theta_1$};
-  \node[latent]   (at2) at (3.65, 2.3) {$\theta_2$};
+  \node[latent]   (at1) at (0.65, 2.3) {$\theta$};
+  \node[latent]   (at2) at (3.65, 2.3) {$\theta'$};
   \node[observed] (aY1) at (0.0, 0.7) {$Y_1$};
   \node[observed] (aY2) at (1.3, 0.7) {$Y_2$};
   \node[observed] (aY3) at (3.0, 0.7) {$Y_3$};
@@ -390,7 +341,7 @@ NOMOLOGICAL_EQUIV = r"""
 """
 
 # ═══════════════════════════════════════════════════════════════════════
-# 10. Systematic construct-irrelevant variance (Chapter 6, Validity)
+# 8. Systematic construct-irrelevant variance (Chapter 6, Validity)
 #     The target construct theta and a construct-irrelevant cause N are BOTH
 #     parents of the shared items: Y_j = lambda_j theta + gamma_j N + z_j.
 #     N is "systematic" because it loads on several items (not just one); if N
@@ -428,8 +379,6 @@ if __name__ == "__main__":
     print("Generating plate diagrams (standalone TikZ -> PNG)...")
     diagrams = [
         ("plate_rasch.png",        RASCH),
-        ("plate_2pl.png",          TWO_PL),
-        ("plate_3pl.png",          THREE_PL),
         ("plate_factor.png",       FACTOR),
         ("plate_bt.png",           BRADLEY_TERRY),
         ("plate_ising.png",        ISING),

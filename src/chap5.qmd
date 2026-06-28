@@ -1438,113 +1438,9 @@ The left panel shows the Mantel-Haenszel log-odds ratio for each item. Items nea
 In practice, DIF analysis for AI benchmarks would compare model families (e.g., autoregressive vs. encoder-decoder), training paradigms (e.g., RLHF vs. base models), or architectural features (e.g., mixture-of-experts vs. dense transformers).
 
 
-### Dimensionality Assessment {#sec-dimensionality}
+### Dimensionality Assessment
 
-A benchmark that claims to measure a single construct (e.g., "reasoning") should exhibit a unidimensional factor structure: a single latent factor should explain the bulk of the covariance among items. If multiple factors are needed, the benchmark is actually measuring multiple constructs, and a single summary score conflates them.
-
-The primary tool for dimensionality assessment is **eigenvalue analysis** of the item correlation matrix. In a unidimensional benchmark, the first eigenvalue should be substantially larger than the rest. However, raw eigenvalues can be misleading because even random data produces a non-trivial first eigenvalue.
-
-**Parallel analysis** [@horn1965rationale] addresses this by comparing the observed eigenvalues to those from random data of the same dimensions. A factor is retained only if its eigenvalue exceeds the corresponding random-data eigenvalue. This is connected to the factor models discussed in @sec-foundations: if the data require $k$ factors, the benchmark is measuring $k$ distinct constructs, not one.
-
-```{pyodide-python}
-#| label: dimensionality-analysis
-#| autorun: true
-import numpy as np
-import matplotlib.pyplot as plt
-
-np.random.seed(123)
-
-# --- Simulate a 2-factor benchmark ---
-n_models = 300
-n_items = 20
-n_factor1 = 10  # "verbal reasoning" items
-n_factor2 = 10  # "quantitative reasoning" items
-
-# Two latent factors with moderate correlation
-factor_corr = 0.3
-cov_matrix = np.array([[1.0, factor_corr], [factor_corr, 1.0]])
-L = np.linalg.cholesky(cov_matrix)
-factors = np.random.normal(0, 1, (n_models, 2)) @ L.T
-
-# Factor loadings
-loadings = np.zeros((n_items, 2))
-loadings[:n_factor1, 0] = np.random.uniform(0.5, 0.9, n_factor1)  # Factor 1
-loadings[n_factor1:, 1] = np.random.uniform(0.5, 0.9, n_factor2)  # Factor 2
-
-# Generate continuous item scores (for eigenvalue analysis)
-noise_var = 0.4
-X = factors @ loadings.T + np.random.normal(0, np.sqrt(noise_var), (n_models, n_items))
-
-# --- Eigenvalue analysis ---
-corr_matrix = np.corrcoef(X.T)
-eigenvalues = np.linalg.eigvalsh(corr_matrix)[::-1]  # Descending
-
-# --- Parallel analysis (100 replications) ---
-n_reps = 100
-random_eigenvalues = np.zeros((n_reps, n_items))
-for rep in range(n_reps):
-    X_random = np.random.normal(0, 1, (n_models, n_items))
-    corr_random = np.corrcoef(X_random.T)
-    random_eigenvalues[rep] = np.linalg.eigvalsh(corr_random)[::-1]
-
-pa_threshold = np.percentile(random_eigenvalues, 95, axis=0)
-
-# --- Visualization ---
-fig, axes = plt.subplots(1, 2, figsize=(6, 2))
-
-# Panel 1: Scree plot with parallel analysis
-components = np.arange(1, n_items + 1)
-axes[0].plot(components[:10], eigenvalues[:10], 'o-', color='#5B8DEE', linewidth=2,
-             markersize=8, label='Observed eigenvalues', zorder=3)
-axes[0].plot(components[:10], pa_threshold[:10], 's--', color='#E8637A', linewidth=2,
-             markersize=6, label='95th percentile (random)', zorder=3)
-axes[0].axhline(y=1, color='gray', linewidth=0.8, linestyle=':', label='Kaiser criterion')
-# Shade retained factors
-n_retained = sum(eigenvalues > pa_threshold)
-for k in range(min(n_retained, 10)):
-    axes[0].axvspan(k + 0.6, k + 1.4, alpha=0.1, color='#45BF7C')
-axes[0].set_xlabel('Component')
-axes[0].set_ylabel('Eigenvalue')
-axes[0].set_title('Scree Plot with Parallel Analysis')
-axes[0].legend()
-axes[0].set_xticks(components[:10])
-
-# Panel 2: Loading structure
-# Estimate loadings via PCA (first 2 components)
-X_centered = X - X.mean(axis=0)
-U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)
-pc_loadings = Vt[:2, :].T * S[:2] / np.sqrt(n_models - 1)
-
-colors = ['#5B8DEE'] * n_factor1 + ['#E8637A'] * n_factor2
-axes[1].scatter(pc_loadings[:, 0], pc_loadings[:, 1], c=colors, s=80,
-                edgecolors='white', linewidth=0.5, zorder=3)
-for i in range(n_items):
-    axes[1].annotate(f'{i+1}', (pc_loadings[i, 0] + 0.02, pc_loadings[i, 1] + 0.02),
-                     fontsize=7, color='gray')
-axes[1].axhline(y=0, color='gray', linewidth=0.5)
-axes[1].axvline(x=0, color='gray', linewidth=0.5)
-axes[1].set_xlabel('PC1 Loading (Factor 1: Verbal)')
-axes[1].set_ylabel('PC2 Loading (Factor 2: Quantitative)')
-axes[1].set_title('Item Loading Structure')
-from matplotlib.patches import Patch
-axes[1].legend(handles=[
-    Patch(facecolor='#5B8DEE', label='Verbal items (1-10)'),
-    Patch(facecolor='#E8637A', label='Quantitative items (11-20)')
-])
-
-plt.tight_layout()
-plt.show()
-
-print(f"\nDimensionality Assessment:")
-print(f"  First 5 eigenvalues: {', '.join(f'{e:.2f}' for e in eigenvalues[:5])}")
-print(f"  Parallel analysis threshold: {', '.join(f'{e:.2f}' for e in pa_threshold[:5])}")
-print(f"  Factors retained (parallel analysis): {n_retained}")
-print(f"  Variance explained by 2 factors: {eigenvalues[:2].sum() / eigenvalues.sum():.1%}")
-```
-
-The scree plot (left) shows two eigenvalues clearly exceeding the parallel analysis threshold (red dashed line), confirming two-dimensional structure. The loading plot (right) reveals the two-factor structure: verbal items (blue, 1--10) load on the first component, while quantitative items (red, 11--20) load on the second. A benchmark reporting a single "reasoning" score would conflate these two distinct abilities.
-
-This analysis connects directly to the factor models introduced in @sec-foundations. When dimensionality assessment reveals multiple factors, the appropriate response is to either (a) report subscores for each factor rather than a single composite, or (b) revise the benchmark to focus on a single construct.
+A benchmark that claims to measure a single construct (e.g., "reasoning") should exhibit a *unidimensional* factor structure: one latent factor explaining the bulk of the inter-item covariance. Verifying that claim---and, more generally, recovering *how many* constructs an item set measures---is the discovery question developed in @sec-dimensionality, where **parallel analysis** [@horn1965rationale] compares the observed eigenvalues of the item correlation matrix against those from random data of the same shape and retains a factor only when its eigenvalue exceeds the random-data threshold. The use here is confirmatory: if the unidimensionality that a single composite score presupposes fails the test, the score is conflating multiple constructs, and the remedy is to report subscores per factor or revise the benchmark toward one construct.
 
 
 ### Item Fit and Contamination Detection {#sec-item-fit}
@@ -2105,7 +2001,7 @@ The first six exercises are conceptual; the rest involve derivation or implement
 
 5. **The reliability--validity tension.** A benchmark of 1000 copies of the same easy question would have extremely high internal consistency but near-zero validity. How does this illustrate the distinction, and what design principles prevent it?
 
-6. **The item-removal paradox.** Spearman--Brown says shortening a test *lowers* reliability, yet dropping an item that correlates poorly with the rest can *raise* Cronbach's $\alpha$. Reconcile these: when does removing an item help reliability on net, and what does that reveal about the equal-quality (parallel-items) assumption behind Spearman--Brown? (The item-quality diagnostics that flag such items are developed in @sec-nonparametric-irt.)
+6. **The item-removal paradox.** Spearman--Brown says shortening a test *lowers* reliability, yet dropping an item that correlates poorly with the rest can *raise* Cronbach's $\alpha$. Reconcile these: when does removing an item help reliability on net, and what does that reveal about the equal-quality (parallel-items) assumption behind Spearman--Brown? (The item-quality diagnostics that flag such items are developed in @sec-rasch-measurement.)
 
 7. **Deriving reliability** ($\star$). Starting from the CTT model $X = T + E$ with the standard assumptions ($\mathbb{E}[E] = 0$, $\operatorname{Cov}(T, E) = 0$), derive $\rho_{XX'} = \sigma^2_T / \sigma^2_X$, and show reliability equals the squared correlation between observed and true scores, $\rho_{XX'} = r^2_{XT}$.
 

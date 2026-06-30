@@ -1034,7 +1034,7 @@ Table&nbsp;10.1: Stakeholders of a modern benchmark and how each can distort it
 </div>
 </figure>
 </div>
-<p>The classical evaluation model—and the formal game of <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.2</span></a>—contains only the first two rows, and assumes the evaluator is a <em>benevolent social planner</em>. The central move of this chapter is to <strong>relax that assumption</strong>: the lower three rows add principals on the demand side, and the second row, once the evaluator has its own commercial incentives, becomes strategic. This is the multi-principal setting we return to in <a href="#sec-multi-principal" class="quarto-xref"><span>Section 10.5.1</span></a>.</p>
+<p>The classical evaluation model—and the formal game of <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.3</span></a>—contains only the first two rows, and assumes the evaluator is a <em>benevolent social planner</em>. The central move of this chapter is to <strong>relax that assumption</strong>: the lower three rows add principals on the demand side, and the second row, once the evaluator has its own commercial incentives, becomes strategic. This is the multi-principal setting we return to in <a href="#sec-multi-principal" class="quarto-xref"><span>Section 10.5.1</span></a>.</p>
 <section id="sec-benchmark-signaling" class="level3" data-number="10.2.1">
 <h3 data-number="10.2.1" class="anchored" data-anchor-id="sec-benchmark-signaling"><span class="header-section-number">10.2.1</span> Benchmarks as Signaling and the Market for Lemons</h3>
 <p>Why should adopters and investors—parties who never train a model—rely on benchmarks at all? Because a benchmark is a <em>certification technology</em> that reduces an information asymmetry. The buyer cannot directly observe a model’s quality before deploying it; the seller can. This is precisely <span class="citation" data-cites="akerlof1970market">Akerlof (<a href="#ref-akerlof1970market" role="doc-biblioref">1970</a>)</span>’s market for lemons: absent a credible quality signal, buyers rationally discount all sellers toward the average, and high-quality producers are driven out. A trustworthy benchmark is the device that lets a high-quality model <em>separate</em> itself—the AI analogue of <span class="citation" data-cites="spence1973job">Spence (<a href="#ref-spence1973job" role="doc-biblioref">1973</a>)</span>’s job-market signaling.</p>
@@ -1054,10 +1054,10 @@ Table&nbsp;10.1: Stakeholders of a modern benchmark and how each can distort it
 <p>The single most important organizing decision for this chapter is to classify gaming <strong>by mechanism, not by anecdote</strong>. Two episodes that look different in the press (a contaminated math benchmark, a leaderboard scandal) may exploit the same channel—or the same-looking episodes may exploit different channels that need different defenses. We split the taxonomy by <em>who is gaming whom</em>.</p>
 <section id="sec-builder-gaming" class="level3" data-number="10.3.1">
 <h3 data-number="10.3.1" class="anchored" data-anchor-id="sec-builder-gaming"><span class="header-section-number">10.3.1</span> Builders Game the Metric</h3>
-<p>This is the direction modeled formally in <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.2</span></a>. Each sub-type names a distinct exploitable channel:</p>
+<p>This is the direction modeled formally in <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.3</span></a>. Each sub-type names a distinct exploitable channel:</p>
 <ol type="1">
 <li><strong>Contamination / memorization.</strong> Training data includes (or overlaps) evaluation items, so the benchmark measures recall rather than capability. Concrete: the OpenLLM Leaderboard’s eventual archival amid contamination and overfitting concerns <span class="citation" data-cites="myrzakhan2024openllmleaderboard">(<a href="#ref-myrzakhan2024openllmleaderboard" role="doc-biblioref">Aidar Myrzakhan 2024</a>)</span>; clean evidence from holdout re-tests such as the GSM1k re-examination of grade-school arithmetic <span class="citation" data-cites="zhang2024careful">(<a href="#ref-zhang2024careful" role="doc-biblioref"><span class="nocase">Zhang et al.</span> 2024</a>)</span>; and detection methods such as black-box contamination proofs <span class="citation" data-cites="oren2023proving">(<a href="#ref-oren2023proving" role="doc-biblioref">Oren et al. 2023</a>)</span>. <em>Channel: the test items are public text that leaks into pretraining.</em></li>
-<li><strong>Adaptive overfitting via repeated querying.</strong> Even without seeing the test items, repeated submissions against a fixed holdout let a builder overfit the leaderboard. This is the failure the Ladder mechanism and reusable-holdout techniques were designed to bound <span class="citation" data-cites="blum2015ladder">(<a href="#ref-blum2015ladder" role="doc-biblioref">Blum and Hardt 2015</a>)</span>. <em>Channel: information leaks through the score itself across rounds (<a href="chap11.html#sec-restoring-alignment" class="quarto-xref"><span>Section 11.4</span></a>).</em></li>
+<li><strong>Adaptive overfitting via repeated querying.</strong> Even without seeing the test items, repeated submissions against a fixed holdout let a builder overfit the leaderboard. This is the failure the Ladder mechanism and reusable-holdout techniques were designed to bound <span class="citation" data-cites="blum2015ladder">(<a href="#ref-blum2015ladder" role="doc-biblioref">Blum and Hardt 2015</a>)</span>. <em>Channel: information leaks through the score itself across rounds (<a href="chap11.html#sec-restoring-alignment" class="quarto-xref"><span>Section 11.5.4</span></a>).</em></li>
 <li><strong>Strategic submission and selection.</strong> A builder deploys models tuned for the queries a platform tends to surface, or selectively reports favorable runs. <em>(TODO: cite the Llama-4 Chatbot Arena episode <span class="citation" data-cites="singh2025leaderboard">(<a href="#ref-singh2025leaderboard" role="doc-biblioref"><span class="nocase">Singh et al.</span> 2025</a>)</span> and the Terminal-Bench case once the references are settled.)</em> <em>Channel: the builder learns and targets the evaluation distribution.</em></li>
 <li><strong>Strategic post-training.</strong> Ranking-aware fine-tuning shifts a model up a leaderboard without broad capability gains. <em>(TODO: cite “Model Rankings under Strategic Post-Training,” <code>strategicposttraining2026</code>—verify authors/venue.)</em> <em>Channel: optimization directed at the rank statistic rather than the construct.</em></li>
 <li><strong>Sandbagging (the inverse).</strong> When the audience is a <em>regulator</em>, the incentive flips: a developer (or a model) may <em>underperform</em> on a dangerous-capability evaluation to appear safe <span class="citation" data-cites="vanderweij2024sandbagging">(<a href="#ref-vanderweij2024sandbagging" role="doc-biblioref">Weij et al. 2024</a>)</span>. This is why government-facing evaluations need different safeguards than capability leaderboards; see the frontier dangerous-capability evaluation program of <span class="citation" data-cites="phuong2024evaluating"><span class="nocase">Phuong et al.</span> (<a href="#ref-phuong2024evaluating" role="doc-biblioref">2024</a>)</span> and the red-teaming methodology of <a href="chap12.html" class="quarto-xref"><span>Chapter 12</span></a>. <em>Channel: strategic concealment rather than strategic exaggeration.</em></li>
@@ -1115,25 +1115,25 @@ Table&nbsp;10.2: Mapping each gaming channel to its design lever. Bold rows are 
 <td>Contamination / memorization</td>
 <td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 10.3.1</span></a></td>
 <td>Randomize &amp; refresh tasks; live benchmarks</td>
-<td><a href="chap11.html#sec-one-shot-alignment" class="quarto-xref"><span>Section 11.2.3</span></a>; <span class="citation" data-cites="white2025livebench jain2024livecodebench">(<a href="#ref-white2025livebench" role="doc-biblioref">White et al. 2025</a>; <a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span></td>
+<td><a href="chap11.html#sec-one-shot-alignment" class="quarto-xref"><span>Section 11.5.1</span></a>; <span class="citation" data-cites="white2025livebench jain2024livecodebench">(<a href="#ref-white2025livebench" role="doc-biblioref">White et al. 2025</a>; <a href="#ref-jain2024livecodebench" role="doc-biblioref">Jain et al. 2024</a>)</span></td>
 </tr>
 <tr class="even">
 <td>Adaptive overfitting (repeated querying)</td>
 <td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 10.3.1</span></a></td>
 <td>Noise-gated holdout; differential privacy</td>
-<td><a href="chap11.html#sec-holdout" class="quarto-xref"><span>Section 11.4.3</span></a></td>
+<td><a href="chap11.html#sec-holdout" class="quarto-xref"><span>Section 11.4.2</span></a></td>
 </tr>
 <tr class="odd">
 <td>Learning the evaluation distribution</td>
 <td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 10.3.1</span></a></td>
 <td>Distribution correction toward uniform</td>
-<td><a href="chap11.html#sec-distribution-correction" class="quarto-xref"><span>Section 11.4.1</span></a></td>
+<td><a href="chap11.html#sec-distribution-correction" class="quarto-xref"><span>Section 11.5.4.1</span></a></td>
 </tr>
 <tr class="even">
 <td>Rank-targeted / metric gaming</td>
 <td><a href="#sec-builder-gaming" class="quarto-xref"><span>Section 10.3.1</span></a></td>
 <td>Welfare-aligned (counterfactual) metrics</td>
-<td><a href="chap11.html#sec-metric-design" class="quarto-xref"><span>Section 11.5</span></a></td>
+<td><a href="chap11.html#sec-metric-design" class="quarto-xref"><span>Section 11.7</span></a></td>
 </tr>
 <tr class="odd">
 <td>Sandbagging on safety evals</td>
@@ -1158,14 +1158,14 @@ Table&nbsp;10.2: Mapping each gaming channel to its design lever. Bold rows are 
 </div>
 </figure>
 </div>
-<p>A practical reading of <a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>10.2</span></a>: the builder-side rows are well-served by the mechanisms of <a href="chap11.html#sec-design-principles" class="quarto-xref"><span>Section 11.7</span></a>, while the evaluator-side rows require <em>governance</em> rather than <em>mechanism design</em>—rules about who may run a benchmark, what they must disclose, and who audits them.</p>
+<p>A practical reading of <a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>10.2</span></a>: the builder-side rows are well-served by the mechanisms of <a href="chap11.html#sec-design-principles" class="quarto-xref"><span>Section 11.9</span></a>, while the evaluator-side rows require <em>governance</em> rather than <em>mechanism design</em>—rules about who may run a benchmark, what they must disclose, and who audits them.</p>
 </section>
 <section id="sec-governance-frontier" class="level2" data-number="10.5">
 <h2 data-number="10.5" class="anchored" data-anchor-id="sec-governance-frontier"><span class="header-section-number">10.5</span> The Governance Frontier</h2>
 <p>The remaining sections promote the chapter’s hardest questions to first-class topics. These are genuinely open; we mark them as such.</p>
 <section id="sec-multi-principal" class="level3" data-number="10.5.1">
 <h3 data-number="10.5.1" class="anchored" data-anchor-id="sec-multi-principal"><span class="header-section-number">10.5.1</span> Multi-Principal Evaluation and the Strategic Evaluator</h3>
-<p>The formal game of <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.2</span></a> has one evaluator and one builder, with the evaluator acting as a benevolent social planner. The ecosystem of <a href="#tbl-actors" class="quarto-xref">Table&nbsp;<span>10.1</span></a> has <em>many</em> principals with conflicting objectives, and an evaluator who may itself be strategic. Open questions:</p>
+<p>The formal game of <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.3</span></a> has one evaluator and one builder, with the evaluator acting as a benevolent social planner. The ecosystem of <a href="#tbl-actors" class="quarto-xref">Table&nbsp;<span>10.1</span></a> has <em>many</em> principals with conflicting objectives, and an evaluator who may itself be strategic. Open questions:</p>
 <ul>
 <li><strong>What is the right model of an evaluator with its own utility?</strong> If the evaluator maximizes traffic or favors an affiliated model, what mechanism keeps its published ranking informative? (This is Discussion Question 1 of <a href="chap11.html" class="quarto-xref"><span>Chapter 11</span></a>, promoted here to a research direction.)</li>
 <li><strong>What is a model of adopter and government behavior?</strong> Both are receivers in the signaling game of <a href="#sec-benchmark-signaling" class="quarto-xref"><span>Section 10.2.1</span></a>, but with different loss functions and different abilities to audit. A formal account would let us ask which guarantees a benchmark must offer each.</li>
@@ -1179,7 +1179,7 @@ Table&nbsp;10.2: Mapping each gaming channel to its design lever. Bold rows are 
 <li><strong>For trust:</strong> open weights enable independent third-party auditing, reproducible evaluation, and inspection that closed APIs preclude.</li>
 <li><strong>Against trust:</strong> open weights make contamination and targeted gaming <em>easier</em>, since the model can be fine-tuned directly against any public benchmark.</li>
 </ul>
-<p><em>(TODO: take a position here, and connect to the public/private benchmark work—the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; <code>truong2025guard</code> covers the private-benchmark design.)</em></p>
+<p><em>(TODO: take a position here, and connect to the public/private benchmark work—the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; <code>truong2025strategic</code> covers the private-benchmark design.)</em></p>
 </section>
 <section id="sec-organizing" class="level3" data-number="10.5.3">
 <h3 data-number="10.5.3" class="anchored" data-anchor-id="sec-organizing"><span class="header-section-number">10.5.3</span> Organizing for Trustworthy Evaluation</h3>
@@ -1192,7 +1192,7 @@ Table&nbsp;10.2: Mapping each gaming channel to its design lever. Bold rows are 
 <li>The market-for-lemons framing (<a href="#sec-benchmark-signaling" class="quarto-xref"><span>Section 10.2.1</span></a>) predicts that high-quality models exit when no credible signal exists. Has the <em>opposite</em> been observed—a credible benchmark causing a flight to quality? What made it credible?</li>
 <li><a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>10.2</span></a> leaves the evaluator-side rows open. Sketch a mechanism (technical or institutional) that would make selective disclosure costly for a platform.</li>
 <li>Sandbagging (<a href="#sec-builder-gaming" class="quarto-xref"><span>Section 10.3.1</span></a>) inverts the usual gaming direction. Does <em>any</em> of the design machinery in <a href="chap11.html" class="quarto-xref"><span>Chapter 11</span></a> help against strategic <em>under</em>-performance, or is it fundamentally a red-teaming problem (<a href="chap12.html" class="quarto-xref"><span>Chapter 12</span></a>)?</li>
-<li>Adopters and investors consume the same number but take different decisions. Should a benchmark report <em>different</em> statistics to different audiences, and does that reintroduce the garbling problem of <a href="chap11.html#sec-metric-design" class="quarto-xref"><span>Section 11.5</span></a>?</li>
+<li>Adopters and investors consume the same number but take different decisions. Should a benchmark report <em>different</em> statistics to different audiences, and does that reintroduce the garbling problem of <a href="chap11.html#sec-metric-design" class="quarto-xref"><span>Section 11.7</span></a>?</li>
 <li>Argue both sides of <a href="#sec-open-source" class="quarto-xref"><span>Section 10.5.2</span></a>: does open-sourcing models make the evaluation ecosystem more or less trustworthy on net?</li>
 <li>The Kaggle era had a benevolent evaluator who <em>owned the test set</em> and <em>controlled submission</em>. List the structural features of the LLM era that break this, and rank them by how much damage each does.</li>
 </ol>
@@ -1211,7 +1211,7 @@ Table&nbsp;10.2: Mapping each gaming channel to its design lever. Bold rows are 
 <li><strong>(Easy)</strong> Modify the decoupling simulation (<a href="#sec-benchmark-signaling" class="quarto-xref"><span>Section 10.2.1</span></a>) so that gaming effort is correlated with low true utility (the worst models game hardest). How does the decoupling curve change?</li>
 <li><strong>(Medium)</strong> Formalize a one-shot signaling game between a builder (high- or low-quality) and an adopter, where a benchmark score is a costly signal. Derive the condition on gaming cost under which a separating equilibrium exists, and relate it to the design levers of <a href="chap11.html" class="quarto-xref"><span>Chapter 11</span></a>.</li>
 <li><strong>(Medium)</strong> Pick one bold (evaluator-side) row of <a href="#tbl-gaming-defense" class="quarto-xref">Table&nbsp;<span>10.2</span></a> and write a half-page design proposal that would move it from <em>open</em> to <em>closed</em>.</li>
-<li><strong>(Hard)</strong> Extend the Stackelberg game of <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.2</span></a> to a <em>strategic</em> evaluator whose utility is a convex combination of social welfare and own-traffic. Characterize when the evaluator’s optimal mechanism still incentivizes broad builder capability.</li>
+<li><strong>(Hard)</strong> Extend the Stackelberg game of <a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>Section 11.3</span></a> to a <em>strategic</em> evaluator whose utility is a convex combination of social welfare and own-traffic. Characterize when the evaluator’s optimal mechanism still incentivizes broad builder capability.</li>
 </ol>
 
 
@@ -1976,7 +1976,7 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
 <span id="cb1-219"><a href="#cb1-219"></a><span class="ss">- </span>**For trust:** open weights enable independent third-party auditing, reproducible evaluation, and inspection that closed APIs preclude.</span>
 <span id="cb1-220"><a href="#cb1-220"></a><span class="ss">- </span>**Against trust:** open weights make contamination and targeted gaming *easier*, since the model can be fine-tuned directly against any public benchmark.</span>
 <span id="cb1-221"><a href="#cb1-221"></a></span>
-<span id="cb1-222"><a href="#cb1-222"></a>*(TODO: take a position here, and connect to the public/private benchmark work---the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; `truong2025guard` covers the private-benchmark design.)*</span>
+<span id="cb1-222"><a href="#cb1-222"></a>*(TODO: take a position here, and connect to the public/private benchmark work---the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; `truong2025strategic` covers the private-benchmark design.)*</span>
 <span id="cb1-223"><a href="#cb1-223"></a></span>
 <span id="cb1-224"><a href="#cb1-224"></a><span class="fu">### Organizing for Trustworthy Evaluation {#sec-organizing}</span></span>
 <span id="cb1-225"><a href="#cb1-225"></a></span>
@@ -2001,7 +2001,7 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
 <span id="cb1-244"><a href="#cb1-244"></a></span>
 <span id="cb1-245"><a href="#cb1-245"></a>**Gaming in the wild.** Leaderboard-platform asymmetries are analyzed by @singh2025leaderboard <span class="co">[</span><span class="ot">platform background: @chiang2024chatbotarena</span><span class="co">]</span>; contamination evidence and detection by @zhang2024careful and @oren2023proving; the OpenLLM Leaderboard's archival by @myrzakhan2024openllmleaderboard. Contamination-resistant "live" benchmarks include @white2025livebench and @jain2024livecodebench. Sandbagging and dangerous-capability evaluation are @vanderweij2024sandbagging and @phuong2024evaluating. The construct-validity critique of general benchmarks is @raji2021everything. The economics of the eval market is discussed by @liao2025evalstartups.</span>
 <span id="cb1-246"><a href="#cb1-246"></a></span>
-<span id="cb1-247"><a href="#cb1-247"></a>**Design levers** for every channel in @tbl-gaming-defense are developed in @sec-design <span class="co">[</span><span class="ot">@truong2025guard; @blum2015ladder; @procaccia2025metritocracy</span><span class="co">]</span>. Reproducible evaluation infrastructure is @biderman2024lessons.</span>
+<span id="cb1-247"><a href="#cb1-247"></a>**Design levers** for every channel in @tbl-gaming-defense are developed in @sec-design <span class="co">[</span><span class="ot">@truong2025strategic; @blum2015ladder; @procaccia2025metritocracy</span><span class="co">]</span>. Reproducible evaluation infrastructure is @biderman2024lessons.</span>
 <span id="cb1-248"><a href="#cb1-248"></a></span>
 <span id="cb1-249"><a href="#cb1-249"></a></span>
 <span id="cb1-250"><a href="#cb1-250"></a><span class="fu">## Exercises {#sec-ecosystem-exercises}</span></span>

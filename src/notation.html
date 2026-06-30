@@ -941,66 +941,96 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
+<td><span class="math inline">\(\mathcal{C}\)</span></td>
+<td>Construct: the latent capability being measured</td>
+<td>—</td>
+<td><a href="chap11.html#sec-what-to-hide" class="quarto-xref"><span>What Are We Trying to Hide?</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D\)</span></td>
+<td>Operationalizing distribution (formally <span class="math inline">\(\pi_E\)</span>)</td>
+<td>distribution on <span class="math inline">\(F\)</span></td>
+<td><a href="chap11.html#sec-what-to-hide" class="quarto-xref"><span>What Are We Trying to Hide?</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(D', D''\)</span></td>
+<td>Public proxy distributions for <span class="math inline">\(\mathcal{C}\)</span></td>
+<td>distributions on <span class="math inline">\(F\)</span></td>
+<td><a href="chap11.html#sec-cv-protocol" class="quarto-xref"><span>Publishing the Construct: The Construct-Validity Protocol</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(S\)</span></td>
+<td>Realized evaluation set, <span class="math inline">\(S \sim D\)</span></td>
+<td><span class="math inline">\(S \subseteq F\)</span></td>
+<td><a href="chap11.html#sec-what-to-hide" class="quarto-xref"><span>What Are We Trying to Hide?</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mu\)</span></td>
+<td>Social-relevance distribution (construct fully operationalized; <span class="math inline">\(\text{Uniform}(F)\)</span> as a special case)</td>
+<td>distribution on <span class="math inline">\(F\)</span></td>
+<td><a href="chap11.html#sec-what-to-hide" class="quarto-xref"><span>What Are We Trying to Hide?</span></a></td>
+</tr>
+<tr class="even">
 <td><span class="math inline">\(F\)</span></td>
 <td>Universe of tasks</td>
 <td>finite set, <span class="math inline">\(\|F\| = N\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(F_E, F_M\)</span></td>
 <td>Evaluator’s / builder’s task sets</td>
 <td><span class="math inline">\(F_E, F_M \subseteq F\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\pi_E, \pi_M\)</span></td>
 <td>Evaluator’s / builder’s sampling distributions</td>
 <td>distributions on <span class="math inline">\(F\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(f(\theta)\)</span></td>
 <td>Task performance function</td>
 <td><span class="math inline">\([0,1]\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(u_E(\theta)\)</span></td>
-<td>Evaluator’s utility: <span class="math inline">\(\sum_{f \in F} f(\theta)\)</span></td>
+<td>Evaluator’s utility: <span class="math inline">\(\mathbb{E}_{f \sim \mu}[f(\theta)]\)</span></td>
 <td><span class="math inline">\(\mathbb{R}^+\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="even">
-<td><span class="math inline">\(k\)</span></td>
-<td>Number of sampled evaluation tasks per round</td>
+<tr class="odd">
+<td><span class="math inline">\(k, k^*\)</span></td>
+<td>Number of (optimal) sampled evaluation tasks per round</td>
 <td><span class="math inline">\(\mathbb{N}\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="odd">
-<td><span class="math inline">\(\rho\)</span></td>
-<td>Distribution correction rate</td>
-<td><span class="math inline">\((0,1]\)</span></td>
-<td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
-</tr>
 <tr class="even">
-<td><span class="math inline">\(\gamma\)</span></td>
-<td>Gaming penalty weight</td>
-<td><span class="math inline">\(\mathbb{R}^+\)</span></td>
+<td><span class="math inline">\(\rho, \sigma_c\)</span></td>
+<td>Distribution correction rate and bandwidth</td>
+<td><span class="math inline">\((0,1] \times \mathbb{R}^+\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\Delta_t\)</span></td>
-<td>Residual misalignment at round <span class="math inline">\(t\)</span></td>
-<td><span class="math inline">\([0,1]\)</span></td>
+<td>Residual misalignment: <span class="math inline">\(\max_\theta u_E(\theta) - u_E(\theta_t)\)</span></td>
+<td><span class="math inline">\(\mathbb{R}^+\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
 <tr class="even">
+<td><span class="math inline">\(\tilde{\pi}_E\)</span></td>
+<td>Builder’s belief about the evaluator’s sampling</td>
+<td>distribution on <span class="math inline">\(F\)</span></td>
+<td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(C\)</span></td>
 <td>Agent cost (principal-agent model)</td>
 <td><span class="math inline">\(\mathbb{R}^+\)</span></td>
 <td><a href="chap11.html#sec-evaluation-game" class="quarto-xref"><span>The Evaluation Game</span></a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(b\)</span></td>
 <td>Principal’s value from agent effort</td>
 <td><span class="math inline">\(\mathbb{R}^+\)</span></td>
@@ -1665,34 +1695,39 @@ window.Quarto = {
 <span id="cb1-82"><a href="#cb1-82"></a></span>
 <span id="cb1-83"><a href="#cb1-83"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Domain <span class="pp">|</span> Introduced <span class="pp">|</span></span>
 <span id="cb1-84"><a href="#cb1-84"></a><span class="pp">|--------|---------|--------|------------|</span></span>
-<span id="cb1-85"><a href="#cb1-85"></a><span class="pp">|</span> $F$ <span class="pp">|</span> Universe of tasks <span class="pp">|</span> finite set, $<span class="sc">\|</span>F<span class="sc">\|</span> = N$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-86"><a href="#cb1-86"></a><span class="pp">|</span> $F_E, F_M$ <span class="pp">|</span> Evaluator's / builder's task sets <span class="pp">|</span> $F_E, F_M \subseteq F$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-87"><a href="#cb1-87"></a><span class="pp">|</span> $\pi_E, \pi_M$ <span class="pp">|</span> Evaluator's / builder's sampling distributions <span class="pp">|</span> distributions on $F$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-88"><a href="#cb1-88"></a><span class="pp">|</span> $f(\theta)$ <span class="pp">|</span> Task performance function <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-89"><a href="#cb1-89"></a><span class="pp">|</span> $u_E(\theta)$ <span class="pp">|</span> Evaluator's utility: $\sum_{f \in F} f(\theta)$ <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-90"><a href="#cb1-90"></a><span class="pp">|</span> $k$ <span class="pp">|</span> Number of sampled evaluation tasks per round <span class="pp">|</span> $\mathbb{N}$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-91"><a href="#cb1-91"></a><span class="pp">|</span> $\rho$ <span class="pp">|</span> Distribution correction rate <span class="pp">|</span> $(0,1]$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-92"><a href="#cb1-92"></a><span class="pp">|</span> $\gamma$ <span class="pp">|</span> Gaming penalty weight <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-93"><a href="#cb1-93"></a><span class="pp">|</span> $\Delta_t$ <span class="pp">|</span> Residual misalignment at round $t$ <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-94"><a href="#cb1-94"></a><span class="pp">|</span> $C$ <span class="pp">|</span> Agent cost (principal-agent model) <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="pp">|</span> $b$ <span class="pp">|</span> Principal's value from agent effort <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
-<span id="cb1-96"><a href="#cb1-96"></a></span>
-<span id="cb1-97"><a href="#cb1-97"></a><span class="fu">## Red-Teaming and Adversarial Evaluation</span></span>
-<span id="cb1-98"><a href="#cb1-98"></a></span>
-<span id="cb1-99"><a href="#cb1-99"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Domain <span class="pp">|</span> Introduced <span class="pp">|</span></span>
-<span id="cb1-100"><a href="#cb1-100"></a><span class="pp">|--------|---------|--------|------------|</span></span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="pp">|</span> $\theta_j^{(\text{adv})}$ <span class="pp">|</span> Adversarial robustness of model $j$ <span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-102"><a href="#cb1-102"></a><span class="pp">|</span> $\theta_j^{(\text{std})}$ <span class="pp">|</span> Standard accuracy ability of model $j$ <span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-103"><a href="#cb1-103"></a><span class="pp">|</span> $\beta_i^{(\text{atk})}$ <span class="pp">|</span> Attack strength (difficulty) of adversarial item $i$ <span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-104"><a href="#cb1-104"></a><span class="pp">|</span> $\delta$ <span class="pp">|</span> Perturbation applied to an input <span class="pp">|</span> $\mathcal{B}_\epsilon$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-105"><a href="#cb1-105"></a><span class="pp">|</span> $\alpha_{s,\mathcal{D}}$ <span class="pp">|</span> Attack success probability under criterion $s$ and goal distribution $\mathcal{D}$ <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-106"><a href="#cb1-106"></a><span class="pp">|</span> $J$ <span class="pp">|</span> Operational judge of attack success <span class="pp">|</span> $<span class="sc">\{</span>0,1<span class="sc">\}</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-107"><a href="#cb1-107"></a><span class="pp">|</span> $s$ <span class="pp">|</span> Oracle (true) success criterion <span class="pp">|</span> $<span class="sc">\{</span>0,1<span class="sc">\}</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-108"><a href="#cb1-108"></a><span class="pp">|</span> $K$ <span class="pp">|</span> Number of repeated samples in Top-1 aggregation <span class="pp">|</span> $\mathbb{N}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-109"><a href="#cb1-109"></a><span class="pp">|</span> $\hat{\mu}_{\text{syn}}$ <span class="pp">|</span> Mean performance estimated from synthetic items <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-110"><a href="#cb1-110"></a><span class="pp">|</span> $\hat{\mu}_{\text{human}}$ <span class="pp">|</span> Mean performance estimated from human-authored items <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-111"><a href="#cb1-111"></a><span class="pp">|</span> $\hat{\mu}_{\text{PPI}}$ <span class="pp">|</span> Prediction-powered inference estimator <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-112"><a href="#cb1-112"></a><span class="pp">|</span> $n$ <span class="pp">|</span> Number of human-evaluated items <span class="pp">|</span> $\mathbb{N}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-85"><a href="#cb1-85"></a><span class="pp">|</span> $\mathcal{C}$ <span class="pp">|</span> Construct: the latent capability being measured <span class="pp">| ---</span> <span class="pp">|</span> @sec-what-to-hide <span class="pp">|</span></span>
+<span id="cb1-86"><a href="#cb1-86"></a><span class="pp">|</span> $D$ <span class="pp">|</span> Operationalizing distribution (formally $\pi_E$) <span class="pp">|</span> distribution on $F$ <span class="pp">|</span> @sec-what-to-hide <span class="pp">|</span></span>
+<span id="cb1-87"><a href="#cb1-87"></a><span class="pp">|</span> $D', D''$ <span class="pp">|</span> Public proxy distributions for $\mathcal{C}$ <span class="pp">|</span> distributions on $F$ <span class="pp">|</span> @sec-cv-protocol <span class="pp">|</span></span>
+<span id="cb1-88"><a href="#cb1-88"></a><span class="pp">|</span> $S$ <span class="pp">|</span> Realized evaluation set, $S \sim D$ <span class="pp">|</span> $S \subseteq F$ <span class="pp">|</span> @sec-what-to-hide <span class="pp">|</span></span>
+<span id="cb1-89"><a href="#cb1-89"></a><span class="pp">|</span> $\mu$ <span class="pp">|</span> Social-relevance distribution (construct fully operationalized; $\text{Uniform}(F)$ as a special case) <span class="pp">|</span> distribution on $F$ <span class="pp">|</span> @sec-what-to-hide <span class="pp">|</span></span>
+<span id="cb1-90"><a href="#cb1-90"></a><span class="pp">|</span> $F$ <span class="pp">|</span> Universe of tasks <span class="pp">|</span> finite set, $<span class="sc">\|</span>F<span class="sc">\|</span> = N$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-91"><a href="#cb1-91"></a><span class="pp">|</span> $F_E, F_M$ <span class="pp">|</span> Evaluator's / builder's task sets <span class="pp">|</span> $F_E, F_M \subseteq F$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-92"><a href="#cb1-92"></a><span class="pp">|</span> $\pi_E, \pi_M$ <span class="pp">|</span> Evaluator's / builder's sampling distributions <span class="pp">|</span> distributions on $F$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-93"><a href="#cb1-93"></a><span class="pp">|</span> $f(\theta)$ <span class="pp">|</span> Task performance function <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-94"><a href="#cb1-94"></a><span class="pp">|</span> $u_E(\theta)$ <span class="pp">|</span> Evaluator's utility: $\mathbb{E}_{f \sim \mu}<span class="co">[</span><span class="ot">f(\theta)</span><span class="co">]</span>$ <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-95"><a href="#cb1-95"></a><span class="pp">|</span> $k, k^*$ <span class="pp">|</span> Number of (optimal) sampled evaluation tasks per round <span class="pp">|</span> $\mathbb{N}$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-96"><a href="#cb1-96"></a><span class="pp">|</span> $\rho, \sigma_c$ <span class="pp">|</span> Distribution correction rate and bandwidth <span class="pp">|</span> $(0,1] \times \mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-97"><a href="#cb1-97"></a><span class="pp">|</span> $\Delta_t$ <span class="pp">|</span> Residual misalignment: $\max_\theta u_E(\theta) - u_E(\theta_t)$ <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-98"><a href="#cb1-98"></a><span class="pp">|</span> $\tilde{\pi}_E$ <span class="pp">|</span> Builder's belief about the evaluator's sampling <span class="pp">|</span> distribution on $F$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-99"><a href="#cb1-99"></a><span class="pp">|</span> $C$ <span class="pp">|</span> Agent cost (principal-agent model) <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-100"><a href="#cb1-100"></a><span class="pp">|</span> $b$ <span class="pp">|</span> Principal's value from agent effort <span class="pp">|</span> $\mathbb{R}^+$ <span class="pp">|</span> @sec-evaluation-game <span class="pp">|</span></span>
+<span id="cb1-101"><a href="#cb1-101"></a></span>
+<span id="cb1-102"><a href="#cb1-102"></a><span class="fu">## Red-Teaming and Adversarial Evaluation</span></span>
+<span id="cb1-103"><a href="#cb1-103"></a></span>
+<span id="cb1-104"><a href="#cb1-104"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Meaning <span class="pp">|</span> Domain <span class="pp">|</span> Introduced <span class="pp">|</span></span>
+<span id="cb1-105"><a href="#cb1-105"></a><span class="pp">|--------|---------|--------|------------|</span></span>
+<span id="cb1-106"><a href="#cb1-106"></a><span class="pp">|</span> $\theta_j^{(\text{adv})}$ <span class="pp">|</span> Adversarial robustness of model $j$ <span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-107"><a href="#cb1-107"></a><span class="pp">|</span> $\theta_j^{(\text{std})}$ <span class="pp">|</span> Standard accuracy ability of model $j$ <span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-108"><a href="#cb1-108"></a><span class="pp">|</span> $\beta_i^{(\text{atk})}$ <span class="pp">|</span> Attack strength (difficulty) of adversarial item $i$ <span class="pp">|</span> $\mathbb{R}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-109"><a href="#cb1-109"></a><span class="pp">|</span> $\delta$ <span class="pp">|</span> Perturbation applied to an input <span class="pp">|</span> $\mathcal{B}_\epsilon$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-110"><a href="#cb1-110"></a><span class="pp">|</span> $\alpha_{s,\mathcal{D}}$ <span class="pp">|</span> Attack success probability under criterion $s$ and goal distribution $\mathcal{D}$ <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-111"><a href="#cb1-111"></a><span class="pp">|</span> $J$ <span class="pp">|</span> Operational judge of attack success <span class="pp">|</span> $<span class="sc">\{</span>0,1<span class="sc">\}</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-112"><a href="#cb1-112"></a><span class="pp">|</span> $s$ <span class="pp">|</span> Oracle (true) success criterion <span class="pp">|</span> $<span class="sc">\{</span>0,1<span class="sc">\}</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-113"><a href="#cb1-113"></a><span class="pp">|</span> $K$ <span class="pp">|</span> Number of repeated samples in Top-1 aggregation <span class="pp">|</span> $\mathbb{N}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-114"><a href="#cb1-114"></a><span class="pp">|</span> $\hat{\mu}_{\text{syn}}$ <span class="pp">|</span> Mean performance estimated from synthetic items <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-115"><a href="#cb1-115"></a><span class="pp">|</span> $\hat{\mu}_{\text{human}}$ <span class="pp">|</span> Mean performance estimated from human-authored items <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-116"><a href="#cb1-116"></a><span class="pp">|</span> $\hat{\mu}_{\text{PPI}}$ <span class="pp">|</span> Prediction-powered inference estimator <span class="pp">|</span> $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
+<span id="cb1-117"><a href="#cb1-117"></a><span class="pp">|</span> $n$ <span class="pp">|</span> Number of human-evaluated items <span class="pp">|</span> $\mathbb{N}$ <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
     <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/notation.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script type="text/javascript">

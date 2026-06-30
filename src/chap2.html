@@ -2502,7 +2502,7 @@ Figure&nbsp;2.5: ChatGPT drift: model × task accuracy heatmap showing performan
 <p>The <code>torch_measure</code> library provides a PyTorch-native toolkit for loading, inspecting, and analyzing response matrices from real benchmarks. It is the companion software for this book.</p>
 <section id="loading-benchmarks" class="level3" data-number="2.8.1">
 <h3 data-number="2.8.1" class="anchored" data-anchor-id="loading-benchmarks"><span class="header-section-number">2.8.1</span> Loading Benchmarks</h3>
-<div id="e01e219f" class="cell" data-execution_count="1">
+<div id="5ced6491" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> torch_measure.datasets <span class="im">import</span> load, list_datasets</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># See all available benchmarks</span></span>
@@ -2517,7 +2517,7 @@ Figure&nbsp;2.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="inspecting-the-response-matrix" class="level3" data-number="2.8.2">
 <h3 data-number="2.8.2" class="anchored" data-anchor-id="inspecting-the-response-matrix"><span class="header-section-number">2.8.2</span> Inspecting the Response Matrix</h3>
-<div id="810cb11f" class="cell" data-execution_count="2">
+<div id="4a1e9857" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Per-subject (model) statistics</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="bu">print</span>(<span class="ss">f"Best model: </span><span class="sc">{</span>rm<span class="sc">.</span>subject_means<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="bu">print</span>(<span class="ss">f"Worst model: </span><span class="sc">{</span>rm<span class="sc">.</span>subject_means<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
@@ -2533,7 +2533,7 @@ Figure&nbsp;2.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="fitting-a-measurement-model" class="level3" data-number="2.8.3">
 <h3 data-number="2.8.3" class="anchored" data-anchor-id="fitting-a-measurement-model"><span class="header-section-number">2.8.3</span> Fitting a Measurement Model</h3>
-<div id="9f00dc69" class="cell" data-execution_count="3">
+<div id="8aaedfd3" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">from</span> torch_measure.models <span class="im">import</span> Rasch</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="co"># Fit a Rasch model to the response matrix</span></span>
@@ -2550,7 +2550,7 @@ Figure&nbsp;2.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="comparing-benchmarks" class="level3" data-number="2.8.4">
 <h3 data-number="2.8.4" class="anchored" data-anchor-id="comparing-benchmarks"><span class="header-section-number">2.8.4</span> Comparing Benchmarks</h3>
-<div id="73b37868" class="cell" data-execution_count="4">
+<div id="1891609c" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Load multiple benchmarks</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>benchmarks <span class="op">=</span> {</span>
 <span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"SWE-bench"</span>: load(<span class="st">"bench/swebench"</span>),</span>
@@ -2566,7 +2566,7 @@ Figure&nbsp;2.5: ChatGPT drift: model × task accuracy heatmap showing performan
 </section>
 <section id="loading-paired-response-matrices" class="level3" data-number="2.8.5">
 <h3 data-number="2.8.5" class="anchored" data-anchor-id="loading-paired-response-matrices"><span class="header-section-number">2.8.5</span> Loading Paired Response Matrices</h3>
-<div id="286a263b" class="cell" data-execution_count="5">
+<div id="89a33c87" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># List intervention datasets</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>list_datasets(<span class="st">"intervention"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>

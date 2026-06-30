@@ -219,7 +219,7 @@ Open weights change the governance calculus in both directions, and it is worth 
 - **For trust:** open weights enable independent third-party auditing, reproducible evaluation, and inspection that closed APIs preclude.
 - **Against trust:** open weights make contamination and targeted gaming *easier*, since the model can be fine-tuned directly against any public benchmark.
 
-*(TODO: take a position here, and connect to the public/private benchmark work---the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; `truong2025guard` covers the private-benchmark design.)*
+*(TODO: take a position here, and connect to the public/private benchmark work---the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; `truong2025strategic` covers the private-benchmark design.)*
 
 ### Organizing for Trustworthy Evaluation {#sec-organizing}
 
@@ -244,7 +244,7 @@ A closing, deliberately normative section: how should the research community org
 
 **Gaming in the wild.** Leaderboard-platform asymmetries are analyzed by @singh2025leaderboard [platform background: @chiang2024chatbotarena]; contamination evidence and detection by @zhang2024careful and @oren2023proving; the OpenLLM Leaderboard's archival by @myrzakhan2024openllmleaderboard. Contamination-resistant "live" benchmarks include @white2025livebench and @jain2024livecodebench. Sandbagging and dangerous-capability evaluation are @vanderweij2024sandbagging and @phuong2024evaluating. The construct-validity critique of general benchmarks is @raji2021everything. The economics of the eval market is discussed by @liao2025evalstartups.
 
-**Design levers** for every channel in @tbl-gaming-defense are developed in @sec-design [@truong2025guard; @blum2015ladder; @procaccia2025metritocracy]. Reproducible evaluation infrastructure is @biderman2024lessons.
+**Design levers** for every channel in @tbl-gaming-defense are developed in @sec-design [@truong2025strategic; @blum2015ladder; @procaccia2025metritocracy]. Reproducible evaluation infrastructure is @biderman2024lessons.
 
 
 ## Exercises {#sec-ecosystem-exercises}

@@ -82,15 +82,20 @@ This appendix collects the notation used throughout the book. Symbols are groupe
 
 | Symbol | Meaning | Domain | Introduced |
 |--------|---------|--------|------------|
+| $\mathcal{C}$ | Construct: the latent capability being measured | --- | @sec-what-to-hide |
+| $D$ | Operationalizing distribution (formally $\pi_E$) | distribution on $F$ | @sec-what-to-hide |
+| $D', D''$ | Public proxy distributions for $\mathcal{C}$ | distributions on $F$ | @sec-cv-protocol |
+| $S$ | Realized evaluation set, $S \sim D$ | $S \subseteq F$ | @sec-what-to-hide |
+| $\mu$ | Social-relevance distribution (construct fully operationalized; $\text{Uniform}(F)$ as a special case) | distribution on $F$ | @sec-what-to-hide |
 | $F$ | Universe of tasks | finite set, $\|F\| = N$ | @sec-evaluation-game |
 | $F_E, F_M$ | Evaluator's / builder's task sets | $F_E, F_M \subseteq F$ | @sec-evaluation-game |
 | $\pi_E, \pi_M$ | Evaluator's / builder's sampling distributions | distributions on $F$ | @sec-evaluation-game |
 | $f(\theta)$ | Task performance function | $[0,1]$ | @sec-evaluation-game |
-| $u_E(\theta)$ | Evaluator's utility: $\sum_{f \in F} f(\theta)$ | $\mathbb{R}^+$ | @sec-evaluation-game |
-| $k$ | Number of sampled evaluation tasks per round | $\mathbb{N}$ | @sec-evaluation-game |
-| $\rho$ | Distribution correction rate | $(0,1]$ | @sec-evaluation-game |
-| $\gamma$ | Gaming penalty weight | $\mathbb{R}^+$ | @sec-evaluation-game |
-| $\Delta_t$ | Residual misalignment at round $t$ | $[0,1]$ | @sec-evaluation-game |
+| $u_E(\theta)$ | Evaluator's utility: $\mathbb{E}_{f \sim \mu}[f(\theta)]$ | $\mathbb{R}^+$ | @sec-evaluation-game |
+| $k, k^*$ | Number of (optimal) sampled evaluation tasks per round | $\mathbb{N}$ | @sec-evaluation-game |
+| $\rho, \sigma_c$ | Distribution correction rate and bandwidth | $(0,1] \times \mathbb{R}^+$ | @sec-evaluation-game |
+| $\Delta_t$ | Residual misalignment: $\max_\theta u_E(\theta) - u_E(\theta_t)$ | $\mathbb{R}^+$ | @sec-evaluation-game |
+| $\tilde{\pi}_E$ | Builder's belief about the evaluator's sampling | distribution on $F$ | @sec-evaluation-game |
 | $C$ | Agent cost (principal-agent model) | $\mathbb{R}^+$ | @sec-evaluation-game |
 | $b$ | Principal's value from agent effort | $\mathbb{R}^+$ | @sec-evaluation-game |
 

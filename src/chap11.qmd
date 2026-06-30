@@ -41,42 +41,42 @@ pyodide:
 ::: {.callout-note title="Intended Learning Outcomes"}
 By the end of this chapter, the reader will be able to:
 
-1. **Explain** why Goodhart's Law is not merely a cautionary aphorism but a formal game-theoretic phenomenon, and classify its four variants in AI evaluation contexts.
-2. **Formalize** AI evaluation as a Stackelberg game between an evaluation designer and a model builder, and prove that deterministic benchmarks fail while randomized mechanisms achieve one-shot incentive alignment.
-3. **Analyze** the information-variance tradeoff in repeated evaluation: why reducing noise requires revealing information, and how this degrades alignment over time.
-4. **Derive** distribution correction as the primary mechanism for restoring alignment, and compute the optimal evaluation size $k^*$ as a function of correction rate $\rho$.
-5. **Model** metric design as a principal-agent problem and characterize when developers prefer to reveal, conceal, or garble evaluation information.
-6. **Apply** positional representation and positional proportionality criteria to select representative benchmark subsets using social choice theory.
-7. **Synthesize** design principles spanning strategic robustness, information control, and representativeness for AI benchmarks.
+1. **Explain** why Goodhart's Law is a formal game-theoretic phenomenon rooted in the gap between a *construct* $\mathcal{C}$ and any single *distribution* $D$ that operationalizes it, and classify its four variants.
+2. **Distinguish** the three objects an evaluator might keep private --- the construct $\mathcal{C}$, the operationalizing distribution $D$, and the realized set $S$ --- and classify mechanisms by which object they hide.
+3. **Formalize** AI evaluation as a Stackelberg game and prove that a *transparent* benchmark fails, while randomization (hiding the realized draw from $D$) aligns incentives up to the builder's belief error $\operatorname{TV}(\mu, \tilde{\pi}_E)$.
+4. **Explain** how reusable holdouts and the Ladder algorithm hide the set $S$ and bound information leakage, and why dynamic benchmarks that refresh $S$ without hiding $D$ remain exploitable.
+5. **Analyze** the information-variance tradeoff that hiding $D$ creates in repeated evaluation, and derive distribution correction (and the optimal size $k^*$) as the response.
+6. **State** the construct-validity protocol --- publish $\mathcal{C}$ and public proxies while keeping $D, S$ private --- and the three properties of a durable evaluator (validity, durability, faithful execution).
+7. **Model** metric design as a principal-agent problem and apply positional representation and proportionality criteria to select representative benchmark subsets.
 :::
 
 ::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}
 This chapter can be covered in **3 lectures** (75-90 minutes each):
 
-**Lecture 1: The Evaluation Game**
+**Lecture 1: From Goodhart to "What Are We Hiding?"**
 
-- Goodhart's Law and strategic manipulation (15 min)
-- Stackelberg benchmark game: setup and failure of deterministic mechanisms (20 min)
-- One-shot incentive alignment via randomization (25 min)
+- Goodhart's Law and its four variants (15 min)
+- Construct, distribution, set: the object-first framing (20 min)
+- The Stackelberg evaluation game; why a static benchmark fails (25 min)
 - Hands-on: deterministic vs. randomized evaluation simulation (15 min)
 
-**Lecture 2: Information Leakage and Restoring Alignment**
+**Lecture 2: Hiding the Set and Hiding the Distribution**
 
-- Repeated evaluation and the information-variance tradeoff (20 min)
-- Distribution correction and alignment recovery (25 min)
-- Optimal evaluation size and the holdout mechanism (20 min)
+- Reusable holdouts, the Ladder algorithm, and dynamic benchmarks (20 min)
+- One-shot alignment via randomization; the information-variance tradeoff (25 min)
+- Distribution correction and the optimal evaluation size (20 min)
 - Hands-on: Pareto frontier and correction simulations (10 min)
 
-**Lecture 3: Metric Design and Representative Selection**
+**Lecture 3: Construct, Metrics, and Synthesis**
 
-- Metric design as a principal-agent problem (25 min)
-- Information elicitation: reveal, conceal, garble (20 min)
+- The construct-validity protocol: publishing $\mathcal{C}$ and proxies (15 min)
+- Metric design as a principal-agent problem; reveal, conceal, garble (25 min)
 - Representative benchmark selection via social choice theory (20 min)
-- Design principles synthesis (10 min)
+- Three properties of a durable evaluator; design principles (15 min)
 :::
 
 ::: {.callout-note title="Notation"}
-This chapter introduces game-theoretic notation: $F$ (task universe), $F_E/F_M$ (evaluator/builder task sets), $\pi_E/\pi_M$ (sampling distributions), $f(\theta)$ (task performance), $u_E$ (evaluator utility), $\Delta_t$ (misalignment), and $\gamma$ (gaming penalty). See the [notation appendix](notation.qmd) for the complete notation reference.
+This chapter introduces game-theoretic notation: $F$ (task universe), $F_E/F_M$ (evaluator/builder task sets), $\pi_E/\pi_M$ (sampling distributions), $f(\theta)$ (task performance), $u_E$ (evaluator utility), $\mu$ (social-relevance distribution), $\Delta_t$ (misalignment), $\rho$ (correction rate), and $k$ (tasks sampled per round). It also introduces the object-first vocabulary of privacy in evaluation: the construct $\mathcal{C}$, an operationalizing distribution $D$ (formally the evaluator's sampling distribution $\pi_E$), a realized evaluation set $S$, the construct's full operationalization $\mu$ (the social-relevance weighting; $\text{Uniform}(F)$ as a special case), and public proxy distributions $D', D''$. See the [notation appendix](notation.qmd) for the complete notation reference.
 :::
 
 
@@ -102,7 +102,48 @@ This assumption breaks down once benchmarks become *influential*. When a develop
 
 The shift from the earlier measurement chapters to this one is a shift in the source of the threat. Measurement error (@sec-reliability) is stochastic. Validity threats (@sec-validity-threats) are systematic but unintentional. Strategic manipulation is *deliberate and adaptive*: the DGP itself changes in response to the measurement. This connects to the literature on performative prediction [@perdomo2020performative], where the act of deploying a model changes the distribution it operates on, and to strategic classification [@hardt2016strategic], where agents manipulate their features to achieve favorable outcomes.
 
-The remainder of this chapter builds three layers of strategic analysis: (i) benchmark disclosure and information design --- how much should evaluators reveal about the evaluation mechanism? (ii) metric selection and reporting granularity --- which metrics should evaluators report, and at what level of detail? (iii) mechanism design for repeated evaluation --- how can evaluators maintain alignment when the game repeats?
+Underlying all four variants is a single structural fact: the *construct* we care about --- say, "mathematical capability" --- is always broader than any *distribution* of tasks we can actually pose. We instantiate "math ability" with one particular distribution over problems, and a rational builder optimizes for that distribution, not for the construct behind it. The rest of this chapter takes this gap as its organizing question. Rather than first asking *which mechanism* an evaluator should use, we ask *what object* the evaluator must keep private to preserve the meaning of the score (@sec-what-to-hide). That question orders the chapter: we escalate from hiding the realized test set (@sec-hiding-set), to hiding the distribution that generates it (@sec-hiding-distribution), to publishing the construct itself alongside public proxies (@sec-cv-protocol).
+
+
+## What Are We Trying to Hide? {#sec-what-to-hide}
+
+Before choosing a mechanism, an evaluator should answer a prior question: *what object are we trying to keep private?* Different protocols protect different things, and once we name the object, the choice between deterministic and randomized machinery often settles itself. We distinguish three objects, nested from concrete to abstract.
+
+::: {.callout-note title="Definition: Construct, Distribution, Set"}
+- A **construct** $\mathcal{C}$ is the capability we intend to measure --- e.g., "mathematical reasoning." It is a latent attribute (@sec-validity), not a finite object.
+- A **distribution** $D$ is an *operationalization* of $\mathcal{C}$: a way of generating tasks that we accept as measuring it. FrontierMath is a sample from one such distribution; the process that could generate *another* FrontierMath-like exam is $D$ itself.
+- A **set** $S \sim D$ is a realized, finite sample of tasks --- the specific items on today's exam.
+:::
+
+A single construct admits *many* distributions. GSM8K and FrontierMath both claim to measure mathematical capability, yet they induce very different task distributions $D'$ and $D$; both are operationalizations of the same $\mathcal{C}$. This multiplicity is not a defect --- it is exactly what lets us reason about validity and, eventually, what lets us publish a public proxy while keeping a private benchmark (@sec-cv-protocol).
+
+**The source of the incentive problem.** The construct is always broader than any distribution that operationalizes it: $\mathcal{C}$ is an idealization, $D$ a finite and fallible instrument. We *say* we measure "math ability" ($\mathcal{C}$) but we *contract on* performance under one distribution ($D$). A strategic builder optimizes for $D$, not $\mathcal{C}$. This $\mathcal{C} \supsetneq D$ gap is the engine behind every Goodhart variant of @sec-goodhart.
+
+**Connecting to the formal model.** The game-theoretic notation of this chapter is a formalization of these three objects. The **social-relevance distribution** $\mu$ that weights the evaluator's utility $u_E(\theta) = \mathbb{E}_{f \sim \mu}[f(\theta)]$ --- how much each task actually matters in deployment --- is the construct $\mathcal{C}$ fully operationalized, "what we actually care about" (the uniform weighting $\mu = \text{Uniform}(F)$ is the simplest special case). The sampling distribution $\pi_E$ is the operationalizing distribution $D$, and a realized draw $S = M(F_E, \omega)$ is the set $S$. In this language the incentive problem is simply the statement $\pi_E \neq \mu$: the distribution we can sample is a biased, narrow shadow of the construct we care about.
+
+With the objects named, mechanisms sort cleanly by *what they hide*.
+
+| Mechanism | Object hidden | What leaks | Durable? | Deterministic OK? |
+|---|---|---|---|---|
+| Static public benchmark | nothing | $S$, and hence $D$ | no | --- |
+| Reusable holdout / Ladder (@sec-holdout) | the set $S$ | score signal, slowly | for a while | yes |
+| Dynamic benchmark (@sec-dynamic-benchmarks) | today's $S$ | $D$, over rounds | no | yes |
+| Randomized evaluation (@sec-hiding-distribution) | the distribution $D$ | $D$, slowly | yes, with correction | no |
+| Construct-validity protocol (@sec-cv-protocol) | $D$ and $S$ | only proxy $D'$ | yes | either |
+
+: Mechanisms classified by the object they keep private {#tbl-what-to-hide}
+
+Two columns deserve comment. *Deterministic OK?* records the chapter's central reconciliation: deterministic machinery is fine when the object you protect is the *set* (a fixed holdout can be kept secret and reused), but it fails when the object is the *distribution* --- @sec-hiding-distribution shows that hiding $D$ *requires* randomization. The right mechanism depends on the object, not on a blanket preference for randomness. *Durable?* records whether the protection survives a builder who plays the game many times.
+
+**An orthogonal axis: how much leaks.** Independent of *which* object you hide is *how much* you reveal about it per round. The Ladder algorithm (@sec-holdout) is best understood as a control on this second axis: it can wrap either a hidden set or a hidden distribution, releasing a sliver of signal only when a submission genuinely improves. "What to hide" and "how much to leak" are separate design decisions, and conflating them is what makes the deterministic-versus-randomized debate feel irreconcilable.
+
+**Three properties.** Naming the objects lets us state what a good evaluator should guarantee. We return to these in @sec-design-principles, but they motivate the whole chapter:
+
+1. **Validity.** The reported score carries the intended construct interpretation --- it tracks $\mathcal{C}$, not merely $D$ (@sec-validity).
+2. **Durability.** The benchmark stays informative over time, because $D$ (and ideally $S$) remains private and therefore hard to game.
+3. **Faithful execution.** The evaluator actually runs the promised procedure --- the same sampling, scoring, and reporting for everyone, with no special treatment. This merges what one might separately call *neutrality* and *integrity*: both reduce to honestly executing the announced protocol.
+
+**Roadmap.** The chapter now escalates through the objects. @sec-hiding-set hides the *set* $S$ --- reusable holdouts, the Ladder algorithm, and dynamic benchmarks --- and shows where each stops working. @sec-hiding-distribution hides the *distribution* $D$ through randomization, develops the information-variance tradeoff that hiding $D$ creates, and resolves it with distribution correction. @sec-cv-protocol then turns the $\mathcal{C} \supsetneq D$ gap from a liability into a tool: by publishing the construct and public proxies while keeping $D$ and $S$ private, an evaluator can certify capability without ever exposing the benchmark.
 
 
 ## The Evaluation Game {#sec-evaluation-game}
@@ -114,14 +155,14 @@ We now formalize the strategic interaction between an evaluation designer and a 
 Let $\Theta$ denote the space of all possible models. For a given model $\theta \in \Theta$, let $f(\theta) \in [0, 1]$ denote the model's performance on task $f$. The universe of all possible tasks is the finite set $F$ with $|F| = N$.
 
 ::: {.callout-note title="Definition: Evaluation Designer's Utility"}
-The evaluation designer's utility for a model $\theta$ is the aggregate performance across all tasks:
+The evaluation designer's utility for a model $\theta$ is its performance averaged under the **social-relevance distribution** $\mu$ over tasks:
 $$
-u_E(\theta) = \sum_{f \in F} f(\theta)
+u_E(\theta) = \sum_{f \in F} f(\theta)\,\mu(f) = \mathbb{E}_{f \sim \mu}[f(\theta)]
 $$
-The designer acts as a social planner seeking models that perform broadly rather than narrowly.
+where $\mu(f)$ is how socially relevant task $f$ is --- e.g., the probability that $f$ is encountered in real deployment. The designer acts as a social planner seeking models that perform broadly across what matters, rather than narrowly. The uniform weighting $\mu = \text{Uniform}(F)$, under which $u_E(\theta) \propto \sum_{f} f(\theta)$, is the simplest special case.
 :::
 
-Each party acquires tasks by sampling from $F$: the designer draws tasks according to $\pi_E$ over $F$, forming the evaluation set $F_E$, while the builder draws according to $\pi_M$, forming the training set $F_M$. In practice, $\pi_M$ is approximately uniform (builders have broad access to training data), while $\pi_E$ is typically biased toward tasks that are easy to construct, grade, or that reflect particular evaluation priorities.
+Each party acquires tasks by sampling from $F$: the designer draws tasks according to $\pi_E$ over $F$, forming the evaluation set $F_E$, while the builder draws according to $\pi_M$, forming the training set $F_M$. In practice, $\pi_M$ is approximately uniform (builders have broad access to training data), while $\pi_E$ is typically biased toward tasks that are easy to construct, grade, or that reflect particular evaluation priorities --- in general $\pi_E \neq \mu$.
 
 ::: {.callout-note title="Definition: Stackelberg Benchmark Game"}
 The game proceeds in three stages, parameterized by a mechanism $(M, r)$ where $M$ is a sampling function and $r: \Theta \times \mathcal{P}(F) \to \mathbb{R}$ is a reward function:
@@ -135,50 +176,121 @@ The game proceeds in three stages, parameterized by a mechanism $(M, r)$ where $
 
 The misalignment between the builder's incentive (performance on $S^*$) and the designer's objective (performance on all of $F$) creates the Goodhart problem.
 
-### Failure of Deterministic Mechanisms {#sec-deterministic-failure}
 
-Consider first a deterministic mechanism where the designer publishes a fixed subset $S^* \subseteq F_E$.
+## Hiding the Set {#sec-hiding-set}
 
-::: {.callout-warning title="Proposition: Failure of Deterministic Mechanisms"}
-If the designer publishes a deterministic set $S^*$ with additive reward $r(\theta, S) = \sum_{f \in S} f(\theta)$, the builder's best response is:
+The mildest thing an evaluator can keep private is the *realized test set* $S$. The construct and even the sampling distribution may be public; only the specific items on today's exam are secret. This is the regime of *held-out* test sets, and --- crucially --- it is a regime where *deterministic* machinery works: a fixed, secret holdout, reused carefully across many submissions, can preserve a leaderboard for a long time. The catch is that every score computed on $S$ leaks a little information about it, so the central design problem is *bounding that leak*. We first see why the naive version (publishing $S$) fails, then how the Ladder algorithm hides $S$ while bounding leakage, and finally why refreshing $S$ --- dynamic benchmarking --- does not reach the harder goal of hiding $D$.
+
+### The Static Benchmark and Why It Fails {#sec-deterministic-failure}
+
+Consider first a *transparent* mechanism: the builder observes the realized evaluation set $S^* \subseteq F_E$ before choosing a model. A published, fixed benchmark is the canonical example.
+
+::: {.callout-warning title="Proposition: Failure of Transparent Mechanisms"}
+If the builder observes the realized set $S^*$ and the reward is non-degenerate on it (e.g., additive $r(\theta, S) = \sum_{f \in S} f(\theta)$), the builder's best response is:
 $$
 \theta^* \in \arg\max_{\theta \in \Theta} \sum_{f \in S^*} f(\theta)
 $$
-This provides *no incentive* for performance on tasks outside $S^*$.
+Whenever $|S^*| < |F|$, there exist a task universe $F$ and social-relevance weighting $\mu$ for which this is socially suboptimal: $u_E(\theta^*) < \max_\theta u_E(\theta)$. The mechanism provides *no incentive* for performance on tasks outside $S^*$.
 :::
 
-*Proof.* The builder observes $S^*$ directly and maximizes the known objective. Tasks in $F \setminus S^*$ do not affect the score. $\square$
+*Proof.* The builder observes $S^*$ and maximizes the known objective, so tasks in $F \setminus S^*$ do not affect the score. Place a socially decisive task $f' \notin S^*$ (some $\mu(f') > 0$ with $f'$ maximized away from $\theta^*$); then $\theta^*$ misses it. $\square$
 
-This is exactly Goodhart's adversarial variant: the builder exploits the known structure of the evaluation to specialize. It is also the construct underrepresentation problem from @sec-construct-underrepresentation viewed through a strategic lens: a fixed benchmark *systematically ignores* capabilities outside $S^*$, and a rational builder responds accordingly.
+This is exactly Goodhart's adversarial variant: the builder exploits the *observed* structure of the evaluation to specialize, the construct underrepresentation problem of @sec-construct-underrepresentation seen through a strategic lens.
 
+It is worth being precise about *what* fails here. The culprit is **transparency**, not determinism. A benchmark whose sampling rule is deterministic but whose realized set $S^*$ is kept *hidden* does not fall under the proposition: the builder is then Bayesian over $S^*$, and the outcome is governed by the single-sample alignment bound of @sec-one-shot-alignment via the builder's belief $\tilde{\pi}_E$. Randomization is one way to enforce the necessary secrecy; a hidden but deterministic holdout is another --- with the crucial caveat that *any leak collapses it back to the transparent case* (the failure mode the Ladder of @sec-holdout is designed to slow). We visualize the transparent-versus-randomized contrast in @sec-one-shot-alignment.
+
+### The Ladder Algorithm and Reusable Holdouts {#sec-holdout}
+
+If a static *public* set fails because $S$ is exposed, the obvious fix is to keep $S$ secret and let builders query it only through scores. But scores themselves leak: a builder who submits many models against a fixed holdout can overfit it through the published numbers alone, even without ever seeing an item --- the *adaptive data analysis* problem. @blum2015ladder's **Ladder** algorithm bounds this leak. It releases a new score only when a submission improves on the best score so far by more than a noisy margin; otherwise it re-reports the previous best. Because most submissions are not genuine improvements, almost no information about $S$ flows back to the builder.
+
+::: {.callout-note title="Algorithm: The Ladder"}
+Maintain a running best published score $b_0 = -\infty$. For each submission $\theta_t$ ($t = 1, 2, \ldots$):
+
+1. Compute the holdout score $r_H(\theta_t) = \frac{1}{|S|}\sum_{f \in S} f(\theta_t)$ on the secret set $S$.
+2. Draw noise $\xi_t \sim \text{Laplace}(0, 1/\varepsilon)$ and a threshold $\eta > 0$.
+3. **If** $r_H(\theta_t) > b_{t-1} + \eta + \xi_t$: publish $b_t \leftarrow \lfloor r_H(\theta_t) \rceil_\eta$ (round to step $\eta$). **Else**: publish $b_t \leftarrow b_{t-1}$ (no new information).
+:::
+
+We can extend this into a mechanism that gates information on the builder's *behavior* rather than only on improvement, by comparing the secret holdout against a public reference set.
+
+::: {.callout-note title="Definition: Noise-Gated Holdout"}
+The evaluator publishes a reference set $S_0 \subset F$ of size $n_0$, sampled from $\pi_E$. At each round $t$:
+
+1. Draw a holdout set $S_t$ of size $k$ from $\pi_E$ and noise $\xi_t \sim \text{Laplace}(0, 1/\varepsilon)$.
+2. Compute the reference score $r_T(\theta_t) = \frac{1}{n_0}\sum_{f \in S_0} f(\theta_t)$ and the holdout score $r_H(\theta_t) = \frac{1}{k}\sum_{f \in S_t} f(\theta_t)$.
+3. **Threshold test:** If $|r_H(\theta_t) + \xi_t - r_T(\theta_t)| < \eta$, publish $r_T(\theta_t)$ ("silent" round). Otherwise, publish $r_H(\theta_t) + \xi_t$ ("alarm" round).
+:::
+
+The mechanism is **self-correcting**: it reveals less information precisely when the builder is behaving well ($\Delta_{\text{game}} \approx 0$, so the alarm fires only due to noise, with probability $p_{\text{alarm}} = e^{-\varepsilon\eta}$), and reveals more when the builder is gaming (the score discrepancy reliably triggers the alarm). The effective leakage per round for a non-gaming builder is:
+$$
+\lambda_{\text{out}}^{\text{holdout}} \approx e^{-\varepsilon\eta} \cdot k
+$$
+Setting $\varepsilon\eta = 3$ yields a $\sim 20\times$ slowdown in the builder's learning rate.
+
+This is a differential-privacy guarantee in disguise [@dwork2015generalization; @dwork2014algorithmic]: the Laplace threshold is the Sparse Vector mechanism, and it makes the published transcript insensitive to any single held-out item, bounding the max-information between the builder's observations and $S$. Hiding the set is, in this sense, a solved problem: a secret $S$ can be reused for a bounded number of informative queries.
+
+::: {.callout-warning title="Why Hiding the Set Is Not Enough"}
+A perfectly hidden, leak-bounded set protects only $S$. If the *distribution* $D = \pi_E$ is biased and fixed, a builder who never sees a single item can still specialize to it --- because $D$ is public, or quickly inferred. The builder's optimal model given their belief $\hat{\pi}_{E}$ about the distribution is $\theta^* = \arg\max_\theta \mathbb{E}_{f \sim \hat{\pi}_{E}}[f(\theta)]$, regardless of how little leaks about any particular $S$. Hiding the set caps overfitting to particular *items*; it does nothing about overfitting to the *distribution*. That requires hiding $D$ itself --- the subject of @sec-hiding-distribution.
+:::
+
+### Dynamic Benchmarks {#sec-dynamic-benchmarks}
+
+A popular alternative to a single hidden holdout is to *refresh* it: draw a fresh set $S' \sim D$ each period and evaluate on it immediately. DynaBench [@kiela2021dynabench], LiveBench [@white2025livebench], and the rolling battles of Chatbot Arena [@chiang2024chatbotarena] are all, in this framing, *repeated sampling of $S' \sim D$ with immediate disclosure.* Refreshing defeats item-level contamination: yesterday's leaked items are worthless because tomorrow's set is new.
+
+But dynamic refresh hides the *set*, not the *distribution*, and two limitations follow.
+
+First, *it does not hide $D$.* Each disclosed $S'$ is a fresh sample from the same $D$; across rounds the builder accumulates samples and can estimate $D$ to arbitrary precision (the posterior-concentration argument of @sec-posterior-concentration). A reader may ask: why repeatedly draw a new $S'$ at all --- why not build two sets $S$ and $S'$ once, publish $S'$, and permanently hold out $S$? That design is exactly the reusable holdout of @sec-holdout, and the held-out $S$ is consumed at the Ladder-bounded leak rate; refreshing merely trades a slowly-leaking fixed set for a stream of fully-disclosed ones. Either way $D$ becomes public or quickly learned. Durability against *distributional* gaming requires hiding $D$, not cycling $S$.
+
+Second, *if $D$ deviates from the construct, refreshing cannot help.* Suppose $D$ over-weights, say, competition-style problems relative to the construct weighting $\mu$. Every $S' \sim D$ inherits that bias. A builder who tracks $D$ --- easy, since it leaks --- specializes to it, and the resulting misalignment does not vanish with the refresh rate: it is governed by how far $D$ sits from $\mu$, on the order of $\operatorname{TV}(\mu, D)$, no matter how often $S$ is renewed (Exercise 9). Dynamic benchmarks fix contamination; they do not fix construct misalignment.
+
+These two failures --- a learnable $D$ and a biased $D$ --- are exactly what the next sections address: @sec-hiding-distribution hides $D$ and corrects it toward $\mu$, and @sec-cv-protocol confronts the $D \neq \mathcal{C}$ gap directly.
+
+
+## Hiding the Distribution {#sec-hiding-distribution}
+
+Hiding the set caps how much a builder can overfit *particular items*, but it leaves the *distribution* $D = \pi_E$ exposed --- and a public distribution is a public target. To incentivize broad capability we must keep $D$ itself uncertain to the builder. This section shows that hiding $D$ (i) *requires* randomization --- no deterministic mechanism suffices --- (ii) creates an unavoidable tradeoff between score variance and information leakage, and (iii) is made durable by *correcting* $D$ toward the construct $\mu$ faster than the builder can learn it.
 
 ### One-Shot Alignment via Randomization {#sec-one-shot-alignment}
 
-While deterministic mechanisms fail, randomization offers a path forward. When the builder faces genuine uncertainty about which tasks will be evaluated, the strategic landscape changes fundamentally.
+While transparent mechanisms fail, randomization offers a path forward. When the builder faces genuine uncertainty about which task will be scored, the strategic landscape changes fundamentally. The simplest such mechanism scores a single random task.
 
-::: {.callout-warning title="Theorem 1: One-Shot Incentive Alignment (Omniscient Builder)"}
-Consider a randomized mechanism where (i) $M$ draws a single task uniformly: $s \sim \text{Unif}(F_E)$, (ii) the reward is $r(\theta, \{s\}) = s(\theta)$, and (iii) the builder has a uniform prior $\pi$ over which tasks comprise $F_E$. Then the builder's expected reward is proportional to the designer's utility:
-$$
-\mathbb{E}_{F_E \sim \pi}\!\left[\mathbb{E}_{s \sim \text{Unif}(F_E)}[s(\theta)]\right] = \frac{1}{|F|}\, u_E(\theta)
-$$
-and the builder's best response maximizes $u_E(\theta)$.
+::: {.callout-note title="Definition: Single-Sample Mechanism"}
+$S(F_E, \omega)$ draws one task $s$ uniformly from $F_E$, and the reward is $r(\theta, \{s\}) = s(\theta)$. The builder, not knowing which task will be drawn, is Bayesian: it holds a belief $\tilde{\pi}_E$ over which tasks the evaluator might score, where $\tilde{\pi}_E(f)$ is the builder's subjective probability that $f$ is the sampled task.
 :::
 
-*Proof sketch.* Under a symmetric (uniform) prior over which tasks compose $F_E$, the builder has no information distinguishing any task $f_i$ from $f_j$. By symmetry, the marginal probability that any specific task $f$ is the sampled task is constant: $P(s = f) = 1/|F|$. Therefore the builder's expected reward is $(1/|F|) \sum_{f \in F} f(\theta) = (1/|F|) \, u_E(\theta)$, and maximizing expected reward is equivalent to maximizing $u_E(\theta)$. $\square$
+Because the builder cannot identify the realized task, it can only optimize against its *belief* $\tilde{\pi}_E$.
 
-The omniscient version assumes the builder knows all of $F$. A more realistic version considers a builder with limited information:
-
-::: {.callout-warning title="Theorem 2: One-Shot Alignment (Limited Information)"}
-Suppose the builder draws tasks i.i.d. from distribution $p_M$ and believes the evaluator also draws from $p_M$. Under a single-sample mechanism, the builder's best response is:
+::: {.callout-warning title="Proposition: Best Response Under a Single-Sample Mechanism"}
+Under the single-sample mechanism, the Bayesian builder's best response is
 $$
-\theta^* \in \arg\max_{\theta \in \Theta} \mathbb{E}_{f \sim p_M}[f(\theta)]
+\theta^M \in \arg\max_{\theta \in \Theta} \mathbb{E}_{f \sim \tilde{\pi}_E}[f(\theta)].
 $$
-That is, the builder optimizes over their own best approximation of the task universe.
+The builder optimizes broadly, over its whole belief about what might be tested, rather than for any fixed set.
 :::
 
-*Proof sketch.* The builder's expected reward, taken over their prior on $F_E$ and the randomness in $M$, equals $\mathbb{E}_{f \sim p_M}[f(\theta)]$. Since $F_M$ is drawn from $p_M$, the builder's best response is empirical risk minimization over $F_M$, which is the best they can do given their information. $\square$
+The value of this is captured by a single bound: the evaluator's loss is controlled by how far the builder's belief sits from social relevance.
 
-This result is powerful: the single-sample mechanism is the best an evaluation designer can do. The builder's best response is to approximate their own approximation of $F$ to the best of their ability --- essentially training broadly over all available data. Under incentive alignment, the builder performs **empirical risk minimization** (ERM) over their task set $F_M$. By classical uniform convergence [@vapnik1998statistical], restricting to any subset $S \subset F_M$ can only increase regret; the builder has no incentive to "game" by focusing on a narrow task set.
+::: {.callout-warning title="Theorem: Single-Sample Alignment"}
+Under the single-sample mechanism, the evaluator's suboptimality is bounded by the total variation distance between the builder's belief and the social-relevance distribution:
+$$
+\max_{\theta \in \Theta} u_E(\theta) - u_E(\theta^M) \;\leq\; 4B \cdot \operatorname{TV}(\mu, \tilde{\pi}_E),
+$$
+where $B = \sup_{f \in F;\, a,b \in \Theta} |f(a) - f(b)|$ bounds the spread of task scores.
+:::
+
+*Proof sketch.* The builder maximizes $\mathbb{E}_{\tilde{\pi}_E}[f(\theta)]$ while the evaluator cares about $\mathbb{E}_{\mu}[f(\theta)] = u_E(\theta)$. Adding and subtracting the belief-weighted objective at the builder's and the optimal model and using optimality of $\theta^M$ for the former bounds the gap by $2\sup_\theta |\mathbb{E}_\mu[f(\theta)] - \mathbb{E}_{\tilde{\pi}_E}[f(\theta)]|$; since scores lie in an interval of width $\le B$, this discrepancy is at most $2B\operatorname{TV}(\mu, \tilde{\pi}_E)$. $\square$
+
+This bound is the chapter's central one-shot result, and it makes the privacy intuition exact: *misalignment is bounded by the distance between what the builder believes will be tested and what society actually cares about.* Two corollaries pin down the endpoints.
+
+::: {.callout-note title="Corollary: Perfect Alignment"}
+If the builder's belief matches social relevance, $\tilde{\pi}_E = \mu$, then $\operatorname{TV} = 0$ and $\theta^M$ maximizes $u_E$ exactly. A well-informed builder who believes the evaluator is equally well-informed is perfectly aligned. (The uniform special case $\mu = \text{Uniform}(F)$ recovers the familiar statement that the builder's expected reward is proportional to $u_E$.)
+:::
+
+::: {.callout-note title="Corollary: Randomization Strictly Broadens Incentives"}
+If $F_E \subset F_M$ and $\tilde{\pi}_E(f) > 0$ for some $f \notin F_E$, the single-sample mechanism incentivizes the builder over a strictly larger set of tasks than *any* transparent mechanism --- including tasks the evaluator cannot even sample, as long as the builder believes they might be tested.
+:::
+
+The practical upshot: under randomization the builder's best move is to optimize for its honest belief about what matters, which --- for a well-resourced builder whose belief is broad --- means training broadly rather than gaming a known set. A boundedly rational builder that can only estimate $\mathbb{E}_{\tilde{\pi}_E}[f(\theta)]$ from a finite sample $F_M \sim \pi_M$ does importance-weighted **empirical risk minimization**; by uniform convergence [@vapnik1998statistical] its worst-case guarantee is monotone in sample size, so it has no statistical reason to discard tasks --- no incentive to "game" by narrowing.
 
 ### Discussion: What Randomization Buys {#sec-randomization-discussion}
 
@@ -206,10 +318,11 @@ N = 50           # total tasks in universe F
 n_eval = 10      # tasks in evaluation set
 n_rounds = 200   # simulation rounds
 
-# Task values: how much each task contributes to "true capability"
-task_values = np.random.uniform(0.3, 1.0, N)
+# Social-relevance distribution mu over tasks (general, non-uniform)
+mu = np.random.uniform(0.5, 1.5, N)
+mu /= mu.sum()
 
-# --- Deterministic mechanism: builder knows S* ---
+# --- Transparent mechanism: builder observes the realized set S* ---
 # Builder puts all effort into the known evaluation tasks
 det_eval_set = np.random.choice(N, n_eval, replace=False)
 det_perf = np.zeros(N)
@@ -221,9 +334,9 @@ det_perf[~np.isin(np.arange(N), det_eval_set)] = 0.2  # low elsewhere
 rand_perf = np.full(N, 0.65)  # uniform effort across all tasks
 
 # --- Evaluate ---
-# True utility = sum of performance across ALL tasks
-det_utility = det_perf.sum()
-rand_utility = rand_perf.sum()
+# True utility u_E = E_{f ~ mu}[performance] (social-relevance weighted)
+det_utility = float(det_perf @ mu)
+rand_utility = float(rand_perf @ mu)
 
 # Eval score = average on sampled tasks
 n_trials = 500
@@ -242,7 +355,7 @@ sorted_idx_det = np.argsort(-det_perf)
 ax.bar(range(N), det_perf[sorted_idx_det], color=colors[1], alpha=0.7, width=1.0)
 ax.set_xlabel('Task (sorted)')
 ax.set_ylabel('Performance')
-ax.set_title('Deterministic')
+ax.set_title('Transparent')
 ax.set_ylim(0, 1.05)
 ax.axhline(y=det_perf.mean(), color='k', ls='--', lw=0.8)
 
@@ -256,12 +369,12 @@ ax.axhline(y=rand_perf.mean(), color='k', ls='--', lw=0.8)
 # Panel 3: Utility comparison
 ax = axes[2]
 bar_x = [0, 1]
-bar_vals = [det_utility / N, rand_utility / N]
+bar_vals = [det_utility, rand_utility]
 bar_colors = [colors[1], colors[0]]
 bars = ax.bar(bar_x, bar_vals, color=bar_colors, width=0.6, alpha=0.8)
 ax.set_xticks(bar_x)
-ax.set_xticklabels(['Det.', 'Rand.'])
-ax.set_ylabel('Avg. true utility')
+ax.set_xticklabels(['Transp.', 'Rand.'])
+ax.set_ylabel('True utility $u_E$ (μ-weighted)')
 ax.set_title('Alignment')
 ax.set_ylim(0, 0.85)
 for b, v in zip(bars, bar_vals):
@@ -271,14 +384,14 @@ plt.tight_layout()
 plt.show()
 ```
 
-**Figure.** Under a deterministic mechanism (left), the builder concentrates effort on the $k=10$ known evaluation tasks and neglects the rest, achieving high benchmark scores but low true utility. Under a randomized mechanism (center), the builder spreads effort broadly. The right panel compares average true utility across *all* tasks: the randomized mechanism produces a substantially higher utility despite lower peak performance on any single task.
+**Figure.** Under a transparent mechanism (left), the builder observes the evaluation set and concentrates effort on the $k=10$ known tasks, neglecting the rest --- high benchmark score, low true utility. Under a randomized mechanism (center), facing uncertainty about what will be scored, the builder spreads effort broadly. The right panel compares true utility $u_E = \mathbb{E}_{f \sim \mu}[\text{performance}]$ under the social-relevance weighting $\mu$: randomization yields substantially higher utility despite lower peak performance on any single task.
 
 
-## The Information-Variance Tradeoff {#sec-info-variance-tradeoff}
+### The Information-Variance Tradeoff {#sec-info-variance-tradeoff}
 
-Theorem 1 established that randomized evaluation achieves incentive alignment in one-shot settings. But benchmarks operate as *repeated games*: weekly leaderboards, monthly submissions, quarterly benchmark releases. In repeated evaluation, randomization alone fails because information *leaks*.
+The single-sample alignment bound (@sec-one-shot-alignment) showed that randomization aligns incentives in a *one-shot* game, up to the builder's belief error $\operatorname{TV}(\mu, \tilde{\pi}_E)$. But benchmarks operate as *repeated games*: weekly leaderboards, monthly submissions, quarterly benchmark releases. In repeated evaluation, randomization alone fails because information *leaks* --- the builder's belief $\tilde{\pi}_E$ drifts toward the true $\pi_E$, and if $\pi_E \neq \mu$ the bound degrades.
 
-### Repeated Evaluation and Information Leakage {#sec-repeated-game}
+#### Repeated Evaluation and Information Leakage {#sec-repeated-game}
 
 ::: {.callout-note title="Definition: Repeated Evaluation Game"}
 At each round $t = 1, 2, \ldots$:
@@ -288,11 +401,15 @@ At each round $t = 1, 2, \ldots$:
 3. The builder observes the $k$ evaluated tasks, updates their estimate $\hat{\pi}_{E,t}$ of the evaluation distribution, and selects model $\theta_t$.
 :::
 
-The variance of a $k$-task average reward scales as $\text{Var}(\hat{r}_k(\theta)) \approx \sigma^2/k$. To reliably distinguish two models with performance gap $\Delta$ at 95% confidence requires $k \geq 4\sigma^2/\Delta^2$. As models improve and converge ($\Delta \to 0$), the required sample size grows quadratically. This creates inexorable market pressure to increase $k$.
+For a size-$k$ subset drawn without replacement from $F_E$ with per-task score variance $\sigma^2$, the average reward has the finite-population variance
+$$
+\operatorname{Var}(\hat{r}_k) = \frac{\sigma^2}{k}\cdot\frac{|F_E| - k}{|F_E| - 1} \approx \frac{\sigma^2}{k} \quad (k \ll |F_E|).
+$$
+To reliably distinguish two models with performance gap $\Delta$ at 95% confidence requires $k \geq 4\sigma^2/\Delta^2$. As models improve and converge ($\Delta \to 0$), the required sample size grows quadratically. This creates inexorable market pressure to increase $k$.
 
 But increasing $k$ to reduce variance simultaneously increases the rate at which the builder accumulates information about $\pi_E$. The builder's *information set* at time $t$ is $\mathcal{I}_t = \bigcup_{i=1}^{t-1} S_i$, where $S_i$ is the set of tasks sampled in round $i$. The *leakage* is $L_t = |\mathcal{I}_t|/|F|$.
 
-### Posterior Concentration and Incentive Misalignment {#sec-posterior-concentration}
+#### Posterior Concentration and Incentive Misalignment {#sec-posterior-concentration}
 
 As the builder observes sampled tasks across rounds, their estimate $\hat{\pi}_{E,t}$ of the evaluation distribution concentrates around the true $\pi_E$. By standard results in Bayesian nonparametrics, the posterior concentration rate is $O(d_{\text{eff}} \log m / m)$ where $m$ is the number of observations and $d_{\text{eff}}$ is the effective dimension of the distribution class.
 
@@ -310,14 +427,14 @@ If $\pi_E$ is non-uniform, the builder specializes to high-density regions at th
 
 This is the core tension: *privatization works in one-shot settings, but repeated evaluation reveals information that enables strategic specialization.* The builder cannot identify a fixed evaluation set (since $F_E^{(t)}$ is resampled each round), but from repeated observations the builder learns $\pi_E$ itself --- the *distribution* from which evaluation tasks are drawn.
 
-### The Pareto Frontier {#sec-pareto-frontier}
+#### The Pareto Frontier {#sec-pareto-frontier}
 
-Define the **residual misalignment** at time $t$ as:
+Define the **residual misalignment** at time $t$ as the evaluator's regret from the builder optimizing for its (drifting) belief rather than for $u_E$ directly:
 $$
-\Delta_t = \mathbb{E}_{f \sim \pi_E^{(t)}}[f(\theta^*_t)] - \frac{1}{|F|} u_E(\theta^*_t)
+\Delta_t := \max_{\theta \in \Theta} u_E(\theta) - u_E(\theta_t).
 $$
 
-This measures the gap between what the builder optimizes for (expected performance under $\pi_E$) and what society wants (aggregate performance over all of $F$). When $\pi_E$ is uniform, $\Delta_t = 0$.
+This measures the gap between the best model society could get and the model the builder actually fields once it has begun to learn $\pi_E$. When the builder's effective belief equals $\mu$ --- in particular when $\pi_E = \mu$ so that what leaks is exactly the construct --- $\Delta_t = 0$.
 
 No evaluation strategy can simultaneously achieve low variance and low leakage. Variance decreases in $k$; leakage increases in $k$. Varying $k$ traces a Pareto frontier where the evaluator must choose their preferred operating point.
 
@@ -335,7 +452,12 @@ n_rounds = 200   # number of rounds
 k_values = [5, 10, 20, 50, 100]
 n_trials = 20    # Monte Carlo trials
 
-# Initial biased evaluator distribution: overweight first 40% of tasks by 3x
+# Social-relevance distribution mu (the construct, generally non-uniform)
+rng0 = np.random.default_rng(0)
+mu = rng0.uniform(0.5, 1.5, N)
+mu /= mu.sum()
+
+# Biased evaluator sampling distribution pi_E: overweight first 40% of tasks
 pi_E_true = np.ones(N) / N
 pi_E_true[:int(0.4 * N)] *= 3.0
 pi_E_true /= pi_E_true.sum()
@@ -373,10 +495,10 @@ for ki, k in enumerate(k_values):
             kl = np.sum(pi_E_true[mask] * np.log(pi_E_true[mask] / pi_hat[mask]))
             all_kl[trial, t] = kl
 
-            # Misalignment: TV distance as proxy
-            tv = 0.5 * np.sum(np.abs(pi_hat - np.ones(N)/N))
-            bias_tv = 0.5 * np.sum(np.abs(pi_E_true - np.ones(N)/N))
-            # Builder exploits learned bias: misalignment ~ min(learned_bias, true_bias)
+            # Misalignment relative to the construct mu (not uniform).
+            # Builder can only exploit the bias it has actually learned:
+            tv = 0.5 * np.sum(np.abs(pi_hat - mu))           # belief vs construct
+            bias_tv = 0.5 * np.sum(np.abs(pi_E_true - mu))   # how far pi_E sits from mu
             all_misalign[trial, t] = min(tv, bias_tv)
 
     col = colors[ki % len(colors)]
@@ -415,47 +537,44 @@ plt.show()
 **Figure.** The information-variance Pareto frontier across $k \in \{5, 10, 20, 50, 100\}$ over 200 rounds with $|F| = 200$ tasks. Left: evaluation noise (score variance) is lower for larger $k$. Center: the builder learns $\pi_E$ faster with larger $k$, as measured by KL divergence between the builder's posterior and the true $\pi_E$. Right: as the builder's posterior concentrates, incentive misalignment grows. No single $k$ achieves both low noise and low misalignment --- a fundamental tradeoff.
 
 
-## Restoring Alignment {#sec-restoring-alignment}
+### Restoring Alignment {#sec-restoring-alignment}
 
 The Pareto frontier of the previous section seems like an impasse: any choice of $k$ sacrifices either measurement precision or incentive alignment. The resolution comes from recognizing that the *evaluator is also a learner*. If the evaluator corrects their distribution over time, the information the builder accumulates becomes obsolete.
 
-### Distribution Correction {#sec-distribution-correction}
+#### Distribution Correction {#sec-distribution-correction}
 
-::: {.callout-note title="Assumption: Distribution Correction"}
-The evaluator updates $\pi_E^{(t)}$ via linear interpolation toward uniform at rate $\rho \in (0, 1]$:
+The right target for correction is the construct $\mu$, not uniformity. The evaluator does not reweight blindly toward a flat distribution; it discovers *which regions it under-covers* and fills them.
+
+::: {.callout-note title="Assumption: Gap-Targeted Gaussian Correction"}
+Embed tasks in a feature space, so each $f \in F$ has a location $z_f$. At each round $t$, the evaluator:
+
+1. **Discovers a gap**: samples a location $\nu_t$ with probability proportional to the local deficit relative to the social-relevance distribution $\mu$,
 $$
-\pi_E^{(t)} = (1 - \rho)\,\pi_E^{(t-1)} + \rho \cdot \text{Uniform}(F)
+P(\nu_t = f \mid \pi_E^{(t-1)}) \;\propto\; \bigl[\mu(f) - \pi_E^{(t-1)}(f)\bigr]_+ .
 $$
-so that $\text{KL}(\pi_E^{(t)} \| \text{Uniform}(F)) \to 0$ exponentially with rate $\rho$.
+2. **Fills locally**: mixes in a Gaussian bump centered at the gap,
+$$
+\pi_E^{(t)} = (1-\rho)\,\pi_E^{(t-1)} + \rho\, g_{\sigma_c}(\cdot\,;\nu_t), \qquad g_{\sigma_c}(f;\nu) \propto \exp\!\bigl(-\|z_f - z_\nu\|^2 / 2\sigma_c^2\bigr),
+$$
+normalized over $F$. The parameters are the *correction rate* $\rho \in (0,1]$ and the *correction bandwidth* $\sigma_c > 0$. The process drives $\pi_E^{(t)} \to \mu$.
 :::
 
-In practice, evaluators correct their biases through several channels: *incident reports* from users who discover model failures that benchmarks missed; *systematic audits* of coverage across capability dimensions (languages, modalities, reasoning types); *improving benchmark acquisition capacity* over time. The parameter $\rho$ captures the fraction of bias removed per evaluation round.
+In practice, evaluators discover these gaps through external channels: *incident reports* from users who hit model failures the benchmark missed; *systematic audits* of coverage across capability dimensions (languages, modalities, reasoning types); *A/B testing* of rankings under different subsets; and *improving acquisition capacity* over time. Each channel fills an under-covered region rather than flattening the distribution --- correction aims at $\mu$, the construct, not at uniformity.
 
-::: {.callout-warning title="Proposition: Alignment Recovery Under Distribution Correction"}
-Under the repeated evaluation game with distribution correction, the builder's optimal strategy converges to maximizing the designer's utility:
+::: {.callout-warning title="Theorem: Misalignment Under Gap-Targeted Correction"}
+Under gap-targeted Gaussian correction, with $m_t = k\cdot\min(t, 1/\rho)$ the builder's effective sample size, the expected residual misalignment satisfies
 $$
-\theta^*_t \to \arg\max_{\theta \in \Theta} \frac{1}{|F|} \sum_{f \in F} f(\theta) = \arg\max_{\theta \in \Theta} u_E(\theta)
+\mathbb{E}[\Delta_t] \leq \min\!\left(\underbrace{\frac{m_t}{m_t + |F|}}_{\text{estimation-limited}},\;\; \underbrace{(1-\rho)^t \sqrt{0.5\,D_0} + \varepsilon(\rho, \sigma_c)}_{\text{correction-limited}}\right),
 $$
-as $\pi_E^{(t)} \to \text{Uniform}(F)$.
+where $D_0 = \mathrm{KL}\!\left(\pi_E^{(0)} \,\|\, \mu\right)$ is the initial bias of the evaluator's distribution from the construct, and $\varepsilon(\rho,\sigma_c) = O\!\left(\sqrt{\rho}\cdot\operatorname{TV}(g_{\sigma_c}, \mu)\right)$ is fluctuation from the stochastic gap-discovery process (vanishing as $\sigma_c \to \infty$ or $\rho \to 0$).
 :::
 
-*Proof sketch.* The builder's expected reward under mechanism $M$ is $\mathbb{E}_{f \sim \pi_E^{(t)}}[f(\theta)]$. As $\pi_E^{(t)} \to \text{Uniform}(F)$, this converges to $(1/|F|) u_E(\theta)$. In the limit, the builder knows $\pi_E = \text{Uniform}(F)$ perfectly, but this knowledge provides no advantage: optimizing for the uniform distribution *is* the designer's objective. $\square$
+The two terms capture complementary regimes --- a *race between two learners*: the builder learns $\pi_E^{(t)}$ from observations while the evaluator corrects $\pi_E^{(t)}$ toward $\mu$.
 
-The key insight is a *race between two learners*: the builder learns $\pi_E^{(t)}$ from observations, while the evaluator corrects $\pi_E^{(t)}$ toward uniform. The residual misalignment depends on the relative rates of these two processes.
+- **Estimation-limited** ($t$ small): $m_t \approx kt$, so $\Delta_t \lesssim kt/|F|$. The builder has too few observations to identify the bias.
+- **Correction-limited** ($t$ large): $\Delta_t \lesssim (1-\rho)^t \sqrt{D_0/2} + \varepsilon$. The builder may know $\pi_E^{(t)}$ well, but correction has driven it toward $\mu$, leaving almost nothing to exploit.
 
-::: {.callout-warning title="Proposition: Misalignment Bound"}
-Let $D_0 = \text{KL}(\pi_E^{(0)} \| \text{Uniform}(F))$ and $m_t = k \cdot \min(t, \rho^{-1})$ be the builder's effective sample size. The residual misalignment satisfies:
-$$
-\Delta_t \leq \min\!\left(\underbrace{\frac{m_t}{m_t + |F|}}_{\text{estimation-limited}},\;\; \underbrace{(1-\rho)^t \sqrt{\frac{D_0}{2}}}_{\text{correction-limited}}\right)
-$$
-:::
-
-The two terms capture complementary regimes:
-
-- **Estimation-limited** ($t$ small): $m_t \approx kt$, giving $\Delta_t \lesssim kt/|F|$. The builder has too few observations to identify the evaluator's biases.
-- **Correction-limited** ($t$ large): $\Delta_t \lesssim (1-\rho)^t \sqrt{D_0/2}$. The builder may know $\pi_E^{(t)}$ well, but the evaluator's correction has driven the bias toward zero, leaving nothing to exploit.
-
-*Proof sketch.* The correction-limited term follows from Pinsker's inequality: $\Delta_t \leq \text{TV}(\pi_E^{(t)}, \text{Uniform}(F)) \leq \sqrt{D_0/2}\,(1-\rho)^t$, since the total variation decays geometrically under linear interpolation. The estimation-limited term follows from Bayesian shrinkage: a builder with $m_t$ observations and a Dirichlet$(1,\ldots,1)$ prior has posterior mean that is an $m_t/(m_t + |F|)$-fraction of the way from uniform to the empirical distribution. $\square$
+The crossover is at roughly $t^* \approx |F|/(k + |F|\rho)$: before $t^*$ estimation limits the builder, after it correction does. Crucially, $k$ appears only in the estimation term --- a smaller $k$ slows the builder's learning, buying the evaluator time to correct.
 
 ```{pyodide-python}
 #| label: distribution-correction
@@ -468,95 +587,96 @@ np.random.seed(42)
 # --- Parameters ---
 N = 200
 n_rounds = 200
-k = 20
 rho_values = [0, 0.01, 0.05, 0.1, 0.2]
 n_trials = 20
+sigma_c = 0.04                       # correction bandwidth
 
-# Initial biased evaluator distribution
-pi_E_init = np.ones(N) / N
+# Tasks embedded on [0, 1]
+z = np.linspace(0, 1, N)
+
+# Social-relevance distribution mu: smooth, non-uniform (two soft modes)
+mu = (1.0
+      + 0.9 * np.exp(-((z - 0.30) ** 2) / (2 * 0.08 ** 2))
+      + 0.6 * np.exp(-((z - 0.75) ** 2) / (2 * 0.05 ** 2)))
+mu /= mu.sum()
+
+# Initial biased evaluator distribution: overweight the left third
+pi_E_init = np.ones(N)
 pi_E_init[:int(0.4 * N)] *= 3.0
 pi_E_init /= pi_E_init.sum()
 
-# True task performance: each task has a "value"
-task_values = np.random.uniform(0.3, 0.9, N)
+# Precompute Gaussian fill kernels: column nu is the bump centered at task nu
+G = np.exp(-((z[:, None] - z[None, :]) ** 2) / (2 * sigma_c ** 2))
+G /= G.sum(axis=0, keepdims=True)
 
 colors = ['#888888', '#B07CD8', '#F0A35C', '#45BF7C', '#5B8DEE']
 
 fig, axes = plt.subplots(1, 2, figsize=(6, 2))
 
 for ri, rho in enumerate(rho_values):
-    all_misalign = np.zeros((n_trials, n_rounds))
+    all_tv = np.zeros((n_trials, n_rounds))
     all_kl = np.zeros((n_trials, n_rounds))
 
     for trial in range(n_trials):
         pi_E = pi_E_init.copy()
-        uniform = np.ones(N) / N
-
         for t in range(n_rounds):
-            # Correct distribution
             if rho > 0:
-                pi_E = (1 - rho) * pi_E + rho * uniform
+                deficit = np.clip(mu - pi_E, 0, None)   # gap relative to construct mu
+                if deficit.sum() > 1e-12:
+                    nu = np.random.choice(N, p=deficit / deficit.sum())
+                    pi_E = (1 - rho) * pi_E + rho * G[:, nu]
 
-            # Misalignment: total variation between pi_E and uniform
-            tv = 0.5 * np.sum(np.abs(pi_E - uniform))
-            all_misalign[trial, t] = tv
-
-            # KL divergence
-            mask = pi_E > 1e-15
-            kl = np.sum(pi_E[mask] * np.log(pi_E[mask] / uniform[mask]))
-            all_kl[trial, t] = kl
+            all_tv[trial, t] = 0.5 * np.sum(np.abs(pi_E - mu))
+            m = pi_E > 1e-15
+            all_kl[trial, t] = np.sum(pi_E[m] * np.log(pi_E[m] / mu[m]))
 
     col = colors[ri]
     rounds = np.arange(n_rounds)
     label = f'ρ={rho}' if rho > 0 else 'ρ=0 (no correction)'
 
-    axes[0].plot(rounds, all_misalign.mean(axis=0), color=col, label=label, lw=1.5)
-    kl_mean = all_kl.mean(axis=0)
-    kl_mean = np.maximum(kl_mean, 1e-10)
-    axes[1].plot(rounds, kl_mean, color=col, label=label, lw=1.5)
+    axes[0].plot(rounds, all_tv.mean(axis=0), color=col, label=label, lw=1.5)
+    axes[1].plot(rounds, np.maximum(all_kl.mean(axis=0), 1e-10), color=col, label=label, lw=1.5)
 
 axes[0].set_xlabel('Round')
-axes[0].set_ylabel('Misalignment (TV distance)')
+axes[0].set_ylabel('Misalignment  TV(π_E, μ)')
 axes[0].set_title('Residual misalignment')
-axes[0].legend()
+axes[0].legend(fontsize=6)
 
 axes[1].set_xlabel('Round')
-axes[1].set_ylabel('KL divergence')
+axes[1].set_ylabel('KL(π_E ‖ μ)')
 axes[1].set_title('Distribution bias')
 axes[1].set_yscale('log')
-axes[1].legend()
+axes[1].legend(fontsize=6)
 
 plt.tight_layout()
 plt.show()
 ```
 
-**Figure.** Alignment recovery under distribution correction with $|F| = 200$ and $k = 20$. Left: residual misalignment converges to zero for all $\rho > 0$, with faster correction rates producing faster convergence. The $\rho = 0$ baseline (gray) maintains persistent misalignment. Right: KL divergence decays exponentially on a log scale, with rate proportional to $\rho$.
+**Figure.** Alignment recovery under gap-targeted Gaussian correction toward a non-uniform construct $\mu$, with $|F| = 200$. Left: residual misalignment $\operatorname{TV}(\pi_E^{(t)}, \mu)$ falls toward zero for all $\rho > 0$, faster for larger $\rho$; the $\rho = 0$ baseline (gray) stays biased. Right: the bias $\operatorname{KL}(\pi_E^{(t)} \,\|\, \mu)$ decays on a log scale, settling at a small floor set by the correction bandwidth $\sigma_c$ (the $\varepsilon(\rho,\sigma_c)$ term of the theorem).
 
-### Optimal Evaluation Size {#sec-optimal-k}
+#### Optimal Evaluation Size {#sec-optimal-k}
 
-With distribution correction, the Pareto frontier from @sec-pareto-frontier collapses. Each revealed task provides only *transient* advantage to the builder, because the bias it reveals gets corrected within $O(1/\rho)$ rounds. The evaluator's per-round loss decomposes as:
+With distribution correction, the Pareto frontier from @sec-pareto-frontier collapses: each revealed task gives the builder only *transient* advantage, since the bias it reveals is corrected within $O(1/\rho)$ rounds. In steady state the builder's effective sample size saturates at $m_\infty = k/\rho$ (new observations arrive at rate $k$, old ones age out at rate $\rho$), so the estimation-limited term of the theorem above becomes a steady-state exploitation cost $k/(\rho|F| + k)$. Combining it with the evaluation variance $\sigma^2/k$ gives the *asymptotic per-round loss*
 $$
-\mathcal{L}(k) = \underbrace{\frac{\sigma^2}{k}}_{\text{evaluation variance}} + \underbrace{\frac{\gamma k}{\rho}}_{\text{steady-state exploitation}}
+\mathcal{L}(k) = \underbrace{\frac{\sigma^2}{k}}_{\text{evaluation variance}} + \underbrace{\frac{k}{\rho|F| + k}}_{\text{steady-state exploitation}} .
 $$
 
-The first term decreases in $k$ (more tasks, less noise); the second increases in $k$ (more tasks, faster builder learning) and decreases in $\rho$ (faster correction, shorter exploitation window).
+The first term decreases in $k$ (more tasks, less noise); the second increases in $k$ (more leakage) and decreases in $\rho$ (faster correction shortens the exploitation window).
 
-::: {.callout-warning title="Proposition: Optimal Sample Size"}
-Given correction rate $\rho > 0$ and gaming penalty $\gamma > 0$, the optimal number of evaluation tasks per round is:
+::: {.callout-warning title="Lemma: Optimal Sample Size"}
+If $\rho|F| > \sigma^2$, the loss $\mathcal{L}(k)$ is minimized at
 $$
-k^* = \sigma \sqrt{\frac{\rho}{\gamma}}
+k^* = \frac{\sigma\,\rho|F|}{\sqrt{\rho|F|} - \sigma}.
 $$
-with minimum loss $\mathcal{L}(k^*) = 2\sigma\sqrt{\gamma/\rho}$.
+If $\rho|F| \leq \sigma^2$, $\mathcal{L}$ is strictly decreasing in $k$ and the optimum is the largest admissible $k$ (variance reduction dominates uniformly).
 :::
 
-*Proof.* Setting $\partial \mathcal{L}/\partial k = -\sigma^2/k^2 + \gamma/\rho = 0$ gives $k^2 = \sigma^2 \rho / \gamma$, hence $k^* = \sigma\sqrt{\rho/\gamma}$. The second-order condition $\partial^2 \mathcal{L}/\partial k^2 = 2\sigma^2/k^3 > 0$ confirms this is a minimum. $\square$
+In the high-correction regime $\rho|F| \gg \sigma^2$, $k^* \approx \sigma\sqrt{\rho|F|}$, which gives clean comparative statics:
 
-Several key implications follow:
-
-- **$k^*$ increases with $\sqrt{\rho}$:** Faster correction allows larger evaluation sets. An evaluator who corrects twice as fast can evaluate $\sqrt{2} \approx 1.4$ times as many tasks.
-- **$k^*$ increases with $\sigma$:** Higher task variance demands more samples for a reliable signal, just as in the static case.
-- **Limiting behavior:** As $\rho \to 0$ (no correction), $k^* \to 0$ --- the evaluator should reveal as few tasks as possible. As $\rho \to \infty$ (instant correction), $k^* \to \infty$ --- leakage is immediately outdated.
-- **The key lever is $\rho$:** Since $\mathcal{L}(k^*) = 2\sigma\sqrt{\gamma/\rho}$, the evaluator's *optimal* loss decreases as $1/\sqrt{\rho}$. Investing in distribution correction (coverage audits, benchmark changelogs, incident-driven task additions) is the most effective lever for benchmark design.
+- **$k^*$ grows with $\sqrt{\rho}$:** each revealed bias goes stale within $\sim 1/\rho$ rounds, so faster correction permits a larger evaluation set.
+- **$k^*$ grows with $\sigma$:** higher score noise demands more samples for a reliable signal.
+- **$k^*$ grows with $\sqrt{|F|}$:** a richer task universe dilutes any single leak.
+- **The threshold $\rho|F| > \sigma^2$ is itself informative:** when correction reaches fewer new tasks per round than the noise scale, no interior optimum exists and the evaluator should simply maximize $k$. The capacity to identify and correct biases, $\rho$, is thus the key design lever --- it both lifts this threshold and raises $k^*$. Investing in correction (coverage audits, benchmark changelogs, incident-driven task additions) is the most effective move in benchmark design.
 
 ```{pyodide-python}
 #| label: optimal-k-surface
@@ -564,70 +684,65 @@ Several key implications follow:
 import numpy as np
 import matplotlib.pyplot as plt
 
-sigma = 5.0
-gamma = 0.05
-rho_values = [0.05, 0.1, 0.2, 0.5]
+sigma = 1.0          # per-task score noise scale
+F_size = 2000        # |F|, the task universe
+rho_values = [0.01, 0.02, 0.05, 0.1]
 
-k_range = np.linspace(1, 80, 200)
+k_range = np.linspace(1, 40, 400)
 colors = ['#E8637A', '#F0A35C', '#45BF7C', '#5B8DEE']
 
 fig, ax = plt.subplots(1, 1, figsize=(3.5, 3))
 
 for i, rho in enumerate(rho_values):
-    loss = sigma**2 / k_range + gamma * k_range / rho
-    k_star = sigma * np.sqrt(rho / gamma)
-    loss_star = 2 * sigma * np.sqrt(gamma / rho)
-
+    a = rho * F_size                         # rho|F|
+    loss = sigma**2 / k_range + k_range / (a + k_range)
     ax.plot(k_range, loss, color=colors[i], lw=1.5, label=f'ρ={rho}')
-    ax.plot(k_star, loss_star, '*', color=colors[i], markersize=10, zorder=5)
-    ax.annotate(f'k*={k_star:.0f}', (k_star, loss_star),
-                textcoords='offset points', xytext=(8, 5), fontsize=6, color=colors[i])
 
-# Static case (rho -> 0): only variance term
-ax.plot(k_range, sigma**2 / k_range, '--', color='#888888', lw=1, label='ρ→0 (static)')
+    if a > sigma**2:                         # interior optimum exists
+        k_star = sigma * a / (np.sqrt(a) - sigma)
+        loss_star = sigma**2 / k_star + k_star / (a + k_star)
+        ax.plot(k_star, loss_star, '*', color=colors[i], markersize=10, zorder=5)
+        ax.annotate(f'k*={k_star:.0f}', (k_star, loss_star),
+                    textcoords='offset points', xytext=(6, 6), fontsize=6, color=colors[i])
 
 ax.set_xlabel('Evaluation tasks per round (k)')
 ax.set_ylabel('Evaluator loss L(k)')
 ax.set_title('Optimal evaluation size')
-ax.legend()
-ax.set_ylim(0, 15)
-ax.set_xlim(0, 80)
+ax.legend(fontsize=6)
+ax.set_ylim(0, 1.1)
+ax.set_xlim(0, 40)
 
 plt.tight_layout()
 plt.show()
 ```
 
-**Figure.** Evaluator loss $\mathcal{L}(k) = \sigma^2/k + \gamma k / \rho$ for different correction rates, with stars marking the optimal $k^*$. Faster correction (larger $\rho$) shifts $k^*$ rightward and lowers the minimum loss. The static case ($\rho \to 0$, dashed) is monotonically decreasing, reflecting the irresolvable tradeoff without correction. Parameters: $\sigma = 5$, $\gamma = 0.05$.
+**Figure.** Asymptotic evaluator loss $\mathcal{L}(k) = \sigma^2/k + k/(\rho|F| + k)$ for several correction rates, with stars marking the optimal $k^* = \sigma\rho|F|/(\sqrt{\rho|F|} - \sigma)$. Faster correction (larger $\rho$, hence larger $\rho|F|$) lowers the minimum loss and pushes $k^*$ rightward, scaling as $\sqrt{\rho|F|}$ once $\rho|F| \gg \sigma^2$. Parameters: $\sigma = 1$, $|F| = 2000$.
 
-### Noise-Gated Holdout {#sec-holdout}
+Together, the two levers of this section --- randomization to hide $D$ and correction to keep $D$ moving toward $\mu$ --- make hiding the distribution durable: leaked information about $D$ goes stale faster than the builder can exploit it. What they cannot address is the case where $D$ itself is the wrong target, i.e., $D \neq \mathcal{C}$. That gap is the subject of the next section.
 
-Distribution correction makes leaked information obsolete by moving the target. A complementary mechanism *prevents* leakage in the first place by gating the information flow.
 
-::: {.callout-note title="Definition: Holdout Evaluation Mechanism"}
-The evaluator publishes a reference set $S_0 \subset F$ of size $n_0$, sampled from $\pi_E$. At each round $t$:
+## Publishing the Construct: The Construct-Validity Protocol {#sec-cv-protocol}
 
-1. Draw a holdout set $S_t$ of size $k$ from $\pi_E^{(t)}$ and noise $\xi_t \sim \text{Laplace}(0, 1/\varepsilon)$.
-2. Compute the reference score $r_T(\theta_t) = \frac{1}{n_0}\sum_{f \in S_0} f(\theta_t)$ and the holdout score $r_H(\theta_t) = \frac{1}{k}\sum_{f \in S_t} f(\theta_t)$.
-3. **Threshold test:** If $|r_H(\theta_t) + \xi_t - r_T(\theta_t)| < \eta$, publish $r_T(\theta_t)$ ("silent" round). Otherwise, publish $r_H(\theta_t) + \xi_t$ ("alarm" round).
+Hiding $D$ buys durability, but it raises two practical worries. If the distribution is secret, how does anyone --- a regulator, an adopter, the builder itself --- know the score means anything? And how is a builder supposed to improve against a target it cannot see? The construct-validity protocol resolves both by exploiting the very gap that caused the trouble. Because a single construct $\mathcal{C}$ admits many operationalizing distributions, the evaluator can keep one distribution private while making *others* public.
+
+::: {.callout-note title="The Construct-Validity Protocol"}
+The evaluator:
+
+1. **Publishes the construct $\mathcal{C}$** --- a precise statement of the capability being measured (its content domain and boundaries), but not a benchmark.
+2. **Keeps $D$ and $S$ private** --- the operationalizing distribution and every realized set stay secret, evaluated only inside a controlled pipeline.
+3. **Publishes one or more proxy distributions $D', D''$** --- public benchmarks that operationalize the *same* $\mathcal{C}$ (think GSM8K as a public proxy for a private competition-math distribution). Builders train and self-evaluate against the proxies.
 :::
 
-The mechanism is **self-correcting**: it reveals less information precisely when the builder is behaving well ($\Delta_{\text{game}} \approx 0$, so the alarm fires only due to noise, with probability $p_{\text{alarm}} = e^{-\varepsilon\eta}$), and reveals more when the builder is gaming (the score discrepancy reliably triggers the alarm). The effective leakage per round for a non-gaming builder is:
-$$
-\lambda_{\text{out}}^{\text{holdout}} \approx e^{-\varepsilon\eta} \cdot k
-$$
+The protocol rests on **construct validity** (@sec-validity): if $D$ and $D'$ genuinely operationalize the same construct, then capability transfers between them --- a model that improves on $D'$ *because* it acquired the construct should also improve on the private $D$. This gives the evaluator a falsifiable check that requires no exposure of $D$: compare a model's private score to what its public-proxy performance predicts. Construct-valid improvement (real capability) transfers; proxy-specific gaming does not, and reveals itself as a model that beats the proxy yet underperforms its predicted private score. The private benchmark thus functions as a *held-out construct probe*, while all public optimization pressure lands on the proxies.
 
-Setting $\varepsilon\eta = 3$ yields a $\sim 20\times$ slowdown in the builder's learning rate, buying the evaluator substantially more time for distribution correction.
+This is why $\mathcal{C}$ need not --- and should not --- be private. Publishing the construct is what makes the score *interpretable* (validity) and what gives builders a legitimate target to improve against; privacy is reserved for the *operationalization*, where it buys durability. The protocol is the constructive use of the $\mathcal{C} \supsetneq D$ gap: the same multiplicity of operationalizations that lets a builder mistake $D$ for $\mathcal{C}$ also lets an evaluator certify $\mathcal{C}$ through public proxies while never revealing $D$.
 
-::: {.callout-warning title="Why Noise Alone Cannot Replace Distribution Correction"}
-The holdout mechanism slows the builder's learning but does not change their *incentives* conditional on what they have learned. Regardless of how much Laplace noise is added, the builder's optimal strategy given their posterior $\hat{\pi}_{E,t}$ remains $\theta_t^* = \arg\max_\theta \mathbb{E}_{f \sim \hat{\pi}_{E,t}}[f(\theta)]$. If $\pi_E$ is biased and fixed, the builder will eventually learn this bias and specialize accordingly. Only distribution correction, which drives $\pi_E^{(t)} \to \text{Uniform}(F)$, ensures that the builder's eventual knowledge provides no exploitable advantage. This is the key difference from pure differential privacy: DP slows learning; distribution correction eliminates the *incentive* to exploit what is learned.
-:::
-
-This connects to the differential privacy literature [@dwork2015generalization; @dwork2014algorithmic]. The holdout mechanism inherits DP guarantees from the Sparse Vector Algorithm, bounding the max-information between the builder's observations and the holdout set. However, DP addresses a different threat: it prevents reconstruction of which specific tasks are in the holdout (overfitting to the test *set*), while our concern is that the builder learns the evaluation *distribution* and specializes accordingly.
+The protocol is an aspirational design rather than a closed theory. Making "transfer across operationalizations" a precise, testable guarantee is itself a *predictive-evaluation* question --- whether public-proxy performance predicts held-out performance --- and connects the strategic results of this chapter to the predictive-modeling tools developed earlier in the book. It is an active direction for the field, and a natural foundation for a privacy-preserving evaluation challenge.
 
 
 ## Metric Design as Principal-Agent Problem {#sec-metric-design}
 
-We now shift from "which tasks to show" to "which metrics to report." Even with a perfectly designed evaluation mechanism, the *choice of metric* can create perverse incentives.
+We now shift from *which tasks to show* (the object axis of @sec-what-to-hide) to *which metrics to report* --- an orthogonal, reporting-side axis. Even with a perfectly designed evaluation mechanism, the *choice of metric* can create perverse incentives.
 
 ### When Metrics Create Perverse Incentives {#sec-perverse-incentives}
 
@@ -770,7 +885,7 @@ plt.show()
 
 ## Representative Benchmark Selection {#sec-representative-selection}
 
-A distinct but related design question: given a large suite of evaluation metrics, how should one select a representative subset? This is the "lite benchmark" problem faced by BIG-bench (200+ metrics $\to$ BIG-bench Lite, 24), HELM ($\to$ HELM Lite), and Cal Hospital Compare (hundreds of quality measures $\to$ 12).
+A distinct but related design question: given a large suite of evaluation metrics, how should one select a representative subset? This is the "lite benchmark" problem faced by BIG-bench (200+ metrics $\to$ BIG-bench Lite, 24), HELM ($\to$ HELM Lite), and Cal Hospital Compare (hundreds of quality measures $\to$ 12). In the language of @sec-what-to-hide, a representative subset is one whose induced distribution best approximates $D$ --- and hence the construct $\mathcal{C}$ --- at a fraction of the evaluation cost.
 
 ### The Subset Selection Problem {#sec-subset-selection}
 
@@ -976,8 +1091,8 @@ The three threads of this chapter --- information design, metric design, and rep
 
 | Principle | Formal Basis | Recommendation |
 |-----------|-------------|----------------|
-| **1. Randomize and Refresh** | Theorem 1 (one-shot alignment), Prop. (deterministic failure) | Use randomized evaluation with task renewal. Static benchmarks are Goodhart-vulnerable by construction. |
-| **2. Correct and Grow** | Prop. (alignment recovery), Prop. (optimal $k^*$) | Invest in distribution correction ($\rho$) as the primary lever. The optimal $k^*$ scales with $\sqrt{\rho}$. |
+| **1. Randomize and Refresh** | Single-sample alignment (TV bound), Prop. (transparent failure) | Use randomized evaluation with task renewal. Transparent fixed benchmarks are Goodhart-vulnerable by construction. |
+| **2. Correct and Grow** | Gap-targeted correction theorem, Lemma (optimal $k^*$) | Invest in distribution correction ($\rho$) toward the construct $\mu$ as the primary lever. The optimal $k^* \approx \sigma\sqrt{\rho|F|}$ grows with $\sqrt{\rho}$. |
 | **3. Gate Information Release** | Holdout mechanism, Prop. (learning slowdown) | Use threshold tests to condition information flow on builder behavior. Combine with distribution correction. |
 | **4. Align Metrics with Welfare** | Prop. (ATO regret), Prop. (TT zero regret) | Score total treatment effect, not averages. Account for counterfactual baselines. |
 | **5. Allow Partial Transparency** | Prop. (garbling dominance) | Calibrated noise in metric reporting (garbling) can create Pareto improvements over both full transparency and full opacity. |
@@ -989,6 +1104,26 @@ These principles interact in important ways. Principles 1--3 address the *inform
 
 A well-designed evaluation system should operate on all four channels simultaneously: randomize task selection (Principle 1), invest in distribution correction (Principle 2), gate information via holdout mechanisms (Principle 3), use welfare-aligned metrics (Principle 4), allow developers to disclose through privacy-preserving mechanisms (Principle 5), and ensure the metric suite is formally representative (Principle 6).
 
+### Three Properties of a Durable Evaluator {#sec-three-properties}
+
+The six principles above are *mechanisms*; it helps to name the *properties* they secure. Read through the object-first lens of @sec-what-to-hide, a well-designed evaluator should guarantee three things.
+
+- **Validity.** The score carries its intended construct meaning: it tracks $\mathcal{C}$, not merely the distribution $D$ that operationalizes it. Validity is secured by *publishing the construct and proxies* (@sec-cv-protocol) and by *welfare-aligned metrics* (@sec-metric-design) that reward capability rather than its proxies.
+- **Durability.** The benchmark stays informative as it is optimized against, because $D$ stays private and is *corrected* toward $\mu$ faster than it is learned (@sec-hiding-distribution). Hiding the set (@sec-holdout) buys time; hiding and correcting the distribution buys durability.
+- **Faithful execution.** The evaluator runs exactly the announced procedure --- the same sampling, scoring, and reporting for every subject, with no special access or after-the-fact adjustment. This single property subsumes what one might separately call *neutrality* (no subject is favored) and *integrity* (the promised procedure is the one that runs): both are guarantees about honest execution of a fixed protocol, and both fail in the same way --- a strategic *evaluator* (@sec-evaluator-gaming) --- which the builder-facing mechanisms of this chapter do not address.
+
+The natural implementation of faithful execution is procedural: run sampling, evaluation, and reporting inside a **secure, auditable pipeline** --- a sealed environment that draws $S \sim D$, scores submissions, and emits only the agreed signal, while producing a verifiable log that the announced protocol was followed. Randomization protects the builder from the evaluator's *information*; auditable execution protects every party from the evaluator's *discretion*. Only the first is a mechanism-design question; the second is why @sec-ecosystem treats evaluator-side gaming as a matter of governance.
+
+| Object hidden | Mechanism | Property secured |
+|---|---|---|
+| nothing | static benchmark | --- (fails) |
+| set $S$ | reusable holdout / Ladder | durability (bounded) |
+| distribution $D$ | randomization + correction | durability |
+| $D, S$; publish $\mathcal{C}, D'$ | construct-validity protocol | validity + durability |
+| the protocol itself | secure auditable pipeline | faithful execution |
+
+: The object-first view of the chapter's mechanisms and the properties they secure {#tbl-properties}
+
 
 ## Discussion Questions {#sec-design-discussion}
 
@@ -998,9 +1133,9 @@ A well-designed evaluation system should operate on all four channels simultaneo
 
 3. Design a mechanism where the builder's incentive is to improve on the *hardest* tasks rather than the average. How should $u_E(\theta)$ and $r(\theta, S)$ be modified?
 
-4. In what sense is the Chatbot Arena a randomized evaluation mechanism? Does it satisfy the conditions of Theorem 1? What information leaks through the adaptive matching process?
+4. In what sense is the Chatbot Arena a randomized evaluation mechanism? Does it satisfy the conditions of the single-sample alignment theorem (@sec-one-shot-alignment)? What information leaks through the adaptive matching process?
 
-5. How should a government regulator set $\gamma$ (the gaming penalty) for a safety benchmark? What factors should influence this choice?
+5. How should a government regulator think about the correction rate $\rho$ and the transparency level $k$ for a safety benchmark? Which is the more effective lever, and what factors (incident-reporting infrastructure, task-acquisition capacity, score-noise scale $\sigma$) should influence the choice?
 
 6. If two "lite" benchmarks both satisfy $\epsilon$-positional proportionality with the same $\epsilon$ but select different subsets, which should be preferred? What additional criteria might break ties?
 
@@ -1008,10 +1143,16 @@ A well-designed evaluation system should operate on all four channels simultaneo
 
 8. Distribution correction requires the evaluator to "know their bias." How can an evaluator identify which regions of the task universe they under-represent? What role do meta-evaluations and coverage audits play?
 
+9. Pick three named benchmarks (e.g., FrontierMath, LiveBench, Chatbot Arena) and classify each by *which object* it keeps private --- the construct $\mathcal{C}$, the distribution $D$, or only the set $S$ (@sec-what-to-hide). Where the answer is "only $S$," what would it take to also hide $D$?
+
+10. A dynamic benchmark refreshes its test set every round. Construct a scenario in which it remains exploitable *even with zero item-level leakage*. (Hint: consider $D \neq \mathcal{C}$ and @sec-dynamic-benchmarks.) What does this say about the limits of contamination control?
+
+11. Faithful execution (@sec-three-properties) is the one property the chapter's builder-facing mechanisms do not secure. Give an example of an evaluator behavior that violates faithful execution but that no amount of randomization or distribution correction can prevent. What kind of intervention would address it?
+
 
 ## Bibliographic Notes {#sec-design-biblio}
 
-The Stackelberg evaluation game and the information-variance tradeoff are developed in @truong2025guard. The distribution correction mechanism and optimal evaluation size results are from the same work. The analysis of metric design as a principal-agent problem draws on @wang2024relying, which develops counterfactual quality metrics (Chapter 5) and information elicitation in agency games (Chapter 6). The positional representation and proportionality framework is from @procaccia2025metritocracy.
+The Stackelberg evaluation game, the single-sample alignment bound, and the information-variance tradeoff are developed in @truong2025strategic ("Strategic Evaluation: Incentivizing AI Capability Coverage with Private Benchmarks"). The gap-targeted distribution-correction mechanism and the optimal evaluation size $k^*$ are from the same work, which also reports a semi-synthetic experiment on MMLU-Pro using a low-rank latent-factor model of task structure. The analysis of metric design as a principal-agent problem draws on @wang2024relying, which develops counterfactual quality metrics (Chapter 5) and information elicitation in agency games (Chapter 6). The positional representation and proportionality framework is from @procaccia2025metritocracy.
 
 **Goodhart's Law** was articulated by @goodhart1984problems in the context of monetary policy. @manheim2018categorizing formalize four variants. The connection to reward overoptimization in RLHF is explored by @gao2023scaling.
 
@@ -1021,23 +1162,31 @@ The Stackelberg evaluation game and the information-variance tradeoff are develo
 
 **Differential privacy and adaptive data analysis** [@dwork2015generalization; @dwork2014algorithmic] underpin the holdout mechanism. @blum2015ladder apply reusable holdout techniques to machine learning competitions. The connection between DP and strategic robustness is developed in the holdout mechanism analysis.
 
+**What to hide: sets versus distributions.** The object-first framing of @sec-what-to-hide --- separating the construct $\mathcal{C}$, the operationalizing distribution $D$, and the realized set $S$ --- organizes a range of mechanisms by what they keep private. Reusable holdouts and the Ladder hide the *set* and bound leakage [@blum2015ladder; @dwork2014algorithmic]. Dynamic benchmarks refresh the set to defeat contamination --- DynaBench [@kiela2021dynabench], LiveBench [@white2025livebench], and Chatbot Arena [@chiang2024chatbotarena] --- but, as @sec-dynamic-benchmarks argues, do not hide the *distribution*. Hiding the distribution is the contribution of the strategic-evaluation game [@truong2025strategic]. The construct-validity protocol of @sec-cv-protocol, which publishes the construct and public proxies while keeping the operationalization private, builds on the validity theory of @sec-validity [@borsboom2005measuring; @messick1995validity] and remains an open, partly aspirational direction.
+
 **Social choice and benchmarking** connect to @zhang2024inherent (Arrow's impossibility for benchmarks), @colombo2022what (Borda count for benchmark aggregation), and @rofin2022votenrank (scoring rules for benchmark ranking). The committee selection literature, particularly justified representation [@aziz2017justified], provides the social choice foundations for positional representation.
 
 
 ## Exercises {#sec-design-exercises}
 
-1. **(Easy)** Show that if $\pi_E = \text{Uniform}(F)$, the one-shot alignment theorem holds for any sample size $k$, not just $k = 1$. *Hint:* Show that for any $k$-subset mechanism, the expected reward is proportional to $u_E(\theta)$.
+1. **(Easy)** Show that if the builder's belief matches social relevance, $\tilde{\pi}_E = \mu$, the single-sample alignment is exact ($\Delta = 0$) and extends to any sample size $k$, not just $k = 1$. *Hint:* show that for any $k$-subset mechanism drawn from a $\mu$-matching belief, the expected reward is proportional to $u_E(\theta)$.
 
-2. **(Easy)** Verify that $k^* = \sigma\sqrt{\rho/\gamma}$ minimizes $\mathcal{L}(k) = \sigma^2/k + \gamma k/\rho$. What is $\mathcal{L}(k^*)$? What happens to $k^*$ when $\gamma$ doubles?
+2. **(Easy)** Verify that, when $\rho|F| > \sigma^2$, $k^* = \sigma\rho|F|/(\sqrt{\rho|F|} - \sigma)$ minimizes $\mathcal{L}(k) = \sigma^2/k + k/(\rho|F| + k)$. Show that $k^* \approx \sigma\sqrt{\rho|F|}$ in the high-correction regime $\rho|F| \gg \sigma^2$, and explain why no interior optimum exists when $\rho|F| \le \sigma^2$.
 
-3. **(Medium)** Derive the estimation-limited term in the misalignment bound using a Dirichlet$(1, \ldots, 1)$ prior over distributions on $F$ with $m$ effective observations. Show that the posterior predictive is the shrinkage estimator $\hat{\pi}_E = \frac{m}{m+N}\hat{p} + \frac{N}{m+N}\text{Uniform}(F)$ and that $\text{TV}(\hat{\pi}_E, \text{Uniform}(F)) \leq m/(m+N)$.
+3. **(Medium)** Derive the estimation-limited term $m/(m+N)$ in the misalignment bound using a Dirichlet prior centered at $\mu$ over distributions on $F$ with $m$ effective observations. Show that the posterior predictive is the shrinkage estimator $\hat{\pi}_E = \frac{m}{m+N}\hat{p} + \frac{N}{m+N}\mu$ and that $\text{TV}(\hat{\pi}_E, \mu) \leq m/(m+N)$.
 
 4. **(Medium)** In the agency game with binary $X$, suppose $C \mid X=0 \sim \text{Exp}(\lambda_0)$ and $C \mid X=1$ is zero-cost. Derive the condition on $\lambda_0$ and the principal's value $b$ under which the agent prefers concealment to revelation.
 
 5. **(Medium)** Show that any subset $K$ satisfying $\epsilon$-positional proportionality approximates any scoring rule within $\epsilon$. *Hint:* Write $f_s(a, \sigma_S)$ as a weighted sum of cumulative counts $C(S, r, a)/|S|$ and apply Abel summation.
 
-6. **(Hard)** Extend the one-shot alignment theorem to the case where the builder has a non-uniform prior $p_M$ over $F$. Show that the builder's best response maximizes $\mathbb{E}_{f \sim p_M}[f(\theta)]$. Under what conditions does this coincide with maximizing $u_E(\theta)$?
+6. **(Hard)** Starting from the single-sample best response $\theta^M \in \arg\max_\theta \mathbb{E}_{f \sim \tilde{\pi}_E}[f(\theta)]$, derive the single-sample alignment bound $\max_\theta u_E(\theta) - u_E(\theta^M) \le 4B\operatorname{TV}(\mu, \tilde{\pi}_E)$. Under what conditions on the builder's belief $\tilde{\pi}_E$ does the builder maximize $u_E(\theta)$ exactly?
 
 7. **(Hard)** Prove that the holdout mechanism slows the builder's posterior concentration by a factor of $e^{\varepsilon\eta}$. *Hint:* Compute the effective sample size $m_t^{\text{holdout}} = n_0 + p_{\text{alarm}} \cdot k \cdot \min(t, \rho^{-1})$ and compare to $m_t^{\text{baseline}}$.
 
 8. **(Hard, computational)** Implement the greedy algorithm for positional representation on the HELM Lite data (or a synthetic dataset with $n = 100$ metrics, $m = 50$ models). Compare $|K|$ to the existing lite benchmark subset for different values of the group size $g$. At what $g$ does the greedy algorithm match the size of the existing subset?
+
+9. **(Medium)** Consider a dynamic benchmark that draws a fresh set $S' \sim D$ each round with *no* item-level leakage, where $D = \pi_E$ is biased away from the construct weighting $\mu$. Suppose the builder knows $D$ and best-responds with $\theta^* = \arg\max_\theta \mathbb{E}_{f \sim D}[f(\theta)]$. Show that the residual misalignment $\max_\theta u_E(\theta) - u_E(\theta^*)$ is bounded below by a quantity proportional to $\operatorname{TV}(\mu, D)$, and conclude that no refresh rate drives it to zero. (This is the claim used in @sec-dynamic-benchmarks.)
+
+10. **(Easy)** Classify each of the following by the object it keeps private (construct $\mathcal{C}$, distribution $D$, or set $S$): (a) a public benchmark with a hidden answer key; (b) a leaderboard backed by the Ladder algorithm; (c) a monthly-refreshed live benchmark; (d) a private benchmark released only as a published construct plus a public proxy. Which are durable against a builder who learns $D$?
+
+11. **(Hard)** Design a concrete *transfer test* for the construct-validity protocol (@sec-cv-protocol): given a model's scores on public proxies $D', D''$ and its score on a private $D$, specify a statistic that distinguishes genuine construct improvement from proxy-specific gaming. What assumption about the relationship between $D'$ and $D$ does your test require, and how would you check it?

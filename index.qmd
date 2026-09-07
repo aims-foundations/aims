@@ -1,4 +1,7 @@
 ---
+pagetitle: "Textbook | AIMS"
+title-prefix: ""
+subtitle: "A textbook on the foundations and practice of AI evaluation"
 aims-title-actions:
   - label: View on GitHub
     href: https://github.com/aims-foundations/aims

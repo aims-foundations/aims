@@ -89,20 +89,17 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../src/chap8.html" rel="next">
 <link href="../src/chap6.html" rel="prev">
+<link href="../resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -117,7 +114,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -535,176 +531,18 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -713,18 +551,57 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="../index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -739,7 +616,23 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span id="sec-discovery" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discovery</span></span></h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -830,13 +723,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
@@ -847,9 +740,7 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>license.qmd</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -881,11 +772,10 @@ window.Quarto = {
   <li><a href="#sec-discovery-bib" id="toc-sec-discovery-bib" class="nav-link" data-scroll-target="#sec-discovery-bib"><span class="header-section-number">7.8</span> Bibliographic Notes</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap7.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
 <script type="module" id="qpyodide-monaco-editor-init">
 
@@ -897,23 +787,7 @@ window.Quarto = {
   });
 </script>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-discovery" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Discovery</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
@@ -1010,7 +884,7 @@ Figure&nbsp;7.1: Plate diagram for the logistic factor model. The latent factor 
 <section id="sec-logistic-fm" class="level3" data-number="7.2.1">
 <h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-logistic-fm"><span class="header-section-number">7.2.1</span> Fitting the Factor Model</h3>
 <p>We estimate the parameters <span class="math inline">\((U, V, Z)\)</span> by minimizing the binary cross-entropy between the predicted probabilities and the observed responses—the same maximum-likelihood objective developed for the Rasch model in <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a>, now over matrix-valued parameters. A compact implementation:</p>
-<div id="a66a679f" class="cell" data-execution_count="1">
+<div id="fdc9b5d7" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">from</span> torch.optim <span class="im">import</span> LBFGS</span>
@@ -1046,7 +920,7 @@ Figure&nbsp;7.1: Plate diagram for the logistic factor model. The latent factor 
 </div>
 </div>
 <p>We train by minimizing binary cross-entropy loss with L-BFGS:</p>
-<div id="397728df" class="cell" data-execution_count="2">
+<div id="d691afda" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Training setup</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>N, M <span class="op">=</span> Y.shape</span>
 <span id="cb2-3"><a href="#cb2-3"></a>K <span class="op">=</span> <span class="dv">2</span>  <span class="co"># Number of latent dimensions</span></span>
@@ -1214,7 +1088,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 </section>
 <section id="implementation-of-masking-functions" class="level3" data-number="7.5.2">
 <h3 data-number="7.5.2" class="anchored" data-anchor-id="implementation-of-masking-functions"><span class="header-section-number">7.5.2</span> Implementation of Masking Functions</h3>
-<div id="71597ea3" class="cell" data-execution_count="3">
+<div id="57e2c9bc" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="kw">def</span> random_mask(data_idtor, pct<span class="op">=</span><span class="fl">0.8</span>):</span>
@@ -1264,7 +1138,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 <li><strong>Stage 2:</strong> Freeze <span class="math inline">\((V, Z)\)</span> and estimate ability parameters <span class="math inline">\(U\)</span> for held-out models using their limited exposed responses</li>
 </ol>
 <p>This ensures item parameters are learned without information from test models.</p>
-<div id="c5924ede" class="cell" data-execution_count="4">
+<div id="cdeb4b81" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Stage 1: Train on known models</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>test_row <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>).values  <span class="co"># Identify held-out models</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>model_stage1 <span class="op">=</span> train_model(Y[<span class="op">~</span>test_row, :], mask<span class="op">=</span>train_idtor[<span class="op">~</span>test_row, :])</span>
@@ -1285,7 +1159,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 <li><strong>Stage 1:</strong> Train on known items to learn model parameters <span class="math inline">\(U\)</span></li>
 <li><strong>Stage 2:</strong> Freeze <span class="math inline">\(U\)</span> and estimate item parameters <span class="math inline">\((V, Z)\)</span> for held-out items</li>
 </ol>
-<div id="523f1b09" class="cell" data-execution_count="5">
+<div id="584257d3" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Stage 1: Train on known items</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>test_col <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">0</span>).values  <span class="co"># Identify held-out items</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>model_stage1 <span class="op">=</span> train_model(Y[:, <span class="op">~</span>test_col], mask<span class="op">=</span>train_idtor[:, <span class="op">~</span>test_col])</span>
@@ -1320,7 +1194,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 <section id="evaluation-across-masking-schemes" class="level3" data-number="7.5.4">
 <h3 data-number="7.5.4" class="anchored" data-anchor-id="evaluation-across-masking-schemes"><span class="header-section-number">7.5.4</span> Evaluation Across Masking Schemes</h3>
 <p>For each masking scheme, we compute AUC on the held-out entries:</p>
-<div id="d574bcd9" class="cell" data-execution_count="6">
+<div id="72876df6" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> torchmetrics <span class="im">import</span> AUROC</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a>masking_schemes <span class="op">=</span> {</span>
@@ -1427,8 +1301,6 @@ P(Y_j = 1 \mid Y_{-j}) = \sigma\!\Big(\tau_j + \sum_{k \ne j}\omega_{jk}\,y_k\Bi
 <p>The exploratory tradition this chapter draws on is exploratory factor analysis, whose modern treatment and the structure-versus-pattern-matrix distinction are covered in standard texts; the application to AI benchmark heterogeneity via the standardized structure matrix is developed in this book and its companion papers. Parallel analysis, the eigenvalue-against-noise procedure for choosing the number of factors, is due to <span class="citation" data-cites="horn1965rationale">Horn (<a href="#ref-horn1965rationale" role="doc-biblioref">1965</a>)</span> and remains the most reliable of the simple dimensionality heuristics, outperforming the Kaiser eigenvalue-greater-than-one rule it is plotted against in <a href="#sec-dimensionality" class="quarto-xref"><span>Section 7.1</span></a>. Network psychometrics emerged in the 2010s as an alternative to the reflective latent-variable model: the Gaussian graphical model and the graphical lasso for sparse precision estimation are due to <span class="citation" data-cites="friedman2008glasso">Friedman et al. (<a href="#ref-friedman2008glasso" role="doc-biblioref">2008</a>)</span>, and the Ising model with nodewise <span class="math inline">\(\ell_1\)</span>-logistic estimation (eLasso) to <span class="citation" data-cites="vandeborkulo2014ising">Borkulo et al. (<a href="#ref-vandeborkulo2014ising" role="doc-biblioref">2014</a>)</span>. The observational closeness of Ising networks and latent-variable models is analyzed by <span class="citation" data-cites="marsman2018ising">Marsman et al. (<a href="#ref-marsman2018ising" role="doc-biblioref">2018</a>)</span>, which formalizes the sense in which marginalizing a latent variable yields a network and a low-rank network mimics a latent factor—the discovery-side counterpart of the nomological equivalence discussed in <a href="chap1.html" class="quarto-xref"><span>Chapter 1</span></a>.</p>
 
 
-<!-- -->
-
 </section>
 <section id="bibliography" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>
@@ -1452,21 +1324,103 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1535,57 +1489,6 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -1927,617 +1830,9 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
         <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Predictability</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="an">format:</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co">  html:</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    include-after-body:</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">      text: |</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">        &lt;script&gt;</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">        // Auto-execute all pyodide cells after initialization</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">        document.addEventListener('DOMContentLoaded', function() {</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co">          function waitForPyodide() {</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co">            if (typeof globalThis.mainPyodide !== 'undefined' &amp;&amp; globalThis.mainPyodide) {</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="co">                globalThis.qpyodideCellDetails.forEach((cell, index) =&gt; {</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="co">                  if (cell.options &amp;&amp; cell.options.autorun === 'true') {</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co">                    setTimeout(() =&gt; {</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="co">                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a><span class="co">                      if (runButton &amp;&amp; !runButton.disabled) {</span></span>
-<span id="cb7-17"><a href="#cb7-17"></a><span class="co">                        runButton.click();</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="co">                      }</span></span>
-<span id="cb7-19"><a href="#cb7-19"></a><span class="co">                    }, index * 1000);</span></span>
-<span id="cb7-20"><a href="#cb7-20"></a><span class="co">                  }</span></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="co">                });</span></span>
-<span id="cb7-22"><a href="#cb7-22"></a><span class="co">              }</span></span>
-<span id="cb7-23"><a href="#cb7-23"></a><span class="co">            } else {</span></span>
-<span id="cb7-24"><a href="#cb7-24"></a><span class="co">              setTimeout(waitForPyodide, 500);</span></span>
-<span id="cb7-25"><a href="#cb7-25"></a><span class="co">            }</span></span>
-<span id="cb7-26"><a href="#cb7-26"></a><span class="co">          }</span></span>
-<span id="cb7-27"><a href="#cb7-27"></a><span class="co">          setTimeout(waitForPyodide, 2000);</span></span>
-<span id="cb7-28"><a href="#cb7-28"></a><span class="co">        });</span></span>
-<span id="cb7-29"><a href="#cb7-29"></a><span class="co">        &lt;/script&gt;</span></span>
-<span id="cb7-30"><a href="#cb7-30"></a><span class="an">filters:</span></span>
-<span id="cb7-31"><a href="#cb7-31"></a><span class="co">  - pyodide</span></span>
-<span id="cb7-32"><a href="#cb7-32"></a><span class="an">pyodide:</span></span>
-<span id="cb7-33"><a href="#cb7-33"></a><span class="co">  packages:</span></span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="co">    - numpy</span></span>
-<span id="cb7-35"><a href="#cb7-35"></a><span class="co">    - matplotlib</span></span>
-<span id="cb7-36"><a href="#cb7-36"></a><span class="co">---</span></span>
-<span id="cb7-37"><a href="#cb7-37"></a></span>
-<span id="cb7-38"><a href="#cb7-38"></a><span class="fu"># Discovery {#sec-discovery}</span></span>
-<span id="cb7-39"><a href="#cb7-39"></a></span>
-<span id="cb7-40"><a href="#cb7-40"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb7-41"><a href="#cb7-41"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb7-42"><a href="#cb7-42"></a></span>
-<span id="cb7-43"><a href="#cb7-43"></a><span class="ss">1. </span>**Distinguish** the *confirmatory* setting of @sec-foundations through @sec-reliability (a construct is posited and the question is whether items measure it) from the *exploratory* setting of this chapter (only a collection of items is given and the construct structure must be discovered).</span>
-<span id="cb7-44"><a href="#cb7-44"></a><span class="ss">2. </span>**Determine** how many constructs an item set measures using parallel analysis, distinguishing genuine factors from the eigenvalues that sampling noise alone produces.</span>
-<span id="cb7-45"><a href="#cb7-45"></a><span class="ss">3. </span>**Compute** and interpret the structure matrix of a fitted factor model, and explain why standardized loadings---not raw loadings---are the comparable fingerprint of an item.</span>
-<span id="cb7-46"><a href="#cb7-46"></a><span class="ss">4. </span>**Cluster** items by their structure vectors to reveal latent subgroups, and diagnose benchmark heterogeneity from the resulting inter-cluster correlations.</span>
-<span id="cb7-47"><a href="#cb7-47"></a><span class="ss">5. </span>**Evaluate** the generalization of a learned factor model under masking schemes (entry-wise, row holdout, column holdout), distinguishing interpolation from extrapolation to unseen models and items.</span>
-<span id="cb7-48"><a href="#cb7-48"></a><span class="ss">6. </span>**Contrast** the common-cause (latent-variable) account of item correlations with the network account, in which correlations arise from direct associations among items rather than a shared latent factor.</span>
-<span id="cb7-49"><a href="#cb7-49"></a><span class="ss">7. </span>**Specify** the Gaussian graphical model (partial-correlation network) and the Ising model as the continuous and binary network models, and relate each to its estimation procedure.</span>
-<span id="cb7-50"><a href="#cb7-50"></a><span class="ss">8. </span>**Explain** why latent-variable and network structures can be observationally close, connecting this underdetermination to the nomological equivalence of @sec-validity.</span>
-<span id="cb7-51"><a href="#cb7-51"></a>:::</span>
-<span id="cb7-52"><a href="#cb7-52"></a></span>
-<span id="cb7-53"><a href="#cb7-53"></a>::: {.callout-important title="Scope of This Chapter"}</span>
-<span id="cb7-54"><a href="#cb7-54"></a>The preceding chapters all begin from a *named construct*. @sec-validity asks whether an instrument measures the construct it claims to; @sec-foundations builds models that assume a single ability $\theta$ and tests whether items realize it; @sec-learning estimates those models; @sec-reliability quantifies how precisely they measure. Throughout, *the thing being measured is decided in advance*, and the work is to certify that the items deliver it.</span>
-<span id="cb7-55"><a href="#cb7-55"></a></span>
-<span id="cb7-56"><a href="#cb7-56"></a>This chapter takes the opposite starting point. We are handed a collection of items---a benchmark, or a merge of several---*without* a vetted account of what they measure, and we ask the data to tell us: **How many distinct things does this item set measure? Which items measure which? And is "one ability" even the right shape for the dependence among items, or are the items related directly, with no common cause behind them?** This is the *exploratory* or *discovery* mode of measurement, the analogue of exploratory (as opposed to confirmatory) factor analysis in psychometrics. The factor model of @sec-factor-models supplies the first tool; network models supply the second.</span>
-<span id="cb7-57"><a href="#cb7-57"></a>:::</span>
-<span id="cb7-58"><a href="#cb7-58"></a></span>
-<span id="cb7-59"><a href="#cb7-59"></a>::: {.callout-note title="Notation"}</span>
-<span id="cb7-60"><a href="#cb7-60"></a>This chapter's central object is the factor model (@sec-factor-models): $U_i \in \mathbb{R}^K$ (person factor vector), $V_j \in \mathbb{R}^K$ (item loading vector), $Z_j$ (item intercept), and $\Sigma = \operatorname{Cov}(U)$ (factor covariance). New beyond it are the **structure matrix** $S$, the per-item **structure vector** $S_j$, and the network quantities: the precision matrix $\Theta = \Sigma^{-1}$, partial correlations $\rho_{jk\cdot\text{rest}}$, and the Ising couplings $\omega_{jk}$.</span>
-<span id="cb7-61"><a href="#cb7-61"></a>:::</span>
-<span id="cb7-62"><a href="#cb7-62"></a></span>
-<span id="cb7-63"><a href="#cb7-63"></a>The instrument for most of this chapter is the **factor model**, developed in @sec-factor-models below. Where the IRT models of @sec-foundations give each model a single ability $\theta_i$ and ask whether the items realize it, the factor model gives a *vector* and lets the data say how many axes there are (@sec-dimensionality), which items load on which (@sec-structure-matrix), and how those items group into latent skills (@sec-item-clustering). Its role as the multidimensional escape hatch was flagged in @sec-acm-ai; here we put it to systematic exploratory use. The final section then asks whether a latent-axis picture is the right one at all, or whether the items are better described as a network with no common cause behind them (@sec-network-models).</span>
-<span id="cb7-64"><a href="#cb7-64"></a></span>
-<span id="cb7-65"><a href="#cb7-65"></a><span class="fu">## How Many Constructs? Dimensionality Assessment {#sec-dimensionality}</span></span>
-<span id="cb7-66"><a href="#cb7-66"></a></span>
-<span id="cb7-67"><a href="#cb7-67"></a>The first and bluntest discovery question is *how many* distinct things an item set measures. In the confirmatory setting of @sec-foundations one assumes the answer is one---a single ability $\theta$---and tests whether the items realize it; here we let the data decide the count. The primary tool is **eigenvalue analysis** of the item correlation matrix: a unidimensional set has one eigenvalue far larger than the rest, while $k$ genuine constructs produce $k$ large eigenvalues. But raw eigenvalues mislead, because even pure noise produces a first eigenvalue above one (sampling fluctuations inflate the leading principal component of any finite matrix).</span>
-<span id="cb7-68"><a href="#cb7-68"></a></span>
-<span id="cb7-69"><a href="#cb7-69"></a>**Parallel analysis** <span class="co">[</span><span class="ot">@horn1965rationale</span><span class="co">]</span> corrects for this by comparing the observed eigenvalues against those from *random* data of the same dimensions, retaining a factor only when its eigenvalue exceeds the random-data threshold. The count $k$ it returns is the number of factors we carry into the structure matrix of @sec-structure-matrix and the clustering of @sec-item-clustering---the rest of this chapter takes that count as given.</span>
-<span id="cb7-70"><a href="#cb7-70"></a></span>
-<span id="cb7-71"><a href="#cb7-71"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb7-72"><a href="#cb7-72"></a><span class="co">#| label: dimensionality-analysis</span></span>
-<span id="cb7-73"><a href="#cb7-73"></a><span class="co">#| autorun: true</span></span>
-<span id="cb7-74"><a href="#cb7-74"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb7-75"><a href="#cb7-75"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb7-76"><a href="#cb7-76"></a></span>
-<span id="cb7-77"><a href="#cb7-77"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb7-78"><a href="#cb7-78"></a></span>
-<span id="cb7-79"><a href="#cb7-79"></a><span class="co"># --- Simulate a 2-factor benchmark ---</span></span>
-<span id="cb7-80"><a href="#cb7-80"></a>n_models <span class="op">=</span> <span class="dv">300</span></span>
-<span id="cb7-81"><a href="#cb7-81"></a>n_items <span class="op">=</span> <span class="dv">20</span></span>
-<span id="cb7-82"><a href="#cb7-82"></a>n_factor1 <span class="op">=</span> <span class="dv">10</span>  <span class="co"># "verbal reasoning" items</span></span>
-<span id="cb7-83"><a href="#cb7-83"></a>n_factor2 <span class="op">=</span> <span class="dv">10</span>  <span class="co"># "quantitative reasoning" items</span></span>
-<span id="cb7-84"><a href="#cb7-84"></a></span>
-<span id="cb7-85"><a href="#cb7-85"></a><span class="co"># Two latent factors with moderate correlation</span></span>
-<span id="cb7-86"><a href="#cb7-86"></a>factor_corr <span class="op">=</span> <span class="fl">0.3</span></span>
-<span id="cb7-87"><a href="#cb7-87"></a>cov_matrix <span class="op">=</span> np.array([[<span class="fl">1.0</span>, factor_corr], [factor_corr, <span class="fl">1.0</span>]])</span>
-<span id="cb7-88"><a href="#cb7-88"></a>L <span class="op">=</span> np.linalg.cholesky(cov_matrix)</span>
-<span id="cb7-89"><a href="#cb7-89"></a>factors <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, (n_models, <span class="dv">2</span>)) <span class="op">@</span> L.T</span>
-<span id="cb7-90"><a href="#cb7-90"></a></span>
-<span id="cb7-91"><a href="#cb7-91"></a><span class="co"># Factor loadings</span></span>
-<span id="cb7-92"><a href="#cb7-92"></a>loadings <span class="op">=</span> np.zeros((n_items, <span class="dv">2</span>))</span>
-<span id="cb7-93"><a href="#cb7-93"></a>loadings[:n_factor1, <span class="dv">0</span>] <span class="op">=</span> np.random.uniform(<span class="fl">0.5</span>, <span class="fl">0.9</span>, n_factor1)  <span class="co"># Factor 1</span></span>
-<span id="cb7-94"><a href="#cb7-94"></a>loadings[n_factor1:, <span class="dv">1</span>] <span class="op">=</span> np.random.uniform(<span class="fl">0.5</span>, <span class="fl">0.9</span>, n_factor2)  <span class="co"># Factor 2</span></span>
-<span id="cb7-95"><a href="#cb7-95"></a></span>
-<span id="cb7-96"><a href="#cb7-96"></a><span class="co"># Generate continuous item scores (for eigenvalue analysis)</span></span>
-<span id="cb7-97"><a href="#cb7-97"></a>noise_var <span class="op">=</span> <span class="fl">0.4</span></span>
-<span id="cb7-98"><a href="#cb7-98"></a>X <span class="op">=</span> factors <span class="op">@</span> loadings.T <span class="op">+</span> np.random.normal(<span class="dv">0</span>, np.sqrt(noise_var), (n_models, n_items))</span>
-<span id="cb7-99"><a href="#cb7-99"></a></span>
-<span id="cb7-100"><a href="#cb7-100"></a><span class="co"># --- Eigenvalue analysis ---</span></span>
-<span id="cb7-101"><a href="#cb7-101"></a>corr_matrix <span class="op">=</span> np.corrcoef(X.T)</span>
-<span id="cb7-102"><a href="#cb7-102"></a>eigenvalues <span class="op">=</span> np.linalg.eigvalsh(corr_matrix)[::<span class="op">-</span><span class="dv">1</span>]  <span class="co"># Descending</span></span>
-<span id="cb7-103"><a href="#cb7-103"></a></span>
-<span id="cb7-104"><a href="#cb7-104"></a><span class="co"># --- Parallel analysis (100 replications) ---</span></span>
-<span id="cb7-105"><a href="#cb7-105"></a>n_reps <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb7-106"><a href="#cb7-106"></a>random_eigenvalues <span class="op">=</span> np.zeros((n_reps, n_items))</span>
-<span id="cb7-107"><a href="#cb7-107"></a><span class="cf">for</span> rep <span class="kw">in</span> <span class="bu">range</span>(n_reps):</span>
-<span id="cb7-108"><a href="#cb7-108"></a>    X_random <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, (n_models, n_items))</span>
-<span id="cb7-109"><a href="#cb7-109"></a>    corr_random <span class="op">=</span> np.corrcoef(X_random.T)</span>
-<span id="cb7-110"><a href="#cb7-110"></a>    random_eigenvalues[rep] <span class="op">=</span> np.linalg.eigvalsh(corr_random)[::<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb7-111"><a href="#cb7-111"></a></span>
-<span id="cb7-112"><a href="#cb7-112"></a>pa_threshold <span class="op">=</span> np.percentile(random_eigenvalues, <span class="dv">95</span>, axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb7-113"><a href="#cb7-113"></a></span>
-<span id="cb7-114"><a href="#cb7-114"></a><span class="co"># --- Visualization ---</span></span>
-<span id="cb7-115"><a href="#cb7-115"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb7-116"><a href="#cb7-116"></a></span>
-<span id="cb7-117"><a href="#cb7-117"></a><span class="co"># Panel 1: Scree plot with parallel analysis</span></span>
-<span id="cb7-118"><a href="#cb7-118"></a>components <span class="op">=</span> np.arange(<span class="dv">1</span>, n_items <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb7-119"><a href="#cb7-119"></a>axes[<span class="dv">0</span>].plot(components[:<span class="dv">10</span>], eigenvalues[:<span class="dv">10</span>], <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, linewidth<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb7-120"><a href="#cb7-120"></a>             markersize<span class="op">=</span><span class="dv">8</span>, label<span class="op">=</span><span class="st">'Observed eigenvalues'</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb7-121"><a href="#cb7-121"></a>axes[<span class="dv">0</span>].plot(components[:<span class="dv">10</span>], pa_threshold[:<span class="dv">10</span>], <span class="st">'s--'</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb7-122"><a href="#cb7-122"></a>             markersize<span class="op">=</span><span class="dv">6</span>, label<span class="op">=</span><span class="st">'95th percentile (random)'</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb7-123"><a href="#cb7-123"></a>axes[<span class="dv">0</span>].axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, linestyle<span class="op">=</span><span class="st">':'</span>, label<span class="op">=</span><span class="st">'Kaiser criterion'</span>)</span>
-<span id="cb7-124"><a href="#cb7-124"></a><span class="co"># Shade retained factors</span></span>
-<span id="cb7-125"><a href="#cb7-125"></a>n_retained <span class="op">=</span> <span class="bu">sum</span>(eigenvalues <span class="op">&gt;</span> pa_threshold)</span>
-<span id="cb7-126"><a href="#cb7-126"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">min</span>(n_retained, <span class="dv">10</span>)):</span>
-<span id="cb7-127"><a href="#cb7-127"></a>    axes[<span class="dv">0</span>].axvspan(k <span class="op">+</span> <span class="fl">0.6</span>, k <span class="op">+</span> <span class="fl">1.4</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, color<span class="op">=</span><span class="st">'#45BF7C'</span>)</span>
-<span id="cb7-128"><a href="#cb7-128"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Component'</span>)</span>
-<span id="cb7-129"><a href="#cb7-129"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Eigenvalue'</span>)</span>
-<span id="cb7-130"><a href="#cb7-130"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Scree Plot with Parallel Analysis'</span>)</span>
-<span id="cb7-131"><a href="#cb7-131"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb7-132"><a href="#cb7-132"></a>axes[<span class="dv">0</span>].set_xticks(components[:<span class="dv">10</span>])</span>
-<span id="cb7-133"><a href="#cb7-133"></a></span>
-<span id="cb7-134"><a href="#cb7-134"></a><span class="co"># Panel 2: Loading structure</span></span>
-<span id="cb7-135"><a href="#cb7-135"></a><span class="co"># Estimate loadings via PCA (first 2 components)</span></span>
-<span id="cb7-136"><a href="#cb7-136"></a>X_centered <span class="op">=</span> X <span class="op">-</span> X.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb7-137"><a href="#cb7-137"></a>U, S, Vt <span class="op">=</span> np.linalg.svd(X_centered, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb7-138"><a href="#cb7-138"></a>pc_loadings <span class="op">=</span> Vt[:<span class="dv">2</span>, :].T <span class="op">*</span> S[:<span class="dv">2</span>] <span class="op">/</span> np.sqrt(n_models <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb7-139"><a href="#cb7-139"></a></span>
-<span id="cb7-140"><a href="#cb7-140"></a>colors <span class="op">=</span> [<span class="st">'#5B8DEE'</span>] <span class="op">*</span> n_factor1 <span class="op">+</span> [<span class="st">'#E8637A'</span>] <span class="op">*</span> n_factor2</span>
-<span id="cb7-141"><a href="#cb7-141"></a>axes[<span class="dv">1</span>].scatter(pc_loadings[:, <span class="dv">0</span>], pc_loadings[:, <span class="dv">1</span>], c<span class="op">=</span>colors, s<span class="op">=</span><span class="dv">80</span>,</span>
-<span id="cb7-142"><a href="#cb7-142"></a>                edgecolors<span class="op">=</span><span class="st">'white'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb7-143"><a href="#cb7-143"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_items):</span>
-<span id="cb7-144"><a href="#cb7-144"></a>    axes[<span class="dv">1</span>].annotate(<span class="ss">f'</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span>, (pc_loadings[i, <span class="dv">0</span>] <span class="op">+</span> <span class="fl">0.02</span>, pc_loadings[i, <span class="dv">1</span>] <span class="op">+</span> <span class="fl">0.02</span>),</span>
-<span id="cb7-145"><a href="#cb7-145"></a>                     fontsize<span class="op">=</span><span class="dv">7</span>, color<span class="op">=</span><span class="st">'gray'</span>)</span>
-<span id="cb7-146"><a href="#cb7-146"></a>axes[<span class="dv">1</span>].axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb7-147"><a href="#cb7-147"></a>axes[<span class="dv">1</span>].axvline(x<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb7-148"><a href="#cb7-148"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'PC1 Loading (Factor 1: Verbal)'</span>)</span>
-<span id="cb7-149"><a href="#cb7-149"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'PC2 Loading (Factor 2: Quantitative)'</span>)</span>
-<span id="cb7-150"><a href="#cb7-150"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Item Loading Structure'</span>)</span>
-<span id="cb7-151"><a href="#cb7-151"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Patch</span>
-<span id="cb7-152"><a href="#cb7-152"></a>axes[<span class="dv">1</span>].legend(handles<span class="op">=</span>[</span>
-<span id="cb7-153"><a href="#cb7-153"></a>    Patch(facecolor<span class="op">=</span><span class="st">'#5B8DEE'</span>, label<span class="op">=</span><span class="st">'Verbal items (1-10)'</span>),</span>
-<span id="cb7-154"><a href="#cb7-154"></a>    Patch(facecolor<span class="op">=</span><span class="st">'#E8637A'</span>, label<span class="op">=</span><span class="st">'Quantitative items (11-20)'</span>)</span>
-<span id="cb7-155"><a href="#cb7-155"></a>])</span>
-<span id="cb7-156"><a href="#cb7-156"></a></span>
-<span id="cb7-157"><a href="#cb7-157"></a>plt.tight_layout()</span>
-<span id="cb7-158"><a href="#cb7-158"></a>plt.show()</span>
-<span id="cb7-159"><a href="#cb7-159"></a></span>
-<span id="cb7-160"><a href="#cb7-160"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Dimensionality Assessment:"</span>)</span>
-<span id="cb7-161"><a href="#cb7-161"></a><span class="bu">print</span>(<span class="ss">f"  First 5 eigenvalues: </span><span class="sc">{</span><span class="st">', '</span><span class="sc">.</span>join(<span class="ss">f'</span><span class="sc">{</span>e<span class="sc">:.2f}</span><span class="ss">'</span> <span class="cf">for</span> e <span class="kw">in</span> eigenvalues[:<span class="dv">5</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb7-162"><a href="#cb7-162"></a><span class="bu">print</span>(<span class="ss">f"  Parallel analysis threshold: </span><span class="sc">{</span><span class="st">', '</span><span class="sc">.</span>join(<span class="ss">f'</span><span class="sc">{</span>e<span class="sc">:.2f}</span><span class="ss">'</span> <span class="cf">for</span> e <span class="kw">in</span> pa_threshold[:<span class="dv">5</span>])<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb7-163"><a href="#cb7-163"></a><span class="bu">print</span>(<span class="ss">f"  Factors retained (parallel analysis): </span><span class="sc">{</span>n_retained<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb7-164"><a href="#cb7-164"></a><span class="bu">print</span>(<span class="ss">f"  Variance explained by 2 factors: </span><span class="sc">{</span>eigenvalues[:<span class="dv">2</span>]<span class="sc">.</span><span class="bu">sum</span>() <span class="op">/</span> eigenvalues<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
-<span id="cb7-165"><a href="#cb7-165"></a><span class="in">```</span></span>
-<span id="cb7-166"><a href="#cb7-166"></a></span>
-<span id="cb7-167"><a href="#cb7-167"></a>The scree plot (left) shows two eigenvalues clearly exceeding the parallel-analysis threshold (red dashed line), confirming two-dimensional structure. The loading plot (right) reveals the two-factor structure: verbal items (blue, 1--10) load on the first component, while quantitative items (red, 11--20) load on the second. A benchmark reporting a single "reasoning" score would conflate these two distinct abilities.</span>
-<span id="cb7-168"><a href="#cb7-168"></a></span>
-<span id="cb7-169"><a href="#cb7-169"></a>This count is the input to everything that follows. When parallel analysis returns $k = 1$, the unidimensional models of @sec-foundations are licensed and a single composite score is defensible; when $k &gt; 1$, the honest response to a benchmark sold as one score is to report subscores per factor or revise the item set toward a single construct---and to fit a $k$-factor model (@sec-factor-models) whose loadings reveal *which* items measure *which* of the $k$ constructs (@sec-structure-matrix).</span>
-<span id="cb7-170"><a href="#cb7-170"></a></span>
-<span id="cb7-171"><a href="#cb7-171"></a><span class="fu">## The Factor Model {#sec-factor-models}</span></span>
-<span id="cb7-172"><a href="#cb7-172"></a></span>
-<span id="cb7-173"><a href="#cb7-173"></a>The instrument that turns a construct *count* into a *characterization* is the **factor model**. Where the IRT models of @sec-foundations assign each model a single ability $\theta_i$, the factor model assigns a *vector*, letting each item load on more than one latent axis---exactly what a count $k &gt; 1$ calls for.</span>
-<span id="cb7-174"><a href="#cb7-174"></a></span>
-<span id="cb7-175"><a href="#cb7-175"></a>Factor models provide an alternative perspective on latent variable measurement. While IRT focuses on item-level response probabilities, factor models focus on the covariance structure of responses. The classical linear factor model assumes observed variables are linear combinations of latent factors plus noise:</span>
-<span id="cb7-176"><a href="#cb7-176"></a></span>
-<span id="cb7-177"><a href="#cb7-177"></a>$$</span>
-<span id="cb7-178"><a href="#cb7-178"></a>X_j = \lambda_{j1} F_1 + \lambda_{j2} F_2 + \cdots + \lambda_{jK} F_K + \epsilon_j</span>
-<span id="cb7-179"><a href="#cb7-179"></a>$$</span>
-<span id="cb7-180"><a href="#cb7-180"></a></span>
-<span id="cb7-181"><a href="#cb7-181"></a>where:</span>
-<span id="cb7-182"><a href="#cb7-182"></a></span>
-<span id="cb7-183"><a href="#cb7-183"></a><span class="ss">- </span>$X_j$ is the observed score on item $j$</span>
-<span id="cb7-184"><a href="#cb7-184"></a><span class="ss">- </span>$F_k$ are latent factors (abilities, traits)</span>
-<span id="cb7-185"><a href="#cb7-185"></a><span class="ss">- </span>$\lambda_{jk}$ are factor loadings</span>
-<span id="cb7-186"><a href="#cb7-186"></a><span class="ss">- </span>$\epsilon_j$ is item-specific error</span>
-<span id="cb7-187"><a href="#cb7-187"></a></span>
-<span id="cb7-188"><a href="#cb7-188"></a>In matrix notation: $X = \Lambda F + \epsilon$, where $\Lambda$ is the $M \times K$ matrix of factor loadings. For binary data, we use a logistic link function:</span>
-<span id="cb7-189"><a href="#cb7-189"></a></span>
-<span id="cb7-190"><a href="#cb7-190"></a>$$</span>
-<span id="cb7-191"><a href="#cb7-191"></a>P(Y_{ij} = 1 | U_i, V_j, Z_j) = \sigma(U_i^\top V_j + Z_j)</span>
-<span id="cb7-192"><a href="#cb7-192"></a>$$</span>
-<span id="cb7-193"><a href="#cb7-193"></a></span>
-<span id="cb7-194"><a href="#cb7-194"></a>where $U_i \in \mathbb{R}^K$ is the latent factor vector for person $i$, $V_j \in \mathbb{R}^K$ is the factor loading vector for item $j$, and $Z_j \in \mathbb{R}$ is the item intercept.</span>
-<span id="cb7-195"><a href="#cb7-195"></a></span>
-<span id="cb7-196"><a href="#cb7-196"></a>The key difference is the link function: the linear model uses an identity link ($X_j = \ldots$) for continuous responses, while the logistic model passes the linear predictor through the sigmoid $\sigma(\cdot)$ to produce a probability for binary responses.</span>
-<span id="cb7-197"><a href="#cb7-197"></a></span>
-<span id="cb7-198"><a href="#cb7-198"></a><span class="al">![Plate diagram for the logistic factor model. The latent factor vector $U_i$ interacts with item-specific loadings $V_j$ and intercepts $Z_j$ to produce responses.](Figures/plate_factor.png)</span>{#fig-factor-plate width=50%}</span>
-<span id="cb7-199"><a href="#cb7-199"></a></span>
-<span id="cb7-200"><a href="#cb7-200"></a>When $K = 1$ and $V_j = 1$ for all $j$, the logistic factor model reduces to the Rasch model of @sec-foundations: the multidimensional version simply lets each item carry its own loading *vector* rather than a fixed unit loading.</span>
-<span id="cb7-201"><a href="#cb7-201"></a></span>
-<span id="cb7-202"><a href="#cb7-202"></a><span class="fu">### Fitting the Factor Model {#sec-logistic-fm}</span></span>
-<span id="cb7-203"><a href="#cb7-203"></a></span>
-<span id="cb7-204"><a href="#cb7-204"></a>We estimate the parameters $(U, V, Z)$ by minimizing the binary cross-entropy between the predicted probabilities and the observed responses---the same maximum-likelihood objective developed for the Rasch model in @sec-learning, now over matrix-valued parameters. A compact implementation:</span>
-<span id="cb7-205"><a href="#cb7-205"></a></span>
-<span id="cb7-208"><a href="#cb7-208"></a><span class="in">```{python}</span></span>
-<span id="cb7-209"><a href="#cb7-209"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-210"><a href="#cb7-210"></a></span>
-<span id="cb7-211"><a href="#cb7-211"></a><span class="im">import</span> torch</span>
-<span id="cb7-212"><a href="#cb7-212"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
-<span id="cb7-213"><a href="#cb7-213"></a><span class="im">from</span> torch.optim <span class="im">import</span> LBFGS</span>
-<span id="cb7-214"><a href="#cb7-214"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
-<span id="cb7-215"><a href="#cb7-215"></a></span>
-<span id="cb7-216"><a href="#cb7-216"></a><span class="kw">class</span> LogisticFM(nn.Module):</span>
-<span id="cb7-217"><a href="#cb7-217"></a>    <span class="co">"""Logistic Factor Model for binary response data."""</span></span>
-<span id="cb7-218"><a href="#cb7-218"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, N, M, K):</span>
-<span id="cb7-219"><a href="#cb7-219"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb7-220"><a href="#cb7-220"></a>        <span class="va">self</span>.U <span class="op">=</span> nn.Parameter(torch.randn(N, K))  <span class="co"># Model abilities</span></span>
-<span id="cb7-221"><a href="#cb7-221"></a>        <span class="va">self</span>.V <span class="op">=</span> nn.Parameter(torch.randn(M, K))  <span class="co"># Item loadings</span></span>
-<span id="cb7-222"><a href="#cb7-222"></a>        <span class="va">self</span>.Z <span class="op">=</span> nn.Parameter(torch.randn(M, <span class="dv">1</span>))  <span class="co"># Item intercepts</span></span>
-<span id="cb7-223"><a href="#cb7-223"></a></span>
-<span id="cb7-224"><a href="#cb7-224"></a>    <span class="kw">def</span> forward(<span class="va">self</span>):</span>
-<span id="cb7-225"><a href="#cb7-225"></a>        <span class="cf">return</span> torch.sigmoid(<span class="va">self</span>.U <span class="op">@</span> <span class="va">self</span>.V.T <span class="op">+</span> <span class="va">self</span>.Z.T)</span>
-<span id="cb7-226"><a href="#cb7-226"></a><span class="in">```</span></span>
-<span id="cb7-227"><a href="#cb7-227"></a></span>
-<span id="cb7-228"><a href="#cb7-228"></a>::: {.callout-note title="Interpretation"}</span>
-<span id="cb7-229"><a href="#cb7-229"></a><span class="ss">- </span>$U_i$: latent ability vector of model $i$ (position in $K$-dimensional capability space)</span>
-<span id="cb7-230"><a href="#cb7-230"></a><span class="ss">- </span>$V_j$: latent property vector of item $j$ (which capabilities the item measures)</span>
-<span id="cb7-231"><a href="#cb7-231"></a><span class="ss">- </span>$Z_j$: overall item difficulty (independent of capability dimensions)</span>
-<span id="cb7-232"><a href="#cb7-232"></a><span class="ss">- </span>$\sigma$: sigmoid function ensuring probabilities in $<span class="co">[</span><span class="ot">0,1</span><span class="co">]</span>$</span>
-<span id="cb7-233"><a href="#cb7-233"></a>:::</span>
-<span id="cb7-234"><a href="#cb7-234"></a></span>
-<span id="cb7-235"><a href="#cb7-235"></a>We train by minimizing binary cross-entropy loss with L-BFGS:</span>
-<span id="cb7-236"><a href="#cb7-236"></a></span>
-<span id="cb7-239"><a href="#cb7-239"></a><span class="in">```{python}</span></span>
-<span id="cb7-240"><a href="#cb7-240"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-241"><a href="#cb7-241"></a></span>
-<span id="cb7-242"><a href="#cb7-242"></a><span class="co"># Training setup</span></span>
-<span id="cb7-243"><a href="#cb7-243"></a>N, M <span class="op">=</span> Y.shape</span>
-<span id="cb7-244"><a href="#cb7-244"></a>K <span class="op">=</span> <span class="dv">2</span>  <span class="co"># Number of latent dimensions</span></span>
-<span id="cb7-245"><a href="#cb7-245"></a>model <span class="op">=</span> LogisticFM(N, M, K)</span>
-<span id="cb7-246"><a href="#cb7-246"></a></span>
-<span id="cb7-247"><a href="#cb7-247"></a>opt <span class="op">=</span> LBFGS(</span>
-<span id="cb7-248"><a href="#cb7-248"></a>    model.parameters(),</span>
-<span id="cb7-249"><a href="#cb7-249"></a>    lr<span class="op">=</span><span class="fl">0.1</span>,</span>
-<span id="cb7-250"><a href="#cb7-250"></a>    max_iter<span class="op">=</span><span class="dv">20</span>,</span>
-<span id="cb7-251"><a href="#cb7-251"></a>    history_size<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb7-252"><a href="#cb7-252"></a>    line_search_fn<span class="op">=</span><span class="st">"strong_wolfe"</span></span>
-<span id="cb7-253"><a href="#cb7-253"></a>)</span>
-<span id="cb7-254"><a href="#cb7-254"></a></span>
-<span id="cb7-255"><a href="#cb7-255"></a><span class="kw">def</span> closure():</span>
-<span id="cb7-256"><a href="#cb7-256"></a>    opt.zero_grad()</span>
-<span id="cb7-257"><a href="#cb7-257"></a>    probs <span class="op">=</span> model()</span>
-<span id="cb7-258"><a href="#cb7-258"></a>    loss <span class="op">=</span> F.binary_cross_entropy(probs[train_mask], Y[train_mask].<span class="bu">float</span>())</span>
-<span id="cb7-259"><a href="#cb7-259"></a>    loss.backward()</span>
-<span id="cb7-260"><a href="#cb7-260"></a>    <span class="cf">return</span> loss</span>
-<span id="cb7-261"><a href="#cb7-261"></a></span>
-<span id="cb7-262"><a href="#cb7-262"></a><span class="co"># Training loop</span></span>
-<span id="cb7-263"><a href="#cb7-263"></a><span class="cf">for</span> iteration <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
-<span id="cb7-264"><a href="#cb7-264"></a>    loss <span class="op">=</span> opt.step(closure)</span>
-<span id="cb7-265"><a href="#cb7-265"></a><span class="in">```</span></span>
-<span id="cb7-266"><a href="#cb7-266"></a></span>
-<span id="cb7-267"><a href="#cb7-267"></a>The model learns to decompose the response matrix into latent factors that capture the underlying structure of model capabilities and item characteristics. With a fitted model in hand, the next sections read its parameters---the loadings $V_j$ via the structure matrix, and their groupings via clustering---and @sec-generalization asks how well those parameters predict held-out models and items.</span>
-<span id="cb7-268"><a href="#cb7-268"></a></span>
-<span id="cb7-269"><a href="#cb7-269"></a><span class="fu">## Reading What Each Item Measures: The Structure Matrix {#sec-structure-matrix}</span></span>
-<span id="cb7-270"><a href="#cb7-270"></a></span>
-<span id="cb7-271"><a href="#cb7-271"></a>After fitting a multidimensional factor model, we obtain estimated item loadings $\hat{V}_j$ that describe how each item relates to the latent factors. However, raw factor loadings require standardization for interpretable comparisons across items and benchmarks.</span>
-<span id="cb7-272"><a href="#cb7-272"></a></span>
-<span id="cb7-273"><a href="#cb7-273"></a>The **structure matrix** $S$ captures the correlation between each item's latent response and each factor:</span>
-<span id="cb7-274"><a href="#cb7-274"></a></span>
-<span id="cb7-275"><a href="#cb7-275"></a>::: {.callout-note title="Definition: Structure Matrix"}</span>
-<span id="cb7-276"><a href="#cb7-276"></a>For a logistic factor model, the latent response $Y^*_{ij}$ can be written as $Y^*_{ij} = U_i^\top V_j + Z_j + \epsilon_{ij}$, where $\epsilon_{ij}$ follows a logistic distribution with variance $\pi^2/3$. The structure matrix entry $S_{jk}$ is the correlation between item $j$'s latent response and factor $k$:</span>
-<span id="cb7-277"><a href="#cb7-277"></a></span>
-<span id="cb7-278"><a href="#cb7-278"></a>$$</span>
-<span id="cb7-279"><a href="#cb7-279"></a>S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_{kk}} \sqrt{V_j^\top \Sigma V_j + \pi^2/3}}</span>
-<span id="cb7-280"><a href="#cb7-280"></a>$$</span>
-<span id="cb7-281"><a href="#cb7-281"></a></span>
-<span id="cb7-282"><a href="#cb7-282"></a>where $\Sigma = \text{Cov}(U)$ is the factor covariance matrix.</span>
-<span id="cb7-283"><a href="#cb7-283"></a>:::</span>
-<span id="cb7-284"><a href="#cb7-284"></a></span>
-<span id="cb7-285"><a href="#cb7-285"></a>The formula for $S_{jk}$ is just a Pearson correlation, built from the standard recipe</span>
-<span id="cb7-286"><a href="#cb7-286"></a></span>
-<span id="cb7-287"><a href="#cb7-287"></a>$$</span>
-<span id="cb7-288"><a href="#cb7-288"></a>\text{Cor}(A, B) = \frac{\text{Cov}(A, B)}{\text{SD}(A) \cdot \text{SD}(B)},</span>
-<span id="cb7-289"><a href="#cb7-289"></a>$$</span>
-<span id="cb7-290"><a href="#cb7-290"></a></span>
-<span id="cb7-291"><a href="#cb7-291"></a>applied to $A = Y^*_{ij}$ and $B = U_{ik}$. Reading the three pieces in turn:</span>
-<span id="cb7-292"><a href="#cb7-292"></a></span>
-<span id="cb7-293"><a href="#cb7-293"></a><span class="ss">- </span>**Numerator — the covariance.** Of the three terms in $Y^*_{ij} = U_i^\top V_j + Z_j + \epsilon_{ij}$, only $U_i^\top V_j$ depends on $U$; the item difficulty $Z_j$ and logistic noise $\epsilon_{ij}$ are independent of $U$ and drop out. This leaves</span>
-<span id="cb7-294"><a href="#cb7-294"></a>$$</span>
-<span id="cb7-295"><a href="#cb7-295"></a>\text{Cov}(Y^*_{ij}, U_{ik}) = \text{Cov}(U_i^\top V_j,\, U_{ik}) = (V_j^\top \Sigma)_k.</span>
-<span id="cb7-296"><a href="#cb7-296"></a>$$</span>
-<span id="cb7-297"><a href="#cb7-297"></a></span>
-<span id="cb7-298"><a href="#cb7-298"></a><span class="ss">- </span>**Denominator — the two standard deviations.** The factor has $\text{SD}(U_{ik}) = \sqrt{\Sigma_{kk}}$, and the latent response has</span>
-<span id="cb7-299"><a href="#cb7-299"></a>$$</span>
-<span id="cb7-300"><a href="#cb7-300"></a>\text{SD}(Y^*_{ij}) = \sqrt{\underbrace{V_j^\top \Sigma V_j}_{\text{from } U_i^\top V_j} + \underbrace{\pi^2/3}_{\text{from } \epsilon_{ij}}},</span>
-<span id="cb7-301"><a href="#cb7-301"></a>$$</span>
-<span id="cb7-302"><a href="#cb7-302"></a>since $Z_j$ is a constant offset and the logistic error contributes variance $\pi^2/3$.</span>
-<span id="cb7-303"><a href="#cb7-303"></a></span>
-<span id="cb7-304"><a href="#cb7-304"></a><span class="ss">- </span>**Why standardize.** The resulting $S_{jk} \in <span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$ is directly comparable across items, unlike the raw loadings $V_j$, which depend on the arbitrary scale of the factors.</span>
-<span id="cb7-305"><a href="#cb7-305"></a></span>
-<span id="cb7-306"><a href="#cb7-306"></a>A detailed derivation is given in @sec-learning.</span>
-<span id="cb7-307"><a href="#cb7-307"></a></span>
-<span id="cb7-308"><a href="#cb7-308"></a>We define the **structure vector** for item $j$ as $S_j = (S_{j1}, S_{j2}, \ldots, S_{jK})^\top \in \mathbb{R}^K$, where each entry $S_{jk}$ is given by the formula above. Stacking these row vectors yields the $M \times K$ **structure matrix** $S$, whose $j$-th row is $S_j^\top$. The structure vector $S_j$ serves as a standardized fingerprint of item $j$: it tells us how strongly the item's latent response correlates with each factor, on a $<span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$ scale that is comparable across items.</span>
-<span id="cb7-309"><a href="#cb7-309"></a></span>
-<span id="cb7-310"><a href="#cb7-310"></a>The structure matrix has several important properties:</span>
-<span id="cb7-311"><a href="#cb7-311"></a></span>
-<span id="cb7-312"><a href="#cb7-312"></a><span class="ss">1. </span>**Bounded values:** Each entry $S_{jk} \in <span class="co">[</span><span class="ot">-1, 1</span><span class="co">]</span>$, making comparisons intuitive.</span>
-<span id="cb7-313"><a href="#cb7-313"></a><span class="ss">2. </span>**Interpretability:** High positive values indicate the item strongly measures that factor; negative values indicate inverse relationships.</span>
-<span id="cb7-314"><a href="#cb7-314"></a><span class="ss">3. </span>**Clustering:** Items with similar structure vectors measure similar constructs and can be grouped together.</span>
-<span id="cb7-315"><a href="#cb7-315"></a></span>
-<span id="cb7-316"><a href="#cb7-316"></a>For AI benchmarks, the structure matrix reveals which questions tap into which capabilities. Two questions may both be "correct/incorrect" but load on different factors---one measuring reasoning, another measuring factual recall. This has important implications for how we interpret aggregate benchmark scores.</span>
-<span id="cb7-317"><a href="#cb7-317"></a></span>
-<span id="cb7-318"><a href="#cb7-318"></a><span class="fu">## Item Clustering and Benchmark Heterogeneity {#sec-item-clustering}</span></span>
-<span id="cb7-319"><a href="#cb7-319"></a></span>
-<span id="cb7-320"><a href="#cb7-320"></a>With the structure matrix in hand, we can cluster items into latent subgroups using standard clustering algorithms such as Gaussian Mixture Models (GMM). Each cluster represents a group of items sharing similar factor loadings---analogous to "skills" or "themes" within the benchmark. This approach is analogous to exploratory factor analysis in psychometrics, revealing whether benchmarks are essentially unidimensional or composed of multiple, potentially antagonistic, latent skills.</span>
-<span id="cb7-321"><a href="#cb7-321"></a></span>
-<span id="cb7-322"><a href="#cb7-322"></a>::: {.callout-important title="Benchmark Heterogeneity"}</span>
-<span id="cb7-323"><a href="#cb7-323"></a>A key insight from factor analysis applied to AI benchmarks is that **benchmarks are rarely homogeneous**. Intentionally or not, they often combine items that test different capabilities, and even a single benchmark item may test a combination of capabilities.</span>
-<span id="cb7-324"><a href="#cb7-324"></a></span>
-<span id="cb7-325"><a href="#cb7-325"></a>Two models with identical mean scores may excel on different capability dimensions. For example, one model might be strong in reasoning but weak in factual recall, while another may have the reverse profile. When item clusters show weak or negative correlations with each other, the benchmark-level mean score becomes neither informative nor accurate about subgroup performance.</span>
-<span id="cb7-326"><a href="#cb7-326"></a>:::</span>
-<span id="cb7-327"><a href="#cb7-327"></a></span>
-<span id="cb7-328"><a href="#cb7-328"></a>Within each benchmark, we can quantify inter-construct correlations by:</span>
-<span id="cb7-329"><a href="#cb7-329"></a></span>
-<span id="cb7-330"><a href="#cb7-330"></a><span class="ss">1. </span>**Clustering items** based on their structure vectors using GMM with BIC for model selection</span>
-<span id="cb7-331"><a href="#cb7-331"></a><span class="ss">2. </span>**Computing cluster means** for each model (average accuracy on items in each cluster)</span>
-<span id="cb7-332"><a href="#cb7-332"></a><span class="ss">3. </span>**Correlating cluster means** across models to assess construct overlap</span>
-<span id="cb7-333"><a href="#cb7-333"></a></span>
-<span id="cb7-334"><a href="#cb7-334"></a>Strongly positive inter-cluster correlations indicate overlapping constructs, while weak or negative correlations suggest distinct and possibly conflicting capabilities being aggregated by the benchmark's mean score. This multidimensional pattern explains why two models with identical overall accuracies may excel on entirely different skill axes.</span>
-<span id="cb7-335"><a href="#cb7-335"></a></span>
-<span id="cb7-336"><a href="#cb7-336"></a>Factor models assign a feature vector to each item (the structure vector), allowing items to be clustered via standard algorithms. This helps interpret evaluation results that would otherwise be obscured by aggregate scores.</span>
-<span id="cb7-337"><a href="#cb7-337"></a></span>
-<span id="cb7-338"><a href="#cb7-338"></a><span class="fu">## Generalization of the Factor Model {#sec-generalization}</span></span>
-<span id="cb7-339"><a href="#cb7-339"></a></span>
-<span id="cb7-340"><a href="#cb7-340"></a>Fitting the factor model (@sec-factor-models) yields learned parameters $(U, V, Z)$, and the previous two sections read structure out of them. But a discovered structure is only useful if it *generalizes*: do the learned parameters predict responses the model never trained on? To evaluate the robustness and transferability of learned factor models, we train and test them under various **masking schemes**, each representing a different notion of generalization. These masks determine which parts of the response matrix $Y$ are visible during training and which are held out for evaluation.</span>
-<span id="cb7-341"><a href="#cb7-341"></a></span>
-<span id="cb7-342"><a href="#cb7-342"></a><span class="fu">### Masking Schemes for Evaluation {#sec-masking-schemes}</span></span>
-<span id="cb7-343"><a href="#cb7-343"></a></span>
-<span id="cb7-344"><a href="#cb7-344"></a><span class="pp">|</span> **Masking Type** | **Train Set** | **Test Set** | **Purpose** <span class="pp">|</span></span>
-<span id="cb7-345"><a href="#cb7-345"></a><span class="pp">|------------------|---------------|--------------|-------------|</span></span>
-<span id="cb7-346"><a href="#cb7-346"></a><span class="pp">|</span> Entry-wise random <span class="pp">|</span> 80% random entries <span class="pp">|</span> 20% random entries <span class="pp">|</span> Interpolation under missing-at-random <span class="pp">|</span></span>
-<span id="cb7-347"><a href="#cb7-347"></a><span class="pp">|</span> Row holdout (random) <span class="pp">|</span> 80% of models, all items <span class="pp">|</span> 20% of models, all items <span class="pp">|</span> Generalization to unseen models <span class="pp">|</span></span>
-<span id="cb7-348"><a href="#cb7-348"></a><span class="pp">|</span> Row holdout (shifted) <span class="pp">|</span> Slice of models (small→large) <span class="pp">|</span> Disjoint slice <span class="pp">|</span> Covariate-shift generalization <span class="pp">|</span></span>
-<span id="cb7-349"><a href="#cb7-349"></a><span class="pp">|</span> Column holdout (random) <span class="pp">|</span> All models, 80% of items <span class="pp">|</span> All models, 20% of items <span class="pp">|</span> Generalization to unseen items <span class="pp">|</span></span>
-<span id="cb7-350"><a href="#cb7-350"></a><span class="pp">|</span> Column holdout (shifted) <span class="pp">|</span> Subset of benchmarks <span class="pp">|</span> Held-out benchmarks <span class="pp">|</span> Cross-domain transfer <span class="pp">|</span></span>
-<span id="cb7-351"><a href="#cb7-351"></a><span class="pp">|</span> Row-column block (L-mask) <span class="pp">|</span> $R_{tr} \times C_{tr}$ <span class="pp">|</span> $R_{te} \times C_{te}$ <span class="pp">|</span> Compositional generalization <span class="pp">|</span></span>
-<span id="cb7-352"><a href="#cb7-352"></a><span class="pp">|</span> Temporal split <span class="pp">|</span> Models before cutoff <span class="pp">|</span> Models after cutoff <span class="pp">|</span> Temporal generalization <span class="pp">|</span></span>
-<span id="cb7-353"><a href="#cb7-353"></a></span>
-<span id="cb7-354"><a href="#cb7-354"></a>These settings parallel psychometric validation tests where new examinees, items, or contexts probe the invariance of latent constructs.</span>
-<span id="cb7-355"><a href="#cb7-355"></a></span>
-<span id="cb7-356"><a href="#cb7-356"></a><span class="fu">### Implementation of Masking Functions</span></span>
-<span id="cb7-357"><a href="#cb7-357"></a></span>
-<span id="cb7-360"><a href="#cb7-360"></a><span class="in">```{python}</span></span>
-<span id="cb7-361"><a href="#cb7-361"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-362"><a href="#cb7-362"></a></span>
-<span id="cb7-363"><a href="#cb7-363"></a><span class="im">import</span> torch</span>
-<span id="cb7-364"><a href="#cb7-364"></a></span>
-<span id="cb7-365"><a href="#cb7-365"></a><span class="kw">def</span> random_mask(data_idtor, pct<span class="op">=</span><span class="fl">0.8</span>):</span>
-<span id="cb7-366"><a href="#cb7-366"></a>    <span class="co">"""Entry-wise random masking."""</span></span>
-<span id="cb7-367"><a href="#cb7-367"></a>    train_idtor <span class="op">=</span> torch.bernoulli(data_idtor <span class="op">*</span> pct).<span class="bu">int</span>()</span>
-<span id="cb7-368"><a href="#cb7-368"></a>    test_idtor <span class="op">=</span> data_idtor.<span class="bu">int</span>() <span class="op">-</span> train_idtor</span>
-<span id="cb7-369"><a href="#cb7-369"></a>    <span class="cf">return</span> train_idtor, test_idtor</span>
-<span id="cb7-370"><a href="#cb7-370"></a></span>
-<span id="cb7-371"><a href="#cb7-371"></a><span class="kw">def</span> model_mask(data_idtor, pct_models<span class="op">=</span><span class="fl">0.8</span>, exposure_rate<span class="op">=</span><span class="fl">0.3</span>):</span>
-<span id="cb7-372"><a href="#cb7-372"></a>    <span class="co">"""Row holdout: hold out unseen models."""</span></span>
-<span id="cb7-373"><a href="#cb7-373"></a>    train_row_mask <span class="op">=</span> torch.bernoulli(torch.ones(data_idtor.shape[<span class="dv">0</span>]) <span class="op">*</span> pct_models).<span class="bu">bool</span>()</span>
-<span id="cb7-374"><a href="#cb7-374"></a>    train_idtor <span class="op">=</span> torch.zeros_like(data_idtor).<span class="bu">int</span>()</span>
-<span id="cb7-375"><a href="#cb7-375"></a>    train_idtor[train_row_mask, :] <span class="op">=</span> data_idtor[train_row_mask, :]</span>
-<span id="cb7-376"><a href="#cb7-376"></a>    train_idtor[<span class="op">~</span>train_row_mask, :], _ <span class="op">=</span> random_mask(data_idtor[<span class="op">~</span>train_row_mask, :], pct<span class="op">=</span>exposure_rate)</span>
-<span id="cb7-377"><a href="#cb7-377"></a>    test_idtor <span class="op">=</span> data_idtor <span class="op">-</span> train_idtor</span>
-<span id="cb7-378"><a href="#cb7-378"></a>    <span class="cf">return</span> train_idtor, test_idtor</span>
-<span id="cb7-379"><a href="#cb7-379"></a></span>
-<span id="cb7-380"><a href="#cb7-380"></a><span class="kw">def</span> item_mask(data_idtor, pct_items<span class="op">=</span><span class="fl">0.8</span>, exposure_rate<span class="op">=</span><span class="fl">0.3</span>):</span>
-<span id="cb7-381"><a href="#cb7-381"></a>    <span class="co">"""Column holdout: hold out unseen items."""</span></span>
-<span id="cb7-382"><a href="#cb7-382"></a>    train_col_mask <span class="op">=</span> torch.bernoulli(torch.ones(data_idtor.shape[<span class="dv">1</span>]) <span class="op">*</span> pct_items).<span class="bu">bool</span>()</span>
-<span id="cb7-383"><a href="#cb7-383"></a>    train_idtor <span class="op">=</span> torch.zeros_like(data_idtor).<span class="bu">int</span>()</span>
-<span id="cb7-384"><a href="#cb7-384"></a>    train_idtor[:, train_col_mask] <span class="op">=</span> data_idtor[:, train_col_mask]</span>
-<span id="cb7-385"><a href="#cb7-385"></a>    train_idtor[:, <span class="op">~</span>train_col_mask], _ <span class="op">=</span> random_mask(data_idtor[:, <span class="op">~</span>train_col_mask], pct<span class="op">=</span>exposure_rate)</span>
-<span id="cb7-386"><a href="#cb7-386"></a>    test_idtor <span class="op">=</span> data_idtor <span class="op">-</span> train_idtor</span>
-<span id="cb7-387"><a href="#cb7-387"></a>    <span class="cf">return</span> train_idtor, test_idtor</span>
-<span id="cb7-388"><a href="#cb7-388"></a></span>
-<span id="cb7-389"><a href="#cb7-389"></a><span class="kw">def</span> L_mask(data_idtor, pct_models<span class="op">=</span><span class="fl">0.8</span>, pct_items<span class="op">=</span><span class="fl">0.8</span>):</span>
-<span id="cb7-390"><a href="#cb7-390"></a>    <span class="co">"""Row-column block (L-mask): compositional generalization."""</span></span>
-<span id="cb7-391"><a href="#cb7-391"></a>    train_row_mask <span class="op">=</span> torch.bernoulli(torch.ones(data_idtor.shape[<span class="dv">0</span>]) <span class="op">*</span> pct_models).<span class="bu">bool</span>()</span>
-<span id="cb7-392"><a href="#cb7-392"></a>    train_col_mask <span class="op">=</span> torch.bernoulli(torch.ones(data_idtor.shape[<span class="dv">1</span>]) <span class="op">*</span> pct_items).<span class="bu">bool</span>()</span>
-<span id="cb7-393"><a href="#cb7-393"></a>    train_idtor <span class="op">=</span> torch.zeros_like(data_idtor).<span class="bu">int</span>()</span>
-<span id="cb7-394"><a href="#cb7-394"></a>    train_idtor[train_row_mask][:, train_col_mask] <span class="op">=</span> data_idtor[train_row_mask][:, train_col_mask]</span>
-<span id="cb7-395"><a href="#cb7-395"></a>    test_idtor <span class="op">=</span> data_idtor <span class="op">-</span> train_idtor</span>
-<span id="cb7-396"><a href="#cb7-396"></a>    test_idtor[train_row_mask, :] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-397"><a href="#cb7-397"></a>    test_idtor[:, train_col_mask] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb7-398"><a href="#cb7-398"></a>    <span class="cf">return</span> train_idtor, test_idtor</span>
-<span id="cb7-399"><a href="#cb7-399"></a><span class="in">```</span></span>
-<span id="cb7-400"><a href="#cb7-400"></a></span>
-<span id="cb7-401"><a href="#cb7-401"></a><span class="fu">### Two-Stage Training for Holdout Generalization {#sec-two-stage}</span></span>
-<span id="cb7-402"><a href="#cb7-402"></a></span>
-<span id="cb7-403"><a href="#cb7-403"></a>To avoid data contamination in row and column holdout experiments, we use a **two-stage training procedure**:</span>
-<span id="cb7-404"><a href="#cb7-404"></a></span>
-<span id="cb7-405"><a href="#cb7-405"></a><span class="fu">#### Row Holdout: Estimating Parameters for Unseen Models</span></span>
-<span id="cb7-406"><a href="#cb7-406"></a></span>
-<span id="cb7-407"><a href="#cb7-407"></a>When testing generalization to unseen models, we:</span>
-<span id="cb7-408"><a href="#cb7-408"></a></span>
-<span id="cb7-409"><a href="#cb7-409"></a><span class="ss">1. </span>**Stage 1:** Train on known models to learn item parameters $(V, Z)$</span>
-<span id="cb7-410"><a href="#cb7-410"></a><span class="ss">2. </span>**Stage 2:** Freeze $(V, Z)$ and estimate ability parameters $U$ for held-out models using their limited exposed responses</span>
-<span id="cb7-411"><a href="#cb7-411"></a></span>
-<span id="cb7-412"><a href="#cb7-412"></a>This ensures item parameters are learned without information from test models.</span>
-<span id="cb7-413"><a href="#cb7-413"></a></span>
-<span id="cb7-416"><a href="#cb7-416"></a><span class="in">```{python}</span></span>
-<span id="cb7-417"><a href="#cb7-417"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-418"><a href="#cb7-418"></a></span>
-<span id="cb7-419"><a href="#cb7-419"></a><span class="co"># Stage 1: Train on known models</span></span>
-<span id="cb7-420"><a href="#cb7-420"></a>test_row <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>).values  <span class="co"># Identify held-out models</span></span>
-<span id="cb7-421"><a href="#cb7-421"></a>model_stage1 <span class="op">=</span> train_model(Y[<span class="op">~</span>test_row, :], mask<span class="op">=</span>train_idtor[<span class="op">~</span>test_row, :])</span>
-<span id="cb7-422"><a href="#cb7-422"></a></span>
-<span id="cb7-423"><a href="#cb7-423"></a><span class="co"># Freeze V, Z from Stage 1</span></span>
-<span id="cb7-424"><a href="#cb7-424"></a>V_frozen <span class="op">=</span> model_stage1.V.detach()</span>
-<span id="cb7-425"><a href="#cb7-425"></a>Z_frozen <span class="op">=</span> model_stage1.Z.detach()</span>
-<span id="cb7-426"><a href="#cb7-426"></a></span>
-<span id="cb7-427"><a href="#cb7-427"></a><span class="co"># Stage 2: Estimate U for unseen models with frozen item parameters</span></span>
-<span id="cb7-428"><a href="#cb7-428"></a>model_stage2 <span class="op">=</span> train_model(Y[test_row, :], mask<span class="op">=</span>train_idtor[test_row, :],</span>
-<span id="cb7-429"><a href="#cb7-429"></a>                           V_fixed<span class="op">=</span>V_frozen, Z_fixed<span class="op">=</span>Z_frozen)</span>
-<span id="cb7-430"><a href="#cb7-430"></a><span class="in">```</span></span>
-<span id="cb7-431"><a href="#cb7-431"></a></span>
-<span id="cb7-432"><a href="#cb7-432"></a><span class="fu">#### Column Holdout: Estimating Parameters for Unseen Items</span></span>
-<span id="cb7-433"><a href="#cb7-433"></a></span>
-<span id="cb7-434"><a href="#cb7-434"></a>When testing generalization to unseen items, we:</span>
-<span id="cb7-435"><a href="#cb7-435"></a></span>
-<span id="cb7-436"><a href="#cb7-436"></a><span class="ss">1. </span>**Stage 1:** Train on known items to learn model parameters $U$</span>
-<span id="cb7-437"><a href="#cb7-437"></a><span class="ss">2. </span>**Stage 2:** Freeze $U$ and estimate item parameters $(V, Z)$ for held-out items</span>
-<span id="cb7-438"><a href="#cb7-438"></a></span>
-<span id="cb7-441"><a href="#cb7-441"></a><span class="in">```{python}</span></span>
-<span id="cb7-442"><a href="#cb7-442"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-443"><a href="#cb7-443"></a></span>
-<span id="cb7-444"><a href="#cb7-444"></a><span class="co"># Stage 1: Train on known items</span></span>
-<span id="cb7-445"><a href="#cb7-445"></a>test_col <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">0</span>).values  <span class="co"># Identify held-out items</span></span>
-<span id="cb7-446"><a href="#cb7-446"></a>model_stage1 <span class="op">=</span> train_model(Y[:, <span class="op">~</span>test_col], mask<span class="op">=</span>train_idtor[:, <span class="op">~</span>test_col])</span>
-<span id="cb7-447"><a href="#cb7-447"></a></span>
-<span id="cb7-448"><a href="#cb7-448"></a><span class="co"># Freeze U from Stage 1</span></span>
-<span id="cb7-449"><a href="#cb7-449"></a>U_frozen <span class="op">=</span> model_stage1.U.detach()</span>
-<span id="cb7-450"><a href="#cb7-450"></a></span>
-<span id="cb7-451"><a href="#cb7-451"></a><span class="co"># Stage 2: Estimate V, Z for unseen items with frozen model parameters</span></span>
-<span id="cb7-452"><a href="#cb7-452"></a>model_stage2 <span class="op">=</span> train_model(Y[:, test_col], mask<span class="op">=</span>train_idtor[:, test_col],</span>
-<span id="cb7-453"><a href="#cb7-453"></a>                           U_fixed<span class="op">=</span>U_frozen)</span>
-<span id="cb7-454"><a href="#cb7-454"></a><span class="in">```</span></span>
-<span id="cb7-455"><a href="#cb7-455"></a></span>
-<span id="cb7-456"><a href="#cb7-456"></a>::: {.callout-note title="Why Two-Stage Training?"}</span>
-<span id="cb7-457"><a href="#cb7-457"></a>The two-stage procedure prevents information leakage:</span>
-<span id="cb7-458"><a href="#cb7-458"></a></span>
-<span id="cb7-459"><a href="#cb7-459"></a><span class="ss">- </span>**Row holdout:** Item parameters learned from training models should not contain information about test models</span>
-<span id="cb7-460"><a href="#cb7-460"></a><span class="ss">- </span>**Column holdout:** Model parameters learned from training items should not contain information about test items</span>
-<span id="cb7-461"><a href="#cb7-461"></a></span>
-<span id="cb7-462"><a href="#cb7-462"></a>This mirrors the real-world scenario where we want to evaluate new models on pre-calibrated items, or calibrate new items using established models.</span>
-<span id="cb7-463"><a href="#cb7-463"></a>:::</span>
-<span id="cb7-464"><a href="#cb7-464"></a></span>
-<span id="cb7-465"><a href="#cb7-465"></a><span class="fu">### Evaluation Across Masking Schemes</span></span>
-<span id="cb7-466"><a href="#cb7-466"></a></span>
-<span id="cb7-467"><a href="#cb7-467"></a>For each masking scheme, we compute AUC on the held-out entries:</span>
-<span id="cb7-468"><a href="#cb7-468"></a></span>
-<span id="cb7-471"><a href="#cb7-471"></a><span class="in">```{python}</span></span>
-<span id="cb7-472"><a href="#cb7-472"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-473"><a href="#cb7-473"></a></span>
-<span id="cb7-474"><a href="#cb7-474"></a><span class="im">from</span> torchmetrics <span class="im">import</span> AUROC</span>
-<span id="cb7-475"><a href="#cb7-475"></a></span>
-<span id="cb7-476"><a href="#cb7-476"></a>masking_schemes <span class="op">=</span> {</span>
-<span id="cb7-477"><a href="#cb7-477"></a>    <span class="st">"entry_random"</span>: random_mask,</span>
-<span id="cb7-478"><a href="#cb7-478"></a>    <span class="st">"row_holdout"</span>: model_mask,</span>
-<span id="cb7-479"><a href="#cb7-479"></a>    <span class="st">"col_holdout"</span>: item_mask,</span>
-<span id="cb7-480"><a href="#cb7-480"></a>    <span class="st">"L_mask"</span>: L_mask,</span>
-<span id="cb7-481"><a href="#cb7-481"></a>}</span>
-<span id="cb7-482"><a href="#cb7-482"></a></span>
-<span id="cb7-483"><a href="#cb7-483"></a>results <span class="op">=</span> {}</span>
-<span id="cb7-484"><a href="#cb7-484"></a>auroc <span class="op">=</span> AUROC(task<span class="op">=</span><span class="st">"binary"</span>)</span>
-<span id="cb7-485"><a href="#cb7-485"></a></span>
-<span id="cb7-486"><a href="#cb7-486"></a><span class="cf">for</span> name, mask_fn <span class="kw">in</span> masking_schemes.items():</span>
-<span id="cb7-487"><a href="#cb7-487"></a>    train_mask, test_mask <span class="op">=</span> mask_fn(data_idtor)</span>
-<span id="cb7-488"><a href="#cb7-488"></a></span>
-<span id="cb7-489"><a href="#cb7-489"></a>    <span class="co"># Train model (with two-stage for row/col holdout)</span></span>
-<span id="cb7-490"><a href="#cb7-490"></a>    model <span class="op">=</span> train_with_appropriate_stages(Y, train_mask, test_mask, name)</span>
-<span id="cb7-491"><a href="#cb7-491"></a></span>
-<span id="cb7-492"><a href="#cb7-492"></a>    <span class="co"># Evaluate on held-out entries</span></span>
-<span id="cb7-493"><a href="#cb7-493"></a>    P_hat <span class="op">=</span> model().detach()</span>
-<span id="cb7-494"><a href="#cb7-494"></a>    auc <span class="op">=</span> auroc(P_hat[test_mask.<span class="bu">bool</span>()], Y[test_mask.<span class="bu">bool</span>()])</span>
-<span id="cb7-495"><a href="#cb7-495"></a>    results[name] <span class="op">=</span> auc.item()</span>
-<span id="cb7-496"><a href="#cb7-496"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: AUC = </span><span class="sc">{</span>auc<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb7-497"><a href="#cb7-497"></a><span class="in">```</span></span>
-<span id="cb7-498"><a href="#cb7-498"></a></span>
-<span id="cb7-499"><a href="#cb7-499"></a>The factor model typically achieves AUC of 92-97% on random masking across benchmarks, demonstrating strong predictive power. Performance on row and column holdout tests the model's ability to generalize to new models and new items, respectively.</span>
-<span id="cb7-500"><a href="#cb7-500"></a></span>
-<span id="cb7-501"><a href="#cb7-501"></a>::: {.callout-tip title="Application: Item Response Scaling Laws"}</span>
-<span id="cb7-502"><a href="#cb7-502"></a>The separability of model ability from item difficulty — the core property of IRT — has a powerful application to scaling laws. @truong2025irsl show that by embedding IRT within the scaling law framework, one can factorize scaling law estimation from $O(M \times N)$ to $O(M + N)$, where $M$ is the number of models (or checkpoints) and $N$ is the number of questions.</span>
-<span id="cb7-503"><a href="#cb7-503"></a></span>
-<span id="cb7-504"><a href="#cb7-504"></a>Their key finding is that the IRT ability parameter $\theta$ scales linearly with the logarithm of pre-training compute: $\theta \approx a \cdot \log(\text{FLOP}) + b$. Combined with calibrated item parameters, this yields per-question scaling predictions: $\hat{R}_{ij}(x) = \sigma(d_j(\theta_i(x) - z_j))$. Because item parameters transfer across benchmarks that share the same measurement objective, ability estimated on one benchmark can predict performance on another — a direct validation of the cross-benchmark transfer tested in the masking experiments above.</span>
-<span id="cb7-505"><a href="#cb7-505"></a></span>
-<span id="cb7-506"><a href="#cb7-506"></a>In a study of 6,612 model checkpoints and 37,682 questions, this approach achieves comparable or superior decision accuracy to traditional scaling laws using only 50 questions per benchmark — a 99.9% reduction in queries. The approach uses Beta-IRT, which models empirical probability responses (token probabilities, pass rates) rather than binary correctness, capturing richer scaling signals.</span>
-<span id="cb7-507"><a href="#cb7-507"></a>:::</span>
-<span id="cb7-508"><a href="#cb7-508"></a></span>
-<span id="cb7-509"><a href="#cb7-509"></a><span class="fu">## When There Is No Common Cause: Network Models {#sec-network-models}</span></span>
-<span id="cb7-510"><a href="#cb7-510"></a></span>
-<span id="cb7-511"><a href="#cb7-511"></a>The factor model, for all its flexibility, still rests on one structural commitment inherited from @sec-validity: a small set of latent variables is the *common cause* of every response, and items correlate *because* they share those causes. Hold the factors fixed and the items become independent---this is the local-independence assumption of @sec-rasch-measurement, drawn as arrows fanning *out* from $\theta$ (or $U$) to the responses. Discovery in the previous two sections stayed inside this picture: it asked only *how many* common causes there are and *which* items they touch.</span>
-<span id="cb7-512"><a href="#cb7-512"></a></span>
-<span id="cb7-513"><a href="#cb7-513"></a>Network psychometrics questions the picture itself. Suppose the items correlate not because a hidden ability radiates into all of them, but because they are *directly* coupled to one another---mastering the subskill behind item $A$ is itself what makes item $B$ solvable, with no third thing behind both. Then there is no construct to measure, only a web of mutual dependence to map. The object of discovery becomes the **graph** of direct associations: which items are connected, and how strongly, once every other item is accounted for.</span>
-<span id="cb7-514"><a href="#cb7-514"></a></span>
-<span id="cb7-515"><a href="#cb7-515"></a>The two accounts make a sharp, testable distinction at the level of *partial* (rather than marginal) association. Under a single latent factor, any two items are correlated marginally but become **conditionally independent given the factor**---the common cause explains away their association. Under a network, two coupled items stay associated *even after conditioning on every other item*, because their link is direct. So the discovery question is: conditioning on all other items, which associations survive?</span>
-<span id="cb7-516"><a href="#cb7-516"></a></span>
-<span id="cb7-517"><a href="#cb7-517"></a><span class="fu">### The Gaussian graphical model {#sec-ggm}</span></span>
-<span id="cb7-518"><a href="#cb7-518"></a></span>
-<span id="cb7-519"><a href="#cb7-519"></a>For continuous responses (or a latent-Gaussian surrogate for binary ones), the natural object is the **Gaussian graphical model** (GGM): a partial-correlation network. Let the items have covariance $\Sigma$ and **precision matrix** $\Theta = \Sigma^{-1}$. The partial correlation between items $j$ and $k$, controlling for all other items, is read directly off the precision matrix:</span>
-<span id="cb7-520"><a href="#cb7-520"></a></span>
-<span id="cb7-521"><a href="#cb7-521"></a>$$</span>
-<span id="cb7-522"><a href="#cb7-522"></a>\rho_{jk\cdot\text{rest}} = -\frac{\Theta_{jk}}{\sqrt{\Theta_{jj}\,\Theta_{kk}}}.</span>
-<span id="cb7-523"><a href="#cb7-523"></a>$$</span>
-<span id="cb7-524"><a href="#cb7-524"></a></span>
-<span id="cb7-525"><a href="#cb7-525"></a>The defining fact is that **a zero in the precision matrix is a conditional independence**: $\Theta_{jk} = 0 \iff$ items $j$ and $k$ are independent given all the others $\iff$ no edge $j\!-\!k$ in the network. The marginal correlation matrix $\Sigma$ is typically dense---everything correlates with everything through shared paths---but $\Theta$ can be sparse, and that sparsity *is* the network. Because a finite sample never yields exact zeros, one estimates a sparse $\hat\Theta$ directly with an $\ell_1$ penalty (the **graphical lasso** <span class="co">[</span><span class="ot">@friedman2008glasso</span><span class="co">]</span>), which sets small partial correlations to zero and returns an interpretable graph.</span>
-<span id="cb7-526"><a href="#cb7-526"></a></span>
-<span id="cb7-527"><a href="#cb7-527"></a>The contrast with the factor model is exact and worth stating as a slogan: the factor model explains a dense $\Sigma$ by a *low-rank* structure ($V\Sigma V^\top$ plus diagonal noise); the network explains the same $\Sigma$ by a *sparse inverse*. Low rank and sparse inverse are different hypotheses about *why* items covary, and the partial-correlation graph is what separates them.</span>
-<span id="cb7-528"><a href="#cb7-528"></a></span>
-<span id="cb7-529"><a href="#cb7-529"></a><span class="fu">### The Ising model {#sec-ising}</span></span>
-<span id="cb7-530"><a href="#cb7-530"></a></span>
-<span id="cb7-531"><a href="#cb7-531"></a>For binary responses $Y \in <span class="sc">\{</span>0,1<span class="sc">\}</span>^M$---the usual benchmark case---the network analogue of the GGM is the **Ising model**, a pairwise Markov random field:</span>
-<span id="cb7-532"><a href="#cb7-532"></a></span>
-<span id="cb7-533"><a href="#cb7-533"></a>$$</span>
-<span id="cb7-534"><a href="#cb7-534"></a>P(Y = y) = \frac{1}{Z(\tau,\omega)}\,\exp<span class="sc">\!</span>\Big(\sum_{j} \tau_j\, y_j + \sum_{j&lt;k} \omega_{jk}\, y_j y_k\Big),</span>
-<span id="cb7-535"><a href="#cb7-535"></a>$$</span>
-<span id="cb7-536"><a href="#cb7-536"></a></span>
-<span id="cb7-537"><a href="#cb7-537"></a>where $\tau_j$ is a threshold (an item's baseline propensity to be solved) and $\omega_{jk}$ is the **coupling** between items $j$ and $k$---the direct association that remains after conditioning on every other item. As with the GGM, $\omega_{jk}=0$ means no edge, and $Z(\tau,\omega)$ is the normalizing constant. Estimating the full joint is intractable for many items, but the conditional of each item given the rest is exactly a logistic regression on the other items,</span>
-<span id="cb7-538"><a href="#cb7-538"></a>$$</span>
-<span id="cb7-539"><a href="#cb7-539"></a>P(Y_j = 1 \mid Y_{-j}) = \sigma<span class="sc">\!</span>\Big(\tau_j + \sum_{k \ne j}\omega_{jk}\,y_k\Big),</span>
-<span id="cb7-540"><a href="#cb7-540"></a>$$</span>
-<span id="cb7-541"><a href="#cb7-541"></a>so the network can be recovered **node by node** with $\ell_1$-penalized logistic regressions and the edge weights symmetrized---the *eLasso* / <span class="in">`IsingFit`</span> procedure <span class="co">[</span><span class="ot">@vandeborkulo2014ising</span><span class="co">]</span>. This is the binary counterpart of the graphical lasso, and it is the model Exercise 4 of @sec-foundations pits against the Rasch model.</span>
-<span id="cb7-542"><a href="#cb7-542"></a></span>
-<span id="cb7-543"><a href="#cb7-543"></a>::: {.callout-note title="Definition: Nodewise neighborhood selection"}</span>
-<span id="cb7-544"><a href="#cb7-544"></a>For each item $j$, regress $Y_j$ on all other items $Y_{-j}$ with an $\ell_1$ penalty; the nonzero coefficients identify $j$'s **neighborhood** (its candidate edges). Doing this for every node and combining the results (an edge is kept if one or both endpoints select it) recovers the graph without ever forming the intractable joint likelihood. The same recipe estimates a GGM (linear regressions) or an Ising model (logistic regressions).</span>
-<span id="cb7-545"><a href="#cb7-545"></a>:::</span>
-<span id="cb7-546"><a href="#cb7-546"></a></span>
-<span id="cb7-547"><a href="#cb7-547"></a><span class="fu">### Networks and latent factors can look alike {#sec-network-equivalence}</span></span>
-<span id="cb7-548"><a href="#cb7-548"></a></span>
-<span id="cb7-549"><a href="#cb7-549"></a>It is tempting to read a sparse network as proof that "there is no latent ability." The inference is not that clean. Marginalizing a latent variable out of a local-independence model produces a *fully connected* network among the observed items---the common cause reappears as dense, uniform coupling <span class="co">[</span><span class="ot">@marsman2018ising</span><span class="co">]</span>. Conversely, an Ising model whose coupling matrix has one dominant eigenvalue mimics a unidimensional latent factor: its summed score behaves almost exactly like a Rasch ability. The two stories therefore sit at opposite ends of a single family, and over a moderate sample they can be observationally close.</span>
-<span id="cb7-550"><a href="#cb7-550"></a></span>
-<span id="cb7-551"><a href="#cb7-551"></a>This is the same underdetermination we met in @sec-validity, where a correlated-factors model and a bifactor model reproduced the *same* observable covariance (@fig-nomological-equiv): the data fix the correlations, not the diagram behind them. Discovery, honestly practiced, returns a *menu* of structures compatible with the responses---one latent axis, several correlated axes, a sparse interaction network---and the choice among them is made by parsimony, out-of-sample prediction (@sec-learning), and substantive knowledge of the items, not by fit alone. What discovery *does* settle is the negative claim: when the partial-correlation graph refuses to collapse to a low-rank common cause, a single benchmark score is measuring a web, not a quantity.</span>
-<span id="cb7-552"><a href="#cb7-552"></a></span>
-<span id="cb7-553"><a href="#cb7-553"></a>The demonstration below makes the GGM-versus-correlation distinction concrete on the same Open LLM Leaderboard slice used in @sec-acm-ai. The marginal correlations among items are dense; their partial correlations---the precision-matrix view---are far sparser, and that gap is exactly the structure a network model reads as *direct* item-to-item dependence.</span>
-<span id="cb7-554"><a href="#cb7-554"></a></span>
-<span id="cb7-555"><a href="#cb7-555"></a>{{&lt; include _plt_setup.qmd &gt;}}</span>
-<span id="cb7-556"><a href="#cb7-556"></a></span>
-<span id="cb7-557"><a href="#cb7-557"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb7-558"><a href="#cb7-558"></a><span class="co">#| label: partial-correlation-network</span></span>
-<span id="cb7-559"><a href="#cb7-559"></a><span class="co">#| autorun: true</span></span>
-<span id="cb7-560"><a href="#cb7-560"></a><span class="co">#| fig-cap: "Marginal vs. partial item correlations on a 30-item slice of the Open LLM Leaderboard. Left: the marginal correlation matrix is dense---almost every pair of items is positively correlated, the signature of a shared latent ability. Right: the partial correlations (from the inverse covariance) are far sparser; most marginal association is explained away by conditioning on the other items, and only a few direct item-to-item links survive. Sparsity in the right panel, not density in the left, is what a network model treats as structure."</span></span>
-<span id="cb7-561"><a href="#cb7-561"></a></span>
-<span id="cb7-562"><a href="#cb7-562"></a><span class="im">import</span> json</span>
-<span id="cb7-563"><a href="#cb7-563"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb7-564"><a href="#cb7-564"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb7-565"><a href="#cb7-565"></a><span class="im">from</span> pyodide.http <span class="im">import</span> open_url</span>
-<span id="cb7-566"><a href="#cb7-566"></a></span>
-<span id="cb7-567"><a href="#cb7-567"></a>raw <span class="op">=</span> json.loads(open_url(<span class="st">"data/openllm_subset.json"</span>).read())</span>
-<span id="cb7-568"><a href="#cb7-568"></a>Y <span class="op">=</span> np.array(raw[<span class="st">"data"</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb7-569"><a href="#cb7-569"></a></span>
-<span id="cb7-570"><a href="#cb7-570"></a><span class="co"># Keep the 30 items with the most balanced solve rates (informative, non-degenerate).</span></span>
-<span id="cb7-571"><a href="#cb7-571"></a>p <span class="op">=</span> Y.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb7-572"><a href="#cb7-572"></a>keep <span class="op">=</span> np.argsort(np.<span class="bu">abs</span>(p <span class="op">-</span> <span class="fl">0.5</span>))[:<span class="dv">30</span>]</span>
-<span id="cb7-573"><a href="#cb7-573"></a>Yc <span class="op">=</span> Y[:, keep]</span>
-<span id="cb7-574"><a href="#cb7-574"></a></span>
-<span id="cb7-575"><a href="#cb7-575"></a><span class="co"># Marginal correlation matrix.</span></span>
-<span id="cb7-576"><a href="#cb7-576"></a>C <span class="op">=</span> np.corrcoef(Yc, rowvar<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb7-577"><a href="#cb7-577"></a></span>
-<span id="cb7-578"><a href="#cb7-578"></a><span class="co"># Partial correlations from the (regularized) precision matrix.</span></span>
-<span id="cb7-579"><a href="#cb7-579"></a>S <span class="op">=</span> np.cov(Yc, rowvar<span class="op">=</span><span class="va">False</span>) <span class="op">+</span> <span class="fl">1e-2</span> <span class="op">*</span> np.eye(Yc.shape[<span class="dv">1</span>])  <span class="co"># ridge for invertibility</span></span>
-<span id="cb7-580"><a href="#cb7-580"></a>Theta <span class="op">=</span> np.linalg.inv(S)</span>
-<span id="cb7-581"><a href="#cb7-581"></a>d <span class="op">=</span> np.sqrt(np.diag(Theta))</span>
-<span id="cb7-582"><a href="#cb7-582"></a>P <span class="op">=</span> <span class="op">-</span>Theta <span class="op">/</span> np.outer(d, d)        <span class="co"># partial correlations</span></span>
-<span id="cb7-583"><a href="#cb7-583"></a>np.fill_diagonal(P, <span class="fl">1.0</span>)</span>
-<span id="cb7-584"><a href="#cb7-584"></a></span>
-<span id="cb7-585"><a href="#cb7-585"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="fl">6.4</span>, <span class="fl">3.0</span>))</span>
-<span id="cb7-586"><a href="#cb7-586"></a><span class="cf">for</span> ax, M, title <span class="kw">in</span> [(axes[<span class="dv">0</span>], C, <span class="st">"Marginal correlation"</span>),</span>
-<span id="cb7-587"><a href="#cb7-587"></a>                     (axes[<span class="dv">1</span>], P, <span class="st">"Partial correlation"</span>)]:</span>
-<span id="cb7-588"><a href="#cb7-588"></a>    im <span class="op">=</span> ax.imshow(M, vmin<span class="op">=-</span><span class="fl">0.6</span>, vmax<span class="op">=</span><span class="fl">0.6</span>, cmap<span class="op">=</span><span class="st">"RdBu_r"</span>)</span>
-<span id="cb7-589"><a href="#cb7-589"></a>    ax.set_title(title, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb7-590"><a href="#cb7-590"></a>    ax.set_xticks([])<span class="op">;</span> ax.set_yticks([])</span>
-<span id="cb7-591"><a href="#cb7-591"></a>fig.colorbar(im, ax<span class="op">=</span>axes, fraction<span class="op">=</span><span class="fl">0.046</span>, pad<span class="op">=</span><span class="fl">0.04</span>)</span>
-<span id="cb7-592"><a href="#cb7-592"></a>plt.show()</span>
-<span id="cb7-593"><a href="#cb7-593"></a></span>
-<span id="cb7-594"><a href="#cb7-594"></a>frac <span class="op">=</span> <span class="kw">lambda</span> M: np.mean(np.<span class="bu">abs</span>(M[np.triu_indices_from(M, <span class="dv">1</span>)]) <span class="op">&gt;</span> <span class="fl">0.1</span>)</span>
-<span id="cb7-595"><a href="#cb7-595"></a><span class="bu">print</span>(<span class="ss">f"off-diagonal |corr| &gt; 0.1 : marginal = </span><span class="sc">{</span>frac(C)<span class="sc">:.2f}</span><span class="ss">, partial = </span><span class="sc">{</span>frac(P)<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb7-596"><a href="#cb7-596"></a><span class="in">```</span></span>
-<span id="cb7-597"><a href="#cb7-597"></a></span>
-<span id="cb7-598"><a href="#cb7-598"></a>The marginal panel is the dense positive manifold a common-cause model predicts; the partial panel keeps only the associations that survive conditioning on everything else. When that residual graph is sparse, a low-rank latent model is the parsimonious explanation. When it stays dense and irreducible, the items are coupled directly---network-like---and no single ability orders them.</span>
-<span id="cb7-599"><a href="#cb7-599"></a></span>
-<span id="cb7-600"><a href="#cb7-600"></a><span class="fu">## Exercises {#sec-discovery-exercises}</span></span>
-<span id="cb7-601"><a href="#cb7-601"></a></span>
-<span id="cb7-602"><a href="#cb7-602"></a>**Exercise 1** (*): A benchmark's items split into two GMM clusters whose model-level mean scores correlate at $r = -0.2$. Explain, in terms of the structure vectors $S_j$, what this negative correlation implies about the benchmark, and why reporting a single mean score is misleading here.</span>
-<span id="cb7-603"><a href="#cb7-603"></a></span>
-<span id="cb7-604"><a href="#cb7-604"></a>**Exercise 2** (**): Show that under a single-factor model with local independence, any two items are conditionally independent given the factor, so their *partial* correlation controlling for the factor is zero even though their *marginal* correlation is positive. Relate this to the precision-matrix characterization of @sec-ggm.</span>
-<span id="cb7-605"><a href="#cb7-605"></a></span>
-<span id="cb7-606"><a href="#cb7-606"></a>**Exercise 3** (**): Implement nodewise neighborhood selection for the Ising model. Given a binary response matrix $Y$, fit an $\ell_1$-penalized logistic regression of each item on the others, symmetrize the coefficient matrix, and plot the recovered network. Compare the edge set to the off-diagonal sparsity of the inverse covariance from a Gaussian graphical model on the same data.</span>
-<span id="cb7-607"><a href="#cb7-607"></a></span>
-<span id="cb7-608"><a href="#cb7-608"></a>**Exercise 4** (***): Simulate data from (a) a unidimensional Rasch model and (b) an Ising model whose coupling matrix has one dominant eigenvalue. Fit both a one-factor model and a graphical lasso to each data set. Show empirically that the two generating mechanisms are hard to distinguish by fit alone, and discuss which auxiliary evidence (@sec-network-equivalence) would adjudicate.</span>
-<span id="cb7-609"><a href="#cb7-609"></a></span>
-<span id="cb7-610"><a href="#cb7-610"></a>**Exercise 5** (**): Implement a cross-validation procedure for selecting between the Rasch, 2PL, and factor models (@sec-factor-models). Apply it to benchmark data with different numbers of items and models. When does the additional complexity of the 2PL or a multidimensional factor model improve out-of-sample prediction over the unidimensional Rasch model?</span>
-<span id="cb7-611"><a href="#cb7-611"></a></span>
-<span id="cb7-612"><a href="#cb7-612"></a>**Discussion 1:** Discovery returns a *menu* of structures compatible with the same responses (one latent axis, several correlated axes, a sparse network). For AI evaluation specifically, what substantive knowledge about *items* would justify preferring a network account over a latent-ability account, or vice versa? Does the answer change for a reasoning benchmark versus a knowledge benchmark?</span>
-<span id="cb7-613"><a href="#cb7-613"></a></span>
-<span id="cb7-614"><a href="#cb7-614"></a>**Discussion 2:** The unidimensional IRT estimation of @sec-learning extends to the multidimensional factor model fit in @sec-factor-models, but new challenges arise---chief among them rotational indeterminacy (the loadings $V$ are identified only up to an orthogonal rotation) and choosing the number of factors $K$. How do the learning procedures change relative to the single-ability case, and how does parallel analysis (@sec-dimensionality) help resolve the choice of $K$?</span>
-<span id="cb7-615"><a href="#cb7-615"></a></span>
-<span id="cb7-616"><a href="#cb7-616"></a><span class="fu">## Bibliographic Notes {#sec-discovery-bib}</span></span>
-<span id="cb7-617"><a href="#cb7-617"></a></span>
-<span id="cb7-618"><a href="#cb7-618"></a>The exploratory tradition this chapter draws on is exploratory factor analysis, whose modern treatment and the structure-versus-pattern-matrix distinction are covered in standard texts; the application to AI benchmark heterogeneity via the standardized structure matrix is developed in this book and its companion papers. Parallel analysis, the eigenvalue-against-noise procedure for choosing the number of factors, is due to @horn1965rationale and remains the most reliable of the simple dimensionality heuristics, outperforming the Kaiser eigenvalue-greater-than-one rule it is plotted against in @sec-dimensionality. Network psychometrics emerged in the 2010s as an alternative to the reflective latent-variable model: the Gaussian graphical model and the graphical lasso for sparse precision estimation are due to @friedman2008glasso, and the Ising model with nodewise $\ell_1$-logistic estimation (eLasso) to @vandeborkulo2014ising. The observational closeness of Ising networks and latent-variable models is analyzed by @marsman2018ising, which formalizes the sense in which marginalizing a latent variable yields a network and a low-rank network mimics a latent factor---the discovery-side counterpart of the nomological equivalence discussed in @sec-validity.</span>
-</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap7.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
+<script>
 // Auto-execute all pyodide cells after initialization
 document.addEventListener('DOMContentLoaded', function() {
   function waitForPyodide() {

@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -89,20 +54,17 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../src/chap5.html" rel="next">
 <link href="../src/chap3.html" rel="prev">
+<link href="../resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/videojs/video.min.js"></script>
@@ -119,7 +81,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -537,176 +498,18 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -715,18 +518,57 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="../index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -741,7 +583,23 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span id="sec-learning" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning</span></span></h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -832,13 +690,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
@@ -849,9 +707,7 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>license.qmd</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -910,11 +766,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap4.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
 <script type="module" id="qpyodide-monaco-editor-init">
 
@@ -926,23 +781,7 @@ window.Quarto = {
   });
 </script>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-learning" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
@@ -1518,8 +1357,6 @@ p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(
 <p><strong>Exercise 2.10:</strong> Investigate the sensitivity of MLE and Bayesian estimation to model misspecification. Generate data from a 2PL model but fit a Rasch model. How do the estimated abilities compare? When does the misspecification matter most?</p>
 
 
-<!-- -->
-
 </section>
 </section>
 <section id="bibliography" class="level1 unnumbered">
@@ -1589,21 +1426,103 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1672,57 +1591,6 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -2064,1155 +1932,9 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
         <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Reliability</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">format:</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">  html:</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    include-after-body:</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">      text: |</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">        &lt;script&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">        // Auto-execute all pyodide cells after initialization</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">        document.addEventListener('DOMContentLoaded', function() {</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">          // Wait for pyodide to be fully ready (mainPyodide is set after loading)</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">          function waitForPyodide() {</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co">            if (typeof globalThis.mainPyodide !== 'undefined' &amp;&amp; globalThis.mainPyodide) {</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">              // Pyodide is ready, execute all cells with autorun=true</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">                globalThis.qpyodideCellDetails.forEach((cell, index) =&gt; {</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">                  if (cell.options &amp;&amp; cell.options.autorun === 'true') {</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co">                    setTimeout(() =&gt; {</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co">                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="co">                      if (runButton &amp;&amp; !runButton.disabled) {</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="co">                        runButton.click();</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="co">                      }</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="co">                    }, index * 1000); // Stagger execution by 1 second each</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="co">                  }</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a><span class="co">                });</span></span>
-<span id="cb1-24"><a href="#cb1-24"></a><span class="co">              }</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a><span class="co">            } else {</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a><span class="co">              setTimeout(waitForPyodide, 500);</span></span>
-<span id="cb1-27"><a href="#cb1-27"></a><span class="co">            }</span></span>
-<span id="cb1-28"><a href="#cb1-28"></a><span class="co">          }</span></span>
-<span id="cb1-29"><a href="#cb1-29"></a><span class="co">          setTimeout(waitForPyodide, 2000); // Start checking after 2 seconds</span></span>
-<span id="cb1-30"><a href="#cb1-30"></a><span class="co">        });</span></span>
-<span id="cb1-31"><a href="#cb1-31"></a><span class="co">        &lt;/script&gt;</span></span>
-<span id="cb1-32"><a href="#cb1-32"></a><span class="an">filters:</span></span>
-<span id="cb1-33"><a href="#cb1-33"></a><span class="co">  - pyodide</span></span>
-<span id="cb1-34"><a href="#cb1-34"></a><span class="an">pyodide:</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a><span class="co">  packages:</span></span>
-<span id="cb1-36"><a href="#cb1-36"></a><span class="co">    - numpy</span></span>
-<span id="cb1-37"><a href="#cb1-37"></a><span class="co">    - matplotlib</span></span>
-<span id="cb1-38"><a href="#cb1-38"></a><span class="co">    - scipy</span></span>
-<span id="cb1-39"><a href="#cb1-39"></a><span class="co">---</span></span>
-<span id="cb1-40"><a href="#cb1-40"></a></span>
-<span id="cb1-41"><a href="#cb1-41"></a><span class="fu"># Learning {#sec-learning}</span></span>
-<span id="cb1-42"><a href="#cb1-42"></a></span>
-<span id="cb1-43"><a href="#cb1-43"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb1-44"><a href="#cb1-44"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb1-45"><a href="#cb1-45"></a></span>
-<span id="cb1-46"><a href="#cb1-46"></a><span class="ss">1. </span>**Derive** the log-likelihood function for the Rasch model and explain the role of person and item parameters.</span>
-<span id="cb1-47"><a href="#cb1-47"></a><span class="ss">2. </span>**Implement** maximum likelihood estimation (MLE) for IRT models using gradient ascent and L-BFGS optimization.</span>
-<span id="cb1-48"><a href="#cb1-48"></a><span class="ss">3. </span>**Explain** the identifiability problem in IRT and describe standard solutions (sum-to-zero, fixed anchor).</span>
-<span id="cb1-49"><a href="#cb1-49"></a><span class="ss">4. </span>**Distinguish** between joint MLE, conditional MLE, and marginal MLE, and articulate when each is appropriate.</span>
-<span id="cb1-50"><a href="#cb1-50"></a><span class="ss">5. </span>**Implement** the Expectation-Maximization (EM) algorithm for Rasch model estimation and explain the E-step and M-step.</span>
-<span id="cb1-51"><a href="#cb1-51"></a><span class="ss">6. </span>**Describe** Bayesian inference for IRT models and specify appropriate priors for ability and item parameters.</span>
-<span id="cb1-52"><a href="#cb1-52"></a><span class="ss">7. </span>**Implement** MAP estimation and MCMC sampling for IRT models.</span>
-<span id="cb1-53"><a href="#cb1-53"></a><span class="ss">8. </span>**Explain** regularization in IRT as a Bayesian prior and apply cross-validation for hyperparameter selection.</span>
-<span id="cb1-54"><a href="#cb1-54"></a><span class="ss">9. </span>**Apply** MLE and Bayesian methods to real AI benchmark data and compare their efficiency.</span>
-<span id="cb1-55"><a href="#cb1-55"></a>:::</span>
-<span id="cb1-56"><a href="#cb1-56"></a></span>
-<span id="cb1-57"><a href="#cb1-57"></a>::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}</span>
-<span id="cb1-58"><a href="#cb1-58"></a>This chapter can be covered in **3 lectures** (75-90 minutes each):</span>
-<span id="cb1-59"><a href="#cb1-59"></a></span>
-<span id="cb1-60"><a href="#cb1-60"></a>**Lecture 1: Foundations of Estimation**</span>
-<span id="cb1-61"><a href="#cb1-61"></a></span>
-<span id="cb1-62"><a href="#cb1-62"></a><span class="ss">- </span>Why learning matters for AI measurement (15 min)</span>
-<span id="cb1-63"><a href="#cb1-63"></a><span class="ss">- </span>Likelihood and log-likelihood for Rasch model (20 min)</span>
-<span id="cb1-64"><a href="#cb1-64"></a><span class="ss">- </span>Gradient derivation and interpretation (20 min)</span>
-<span id="cb1-65"><a href="#cb1-65"></a><span class="ss">- </span>Hands-on: MLE with synthetic data (20 min)</span>
-<span id="cb1-66"><a href="#cb1-66"></a></span>
-<span id="cb1-67"><a href="#cb1-67"></a>**Lecture 2: Advanced Estimation Methods**</span>
-<span id="cb1-68"><a href="#cb1-68"></a></span>
-<span id="cb1-69"><a href="#cb1-69"></a><span class="ss">- </span>Identifiability and conditional vs marginal MLE (20 min)</span>
-<span id="cb1-70"><a href="#cb1-70"></a><span class="ss">- </span>EM algorithm for IRT (30 min)</span>
-<span id="cb1-71"><a href="#cb1-71"></a><span class="ss">- </span>Hands-on: EM implementation (25 min)</span>
-<span id="cb1-72"><a href="#cb1-72"></a></span>
-<span id="cb1-73"><a href="#cb1-73"></a>**Lecture 3: Bayesian Approaches**</span>
-<span id="cb1-74"><a href="#cb1-74"></a></span>
-<span id="cb1-75"><a href="#cb1-75"></a><span class="ss">- </span>Prior specification for IRT (15 min)</span>
-<span id="cb1-76"><a href="#cb1-76"></a><span class="ss">- </span>MAP estimation and MCMC (30 min)</span>
-<span id="cb1-77"><a href="#cb1-77"></a><span class="ss">- </span>Regularization and cross-validation (15 min)</span>
-<span id="cb1-78"><a href="#cb1-78"></a>:::</span>
-<span id="cb1-79"><a href="#cb1-79"></a></span>
-<span id="cb1-80"><a href="#cb1-80"></a>::: {.callout-note title="Notation"}</span>
-<span id="cb1-81"><a href="#cb1-81"></a>This chapter introduces estimation notation: $\ell(\theta, \beta)$ (log-likelihood), $\hat{\theta}_{\text{MLE}}$ and $\hat{\theta}_{\text{MAP}}$ (point estimates), $\pi(\theta)$ (priors), and $\eta$ (learning rate). See the <span class="co">[</span><span class="ot">notation appendix</span><span class="co">](notation.qmd)</span> for the complete notation reference.</span>
-<span id="cb1-82"><a href="#cb1-82"></a>:::</span>
-<span id="cb1-83"><a href="#cb1-83"></a></span>
-<span id="cb1-84"><a href="#cb1-84"></a>::: {.callout-tip title="Video Overview" collapse="false"}</span>
-<span id="cb1-85"><a href="#cb1-85"></a>A visual tour of the key concepts in this chapter — from maximum likelihood estimation and the EM algorithm to Bayesian inference and generalization.</span>
-<span id="cb1-86"><a href="#cb1-86"></a></span>
-<span id="cb1-87"><a href="#cb1-87"></a>{{&lt; video ../animations/ch2/chapter2_narrated.mp4 &gt;}}</span>
-<span id="cb1-88"><a href="#cb1-88"></a>:::</span>
-<span id="cb1-89"><a href="#cb1-89"></a></span>
-<span id="cb1-90"><a href="#cb1-90"></a><span class="fu">## Why Learning Matters for AI Measurement {#sec-why-learning}</span></span>
-<span id="cb1-91"><a href="#cb1-91"></a></span>
-<span id="cb1-92"><a href="#cb1-92"></a>@sec-foundations introduced the measurement models---Rasch, 2PL, Bradley-Terry---that describe how latent abilities generate observed responses. But knowing the *form* of a model is not enough. To actually *use* these models for AI evaluation, we must estimate their parameters from data. This chapter develops estimation for the unidimensional IRT models; the multidimensional factor model and the experiments that probe its generalization are estimated and analyzed in @sec-factor-models and @sec-generalization.</span>
-<span id="cb1-93"><a href="#cb1-93"></a></span>
-<span id="cb1-94"><a href="#cb1-94"></a>::: {.callout-important title="The Central Learning Problem in AI Measurement"}</span>
-<span id="cb1-95"><a href="#cb1-95"></a>Given a response matrix $Y \in <span class="sc">\{</span>0,1<span class="sc">\}</span>^{N \times M}$ where $Y_{ij} = 1$ indicates model $i$ answered question $j$ correctly:</span>
-<span id="cb1-96"><a href="#cb1-96"></a></span>
-<span id="cb1-97"><a href="#cb1-97"></a>$$</span>
-<span id="cb1-98"><a href="#cb1-98"></a>\text{Find } \hat{\theta}, \hat{\beta} = \arg\max_{\theta, \beta} P(Y \mid \theta, \beta)</span>
-<span id="cb1-99"><a href="#cb1-99"></a>$$</span>
-<span id="cb1-100"><a href="#cb1-100"></a></span>
-<span id="cb1-101"><a href="#cb1-101"></a>This optimization problem underlies all psychometric estimation and forms the foundation for trustworthy AI evaluation.</span>
-<span id="cb1-102"><a href="#cb1-102"></a>:::</span>
-<span id="cb1-103"><a href="#cb1-103"></a></span>
-<span id="cb1-104"><a href="#cb1-104"></a>Parameter estimation serves several critical purposes in AI measurement:</span>
-<span id="cb1-105"><a href="#cb1-105"></a></span>
-<span id="cb1-106"><a href="#cb1-106"></a><span class="ss">1. </span>**Fair comparison:** Calibrated item difficulties allow us to compare models tested on different question subsets. If we know that question A is harder than question B, we can appropriately weight their contributions to the final score.</span>
-<span id="cb1-107"><a href="#cb1-107"></a></span>
-<span id="cb1-108"><a href="#cb1-108"></a><span class="ss">2. </span>**Uncertainty quantification:** Estimation procedures provide not just point estimates but standard errors, telling us how confident we should be in our measurements.</span>
-<span id="cb1-109"><a href="#cb1-109"></a></span>
-<span id="cb1-110"><a href="#cb1-110"></a><span class="ss">3. </span>**Adaptive testing:** Once we have calibrated item parameters, we can select the most informative questions for each model, dramatically reducing evaluation costs (see @sec-cat for a full treatment of Computerized Adaptive Testing).</span>
-<span id="cb1-111"><a href="#cb1-111"></a></span>
-<span id="cb1-112"><a href="#cb1-112"></a><span class="ss">4. </span>**Prediction:** With learned parameters, we can predict how a model will perform on questions it has never seen, enabling efficient evaluation of new benchmarks.</span>
-<span id="cb1-113"><a href="#cb1-113"></a></span>
-<span id="cb1-114"><a href="#cb1-114"></a>This chapter focuses on **passive learning**: given a fixed dataset, estimate all parameters simultaneously. This includes maximum likelihood estimation (MLE), expectation-maximization (EM), and Bayesian inference. The design of *which* items to include in a benchmark, including active item selection, is the subject of @sec-efficient.</span>
-<span id="cb1-115"><a href="#cb1-115"></a></span>
-<span id="cb1-116"><a href="#cb1-116"></a></span>
-<span id="cb1-117"><a href="#cb1-117"></a><span class="fu">## Maximum Likelihood Estimation {#sec-mle}</span></span>
-<span id="cb1-118"><a href="#cb1-118"></a></span>
-<span id="cb1-119"><a href="#cb1-119"></a>Maximum likelihood estimation is the foundation of parameter estimation in IRT. The principle is simple: find the parameter values that make the observed data most probable.</span>
-<span id="cb1-120"><a href="#cb1-120"></a></span>
-<span id="cb1-121"><a href="#cb1-121"></a><span class="fu">### The Likelihood Function {#sec-likelihood}</span></span>
-<span id="cb1-122"><a href="#cb1-122"></a></span>
-<span id="cb1-123"><a href="#cb1-123"></a>Recall from @sec-foundations that the Rasch model specifies the probability of a correct response as:</span>
-<span id="cb1-124"><a href="#cb1-124"></a></span>
-<span id="cb1-125"><a href="#cb1-125"></a>$$</span>
-<span id="cb1-126"><a href="#cb1-126"></a>P(Y_{ij} = 1 \mid \theta_i, \beta_j) = \sigma(\theta_i - \beta_j) = \frac{1}{1 + e^{-(\theta_i - \beta_j)}}</span>
-<span id="cb1-127"><a href="#cb1-127"></a>$$ {#eq-rasch-prob}</span>
-<span id="cb1-128"><a href="#cb1-128"></a></span>
-<span id="cb1-129"><a href="#cb1-129"></a>where $\theta_i$ is the ability of model $i$ and $\beta_j$ is the difficulty of item $j$.</span>
-<span id="cb1-130"><a href="#cb1-130"></a></span>
-<span id="cb1-131"><a href="#cb1-131"></a>Under the *local independence* assumption introduced in @sec-local-independence---responses are conditionally independent given the latent parameters---the likelihood of the entire response matrix factorizes into a product of per-observation terms:</span>
-<span id="cb1-132"><a href="#cb1-132"></a></span>
-<span id="cb1-133"><a href="#cb1-133"></a>$$</span>
-<span id="cb1-134"><a href="#cb1-134"></a>L(\theta, \beta \mid Y) = \prod_{i=1}^N \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j)^{Y_{ij}} <span class="co">[</span><span class="ot">1 - P(Y_{ij} \mid \theta_i, \beta_j)</span><span class="co">]</span>^{1-Y_{ij}}</span>
-<span id="cb1-135"><a href="#cb1-135"></a>$$ {#eq-likelihood}</span>
-<span id="cb1-136"><a href="#cb1-136"></a></span>
-<span id="cb1-137"><a href="#cb1-137"></a>Taking the logarithm (for computational stability and mathematical convenience):</span>
-<span id="cb1-138"><a href="#cb1-138"></a></span>
-<span id="cb1-139"><a href="#cb1-139"></a>$$</span>
-<span id="cb1-140"><a href="#cb1-140"></a>\ell(\theta, \beta) = \sum_{i=1}^N \sum_{j=1}^M \left<span class="co">[</span><span class="ot"> Y_{ij}(\theta_i - \beta_j) - \log(1 + e^{\theta_i - \beta_j}) \right</span><span class="co">]</span></span>
-<span id="cb1-141"><a href="#cb1-141"></a>$$ {#eq-log-likelihood}</span>
-<span id="cb1-142"><a href="#cb1-142"></a></span>
-<span id="cb1-143"><a href="#cb1-143"></a>This is the objective function we want to maximize.</span>
-<span id="cb1-144"><a href="#cb1-144"></a></span>
-<span id="cb1-145"><a href="#cb1-145"></a></span>
-<span id="cb1-146"><a href="#cb1-146"></a><span class="fu">### Gradient Derivation {#sec-gradient}</span></span>
-<span id="cb1-147"><a href="#cb1-147"></a></span>
-<span id="cb1-148"><a href="#cb1-148"></a>To optimize the log-likelihood, we need its gradients. Taking partial derivatives:</span>
-<span id="cb1-149"><a href="#cb1-149"></a></span>
-<span id="cb1-150"><a href="#cb1-150"></a>$$</span>
-<span id="cb1-151"><a href="#cb1-151"></a>\frac{\partial \ell}{\partial \theta_i} = \sum_{j=1}^M \left<span class="co">[</span><span class="ot"> Y_{ij} - \sigma(\theta_i - \beta_j) \right</span><span class="co">]</span></span>
-<span id="cb1-152"><a href="#cb1-152"></a>$$ {#eq-gradient-theta}</span>
-<span id="cb1-153"><a href="#cb1-153"></a></span>
-<span id="cb1-154"><a href="#cb1-154"></a>$$</span>
-<span id="cb1-155"><a href="#cb1-155"></a>\frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^N \left<span class="co">[</span><span class="ot"> \sigma(\theta_i - \beta_j) - Y_{ij} \right</span><span class="co">]</span></span>
-<span id="cb1-156"><a href="#cb1-156"></a>$$ {#eq-gradient-beta}</span>
-<span id="cb1-157"><a href="#cb1-157"></a></span>
-<span id="cb1-158"><a href="#cb1-158"></a>::: {.callout-note title="Intuitive Interpretation of the Gradient"}</span>
-<span id="cb1-159"><a href="#cb1-159"></a>The gradient $\frac{\partial \ell}{\partial \theta_i} = \sum_j <span class="co">[</span><span class="ot">Y_{ij} - P_{ij}</span><span class="co">]</span>$ has a beautiful interpretation:</span>
-<span id="cb1-160"><a href="#cb1-160"></a></span>
-<span id="cb1-161"><a href="#cb1-161"></a><span class="ss">- </span>$Y_{ij}$ is the **observed** response (0 or 1)</span>
-<span id="cb1-162"><a href="#cb1-162"></a><span class="ss">- </span>$P_{ij} = \sigma(\theta_i - \beta_j)$ is the **predicted** probability</span>
-<span id="cb1-163"><a href="#cb1-163"></a></span>
-<span id="cb1-164"><a href="#cb1-164"></a>The gradient is simply the sum of **residuals**: observed minus predicted. If model $i$ performs better than expected (more correct answers than predicted), the residuals are positive, and we increase $\theta_i$. If it performs worse than expected, we decrease $\theta_i$. This is the essence of gradient ascent.</span>
-<span id="cb1-165"><a href="#cb1-165"></a>:::</span>
-<span id="cb1-166"><a href="#cb1-166"></a></span>
-<span id="cb1-167"><a href="#cb1-167"></a></span>
-<span id="cb1-168"><a href="#cb1-168"></a><span class="fu">### The Identifiability Problem {#sec-identifiability}</span></span>
-<span id="cb1-169"><a href="#cb1-169"></a></span>
-<span id="cb1-170"><a href="#cb1-170"></a>Before implementing the optimizer, we must address a subtlety that would otherwise cause the iterates to drift indefinitely without improving fit.</span>
-<span id="cb1-171"><a href="#cb1-171"></a></span>
-<span id="cb1-172"><a href="#cb1-172"></a>::: {.callout-warning title="The Identifiability Problem"}</span>
-<span id="cb1-173"><a href="#cb1-173"></a>The Rasch model has a fundamental identifiability issue: if we add a constant $c$ to all abilities and all difficulties, the likelihood is unchanged:</span>
-<span id="cb1-174"><a href="#cb1-174"></a></span>
-<span id="cb1-175"><a href="#cb1-175"></a>$$</span>
-<span id="cb1-176"><a href="#cb1-176"></a>P(Y_{ij}=1 \mid \theta_i + c, \beta_j + c) = \sigma((\theta_i + c) - (\beta_j + c)) = \sigma(\theta_i - \beta_j)</span>
-<span id="cb1-177"><a href="#cb1-177"></a>$$</span>
-<span id="cb1-178"><a href="#cb1-178"></a></span>
-<span id="cb1-179"><a href="#cb1-179"></a>The parameters are only identified up to an additive constant. This means infinitely many parameter values produce the same likelihood.</span>
-<span id="cb1-180"><a href="#cb1-180"></a></span>
-<span id="cb1-181"><a href="#cb1-181"></a>**Common Solutions:**</span>
-<span id="cb1-182"><a href="#cb1-182"></a></span>
-<span id="cb1-183"><a href="#cb1-183"></a><span class="ss">1. </span>**Sum-to-zero constraint:** Set $\sum_i \theta_i = 0$ or $\sum_j \beta_j = 0$</span>
-<span id="cb1-184"><a href="#cb1-184"></a><span class="ss">2. </span>**Fixed anchor:** Set one parameter (e.g., $\beta_1 = 0$) as reference</span>
-<span id="cb1-185"><a href="#cb1-185"></a><span class="ss">3. </span>**Prior constraint:** Use Bayesian priors centered at zero</span>
-<span id="cb1-186"><a href="#cb1-186"></a></span>
-<span id="cb1-187"><a href="#cb1-187"></a>For AI benchmarks, we typically use sum-to-zero: a model with $\theta = 0$ has "average" ability relative to the calibration sample.</span>
-<span id="cb1-188"><a href="#cb1-188"></a>:::</span>
-<span id="cb1-189"><a href="#cb1-189"></a></span>
-<span id="cb1-190"><a href="#cb1-190"></a>We will adopt the sum-to-zero constraint below, re-centering $\hat{\theta}$ and $\hat{\beta}$ after each gradient step so the iterates stay anchored.</span>
-<span id="cb1-191"><a href="#cb1-191"></a></span>
-<span id="cb1-192"><a href="#cb1-192"></a></span>
-<span id="cb1-193"><a href="#cb1-193"></a><span class="fu">### Implementation with Gradient Ascent {#sec-gd-implementation}</span></span>
-<span id="cb1-194"><a href="#cb1-194"></a></span>
-<span id="cb1-195"><a href="#cb1-195"></a>Let us implement MLE via gradient ascent on synthetic data. First, we generate a response matrix from known parameters:</span>
-<span id="cb1-196"><a href="#cb1-196"></a></span>
-<span id="cb1-197"><a href="#cb1-197"></a>{{&lt; include _plt_setup.qmd &gt;}}</span>
-<span id="cb1-198"><a href="#cb1-198"></a></span>
-<span id="cb1-199"><a href="#cb1-199"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-200"><a href="#cb1-200"></a><span class="co">#| label: synthetic-data</span></span>
-<span id="cb1-201"><a href="#cb1-201"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-202"><a href="#cb1-202"></a><span class="co">#| fig-cap: "Synthetic response matrix generated from known Rasch model parameters."</span></span>
-<span id="cb1-203"><a href="#cb1-203"></a></span>
-<span id="cb1-204"><a href="#cb1-204"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-205"><a href="#cb1-205"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-206"><a href="#cb1-206"></a></span>
-<span id="cb1-207"><a href="#cb1-207"></a><span class="kw">def</span> sigmoid(x):</span>
-<span id="cb1-208"><a href="#cb1-208"></a>    <span class="co">"""Numerically stable sigmoid function."""</span></span>
-<span id="cb1-209"><a href="#cb1-209"></a>    <span class="cf">return</span> np.where(x <span class="op">&gt;=</span> <span class="dv">0</span>,</span>
-<span id="cb1-210"><a href="#cb1-210"></a>                    <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>x)),</span>
-<span id="cb1-211"><a href="#cb1-211"></a>                    np.exp(x) <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(x)))</span>
-<span id="cb1-212"><a href="#cb1-212"></a></span>
-<span id="cb1-213"><a href="#cb1-213"></a><span class="co"># Set seed for reproducibility</span></span>
-<span id="cb1-214"><a href="#cb1-214"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-215"><a href="#cb1-215"></a></span>
-<span id="cb1-216"><a href="#cb1-216"></a><span class="co"># True parameters</span></span>
-<span id="cb1-217"><a href="#cb1-217"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span>  <span class="co"># 100 models, 50 questions</span></span>
-<span id="cb1-218"><a href="#cb1-218"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)  <span class="co"># True abilities</span></span>
-<span id="cb1-219"><a href="#cb1-219"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, M)  <span class="co"># True difficulties</span></span>
-<span id="cb1-220"><a href="#cb1-220"></a></span>
-<span id="cb1-221"><a href="#cb1-221"></a><span class="co"># Generate response matrix via Rasch model</span></span>
-<span id="cb1-222"><a href="#cb1-222"></a>prob_matrix <span class="op">=</span> sigmoid(theta_true[:, <span class="va">None</span>] <span class="op">-</span> beta_true[<span class="va">None</span>, :])</span>
-<span id="cb1-223"><a href="#cb1-223"></a>Y <span class="op">=</span> (np.random.random((N, M)) <span class="op">&lt;</span> prob_matrix).astype(<span class="bu">int</span>)</span>
-<span id="cb1-224"><a href="#cb1-224"></a></span>
-<span id="cb1-225"><a href="#cb1-225"></a><span class="bu">print</span>(<span class="ss">f"Response matrix shape: </span><span class="sc">{</span>Y<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-226"><a href="#cb1-226"></a><span class="bu">print</span>(<span class="ss">f"Overall accuracy: </span><span class="sc">{</span>Y<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-227"><a href="#cb1-227"></a><span class="bu">print</span>(<span class="ss">f"Model accuracies range: [</span><span class="sc">{</span>Y<span class="sc">.</span>mean(axis<span class="op">=</span><span class="dv">1</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>Y<span class="sc">.</span>mean(axis<span class="op">=</span><span class="dv">1</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.3f}</span><span class="ss">]"</span>)</span>
-<span id="cb1-228"><a href="#cb1-228"></a><span class="bu">print</span>(<span class="ss">f"Item difficulties range: [</span><span class="sc">{</span>Y<span class="sc">.</span>mean(axis<span class="op">=</span><span class="dv">0</span>)<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>Y<span class="sc">.</span>mean(axis<span class="op">=</span><span class="dv">0</span>)<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.3f}</span><span class="ss">]"</span>)</span>
-<span id="cb1-229"><a href="#cb1-229"></a></span>
-<span id="cb1-230"><a href="#cb1-230"></a><span class="co"># Visualize</span></span>
-<span id="cb1-231"><a href="#cb1-231"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-232"><a href="#cb1-232"></a></span>
-<span id="cb1-233"><a href="#cb1-233"></a><span class="co"># Raw response matrix</span></span>
-<span id="cb1-234"><a href="#cb1-234"></a>axes[<span class="dv">0</span>].imshow(Y, aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>)</span>
-<span id="cb1-235"><a href="#cb1-235"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Questions'</span>)</span>
-<span id="cb1-236"><a href="#cb1-236"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Models'</span>)</span>
-<span id="cb1-237"><a href="#cb1-237"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Raw Response Matrix'</span>)</span>
-<span id="cb1-238"><a href="#cb1-238"></a></span>
-<span id="cb1-239"><a href="#cb1-239"></a><span class="co"># Sorted by ability and difficulty</span></span>
-<span id="cb1-240"><a href="#cb1-240"></a>row_order <span class="op">=</span> np.argsort(Y.mean(axis<span class="op">=</span><span class="dv">1</span>))[::<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb1-241"><a href="#cb1-241"></a>col_order <span class="op">=</span> np.argsort(Y.mean(axis<span class="op">=</span><span class="dv">0</span>))[::<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb1-242"><a href="#cb1-242"></a>Y_sorted <span class="op">=</span> Y[row_order][:, col_order]</span>
-<span id="cb1-243"><a href="#cb1-243"></a>axes[<span class="dv">1</span>].imshow(Y_sorted, aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>)</span>
-<span id="cb1-244"><a href="#cb1-244"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Questions (sorted by difficulty)'</span>)</span>
-<span id="cb1-245"><a href="#cb1-245"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Models (sorted by ability)'</span>)</span>
-<span id="cb1-246"><a href="#cb1-246"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Sorted Response Matrix'</span>)</span>
-<span id="cb1-247"><a href="#cb1-247"></a></span>
-<span id="cb1-248"><a href="#cb1-248"></a>plt.tight_layout()</span>
-<span id="cb1-249"><a href="#cb1-249"></a>plt.show()</span>
-<span id="cb1-250"><a href="#cb1-250"></a><span class="in">```</span></span>
-<span id="cb1-251"><a href="#cb1-251"></a></span>
-<span id="cb1-252"><a href="#cb1-252"></a>Next, we define helper functions for the log-likelihood and its gradients derived in @sec-gradient:</span>
-<span id="cb1-253"><a href="#cb1-253"></a></span>
-<span id="cb1-254"><a href="#cb1-254"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-255"><a href="#cb1-255"></a><span class="co">#| label: rasch-helpers</span></span>
-<span id="cb1-256"><a href="#cb1-256"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-257"><a href="#cb1-257"></a></span>
-<span id="cb1-258"><a href="#cb1-258"></a><span class="kw">def</span> rasch_log_likelihood(theta, beta, Y):</span>
-<span id="cb1-259"><a href="#cb1-259"></a>    <span class="co">"""Compute Rasch model log-likelihood."""</span></span>
-<span id="cb1-260"><a href="#cb1-260"></a>    logits <span class="op">=</span> theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :]</span>
-<span id="cb1-261"><a href="#cb1-261"></a>    ll <span class="op">=</span> (Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)))).<span class="bu">sum</span>()</span>
-<span id="cb1-262"><a href="#cb1-262"></a>    <span class="cf">return</span> ll</span>
-<span id="cb1-263"><a href="#cb1-263"></a></span>
-<span id="cb1-264"><a href="#cb1-264"></a><span class="kw">def</span> rasch_gradients(theta, beta, Y):</span>
-<span id="cb1-265"><a href="#cb1-265"></a>    <span class="co">"""Compute gradients for theta and beta."""</span></span>
-<span id="cb1-266"><a href="#cb1-266"></a>    P <span class="op">=</span> sigmoid(theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :])</span>
-<span id="cb1-267"><a href="#cb1-267"></a>    grad_theta <span class="op">=</span> (Y <span class="op">-</span> P).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-268"><a href="#cb1-268"></a>    grad_beta <span class="op">=</span> (P <span class="op">-</span> Y).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-269"><a href="#cb1-269"></a>    <span class="cf">return</span> grad_theta, grad_beta</span>
-<span id="cb1-270"><a href="#cb1-270"></a><span class="in">```</span></span>
-<span id="cb1-271"><a href="#cb1-271"></a></span>
-<span id="cb1-272"><a href="#cb1-272"></a>With the helpers in place, we run the gradient ascent loop. At each step we take a gradient step and then apply the sum-to-zero re-centering described in @sec-identifiability:</span>
-<span id="cb1-273"><a href="#cb1-273"></a></span>
-<span id="cb1-274"><a href="#cb1-274"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-275"><a href="#cb1-275"></a><span class="co">#| label: mle-gradient-ascent</span></span>
-<span id="cb1-276"><a href="#cb1-276"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-277"><a href="#cb1-277"></a><span class="co">#| fig-cap: "Convergence of gradient ascent for Rasch model MLE."</span></span>
-<span id="cb1-278"><a href="#cb1-278"></a></span>
-<span id="cb1-279"><a href="#cb1-279"></a><span class="co"># Initialize parameters at zero</span></span>
-<span id="cb1-280"><a href="#cb1-280"></a>theta_hat <span class="op">=</span> np.zeros(N)</span>
-<span id="cb1-281"><a href="#cb1-281"></a>beta_hat <span class="op">=</span> np.zeros(M)</span>
-<span id="cb1-282"><a href="#cb1-282"></a></span>
-<span id="cb1-283"><a href="#cb1-283"></a><span class="co"># Gradient ascent</span></span>
-<span id="cb1-284"><a href="#cb1-284"></a>learning_rate <span class="op">=</span> <span class="fl">0.01</span></span>
-<span id="cb1-285"><a href="#cb1-285"></a>n_iterations <span class="op">=</span> <span class="dv">500</span></span>
-<span id="cb1-286"><a href="#cb1-286"></a>ll_history <span class="op">=</span> []</span>
-<span id="cb1-287"><a href="#cb1-287"></a></span>
-<span id="cb1-288"><a href="#cb1-288"></a><span class="cf">for</span> iteration <span class="kw">in</span> <span class="bu">range</span>(n_iterations):</span>
-<span id="cb1-289"><a href="#cb1-289"></a>    <span class="co"># Compute gradients</span></span>
-<span id="cb1-290"><a href="#cb1-290"></a>    grad_theta, grad_beta <span class="op">=</span> rasch_gradients(theta_hat, beta_hat, Y)</span>
-<span id="cb1-291"><a href="#cb1-291"></a></span>
-<span id="cb1-292"><a href="#cb1-292"></a>    <span class="co"># Update parameters</span></span>
-<span id="cb1-293"><a href="#cb1-293"></a>    theta_hat <span class="op">=</span> theta_hat <span class="op">+</span> learning_rate <span class="op">*</span> grad_theta</span>
-<span id="cb1-294"><a href="#cb1-294"></a>    beta_hat <span class="op">=</span> beta_hat <span class="op">+</span> learning_rate <span class="op">*</span> grad_beta</span>
-<span id="cb1-295"><a href="#cb1-295"></a></span>
-<span id="cb1-296"><a href="#cb1-296"></a>    <span class="co"># Re-center for identification (sum-to-zero constraint)</span></span>
-<span id="cb1-297"><a href="#cb1-297"></a>    theta_hat <span class="op">=</span> theta_hat <span class="op">-</span> theta_hat.mean()</span>
-<span id="cb1-298"><a href="#cb1-298"></a>    beta_hat <span class="op">=</span> beta_hat <span class="op">-</span> beta_hat.mean()</span>
-<span id="cb1-299"><a href="#cb1-299"></a></span>
-<span id="cb1-300"><a href="#cb1-300"></a>    <span class="co"># Track log-likelihood</span></span>
-<span id="cb1-301"><a href="#cb1-301"></a>    ll <span class="op">=</span> rasch_log_likelihood(theta_hat, beta_hat, Y)</span>
-<span id="cb1-302"><a href="#cb1-302"></a>    ll_history.append(ll)</span>
-<span id="cb1-303"><a href="#cb1-303"></a></span>
-<span id="cb1-304"><a href="#cb1-304"></a><span class="co"># Plot convergence</span></span>
-<span id="cb1-305"><a href="#cb1-305"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-306"><a href="#cb1-306"></a></span>
-<span id="cb1-307"><a href="#cb1-307"></a><span class="co"># Convergence curve</span></span>
-<span id="cb1-308"><a href="#cb1-308"></a>axes[<span class="dv">0</span>].plot(ll_history)</span>
-<span id="cb1-309"><a href="#cb1-309"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Iteration'</span>)</span>
-<span id="cb1-310"><a href="#cb1-310"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Log-likelihood'</span>)</span>
-<span id="cb1-311"><a href="#cb1-311"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Gradient Ascent Convergence'</span>)</span>
-<span id="cb1-312"><a href="#cb1-312"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-313"><a href="#cb1-313"></a></span>
-<span id="cb1-314"><a href="#cb1-314"></a><span class="co"># Compare ability estimates to true values</span></span>
-<span id="cb1-315"><a href="#cb1-315"></a>theta_true_centered <span class="op">=</span> theta_true <span class="op">-</span> theta_true.mean()</span>
-<span id="cb1-316"><a href="#cb1-316"></a>axes[<span class="dv">1</span>].scatter(theta_true_centered, theta_hat, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb1-317"><a href="#cb1-317"></a>axes[<span class="dv">1</span>].plot([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>], [<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'y=x'</span>)</span>
-<span id="cb1-318"><a href="#cb1-318"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'True ability (centered)'</span>)</span>
-<span id="cb1-319"><a href="#cb1-319"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Estimated ability'</span>)</span>
-<span id="cb1-320"><a href="#cb1-320"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Recovery of Abilities'</span>)</span>
-<span id="cb1-321"><a href="#cb1-321"></a>axes[<span class="dv">1</span>].legend()</span>
-<span id="cb1-322"><a href="#cb1-322"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-323"><a href="#cb1-323"></a></span>
-<span id="cb1-324"><a href="#cb1-324"></a><span class="co"># Compare difficulty estimates to true values</span></span>
-<span id="cb1-325"><a href="#cb1-325"></a>beta_true_centered <span class="op">=</span> beta_true <span class="op">-</span> beta_true.mean()</span>
-<span id="cb1-326"><a href="#cb1-326"></a>axes[<span class="dv">2</span>].scatter(beta_true_centered, beta_hat, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
-<span id="cb1-327"><a href="#cb1-327"></a>axes[<span class="dv">2</span>].plot([<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>], [<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'y=x'</span>)</span>
-<span id="cb1-328"><a href="#cb1-328"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'True difficulty (centered)'</span>)</span>
-<span id="cb1-329"><a href="#cb1-329"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Estimated difficulty'</span>)</span>
-<span id="cb1-330"><a href="#cb1-330"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Recovery of Difficulties'</span>)</span>
-<span id="cb1-331"><a href="#cb1-331"></a>axes[<span class="dv">2</span>].legend()</span>
-<span id="cb1-332"><a href="#cb1-332"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-333"><a href="#cb1-333"></a></span>
-<span id="cb1-334"><a href="#cb1-334"></a>plt.tight_layout()</span>
-<span id="cb1-335"><a href="#cb1-335"></a>plt.show()</span>
-<span id="cb1-336"><a href="#cb1-336"></a></span>
-<span id="cb1-337"><a href="#cb1-337"></a><span class="co"># Correlation with true values</span></span>
-<span id="cb1-338"><a href="#cb1-338"></a>corr_theta <span class="op">=</span> np.corrcoef(theta_true_centered, theta_hat)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-339"><a href="#cb1-339"></a>corr_beta <span class="op">=</span> np.corrcoef(beta_true_centered, beta_hat)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-340"><a href="#cb1-340"></a><span class="bu">print</span>(<span class="ss">f"Correlation with true abilities: </span><span class="sc">{</span>corr_theta<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-341"><a href="#cb1-341"></a><span class="bu">print</span>(<span class="ss">f"Correlation with true difficulties: </span><span class="sc">{</span>corr_beta<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-342"><a href="#cb1-342"></a><span class="in">```</span></span>
-<span id="cb1-343"><a href="#cb1-343"></a></span>
-<span id="cb1-344"><a href="#cb1-344"></a></span>
-<span id="cb1-345"><a href="#cb1-345"></a><span class="fu">### L-BFGS Optimization {#sec-lbfgs}</span></span>
-<span id="cb1-346"><a href="#cb1-346"></a></span>
-<span id="cb1-347"><a href="#cb1-347"></a>While gradient ascent is intuitive, quasi-Newton methods like L-BFGS converge much faster by approximating second-order information. L-BFGS is conventionally formulated as a minimization routine, so we negate the log-likelihood and minimize the resulting objective:</span>
-<span id="cb1-348"><a href="#cb1-348"></a></span>
-<span id="cb1-349"><a href="#cb1-349"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-350"><a href="#cb1-350"></a><span class="co">#| label: lbfgs-optimization</span></span>
-<span id="cb1-351"><a href="#cb1-351"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-352"><a href="#cb1-352"></a><span class="co">#| fig-cap: "L-BFGS achieves faster convergence than gradient ascent."</span></span>
-<span id="cb1-353"><a href="#cb1-353"></a></span>
-<span id="cb1-354"><a href="#cb1-354"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
-<span id="cb1-355"><a href="#cb1-355"></a></span>
-<span id="cb1-356"><a href="#cb1-356"></a><span class="kw">def</span> negative_log_likelihood(params, Y):</span>
-<span id="cb1-357"><a href="#cb1-357"></a>    <span class="co">"""Negative log-likelihood (for minimization)."""</span></span>
-<span id="cb1-358"><a href="#cb1-358"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-359"><a href="#cb1-359"></a>    theta <span class="op">=</span> params[:N]</span>
-<span id="cb1-360"><a href="#cb1-360"></a>    beta <span class="op">=</span> params[N:]</span>
-<span id="cb1-361"><a href="#cb1-361"></a></span>
-<span id="cb1-362"><a href="#cb1-362"></a>    logits <span class="op">=</span> theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :]</span>
-<span id="cb1-363"><a href="#cb1-363"></a>    nll <span class="op">=</span> <span class="op">-</span>(Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)))).<span class="bu">sum</span>()</span>
-<span id="cb1-364"><a href="#cb1-364"></a>    <span class="cf">return</span> nll</span>
-<span id="cb1-365"><a href="#cb1-365"></a></span>
-<span id="cb1-366"><a href="#cb1-366"></a><span class="kw">def</span> gradient(params, Y):</span>
-<span id="cb1-367"><a href="#cb1-367"></a>    <span class="co">"""Gradient of negative log-likelihood."""</span></span>
-<span id="cb1-368"><a href="#cb1-368"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-369"><a href="#cb1-369"></a>    theta <span class="op">=</span> params[:N]</span>
-<span id="cb1-370"><a href="#cb1-370"></a>    beta <span class="op">=</span> params[N:]</span>
-<span id="cb1-371"><a href="#cb1-371"></a></span>
-<span id="cb1-372"><a href="#cb1-372"></a>    P <span class="op">=</span> sigmoid(theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :])</span>
-<span id="cb1-373"><a href="#cb1-373"></a>    grad_theta <span class="op">=</span> <span class="op">-</span>(Y <span class="op">-</span> P).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-374"><a href="#cb1-374"></a>    grad_beta <span class="op">=</span> <span class="op">-</span>(P <span class="op">-</span> Y).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-375"><a href="#cb1-375"></a></span>
-<span id="cb1-376"><a href="#cb1-376"></a>    <span class="cf">return</span> np.concatenate([grad_theta, grad_beta])</span>
-<span id="cb1-377"><a href="#cb1-377"></a></span>
-<span id="cb1-378"><a href="#cb1-378"></a><span class="co"># Initial parameters</span></span>
-<span id="cb1-379"><a href="#cb1-379"></a>params0 <span class="op">=</span> np.zeros(N <span class="op">+</span> M)</span>
-<span id="cb1-380"><a href="#cb1-380"></a></span>
-<span id="cb1-381"><a href="#cb1-381"></a><span class="co"># L-BFGS optimization</span></span>
-<span id="cb1-382"><a href="#cb1-382"></a>result <span class="op">=</span> minimize(</span>
-<span id="cb1-383"><a href="#cb1-383"></a>    negative_log_likelihood,</span>
-<span id="cb1-384"><a href="#cb1-384"></a>    params0,</span>
-<span id="cb1-385"><a href="#cb1-385"></a>    args<span class="op">=</span>(Y,),</span>
-<span id="cb1-386"><a href="#cb1-386"></a>    jac<span class="op">=</span>gradient,</span>
-<span id="cb1-387"><a href="#cb1-387"></a>    method<span class="op">=</span><span class="st">'L-BFGS-B'</span>,</span>
-<span id="cb1-388"><a href="#cb1-388"></a>    options<span class="op">=</span>{<span class="st">'maxiter'</span>: <span class="dv">200</span>, <span class="st">'disp'</span>: <span class="va">False</span>}</span>
-<span id="cb1-389"><a href="#cb1-389"></a>)</span>
-<span id="cb1-390"><a href="#cb1-390"></a></span>
-<span id="cb1-391"><a href="#cb1-391"></a>theta_lbfgs <span class="op">=</span> result.x[:N]</span>
-<span id="cb1-392"><a href="#cb1-392"></a>beta_lbfgs <span class="op">=</span> result.x[N:]</span>
-<span id="cb1-393"><a href="#cb1-393"></a></span>
-<span id="cb1-394"><a href="#cb1-394"></a><span class="co"># Center for comparison</span></span>
-<span id="cb1-395"><a href="#cb1-395"></a>theta_lbfgs <span class="op">=</span> theta_lbfgs <span class="op">-</span> theta_lbfgs.mean()</span>
-<span id="cb1-396"><a href="#cb1-396"></a>beta_lbfgs <span class="op">=</span> beta_lbfgs <span class="op">-</span> beta_lbfgs.mean()</span>
-<span id="cb1-397"><a href="#cb1-397"></a></span>
-<span id="cb1-398"><a href="#cb1-398"></a><span class="bu">print</span>(<span class="ss">f"L-BFGS converged: </span><span class="sc">{</span>result<span class="sc">.</span>success<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-399"><a href="#cb1-399"></a><span class="bu">print</span>(<span class="ss">f"Final log-likelihood: </span><span class="sc">{</span><span class="op">-</span>result<span class="sc">.</span>fun<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-400"><a href="#cb1-400"></a><span class="bu">print</span>(<span class="ss">f"Iterations: </span><span class="sc">{</span>result<span class="sc">.</span>nit<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-401"><a href="#cb1-401"></a></span>
-<span id="cb1-402"><a href="#cb1-402"></a><span class="co"># Compare to gradient ascent</span></span>
-<span id="cb1-403"><a href="#cb1-403"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Correlation with GA estimates:"</span>)</span>
-<span id="cb1-404"><a href="#cb1-404"></a><span class="bu">print</span>(<span class="ss">f"  Abilities: </span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(theta_hat, theta_lbfgs)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="sc">:.6f}</span><span class="ss">"</span>)</span>
-<span id="cb1-405"><a href="#cb1-405"></a><span class="bu">print</span>(<span class="ss">f"  Difficulties: </span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(beta_hat, beta_lbfgs)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="sc">:.6f}</span><span class="ss">"</span>)</span>
-<span id="cb1-406"><a href="#cb1-406"></a><span class="in">```</span></span>
-<span id="cb1-407"><a href="#cb1-407"></a></span>
-<span id="cb1-408"><a href="#cb1-408"></a></span>
-<span id="cb1-409"><a href="#cb1-409"></a><span class="fu">## Joint, Conditional, and Marginal MLE {#sec-mle-variants}</span></span>
-<span id="cb1-410"><a href="#cb1-410"></a></span>
-<span id="cb1-411"><a href="#cb1-411"></a>The MLE approach we have discussed so far is called *joint maximum likelihood estimation* (JMLE). It treats both person parameters $\theta$ and item parameters $\beta$ as fixed unknowns to be estimated. However, JMLE has theoretical limitations that motivate alternative approaches.</span>
-<span id="cb1-412"><a href="#cb1-412"></a></span>
-<span id="cb1-413"><a href="#cb1-413"></a><span class="fu">### Joint MLE (JMLE) {#sec-jmle}</span></span>
-<span id="cb1-414"><a href="#cb1-414"></a></span>
-<span id="cb1-415"><a href="#cb1-415"></a>JMLE simultaneously estimates all parameters by maximizing @eq-log-likelihood. While intuitive, JMLE suffers from the *incidental parameter problem* <span class="co">[</span><span class="ot">@neyman1948consistent</span><span class="co">]</span>: as the number of items $M$ remains fixed and the number of persons $N$ grows, the item parameter estimates $\hat{\beta}$ are inconsistent---they do not converge to the true values. @haberman1977maximum proves this formally for the Rasch model; @lancaster2000incidental surveys how the problem generalizes across statistics and econometrics.</span>
-<span id="cb1-416"><a href="#cb1-416"></a></span>
-<span id="cb1-417"><a href="#cb1-417"></a>::: {.callout-note title="Intuition: Why More Data Does Not Fix the Bias"}</span>
-<span id="cb1-418"><a href="#cb1-418"></a>For a standard estimation problem, more data means better estimates: the law of large numbers washes out idiosyncratic noise and $\hat{\beta}$ converges to the truth. One might hope the same holds here: as we add more test takers, the sample information about each item $\beta_j$ grows without bound, so $\hat{\beta}_j$ should become unbiased.</span>
-<span id="cb1-419"><a href="#cb1-419"></a></span>
-<span id="cb1-420"><a href="#cb1-420"></a>The catch is that each new test taker also brings a new parameter $\theta_i$ to estimate. Unlike $\beta_j$, the person parameter $\theta_i$ is *only* estimated from that person's $M$ responses --- adding more test takers does **not** give us more information about any existing $\theta_i$. These per-person parameters are "incidental": their number grows with $N$, but their precision does not.</span>
-<span id="cb1-421"><a href="#cb1-421"></a></span>
-<span id="cb1-422"><a href="#cb1-422"></a>When we plug the noisy $\hat{\theta}_i$ back into the likelihood to update $\hat{\beta}_j$, the bias in the person estimates leaks into the item estimates, and the two biases do not cancel. As a result, $\hat{\beta}_j$ is biased by a factor that depends only on $M$ --- more persons cannot rescue us; only more *items per person* can.</span>
-<span id="cb1-423"><a href="#cb1-423"></a>:::</span>
-<span id="cb1-424"><a href="#cb1-424"></a></span>
-<span id="cb1-425"><a href="#cb1-425"></a>For AI benchmarks with many items (typically $M &gt; 100$), this bias is small in practice. But for smaller tests, JMLE can be problematic, which motivates the conditional and marginal approaches below.</span>
-<span id="cb1-426"><a href="#cb1-426"></a></span>
-<span id="cb1-427"><a href="#cb1-427"></a><span class="fu">### Conditional MLE (CMLE) {#sec-cmle}</span></span>
-<span id="cb1-428"><a href="#cb1-428"></a></span>
-<span id="cb1-429"><a href="#cb1-429"></a>Georg Rasch discovered an elegant solution to the incidental parameter problem. For the Rasch model specifically, the sum score $S_i = \sum_j Y_{ij}$ is a *sufficient statistic* for $\theta_i$. This means all information about $\theta_i$ in the data $Y_i$ is captured by $S_i$.</span>
-<span id="cb1-430"><a href="#cb1-430"></a></span>
-<span id="cb1-431"><a href="#cb1-431"></a>By conditioning on the sufficient statistics, we can eliminate the person parameters entirely:</span>
-<span id="cb1-432"><a href="#cb1-432"></a></span>
-<span id="cb1-433"><a href="#cb1-433"></a>$$</span>
-<span id="cb1-434"><a href="#cb1-434"></a>P(Y_i \mid S_i, \beta) = \frac{\exp(-\sum_j Y_{ij}\beta_j)}{\gamma_{S_i}(\beta)}</span>
-<span id="cb1-435"><a href="#cb1-435"></a>$$ {#eq-cmle}</span>
-<span id="cb1-436"><a href="#cb1-436"></a></span>
-<span id="cb1-437"><a href="#cb1-437"></a>where $\gamma_r(\beta) = \sum_{A: |A|=r} \exp(-\sum_{j \in A} \beta_j)$ is the elementary symmetric function of order $r$, summing over all subsets $A$ of items of size $r$.</span>
-<span id="cb1-438"><a href="#cb1-438"></a></span>
-<span id="cb1-439"><a href="#cb1-439"></a>The conditional likelihood depends only on $\beta$, so we can estimate item parameters without any person parameters. This produces consistent estimates of $\beta$ regardless of how $N$ grows.</span>
-<span id="cb1-440"><a href="#cb1-440"></a></span>
-<span id="cb1-441"><a href="#cb1-441"></a>::: {.callout-note title="Rasch's Insight"}</span>
-<span id="cb1-442"><a href="#cb1-442"></a>The sufficiency of sum scores is unique to the Rasch model. For the 2PL or 3PL models, sum scores are not sufficient, and CMLE cannot be applied. This mathematical property is one reason the Rasch model holds special status in measurement theory.</span>
-<span id="cb1-443"><a href="#cb1-443"></a>:::</span>
-<span id="cb1-444"><a href="#cb1-444"></a></span>
-<span id="cb1-445"><a href="#cb1-445"></a><span class="fu">### Marginal MLE (MMLE) {#sec-mmle}</span></span>
-<span id="cb1-446"><a href="#cb1-446"></a></span>
-<span id="cb1-447"><a href="#cb1-447"></a>An alternative approach is to treat person parameters as random variables from a population distribution:</span>
-<span id="cb1-448"><a href="#cb1-448"></a></span>
-<span id="cb1-449"><a href="#cb1-449"></a>$$</span>
-<span id="cb1-450"><a href="#cb1-450"></a>\theta_i \sim \mathcal{N}(\mu_\theta, \sigma^2_\theta)</span>
-<span id="cb1-451"><a href="#cb1-451"></a>$$</span>
-<span id="cb1-452"><a href="#cb1-452"></a></span>
-<span id="cb1-453"><a href="#cb1-453"></a>The marginal likelihood integrates out the person parameters:</span>
-<span id="cb1-454"><a href="#cb1-454"></a></span>
-<span id="cb1-455"><a href="#cb1-455"></a>$$</span>
-<span id="cb1-456"><a href="#cb1-456"></a>L(\beta) = \prod_{i=1}^N \int P(Y_i \mid \theta, \beta) \, p(\theta) \, d\theta</span>
-<span id="cb1-457"><a href="#cb1-457"></a>$$ {#eq-mmle}</span>
-<span id="cb1-458"><a href="#cb1-458"></a></span>
-<span id="cb1-459"><a href="#cb1-459"></a>This approach:</span>
-<span id="cb1-460"><a href="#cb1-460"></a></span>
-<span id="cb1-461"><a href="#cb1-461"></a><span class="ss">- </span>Treats item parameters as fixed and person parameters as random</span>
-<span id="cb1-462"><a href="#cb1-462"></a><span class="ss">- </span>Produces consistent estimates of $\beta$ as $N \to \infty$</span>
-<span id="cb1-463"><a href="#cb1-463"></a><span class="ss">- </span>Naturally extends to more complex IRT models (2PL, 3PL)</span>
-<span id="cb1-464"><a href="#cb1-464"></a><span class="ss">- </span>Forms the basis for the EM algorithm (next section)</span>
-<span id="cb1-465"><a href="#cb1-465"></a></span>
-<span id="cb1-466"><a href="#cb1-466"></a>::: {.callout-note title="Comparison of MLE Approaches"}</span>
-<span id="cb1-467"><a href="#cb1-467"></a><span class="pp">|</span> Method <span class="pp">|</span> Person Parameters <span class="pp">|</span> Item Parameters <span class="pp">|</span> Consistency <span class="pp">|</span> Applicability <span class="pp">|</span></span>
-<span id="cb1-468"><a href="#cb1-468"></a><span class="pp">|--------|------------------|-----------------|-------------|---------------|</span></span>
-<span id="cb1-469"><a href="#cb1-469"></a><span class="pp">|</span> JMLE <span class="pp">|</span> Estimated directly <span class="pp">|</span> Estimated directly <span class="pp">|</span> Inconsistent for fixed M <span class="pp">|</span> Any IRT model <span class="pp">|</span></span>
-<span id="cb1-470"><a href="#cb1-470"></a><span class="pp">|</span> CMLE <span class="pp">|</span> Conditioned out <span class="pp">|</span> Consistent <span class="pp">|</span> Consistent <span class="pp">|</span> Rasch only <span class="pp">|</span></span>
-<span id="cb1-471"><a href="#cb1-471"></a><span class="pp">|</span> MMLE <span class="pp">|</span> Integrated out <span class="pp">|</span> Consistent <span class="pp">|</span> Consistent <span class="pp">|</span> Any IRT model <span class="pp">|</span></span>
-<span id="cb1-472"><a href="#cb1-472"></a></span>
-<span id="cb1-473"><a href="#cb1-473"></a>For AI benchmarks with many questions ($M &gt; 100$), JMLE works well in practice. For smaller tests or when statistical properties are important, CMLE or MMLE is preferred.</span>
-<span id="cb1-474"><a href="#cb1-474"></a>:::</span>
-<span id="cb1-475"><a href="#cb1-475"></a></span>
-<span id="cb1-476"><a href="#cb1-476"></a></span>
-<span id="cb1-477"><a href="#cb1-477"></a><span class="fu">## The EM Algorithm {#sec-em}</span></span>
-<span id="cb1-478"><a href="#cb1-478"></a></span>
-<span id="cb1-479"><a href="#cb1-479"></a>The Expectation-Maximization (EM) algorithm is a general method for maximum likelihood estimation with latent variables. In IRT, the latent variables are the person abilities $\theta$.</span>
-<span id="cb1-480"><a href="#cb1-480"></a></span>
-<span id="cb1-481"><a href="#cb1-481"></a><span class="fu">### The EM Framework {#sec-em-framework}</span></span>
-<span id="cb1-482"><a href="#cb1-482"></a></span>
-<span id="cb1-483"><a href="#cb1-483"></a>The EM algorithm iterates between two steps:</span>
-<span id="cb1-484"><a href="#cb1-484"></a></span>
-<span id="cb1-485"><a href="#cb1-485"></a>**E-step (Expectation):** Compute the expected value of the complete-data log-likelihood, given the observed data and current parameter estimates:</span>
-<span id="cb1-486"><a href="#cb1-486"></a></span>
-<span id="cb1-487"><a href="#cb1-487"></a>$$</span>
-<span id="cb1-488"><a href="#cb1-488"></a>Q(\beta \mid \beta^{(t)}) = \mathbb{E}_{\theta \mid Y, \beta^{(t)}} \left<span class="co">[</span><span class="ot"> \log P(Y, \theta \mid \beta) \right</span><span class="co">]</span></span>
-<span id="cb1-489"><a href="#cb1-489"></a>$$</span>
-<span id="cb1-490"><a href="#cb1-490"></a></span>
-<span id="cb1-491"><a href="#cb1-491"></a>**M-step (Maximization):** Find the parameter values that maximize the expected log-likelihood:</span>
-<span id="cb1-492"><a href="#cb1-492"></a></span>
-<span id="cb1-493"><a href="#cb1-493"></a>$$</span>
-<span id="cb1-494"><a href="#cb1-494"></a>\beta^{(t+1)} = \arg\max_\beta Q(\beta \mid \beta^{(t)})</span>
-<span id="cb1-495"><a href="#cb1-495"></a>$$</span>
-<span id="cb1-496"><a href="#cb1-496"></a></span>
-<span id="cb1-497"><a href="#cb1-497"></a>The EM algorithm guarantees that the marginal likelihood increases (or stays the same) at each iteration, converging to a local maximum.</span>
-<span id="cb1-498"><a href="#cb1-498"></a></span>
-<span id="cb1-499"><a href="#cb1-499"></a><span class="fu">### EM for the Rasch Model {#sec-em-rasch}</span></span>
-<span id="cb1-500"><a href="#cb1-500"></a></span>
-<span id="cb1-501"><a href="#cb1-501"></a>For the Rasch model with a standard normal prior on abilities, the EM algorithm takes a specific form:</span>
-<span id="cb1-502"><a href="#cb1-502"></a></span>
-<span id="cb1-503"><a href="#cb1-503"></a>**E-step:** For each person $i$, compute the posterior distribution of $\theta_i$ given their responses $Y_i$ and current item parameters $\beta^{(t)}$:</span>
-<span id="cb1-504"><a href="#cb1-504"></a></span>
-<span id="cb1-505"><a href="#cb1-505"></a>$$</span>
-<span id="cb1-506"><a href="#cb1-506"></a>p(\theta_i \mid Y_i, \beta^{(t)}) \propto p(Y_i \mid \theta_i, \beta^{(t)}) \cdot p(\theta_i)</span>
-<span id="cb1-507"><a href="#cb1-507"></a>$$</span>
-<span id="cb1-508"><a href="#cb1-508"></a></span>
-<span id="cb1-509"><a href="#cb1-509"></a>This posterior is not available in closed form, so we use numerical integration (Gauss-Hermite quadrature).</span>
-<span id="cb1-510"><a href="#cb1-510"></a></span>
-<span id="cb1-511"><a href="#cb1-511"></a>**M-step:** Update each item parameter by solving:</span>
-<span id="cb1-512"><a href="#cb1-512"></a></span>
-<span id="cb1-513"><a href="#cb1-513"></a>$$</span>
-<span id="cb1-514"><a href="#cb1-514"></a>\sum_{i=1}^N \mathbb{E}_{\theta_i}[\sigma(\theta_i - \beta_j)] = \sum_{i=1}^N Y_{ij}</span>
-<span id="cb1-515"><a href="#cb1-515"></a>$$</span>
-<span id="cb1-516"><a href="#cb1-516"></a></span>
-<span id="cb1-517"><a href="#cb1-517"></a>The left side is the expected number of correct responses to item $j$; the right side is the observed number. We equate these.</span>
-<span id="cb1-518"><a href="#cb1-518"></a></span>
-<span id="cb1-519"><a href="#cb1-519"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-520"><a href="#cb1-520"></a><span class="co">#| label: em-algorithm</span></span>
-<span id="cb1-521"><a href="#cb1-521"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-522"><a href="#cb1-522"></a><span class="co">#| fig-cap: "EM algorithm convergence for Rasch model estimation."</span></span>
-<span id="cb1-523"><a href="#cb1-523"></a></span>
-<span id="cb1-524"><a href="#cb1-524"></a><span class="im">from</span> numpy.polynomial.hermite <span class="im">import</span> hermgauss</span>
-<span id="cb1-525"><a href="#cb1-525"></a></span>
-<span id="cb1-526"><a href="#cb1-526"></a><span class="kw">def</span> em_rasch(Y, n_iterations<span class="op">=</span><span class="dv">50</span>, n_quadrature<span class="op">=</span><span class="dv">21</span>, verbose<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb1-527"><a href="#cb1-527"></a>    <span class="co">"""</span></span>
-<span id="cb1-528"><a href="#cb1-528"></a><span class="co">    EM algorithm for Rasch model using Gauss-Hermite quadrature.</span></span>
-<span id="cb1-529"><a href="#cb1-529"></a></span>
-<span id="cb1-530"><a href="#cb1-530"></a><span class="co">    Parameters</span></span>
-<span id="cb1-531"><a href="#cb1-531"></a><span class="co">    ----------</span></span>
-<span id="cb1-532"><a href="#cb1-532"></a><span class="co">    Y : ndarray (N, M)</span></span>
-<span id="cb1-533"><a href="#cb1-533"></a><span class="co">        Binary response matrix</span></span>
-<span id="cb1-534"><a href="#cb1-534"></a><span class="co">    n_iterations : int</span></span>
-<span id="cb1-535"><a href="#cb1-535"></a><span class="co">        Number of EM iterations</span></span>
-<span id="cb1-536"><a href="#cb1-536"></a><span class="co">    n_quadrature : int</span></span>
-<span id="cb1-537"><a href="#cb1-537"></a><span class="co">        Number of quadrature points</span></span>
-<span id="cb1-538"><a href="#cb1-538"></a><span class="co">    verbose : bool</span></span>
-<span id="cb1-539"><a href="#cb1-539"></a><span class="co">        Print progress</span></span>
-<span id="cb1-540"><a href="#cb1-540"></a></span>
-<span id="cb1-541"><a href="#cb1-541"></a><span class="co">    Returns</span></span>
-<span id="cb1-542"><a href="#cb1-542"></a><span class="co">    -------</span></span>
-<span id="cb1-543"><a href="#cb1-543"></a><span class="co">    theta_hat : ndarray (N,)</span></span>
-<span id="cb1-544"><a href="#cb1-544"></a><span class="co">        Estimated abilities (posterior means)</span></span>
-<span id="cb1-545"><a href="#cb1-545"></a><span class="co">    beta_hat : ndarray (M,)</span></span>
-<span id="cb1-546"><a href="#cb1-546"></a><span class="co">        Estimated difficulties</span></span>
-<span id="cb1-547"><a href="#cb1-547"></a><span class="co">    ll_history : list</span></span>
-<span id="cb1-548"><a href="#cb1-548"></a><span class="co">        Marginal log-likelihood at each iteration</span></span>
-<span id="cb1-549"><a href="#cb1-549"></a><span class="co">    """</span></span>
-<span id="cb1-550"><a href="#cb1-550"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-551"><a href="#cb1-551"></a></span>
-<span id="cb1-552"><a href="#cb1-552"></a>    <span class="co"># Initialize item difficulties</span></span>
-<span id="cb1-553"><a href="#cb1-553"></a>    beta <span class="op">=</span> np.zeros(M)</span>
-<span id="cb1-554"><a href="#cb1-554"></a></span>
-<span id="cb1-555"><a href="#cb1-555"></a>    <span class="co"># Gauss-Hermite quadrature points and weights</span></span>
-<span id="cb1-556"><a href="#cb1-556"></a>    <span class="co"># These approximate the integral over theta ~ N(0, 1)</span></span>
-<span id="cb1-557"><a href="#cb1-557"></a>    nodes, weights <span class="op">=</span> hermgauss(n_quadrature)</span>
-<span id="cb1-558"><a href="#cb1-558"></a>    nodes <span class="op">=</span> nodes <span class="op">*</span> np.sqrt(<span class="dv">2</span>)  <span class="co"># Scale for standard normal</span></span>
-<span id="cb1-559"><a href="#cb1-559"></a>    weights <span class="op">=</span> weights <span class="op">/</span> np.sqrt(np.pi)  <span class="co"># Normalize</span></span>
-<span id="cb1-560"><a href="#cb1-560"></a></span>
-<span id="cb1-561"><a href="#cb1-561"></a>    ll_history <span class="op">=</span> []</span>
-<span id="cb1-562"><a href="#cb1-562"></a></span>
-<span id="cb1-563"><a href="#cb1-563"></a>    <span class="cf">for</span> iteration <span class="kw">in</span> <span class="bu">range</span>(n_iterations):</span>
-<span id="cb1-564"><a href="#cb1-564"></a>        <span class="co"># E-step: Compute posterior distributions over theta</span></span>
-<span id="cb1-565"><a href="#cb1-565"></a>        <span class="co"># P(theta | Y_i, beta) for each person at each quadrature point</span></span>
-<span id="cb1-566"><a href="#cb1-566"></a></span>
-<span id="cb1-567"><a href="#cb1-567"></a>        <span class="co"># Compute log-likelihood at each quadrature point for each person</span></span>
-<span id="cb1-568"><a href="#cb1-568"></a>        <span class="co"># log P(Y_i | theta_q, beta) for all i, q</span></span>
-<span id="cb1-569"><a href="#cb1-569"></a>        log_L <span class="op">=</span> np.zeros((N, n_quadrature))</span>
-<span id="cb1-570"><a href="#cb1-570"></a>        <span class="cf">for</span> q, theta_q <span class="kw">in</span> <span class="bu">enumerate</span>(nodes):</span>
-<span id="cb1-571"><a href="#cb1-571"></a>            logits <span class="op">=</span> theta_q <span class="op">-</span> beta  <span class="co"># (M,)</span></span>
-<span id="cb1-572"><a href="#cb1-572"></a>            <span class="co"># log P(Y_i | theta_q) = sum_j [Y_ij * logit_j - log(1 + exp(logit_j))]</span></span>
-<span id="cb1-573"><a href="#cb1-573"></a>            log_probs <span class="op">=</span> Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)))</span>
-<span id="cb1-574"><a href="#cb1-574"></a>            log_L[:, q] <span class="op">=</span> log_probs.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-575"><a href="#cb1-575"></a></span>
-<span id="cb1-576"><a href="#cb1-576"></a>        <span class="co"># Compute posterior weights: P(theta_q | Y_i, beta) ∝ P(Y_i | theta_q) * P(theta_q)</span></span>
-<span id="cb1-577"><a href="#cb1-577"></a>        <span class="co"># The weights already incorporate P(theta_q) from Gauss-Hermite</span></span>
-<span id="cb1-578"><a href="#cb1-578"></a>        log_posterior <span class="op">=</span> log_L <span class="op">+</span> np.log(weights <span class="op">+</span> <span class="fl">1e-300</span>)</span>
-<span id="cb1-579"><a href="#cb1-579"></a></span>
-<span id="cb1-580"><a href="#cb1-580"></a>        <span class="co"># Normalize to get posterior probabilities</span></span>
-<span id="cb1-581"><a href="#cb1-581"></a>        log_posterior_max <span class="op">=</span> log_posterior.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-582"><a href="#cb1-582"></a>        posterior <span class="op">=</span> np.exp(log_posterior <span class="op">-</span> log_posterior_max)</span>
-<span id="cb1-583"><a href="#cb1-583"></a>        posterior <span class="op">=</span> posterior <span class="op">/</span> posterior.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-584"><a href="#cb1-584"></a></span>
-<span id="cb1-585"><a href="#cb1-585"></a>        <span class="co"># Expected ability for each person (posterior mean)</span></span>
-<span id="cb1-586"><a href="#cb1-586"></a>        E_theta <span class="op">=</span> (posterior <span class="op">*</span> nodes).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-587"><a href="#cb1-587"></a></span>
-<span id="cb1-588"><a href="#cb1-588"></a>        <span class="co"># M-step: Update beta</span></span>
-<span id="cb1-589"><a href="#cb1-589"></a>        <span class="co"># For each item j, solve: sum_i E[P(Y_ij=1 | theta_i)] = sum_i Y_ij</span></span>
-<span id="cb1-590"><a href="#cb1-590"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(M):</span>
-<span id="cb1-591"><a href="#cb1-591"></a>            <span class="co"># Expected probability at each quadrature point</span></span>
-<span id="cb1-592"><a href="#cb1-592"></a>            <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):  <span class="co"># Newton-Raphson iterations</span></span>
-<span id="cb1-593"><a href="#cb1-593"></a>                E_prob_j <span class="op">=</span> np.zeros(N)</span>
-<span id="cb1-594"><a href="#cb1-594"></a>                E_deriv_j <span class="op">=</span> np.zeros(N)</span>
-<span id="cb1-595"><a href="#cb1-595"></a>                <span class="cf">for</span> q, theta_q <span class="kw">in</span> <span class="bu">enumerate</span>(nodes):</span>
-<span id="cb1-596"><a href="#cb1-596"></a>                    p_q <span class="op">=</span> sigmoid(theta_q <span class="op">-</span> beta[j])</span>
-<span id="cb1-597"><a href="#cb1-597"></a>                    E_prob_j <span class="op">+=</span> posterior[:, q] <span class="op">*</span> p_q</span>
-<span id="cb1-598"><a href="#cb1-598"></a>                    E_deriv_j <span class="op">+=</span> posterior[:, q] <span class="op">*</span> p_q <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p_q)</span>
-<span id="cb1-599"><a href="#cb1-599"></a></span>
-<span id="cb1-600"><a href="#cb1-600"></a>                <span class="co"># Newton-Raphson update</span></span>
-<span id="cb1-601"><a href="#cb1-601"></a>                residual <span class="op">=</span> E_prob_j.<span class="bu">sum</span>() <span class="op">-</span> Y[:, j].<span class="bu">sum</span>()</span>
-<span id="cb1-602"><a href="#cb1-602"></a>                hessian <span class="op">=</span> <span class="op">-</span>E_deriv_j.<span class="bu">sum</span>()</span>
-<span id="cb1-603"><a href="#cb1-603"></a>                <span class="cf">if</span> <span class="bu">abs</span>(hessian) <span class="op">&gt;</span> <span class="fl">1e-10</span>:</span>
-<span id="cb1-604"><a href="#cb1-604"></a>                    beta[j] <span class="op">=</span> beta[j] <span class="op">-</span> residual <span class="op">/</span> hessian</span>
-<span id="cb1-605"><a href="#cb1-605"></a></span>
-<span id="cb1-606"><a href="#cb1-606"></a>        <span class="co"># Center beta for identification</span></span>
-<span id="cb1-607"><a href="#cb1-607"></a>        beta <span class="op">=</span> beta <span class="op">-</span> beta.mean()</span>
-<span id="cb1-608"><a href="#cb1-608"></a></span>
-<span id="cb1-609"><a href="#cb1-609"></a>        <span class="co"># Compute marginal log-likelihood for monitoring</span></span>
-<span id="cb1-610"><a href="#cb1-610"></a>        ll <span class="op">=</span> (log_posterior_max.flatten() <span class="op">+</span></span>
-<span id="cb1-611"><a href="#cb1-611"></a>              np.log(np.exp(log_L <span class="op">-</span> log_posterior_max) <span class="op">@</span> weights <span class="op">+</span> <span class="fl">1e-300</span>)).<span class="bu">sum</span>()</span>
-<span id="cb1-612"><a href="#cb1-612"></a>        ll_history.append(ll)</span>
-<span id="cb1-613"><a href="#cb1-613"></a></span>
-<span id="cb1-614"><a href="#cb1-614"></a>        <span class="cf">if</span> verbose <span class="kw">and</span> (iteration <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="dv">10</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-615"><a href="#cb1-615"></a>            <span class="bu">print</span>(<span class="ss">f"Iteration </span><span class="sc">{</span>iteration <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">: LL = </span><span class="sc">{</span>ll<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-616"><a href="#cb1-616"></a></span>
-<span id="cb1-617"><a href="#cb1-617"></a>    <span class="co"># Final E-step to get ability estimates</span></span>
-<span id="cb1-618"><a href="#cb1-618"></a>    log_L <span class="op">=</span> np.zeros((N, n_quadrature))</span>
-<span id="cb1-619"><a href="#cb1-619"></a>    <span class="cf">for</span> q, theta_q <span class="kw">in</span> <span class="bu">enumerate</span>(nodes):</span>
-<span id="cb1-620"><a href="#cb1-620"></a>        logits <span class="op">=</span> theta_q <span class="op">-</span> beta</span>
-<span id="cb1-621"><a href="#cb1-621"></a>        log_probs <span class="op">=</span> Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)))</span>
-<span id="cb1-622"><a href="#cb1-622"></a>        log_L[:, q] <span class="op">=</span> log_probs.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-623"><a href="#cb1-623"></a></span>
-<span id="cb1-624"><a href="#cb1-624"></a>    log_posterior <span class="op">=</span> log_L <span class="op">+</span> np.log(weights <span class="op">+</span> <span class="fl">1e-300</span>)</span>
-<span id="cb1-625"><a href="#cb1-625"></a>    log_posterior_max <span class="op">=</span> log_posterior.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-626"><a href="#cb1-626"></a>    posterior <span class="op">=</span> np.exp(log_posterior <span class="op">-</span> log_posterior_max)</span>
-<span id="cb1-627"><a href="#cb1-627"></a>    posterior <span class="op">=</span> posterior <span class="op">/</span> posterior.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-628"><a href="#cb1-628"></a>    theta_hat <span class="op">=</span> (posterior <span class="op">*</span> nodes).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-629"><a href="#cb1-629"></a></span>
-<span id="cb1-630"><a href="#cb1-630"></a>    <span class="cf">return</span> theta_hat, beta, ll_history</span>
-<span id="cb1-631"><a href="#cb1-631"></a></span>
-<span id="cb1-632"><a href="#cb1-632"></a><span class="co"># Run EM algorithm</span></span>
-<span id="cb1-633"><a href="#cb1-633"></a>theta_em, beta_em, ll_em <span class="op">=</span> em_rasch(Y, n_iterations<span class="op">=</span><span class="dv">50</span>)</span>
-<span id="cb1-634"><a href="#cb1-634"></a></span>
-<span id="cb1-635"><a href="#cb1-635"></a><span class="co"># Plot results</span></span>
-<span id="cb1-636"><a href="#cb1-636"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-637"><a href="#cb1-637"></a></span>
-<span id="cb1-638"><a href="#cb1-638"></a><span class="co"># Convergence</span></span>
-<span id="cb1-639"><a href="#cb1-639"></a>axes[<span class="dv">0</span>].plot(ll_em)</span>
-<span id="cb1-640"><a href="#cb1-640"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Iteration'</span>)</span>
-<span id="cb1-641"><a href="#cb1-641"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Marginal Log-likelihood'</span>)</span>
-<span id="cb1-642"><a href="#cb1-642"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'EM Algorithm Convergence'</span>)</span>
-<span id="cb1-643"><a href="#cb1-643"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-644"><a href="#cb1-644"></a></span>
-<span id="cb1-645"><a href="#cb1-645"></a><span class="co"># Ability recovery</span></span>
-<span id="cb1-646"><a href="#cb1-646"></a>axes[<span class="dv">1</span>].scatter(theta_true_centered, theta_em, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb1-647"><a href="#cb1-647"></a>axes[<span class="dv">1</span>].plot([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>], [<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-648"><a href="#cb1-648"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'True ability (centered)'</span>)</span>
-<span id="cb1-649"><a href="#cb1-649"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'EM estimate'</span>)</span>
-<span id="cb1-650"><a href="#cb1-650"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Ability Recovery (EM)'</span>)</span>
-<span id="cb1-651"><a href="#cb1-651"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-652"><a href="#cb1-652"></a></span>
-<span id="cb1-653"><a href="#cb1-653"></a><span class="co"># Difficulty recovery</span></span>
-<span id="cb1-654"><a href="#cb1-654"></a>axes[<span class="dv">2</span>].scatter(beta_true_centered, beta_em, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
-<span id="cb1-655"><a href="#cb1-655"></a>axes[<span class="dv">2</span>].plot([<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>], [<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-656"><a href="#cb1-656"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'True difficulty (centered)'</span>)</span>
-<span id="cb1-657"><a href="#cb1-657"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'EM estimate'</span>)</span>
-<span id="cb1-658"><a href="#cb1-658"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Difficulty Recovery (EM)'</span>)</span>
-<span id="cb1-659"><a href="#cb1-659"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-660"><a href="#cb1-660"></a></span>
-<span id="cb1-661"><a href="#cb1-661"></a>plt.tight_layout()</span>
-<span id="cb1-662"><a href="#cb1-662"></a>plt.show()</span>
-<span id="cb1-663"><a href="#cb1-663"></a></span>
-<span id="cb1-664"><a href="#cb1-664"></a><span class="bu">print</span>(<span class="ss">f"Correlation (abilities): </span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(theta_true_centered, theta_em)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-665"><a href="#cb1-665"></a><span class="bu">print</span>(<span class="ss">f"Correlation (difficulties): </span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(beta_true_centered, beta_em)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-666"><a href="#cb1-666"></a><span class="in">```</span></span>
-<span id="cb1-667"><a href="#cb1-667"></a></span>
-<span id="cb1-668"><a href="#cb1-668"></a></span>
-<span id="cb1-669"><a href="#cb1-669"></a><span class="fu">## Bayesian Inference {#sec-bayesian}</span></span>
-<span id="cb1-670"><a href="#cb1-670"></a></span>
-<span id="cb1-671"><a href="#cb1-671"></a>Bayesian inference provides an alternative to maximum likelihood that naturally incorporates prior information and quantifies uncertainty. Instead of finding a single point estimate, we characterize the entire posterior distribution over parameters.</span>
-<span id="cb1-672"><a href="#cb1-672"></a></span>
-<span id="cb1-673"><a href="#cb1-673"></a><span class="fu">### Prior Specification {#sec-priors}</span></span>
-<span id="cb1-674"><a href="#cb1-674"></a></span>
-<span id="cb1-675"><a href="#cb1-675"></a>The first step in Bayesian inference is specifying prior distributions that encode our beliefs before seeing the data:</span>
-<span id="cb1-676"><a href="#cb1-676"></a></span>
-<span id="cb1-677"><a href="#cb1-677"></a>::: {.callout-note title="Standard Priors for IRT"}</span>
-<span id="cb1-678"><a href="#cb1-678"></a>**For abilities (persons/models):**</span>
-<span id="cb1-679"><a href="#cb1-679"></a>$$\theta_i \sim \mathcal{N}(0, \sigma^2_\theta), \quad \sigma_\theta = 1 \text{ (standard choice)}$$</span>
-<span id="cb1-680"><a href="#cb1-680"></a></span>
-<span id="cb1-681"><a href="#cb1-681"></a>**For difficulties (items/questions):**</span>
-<span id="cb1-682"><a href="#cb1-682"></a>$$\beta_j \sim \mathcal{N}(0, \sigma^2_\beta), \quad \sigma_\beta = 1\text{-}2 \text{ (depending on expected range)}$$</span>
-<span id="cb1-683"><a href="#cb1-683"></a></span>
-<span id="cb1-684"><a href="#cb1-684"></a>**For discrimination (2PL model):**</span>
-<span id="cb1-685"><a href="#cb1-685"></a>$$\beta_{j2} \sim \text{LogNormal}(0, 0.5) \text{ or } \beta_{j2} \sim \text{Gamma}(2, 0.5)$$</span>
-<span id="cb1-686"><a href="#cb1-686"></a></span>
-<span id="cb1-687"><a href="#cb1-687"></a>These priors are **weakly informative**: they regularize estimates without dominating the data. They encode the belief that most abilities and difficulties are within a few units of zero, which is appropriate when the scale is defined by convention.</span>
-<span id="cb1-688"><a href="#cb1-688"></a>:::</span>
-<span id="cb1-689"><a href="#cb1-689"></a></span>
-<span id="cb1-690"><a href="#cb1-690"></a><span class="fu">### Hierarchical Priors and Partial Pooling {#sec-hierarchical-models}</span></span>
-<span id="cb1-691"><a href="#cb1-691"></a></span>
-<span id="cb1-692"><a href="#cb1-692"></a>The priors above are *fixed*: we choose $\sigma_\beta$ once and apply it to every item. But AI evaluations are *nested*---items belong to benchmarks, benchmarks to suites or domains---and items within a benchmark tend to share difficulty characteristics. A **hierarchical prior** turns the fixed prior into one whose hyperparameters are *learned* from the data, letting items borrow strength within their group.</span>
-<span id="cb1-693"><a href="#cb1-693"></a></span>
-<span id="cb1-694"><a href="#cb1-694"></a>::: {.callout-note title="Definition: Hierarchical IRT Model"}</span>
-<span id="cb1-695"><a href="#cb1-695"></a>Consider item $i$ nested within benchmark $j$. A hierarchical extension of the Rasch model specifies:</span>
-<span id="cb1-696"><a href="#cb1-696"></a></span>
-<span id="cb1-697"><a href="#cb1-697"></a>$$</span>
-<span id="cb1-698"><a href="#cb1-698"></a>\text{logit}\, P(Y_{ij} = 1 \mid \theta, b_{ij}) = \theta - b_{ij}</span>
-<span id="cb1-699"><a href="#cb1-699"></a>$$</span>
-<span id="cb1-700"><a href="#cb1-700"></a></span>
-<span id="cb1-701"><a href="#cb1-701"></a>where item difficulties are drawn from a benchmark-level prior:</span>
-<span id="cb1-702"><a href="#cb1-702"></a></span>
-<span id="cb1-703"><a href="#cb1-703"></a>$$</span>
-<span id="cb1-704"><a href="#cb1-704"></a>b_{ij} \sim \mathcal{N}(\mu_j, \sigma_j^2)</span>
-<span id="cb1-705"><a href="#cb1-705"></a>$$</span>
-<span id="cb1-706"><a href="#cb1-706"></a></span>
-<span id="cb1-707"><a href="#cb1-707"></a>The benchmark means $\mu_j$ may themselves follow a domain-level distribution $\mu_j \sim \mathcal{N}(\mu_0, \tau^2)$, creating a three-level hierarchy: items within benchmarks within domains. The same hierarchical extension applies to 2PL, 3PL, and factor models.</span>
-<span id="cb1-708"><a href="#cb1-708"></a>:::</span>
-<span id="cb1-709"><a href="#cb1-709"></a></span>
-<span id="cb1-710"><a href="#cb1-710"></a><span class="al">![Plate diagram for the hierarchical IRT model. Item difficulties $b_{ij}$ are drawn from benchmark-level distributions parameterized by $\mu_j$ and $\sigma_j$, which may themselves be drawn from domain-level hyperparameters $\mu_0$ and $\tau$. Nested plates reflect the hierarchical data structure.](Figures/plate_hierarchical.png)</span>{#fig-hierarchical-plate width=50%}</span>
-<span id="cb1-711"><a href="#cb1-711"></a></span>
-<span id="cb1-712"><a href="#cb1-712"></a>Estimating this model performs **partial pooling**, interpolating between two extremes. *No pooling* estimates each benchmark's difficulties independently---noisy for small benchmarks. *Complete pooling* uses one global difficulty distribution---ignoring real between-benchmark differences. The hierarchical prior sits between them: an item's difficulty is shrunk toward its benchmark mean $\mu_j$ by an amount that depends on how sharply the data pin it down, and the benchmark means are themselves shrunk toward the global mean $\mu_0$. Items in small or noisy benchmarks borrow strength from their group, and because the hyperparameters $\sigma_j, \tau$ are learned (by MAP or MCMC; @sec-map, @sec-mcmc), the *amount* of shrinkage is set by the data rather than fixed in advance. This is the same move as L2 regularization (@sec-l2-reg)---a Gaussian prior on the parameters---but with the prior's scale estimated rather than chosen. Treating all items as exchangeable under a single global prior instead conflates within-benchmark and between-benchmark variation and yields estimates that may not generalize beyond the items observed <span class="co">[</span><span class="ot">@luettgau2025hibayes</span><span class="co">]</span>.</span>
-<span id="cb1-713"><a href="#cb1-713"></a></span>
-<span id="cb1-714"><a href="#cb1-714"></a>::: {.callout-note title="Hierarchical Structure in AI Evaluation"}</span>
-<span id="cb1-715"><a href="#cb1-715"></a>Modern AI evaluations exhibit natural hierarchy at multiple levels:</span>
-<span id="cb1-716"><a href="#cb1-716"></a></span>
-<span id="cb1-717"><a href="#cb1-717"></a><span class="ss">- </span>**MMLU:** 15,908 items $\to$ 57 subjects $\to$ 4 domains (humanities, social sciences, STEM, other)</span>
-<span id="cb1-718"><a href="#cb1-718"></a><span class="ss">- </span>**GAIA:** agentic tasks $\to$ 3 difficulty levels $\to$ capability domain</span>
-<span id="cb1-719"><a href="#cb1-719"></a><span class="ss">- </span>**Coding benchmarks:** problems $\to$ benchmarks (HumanEval, MBPP, DS-1000) $\to$ coding capability</span>
-<span id="cb1-720"><a href="#cb1-720"></a></span>
-<span id="cb1-721"><a href="#cb1-721"></a>Modeling these levels separates the sources of variation at each, which supports principled generalization from the benchmarks actually tested to the broader construct they are intended to measure.</span>
-<span id="cb1-722"><a href="#cb1-722"></a>:::</span>
-<span id="cb1-723"><a href="#cb1-723"></a></span>
-<span id="cb1-724"><a href="#cb1-724"></a><span class="fu">### Posterior Computation {#sec-posterior}</span></span>
-<span id="cb1-725"><a href="#cb1-725"></a></span>
-<span id="cb1-726"><a href="#cb1-726"></a>Bayes' theorem gives us the posterior distribution:</span>
-<span id="cb1-727"><a href="#cb1-727"></a></span>
-<span id="cb1-728"><a href="#cb1-728"></a>$$</span>
-<span id="cb1-729"><a href="#cb1-729"></a>p(\theta, \beta \mid Y) \propto p(Y \mid \theta, \beta) \cdot p(\theta) \cdot p(\beta)</span>
-<span id="cb1-730"><a href="#cb1-730"></a>$$ {#eq-posterior}</span>
-<span id="cb1-731"><a href="#cb1-731"></a></span>
-<span id="cb1-732"><a href="#cb1-732"></a>The posterior combines the likelihood (data) with the priors (beliefs). Unfortunately, this posterior is not available in closed form---we need computational methods.</span>
-<span id="cb1-733"><a href="#cb1-733"></a></span>
-<span id="cb1-734"><a href="#cb1-734"></a><span class="fu">### MAP Estimation {#sec-map}</span></span>
-<span id="cb1-735"><a href="#cb1-735"></a></span>
-<span id="cb1-736"><a href="#cb1-736"></a>The simplest Bayesian approach is *maximum a posteriori* (MAP) estimation, which finds the mode of the posterior:</span>
-<span id="cb1-737"><a href="#cb1-737"></a></span>
-<span id="cb1-738"><a href="#cb1-738"></a>$$</span>
-<span id="cb1-739"><a href="#cb1-739"></a>\hat{\theta}_{\text{MAP}}, \hat{\beta}_{\text{MAP}} = \arg\max_{\theta, \beta} \left<span class="co">[</span><span class="ot"> \ell(\theta, \beta \mid Y) + \log p(\theta) + \log p(\beta) \right</span><span class="co">]</span></span>
-<span id="cb1-740"><a href="#cb1-740"></a>$$ {#eq-map}</span>
-<span id="cb1-741"><a href="#cb1-741"></a></span>
-<span id="cb1-742"><a href="#cb1-742"></a>With Gaussian priors, this is equivalent to L2-regularized MLE:</span>
-<span id="cb1-743"><a href="#cb1-743"></a></span>
-<span id="cb1-744"><a href="#cb1-744"></a>$$</span>
-<span id="cb1-745"><a href="#cb1-745"></a>\hat{\theta}_{\text{MAP}}, \hat{\beta}_{\text{MAP}} = \arg\max_{\theta, \beta} \left[ \ell(\theta, \beta) - \frac{1}{2\sigma^2_\theta}\sum_i \theta_i^2 - \frac{1}{2\sigma^2_\beta}\sum_j \beta_j^2 \right]</span>
-<span id="cb1-746"><a href="#cb1-746"></a>$$</span>
-<span id="cb1-747"><a href="#cb1-747"></a></span>
-<span id="cb1-748"><a href="#cb1-748"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-749"><a href="#cb1-749"></a><span class="co">#| label: map-estimation</span></span>
-<span id="cb1-750"><a href="#cb1-750"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-751"><a href="#cb1-751"></a><span class="co">#| fig-cap: "Comparison of MLE and MAP estimates showing Bayesian shrinkage."</span></span>
-<span id="cb1-752"><a href="#cb1-752"></a></span>
-<span id="cb1-753"><a href="#cb1-753"></a><span class="kw">def</span> map_objective(params, Y, sigma_theta<span class="op">=</span><span class="fl">1.0</span>, sigma_beta<span class="op">=</span><span class="fl">1.5</span>):</span>
-<span id="cb1-754"><a href="#cb1-754"></a>    <span class="co">"""Negative log-posterior (to minimize)."""</span></span>
-<span id="cb1-755"><a href="#cb1-755"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-756"><a href="#cb1-756"></a>    theta <span class="op">=</span> params[:N]</span>
-<span id="cb1-757"><a href="#cb1-757"></a>    beta <span class="op">=</span> params[N:]</span>
-<span id="cb1-758"><a href="#cb1-758"></a></span>
-<span id="cb1-759"><a href="#cb1-759"></a>    <span class="co"># Log-likelihood</span></span>
-<span id="cb1-760"><a href="#cb1-760"></a>    logits <span class="op">=</span> theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :]</span>
-<span id="cb1-761"><a href="#cb1-761"></a>    ll <span class="op">=</span> (Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)))).<span class="bu">sum</span>()</span>
-<span id="cb1-762"><a href="#cb1-762"></a></span>
-<span id="cb1-763"><a href="#cb1-763"></a>    <span class="co"># Log-prior (Gaussian)</span></span>
-<span id="cb1-764"><a href="#cb1-764"></a>    log_prior_theta <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> (theta<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> sigma_theta<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>()</span>
-<span id="cb1-765"><a href="#cb1-765"></a>    log_prior_beta <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> (beta<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> sigma_beta<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>()</span>
-<span id="cb1-766"><a href="#cb1-766"></a></span>
-<span id="cb1-767"><a href="#cb1-767"></a>    <span class="cf">return</span> <span class="op">-</span>(ll <span class="op">+</span> log_prior_theta <span class="op">+</span> log_prior_beta)</span>
-<span id="cb1-768"><a href="#cb1-768"></a></span>
-<span id="cb1-769"><a href="#cb1-769"></a><span class="kw">def</span> map_gradient(params, Y, sigma_theta<span class="op">=</span><span class="fl">1.0</span>, sigma_beta<span class="op">=</span><span class="fl">1.5</span>):</span>
-<span id="cb1-770"><a href="#cb1-770"></a>    <span class="co">"""Gradient of negative log-posterior."""</span></span>
-<span id="cb1-771"><a href="#cb1-771"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-772"><a href="#cb1-772"></a>    theta <span class="op">=</span> params[:N]</span>
-<span id="cb1-773"><a href="#cb1-773"></a>    beta <span class="op">=</span> params[N:]</span>
-<span id="cb1-774"><a href="#cb1-774"></a></span>
-<span id="cb1-775"><a href="#cb1-775"></a>    P <span class="op">=</span> sigmoid(theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :])</span>
-<span id="cb1-776"><a href="#cb1-776"></a>    grad_theta <span class="op">=</span> <span class="op">-</span>(Y <span class="op">-</span> P).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>) <span class="op">+</span> theta <span class="op">/</span> sigma_theta<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb1-777"><a href="#cb1-777"></a>    grad_beta <span class="op">=</span> <span class="op">-</span>(P <span class="op">-</span> Y).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>) <span class="op">+</span> beta <span class="op">/</span> sigma_beta<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb1-778"><a href="#cb1-778"></a></span>
-<span id="cb1-779"><a href="#cb1-779"></a>    <span class="cf">return</span> np.concatenate([grad_theta, grad_beta])</span>
-<span id="cb1-780"><a href="#cb1-780"></a></span>
-<span id="cb1-781"><a href="#cb1-781"></a><span class="co"># MAP estimation</span></span>
-<span id="cb1-782"><a href="#cb1-782"></a>params0 <span class="op">=</span> np.zeros(N <span class="op">+</span> M)</span>
-<span id="cb1-783"><a href="#cb1-783"></a>result_map <span class="op">=</span> minimize(</span>
-<span id="cb1-784"><a href="#cb1-784"></a>    map_objective, params0, args<span class="op">=</span>(Y,),</span>
-<span id="cb1-785"><a href="#cb1-785"></a>    jac<span class="op">=</span>map_gradient,</span>
-<span id="cb1-786"><a href="#cb1-786"></a>    method<span class="op">=</span><span class="st">'L-BFGS-B'</span>,</span>
-<span id="cb1-787"><a href="#cb1-787"></a>    options<span class="op">=</span>{<span class="st">'maxiter'</span>: <span class="dv">200</span>}</span>
-<span id="cb1-788"><a href="#cb1-788"></a>)</span>
-<span id="cb1-789"><a href="#cb1-789"></a></span>
-<span id="cb1-790"><a href="#cb1-790"></a>theta_map <span class="op">=</span> result_map.x[:N]</span>
-<span id="cb1-791"><a href="#cb1-791"></a>beta_map <span class="op">=</span> result_map.x[N:]</span>
-<span id="cb1-792"><a href="#cb1-792"></a></span>
-<span id="cb1-793"><a href="#cb1-793"></a><span class="co"># Center for comparison</span></span>
-<span id="cb1-794"><a href="#cb1-794"></a>theta_map <span class="op">=</span> theta_map <span class="op">-</span> theta_map.mean()</span>
-<span id="cb1-795"><a href="#cb1-795"></a>beta_map <span class="op">=</span> beta_map <span class="op">-</span> beta_map.mean()</span>
-<span id="cb1-796"><a href="#cb1-796"></a></span>
-<span id="cb1-797"><a href="#cb1-797"></a><span class="co"># Compare MLE vs MAP</span></span>
-<span id="cb1-798"><a href="#cb1-798"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-799"><a href="#cb1-799"></a></span>
-<span id="cb1-800"><a href="#cb1-800"></a><span class="co"># Abilities</span></span>
-<span id="cb1-801"><a href="#cb1-801"></a>axes[<span class="dv">0</span>].scatter(theta_true_centered, theta_lbfgs, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'MLE'</span>, s<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb1-802"><a href="#cb1-802"></a>axes[<span class="dv">0</span>].scatter(theta_true_centered, theta_map, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'MAP'</span>, s<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb1-803"><a href="#cb1-803"></a>axes[<span class="dv">0</span>].plot([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>], [<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-804"><a href="#cb1-804"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'True ability'</span>)</span>
-<span id="cb1-805"><a href="#cb1-805"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Estimated ability'</span>)</span>
-<span id="cb1-806"><a href="#cb1-806"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Ability Estimates: MLE vs MAP'</span>)</span>
-<span id="cb1-807"><a href="#cb1-807"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb1-808"><a href="#cb1-808"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-809"><a href="#cb1-809"></a></span>
-<span id="cb1-810"><a href="#cb1-810"></a><span class="co"># Difficulties</span></span>
-<span id="cb1-811"><a href="#cb1-811"></a>axes[<span class="dv">1</span>].scatter(beta_true_centered, beta_lbfgs, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'MLE'</span>, s<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb1-812"><a href="#cb1-812"></a>axes[<span class="dv">1</span>].scatter(beta_true_centered, beta_map, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'MAP'</span>, s<span class="op">=</span><span class="dv">30</span>)</span>
-<span id="cb1-813"><a href="#cb1-813"></a>axes[<span class="dv">1</span>].plot([<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>], [<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>], <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-814"><a href="#cb1-814"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'True difficulty'</span>)</span>
-<span id="cb1-815"><a href="#cb1-815"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Estimated difficulty'</span>)</span>
-<span id="cb1-816"><a href="#cb1-816"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Difficulty Estimates: MLE vs MAP'</span>)</span>
-<span id="cb1-817"><a href="#cb1-817"></a>axes[<span class="dv">1</span>].legend()</span>
-<span id="cb1-818"><a href="#cb1-818"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-819"><a href="#cb1-819"></a></span>
-<span id="cb1-820"><a href="#cb1-820"></a>plt.tight_layout()</span>
-<span id="cb1-821"><a href="#cb1-821"></a>plt.show()</span>
-<span id="cb1-822"><a href="#cb1-822"></a></span>
-<span id="cb1-823"><a href="#cb1-823"></a><span class="co"># Shrinkage demonstration</span></span>
-<span id="cb1-824"><a href="#cb1-824"></a><span class="bu">print</span>(<span class="st">"Shrinkage effect (standard deviations):"</span>)</span>
-<span id="cb1-825"><a href="#cb1-825"></a><span class="bu">print</span>(<span class="ss">f"  MLE abilities: </span><span class="sc">{</span>theta_lbfgs<span class="sc">.</span>std()<span class="sc">:.3f}</span><span class="ss">, MAP abilities: </span><span class="sc">{</span>theta_map<span class="sc">.</span>std()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-826"><a href="#cb1-826"></a><span class="bu">print</span>(<span class="ss">f"  MLE difficulties: </span><span class="sc">{</span>beta_lbfgs<span class="sc">.</span>std()<span class="sc">:.3f}</span><span class="ss">, MAP difficulties: </span><span class="sc">{</span>beta_map<span class="sc">.</span>std()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-827"><a href="#cb1-827"></a><span class="in">```</span></span>
-<span id="cb1-828"><a href="#cb1-828"></a></span>
-<span id="cb1-829"><a href="#cb1-829"></a>::: {.callout-tip title="Bayesian Shrinkage"}</span>
-<span id="cb1-830"><a href="#cb1-830"></a>Notice that MAP estimates have smaller variance than MLE estimates. This is **shrinkage** toward the prior mean (zero).</span>
-<span id="cb1-831"><a href="#cb1-831"></a></span>
-<span id="cb1-832"><a href="#cb1-832"></a>For extreme scores---models that answer all questions correctly or incorrectly---MLE gives infinite or very large estimates. MAP regularizes these to finite, sensible values. This is crucial for AI benchmarks where some models may achieve near-perfect scores on easy subsets.</span>
-<span id="cb1-833"><a href="#cb1-833"></a></span>
-<span id="cb1-834"><a href="#cb1-834"></a>The amount of shrinkage is controlled by the prior variance: smaller $\sigma^2$ means stronger shrinkage toward zero.</span>
-<span id="cb1-835"><a href="#cb1-835"></a>:::</span>
-<span id="cb1-836"><a href="#cb1-836"></a></span>
-<span id="cb1-837"><a href="#cb1-837"></a><span class="fu">### MCMC Sampling {#sec-mcmc}</span></span>
-<span id="cb1-838"><a href="#cb1-838"></a></span>
-<span id="cb1-839"><a href="#cb1-839"></a>To characterize the full posterior distribution (not just its mode), we use Markov Chain Monte Carlo (MCMC) sampling. The Metropolis-Hastings algorithm is a simple but effective approach:</span>
-<span id="cb1-840"><a href="#cb1-840"></a></span>
-<span id="cb1-841"><a href="#cb1-841"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-842"><a href="#cb1-842"></a><span class="co">#| label: mcmc-sampling</span></span>
-<span id="cb1-843"><a href="#cb1-843"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-844"><a href="#cb1-844"></a><span class="co">#| fig-cap: "MCMC trace plots and posterior distributions for selected parameters."</span></span>
-<span id="cb1-845"><a href="#cb1-845"></a></span>
-<span id="cb1-846"><a href="#cb1-846"></a><span class="kw">def</span> log_posterior(theta, beta, Y, sigma_theta<span class="op">=</span><span class="fl">1.0</span>, sigma_beta<span class="op">=</span><span class="fl">1.5</span>):</span>
-<span id="cb1-847"><a href="#cb1-847"></a>    <span class="co">"""Compute log-posterior (up to normalizing constant)."""</span></span>
-<span id="cb1-848"><a href="#cb1-848"></a>    logits <span class="op">=</span> theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :]</span>
-<span id="cb1-849"><a href="#cb1-849"></a>    ll <span class="op">=</span> (Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)))).<span class="bu">sum</span>()</span>
-<span id="cb1-850"><a href="#cb1-850"></a>    log_prior <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> ((theta<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>() <span class="op">/</span> sigma_theta<span class="op">**</span><span class="dv">2</span> <span class="op">+</span></span>
-<span id="cb1-851"><a href="#cb1-851"></a>                        (beta<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>() <span class="op">/</span> sigma_beta<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-852"><a href="#cb1-852"></a>    <span class="cf">return</span> ll <span class="op">+</span> log_prior</span>
-<span id="cb1-853"><a href="#cb1-853"></a></span>
-<span id="cb1-854"><a href="#cb1-854"></a><span class="kw">def</span> metropolis_hastings_rasch(Y, n_samples<span class="op">=</span><span class="dv">2000</span>, n_warmup<span class="op">=</span><span class="dv">500</span>,</span>
-<span id="cb1-855"><a href="#cb1-855"></a>                              proposal_sd<span class="op">=</span><span class="fl">0.05</span>, thin<span class="op">=</span><span class="dv">2</span>, verbose<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb1-856"><a href="#cb1-856"></a>    <span class="co">"""</span></span>
-<span id="cb1-857"><a href="#cb1-857"></a><span class="co">    Metropolis-Hastings sampler for Rasch model.</span></span>
-<span id="cb1-858"><a href="#cb1-858"></a></span>
-<span id="cb1-859"><a href="#cb1-859"></a><span class="co">    Uses a random-walk proposal for all parameters jointly.</span></span>
-<span id="cb1-860"><a href="#cb1-860"></a><span class="co">    """</span></span>
-<span id="cb1-861"><a href="#cb1-861"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-862"><a href="#cb1-862"></a></span>
-<span id="cb1-863"><a href="#cb1-863"></a>    <span class="co"># Initialize at MAP estimate</span></span>
-<span id="cb1-864"><a href="#cb1-864"></a>    theta <span class="op">=</span> theta_map.copy()</span>
-<span id="cb1-865"><a href="#cb1-865"></a>    beta <span class="op">=</span> beta_map.copy()</span>
-<span id="cb1-866"><a href="#cb1-866"></a></span>
-<span id="cb1-867"><a href="#cb1-867"></a>    <span class="co"># Storage for samples</span></span>
-<span id="cb1-868"><a href="#cb1-868"></a>    n_stored <span class="op">=</span> n_samples <span class="op">//</span> thin</span>
-<span id="cb1-869"><a href="#cb1-869"></a>    theta_samples <span class="op">=</span> np.zeros((n_stored, N))</span>
-<span id="cb1-870"><a href="#cb1-870"></a>    beta_samples <span class="op">=</span> np.zeros((n_stored, M))</span>
-<span id="cb1-871"><a href="#cb1-871"></a></span>
-<span id="cb1-872"><a href="#cb1-872"></a>    current_lp <span class="op">=</span> log_posterior(theta, beta, Y)</span>
-<span id="cb1-873"><a href="#cb1-873"></a>    n_accept <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-874"><a href="#cb1-874"></a>    sample_idx <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-875"><a href="#cb1-875"></a></span>
-<span id="cb1-876"><a href="#cb1-876"></a>    total_iterations <span class="op">=</span> n_warmup <span class="op">+</span> n_samples</span>
-<span id="cb1-877"><a href="#cb1-877"></a></span>
-<span id="cb1-878"><a href="#cb1-878"></a>    <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">range</span>(total_iterations):</span>
-<span id="cb1-879"><a href="#cb1-879"></a>        <span class="co"># Propose new theta (random walk)</span></span>
-<span id="cb1-880"><a href="#cb1-880"></a>        theta_prop <span class="op">=</span> theta <span class="op">+</span> np.random.normal(<span class="dv">0</span>, proposal_sd, N)</span>
-<span id="cb1-881"><a href="#cb1-881"></a>        theta_prop <span class="op">=</span> theta_prop <span class="op">-</span> theta_prop.mean()  <span class="co"># Maintain centering</span></span>
-<span id="cb1-882"><a href="#cb1-882"></a></span>
-<span id="cb1-883"><a href="#cb1-883"></a>        <span class="co"># Propose new beta (random walk)</span></span>
-<span id="cb1-884"><a href="#cb1-884"></a>        beta_prop <span class="op">=</span> beta <span class="op">+</span> np.random.normal(<span class="dv">0</span>, proposal_sd, M)</span>
-<span id="cb1-885"><a href="#cb1-885"></a>        beta_prop <span class="op">=</span> beta_prop <span class="op">-</span> beta_prop.mean()  <span class="co"># Maintain centering</span></span>
-<span id="cb1-886"><a href="#cb1-886"></a></span>
-<span id="cb1-887"><a href="#cb1-887"></a>        <span class="co"># Compute acceptance probability</span></span>
-<span id="cb1-888"><a href="#cb1-888"></a>        prop_lp <span class="op">=</span> log_posterior(theta_prop, beta_prop, Y)</span>
-<span id="cb1-889"><a href="#cb1-889"></a>        log_alpha <span class="op">=</span> prop_lp <span class="op">-</span> current_lp</span>
-<span id="cb1-890"><a href="#cb1-890"></a></span>
-<span id="cb1-891"><a href="#cb1-891"></a>        <span class="co"># Accept or reject</span></span>
-<span id="cb1-892"><a href="#cb1-892"></a>        <span class="cf">if</span> np.log(np.random.random()) <span class="op">&lt;</span> log_alpha:</span>
-<span id="cb1-893"><a href="#cb1-893"></a>            theta <span class="op">=</span> theta_prop</span>
-<span id="cb1-894"><a href="#cb1-894"></a>            beta <span class="op">=</span> beta_prop</span>
-<span id="cb1-895"><a href="#cb1-895"></a>            current_lp <span class="op">=</span> prop_lp</span>
-<span id="cb1-896"><a href="#cb1-896"></a>            <span class="cf">if</span> s <span class="op">&gt;=</span> n_warmup:</span>
-<span id="cb1-897"><a href="#cb1-897"></a>                n_accept <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-898"><a href="#cb1-898"></a></span>
-<span id="cb1-899"><a href="#cb1-899"></a>        <span class="co"># Store sample (after warmup, with thinning)</span></span>
-<span id="cb1-900"><a href="#cb1-900"></a>        <span class="cf">if</span> s <span class="op">&gt;=</span> n_warmup <span class="kw">and</span> (s <span class="op">-</span> n_warmup) <span class="op">%</span> thin <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-901"><a href="#cb1-901"></a>            theta_samples[sample_idx] <span class="op">=</span> theta</span>
-<span id="cb1-902"><a href="#cb1-902"></a>            beta_samples[sample_idx] <span class="op">=</span> beta</span>
-<span id="cb1-903"><a href="#cb1-903"></a>            sample_idx <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-904"><a href="#cb1-904"></a></span>
-<span id="cb1-905"><a href="#cb1-905"></a>    acceptance_rate <span class="op">=</span> n_accept <span class="op">/</span> n_samples</span>
-<span id="cb1-906"><a href="#cb1-906"></a>    <span class="cf">if</span> verbose:</span>
-<span id="cb1-907"><a href="#cb1-907"></a>        <span class="bu">print</span>(<span class="ss">f"Acceptance rate: </span><span class="sc">{</span>acceptance_rate<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-908"><a href="#cb1-908"></a></span>
-<span id="cb1-909"><a href="#cb1-909"></a>    <span class="cf">return</span> theta_samples, beta_samples, acceptance_rate</span>
-<span id="cb1-910"><a href="#cb1-910"></a></span>
-<span id="cb1-911"><a href="#cb1-911"></a><span class="co"># Run MCMC</span></span>
-<span id="cb1-912"><a href="#cb1-912"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb1-913"><a href="#cb1-913"></a>theta_samples, beta_samples, acc_rate <span class="op">=</span> metropolis_hastings_rasch(</span>
-<span id="cb1-914"><a href="#cb1-914"></a>    Y, n_samples<span class="op">=</span><span class="dv">4000</span>, n_warmup<span class="op">=</span><span class="dv">1000</span>, proposal_sd<span class="op">=</span><span class="fl">0.03</span>, thin<span class="op">=</span><span class="dv">2</span></span>
-<span id="cb1-915"><a href="#cb1-915"></a>)</span>
-<span id="cb1-916"><a href="#cb1-916"></a></span>
-<span id="cb1-917"><a href="#cb1-917"></a><span class="co"># Visualization</span></span>
-<span id="cb1-918"><a href="#cb1-918"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-919"><a href="#cb1-919"></a></span>
-<span id="cb1-920"><a href="#cb1-920"></a><span class="co"># Trace plots for selected ability parameters</span></span>
-<span id="cb1-921"><a href="#cb1-921"></a><span class="cf">for</span> i, idx <span class="kw">in</span> <span class="bu">enumerate</span>([<span class="dv">0</span>, <span class="dv">49</span>, <span class="dv">99</span>]):</span>
-<span id="cb1-922"><a href="#cb1-922"></a>    axes[<span class="dv">0</span>, i].plot(theta_samples[:, idx], alpha<span class="op">=</span><span class="fl">0.7</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-923"><a href="#cb1-923"></a>    axes[<span class="dv">0</span>, i].axhline(theta_true_centered[idx], color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
-<span id="cb1-924"><a href="#cb1-924"></a>                       linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">'True'</span>)</span>
-<span id="cb1-925"><a href="#cb1-925"></a>    axes[<span class="dv">0</span>, i].axhline(theta_samples[:, idx].mean(), color<span class="op">=</span><span class="st">'g'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>,</span>
-<span id="cb1-926"><a href="#cb1-926"></a>                       linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">'Post. mean'</span>)</span>
-<span id="cb1-927"><a href="#cb1-927"></a>    axes[<span class="dv">0</span>, i].set_xlabel(<span class="st">'Sample'</span>)</span>
-<span id="cb1-928"><a href="#cb1-928"></a>    axes[<span class="dv">0</span>, i].set_ylabel(<span class="ss">f'$</span><span class="ch">\\</span><span class="ss">theta_</span><span class="ch">{{</span><span class="sc">{</span>idx<span class="sc">}</span><span class="ch">}}</span><span class="ss">$'</span>)</span>
-<span id="cb1-929"><a href="#cb1-929"></a>    axes[<span class="dv">0</span>, i].set_title(<span class="ss">f'Trace: Ability </span><span class="sc">{</span>idx<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb1-930"><a href="#cb1-930"></a>    <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-931"><a href="#cb1-931"></a>        axes[<span class="dv">0</span>, i].legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb1-932"><a href="#cb1-932"></a></span>
-<span id="cb1-933"><a href="#cb1-933"></a><span class="co"># Posterior distributions for selected difficulty parameters</span></span>
-<span id="cb1-934"><a href="#cb1-934"></a><span class="cf">for</span> i, idx <span class="kw">in</span> <span class="bu">enumerate</span>([<span class="dv">0</span>, <span class="dv">24</span>, <span class="dv">49</span>]):</span>
-<span id="cb1-935"><a href="#cb1-935"></a>    axes[<span class="dv">1</span>, i].hist(beta_samples[:, idx], bins<span class="op">=</span><span class="dv">30</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb1-936"><a href="#cb1-936"></a>    axes[<span class="dv">1</span>, i].axvline(beta_true_centered[idx], color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
-<span id="cb1-937"><a href="#cb1-937"></a>                       linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'True'</span>)</span>
-<span id="cb1-938"><a href="#cb1-938"></a>    axes[<span class="dv">1</span>, i].axvline(beta_samples[:, idx].mean(), color<span class="op">=</span><span class="st">'g'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>,</span>
-<span id="cb1-939"><a href="#cb1-939"></a>                       linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Post. mean'</span>)</span>
-<span id="cb1-940"><a href="#cb1-940"></a>    axes[<span class="dv">1</span>, i].set_xlabel(<span class="ss">f'$</span><span class="ch">\\</span><span class="ss">beta_</span><span class="ch">{{</span><span class="sc">{</span>idx<span class="sc">}</span><span class="ch">}}</span><span class="ss">$'</span>)</span>
-<span id="cb1-941"><a href="#cb1-941"></a>    axes[<span class="dv">1</span>, i].set_ylabel(<span class="st">'Density'</span>)</span>
-<span id="cb1-942"><a href="#cb1-942"></a>    axes[<span class="dv">1</span>, i].set_title(<span class="ss">f'Posterior: Difficulty </span><span class="sc">{</span>idx<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb1-943"><a href="#cb1-943"></a>    <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-944"><a href="#cb1-944"></a>        axes[<span class="dv">1</span>, i].legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb1-945"><a href="#cb1-945"></a></span>
-<span id="cb1-946"><a href="#cb1-946"></a>plt.tight_layout()</span>
-<span id="cb1-947"><a href="#cb1-947"></a>plt.show()</span>
-<span id="cb1-948"><a href="#cb1-948"></a></span>
-<span id="cb1-949"><a href="#cb1-949"></a><span class="co"># Posterior summary statistics</span></span>
-<span id="cb1-950"><a href="#cb1-950"></a>theta_post_mean <span class="op">=</span> theta_samples.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-951"><a href="#cb1-951"></a>theta_post_std <span class="op">=</span> theta_samples.std(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-952"><a href="#cb1-952"></a>beta_post_mean <span class="op">=</span> beta_samples.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-953"><a href="#cb1-953"></a>beta_post_std <span class="op">=</span> beta_samples.std(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-954"><a href="#cb1-954"></a></span>
-<span id="cb1-955"><a href="#cb1-955"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Posterior summary:"</span>)</span>
-<span id="cb1-956"><a href="#cb1-956"></a><span class="bu">print</span>(<span class="ss">f"  Mean posterior std for abilities: </span><span class="sc">{</span>theta_post_std<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-957"><a href="#cb1-957"></a><span class="bu">print</span>(<span class="ss">f"  Mean posterior std for difficulties: </span><span class="sc">{</span>beta_post_std<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-958"><a href="#cb1-958"></a><span class="bu">print</span>(<span class="ss">f"  Correlation with true abilities: </span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(theta_true_centered, theta_post_mean)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-959"><a href="#cb1-959"></a><span class="bu">print</span>(<span class="ss">f"  Correlation with true difficulties: </span><span class="sc">{</span>np<span class="sc">.</span>corrcoef(beta_true_centered, beta_post_mean)[<span class="dv">0</span>,<span class="dv">1</span>]<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-960"><a href="#cb1-960"></a><span class="in">```</span></span>
-<span id="cb1-961"><a href="#cb1-961"></a></span>
-<span id="cb1-962"><a href="#cb1-962"></a>The posterior standard deviations quantify our uncertainty about each parameter. Parameters with more information (e.g., items answered by many models, models who answered many questions) have smaller posterior uncertainty.</span>
-<span id="cb1-963"><a href="#cb1-963"></a></span>
-<span id="cb1-964"><a href="#cb1-964"></a></span>
-<span id="cb1-965"><a href="#cb1-965"></a><span class="fu">## Regularization and Model Selection {#sec-regularization}</span></span>
-<span id="cb1-966"><a href="#cb1-966"></a></span>
-<span id="cb1-967"><a href="#cb1-967"></a><span class="fu">### L2 Regularization as Bayesian Prior {#sec-l2-reg}</span></span>
-<span id="cb1-968"><a href="#cb1-968"></a></span>
-<span id="cb1-969"><a href="#cb1-969"></a>We have seen that MAP estimation with Gaussian priors is equivalent to L2 regularization. The regularization strength $\lambda$ relates to the prior variance as $\lambda = 1/\sigma^2$.</span>
-<span id="cb1-970"><a href="#cb1-970"></a></span>
-<span id="cb1-971"><a href="#cb1-971"></a>The regularized objective is:</span>
-<span id="cb1-972"><a href="#cb1-972"></a></span>
-<span id="cb1-973"><a href="#cb1-973"></a>$$</span>
-<span id="cb1-974"><a href="#cb1-974"></a>\ell_{\text{reg}}(\theta, \beta) = \ell(\theta, \beta) - \frac{\lambda_\theta}{2}<span class="sc">\|</span>\theta<span class="sc">\|</span>^2 - \frac{\lambda_\beta}{2}<span class="sc">\|</span>\beta<span class="sc">\|</span>^2</span>
-<span id="cb1-975"><a href="#cb1-975"></a>$$</span>
-<span id="cb1-976"><a href="#cb1-976"></a></span>
-<span id="cb1-977"><a href="#cb1-977"></a>Regularization prevents overfitting, especially when:</span>
-<span id="cb1-978"><a href="#cb1-978"></a></span>
-<span id="cb1-979"><a href="#cb1-979"></a><span class="ss">- </span>Some persons have few responses (sparse data)</span>
-<span id="cb1-980"><a href="#cb1-980"></a><span class="ss">- </span>Some items have extreme difficulty (near 0% or 100% pass rates)</span>
-<span id="cb1-981"><a href="#cb1-981"></a><span class="ss">- </span>The model is complex (many parameters relative to data)</span>
-<span id="cb1-982"><a href="#cb1-982"></a></span>
-<span id="cb1-983"><a href="#cb1-983"></a><span class="fu">### Cross-Validation for Hyperparameter Selection {#sec-cv}</span></span>
-<span id="cb1-984"><a href="#cb1-984"></a></span>
-<span id="cb1-985"><a href="#cb1-985"></a>How do we choose the regularization strength? Cross-validation provides a principled answer: we hold out some data, train on the rest, and evaluate prediction performance.</span>
-<span id="cb1-986"><a href="#cb1-986"></a></span>
-<span id="cb1-987"><a href="#cb1-987"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-988"><a href="#cb1-988"></a><span class="co">#| label: cross-validation</span></span>
-<span id="cb1-989"><a href="#cb1-989"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-990"><a href="#cb1-990"></a><span class="co">#| fig-cap: "Cross-validation for selecting regularization strength."</span></span>
-<span id="cb1-991"><a href="#cb1-991"></a></span>
-<span id="cb1-992"><a href="#cb1-992"></a><span class="kw">def</span> fit_and_evaluate(Y_train_mask, Y, lambda_param, sigma_theta<span class="op">=</span><span class="va">None</span>, sigma_beta<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb1-993"><a href="#cb1-993"></a>    <span class="co">"""Fit model on training data, evaluate on held-out data."""</span></span>
-<span id="cb1-994"><a href="#cb1-994"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-995"><a href="#cb1-995"></a></span>
-<span id="cb1-996"><a href="#cb1-996"></a>    <span class="co"># Convert lambda to prior std</span></span>
-<span id="cb1-997"><a href="#cb1-997"></a>    <span class="cf">if</span> sigma_theta <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb1-998"><a href="#cb1-998"></a>        sigma_theta <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> np.sqrt(lambda_param <span class="op">+</span> <span class="fl">1e-10</span>)</span>
-<span id="cb1-999"><a href="#cb1-999"></a>    <span class="cf">if</span> sigma_beta <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb1-1000"><a href="#cb1-1000"></a>        sigma_beta <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> np.sqrt(lambda_param <span class="op">+</span> <span class="fl">1e-10</span>)</span>
-<span id="cb1-1001"><a href="#cb1-1001"></a></span>
-<span id="cb1-1002"><a href="#cb1-1002"></a>    <span class="co"># Fit on training data</span></span>
-<span id="cb1-1003"><a href="#cb1-1003"></a>    <span class="kw">def</span> objective(params):</span>
-<span id="cb1-1004"><a href="#cb1-1004"></a>        theta <span class="op">=</span> params[:N]</span>
-<span id="cb1-1005"><a href="#cb1-1005"></a>        beta <span class="op">=</span> params[N:]</span>
-<span id="cb1-1006"><a href="#cb1-1006"></a>        logits <span class="op">=</span> theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :]</span>
-<span id="cb1-1007"><a href="#cb1-1007"></a></span>
-<span id="cb1-1008"><a href="#cb1-1008"></a>        <span class="co"># Only include training observations in likelihood</span></span>
-<span id="cb1-1009"><a href="#cb1-1009"></a>        ll <span class="op">=</span> (Y_train_mask <span class="op">*</span> (Y <span class="op">*</span> logits <span class="op">-</span> np.log(<span class="dv">1</span> <span class="op">+</span> np.exp(np.clip(logits, <span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>))))).<span class="bu">sum</span>()</span>
-<span id="cb1-1010"><a href="#cb1-1010"></a>        log_prior <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> ((theta<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>() <span class="op">/</span> sigma_theta<span class="op">**</span><span class="dv">2</span> <span class="op">+</span></span>
-<span id="cb1-1011"><a href="#cb1-1011"></a>                           (beta<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>() <span class="op">/</span> sigma_beta<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb1-1012"><a href="#cb1-1012"></a>        <span class="cf">return</span> <span class="op">-</span>(ll <span class="op">+</span> log_prior)</span>
-<span id="cb1-1013"><a href="#cb1-1013"></a></span>
-<span id="cb1-1014"><a href="#cb1-1014"></a>    params0 <span class="op">=</span> np.zeros(N <span class="op">+</span> M)</span>
-<span id="cb1-1015"><a href="#cb1-1015"></a>    result <span class="op">=</span> minimize(objective, params0, method<span class="op">=</span><span class="st">'L-BFGS-B'</span>, options<span class="op">=</span>{<span class="st">'maxiter'</span>: <span class="dv">100</span>})</span>
-<span id="cb1-1016"><a href="#cb1-1016"></a></span>
-<span id="cb1-1017"><a href="#cb1-1017"></a>    theta_fit <span class="op">=</span> result.x[:N]</span>
-<span id="cb1-1018"><a href="#cb1-1018"></a>    beta_fit <span class="op">=</span> result.x[N:]</span>
-<span id="cb1-1019"><a href="#cb1-1019"></a></span>
-<span id="cb1-1020"><a href="#cb1-1020"></a>    <span class="co"># Evaluate on held-out data</span></span>
-<span id="cb1-1021"><a href="#cb1-1021"></a>    P <span class="op">=</span> sigmoid(theta_fit[:, <span class="va">None</span>] <span class="op">-</span> beta_fit[<span class="va">None</span>, :])</span>
-<span id="cb1-1022"><a href="#cb1-1022"></a>    test_mask <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> Y_train_mask</span>
-<span id="cb1-1023"><a href="#cb1-1023"></a></span>
-<span id="cb1-1024"><a href="#cb1-1024"></a>    <span class="co"># Log-likelihood on test set</span></span>
-<span id="cb1-1025"><a href="#cb1-1025"></a>    ll_test <span class="op">=</span> (test_mask <span class="op">*</span> (Y <span class="op">*</span> np.log(P <span class="op">+</span> <span class="fl">1e-10</span>) <span class="op">+</span></span>
-<span id="cb1-1026"><a href="#cb1-1026"></a>               (<span class="dv">1</span> <span class="op">-</span> Y) <span class="op">*</span> np.log(<span class="dv">1</span> <span class="op">-</span> P <span class="op">+</span> <span class="fl">1e-10</span>))).<span class="bu">sum</span>()</span>
-<span id="cb1-1027"><a href="#cb1-1027"></a>    n_test <span class="op">=</span> test_mask.<span class="bu">sum</span>()</span>
-<span id="cb1-1028"><a href="#cb1-1028"></a></span>
-<span id="cb1-1029"><a href="#cb1-1029"></a>    <span class="cf">return</span> ll_test <span class="op">/</span> n_test  <span class="co"># Average log-likelihood</span></span>
-<span id="cb1-1030"><a href="#cb1-1030"></a></span>
-<span id="cb1-1031"><a href="#cb1-1031"></a><span class="kw">def</span> cross_validate(Y, lambda_param, n_folds<span class="op">=</span><span class="dv">5</span>, seed<span class="op">=</span><span class="dv">42</span>):</span>
-<span id="cb1-1032"><a href="#cb1-1032"></a>    <span class="co">"""K-fold cross-validation for regularization strength."""</span></span>
-<span id="cb1-1033"><a href="#cb1-1033"></a>    np.random.seed(seed)</span>
-<span id="cb1-1034"><a href="#cb1-1034"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb1-1035"><a href="#cb1-1035"></a></span>
-<span id="cb1-1036"><a href="#cb1-1036"></a>    <span class="co"># Create random fold assignments for entries</span></span>
-<span id="cb1-1037"><a href="#cb1-1037"></a>    fold_assignment <span class="op">=</span> np.random.randint(<span class="dv">0</span>, n_folds, (N, M))</span>
-<span id="cb1-1038"><a href="#cb1-1038"></a></span>
-<span id="cb1-1039"><a href="#cb1-1039"></a>    cv_scores <span class="op">=</span> []</span>
-<span id="cb1-1040"><a href="#cb1-1040"></a>    <span class="cf">for</span> fold <span class="kw">in</span> <span class="bu">range</span>(n_folds):</span>
-<span id="cb1-1041"><a href="#cb1-1041"></a>        train_mask <span class="op">=</span> (fold_assignment <span class="op">!=</span> fold).astype(<span class="bu">float</span>)</span>
-<span id="cb1-1042"><a href="#cb1-1042"></a>        score <span class="op">=</span> fit_and_evaluate(train_mask, Y, lambda_param)</span>
-<span id="cb1-1043"><a href="#cb1-1043"></a>        cv_scores.append(score)</span>
-<span id="cb1-1044"><a href="#cb1-1044"></a></span>
-<span id="cb1-1045"><a href="#cb1-1045"></a>    <span class="cf">return</span> np.mean(cv_scores), np.std(cv_scores)</span>
-<span id="cb1-1046"><a href="#cb1-1046"></a></span>
-<span id="cb1-1047"><a href="#cb1-1047"></a><span class="co"># Grid search over regularization strengths</span></span>
-<span id="cb1-1048"><a href="#cb1-1048"></a>lambdas <span class="op">=</span> [<span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">5.0</span>]</span>
-<span id="cb1-1049"><a href="#cb1-1049"></a>cv_means <span class="op">=</span> []</span>
-<span id="cb1-1050"><a href="#cb1-1050"></a>cv_stds <span class="op">=</span> []</span>
-<span id="cb1-1051"><a href="#cb1-1051"></a></span>
-<span id="cb1-1052"><a href="#cb1-1052"></a><span class="bu">print</span>(<span class="st">"Cross-validation results:"</span>)</span>
-<span id="cb1-1053"><a href="#cb1-1053"></a><span class="cf">for</span> lam <span class="kw">in</span> lambdas:</span>
-<span id="cb1-1054"><a href="#cb1-1054"></a>    mean, std <span class="op">=</span> cross_validate(Y, lam)</span>
-<span id="cb1-1055"><a href="#cb1-1055"></a>    cv_means.append(mean)</span>
-<span id="cb1-1056"><a href="#cb1-1056"></a>    cv_stds.append(std)</span>
-<span id="cb1-1057"><a href="#cb1-1057"></a>    <span class="bu">print</span>(<span class="ss">f"  lambda = </span><span class="sc">{</span>lam<span class="sc">:5.3f}</span><span class="ss">: CV log-lik = </span><span class="sc">{</span>mean<span class="sc">:.4f}</span><span class="ss"> +/- </span><span class="sc">{</span>std<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-1058"><a href="#cb1-1058"></a></span>
-<span id="cb1-1059"><a href="#cb1-1059"></a><span class="co"># Plot</span></span>
-<span id="cb1-1060"><a href="#cb1-1060"></a>plt.figure()</span>
-<span id="cb1-1061"><a href="#cb1-1061"></a>plt.errorbar(lambdas, cv_means, yerr<span class="op">=</span>cv_stds, fmt<span class="op">=</span><span class="st">'o-'</span>, capsize<span class="op">=</span><span class="dv">5</span>, markersize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb1-1062"><a href="#cb1-1062"></a>plt.xscale(<span class="st">'log'</span>)</span>
-<span id="cb1-1063"><a href="#cb1-1063"></a>plt.xlabel(<span class="st">'Regularization strength ($</span><span class="ch">\\</span><span class="st">lambda$)'</span>)</span>
-<span id="cb1-1064"><a href="#cb1-1064"></a>plt.ylabel(<span class="st">'Cross-validation log-likelihood'</span>)</span>
-<span id="cb1-1065"><a href="#cb1-1065"></a>plt.title(<span class="st">'Hyperparameter Selection via Cross-Validation'</span>)</span>
-<span id="cb1-1066"><a href="#cb1-1066"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb1-1067"><a href="#cb1-1067"></a>plt.tight_layout()</span>
-<span id="cb1-1068"><a href="#cb1-1068"></a>plt.show()</span>
-<span id="cb1-1069"><a href="#cb1-1069"></a></span>
-<span id="cb1-1070"><a href="#cb1-1070"></a>best_lambda <span class="op">=</span> lambdas[np.argmax(cv_means)]</span>
-<span id="cb1-1071"><a href="#cb1-1071"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Best regularization: lambda = </span><span class="sc">{</span>best_lambda<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-1072"><a href="#cb1-1072"></a><span class="in">```</span></span>
-<span id="cb1-1073"><a href="#cb1-1073"></a></span>
-<span id="cb1-1074"><a href="#cb1-1074"></a></span>
-<span id="cb1-1075"><a href="#cb1-1075"></a><span class="fu">## Discussion Questions {#sec-discussion}</span></span>
-<span id="cb1-1076"><a href="#cb1-1076"></a></span>
-<span id="cb1-1077"><a href="#cb1-1077"></a><span class="ss">1. </span>**Identifiability and Interpretation:** In AI evaluation, should we anchor the ability scale by fixing one model (e.g., GPT-4 = 0) or by centering all models? What are the implications for interpreting ability scores over time as new models are released?</span>
-<span id="cb1-1078"><a href="#cb1-1078"></a></span>
-<span id="cb1-1079"><a href="#cb1-1079"></a><span class="ss">2. </span>**Bayesian vs Frequentist:** When is Bayesian inference preferred over MLE for AI benchmark analysis? Consider scenarios with limited data, extreme scores, or the need for uncertainty quantification.</span>
-<span id="cb1-1080"><a href="#cb1-1080"></a></span>
-<span id="cb1-1081"><a href="#cb1-1081"></a><span class="ss">3. </span>**From Learning to Design:** This chapter focuses on estimating parameters from a fixed dataset. @sec-efficient considers how to *design* the evaluation---choosing which items to include, how to allocate testing effort, and how to ensure robustness. What aspects of the estimation methods learned here would inform good benchmark design?</span>
-<span id="cb1-1082"><a href="#cb1-1082"></a></span>
-<span id="cb1-1083"><a href="#cb1-1083"></a><span class="ss">4. </span>**Transfer of Item Parameters:** If we calibrate item difficulties on one set of models (e.g., 2023 models), can we use these parameters to evaluate 2024 models? What assumptions does this require, and when might they fail?</span>
-<span id="cb1-1084"><a href="#cb1-1084"></a></span>
-<span id="cb1-1085"><a href="#cb1-1085"></a></span>
-<span id="cb1-1086"><a href="#cb1-1086"></a><span class="fu">## Bibliographic Notes {#sec-learning-bib}</span></span>
-<span id="cb1-1087"><a href="#cb1-1087"></a></span>
-<span id="cb1-1088"><a href="#cb1-1088"></a><span class="fu">### Maximum Likelihood Estimation</span></span>
-<span id="cb1-1089"><a href="#cb1-1089"></a></span>
-<span id="cb1-1090"><a href="#cb1-1090"></a>The theory of maximum likelihood for IRT models is developed comprehensively in @lord1968statistical and @birnbaum1968some. The joint MLE approach and its limitations (incidental parameter problem) were first formalized in @neyman1948consistent; @haberman1977maximum proves the inconsistency specifically for the Rasch model, and @lancaster2000incidental provides a modern survey. For modern computational approaches, see @baker2004item.</span>
-<span id="cb1-1091"><a href="#cb1-1091"></a></span>
-<span id="cb1-1092"><a href="#cb1-1092"></a><span class="fu">### Conditional and Marginal MLE</span></span>
-<span id="cb1-1093"><a href="#cb1-1093"></a></span>
-<span id="cb1-1094"><a href="#cb1-1094"></a>Conditional MLE for the Rasch model was developed by @andersen1970asymptotic, who proved consistency and derived the elementary symmetric functions needed for computation. Marginal MLE was introduced by @bock1970fitting and popularized by @bock1981marginal using the EM algorithm.</span>
-<span id="cb1-1095"><a href="#cb1-1095"></a></span>
-<span id="cb1-1096"><a href="#cb1-1096"></a><span class="fu">### EM Algorithm</span></span>
-<span id="cb1-1097"><a href="#cb1-1097"></a></span>
-<span id="cb1-1098"><a href="#cb1-1098"></a>The general EM algorithm was formalized by @dempster1977maximum. Its application to IRT is detailed in @bock1981marginal. For modern treatments, see @mclachlan2007algorithm.</span>
-<span id="cb1-1099"><a href="#cb1-1099"></a></span>
-<span id="cb1-1100"><a href="#cb1-1100"></a><span class="fu">### Bayesian IRT</span></span>
-<span id="cb1-1101"><a href="#cb1-1101"></a></span>
-<span id="cb1-1102"><a href="#cb1-1102"></a>Bayesian approaches to IRT were pioneered by @swaminathan1982bayesian and advanced using Gibbs sampling by @albert1992bayesian. Modern references include @fox2010bayesian and the software documentation for Stan <span class="co">[</span><span class="ot">@carpenter2017stan</span><span class="co">]</span>.</span>
-<span id="cb1-1103"><a href="#cb1-1103"></a></span>
-<span id="cb1-1104"><a href="#cb1-1104"></a><span class="fu">### Beta-IRT and Continuous Responses</span></span>
-<span id="cb1-1105"><a href="#cb1-1105"></a></span>
-<span id="cb1-1106"><a href="#cb1-1106"></a>Standard IRT models assume binary (correct/incorrect) responses, but language models provide richer signals: token probabilities in pre-training and empirical pass rates in repeated sampling. @truong2025irsl introduce Beta-IRT, which replaces the Bernoulli loss with a Beta loss parameterized by the IRT logistic mean $\sigma(d_j(\theta_i - z_j))$ and a precision parameter $\phi$. This achieves reliable calibration with as few as 2 test takers (30--60$\times$ fewer than Binary-IRT), making it practical for scaling law studies where the number of model checkpoints far exceeds what binary IRT requires. The connection between per-problem exponential scaling and aggregate power-law scaling is formalized by @schaeffer2025monkeys, who show the power-law exponent is controlled by the left-tail shape of the success probability distribution — precisely the item difficulty distribution in IRT terms.</span>
-<span id="cb1-1107"><a href="#cb1-1107"></a></span>
-<span id="cb1-1108"><a href="#cb1-1108"></a><span class="fu">### Optimization Methods</span></span>
-<span id="cb1-1109"><a href="#cb1-1109"></a></span>
-<span id="cb1-1110"><a href="#cb1-1110"></a>L-BFGS is described in @nocedal2006numerical. For deep learning optimizers applied to psychometric models, see @kingma2015adam for Adam.</span>
-<span id="cb1-1111"><a href="#cb1-1111"></a></span>
-<span id="cb1-1112"><a href="#cb1-1112"></a></span>
-<span id="cb1-1113"><a href="#cb1-1113"></a><span class="fu">## Exercises {#sec-learning-exercises}</span></span>
-<span id="cb1-1114"><a href="#cb1-1114"></a></span>
-<span id="cb1-1115"><a href="#cb1-1115"></a><span class="fu">### Theoretical Exercises</span></span>
-<span id="cb1-1116"><a href="#cb1-1116"></a></span>
-<span id="cb1-1117"><a href="#cb1-1117"></a>**Exercise 2.1** ($\star$): Derive the gradient of the Rasch model log-likelihood with respect to $\theta_i$. Show that it equals the sum of residuals: $\frac{\partial \ell}{\partial \theta_i} = \sum_j (Y_{ij} - P_{ij})$.</span>
-<span id="cb1-1118"><a href="#cb1-1118"></a></span>
-<span id="cb1-1119"><a href="#cb1-1119"></a>**Exercise 2.2** ($\star\star$): Prove that the Hessian matrix of the Rasch log-likelihood is negative semi-definite, ensuring the log-likelihood is concave.</span>
-<span id="cb1-1120"><a href="#cb1-1120"></a></span>
-<span id="cb1-1121"><a href="#cb1-1121"></a>**Exercise 2.3** ($\star\star$): Show that for the Rasch model, the Fisher information for item $j$ at ability $\theta$ is $I_j(\theta) = P_j(1-P_j)$, and that this is maximized when $\theta = \beta_j$.</span>
-<span id="cb1-1122"><a href="#cb1-1122"></a></span>
-<span id="cb1-1123"><a href="#cb1-1123"></a>**Exercise 2.4** ($\star\star\star$): Derive the EM algorithm for the 2PL model. What additional complications arise compared to the Rasch model due to the discrimination parameters?</span>
-<span id="cb1-1124"><a href="#cb1-1124"></a></span>
-<span id="cb1-1125"><a href="#cb1-1125"></a>**Exercise 2.5** ($\star\star$): Show that L2 regularization on the parameters is equivalent to MAP estimation with Gaussian priors. What is the relationship between the regularization strength $\lambda$ and the prior variance $\sigma^2$?</span>
-<span id="cb1-1126"><a href="#cb1-1126"></a></span>
-<span id="cb1-1127"><a href="#cb1-1127"></a><span class="fu">### Computational Exercises</span></span>
-<span id="cb1-1128"><a href="#cb1-1128"></a></span>
-<span id="cb1-1129"><a href="#cb1-1129"></a>**Exercise 2.6** ($\star\star$): Implement conditional MLE for the Rasch model. Use the fact that the conditional likelihood depends only on item parameters and can be computed using elementary symmetric functions.</span>
-<span id="cb1-1130"><a href="#cb1-1130"></a></span>
-<span id="cb1-1131"><a href="#cb1-1131"></a>**Exercise 2.7** ($\star\star\star$): Implement a Gibbs sampler for the Rasch model that alternates between:</span>
-<span id="cb1-1132"><a href="#cb1-1132"></a><span class="ss">   - </span>Sampling $\theta_i \mid Y, \beta$ for each person (using slice sampling)</span>
-<span id="cb1-1133"><a href="#cb1-1133"></a><span class="ss">   - </span>Sampling $\beta_j \mid Y, \theta$ for each item</span>
-<span id="cb1-1134"><a href="#cb1-1134"></a></span>
-<span id="cb1-1135"><a href="#cb1-1135"></a>Compare the posterior estimates to those from Metropolis-Hastings.</span>
-<span id="cb1-1136"><a href="#cb1-1136"></a></span>
-<span id="cb1-1137"><a href="#cb1-1137"></a>**Exercise 2.8** ($\star\star\star$): Implement marginal MLE using numerical quadrature to integrate out the ability parameters. Compare convergence and parameter recovery to the EM approach from this chapter.</span>
-<span id="cb1-1138"><a href="#cb1-1138"></a></span>
-<span id="cb1-1139"><a href="#cb1-1139"></a>**Exercise 2.9** ($\star\star$): Implement Beta-IRT estimation. Given a response matrix $P_{ij} \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$ of empirical probabilities (e.g., token probabilities or pass rates), maximize the Beta log-likelihood $\sum_{i,j} \log p(P_{ij}; \mu_{ij}, \phi)$ where $\mu_{ij} = \sigma(d_j(\theta_i - z_j))$ is the IRT-predicted mean and $\phi &gt; 0$ is a precision parameter. (a) Derive the gradient with respect to $\theta_i$ and $z_j$. (b) Simulate data with $M = 50$ models and $N = 200$ items, where $P_{ij} \sim \text{Beta}(\mu_{ij} \phi, (1 - \mu_{ij})\phi)$ with $\phi = 10$. (c) Compare parameter recovery of Beta-IRT vs. binary IRT (where responses are thresholded at 0.5) as a function of $M$. Verify the finding of @truong2025irsl that Beta-IRT achieves reliable calibration with far fewer models than Binary-IRT.</span>
-<span id="cb1-1140"><a href="#cb1-1140"></a></span>
-<span id="cb1-1141"><a href="#cb1-1141"></a><span class="fu">### Discussion Exercises</span></span>
-<span id="cb1-1142"><a href="#cb1-1142"></a></span>
-<span id="cb1-1143"><a href="#cb1-1143"></a>**Exercise 2.9:** Compare the convergence of gradient ascent, L-BFGS, and Adam on a Rasch model estimation problem. Which converges fastest? Which is most robust to different initializations?</span>
-<span id="cb1-1144"><a href="#cb1-1144"></a></span>
-<span id="cb1-1145"><a href="#cb1-1145"></a>**Exercise 2.10:** Investigate the sensitivity of MLE and Bayesian estimation to model misspecification. Generate data from a 2PL model but fit a Rasch model. How do the estimated abilities compare? When does the misspecification matter most?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap4.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
+<script>
 // Auto-execute all pyodide cells after initialization
 document.addEventListener('DOMContentLoaded', function() {
   // Wait for pyodide to be fully ready (mainPyodide is set after loading)

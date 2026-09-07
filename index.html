@@ -8,7 +8,7 @@
 
 <meta name="author" content="Sang T. Truong">
 <meta name="author" content="Sanmi Koyejo">
-<meta name="dcterms.date" content="2026-06-30">
+<meta name="dcterms.date" content="2026-09-07">
 
 <title>AI Measurement Science</title>
 <style>
@@ -91,20 +91,17 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./src/chap1.html" rel="next">
+<link href="./resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -119,7 +116,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -156,176 +152,18 @@ MathJax = {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="./resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="./resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -334,18 +172,57 @@ MathJax = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="./index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="./AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -360,7 +237,44 @@ MathJax = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">AI Measurement Science</h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      <div class="aims-title-meta-byline">
+      <div class="quarto-title-meta-contents">
+        <p class="author"><a class="aims-title-author-link no-external" href="https://ai.stanford.edu/~sttruong/">Sang T. Truong</a> and <a class="aims-title-author-link no-external" href="https://cs.stanford.edu/~sanmi/">Sanmi Koyejo</a></p>
+      </div>
+    </div>
+      
+      <div class="aims-title-meta-date">
+      <div class="quarto-title-meta-heading">Updated</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 7, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+
+    <nav class="aims-title-actions" aria-label="Textbook resources">
+        <a class="aims-title-action aims-title-action--secondary no-external" href="https://github.com/aims-foundations/aims">
+      <i class="bi bi-github" aria-hidden="true"></i>
+      <span>View on GitHub</span>
+    </a>
+        <a class="aims-title-action aims-title-action--primary no-external" href="https://aimslab.stanford.edu/textbook/AI-Measurement-Science.pdf">
+      <i class="bi bi-file-pdf" aria-hidden="true"></i>
+      <span>Download PDF</span>
+    </a>
+      </nav>
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -451,13 +365,13 @@ MathJax = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./src/notation.html" class="sidebar-item-text sidebar-link">
@@ -468,9 +382,7 @@ MathJax = {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>© 2025. This work is openly licensed via <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY NC 4.0</a>.</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -487,42 +399,12 @@ MathJax = {
   </ul></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">AI Measurement Science</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Authors</div>
-    <div class="quarto-title-meta-contents">
-             <p>Sang T. Truong <a href="https://orcid.org/0000-0002-7551-4378" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-             <p>Sanmi Koyejo <a href="https://orcid.org/0000-0001-9039-3220" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Updated</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">June 30, 2026</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <section id="sec-intro" class="level1 unnumbered">
@@ -571,8 +453,6 @@ MathJax = {
 <span id="cb1-6"><a href="#cb1-6"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
-<!-- -->
-
 </section>
 </section>
 <section id="bibliography" class="level1 unnumbered">
@@ -591,21 +471,103 @@ Murphy, Kevin P. 2022. <em>Probabilistic Machine Learning: An Introduction</em>.
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -674,57 +636,6 @@ Murphy, Kevin P. 2022. <em>Probabilistic Machine Learning: An Introduction</em>.
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -1063,72 +974,9 @@ Murphy, Kevin P. 2022. <em>Probabilistic Machine Learning: An Introduction</em>.
         <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Validity</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu"># Preface {.unnumbered #sec-intro}</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>Decisions about AI systems—whether to deploy one, which to prefer, how to govern its use—rest on measurements of quantities such as reasoning, planning, and safety. The quality of those measurements is therefore a precondition for sound decisions, yet it is rarely examined. New benchmarks appear faster than their measurement properties can be characterized; leaderboards report scores without specifying the scale on which they are defined; and a system's average accuracy is largely uninformative about why it succeeds or where it fails. The field has accumulated a large number of evaluation results, but comparatively little theory governing how those results should be produced and interpreted.</span>
-<span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a>This book develops the foundations and practical tools of measurement science for AI evaluation. Its organizing premise is that evaluation is a problem of inference - where we estimate latent properties of a system, such as ability along a given dimension, from observed responses, - rather than a procedure that ends once a dataset is collected and a metric is computed. From this premise the book builds outward. It begins with validity, the question of whether an evaluation measures the construct it claims to, and with the structure of benchmark data. It then develops the probabilistic models that make latent properties estimable — item response theory, Bradley–Terry models, and factor models — together with methods for fitting them, for decomposing measurement error, and for designing evaluations that extract more information per item. On this base it treats the harder questions: when benchmark results generalize across shifts in distribution, and how to evaluate systems that are themselves optimizing against the benchmark, which brings in causal inference and mechanism design. Throughout, each method is presented with its assumptions, the conditions under which it applies, and the ways it can fail, since characterizing the failure modes of an evaluation is as much a part of measurement as the estimate itself.</span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>The book is intended for researchers, practitioners, and students who work on or care about AI evaluation. We assume some background in probability, statistics, and machine learning, but provide sufficient context and references for readers to follow the main ideas. The book also includes interactive code examples and datasets. The science of AI measurement is a fast-moving area with many open challenges, and we hope this book will inspire readers to further explore and advance it. We hope with the present book to help the field move from ad hoc benchmarking toward principled measurement—so that our decision about AI systems rest on solid scientific ground.</span>
-<span id="cb2-8"><a href="#cb2-8"></a></span>
-<span id="cb2-9"><a href="#cb2-9"></a>Stanford, 2026, Truong &amp; Koyejo</span>
-<span id="cb2-10"><a href="#cb2-10"></a></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="fu">## Structure of this book {.unnumbered}</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a>The chapters build in sequence — from validity and the structure of benchmark data, through the models, estimation, reliability, and design that form the methodological core, to causal generalization and the strategic dimensions that arise once benchmarks become optimization targets.</span>
-<span id="cb2-14"><a href="#cb2-14"></a></span>
-<span id="cb2-15"><a href="#cb2-15"></a>@sec-validity opens the book with validity—the question of whether an evaluation measures the construct it claims to. The chapter models a construct as a latent variable embedded in a nomological network that causally produces item responses, and adopts existence-and-causation condition as the standard validity must meet. A central difficulty is that this network is not identifiable from data alone—substantively different structures can imply the same observed responses—so validity cannot be read off the data and must instead be built up as an accumulation of evidence. The chapter organizes that evidence, following the unitary view of validity, into five kinds (content, criterion, construct, external, and consequential), and catalogs the major threats at the conceptual level, deferring their operationalization to the later chapters.</span>
-<span id="cb2-16"><a href="#cb2-16"></a></span>
-<span id="cb2-17"><a href="#cb2-17"></a>@sec-data-landscape surveys the AI evaluation data landscape: the response matrix abstraction, a taxonomy of 70+ benchmarks spanning knowledge, coding, agentic, multilingual, cultural, and preference evaluation, and the practical data quality issues that arise in real-world evaluation.</span>
-<span id="cb2-18"><a href="#cb2-18"></a></span>
-<span id="cb2-19"><a href="#cb2-19"></a>@sec-foundations lays the mathematical modeling groundwork for the rest of the book. It covers probabilistic models for AI evaluation data — including Item Response Theory (Rasch, 2PL, 3PL) and Bradley-Terry models for pairwise comparisons. A central theme is the relationship between model assumptions and what they allow us to infer: sufficiency, specific objectivity, and the tradeoffs between model complexity and interpretability. The chapter also introduces prediction-powered evaluation—an amortized model that maps external features to latent parameters for cold-start prediction of unseen models and items.</span>
-<span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a>@sec-learning studies how to estimate latent parameters from evaluation data. It covers maximum likelihood estimation, gradient-based optimization, the EM algorithm, Bayesian inference, regularization, and model selection for the unidimensional IRT models.</span>
-<span id="cb2-22"><a href="#cb2-22"></a></span>
-<span id="cb2-23"><a href="#cb2-23"></a>@sec-reliability addresses the question of signal versus noise in AI measurement. Building on the response model of @sec-foundations, it derives a variance decomposition—person, item, interaction, and residual—and defines reliability as the person share of that variance, the generalizability coefficient. It develops three routes for estimating the variance components (plug-in, Bayesian, and method of moments), turns generalizability theory into a design tool that sizes items and raters to a target reliability, and treats the rater facet in depth for LLM-as-a-judge and ordinal-rating protocols—including why systematic biases such as a judge's position bias can be reliable yet escape reliability analysis. Classical test theory appears as the special case recovered when only total scores are available. It is also where the validity threats of @sec-validity become operational: the item-level diagnostics—differential item functioning, dimensionality assessment, and item-fit statistics—are each a structured reading of the same variance decomposition.</span>
-<span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a>@sec-discovery turns from confirming a known construct to discovering an unknown one. Where the preceding chapters assume the construct is named in advance and ask whether the items measure it, this chapter is handed a collection of items and asks the data how many distinct things they measure and which items measure which. It uses parallel analysis to recover dimensionality, then develops the multidimensional factor model—its definition, estimation, the structure matrix and item clustering for diagnosing benchmark heterogeneity, and masking experiments that test how well the learned model generalizes to unseen models and items. It closes with network models (the Gaussian graphical model and the Ising model) that drop the common-cause assumption entirely—treating item correlations as direct associations rather than the signature of a shared latent ability—and shows why latent-variable and network structures can be observationally close.</span>
-<span id="cb2-26"><a href="#cb2-26"></a></span>
-<span id="cb2-27"><a href="#cb2-27"></a>@sec-efficient develops the statistical foundations for efficient evaluation design. It introduces Fisher information for item selection, Computerized Adaptive Testing (CAT), D-optimal design for constructing maximally informative item pools, and efficient paired-comparison schedules for model arenas.</span>
-<span id="cb2-28"><a href="#cb2-28"></a></span>
-<span id="cb2-29"><a href="#cb2-29"></a>@sec-causality examines the causal foundations of AI measurement. It covers structural causal models for evaluation data, distribution shift (covariate, label, and concept shift) and when benchmark results generalize across contexts, interventional and counterfactual reasoning for diagnosing construct-irrelevant variance, and methods for robust prediction under shift including conformal inference and data attribution.</span>
-<span id="cb2-30"><a href="#cb2-30"></a></span>
-<span id="cb2-31"><a href="#cb2-31"></a>@sec-ecosystem steps back from the statistics to the institutions that consume benchmark scores. It maps the stakeholders of a modern benchmark—builders, evaluators and platforms, adopters, investors, and regulators—and argues that as a benchmark's audience expands, Goodhart's Law turns from an academic curiosity into a structural force, analyzed through the economics of signaling and the market for lemons. It develops a mechanism-based taxonomy of gaming on both sides of the market—builders who game the metric and evaluators who game the audience—and connects each gaming channel to a design lever, framing the governance frontier (multi-principal evaluation, the role of open-source models, and how to organize trustworthy third-party evaluation). The chapter is the diagnosis that motivates the design machinery of @sec-design.</span>
-<span id="cb2-32"><a href="#cb2-32"></a></span>
-<span id="cb2-33"><a href="#cb2-33"></a>@sec-design considers the strategic and economic dimensions of evaluation design. It introduces decision-making under ambiguity (Maxmin Expected Utility), Bayesian persuasion for optimal information disclosure, robust mechanism design, and the strategic considerations that arise when benchmark results influence development incentives.</span>
-<span id="cb2-34"><a href="#cb2-34"></a></span>
-<span id="cb2-35"><a href="#cb2-35"></a>@sec-redteaming applies the measurement framework to adversarial evaluation: red-teaming as structured measurement, attack success rate as an estimand (and when comparisons are valid), adversarial robustness as a multidimensional latent trait, synthetic data for evaluation at scale, and prediction-powered inference for combining human and automated judgments.</span>
-<span id="cb2-36"><a href="#cb2-36"></a></span>
-<span id="cb2-37"><a href="#cb2-37"></a>@sec-conclusion synthesizes the book's themes, distills lessons from the field, identifies six open challenges (beyond binary responses, multidimensional ability, temporal dynamics, agentic evaluation, scalable oversight, and fairness in evaluation), presents ten capstone projects for the CS321M course, and offers a practitioner's checklist for designing rigorous AI evaluations.</span>
-<span id="cb2-38"><a href="#cb2-38"></a></span>
-<span id="cb2-39"><a href="#cb2-39"></a><span class="fu">## How to engage with this book {.unnumbered}</span></span>
-<span id="cb2-40"><a href="#cb2-40"></a></span>
-<span id="cb2-41"><a href="#cb2-41"></a>Three chapters are essential for every reader—@sec-validity, @sec-data-landscape, and @sec-foundations—which frame the measurement question, the data landscape, and the modeling toolkit that the rest of the book builds on; they belong in both reading tracks. Beyond this shared core, the book splits into two tracks. Readers focused on building and improving rigorous evaluations should follow the methodological track—@sec-learning, @sec-reliability, @sec-efficient, and @sec-causality—which develops estimation, reliability, efficient design, and the analysis of when results generalize. Readers focused on the strategic and governance dimensions of AI evaluation should follow @sec-ecosystem, @sec-design, and @sec-redteaming, which cover the incentives surrounding benchmarks, the mechanism design that responds to them, and adversarial testing.</span>
-<span id="cb2-42"><a href="#cb2-42"></a></span>
-<span id="cb2-43"><a href="#cb2-43"></a><span class="fu">## Prior knowledge {.unnumbered}</span></span>
-<span id="cb2-44"><a href="#cb2-44"></a></span>
-<span id="cb2-45"><a href="#cb2-45"></a>The book assumes knowledge of the fundamentals of statistics, linear algebra, and machine learning. Code examples are written in Python using PyTorch, scikit-learn, and pandas, so familiarity with Python is valuable for readers who wish to engage with the interactive examples. For readers seeking to strengthen their prerequisites or deepen their understanding of the fields this book draws from, we recommend the following companion texts:</span>
-<span id="cb2-46"><a href="#cb2-46"></a></span>
-<span id="cb2-47"><a href="#cb2-47"></a><span class="ss">- </span>@borsboom2005measuring — A philosophically rigorous account of what it means to measure a psychological attribute. Essential reading for the validity and construct modeling discussions in @sec-reliability and @sec-validity.</span>
-<span id="cb2-48"><a href="#cb2-48"></a><span class="ss">- </span>@lord1968statistical — The classical statistical theory of mental testing that underlies much of modern psychometrics. For readers wanting depth in reliability, item analysis, and test construction before the measurement chapters.</span>
-<span id="cb2-49"><a href="#cb2-49"></a><span class="ss">- </span>@murphy2022probabilistic — A modern, comprehensive treatment of probabilistic modeling, Bayesian inference, and statistical learning. Excellent preparation for the latent variable models and estimation methods in @sec-foundations through @sec-efficient.</span>
-<span id="cb2-50"><a href="#cb2-50"></a></span>
-<span id="cb2-51"><a href="#cb2-51"></a><span class="fu">## Citation {.unnumbered}</span></span>
-<span id="cb2-52"><a href="#cb2-52"></a></span>
-<span id="cb2-53"><a href="#cb2-53"></a>To cite this book, please use the following entry:</span>
-<span id="cb2-54"><a href="#cb2-54"></a></span>
-<span id="cb2-55"><a href="#cb2-55"></a><span class="in">```bibtex</span></span>
-<span id="cb2-56"><a href="#cb2-56"></a><span class="in">@book{truongkoyejo2026aims,</span></span>
-<span id="cb2-57"><a href="#cb2-57"></a><span class="in">  title     = {AI Measurement Science},</span></span>
-<span id="cb2-58"><a href="#cb2-58"></a><span class="in">  author    = {Truong, Sang T. and Koyejo, Sanmi},</span></span>
-<span id="cb2-59"><a href="#cb2-59"></a><span class="in">  year      = {2026},</span></span>
-<span id="cb2-60"><a href="#cb2-60"></a><span class="in">  url       = {https://aimslab.stanford.edu/textbook/}</span></span>
-<span id="cb2-61"><a href="#cb2-61"></a><span class="in">}</span></span>
-<span id="cb2-62"><a href="#cb2-62"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-    <footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script type="text/javascript">
+    <script type="text/javascript">
     (function(d) {
       d.querySelectorAll(".pseudocode-container").forEach(function(el) {
         let pseudocodeOptions = {

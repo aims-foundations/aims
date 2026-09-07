@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -89,20 +54,17 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../src/chap11.html" rel="next">
 <link href="../src/chap9.html" rel="prev">
+<link href="../resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -117,7 +79,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -506,176 +467,18 @@ globalThis._qpyodideGetInstance = function() {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -684,18 +487,57 @@ globalThis._qpyodideGetInstance = function() {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="../index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -710,7 +552,23 @@ globalThis._qpyodideGetInstance = function() {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span id="sec-ecosystem" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -801,13 +659,13 @@ globalThis._qpyodideGetInstance = function() {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
@@ -818,9 +676,7 @@ globalThis._qpyodideGetInstance = function() {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>license.qmd</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -850,11 +706,10 @@ globalThis._qpyodideGetInstance = function() {
   <li><a href="#sec-ecosystem-exercises" id="toc-sec-ecosystem-exercises" class="nav-link" data-scroll-target="#sec-ecosystem-exercises"><span class="header-section-number">10.8</span> Exercises</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap10.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
 <script type="module" id="qpyodide-monaco-editor-init">
 
@@ -866,23 +721,7 @@ globalThis._qpyodideGetInstance = function() {
   });
 </script>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-ecosystem" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Ecosystem</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
@@ -1215,8 +1054,6 @@ Table&nbsp;10.2: Mapping each gaming channel to its design lever. Bold rows are 
 </ol>
 
 
-<!-- -->
-
 </section>
 <section id="bibliography" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>
@@ -1279,21 +1116,103 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1362,57 +1281,6 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -1754,266 +1622,9 @@ White, Colin, Samuel Dooley, Manley Roberts, et al. 2025. <em>LiveBench: A Chall
         <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Design</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">format:</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">  html:</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    include-after-body:</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">      text: |</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">        &lt;script&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">        // Auto-execute all pyodide cells after initialization</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">        document.addEventListener('DOMContentLoaded', function() {</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">          function waitForPyodide() {</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">            if (typeof globalThis.mainPyodide !== 'undefined' &amp;&amp; globalThis.mainPyodide) {</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co">              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">                globalThis.qpyodideCellDetails.forEach((cell, index) =&gt; {</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">                  if (cell.options &amp;&amp; cell.options.autorun === 'true') {</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">                    setTimeout(() =&gt; {</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co">                      if (runButton &amp;&amp; !runButton.disabled) {</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co">                        runButton.click();</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="co">                      }</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="co">                    }, index * 1000);</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="co">                  }</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="co">                });</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="co">              }</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a><span class="co">            } else {</span></span>
-<span id="cb1-24"><a href="#cb1-24"></a><span class="co">              setTimeout(waitForPyodide, 500);</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a><span class="co">            }</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a><span class="co">          }</span></span>
-<span id="cb1-27"><a href="#cb1-27"></a><span class="co">          setTimeout(waitForPyodide, 2000);</span></span>
-<span id="cb1-28"><a href="#cb1-28"></a><span class="co">        });</span></span>
-<span id="cb1-29"><a href="#cb1-29"></a><span class="co">        &lt;/script&gt;</span></span>
-<span id="cb1-30"><a href="#cb1-30"></a><span class="an">filters:</span></span>
-<span id="cb1-31"><a href="#cb1-31"></a><span class="co">  - pyodide</span></span>
-<span id="cb1-32"><a href="#cb1-32"></a><span class="an">pyodide:</span></span>
-<span id="cb1-33"><a href="#cb1-33"></a><span class="co">  packages:</span></span>
-<span id="cb1-34"><a href="#cb1-34"></a><span class="co">    - numpy</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a><span class="co">    - matplotlib</span></span>
-<span id="cb1-36"><a href="#cb1-36"></a><span class="co">---</span></span>
-<span id="cb1-37"><a href="#cb1-37"></a></span>
-<span id="cb1-38"><a href="#cb1-38"></a><span class="fu"># Ecosystem {#sec-ecosystem}</span></span>
-<span id="cb1-39"><a href="#cb1-39"></a></span>
-<span id="cb1-40"><a href="#cb1-40"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb1-41"><a href="#cb1-41"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb1-42"><a href="#cb1-42"></a></span>
-<span id="cb1-43"><a href="#cb1-43"></a><span class="ss">1. </span>**Map** the stakeholders of a modern AI benchmark---builders, evaluators/platforms, adopters, investors, and regulators---and identify the decision each one delegates to the metric and the incentive each has to distort it.</span>
-<span id="cb1-44"><a href="#cb1-44"></a><span class="ss">2. </span>**Explain** why an expanding audience turns Goodhart's Law from an academic curiosity into a structural force, using the economics of *signaling* and the *market for lemons*.</span>
-<span id="cb1-45"><a href="#cb1-45"></a><span class="ss">3. </span>**Distinguish** the two directions of gaming: builders who game the metric and evaluators/platforms who game the audience, and classify real episodes into a mechanism-based taxonomy.</span>
-<span id="cb1-46"><a href="#cb1-46"></a><span class="ss">4. </span>**Connect** each gaming channel to a design lever from @sec-design, and identify which channels remain open research problems.</span>
-<span id="cb1-47"><a href="#cb1-47"></a><span class="ss">5. </span>**Articulate** the governance frontier: multi-principal evaluation, the role of open-source models, and how to organize a trustworthy third-party evaluation ecosystem.</span>
-<span id="cb1-48"><a href="#cb1-48"></a>:::</span>
-<span id="cb1-49"><a href="#cb1-49"></a></span>
-<span id="cb1-50"><a href="#cb1-50"></a>::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}</span>
-<span id="cb1-51"><a href="#cb1-51"></a>This chapter can be covered in **2 lectures** (75--90 minutes each):</span>
-<span id="cb1-52"><a href="#cb1-52"></a></span>
-<span id="cb1-53"><a href="#cb1-53"></a>**Lecture 1: The Ecosystem and Its Failures**</span>
-<span id="cb1-54"><a href="#cb1-54"></a></span>
-<span id="cb1-55"><a href="#cb1-55"></a><span class="ss">- </span>From scoreboard to target: the expanding audience (15 min)</span>
-<span id="cb1-56"><a href="#cb1-56"></a><span class="ss">- </span>Benchmarks as signaling and the market for lemons (20 min)</span>
-<span id="cb1-57"><a href="#cb1-57"></a><span class="ss">- </span>A taxonomy of gaming: builder-side and evaluator-side (35 min)</span>
-<span id="cb1-58"><a href="#cb1-58"></a></span>
-<span id="cb1-59"><a href="#cb1-59"></a>**Lecture 2: Governance**</span>
-<span id="cb1-60"><a href="#cb1-60"></a></span>
-<span id="cb1-61"><a href="#cb1-61"></a><span class="ss">- </span>The gaming-channel / design-lever map (20 min)</span>
-<span id="cb1-62"><a href="#cb1-62"></a><span class="ss">- </span>Multi-principal evaluation and the strategic evaluator (25 min)</span>
-<span id="cb1-63"><a href="#cb1-63"></a><span class="ss">- </span>The role of open-source; organizing the community (25 min)</span>
-<span id="cb1-64"><a href="#cb1-64"></a>:::</span>
-<span id="cb1-65"><a href="#cb1-65"></a></span>
-<span id="cb1-66"><a href="#cb1-66"></a>::: {.callout-note title="Chapter Roadmap"}</span>
-<span id="cb1-67"><a href="#cb1-67"></a>This chapter is the *diagnosis* that motivates the *design* of @sec-design. We ask three questions in sequence: **who are the actors** (@sec-actors), **what game do they play** (@sec-gaming-taxonomy), and **how should the system be governed** (@sec-governance-frontier). The technical machinery for re-engineering the game---randomization, distribution correction, holdout mechanisms, welfare-aligned metrics---is developed in @sec-design; here we establish *why* that machinery is needed and *which* failures it must close.</span>
-<span id="cb1-68"><a href="#cb1-68"></a>:::</span>
-<span id="cb1-69"><a href="#cb1-69"></a></span>
-<span id="cb1-70"><a href="#cb1-70"></a></span>
-<span id="cb1-71"><a href="#cb1-71"></a><span class="fu">## From Scoreboard to Target {#sec-scoreboard-to-target}</span></span>
-<span id="cb1-72"><a href="#cb1-72"></a></span>
-<span id="cb1-73"><a href="#cb1-73"></a><span class="at">&gt; "When a measure becomes a target, it ceases to be a good measure." --- Charles Goodhart (1975)</span></span>
-<span id="cb1-74"><a href="#cb1-74"></a></span>
-<span id="cb1-75"><a href="#cb1-75"></a>A benchmark begins life as an *internal* instrument: a model developer's private scoreboard for tracking research progress. In that regime Goodhart's Law is mostly latent---the only party who can optimize against the metric is the same party who benefits from an honest reading of it. The structural shift of the past few years is that the *audience* of a benchmark has expanded far beyond the developer who builds the model.</span>
-<span id="cb1-76"><a href="#cb1-76"></a></span>
-<span id="cb1-77"><a href="#cb1-77"></a>Today a single leaderboard number is consumed by:</span>
-<span id="cb1-78"><a href="#cb1-78"></a></span>
-<span id="cb1-79"><a href="#cb1-79"></a><span class="ss">- </span>**Builders**, who use it to allocate research effort and to claim state-of-the-art.</span>
-<span id="cb1-80"><a href="#cb1-80"></a><span class="ss">- </span>**Adopters** (enterprises, agencies, application developers), who use it as a procurement and due-diligence signal in build-vs-buy and vendor-selection decisions.</span>
-<span id="cb1-81"><a href="#cb1-81"></a><span class="ss">- </span>**Investors**, who read benchmark leadership as a proxy for a technical moat when pricing funding rounds.</span>
-<span id="cb1-82"><a href="#cb1-82"></a><span class="ss">- </span>**Governments and regulators**, who increasingly reference capability and safety evaluations in policy. *(TODO: cite the specific provisions to lean on---e.g., the EU AI Act's general-purpose-AI obligations and codes of practice, and the relevant US framework. Verify current status as of the writing date; the policy landscape moves quickly.)*</span>
-<span id="cb1-83"><a href="#cb1-83"></a></span>
-<span id="cb1-84"><a href="#cb1-84"></a>Once any of these parties can move resources on the basis of a score, the developer's reputation, funding, or regulatory standing depends on that score---and the data-generating process is no longer fixed. This is exactly the setting in which Goodhart's adversarial variant dominates (@sec-goodhart). The remainder of this chapter takes the audience expansion as the root cause and traces its consequences.</span>
-<span id="cb1-85"><a href="#cb1-85"></a></span>
-<span id="cb1-86"><a href="#cb1-86"></a>::: {.callout-important title="The chapter's thesis"}</span>
-<span id="cb1-87"><a href="#cb1-87"></a>A public benchmark is a **signaling instrument**. As its audience expands beyond builders, *both sides* of the market acquire an incentive to game it: builders game the metric, and benchmark providers game the audience. Restoring trust is therefore not only a statistical problem (@sec-reliability, @sec-validity) but an **institutional design** problem---the subject of @sec-design and of this chapter's governance discussion.</span>
-<span id="cb1-88"><a href="#cb1-88"></a>:::</span>
-<span id="cb1-89"><a href="#cb1-89"></a></span>
-<span id="cb1-90"><a href="#cb1-90"></a></span>
-<span id="cb1-91"><a href="#cb1-91"></a><span class="fu">## The Actors and Their Incentives {#sec-actors}</span></span>
-<span id="cb1-92"><a href="#cb1-92"></a></span>
-<span id="cb1-93"><a href="#cb1-93"></a>We organize the ecosystem as a set of principals, each delegating a decision to the metric, each with a characteristic way of distorting it.</span>
-<span id="cb1-94"><a href="#cb1-94"></a></span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="pp">|</span> Actor <span class="pp">|</span> Decision delegated to the metric <span class="pp">|</span> Incentive to distort <span class="pp">|</span> Primary failure mode <span class="pp">|</span></span>
-<span id="cb1-96"><a href="#cb1-96"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb1-97"><a href="#cb1-97"></a><span class="pp">|</span> **Builder / developer** <span class="pp">|</span> Where to allocate training effort; what to claim <span class="pp">|</span> Reputation, funding, market share <span class="pp">|</span> Optimize to the test (@sec-builder-gaming) <span class="pp">|</span></span>
-<span id="cb1-98"><a href="#cb1-98"></a><span class="pp">|</span> **Evaluator / platform** <span class="pp">|</span> What to publish and how to rank <span class="pp">|</span> Relevance, traffic, revenue, own-model favoritism <span class="pp">|</span> Game the audience (@sec-evaluator-gaming) <span class="pp">|</span></span>
-<span id="cb1-99"><a href="#cb1-99"></a><span class="pp">|</span> **Adopter** <span class="pp">|</span> Build vs. buy; which vendor <span class="pp">|</span> Lower procurement risk cheaply <span class="pp">|</span> Over-trust a decoupled proxy <span class="pp">|</span></span>
-<span id="cb1-100"><a href="#cb1-100"></a><span class="pp">|</span> **Investor** <span class="pp">|</span> How to price a round <span class="pp">|</span> Back the apparent leader <span class="pp">|</span> Reward narrative over capability <span class="pp">|</span></span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="pp">|</span> **Regulator** <span class="pp">|</span> Whether a system is safe to deploy <span class="pp">|</span> Public safety, accountability <span class="pp">|</span> Incentivize *sandbagging* (@sec-builder-gaming) <span class="pp">|</span></span>
-<span id="cb1-102"><a href="#cb1-102"></a></span>
-<span id="cb1-103"><a href="#cb1-103"></a>: Stakeholders of a modern benchmark and how each can distort it {#tbl-actors}</span>
-<span id="cb1-104"><a href="#cb1-104"></a></span>
-<span id="cb1-105"><a href="#cb1-105"></a>The classical evaluation model---and the formal game of @sec-evaluation-game---contains only the first two rows, and assumes the evaluator is a *benevolent social planner*. The central move of this chapter is to **relax that assumption**: the lower three rows add principals on the demand side, and the second row, once the evaluator has its own commercial incentives, becomes strategic. This is the multi-principal setting we return to in @sec-multi-principal.</span>
-<span id="cb1-106"><a href="#cb1-106"></a></span>
-<span id="cb1-107"><a href="#cb1-107"></a><span class="fu">### Benchmarks as Signaling and the Market for Lemons {#sec-benchmark-signaling}</span></span>
-<span id="cb1-108"><a href="#cb1-108"></a></span>
-<span id="cb1-109"><a href="#cb1-109"></a>Why should adopters and investors---parties who never train a model---rely on benchmarks at all? Because a benchmark is a *certification technology* that reduces an information asymmetry. The buyer cannot directly observe a model's quality before deploying it; the seller can. This is precisely @akerlof1970market's market for lemons: absent a credible quality signal, buyers rationally discount all sellers toward the average, and high-quality producers are driven out. A trustworthy benchmark is the device that lets a high-quality model *separate* itself---the AI analogue of @spence1973job's job-market signaling.</span>
-<span id="cb1-110"><a href="#cb1-110"></a></span>
-<span id="cb1-111"><a href="#cb1-111"></a>This framing does real work in the chapter:</span>
-<span id="cb1-112"><a href="#cb1-112"></a></span>
-<span id="cb1-113"><a href="#cb1-113"></a><span class="ss">- </span>It explains the adopter and investor rows of @tbl-actors without hand-waving: both are *receivers* in a signaling game, differing only in the decision they take.</span>
-<span id="cb1-114"><a href="#cb1-114"></a><span class="ss">- </span>It makes the cost of gaming precise. Gaming works by making the *cheap* signal (a tuned benchmark score) imitate the *expensive* one (genuine capability). When gaming is cheap relative to real improvement, the separating equilibrium collapses back to pooling---and the benchmark stops carrying information for *all* downstream audiences, even though it may still be locally useful to guide a builder's own research.</span>
-<span id="cb1-115"><a href="#cb1-115"></a><span class="ss">- </span>It connects directly to @sec-design: the design levers there (randomization, correction, holdout, welfare-aligned metrics) are all attempts to *raise the cost of the cheap signal* until separation is restored.</span>
-<span id="cb1-116"><a href="#cb1-116"></a></span>
-<span id="cb1-117"><a href="#cb1-117"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-118"><a href="#cb1-118"></a><span class="co">#| label: signal-decoupling</span></span>
-<span id="cb1-119"><a href="#cb1-119"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-120"><a href="#cb1-120"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-121"><a href="#cb1-121"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-122"><a href="#cb1-122"></a></span>
-<span id="cb1-123"><a href="#cb1-123"></a><span class="kw">def</span> spearman(a, b):</span>
-<span id="cb1-124"><a href="#cb1-124"></a>    <span class="co"># Spearman rank correlation = Pearson correlation of the ranks.</span></span>
-<span id="cb1-125"><a href="#cb1-125"></a>    ra, rb <span class="op">=</span> np.argsort(np.argsort(a)), np.argsort(np.argsort(b))</span>
-<span id="cb1-126"><a href="#cb1-126"></a>    <span class="cf">return</span> np.corrcoef(ra, rb)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-127"><a href="#cb1-127"></a></span>
-<span id="cb1-128"><a href="#cb1-128"></a>np.random.seed(<span class="dv">0</span>)</span>
-<span id="cb1-129"><a href="#cb1-129"></a></span>
-<span id="cb1-130"><a href="#cb1-130"></a><span class="co"># A simple illustration of the chapter's thesis:</span></span>
-<span id="cb1-131"><a href="#cb1-131"></a><span class="co"># as "gaming" becomes cheaper, the benchmark decouples from true utility.</span></span>
-<span id="cb1-132"><a href="#cb1-132"></a>M <span class="op">=</span> <span class="dv">200</span>                                   <span class="co"># number of models</span></span>
-<span id="cb1-133"><a href="#cb1-133"></a>true_utility <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)  <span class="co"># what society actually cares about</span></span>
-<span id="cb1-134"><a href="#cb1-134"></a></span>
-<span id="cb1-135"><a href="#cb1-135"></a>gaming_strengths <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="fl">3.0</span>, <span class="dv">25</span>)  <span class="co"># how much a model can boost its score by gaming</span></span>
-<span id="cb1-136"><a href="#cb1-136"></a>noise <span class="op">=</span> <span class="fl">0.3</span></span>
-<span id="cb1-137"><a href="#cb1-137"></a>corrs <span class="op">=</span> []</span>
-<span id="cb1-138"><a href="#cb1-138"></a><span class="cf">for</span> g <span class="kw">in</span> gaming_strengths:</span>
-<span id="cb1-139"><a href="#cb1-139"></a>    gaming_effort <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, M)     <span class="co"># heterogeneous propensity to game</span></span>
-<span id="cb1-140"><a href="#cb1-140"></a>    bench <span class="op">=</span> true_utility <span class="op">+</span> g <span class="op">*</span> gaming_effort <span class="op">+</span> np.random.normal(<span class="dv">0</span>, noise, M)</span>
-<span id="cb1-141"><a href="#cb1-141"></a>    corrs.append(spearman(bench, true_utility))</span>
-<span id="cb1-142"><a href="#cb1-142"></a></span>
-<span id="cb1-143"><a href="#cb1-143"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="fl">3.5</span>, <span class="fl">2.6</span>))</span>
-<span id="cb1-144"><a href="#cb1-144"></a>ax.plot(gaming_strengths, corrs, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, lw<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb1-145"><a href="#cb1-145"></a>ax.axhline(<span class="fl">1.0</span>, color<span class="op">=</span><span class="st">'#888888'</span>, ls<span class="op">=</span><span class="st">':'</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-146"><a href="#cb1-146"></a>ax.set_xlabel(<span class="st">'Gaming strength (cheapness of the proxy)'</span>)</span>
-<span id="cb1-147"><a href="#cb1-147"></a>ax.set_ylabel(<span class="st">"Benchmark–utility rank corr."</span>)</span>
-<span id="cb1-148"><a href="#cb1-148"></a>ax.set_title(<span class="st">'Decoupling under gaming'</span>)</span>
-<span id="cb1-149"><a href="#cb1-149"></a>ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span>
-<span id="cb1-150"><a href="#cb1-150"></a>plt.tight_layout()</span>
-<span id="cb1-151"><a href="#cb1-151"></a>plt.show()</span>
-<span id="cb1-152"><a href="#cb1-152"></a><span class="in">```</span></span>
-<span id="cb1-153"><a href="#cb1-153"></a></span>
-<span id="cb1-154"><a href="#cb1-154"></a>**Figure.** A deliberately simple illustration of the thesis: each model's benchmark score is its true utility plus a gaming term plus noise. As gaming becomes cheaper (x-axis), the rank correlation between the benchmark and true utility decays---the metric *decouples* from what downstream audiences care about. *(TODO: replace with a proper separating-vs-pooling signaling figure to make the Spence connection explicit.)*</span>
-<span id="cb1-155"><a href="#cb1-155"></a></span>
-<span id="cb1-156"><a href="#cb1-156"></a></span>
-<span id="cb1-157"><a href="#cb1-157"></a><span class="fu">## A Taxonomy of Gaming {#sec-gaming-taxonomy}</span></span>
-<span id="cb1-158"><a href="#cb1-158"></a></span>
-<span id="cb1-159"><a href="#cb1-159"></a>The single most important organizing decision for this chapter is to classify gaming **by mechanism, not by anecdote**. Two episodes that look different in the press (a contaminated math benchmark, a leaderboard scandal) may exploit the same channel---or the same-looking episodes may exploit different channels that need different defenses. We split the taxonomy by *who is gaming whom*.</span>
-<span id="cb1-160"><a href="#cb1-160"></a></span>
-<span id="cb1-161"><a href="#cb1-161"></a><span class="fu">### Builders Game the Metric {#sec-builder-gaming}</span></span>
-<span id="cb1-162"><a href="#cb1-162"></a></span>
-<span id="cb1-163"><a href="#cb1-163"></a>This is the direction modeled formally in @sec-evaluation-game. Each sub-type names a distinct exploitable channel:</span>
-<span id="cb1-164"><a href="#cb1-164"></a></span>
-<span id="cb1-165"><a href="#cb1-165"></a><span class="ss">1. </span>**Contamination / memorization.** Training data includes (or overlaps) evaluation items, so the benchmark measures recall rather than capability. Concrete: the OpenLLM Leaderboard's eventual archival amid contamination and overfitting concerns <span class="co">[</span><span class="ot">@myrzakhan2024openllmleaderboard</span><span class="co">]</span>; clean evidence from holdout re-tests such as the GSM1k re-examination of grade-school arithmetic <span class="co">[</span><span class="ot">@zhang2024careful</span><span class="co">]</span>; and detection methods such as black-box contamination proofs <span class="co">[</span><span class="ot">@oren2023proving</span><span class="co">]</span>. *Channel: the test items are public text that leaks into pretraining.*</span>
-<span id="cb1-166"><a href="#cb1-166"></a><span class="ss">2. </span>**Adaptive overfitting via repeated querying.** Even without seeing the test items, repeated submissions against a fixed holdout let a builder overfit the leaderboard. This is the failure the Ladder mechanism and reusable-holdout techniques were designed to bound <span class="co">[</span><span class="ot">@blum2015ladder</span><span class="co">]</span>. *Channel: information leaks through the score itself across rounds (@sec-restoring-alignment).*</span>
-<span id="cb1-167"><a href="#cb1-167"></a><span class="ss">3. </span>**Strategic submission and selection.** A builder deploys models tuned for the queries a platform tends to surface, or selectively reports favorable runs. *(TODO: cite the Llama-4 Chatbot Arena episode [@singh2025leaderboard] and the Terminal-Bench case once the references are settled.)* *Channel: the builder learns and targets the evaluation distribution.*</span>
-<span id="cb1-168"><a href="#cb1-168"></a><span class="ss">4. </span>**Strategic post-training.** Ranking-aware fine-tuning shifts a model up a leaderboard without broad capability gains. *(TODO: cite "Model Rankings under Strategic Post-Training," `strategicposttraining2026`---verify authors/venue.)* *Channel: optimization directed at the rank statistic rather than the construct.*</span>
-<span id="cb1-169"><a href="#cb1-169"></a><span class="ss">5. </span>**Sandbagging (the inverse).** When the audience is a *regulator*, the incentive flips: a developer (or a model) may *underperform* on a dangerous-capability evaluation to appear safe [@vanderweij2024sandbagging]. This is why government-facing evaluations need different safeguards than capability leaderboards; see the frontier dangerous-capability evaluation program of @phuong2024evaluating and the red-teaming methodology of @sec-redteaming. *Channel: strategic concealment rather than strategic exaggeration.*</span>
-<span id="cb1-170"><a href="#cb1-170"></a></span>
-<span id="cb1-171"><a href="#cb1-171"></a><span class="fu">### Evaluators Game the Audience {#sec-evaluator-gaming}</span></span>
-<span id="cb1-172"><a href="#cb1-172"></a></span>
-<span id="cb1-173"><a href="#cb1-173"></a>This is the direction the formal game of @sec-design does **not** yet model, and it is the chapter's novel thread. Once a benchmark provider has commercial or reputational incentives, the provider is itself a strategic player:</span>
-<span id="cb1-174"><a href="#cb1-174"></a></span>
-<span id="cb1-175"><a href="#cb1-175"></a><span class="ss">- </span>**Selective disclosure / pay-to-play.** Privileged providers obtain more matches, private pre-testing, or the ability to retract unfavorable results---asymmetries documented in the Chatbot Arena analysis of @singh2025leaderboard <span class="co">[</span><span class="ot">see also @chiang2024chatbotarena for the platform</span><span class="co">]</span>. *Channel: the evaluator controls what the audience sees.*</span>
-<span id="cb1-176"><a href="#cb1-176"></a><span class="ss">- </span>**Conflicts of interest.** A platform that ranks models while also building or investing in one of them has an incentive to tilt the playing field.</span>
-<span id="cb1-177"><a href="#cb1-177"></a><span class="ss">- </span>**Market structure.** Why is trustworthy third-party evaluation hard to sustain as a business? The economics of the eval market---who pays, and whether the payer wants an honest signal---explain the recurring failure of independent eval startups <span class="co">[</span><span class="ot">@liao2025evalstartups</span><span class="co">]</span>. This is a *governance* observation: the party best positioned to certify quality is often the party with the least incentive to do so honestly.</span>
-<span id="cb1-178"><a href="#cb1-178"></a></span>
-<span id="cb1-179"><a href="#cb1-179"></a>::: {.callout-note title="Why this split matters"}</span>
-<span id="cb1-180"><a href="#cb1-180"></a>Every defense in @sec-design assumes a benevolent evaluator and targets *builder-side* gaming. The evaluator-side failures of @sec-evaluator-gaming are therefore **largely unaddressed by current mechanism design**---they are an open frontier (@sec-governance-frontier). Naming them as a separate direction is what keeps this chapter an argument rather than a list.</span>
-<span id="cb1-181"><a href="#cb1-181"></a>:::</span>
-<span id="cb1-182"><a href="#cb1-182"></a></span>
-<span id="cb1-183"><a href="#cb1-183"></a></span>
-<span id="cb1-184"><a href="#cb1-184"></a><span class="fu">## The Gaming-Channel / Design-Lever Map {#sec-gaming-defense-map}</span></span>
-<span id="cb1-185"><a href="#cb1-185"></a></span>
-<span id="cb1-186"><a href="#cb1-186"></a>This table is the spine that ties diagnosis (this chapter) to design (@sec-design). Each gaming channel from @sec-gaming-taxonomy is closed---or left open---by a specific lever. The unclosed cells *are* the chapter's research agenda.</span>
-<span id="cb1-187"><a href="#cb1-187"></a></span>
-<span id="cb1-188"><a href="#cb1-188"></a><span class="pp">|</span> Gaming channel <span class="pp">|</span> Section <span class="pp">|</span> Design lever <span class="pp">|</span> Where developed <span class="pp">|</span></span>
-<span id="cb1-189"><a href="#cb1-189"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb1-190"><a href="#cb1-190"></a><span class="pp">|</span> Contamination / memorization <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Randomize &amp; refresh tasks; live benchmarks <span class="pp">|</span> @sec-one-shot-alignment; <span class="co">[</span><span class="ot">@white2025livebench; @jain2024livecodebench</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-191"><a href="#cb1-191"></a><span class="pp">|</span> Adaptive overfitting (repeated querying) <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Noise-gated holdout; differential privacy <span class="pp">|</span> @sec-holdout <span class="pp">|</span></span>
-<span id="cb1-192"><a href="#cb1-192"></a><span class="pp">|</span> Learning the evaluation distribution <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Distribution correction toward uniform <span class="pp">|</span> @sec-distribution-correction <span class="pp">|</span></span>
-<span id="cb1-193"><a href="#cb1-193"></a><span class="pp">|</span> Rank-targeted / metric gaming <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Welfare-aligned (counterfactual) metrics <span class="pp">|</span> @sec-metric-design <span class="pp">|</span></span>
-<span id="cb1-194"><a href="#cb1-194"></a><span class="pp">|</span> Sandbagging on safety evals <span class="pp">|</span> @sec-builder-gaming <span class="pp">|</span> Adversarial / red-team elicitation <span class="pp">|</span> @sec-redteaming <span class="pp">|</span></span>
-<span id="cb1-195"><a href="#cb1-195"></a><span class="pp">|</span> **Selective disclosure, pay-to-play** <span class="pp">|</span> @sec-evaluator-gaming <span class="pp">|</span> *(open)* audit, transparency, conflict rules <span class="pp">|</span> @sec-governance-frontier <span class="pp">|</span></span>
-<span id="cb1-196"><a href="#cb1-196"></a><span class="pp">|</span> **Evaluator conflicts of interest** <span class="pp">|</span> @sec-evaluator-gaming <span class="pp">|</span> *(open)* institutional separation <span class="pp">|</span> @sec-multi-principal <span class="pp">|</span></span>
-<span id="cb1-197"><a href="#cb1-197"></a></span>
-<span id="cb1-198"><a href="#cb1-198"></a>: Mapping each gaming channel to its design lever. Bold rows are evaluator-side failures not yet covered by the formal game. {#tbl-gaming-defense}</span>
-<span id="cb1-199"><a href="#cb1-199"></a></span>
-<span id="cb1-200"><a href="#cb1-200"></a>A practical reading of @tbl-gaming-defense: the builder-side rows are well-served by the mechanisms of @sec-design-principles, while the evaluator-side rows require *governance* rather than *mechanism design*---rules about who may run a benchmark, what they must disclose, and who audits them.</span>
-<span id="cb1-201"><a href="#cb1-201"></a></span>
-<span id="cb1-202"><a href="#cb1-202"></a></span>
-<span id="cb1-203"><a href="#cb1-203"></a><span class="fu">## The Governance Frontier {#sec-governance-frontier}</span></span>
-<span id="cb1-204"><a href="#cb1-204"></a></span>
-<span id="cb1-205"><a href="#cb1-205"></a>The remaining sections promote the chapter's hardest questions to first-class topics. These are genuinely open; we mark them as such.</span>
-<span id="cb1-206"><a href="#cb1-206"></a></span>
-<span id="cb1-207"><a href="#cb1-207"></a><span class="fu">### Multi-Principal Evaluation and the Strategic Evaluator {#sec-multi-principal}</span></span>
-<span id="cb1-208"><a href="#cb1-208"></a></span>
-<span id="cb1-209"><a href="#cb1-209"></a>The formal game of @sec-evaluation-game has one evaluator and one builder, with the evaluator acting as a benevolent social planner. The ecosystem of @tbl-actors has *many* principals with conflicting objectives, and an evaluator who may itself be strategic. Open questions:</span>
-<span id="cb1-210"><a href="#cb1-210"></a></span>
-<span id="cb1-211"><a href="#cb1-211"></a><span class="ss">- </span>**What is the right model of an evaluator with its own utility?** If the evaluator maximizes traffic or favors an affiliated model, what mechanism keeps its published ranking informative? (This is Discussion Question 1 of @sec-design, promoted here to a research direction.)</span>
-<span id="cb1-212"><a href="#cb1-212"></a><span class="ss">- </span>**What is a model of adopter and government behavior?** Both are receivers in the signaling game of @sec-benchmark-signaling, but with different loss functions and different abilities to audit. A formal account would let us ask which guarantees a benchmark must offer each.</span>
-<span id="cb1-213"><a href="#cb1-213"></a><span class="ss">- </span>**Who watches the watchers?** Independent audit, reproducible evaluation infrastructure <span class="co">[</span><span class="ot">@biderman2024lessons</span><span class="co">]</span>, and conflict-of-interest rules are the institutional analogues of the technical levers in @sec-design.</span>
-<span id="cb1-214"><a href="#cb1-214"></a></span>
-<span id="cb1-215"><a href="#cb1-215"></a><span class="fu">### The Role of Open-Source Models {#sec-open-source}</span></span>
-<span id="cb1-216"><a href="#cb1-216"></a></span>
-<span id="cb1-217"><a href="#cb1-217"></a>Open weights change the governance calculus in both directions, and it is worth stating the tension plainly:</span>
-<span id="cb1-218"><a href="#cb1-218"></a></span>
-<span id="cb1-219"><a href="#cb1-219"></a><span class="ss">- </span>**For trust:** open weights enable independent third-party auditing, reproducible evaluation, and inspection that closed APIs preclude.</span>
-<span id="cb1-220"><a href="#cb1-220"></a><span class="ss">- </span>**Against trust:** open weights make contamination and targeted gaming *easier*, since the model can be fine-tuned directly against any public benchmark.</span>
-<span id="cb1-221"><a href="#cb1-221"></a></span>
-<span id="cb1-222"><a href="#cb1-222"></a>*(TODO: take a position here, and connect to the public/private benchmark work---the public version supports open auditing while a private holdout preserves an incentive-compatible signal. Add the citation for that paper once it has a key; `truong2025strategic` covers the private-benchmark design.)*</span>
-<span id="cb1-223"><a href="#cb1-223"></a></span>
-<span id="cb1-224"><a href="#cb1-224"></a><span class="fu">### Organizing for Trustworthy Evaluation {#sec-organizing}</span></span>
-<span id="cb1-225"><a href="#cb1-225"></a></span>
-<span id="cb1-226"><a href="#cb1-226"></a>A closing, deliberately normative section: how should the research community organize a future in which capable AI is evaluated in ways that serve all of its audiences, not just its builders? *(TODO: this is the "intelligence serves all" theme---write the vision to leave the reader with, and connect it back to the predictive-evaluation half of the book.)*</span>
-<span id="cb1-227"><a href="#cb1-227"></a></span>
-<span id="cb1-228"><a href="#cb1-228"></a></span>
-<span id="cb1-229"><a href="#cb1-229"></a><span class="fu">## Discussion Questions {#sec-ecosystem-discussion}</span></span>
-<span id="cb1-230"><a href="#cb1-230"></a></span>
-<span id="cb1-231"><a href="#cb1-231"></a><span class="ss">1. </span>The market-for-lemons framing (@sec-benchmark-signaling) predicts that high-quality models exit when no credible signal exists. Has the *opposite* been observed---a credible benchmark causing a flight to quality? What made it credible?</span>
-<span id="cb1-232"><a href="#cb1-232"></a><span class="ss">2. </span>@tbl-gaming-defense leaves the evaluator-side rows open. Sketch a mechanism (technical or institutional) that would make selective disclosure costly for a platform.</span>
-<span id="cb1-233"><a href="#cb1-233"></a><span class="ss">3. </span>Sandbagging (@sec-builder-gaming) inverts the usual gaming direction. Does *any* of the design machinery in @sec-design help against strategic *under*-performance, or is it fundamentally a red-teaming problem (@sec-redteaming)?</span>
-<span id="cb1-234"><a href="#cb1-234"></a><span class="ss">4. </span>Adopters and investors consume the same number but take different decisions. Should a benchmark report *different* statistics to different audiences, and does that reintroduce the garbling problem of @sec-metric-design?</span>
-<span id="cb1-235"><a href="#cb1-235"></a><span class="ss">5. </span>Argue both sides of @sec-open-source: does open-sourcing models make the evaluation ecosystem more or less trustworthy on net?</span>
-<span id="cb1-236"><a href="#cb1-236"></a><span class="ss">6. </span>The Kaggle era had a benevolent evaluator who *owned the test set* and *controlled submission*. List the structural features of the LLM era that break this, and rank them by how much damage each does.</span>
-<span id="cb1-237"><a href="#cb1-237"></a></span>
-<span id="cb1-238"><a href="#cb1-238"></a></span>
-<span id="cb1-239"><a href="#cb1-239"></a><span class="fu">## Bibliographic Notes {#sec-ecosystem-biblio}</span></span>
-<span id="cb1-240"><a href="#cb1-240"></a></span>
-<span id="cb1-241"><a href="#cb1-241"></a>**Goodhart's Law and its variants** are treated formally in @sec-goodhart <span class="co">[</span><span class="ot">@goodhart1984problems; @manheim2018categorizing</span><span class="co">]</span>; the strategic-classification and performative-prediction foundations are @hardt2016strategic and @perdomo2020performative.</span>
-<span id="cb1-242"><a href="#cb1-242"></a></span>
-<span id="cb1-243"><a href="#cb1-243"></a>**Signaling and information economics.** The market-for-lemons and signaling framing is @akerlof1970market and @spence1973job. The information-design view of disclosure is developed in @sec-design via @kamenica2011bayesian.</span>
-<span id="cb1-244"><a href="#cb1-244"></a></span>
-<span id="cb1-245"><a href="#cb1-245"></a>**Gaming in the wild.** Leaderboard-platform asymmetries are analyzed by @singh2025leaderboard <span class="co">[</span><span class="ot">platform background: @chiang2024chatbotarena</span><span class="co">]</span>; contamination evidence and detection by @zhang2024careful and @oren2023proving; the OpenLLM Leaderboard's archival by @myrzakhan2024openllmleaderboard. Contamination-resistant "live" benchmarks include @white2025livebench and @jain2024livecodebench. Sandbagging and dangerous-capability evaluation are @vanderweij2024sandbagging and @phuong2024evaluating. The construct-validity critique of general benchmarks is @raji2021everything. The economics of the eval market is discussed by @liao2025evalstartups.</span>
-<span id="cb1-246"><a href="#cb1-246"></a></span>
-<span id="cb1-247"><a href="#cb1-247"></a>**Design levers** for every channel in @tbl-gaming-defense are developed in @sec-design <span class="co">[</span><span class="ot">@truong2025strategic; @blum2015ladder; @procaccia2025metritocracy</span><span class="co">]</span>. Reproducible evaluation infrastructure is @biderman2024lessons.</span>
-<span id="cb1-248"><a href="#cb1-248"></a></span>
-<span id="cb1-249"><a href="#cb1-249"></a></span>
-<span id="cb1-250"><a href="#cb1-250"></a><span class="fu">## Exercises {#sec-ecosystem-exercises}</span></span>
-<span id="cb1-251"><a href="#cb1-251"></a></span>
-<span id="cb1-252"><a href="#cb1-252"></a><span class="ss">1. </span>**(Easy)** Fill in @tbl-actors for a familiar benchmark: for each actor, name the concrete decision and the concrete distortion.</span>
-<span id="cb1-253"><a href="#cb1-253"></a><span class="ss">2. </span>**(Easy)** Modify the decoupling simulation (@sec-benchmark-signaling) so that gaming effort is correlated with low true utility (the worst models game hardest). How does the decoupling curve change?</span>
-<span id="cb1-254"><a href="#cb1-254"></a><span class="ss">3. </span>**(Medium)** Formalize a one-shot signaling game between a builder (high- or low-quality) and an adopter, where a benchmark score is a costly signal. Derive the condition on gaming cost under which a separating equilibrium exists, and relate it to the design levers of @sec-design.</span>
-<span id="cb1-255"><a href="#cb1-255"></a><span class="ss">4. </span>**(Medium)** Pick one bold (evaluator-side) row of @tbl-gaming-defense and write a half-page design proposal that would move it from *open* to *closed*.</span>
-<span id="cb1-256"><a href="#cb1-256"></a><span class="ss">5. </span>**(Hard)** Extend the Stackelberg game of @sec-evaluation-game to a *strategic* evaluator whose utility is a convex combination of social welfare and own-traffic. Characterize when the evaluator's optimal mechanism still incentivizes broad builder capability.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap10.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
+<script>
 // Auto-execute all pyodide cells after initialization
 document.addEventListener('DOMContentLoaded', function() {
   function waitForPyodide() {

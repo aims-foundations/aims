@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -89,20 +54,17 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../src/chap10.html" rel="next">
 <link href="../src/chap8.html" rel="prev">
+<link href="../resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -117,7 +79,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -535,176 +496,18 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -713,18 +516,57 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="../index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -739,7 +581,23 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span id="sec-causality" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intervention</span></span></h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -830,13 +688,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
@@ -847,9 +705,7 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>license.qmd</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -895,11 +751,10 @@ window.Quarto = {
   <li><a href="#sec-causality-exercises" id="toc-sec-causality-exercises" class="nav-link" data-scroll-target="#sec-causality-exercises"><span class="header-section-number">9.9</span> Exercises</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap9.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
 <script type="module" id="qpyodide-monaco-editor-init">
 
@@ -911,23 +766,7 @@ window.Quarto = {
   });
 </script>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-causality" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Intervention</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
@@ -1439,8 +1278,6 @@ P^{(t)}(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha
 </ol>
 
 
-<!-- -->
-
 </section>
 <section id="bibliography" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>
@@ -1491,21 +1328,103 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1574,57 +1493,6 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -1966,900 +1834,9 @@ Vovk, Vladimir, Alex Gammerman, and Glenn Shafer. 2005. <em>Algorithmic Learning
         <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Ecosystem</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">format:</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">  html:</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    include-after-body:</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">      text: |</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">        &lt;script&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">        // Auto-execute all pyodide cells after initialization</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">        document.addEventListener('DOMContentLoaded', function() {</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">          function waitForPyodide() {</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">            if (typeof globalThis.mainPyodide !== 'undefined' &amp;&amp; globalThis.mainPyodide) {</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co">              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">                globalThis.qpyodideCellDetails.forEach((cell, index) =&gt; {</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">                  if (cell.options &amp;&amp; cell.options.autorun === 'true') {</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">                    setTimeout(() =&gt; {</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co">                      if (runButton &amp;&amp; !runButton.disabled) {</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co">                        runButton.click();</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="co">                      }</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="co">                    }, index * 1000);</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="co">                  }</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="co">                });</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="co">              }</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a><span class="co">            } else {</span></span>
-<span id="cb1-24"><a href="#cb1-24"></a><span class="co">              setTimeout(waitForPyodide, 500);</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a><span class="co">            }</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a><span class="co">          }</span></span>
-<span id="cb1-27"><a href="#cb1-27"></a><span class="co">          setTimeout(waitForPyodide, 2000);</span></span>
-<span id="cb1-28"><a href="#cb1-28"></a><span class="co">        });</span></span>
-<span id="cb1-29"><a href="#cb1-29"></a><span class="co">        &lt;/script&gt;</span></span>
-<span id="cb1-30"><a href="#cb1-30"></a><span class="an">filters:</span></span>
-<span id="cb1-31"><a href="#cb1-31"></a><span class="co">  - pyodide</span></span>
-<span id="cb1-32"><a href="#cb1-32"></a><span class="an">pyodide:</span></span>
-<span id="cb1-33"><a href="#cb1-33"></a><span class="co">  packages:</span></span>
-<span id="cb1-34"><a href="#cb1-34"></a><span class="co">    - numpy</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a><span class="co">    - matplotlib</span></span>
-<span id="cb1-36"><a href="#cb1-36"></a><span class="co">    - scipy</span></span>
-<span id="cb1-37"><a href="#cb1-37"></a><span class="co">---</span></span>
-<span id="cb1-38"><a href="#cb1-38"></a></span>
-<span id="cb1-39"><a href="#cb1-39"></a><span class="fu"># Intervention {#sec-causality}</span></span>
-<span id="cb1-40"><a href="#cb1-40"></a></span>
-<span id="cb1-41"><a href="#cb1-41"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb1-42"><a href="#cb1-42"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb1-43"><a href="#cb1-43"></a></span>
-<span id="cb1-44"><a href="#cb1-44"></a><span class="ss">1. </span>**Formulate** causal models for AI evaluation and distinguish causal from associational claims about benchmark performance.</span>
-<span id="cb1-45"><a href="#cb1-45"></a><span class="ss">2. </span>**Apply** structural causal models (SCMs) to represent the data-generating process behind evaluation data, including the roles of training data, model architecture, and benchmark design.</span>
-<span id="cb1-46"><a href="#cb1-46"></a><span class="ss">3. </span>**Identify** when distribution shift---between training, calibration, and deployment populations---threatens the validity of evaluation conclusions, and characterize shift types (covariate, label, concept).</span>
-<span id="cb1-47"><a href="#cb1-47"></a><span class="ss">4. </span>**Use** interventional and counterfactual reasoning to diagnose construct-irrelevant variance: does the benchmark score change because ability changed, or because something else did?</span>
-<span id="cb1-48"><a href="#cb1-48"></a><span class="ss">5. </span>**Explain** the connection between Borsboom's causal theory of validity and modern causal inference: a benchmark is valid if and only if the target construct causally produces variation in scores.</span>
-<span id="cb1-49"><a href="#cb1-49"></a><span class="ss">6. </span>**Apply** doubly robust estimation to correct for selection bias in adaptive and non-representative evaluations, connecting importance weighting, model-based imputation, and prediction-powered inference.</span>
-<span id="cb1-50"><a href="#cb1-50"></a><span class="ss">7. </span>**Evaluate** when benchmark results generalize across deployment contexts and when they do not, using transportability criteria and conformal inference.</span>
-<span id="cb1-51"><a href="#cb1-51"></a>:::</span>
-<span id="cb1-52"><a href="#cb1-52"></a></span>
-<span id="cb1-53"><a href="#cb1-53"></a>::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}</span>
-<span id="cb1-54"><a href="#cb1-54"></a>This chapter can be covered in **3 lectures** (75-90 minutes each):</span>
-<span id="cb1-55"><a href="#cb1-55"></a></span>
-<span id="cb1-56"><a href="#cb1-56"></a>**Lecture 1: Causal Models for Evaluation**</span>
-<span id="cb1-57"><a href="#cb1-57"></a></span>
-<span id="cb1-58"><a href="#cb1-58"></a><span class="ss">- </span>From correlation to causation in benchmark scores (20 min)</span>
-<span id="cb1-59"><a href="#cb1-59"></a><span class="ss">- </span>Structural causal models and the evaluation DAG (25 min)</span>
-<span id="cb1-60"><a href="#cb1-60"></a><span class="ss">- </span>Interventional reasoning: diagnosing contamination and CIV (20 min)</span>
-<span id="cb1-61"><a href="#cb1-61"></a><span class="ss">- </span>Borsboom's causal validity revisited (10 min)</span>
-<span id="cb1-62"><a href="#cb1-62"></a></span>
-<span id="cb1-63"><a href="#cb1-63"></a>**Lecture 2: Distribution Shift and Transportability**</span>
-<span id="cb1-64"><a href="#cb1-64"></a></span>
-<span id="cb1-65"><a href="#cb1-65"></a><span class="ss">- </span>Types of distribution shift: covariate, label, concept (20 min)</span>
-<span id="cb1-66"><a href="#cb1-66"></a><span class="ss">- </span>When do benchmark results generalize? Transportability (25 min)</span>
-<span id="cb1-67"><a href="#cb1-67"></a><span class="ss">- </span>The evaluation-as-bandit framing (20 min)</span>
-<span id="cb1-68"><a href="#cb1-68"></a><span class="ss">- </span>Hands-on: shift visualization (10 min)</span>
-<span id="cb1-69"><a href="#cb1-69"></a></span>
-<span id="cb1-70"><a href="#cb1-70"></a>**Lecture 3: Robust Estimation and Conformal Prediction**</span>
-<span id="cb1-71"><a href="#cb1-71"></a></span>
-<span id="cb1-72"><a href="#cb1-72"></a><span class="ss">- </span>Three estimators: DM, IPW, doubly robust (25 min)</span>
-<span id="cb1-73"><a href="#cb1-73"></a><span class="ss">- </span>Connection to prediction-powered inference (15 min)</span>
-<span id="cb1-74"><a href="#cb1-74"></a><span class="ss">- </span>Conformal prediction under distribution shift (20 min)</span>
-<span id="cb1-75"><a href="#cb1-75"></a><span class="ss">- </span>Hands-on: DR estimation and weighted conformal (15 min)</span>
-<span id="cb1-76"><a href="#cb1-76"></a>:::</span>
-<span id="cb1-77"><a href="#cb1-77"></a></span>
-<span id="cb1-78"><a href="#cb1-78"></a>::: {.callout-note title="Notation"}</span>
-<span id="cb1-79"><a href="#cb1-79"></a>This chapter introduces causal and distributional notation: $\text{do}(X=x)$ (intervention), $P^{(s)}/P^{(t)}$ (source/target distributions), $\pi_0/\pi$ (logging/target policies), $w(x)$ (importance weights), $\hat{V}_{\text{DR}}$ (doubly robust estimator), and $C_\alpha(x)$ (conformal prediction sets). See the <span class="co">[</span><span class="ot">notation appendix</span><span class="co">](notation.qmd)</span> for the complete notation reference.</span>
-<span id="cb1-80"><a href="#cb1-80"></a>:::</span>
-<span id="cb1-81"><a href="#cb1-81"></a></span>
-<span id="cb1-82"><a href="#cb1-82"></a></span>
-<span id="cb1-83"><a href="#cb1-83"></a><span class="fu">## From Association to Causation in Benchmark Scores {#sec-association-causation}</span></span>
-<span id="cb1-84"><a href="#cb1-84"></a></span>
-<span id="cb1-85"><a href="#cb1-85"></a>Model A outperforms Model B on a popular reasoning benchmark. What can we conclude? The association is clear: $\mathbb{E}<span class="co">[</span><span class="ot">Y \mid \text{Model} = A</span><span class="co">]</span> &gt; \mathbb{E}<span class="co">[</span><span class="ot">Y \mid \text{Model} = B</span><span class="co">]</span>$. But does this mean Model A has greater reasoning ability? Or did Model A's training data happen to include problems similar to the benchmark items, giving it a memorization advantage that has nothing to do with reasoning?</span>
-<span id="cb1-86"><a href="#cb1-86"></a></span>
-<span id="cb1-87"><a href="#cb1-87"></a>This distinction---between associational and causal claims---is the central concern of this chapter. In @sec-foundations, we introduced Borsboom's realist definition of validity: a test is valid for measuring an attribute if and only if (a) the attribute exists and (b) variation in the attribute *causally produces* variation in test scores [@borsboom2005measuring]. In @sec-validity, we developed the practical implications of this definition through content, criterion, construct, external, and consequential validity. This chapter provides the *formal causal machinery* to make these ideas precise.</span>
-<span id="cb1-88"><a href="#cb1-88"></a></span>
-<span id="cb1-89"><a href="#cb1-89"></a><span class="fu">### The Causal Hierarchy {#sec-causal-hierarchy}</span></span>
-<span id="cb1-90"><a href="#cb1-90"></a></span>
-<span id="cb1-91"><a href="#cb1-91"></a>@pearl2009causality distinguishes three levels of causal reasoning, each requiring progressively stronger assumptions:</span>
-<span id="cb1-92"><a href="#cb1-92"></a></span>
-<span id="cb1-93"><a href="#cb1-93"></a><span class="ss">1. </span>**Association** $P(Y \mid X)$: What does observing $X$ tell us about $Y$? *Example:* "Models with more parameters tend to score higher on MMLU." This is a correlation that could arise from many causal structures.</span>
-<span id="cb1-94"><a href="#cb1-94"></a></span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="ss">2. </span>**Intervention** $P(Y \mid \text{do}(X = x))$: What happens to $Y$ if we *set* $X$ to $x$, regardless of what would have occurred naturally? *Example:* "If we increase the context window from 4K to 128K tokens, does the reasoning score improve?" This requires knowing the causal structure, not just the joint distribution.</span>
-<span id="cb1-96"><a href="#cb1-96"></a></span>
-<span id="cb1-97"><a href="#cb1-97"></a><span class="ss">3. </span>**Counterfactual** $P(Y_x \mid X = x')$: What *would have happened* to $Y$ if $X$ had been $x$, given that we actually observed $X = x'$? *Example:* "Would this model have scored lower on the benchmark if its training data had not included the benchmark's source documents?" Counterfactuals reason about individual cases, not populations.</span>
-<span id="cb1-98"><a href="#cb1-98"></a></span>
-<span id="cb1-99"><a href="#cb1-99"></a>Most benchmark analyses operate at Level 1. A leaderboard reports $P(Y \mid \text{Model})$---the association between model identity and score. But the claims we want to make are at Level 2 or 3: "This model *has better reasoning ability*" is a causal claim about what produces the score.</span>
-<span id="cb1-100"><a href="#cb1-100"></a></span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="fu">### Structural Causal Models {#sec-scm}</span></span>
-<span id="cb1-102"><a href="#cb1-102"></a></span>
-<span id="cb1-103"><a href="#cb1-103"></a>A **Structural Causal Model** (SCM) provides the formal language for causal reasoning <span class="co">[</span><span class="ot">@pearl2009causality</span><span class="co">]</span>.</span>
-<span id="cb1-104"><a href="#cb1-104"></a></span>
-<span id="cb1-105"><a href="#cb1-105"></a>::: {.callout-note title="Definition: Structural Causal Model"}</span>
-<span id="cb1-106"><a href="#cb1-106"></a>An SCM is a tuple $\mathcal{M} = (U, V, F, P(U))$ where:</span>
-<span id="cb1-107"><a href="#cb1-107"></a></span>
-<span id="cb1-108"><a href="#cb1-108"></a><span class="ss">- </span>$U$ is a set of exogenous (background) variables</span>
-<span id="cb1-109"><a href="#cb1-109"></a><span class="ss">- </span>$V = <span class="sc">\{</span>V_1, \ldots, V_n<span class="sc">\}</span>$ is a set of endogenous variables</span>
-<span id="cb1-110"><a href="#cb1-110"></a><span class="ss">- </span>$F = <span class="sc">\{</span>f_1, \ldots, f_n<span class="sc">\}</span>$ is a set of structural equations, $V_i = f_i(\text{pa}(V_i), U_i)$, where $\text{pa}(V_i) \subseteq V \setminus <span class="sc">\{</span>V_i<span class="sc">\}</span>$</span>
-<span id="cb1-111"><a href="#cb1-111"></a><span class="ss">- </span>$P(U)$ is a distribution over exogenous variables</span>
-<span id="cb1-112"><a href="#cb1-112"></a></span>
-<span id="cb1-113"><a href="#cb1-113"></a>Each SCM induces a directed acyclic graph (DAG) where edges point from $\text{pa}(V_i)$ to $V_i$. The DAG encodes conditional independence structure: $V_i \perp<span class="sc">\!\!\!</span>\perp V_j \mid S$ if $S$ *d-separates* $V_i$ and $V_j$ in the DAG.</span>
-<span id="cb1-114"><a href="#cb1-114"></a>:::</span>
-<span id="cb1-115"><a href="#cb1-115"></a></span>
-<span id="cb1-116"><a href="#cb1-116"></a><span class="fu">### The Evaluation DAG {#sec-evaluation-dag}</span></span>
-<span id="cb1-117"><a href="#cb1-117"></a></span>
-<span id="cb1-118"><a href="#cb1-118"></a>We now construct an SCM for the AI evaluation process. The key endogenous variables are:</span>
-<span id="cb1-119"><a href="#cb1-119"></a></span>
-<span id="cb1-120"><a href="#cb1-120"></a><span class="ss">- </span>$D$: **Training data** (corpus composition, size, quality)</span>
-<span id="cb1-121"><a href="#cb1-121"></a><span class="ss">- </span>$A$: **Architecture** (transformer variant, parameter count, training recipe)</span>
-<span id="cb1-122"><a href="#cb1-122"></a><span class="ss">- </span>$\theta$: **Latent ability** (the construct the benchmark claims to measure)</span>
-<span id="cb1-123"><a href="#cb1-123"></a><span class="ss">- </span>$B$: **Benchmark design** (item pool, selection criteria, format)</span>
-<span id="cb1-124"><a href="#cb1-124"></a><span class="ss">- </span>$\beta$: **Item properties** (difficulty, discrimination, content)</span>
-<span id="cb1-125"><a href="#cb1-125"></a><span class="ss">- </span>$F$: **Formatting** (prompt template, few-shot examples, system prompt)</span>
-<span id="cb1-126"><a href="#cb1-126"></a><span class="ss">- </span>$Y$: **Observed score** (the benchmark outcome)</span>
-<span id="cb1-127"><a href="#cb1-127"></a></span>
-<span id="cb1-128"><a href="#cb1-128"></a>The causal structure is:</span>
-<span id="cb1-129"><a href="#cb1-129"></a></span>
-<span id="cb1-130"><a href="#cb1-130"></a>$$</span>
-<span id="cb1-131"><a href="#cb1-131"></a>D \to \theta, \quad A \to \theta, \quad \theta \to Y, \quad \beta \to Y, \quad B \to \beta, \quad F \to Y</span>
-<span id="cb1-132"><a href="#cb1-132"></a>$$</span>
-<span id="cb1-133"><a href="#cb1-133"></a></span>
-<span id="cb1-134"><a href="#cb1-134"></a>When the benchmark is *valid* in Borsboom's sense, the primary path from $D$ and $A$ to $Y$ passes through $\theta$: training data and architecture determine ability, and ability determines the score. The item properties $\beta$ moderate this relationship (harder items produce lower scores for the same ability), but do not confound it.</span>
-<span id="cb1-135"><a href="#cb1-135"></a></span>
-<span id="cb1-136"><a href="#cb1-136"></a>**Validity threats as DAG pathologies.** The threats identified in @sec-validity-threats correspond to specific DAG structures:</span>
-<span id="cb1-137"><a href="#cb1-137"></a></span>
-<span id="cb1-138"><a href="#cb1-138"></a><span class="ss">- </span>**Contamination** (@sec-contamination): A direct path $D \to Y$ that bypasses $\theta$. The model's training data includes benchmark items, so the score reflects memorization rather than ability. This is a *confounding* path that inflates the observed association between $\theta$ and $Y$.</span>
-<span id="cb1-139"><a href="#cb1-139"></a><span class="ss">- </span>**Construct-irrelevant variance** (@sec-civ): A path $F \to Y$ that does not pass through $\theta$. Prompt formatting affects the score independent of ability. This is an additional cause of $Y$ that is not part of the target construct.</span>
-<span id="cb1-140"><a href="#cb1-140"></a><span class="ss">- </span>**Differential item functioning** (@sec-dif-theory): An interaction $A \to Y$ that is not mediated by $\theta$. Certain architectures have advantages on certain items independent of their ability level.</span>
-<span id="cb1-141"><a href="#cb1-141"></a></span>
-<span id="cb1-142"><a href="#cb1-142"></a>::: {.callout-important title="Validity = No Unblocked Backdoor Paths"}</span>
-<span id="cb1-143"><a href="#cb1-143"></a>Under Borsboom's causal framework, a benchmark is valid if and only if the *only* systematic path from the data-generating process to the observed score passes through the target construct $\theta$. Every unblocked non-$\theta$ path is a validity threat. The diagnostic tools from @sec-validity-diagnostics — DIF analysis, dimensionality assessment, item-fit statistics — are empirical tests for whether such paths exist.</span>
-<span id="cb1-144"><a href="#cb1-144"></a>:::</span>
-<span id="cb1-145"><a href="#cb1-145"></a></span>
-<span id="cb1-146"><a href="#cb1-146"></a></span>
-<span id="cb1-147"><a href="#cb1-147"></a><span class="fu">## Interventional and Counterfactual Diagnostics {#sec-interventional-diagnostics}</span></span>
-<span id="cb1-148"><a href="#cb1-148"></a></span>
-<span id="cb1-149"><a href="#cb1-149"></a>The evaluation DAG from @sec-evaluation-dag allows us to reason about *interventions*---what happens when we deliberately change one variable while holding others fixed.</span>
-<span id="cb1-150"><a href="#cb1-150"></a></span>
-<span id="cb1-151"><a href="#cb1-151"></a><span class="fu">### The Back-Door Adjustment {#sec-backdoor}</span></span>
-<span id="cb1-152"><a href="#cb1-152"></a></span>
-<span id="cb1-153"><a href="#cb1-153"></a>The back-door criterion <span class="co">[</span><span class="ot">@pearl2009causality</span><span class="co">]</span> identifies when observational data suffices to estimate causal effects. A set of variables $Z$ satisfies the back-door criterion relative to an ordered pair $(X, Y)$ if: (i) no node in $Z$ is a descendant of $X$, and (ii) $Z$ blocks every path between $X$ and $Y$ that contains an arrow into $X$.</span>
-<span id="cb1-154"><a href="#cb1-154"></a></span>
-<span id="cb1-155"><a href="#cb1-155"></a>When the back-door criterion is satisfied:</span>
-<span id="cb1-156"><a href="#cb1-156"></a></span>
-<span id="cb1-157"><a href="#cb1-157"></a>$$</span>
-<span id="cb1-158"><a href="#cb1-158"></a>P(Y \mid \text{do}(X = x)) = \sum_z P(Y \mid X = x, Z = z) P(Z = z)</span>
-<span id="cb1-159"><a href="#cb1-159"></a>$$ {#eq-backdoor}</span>
-<span id="cb1-160"><a href="#cb1-160"></a></span>
-<span id="cb1-161"><a href="#cb1-161"></a>This *adjustment formula* removes confounding by averaging over the confounder distribution. For AI evaluation, this means: to estimate the causal effect of ability $\theta$ on score $Y$, we must adjust for all confounders---variables that cause both $\theta$ and $Y$ through non-$\theta$ paths.</span>
-<span id="cb1-162"><a href="#cb1-162"></a></span>
-<span id="cb1-163"><a href="#cb1-163"></a><span class="fu">### Diagnosing Contamination {#sec-causal-contamination}</span></span>
-<span id="cb1-164"><a href="#cb1-164"></a></span>
-<span id="cb1-165"><a href="#cb1-165"></a>The contamination diagnostic from @sec-contamination can be formalized as an interventional question. Let $D_{\text{overlap}}$ denote the subset of training data that overlaps with benchmark items. The causal question is:</span>
-<span id="cb1-166"><a href="#cb1-166"></a></span>
-<span id="cb1-167"><a href="#cb1-167"></a>$$</span>
-<span id="cb1-168"><a href="#cb1-168"></a>P(Y \mid \text{do}(D_{\text{overlap}} = \emptyset)) \stackrel{?}{=} P(Y \mid D_{\text{overlap}} = \emptyset)</span>
-<span id="cb1-169"><a href="#cb1-169"></a>$$</span>
-<span id="cb1-170"><a href="#cb1-170"></a></span>
-<span id="cb1-171"><a href="#cb1-171"></a>If these are equal, removing the overlapping data does not change the score *beyond* what we would expect from the reduced training set. If they differ, the overlap was providing a direct $D \to Y$ path (memorization) rather than contributing to $\theta$ (genuine learning).</span>
-<span id="cb1-172"><a href="#cb1-172"></a></span>
-<span id="cb1-173"><a href="#cb1-173"></a>In practice, we cannot perform this intervention on already-trained models. But we can approximate it through:</span>
-<span id="cb1-174"><a href="#cb1-174"></a></span>
-<span id="cb1-175"><a href="#cb1-175"></a><span class="ss">- </span>**Chronological splits**: Items created after the training data cutoff cannot be memorized. Comparing scores on pre- vs. post-cutoff items estimates the contamination effect.</span>
-<span id="cb1-176"><a href="#cb1-176"></a><span class="ss">- </span>**Canary detection**: Embedding unique strings in benchmark items and testing whether models reproduce them provides evidence for the $D \to Y$ path <span class="co">[</span><span class="ot">@jacovi2023stop</span><span class="co">]</span>.</span>
-<span id="cb1-177"><a href="#cb1-177"></a><span class="ss">- </span>**Item-fit analysis**: The infit/outfit statistics from @sec-item-fit detect items where some models perform unexpectedly well---a signature of the memorization path.</span>
-<span id="cb1-178"><a href="#cb1-178"></a></span>
-<span id="cb1-179"><a href="#cb1-179"></a><span class="fu">### Counterfactual Reasoning for DIF {#sec-counterfactual-dif}</span></span>
-<span id="cb1-180"><a href="#cb1-180"></a></span>
-<span id="cb1-181"><a href="#cb1-181"></a>Differential Item Functioning (@sec-dif-theory) has a natural counterfactual interpretation. An item $i$ exhibits DIF between groups $g = 0$ and $g = 1$ if:</span>
-<span id="cb1-182"><a href="#cb1-182"></a></span>
-<span id="cb1-183"><a href="#cb1-183"></a>$$</span>
-<span id="cb1-184"><a href="#cb1-184"></a>P(Y_{i,g=1} = 1 \mid \theta) \neq P(Y_{i,g=0} = 1 \mid \theta)</span>
-<span id="cb1-185"><a href="#cb1-185"></a>$$</span>
-<span id="cb1-186"><a href="#cb1-186"></a></span>
-<span id="cb1-187"><a href="#cb1-187"></a>This is a counterfactual statement: "For a model with ability $\theta$, would the response to item $i$ have been different if the model belonged to the other group, holding ability fixed?" The "group" variable $g$ (e.g., model architecture family) has a *direct* effect on the item response that is not mediated by $\theta$.</span>
-<span id="cb1-188"><a href="#cb1-188"></a></span>
-<span id="cb1-189"><a href="#cb1-189"></a>Under the evaluation DAG, DIF corresponds to a path $A \to Y$ that does not pass through $\theta$---an architectural advantage on specific items that reflects something other than the target construct. The Mantel-Haenszel procedure from @sec-dif-analysis estimates this direct effect by stratifying on $\theta$ (using total score as a proxy), which blocks the $A \to \theta \to Y$ path and isolates the $A \to Y$ direct effect.</span>
-<span id="cb1-190"><a href="#cb1-190"></a></span>
-<span id="cb1-191"><a href="#cb1-191"></a>::: {.callout-important title="When Is a Score Difference Causal?"}</span>
-<span id="cb1-192"><a href="#cb1-192"></a>A score difference $Y_A - Y_B$ between two models reflects a genuine *ability* difference only if all paths from the data-generating process to $Y$ that do not pass through $\theta$ are blocked. Common unblocked paths in AI evaluation:</span>
-<span id="cb1-193"><a href="#cb1-193"></a></span>
-<span id="cb1-194"><a href="#cb1-194"></a><span class="ss">- </span>**Training data overlap** ($D \to Y$ bypassing $\theta$): memorization inflates scores</span>
-<span id="cb1-195"><a href="#cb1-195"></a><span class="ss">- </span>**Prompt formatting** ($F \to Y$): format preferences affect scores independent of ability</span>
-<span id="cb1-196"><a href="#cb1-196"></a><span class="ss">- </span>**Evaluation order** (position bias in LLM-as-judge): systematic bias from presentation order</span>
-<span id="cb1-197"><a href="#cb1-197"></a></span>
-<span id="cb1-198"><a href="#cb1-198"></a>The causal diagnostics in this section and the statistical diagnostics in @sec-validity-diagnostics are complementary approaches to detecting these unblocked paths.</span>
-<span id="cb1-199"><a href="#cb1-199"></a>:::</span>
-<span id="cb1-200"><a href="#cb1-200"></a></span>
-<span id="cb1-201"><a href="#cb1-201"></a></span>
-<span id="cb1-202"><a href="#cb1-202"></a><span class="fu">## Distribution Shift and Transportability {#sec-shift-taxonomy}</span></span>
-<span id="cb1-203"><a href="#cb1-203"></a></span>
-<span id="cb1-204"><a href="#cb1-204"></a>In @sec-external-validity, we raised the question of whether benchmark results generalize beyond the specific conditions of the evaluation. This section provides the formal framework.</span>
-<span id="cb1-205"><a href="#cb1-205"></a></span>
-<span id="cb1-206"><a href="#cb1-206"></a><span class="fu">### Setup {#sec-shift-setup}</span></span>
-<span id="cb1-207"><a href="#cb1-207"></a></span>
-<span id="cb1-208"><a href="#cb1-208"></a>Let $P^{(s)}(X, Y)$ denote the **source** (benchmark) joint distribution over items $X$ and responses $Y$, and $P^{(t)}(X, Y)$ the **target** (deployment) distribution. The fundamental question is: when does a performance estimate computed under $P^{(s)}$ remain valid under $P^{(t)}$?</span>
-<span id="cb1-209"><a href="#cb1-209"></a></span>
-<span id="cb1-210"><a href="#cb1-210"></a>The joint distribution factorizes as $P(X, Y) = P(Y \mid X) P(X)$, giving rise to a taxonomy of shift types based on which component changes.</span>
-<span id="cb1-211"><a href="#cb1-211"></a></span>
-<span id="cb1-212"><a href="#cb1-212"></a>::: {.callout-note title="Definition: Types of Distribution Shift"}</span>
-<span id="cb1-213"><a href="#cb1-213"></a><span class="ss">1. </span>**Covariate shift**: $P^{(s)}(X) \neq P^{(t)}(X)$ but $P^{(s)}(Y \mid X) = P^{(t)}(Y \mid X)$. The *item distribution* changes but the model's *conditional behavior* is stable. Example: a benchmark oversamples easy items; deployment sees a harder mix.</span>
-<span id="cb1-214"><a href="#cb1-214"></a></span>
-<span id="cb1-215"><a href="#cb1-215"></a><span class="ss">2. </span>**Label shift** (prior probability shift): $P^{(s)}(Y) \neq P^{(t)}(Y)$ but $P^{(s)}(X \mid Y) = P^{(t)}(X \mid Y)$. The *base rate* of outcomes changes. Example: a benchmark has 50% correct base rate; deployment tasks have 10%.</span>
-<span id="cb1-216"><a href="#cb1-216"></a></span>
-<span id="cb1-217"><a href="#cb1-217"></a><span class="ss">3. </span>**Concept drift**: $P^{(s)}(Y \mid X) \neq P^{(t)}(Y \mid X)$. The *relationship between items and responses* changes. Example: a coding benchmark becomes outdated as programming conventions evolve, so the correct answers shift.</span>
-<span id="cb1-218"><a href="#cb1-218"></a>:::</span>
-<span id="cb1-219"><a href="#cb1-219"></a></span>
-<span id="cb1-220"><a href="#cb1-220"></a><span class="fu">### Covariate Shift in AI Evaluation {#sec-covariate-shift}</span></span>
-<span id="cb1-221"><a href="#cb1-221"></a></span>
-<span id="cb1-222"><a href="#cb1-222"></a>Covariate shift is the most common and most correctable form of shift. In AI evaluation, it arises whenever the benchmark item pool is not representative of the deployment item distribution.</span>
-<span id="cb1-223"><a href="#cb1-223"></a></span>
-<span id="cb1-224"><a href="#cb1-224"></a>Consider a benchmark designed to measure mathematical reasoning. If the item pool is drawn disproportionately from algebra (easy) rather than from combinatorics, number theory, and analysis (hard), then the benchmark's item distribution $P^{(s)}(X)$ is shifted toward easy items relative to the deployment distribution $P^{(t)}(X)$. The model's behavior on any given item---its conditional response $P(Y \mid X)$---is the same in both settings. But the overall accuracy computed under $P^{(s)}$ overestimates deployment accuracy because easy items are overweighted.</span>
-<span id="cb1-225"><a href="#cb1-225"></a></span>
-<span id="cb1-226"><a href="#cb1-226"></a>This connects directly to the content validity discussion in @sec-content-validity: a benchmark with poor content validity (non-representative item sampling) is a benchmark with covariate shift relative to the construct domain.</span>
-<span id="cb1-227"><a href="#cb1-227"></a></span>
-<span id="cb1-228"><a href="#cb1-228"></a><span class="fu">### Concept Drift in AI Evaluation {#sec-concept-drift}</span></span>
-<span id="cb1-229"><a href="#cb1-229"></a></span>
-<span id="cb1-230"><a href="#cb1-230"></a>Concept drift is more dangerous because the model's conditional behavior itself changes. In AI evaluation, concept drift occurs when:</span>
-<span id="cb1-231"><a href="#cb1-231"></a></span>
-<span id="cb1-232"><a href="#cb1-232"></a><span class="ss">- </span>**Model updates**: A model is updated via RLHF, fine-tuning, or system prompt changes. The IRT parameters calibrated on the old model no longer apply.</span>
-<span id="cb1-233"><a href="#cb1-233"></a><span class="ss">- </span>**Prompt template changes**: Switching from a zero-shot to a few-shot template changes $P(Y \mid X)$ even for the same items.</span>
-<span id="cb1-234"><a href="#cb1-234"></a><span class="ss">- </span>**Temporal evolution**: Programming languages evolve, scientific knowledge advances, and social norms shift. A benchmark's "correct" answers may become outdated.</span>
-<span id="cb1-235"><a href="#cb1-235"></a></span>
-<span id="cb1-236"><a href="#cb1-236"></a>Under concept drift, no reweighting of the source distribution can recover the target performance. The model must be re-evaluated on data drawn from the target distribution, or the concept drift must be modeled explicitly.</span>
-<span id="cb1-237"><a href="#cb1-237"></a></span>
-<span id="cb1-238"><a href="#cb1-238"></a><span class="fu">### Transportability {#sec-transportability}</span></span>
-<span id="cb1-239"><a href="#cb1-239"></a></span>
-<span id="cb1-240"><a href="#cb1-240"></a>When can we transport causal conclusions from one setting to another? @bareinboim2016causal formalize this through **selection diagrams**: DAGs augmented with special "selection" nodes $S$ that indicate which mechanisms differ between source and target.</span>
-<span id="cb1-241"><a href="#cb1-241"></a></span>
-<span id="cb1-242"><a href="#cb1-242"></a>The key result (stated informally): a causal effect is transportable from source to target if the differences between environments, as encoded by $S$, can be "adjusted away" using the causal structure. Specifically, the target-domain causal effect is identifiable from the source data plus knowledge of which mechanisms differ.</span>
-<span id="cb1-243"><a href="#cb1-243"></a></span>
-<span id="cb1-244"><a href="#cb1-244"></a>For AI evaluation, this means: a benchmark result is transportable to a new deployment context if we can identify *what changed* between the benchmark setting and deployment, and the evaluation DAG provides a path to adjust for those changes. If the only change is the item distribution (covariate shift), importance weighting suffices. If the model's behavior changes (concept drift), we need additional assumptions or new data from the target domain.</span>
-<span id="cb1-245"><a href="#cb1-245"></a></span>
-<span id="cb1-246"><a href="#cb1-246"></a>{{&lt; include _plt_setup.qmd &gt;}}</span>
-<span id="cb1-247"><a href="#cb1-247"></a></span>
-<span id="cb1-248"><a href="#cb1-248"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-249"><a href="#cb1-249"></a><span class="co">#| label: shift-taxonomy</span></span>
-<span id="cb1-250"><a href="#cb1-250"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-251"><a href="#cb1-251"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-252"><a href="#cb1-252"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-253"><a href="#cb1-253"></a><span class="im">from</span> scipy.special <span class="im">import</span> expit</span>
-<span id="cb1-254"><a href="#cb1-254"></a></span>
-<span id="cb1-255"><a href="#cb1-255"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-256"><a href="#cb1-256"></a></span>
-<span id="cb1-257"><a href="#cb1-257"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-258"><a href="#cb1-258"></a></span>
-<span id="cb1-259"><a href="#cb1-259"></a>theta_range <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">200</span>)</span>
-<span id="cb1-260"><a href="#cb1-260"></a></span>
-<span id="cb1-261"><a href="#cb1-261"></a><span class="co"># --- Panel 1: Covariate Shift ---</span></span>
-<span id="cb1-262"><a href="#cb1-262"></a><span class="co"># Source: easy items (beta ~ N(-1, 0.5))</span></span>
-<span id="cb1-263"><a href="#cb1-263"></a><span class="co"># Target: broad items (beta ~ N(0, 1.5))</span></span>
-<span id="cb1-264"><a href="#cb1-264"></a>beta_source <span class="op">=</span> np.random.normal(<span class="op">-</span><span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">500</span>)</span>
-<span id="cb1-265"><a href="#cb1-265"></a>beta_target <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, <span class="dv">500</span>)</span>
-<span id="cb1-266"><a href="#cb1-266"></a></span>
-<span id="cb1-267"><a href="#cb1-267"></a>axes[<span class="dv">0</span>].hist(beta_source, bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, density<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Source (benchmark)'</span>)</span>
-<span id="cb1-268"><a href="#cb1-268"></a>axes[<span class="dv">0</span>].hist(beta_target, bins<span class="op">=</span><span class="dv">30</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, density<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Target (deployment)'</span>)</span>
-<span id="cb1-269"><a href="#cb1-269"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="vs">r'Item difficulty </span><span class="kw">(</span><span class="dv">$\b</span><span class="vs">eta</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-270"><a href="#cb1-270"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Density'</span>)</span>
-<span id="cb1-271"><a href="#cb1-271"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Covariate Shift'</span>)</span>
-<span id="cb1-272"><a href="#cb1-272"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb1-273"><a href="#cb1-273"></a>axes[<span class="dv">0</span>].set_xlim(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>)</span>
-<span id="cb1-274"><a href="#cb1-274"></a></span>
-<span id="cb1-275"><a href="#cb1-275"></a><span class="co"># Inset: same ICC in both</span></span>
-<span id="cb1-276"><a href="#cb1-276"></a>ax_inset1 <span class="op">=</span> axes[<span class="dv">0</span>].inset_axes([<span class="fl">0.55</span>, <span class="fl">0.55</span>, <span class="fl">0.4</span>, <span class="fl">0.35</span>])</span>
-<span id="cb1-277"><a href="#cb1-277"></a>theta_ex <span class="op">=</span> <span class="fl">0.5</span></span>
-<span id="cb1-278"><a href="#cb1-278"></a>p_source <span class="op">=</span> expit(theta_ex <span class="op">-</span> theta_range)</span>
-<span id="cb1-279"><a href="#cb1-279"></a>ax_inset1.plot(theta_range, p_source, <span class="st">'#5B8DEE'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">'Source'</span>)</span>
-<span id="cb1-280"><a href="#cb1-280"></a>ax_inset1.plot(theta_range, p_source, <span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Target'</span>)</span>
-<span id="cb1-281"><a href="#cb1-281"></a>ax_inset1.set_title(<span class="st">'Same P(Y|X)'</span>)</span>
-<span id="cb1-282"><a href="#cb1-282"></a>ax_inset1.set_xticks([])</span>
-<span id="cb1-283"><a href="#cb1-283"></a>ax_inset1.set_yticks([])</span>
-<span id="cb1-284"><a href="#cb1-284"></a></span>
-<span id="cb1-285"><a href="#cb1-285"></a><span class="co"># --- Panel 2: Label Shift ---</span></span>
-<span id="cb1-286"><a href="#cb1-286"></a><span class="co"># Source: 50% correct base rate</span></span>
-<span id="cb1-287"><a href="#cb1-287"></a><span class="co"># Target: 10% correct base rate</span></span>
-<span id="cb1-288"><a href="#cb1-288"></a>n_items <span class="op">=</span> <span class="dv">1000</span></span>
-<span id="cb1-289"><a href="#cb1-289"></a>y_source <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, <span class="fl">0.5</span>, n_items)</span>
-<span id="cb1-290"><a href="#cb1-290"></a>y_target <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, <span class="fl">0.1</span>, n_items)</span>
-<span id="cb1-291"><a href="#cb1-291"></a></span>
-<span id="cb1-292"><a href="#cb1-292"></a>categories <span class="op">=</span> [<span class="st">'Correct'</span>, <span class="st">'Incorrect'</span>]</span>
-<span id="cb1-293"><a href="#cb1-293"></a>source_rates <span class="op">=</span> [y_source.mean(), <span class="dv">1</span> <span class="op">-</span> y_source.mean()]</span>
-<span id="cb1-294"><a href="#cb1-294"></a>target_rates <span class="op">=</span> [y_target.mean(), <span class="dv">1</span> <span class="op">-</span> y_target.mean()]</span>
-<span id="cb1-295"><a href="#cb1-295"></a></span>
-<span id="cb1-296"><a href="#cb1-296"></a>x_pos <span class="op">=</span> np.arange(<span class="bu">len</span>(categories))</span>
-<span id="cb1-297"><a href="#cb1-297"></a>width <span class="op">=</span> <span class="fl">0.35</span></span>
-<span id="cb1-298"><a href="#cb1-298"></a>axes[<span class="dv">1</span>].bar(x_pos <span class="op">-</span> width<span class="op">/</span><span class="dv">2</span>, source_rates, width, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Source'</span>)</span>
-<span id="cb1-299"><a href="#cb1-299"></a>axes[<span class="dv">1</span>].bar(x_pos <span class="op">+</span> width<span class="op">/</span><span class="dv">2</span>, target_rates, width, color<span class="op">=</span><span class="st">'#E8637A'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">'Target'</span>)</span>
-<span id="cb1-300"><a href="#cb1-300"></a>axes[<span class="dv">1</span>].set_xticks(x_pos)</span>
-<span id="cb1-301"><a href="#cb1-301"></a>axes[<span class="dv">1</span>].set_xticklabels(categories)</span>
-<span id="cb1-302"><a href="#cb1-302"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Proportion'</span>)</span>
-<span id="cb1-303"><a href="#cb1-303"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Label Shift'</span>)</span>
-<span id="cb1-304"><a href="#cb1-304"></a>axes[<span class="dv">1</span>].legend()</span>
-<span id="cb1-305"><a href="#cb1-305"></a>axes[<span class="dv">1</span>].set_ylim(<span class="dv">0</span>, <span class="fl">1.1</span>)</span>
-<span id="cb1-306"><a href="#cb1-306"></a></span>
-<span id="cb1-307"><a href="#cb1-307"></a><span class="co"># --- Panel 3: Concept Drift ---</span></span>
-<span id="cb1-308"><a href="#cb1-308"></a><span class="co"># Source: Rasch with beta=0</span></span>
-<span id="cb1-309"><a href="#cb1-309"></a><span class="co"># Target: Rasch with beta shifted AND discrimination changed</span></span>
-<span id="cb1-310"><a href="#cb1-310"></a>beta_fixed <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb1-311"><a href="#cb1-311"></a>p_source_icc <span class="op">=</span> expit(theta_range <span class="op">-</span> beta_fixed)</span>
-<span id="cb1-312"><a href="#cb1-312"></a>p_target_icc <span class="op">=</span> expit(<span class="fl">1.5</span> <span class="op">*</span> (theta_range <span class="op">-</span> <span class="fl">0.5</span>))  <span class="co"># Different discrimination and difficulty</span></span>
-<span id="cb1-313"><a href="#cb1-313"></a></span>
-<span id="cb1-314"><a href="#cb1-314"></a>axes[<span class="dv">2</span>].plot(theta_range, p_source_icc, <span class="st">'#5B8DEE'</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>, label<span class="op">=</span><span class="st">'Source: P(Y|X)'</span>)</span>
-<span id="cb1-315"><a href="#cb1-315"></a>axes[<span class="dv">2</span>].plot(theta_range, p_target_icc, <span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Target: P(Y|X)'</span>)</span>
-<span id="cb1-316"><a href="#cb1-316"></a>axes[<span class="dv">2</span>].fill_between(theta_range, p_source_icc, p_target_icc, alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#F0A35C'</span>)</span>
-<span id="cb1-317"><a href="#cb1-317"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="vs">r'Ability </span><span class="kw">(</span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-318"><a href="#cb1-318"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'P(Correct)'</span>)</span>
-<span id="cb1-319"><a href="#cb1-319"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Concept Drift'</span>)</span>
-<span id="cb1-320"><a href="#cb1-320"></a>axes[<span class="dv">2</span>].legend()</span>
-<span id="cb1-321"><a href="#cb1-321"></a>axes[<span class="dv">2</span>].set_ylim(<span class="op">-</span><span class="fl">0.05</span>, <span class="fl">1.05</span>)</span>
-<span id="cb1-322"><a href="#cb1-322"></a></span>
-<span id="cb1-323"><a href="#cb1-323"></a>plt.tight_layout()</span>
-<span id="cb1-324"><a href="#cb1-324"></a>plt.show()</span>
-<span id="cb1-325"><a href="#cb1-325"></a></span>
-<span id="cb1-326"><a href="#cb1-326"></a><span class="bu">print</span>(<span class="st">"Distribution Shift Summary:"</span>)</span>
-<span id="cb1-327"><a href="#cb1-327"></a><span class="bu">print</span>(<span class="ss">f"  Covariate shift: source mean difficulty = </span><span class="sc">{</span>beta_source<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">, "</span></span>
-<span id="cb1-328"><a href="#cb1-328"></a>      <span class="ss">f"target mean difficulty = </span><span class="sc">{</span>beta_target<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-329"><a href="#cb1-329"></a><span class="bu">print</span>(<span class="ss">f"  Label shift: source base rate = </span><span class="sc">{</span>y_source<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">, "</span></span>
-<span id="cb1-330"><a href="#cb1-330"></a>      <span class="ss">f"target base rate = </span><span class="sc">{</span>y_target<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-331"><a href="#cb1-331"></a><span class="bu">print</span>(<span class="ss">f"  Concept drift: P(Y|X) changes between source and target"</span>)</span>
-<span id="cb1-332"><a href="#cb1-332"></a><span class="in">```</span></span>
-<span id="cb1-333"><a href="#cb1-333"></a></span>
-<span id="cb1-334"><a href="#cb1-334"></a>The three panels illustrate the shift taxonomy. **Covariate shift** (left): the benchmark item pool is concentrated at easy difficulties (blue), while deployment items span a broader range (red), but the item characteristic curve is the same in both settings. **Label shift** (center): the base rate of correct responses differs between benchmark (50%) and deployment (10%). **Concept drift** (right): the relationship between ability and response probability itself changes---the target ICC (dashed red) has different discrimination and difficulty than the source (blue), so no reweighting of items can correct the estimate.</span>
-<span id="cb1-335"><a href="#cb1-335"></a></span>
-<span id="cb1-336"><a href="#cb1-336"></a></span>
-<span id="cb1-337"><a href="#cb1-337"></a><span class="fu">## Off-Policy Evaluation and Doubly Robust Estimation {#sec-off-policy}</span></span>
-<span id="cb1-338"><a href="#cb1-338"></a></span>
-<span id="cb1-339"><a href="#cb1-339"></a>The distribution shift framework tells us *when* benchmark results are biased. This section develops the tools to *correct* that bias, drawing on the off-policy evaluation literature from contextual bandits.</span>
-<span id="cb1-340"><a href="#cb1-340"></a></span>
-<span id="cb1-341"><a href="#cb1-341"></a><span class="fu">### The Evaluation-as-Bandit Framing {#sec-bandit-framing}</span></span>
-<span id="cb1-342"><a href="#cb1-342"></a></span>
-<span id="cb1-343"><a href="#cb1-343"></a>We reframe AI evaluation as an off-policy estimation problem. The key mapping is:</span>
-<span id="cb1-344"><a href="#cb1-344"></a></span>
-<span id="cb1-345"><a href="#cb1-345"></a><span class="pp">|</span> Bandit concept <span class="pp">|</span> AI evaluation translation <span class="pp">|</span></span>
-<span id="cb1-346"><a href="#cb1-346"></a><span class="pp">|---|---|</span></span>
-<span id="cb1-347"><a href="#cb1-347"></a><span class="pp">|</span> Context $x$ <span class="pp">|</span> Evaluation item (content, format, difficulty) <span class="pp">|</span></span>
-<span id="cb1-348"><a href="#cb1-348"></a><span class="pp">|</span> Action $a$ <span class="pp">|</span> Model's response <span class="pp">|</span></span>
-<span id="cb1-349"><a href="#cb1-349"></a><span class="pp">|</span> Reward $r$ <span class="pp">|</span> Correctness score ($0$ or $1$, or a continuous quality rating) <span class="pp">|</span></span>
-<span id="cb1-350"><a href="#cb1-350"></a><span class="pp">|</span> Logging policy $\pi_0(a \mid x)$ <span class="pp">|</span> The benchmark design process---how items were selected and administered <span class="pp">|</span></span>
-<span id="cb1-351"><a href="#cb1-351"></a><span class="pp">|</span> Target policy $\pi(a \mid x)$ <span class="pp">|</span> The model's behavior under deployment conditions <span class="pp">|</span></span>
-<span id="cb1-352"><a href="#cb1-352"></a></span>
-<span id="cb1-353"><a href="#cb1-353"></a>::: {.callout-note title="Definition: Off-Policy Evaluation"}</span>
-<span id="cb1-354"><a href="#cb1-354"></a>Given logged data $<span class="sc">\{</span>(x_t, a_t, r_t)<span class="sc">\}</span>_{t=1}^n$ collected under logging policy $\pi_0$, the off-policy evaluation problem is to estimate the **value** of a target policy $\pi$:</span>
-<span id="cb1-355"><a href="#cb1-355"></a></span>
-<span id="cb1-356"><a href="#cb1-356"></a>$$</span>
-<span id="cb1-357"><a href="#cb1-357"></a>V(\pi) = \mathbb{E}_{x \sim P, a \sim \pi(\cdot \mid x)}<span class="co">[</span><span class="ot">r(x, a)</span><span class="co">]</span></span>
-<span id="cb1-358"><a href="#cb1-358"></a>$$</span>
-<span id="cb1-359"><a href="#cb1-359"></a></span>
-<span id="cb1-360"><a href="#cb1-360"></a>without deploying $\pi$ to collect new data.</span>
-<span id="cb1-361"><a href="#cb1-361"></a>:::</span>
-<span id="cb1-362"><a href="#cb1-362"></a></span>
-<span id="cb1-363"><a href="#cb1-363"></a>Why does this framing matter? Whenever items are selected non-uniformly---by adaptive testing (@sec-cat), by convenience sampling, or by any design process that makes some items more likely to appear than others---we are observing rewards under $\pi_0$ but want to estimate performance under $\pi$. Naive accuracy (the simple average of rewards) is biased because $\pi_0 \neq \pi$.</span>
-<span id="cb1-364"><a href="#cb1-364"></a></span>
-<span id="cb1-365"><a href="#cb1-365"></a><span class="fu">### Three Estimators {#sec-three-estimators}</span></span>
-<span id="cb1-366"><a href="#cb1-366"></a></span>
-<span id="cb1-367"><a href="#cb1-367"></a>Three classical estimators address this problem, each with different bias-variance tradeoffs.</span>
-<span id="cb1-368"><a href="#cb1-368"></a></span>
-<span id="cb1-369"><a href="#cb1-369"></a>**The Direct Method (DM).** Build a reward model $\hat{r}(x, a)$ and use it to predict rewards under the target policy:</span>
-<span id="cb1-370"><a href="#cb1-370"></a></span>
-<span id="cb1-371"><a href="#cb1-371"></a>$$</span>
-<span id="cb1-372"><a href="#cb1-372"></a>\hat{V}_{\text{DM}} = \frac{1}{n} \sum_{t=1}^{n} \hat{r}(x_t, \pi)</span>
-<span id="cb1-373"><a href="#cb1-373"></a>$$ {#eq-dm}</span>
-<span id="cb1-374"><a href="#cb1-374"></a></span>
-<span id="cb1-375"><a href="#cb1-375"></a>where $\hat{r}(x_t, \pi) = \sum_a \pi(a \mid x_t) \hat{r}(x_t, a)$ integrates the reward model over the target policy's action distribution. In the AIMS context, $\hat{r}$ is precisely the IRT model from @sec-foundations: $\hat{r}(x, a) = P(Y = 1 \mid \theta, \beta_x)$. The direct method is what we have been doing throughout the earlier modeling chapters (@sec-foundations, @sec-learning): using the fitted IRT model to predict performance.</span>
-<span id="cb1-376"><a href="#cb1-376"></a></span>
-<span id="cb1-377"><a href="#cb1-377"></a>The direct method is biased when the reward model is misspecified. If the IRT model is wrong---perhaps the true data-generating process has interactions the model does not capture---the predictions will be systematically off.</span>
-<span id="cb1-378"><a href="#cb1-378"></a></span>
-<span id="cb1-379"><a href="#cb1-379"></a>**Inverse Propensity Weighting (IPW).** Instead of modeling the reward, model the selection process and reweight observations:</span>
-<span id="cb1-380"><a href="#cb1-380"></a></span>
-<span id="cb1-381"><a href="#cb1-381"></a>$$</span>
-<span id="cb1-382"><a href="#cb1-382"></a>\hat{V}_{\text{IPW}} = \frac{1}{n} \sum_{t=1}^{n} \frac{\pi(a_t \mid x_t)}{\pi_0(a_t \mid x_t)} r_t</span>
-<span id="cb1-383"><a href="#cb1-383"></a>$$ {#eq-ipw}</span>
-<span id="cb1-384"><a href="#cb1-384"></a></span>
-<span id="cb1-385"><a href="#cb1-385"></a>Each observation is weighted by the ratio of how likely the target policy was to take that action versus how likely the logging policy was. IPW is unbiased when the propensities are known, but can have very high variance when $\pi_0$ and $\pi$ differ substantially (the weights become large).</span>
-<span id="cb1-386"><a href="#cb1-386"></a></span>
-<span id="cb1-387"><a href="#cb1-387"></a>::: {.callout-important title="The CAT Propensity Problem"}</span>
-<span id="cb1-388"><a href="#cb1-388"></a>In computerized adaptive testing (@sec-cat), items are selected to maximize Fisher information at the current ability estimate. This means the item selection probability $\pi_0(x_t \mid \hat{\theta}_t)$ is non-uniform: items near the model's estimated ability are heavily oversampled, while very easy and very hard items are undersampled.</span>
-<span id="cb1-389"><a href="#cb1-389"></a></span>
-<span id="cb1-390"><a href="#cb1-390"></a>Naive accuracy on CAT-selected items is biased because the item pool is deliberately non-representative. IPW corrects this by upweighting items that were unlikely to be selected by the adaptive algorithm. The propensities $\pi_0$ are known from the CAT algorithm's selection rule (the item with maximum Fisher information at the current estimate is selected with probability 1 in a greedy CAT, or with probability proportional to information in a stochastic variant).</span>
-<span id="cb1-391"><a href="#cb1-391"></a>:::</span>
-<span id="cb1-392"><a href="#cb1-392"></a></span>
-<span id="cb1-393"><a href="#cb1-393"></a>**The Doubly Robust Estimator (DR).** The doubly robust estimator <span class="co">[</span><span class="ot">@dudik2011doubly; @robins1994estimation</span><span class="co">]</span> combines both approaches:</span>
-<span id="cb1-394"><a href="#cb1-394"></a></span>
-<span id="cb1-395"><a href="#cb1-395"></a>$$</span>
-<span id="cb1-396"><a href="#cb1-396"></a>\hat{V}_{\text{DR}} = \frac{1}{n} \sum_{t=1}^{n} \left<span class="co">[</span><span class="ot"> \hat{r}(x_t, \pi) + \frac{\pi(a_t \mid x_t)}{\pi_0(a_t \mid x_t)} \bigl(r_t - \hat{r}(x_t, a_t)\bigr) \right</span><span class="co">]</span></span>
-<span id="cb1-397"><a href="#cb1-397"></a>$$ {#eq-dr}</span>
-<span id="cb1-398"><a href="#cb1-398"></a></span>
-<span id="cb1-399"><a href="#cb1-399"></a>::: {.callout-note title="Definition: Doubly Robust Estimator"}</span>
-<span id="cb1-400"><a href="#cb1-400"></a>The DR estimator augments the direct method prediction $\hat{r}(x_t, \pi)$ with a propensity-weighted correction term $\frac{\pi}{\pi_0}(r_t - \hat{r})$. It is **doubly robust**: consistent if *either* the reward model $\hat{r}$ or the propensity model $\pi_0$ is correctly specified (but not necessarily both).</span>
-<span id="cb1-401"><a href="#cb1-401"></a></span>
-<span id="cb1-402"><a href="#cb1-402"></a><span class="ss">- </span>When $\hat{r}$ is correct: the residual $r_t - \hat{r}(x_t, a_t)$ has zero expectation, so the correction vanishes and $\hat{V}_{\text{DR}} \approx \hat{V}_{\text{DM}}$.</span>
-<span id="cb1-403"><a href="#cb1-403"></a><span class="ss">- </span>When $\hat{r}$ is wrong but $\pi_0$ is correct: the IPW term corrects the model's bias, yielding an unbiased estimate.</span>
-<span id="cb1-404"><a href="#cb1-404"></a>:::</span>
-<span id="cb1-405"><a href="#cb1-405"></a></span>
-<span id="cb1-406"><a href="#cb1-406"></a>**Proof of double robustness.** We verify that $\mathbb{E}<span class="co">[</span><span class="ot">\hat{V}_{\text{DR}}</span><span class="co">]</span> = V(\pi)$ when either model is correct. Taking expectations:</span>
-<span id="cb1-407"><a href="#cb1-407"></a></span>
-<span id="cb1-408"><a href="#cb1-408"></a>$$</span>
-<span id="cb1-409"><a href="#cb1-409"></a>\mathbb{E}<span class="co">[</span><span class="ot">\hat{V}_{\text{DR}}</span><span class="co">]</span> = \mathbb{E}<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\hat{r}(x, \pi)\right</span><span class="co">]</span> + \mathbb{E}<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\frac{\pi(a \mid x)}{\pi_0(a \mid x)}(r - \hat{r}(x, a))\right</span><span class="co">]</span></span>
-<span id="cb1-410"><a href="#cb1-410"></a>$$</span>
-<span id="cb1-411"><a href="#cb1-411"></a></span>
-<span id="cb1-412"><a href="#cb1-412"></a>For the second term, conditioning on $x$:</span>
-<span id="cb1-413"><a href="#cb1-413"></a></span>
-<span id="cb1-414"><a href="#cb1-414"></a>$$</span>
-<span id="cb1-415"><a href="#cb1-415"></a>\mathbb{E}<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\frac{\pi(a \mid x)}{\pi_0(a \mid x)}(r - \hat{r}(x, a)) \;\middle|\; x\right</span><span class="co">]</span> = \sum_a \pi_0(a \mid x) \frac{\pi(a \mid x)}{\pi_0(a \mid x)} \bigl(\mathbb{E}<span class="co">[</span><span class="ot">r \mid x, a</span><span class="co">]</span> - \hat{r}(x, a)\bigr)</span>
-<span id="cb1-416"><a href="#cb1-416"></a>$$</span>
-<span id="cb1-417"><a href="#cb1-417"></a></span>
-<span id="cb1-418"><a href="#cb1-418"></a>$$</span>
-<span id="cb1-419"><a href="#cb1-419"></a>= \sum_a \pi(a \mid x) \bigl(r^*(x, a) - \hat{r}(x, a)\bigr)</span>
-<span id="cb1-420"><a href="#cb1-420"></a>$$</span>
-<span id="cb1-421"><a href="#cb1-421"></a></span>
-<span id="cb1-422"><a href="#cb1-422"></a>where $r^*(x, a) = \mathbb{E}[r \mid x, a]$ is the true reward function. If $\hat{r} = r^*$, this is zero. If $\pi_0$ is correct (which it is by construction in the importance weighting), the full expectation becomes:</span>
-<span id="cb1-423"><a href="#cb1-423"></a></span>
-<span id="cb1-424"><a href="#cb1-424"></a>$$</span>
-<span id="cb1-425"><a href="#cb1-425"></a>\mathbb{E}<span class="co">[</span><span class="ot">\hat{V}_{\text{DR}}</span><span class="co">]</span> = \mathbb{E}<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\hat{r}(x, \pi)\right</span><span class="co">]</span> + \mathbb{E}_x<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\sum_a \pi(a \mid x)(r^*(x,a) - \hat{r}(x,a))\right</span><span class="co">]</span> = \mathbb{E}_x<span class="sc">\!</span>\left<span class="co">[</span><span class="ot">\sum_a \pi(a \mid x) r^*(x, a)\right</span><span class="co">]</span> = V(\pi)</span>
-<span id="cb1-426"><a href="#cb1-426"></a>$$</span>
-<span id="cb1-427"><a href="#cb1-427"></a></span>
-<span id="cb1-428"><a href="#cb1-428"></a><span class="fu">### Connection to Prediction-Powered Inference {#sec-ppi-connection}</span></span>
-<span id="cb1-429"><a href="#cb1-429"></a></span>
-<span id="cb1-430"><a href="#cb1-430"></a>Prediction-Powered Inference (PPI) <span class="co">[</span><span class="ot">@angelopoulos2023prediction</span><span class="co">]</span> is a recently developed framework that is structurally equivalent to doubly robust estimation. PPI uses a small labeled dataset $\mathcal{D}_n = \{(X_i, Y_i)\}_{i=1}^n$ (expensive: actual model evaluations) and a large unlabeled dataset $\mathcal{D}_N = \{(X_i, \hat{Y}_i)\}_{i=1}^N$ (cheap: model predictions or automated scores) to estimate a population quantity $\mu = \mathbb{E}<span class="co">[</span><span class="ot">Y</span><span class="co">]</span>$:</span>
-<span id="cb1-431"><a href="#cb1-431"></a></span>
-<span id="cb1-432"><a href="#cb1-432"></a>$$</span>
-<span id="cb1-433"><a href="#cb1-433"></a>\hat{\mu}_{\text{PPI}} = \frac{1}{N} \sum_{i \in \mathcal{D}_N} \hat{Y}_i + \frac{1}{n} \sum_{i \in \mathcal{D}_n} (Y_i - \hat{Y}_i)</span>
-<span id="cb1-434"><a href="#cb1-434"></a>$$ {#eq-ppi}</span>
-<span id="cb1-435"><a href="#cb1-435"></a></span>
-<span id="cb1-436"><a href="#cb1-436"></a>The first term is the direct method estimate using the cheap predictions. The second term is the bias correction: it estimates the systematic error in $\hat{Y}$ using the labeled subsample. This is exactly the DR structure: imputation + correction.</span>
-<span id="cb1-437"><a href="#cb1-437"></a></span>
-<span id="cb1-438"><a href="#cb1-438"></a>The connection to the cold-start pipeline in @sec-cold-start is direct. The PPE (Prediction-Powered Evaluation) approach from @sec-foundations learns a mapping from model embeddings and metadata to IRT parameters, producing predictions $\hat{Y}_{ij}$ for unseen model-item pairs. PPI provides the debiasing step: use a small set of actual evaluations to correct the PPE predictions, yielding valid confidence intervals for model performance. The PPE predictions serve as the imputation model $\hat{r}$; the actual evaluations provide the labeled correction $Y - \hat{Y}$.</span>
-<span id="cb1-439"><a href="#cb1-439"></a></span>
-<span id="cb1-440"><a href="#cb1-440"></a><span class="fu">### Importance Weighting for Covariate Shift {#sec-importance-weighting}</span></span>
-<span id="cb1-441"><a href="#cb1-441"></a></span>
-<span id="cb1-442"><a href="#cb1-442"></a>When the shift between benchmark and deployment is purely covariate shift ($P^{(s)}(Y \mid X) = P^{(t)}(Y \mid X)$, $P^{(s)}(X) \neq P^{(t)}(X)$), the importance-weighted estimator corrects the bias <span class="co">[</span><span class="ot">@shimodaira2000improving</span><span class="co">]</span>:</span>
-<span id="cb1-443"><a href="#cb1-443"></a></span>
-<span id="cb1-444"><a href="#cb1-444"></a>$$</span>
-<span id="cb1-445"><a href="#cb1-445"></a>\hat{\mu}_{\text{IW}} = \frac{\sum_{i=1}^n w(x_i) Y_i}{\sum_{i=1}^n w(x_i)}, \quad w(x_i) = \frac{P^{(t)}(x_i)}{P^{(s)}(x_i)}</span>
-<span id="cb1-446"><a href="#cb1-446"></a>$$ {#eq-iw}</span>
-<span id="cb1-447"><a href="#cb1-447"></a></span>
-<span id="cb1-448"><a href="#cb1-448"></a>This is the self-normalized variant, which is more stable than the unnormalized version. The weights $w(x_i)$ upweight items that are underrepresented in the benchmark relative to deployment, and downweight overrepresented items.</span>
-<span id="cb1-449"><a href="#cb1-449"></a></span>
-<span id="cb1-450"><a href="#cb1-450"></a>**Practical challenges:**</span>
-<span id="cb1-451"><a href="#cb1-451"></a></span>
-<span id="cb1-452"><a href="#cb1-452"></a><span class="ss">- </span>**Density ratio estimation**: The weights require knowing or estimating the density ratio $P^{(t)}/P^{(s)}$. Methods include logistic regression on a domain classifier, kernel mean matching, and moment matching <span class="co">[</span><span class="ot">@sugiyama2012density</span><span class="co">]</span>.</span>
-<span id="cb1-453"><a href="#cb1-453"></a><span class="ss">- </span>**Weight clipping**: Extreme weights inflate variance. Clipping weights at a maximum value $M$ (e.g., $w_i \leftarrow \min(w_i, M)$) trades bias for variance reduction.</span>
-<span id="cb1-454"><a href="#cb1-454"></a><span class="ss">- </span>**Effective sample size**: The effective sample size $n_{\text{eff}} = (\sum w_i)^2 / \sum w_i^2$ measures how much information the reweighted sample contains. When $n_{\text{eff}} \ll n$, the importance-weighted estimate is unreliable.</span>
-<span id="cb1-455"><a href="#cb1-455"></a></span>
-<span id="cb1-456"><a href="#cb1-456"></a>**AI example.** A reasoning benchmark oversamples algebra items (60% algebra, 20% geometry, 20% combinatorics). The deployment distribution is uniform across topics. Importance weighting reweights: algebra items get weight $w = 1/3 \div 3/5 = 5/9$, while geometry and combinatorics items get weight $w = 1/3 \div 1/5 = 5/3$. The corrected accuracy better reflects deployment performance.</span>
-<span id="cb1-457"><a href="#cb1-457"></a></span>
-<span id="cb1-458"><a href="#cb1-458"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-459"><a href="#cb1-459"></a><span class="co">#| label: dr-estimation</span></span>
-<span id="cb1-460"><a href="#cb1-460"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-461"><a href="#cb1-461"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-462"><a href="#cb1-462"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-463"><a href="#cb1-463"></a><span class="im">from</span> scipy.special <span class="im">import</span> expit</span>
-<span id="cb1-464"><a href="#cb1-464"></a></span>
-<span id="cb1-465"><a href="#cb1-465"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb1-466"><a href="#cb1-466"></a></span>
-<span id="cb1-467"><a href="#cb1-467"></a><span class="co"># --- Simulate CAT-like adaptive item selection ---</span></span>
-<span id="cb1-468"><a href="#cb1-468"></a>n_models <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb1-469"><a href="#cb1-469"></a>n_items_pool <span class="op">=</span> <span class="dv">200</span></span>
-<span id="cb1-470"><a href="#cb1-470"></a>n_selected <span class="op">=</span> <span class="dv">30</span>  <span class="co"># Items selected per model by CAT</span></span>
-<span id="cb1-471"><a href="#cb1-471"></a>n_reps <span class="op">=</span> <span class="dv">500</span></span>
-<span id="cb1-472"><a href="#cb1-472"></a></span>
-<span id="cb1-473"><a href="#cb1-473"></a><span class="co"># True model abilities</span></span>
-<span id="cb1-474"><a href="#cb1-474"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_models)</span>
-<span id="cb1-475"><a href="#cb1-475"></a><span class="co"># Item difficulties spanning the range</span></span>
-<span id="cb1-476"><a href="#cb1-476"></a>beta_pool <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, n_items_pool)</span>
-<span id="cb1-477"><a href="#cb1-477"></a></span>
-<span id="cb1-478"><a href="#cb1-478"></a><span class="co"># True value: average accuracy under uniform item selection</span></span>
-<span id="cb1-479"><a href="#cb1-479"></a>true_values <span class="op">=</span> np.zeros(n_models)</span>
-<span id="cb1-480"><a href="#cb1-480"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_models):</span>
-<span id="cb1-481"><a href="#cb1-481"></a>    true_values[j] <span class="op">=</span> expit(theta_true[j] <span class="op">-</span> beta_pool).mean()</span>
-<span id="cb1-482"><a href="#cb1-482"></a></span>
-<span id="cb1-483"><a href="#cb1-483"></a><span class="co"># Run repeated experiments</span></span>
-<span id="cb1-484"><a href="#cb1-484"></a>dm_estimates <span class="op">=</span> np.zeros((n_reps, n_models))</span>
-<span id="cb1-485"><a href="#cb1-485"></a>ipw_estimates <span class="op">=</span> np.zeros((n_reps, n_models))</span>
-<span id="cb1-486"><a href="#cb1-486"></a>dr_estimates <span class="op">=</span> np.zeros((n_reps, n_models))</span>
-<span id="cb1-487"><a href="#cb1-487"></a>naive_estimates <span class="op">=</span> np.zeros((n_reps, n_models))</span>
-<span id="cb1-488"><a href="#cb1-488"></a></span>
-<span id="cb1-489"><a href="#cb1-489"></a><span class="cf">for</span> rep <span class="kw">in</span> <span class="bu">range</span>(n_reps):</span>
-<span id="cb1-490"><a href="#cb1-490"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_models):</span>
-<span id="cb1-491"><a href="#cb1-491"></a>        <span class="co"># CAT item selection: select items near theta (high Fisher info)</span></span>
-<span id="cb1-492"><a href="#cb1-492"></a>        <span class="co"># Propensity: proportional to Fisher information</span></span>
-<span id="cb1-493"><a href="#cb1-493"></a>        p_items <span class="op">=</span> expit(theta_true[j] <span class="op">-</span> beta_pool)</span>
-<span id="cb1-494"><a href="#cb1-494"></a>        fisher_info <span class="op">=</span> p_items <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p_items)  <span class="co"># Rasch Fisher info</span></span>
-<span id="cb1-495"><a href="#cb1-495"></a>        propensity <span class="op">=</span> fisher_info <span class="op">/</span> fisher_info.<span class="bu">sum</span>()  <span class="co"># Normalized propensity</span></span>
-<span id="cb1-496"><a href="#cb1-496"></a></span>
-<span id="cb1-497"><a href="#cb1-497"></a>        <span class="co"># Select items (with replacement for simplicity)</span></span>
-<span id="cb1-498"><a href="#cb1-498"></a>        selected <span class="op">=</span> np.random.choice(n_items_pool, n_selected, p<span class="op">=</span>propensity, replace<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb1-499"><a href="#cb1-499"></a>        beta_selected <span class="op">=</span> beta_pool[selected]</span>
-<span id="cb1-500"><a href="#cb1-500"></a>        prop_selected <span class="op">=</span> propensity[selected]</span>
-<span id="cb1-501"><a href="#cb1-501"></a></span>
-<span id="cb1-502"><a href="#cb1-502"></a>        <span class="co"># Generate responses</span></span>
-<span id="cb1-503"><a href="#cb1-503"></a>        p_correct <span class="op">=</span> expit(theta_true[j] <span class="op">-</span> beta_selected)</span>
-<span id="cb1-504"><a href="#cb1-504"></a>        responses <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, p_correct)</span>
-<span id="cb1-505"><a href="#cb1-505"></a></span>
-<span id="cb1-506"><a href="#cb1-506"></a>        <span class="co"># Uniform target propensity</span></span>
-<span id="cb1-507"><a href="#cb1-507"></a>        target_prop <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> n_items_pool</span>
-<span id="cb1-508"><a href="#cb1-508"></a></span>
-<span id="cb1-509"><a href="#cb1-509"></a>        <span class="co"># --- Naive estimate (simple average) ---</span></span>
-<span id="cb1-510"><a href="#cb1-510"></a>        naive_estimates[rep, j] <span class="op">=</span> responses.mean()</span>
-<span id="cb1-511"><a href="#cb1-511"></a></span>
-<span id="cb1-512"><a href="#cb1-512"></a>        <span class="co"># --- Direct Method: use true IRT model ---</span></span>
-<span id="cb1-513"><a href="#cb1-513"></a>        <span class="co"># Slight misspecification: use noisy theta estimate</span></span>
-<span id="cb1-514"><a href="#cb1-514"></a>        theta_hat <span class="op">=</span> theta_true[j] <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.3</span>)</span>
-<span id="cb1-515"><a href="#cb1-515"></a>        dm_pred <span class="op">=</span> expit(theta_hat <span class="op">-</span> beta_pool).mean()</span>
-<span id="cb1-516"><a href="#cb1-516"></a>        dm_estimates[rep, j] <span class="op">=</span> dm_pred</span>
-<span id="cb1-517"><a href="#cb1-517"></a></span>
-<span id="cb1-518"><a href="#cb1-518"></a>        <span class="co"># --- IPW ---</span></span>
-<span id="cb1-519"><a href="#cb1-519"></a>        weights <span class="op">=</span> target_prop <span class="op">/</span> prop_selected</span>
-<span id="cb1-520"><a href="#cb1-520"></a>        weights <span class="op">=</span> weights <span class="op">/</span> weights.<span class="bu">sum</span>()  <span class="co"># Self-normalize</span></span>
-<span id="cb1-521"><a href="#cb1-521"></a>        ipw_estimates[rep, j] <span class="op">=</span> (weights <span class="op">*</span> responses).<span class="bu">sum</span>()</span>
-<span id="cb1-522"><a href="#cb1-522"></a></span>
-<span id="cb1-523"><a href="#cb1-523"></a>        <span class="co"># --- Doubly Robust ---</span></span>
-<span id="cb1-524"><a href="#cb1-524"></a>        r_hat <span class="op">=</span> expit(theta_hat <span class="op">-</span> beta_selected)  <span class="co"># IRT prediction for selected items</span></span>
-<span id="cb1-525"><a href="#cb1-525"></a>        r_hat_full <span class="op">=</span> expit(theta_hat <span class="op">-</span> beta_pool).mean()  <span class="co"># DM estimate</span></span>
-<span id="cb1-526"><a href="#cb1-526"></a>        correction <span class="op">=</span> (weights <span class="op">*</span> (responses <span class="op">-</span> r_hat)).<span class="bu">sum</span>()</span>
-<span id="cb1-527"><a href="#cb1-527"></a>        dr_estimates[rep, j] <span class="op">=</span> r_hat_full <span class="op">+</span> correction</span>
-<span id="cb1-528"><a href="#cb1-528"></a></span>
-<span id="cb1-529"><a href="#cb1-529"></a><span class="co"># --- Compute bias and RMSE ---</span></span>
-<span id="cb1-530"><a href="#cb1-530"></a><span class="kw">def</span> compute_stats(estimates, true_vals):</span>
-<span id="cb1-531"><a href="#cb1-531"></a>    bias <span class="op">=</span> (estimates.mean(axis<span class="op">=</span><span class="dv">0</span>) <span class="op">-</span> true_vals).mean()</span>
-<span id="cb1-532"><a href="#cb1-532"></a>    rmse <span class="op">=</span> np.sqrt(((estimates.mean(axis<span class="op">=</span><span class="dv">0</span>) <span class="op">-</span> true_vals)<span class="op">**</span><span class="dv">2</span>).mean())</span>
-<span id="cb1-533"><a href="#cb1-533"></a>    <span class="cf">return</span> bias, rmse</span>
-<span id="cb1-534"><a href="#cb1-534"></a></span>
-<span id="cb1-535"><a href="#cb1-535"></a>stats <span class="op">=</span> {</span>
-<span id="cb1-536"><a href="#cb1-536"></a>    <span class="st">'Naive'</span>: compute_stats(naive_estimates, true_values),</span>
-<span id="cb1-537"><a href="#cb1-537"></a>    <span class="st">'DM (IRT)'</span>: compute_stats(dm_estimates, true_values),</span>
-<span id="cb1-538"><a href="#cb1-538"></a>    <span class="st">'IPW'</span>: compute_stats(ipw_estimates, true_values),</span>
-<span id="cb1-539"><a href="#cb1-539"></a>    <span class="st">'DR'</span>: compute_stats(dr_estimates, true_values)</span>
-<span id="cb1-540"><a href="#cb1-540"></a>}</span>
-<span id="cb1-541"><a href="#cb1-541"></a></span>
-<span id="cb1-542"><a href="#cb1-542"></a><span class="co"># --- Visualization ---</span></span>
-<span id="cb1-543"><a href="#cb1-543"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-544"><a href="#cb1-544"></a></span>
-<span id="cb1-545"><a href="#cb1-545"></a>methods <span class="op">=</span> <span class="bu">list</span>(stats.keys())</span>
-<span id="cb1-546"><a href="#cb1-546"></a>biases <span class="op">=</span> [stats[m][<span class="dv">0</span>] <span class="cf">for</span> m <span class="kw">in</span> methods]</span>
-<span id="cb1-547"><a href="#cb1-547"></a>rmses <span class="op">=</span> [stats[m][<span class="dv">1</span>] <span class="cf">for</span> m <span class="kw">in</span> methods]</span>
-<span id="cb1-548"><a href="#cb1-548"></a>colors <span class="op">=</span> [<span class="st">'#B07CD8'</span>, <span class="st">'#5B8DEE'</span>, <span class="st">'#F0A35C'</span>, <span class="st">'#45BF7C'</span>]</span>
-<span id="cb1-549"><a href="#cb1-549"></a></span>
-<span id="cb1-550"><a href="#cb1-550"></a><span class="co"># Panel 1: Bias</span></span>
-<span id="cb1-551"><a href="#cb1-551"></a>bars1 <span class="op">=</span> axes[<span class="dv">0</span>].bar(methods, biases, color<span class="op">=</span>colors, alpha<span class="op">=</span><span class="fl">0.8</span>, edgecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb1-552"><a href="#cb1-552"></a>axes[<span class="dv">0</span>].axhline(y<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb1-553"><a href="#cb1-553"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Bias'</span>)</span>
-<span id="cb1-554"><a href="#cb1-554"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Estimation Bias (500 replications)'</span>)</span>
-<span id="cb1-555"><a href="#cb1-555"></a><span class="cf">for</span> bar, val <span class="kw">in</span> <span class="bu">zip</span>(bars1, biases):</span>
-<span id="cb1-556"><a href="#cb1-556"></a>    axes[<span class="dv">0</span>].text(bar.get_x() <span class="op">+</span> bar.get_width()<span class="op">/</span><span class="dv">2</span>, bar.get_height() <span class="op">+</span> <span class="fl">0.001</span>,</span>
-<span id="cb1-557"><a href="#cb1-557"></a>                 <span class="ss">f'</span><span class="sc">{</span>val<span class="sc">:.4f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'center'</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb1-558"><a href="#cb1-558"></a></span>
-<span id="cb1-559"><a href="#cb1-559"></a><span class="co"># Panel 2: RMSE</span></span>
-<span id="cb1-560"><a href="#cb1-560"></a>bars2 <span class="op">=</span> axes[<span class="dv">1</span>].bar(methods, rmses, color<span class="op">=</span>colors, alpha<span class="op">=</span><span class="fl">0.8</span>, edgecolor<span class="op">=</span><span class="st">'white'</span>)</span>
-<span id="cb1-561"><a href="#cb1-561"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'RMSE'</span>)</span>
-<span id="cb1-562"><a href="#cb1-562"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Root Mean Squared Error (500 replications)'</span>)</span>
-<span id="cb1-563"><a href="#cb1-563"></a><span class="cf">for</span> bar, val <span class="kw">in</span> <span class="bu">zip</span>(bars2, rmses):</span>
-<span id="cb1-564"><a href="#cb1-564"></a>    axes[<span class="dv">1</span>].text(bar.get_x() <span class="op">+</span> bar.get_width()<span class="op">/</span><span class="dv">2</span>, bar.get_height() <span class="op">+</span> <span class="fl">0.001</span>,</span>
-<span id="cb1-565"><a href="#cb1-565"></a>                 <span class="ss">f'</span><span class="sc">{</span>val<span class="sc">:.4f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'center'</span>, fontweight<span class="op">=</span><span class="st">'bold'</span>)</span>
-<span id="cb1-566"><a href="#cb1-566"></a></span>
-<span id="cb1-567"><a href="#cb1-567"></a>plt.tight_layout()</span>
-<span id="cb1-568"><a href="#cb1-568"></a>plt.show()</span>
-<span id="cb1-569"><a href="#cb1-569"></a></span>
-<span id="cb1-570"><a href="#cb1-570"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Off-Policy Estimation Results (</span><span class="sc">{</span>n_reps<span class="sc">}</span><span class="ss"> replications, </span><span class="sc">{</span>n_models<span class="sc">}</span><span class="ss"> models):"</span>)</span>
-<span id="cb1-571"><a href="#cb1-571"></a><span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="st">'Method'</span><span class="sc">:&lt;12}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Bias'</span><span class="sc">:&gt;8}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'RMSE'</span><span class="sc">:&gt;8}</span><span class="ss">"</span>)</span>
-<span id="cb1-572"><a href="#cb1-572"></a><span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="st">'-'</span><span class="op">*</span><span class="dv">28</span><span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-573"><a href="#cb1-573"></a><span class="cf">for</span> m <span class="kw">in</span> methods:</span>
-<span id="cb1-574"><a href="#cb1-574"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>m<span class="sc">:&lt;12}</span><span class="ss"> </span><span class="sc">{</span>stats[m][<span class="dv">0</span>]<span class="sc">:&gt;8.4f}</span><span class="ss"> </span><span class="sc">{</span>stats[m][<span class="dv">1</span>]<span class="sc">:&gt;8.4f}</span><span class="ss">"</span>)</span>
-<span id="cb1-575"><a href="#cb1-575"></a><span class="in">```</span></span>
-<span id="cb1-576"><a href="#cb1-576"></a></span>
-<span id="cb1-577"><a href="#cb1-577"></a>The simulation demonstrates the off-policy estimation problem under CAT-like adaptive item selection. The **naive** estimator (simple average of responses on adaptively-selected items) is biased because the CAT algorithm oversamples items near the model's ability level. The **Direct Method** (IRT prediction with noisy ability estimate) has low bias when the model is approximately correct but is sensitive to misspecification. **IPW** corrects the selection bias but has higher variance due to extreme weights. The **Doubly Robust** estimator combines the strengths of both, achieving the lowest RMSE by using the IRT model for imputation and IPW for bias correction.</span>
-<span id="cb1-578"><a href="#cb1-578"></a></span>
-<span id="cb1-579"><a href="#cb1-579"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-580"><a href="#cb1-580"></a><span class="co">#| label: importance-weighting</span></span>
-<span id="cb1-581"><a href="#cb1-581"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-582"><a href="#cb1-582"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-583"><a href="#cb1-583"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-584"><a href="#cb1-584"></a><span class="im">from</span> scipy.special <span class="im">import</span> expit</span>
-<span id="cb1-585"><a href="#cb1-585"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
-<span id="cb1-586"><a href="#cb1-586"></a></span>
-<span id="cb1-587"><a href="#cb1-587"></a>np.random.seed(<span class="dv">456</span>)</span>
-<span id="cb1-588"><a href="#cb1-588"></a></span>
-<span id="cb1-589"><a href="#cb1-589"></a><span class="co"># --- Simulate covariate shift: benchmark oversamples easy items ---</span></span>
-<span id="cb1-590"><a href="#cb1-590"></a>n_models <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb1-591"><a href="#cb1-591"></a>n_source_items <span class="op">=</span> <span class="dv">200</span></span>
-<span id="cb1-592"><a href="#cb1-592"></a>n_target_items <span class="op">=</span> <span class="dv">200</span></span>
-<span id="cb1-593"><a href="#cb1-593"></a></span>
-<span id="cb1-594"><a href="#cb1-594"></a>theta <span class="op">=</span> np.random.normal(<span class="fl">0.5</span>, <span class="dv">1</span>, n_models)</span>
-<span id="cb1-595"><a href="#cb1-595"></a></span>
-<span id="cb1-596"><a href="#cb1-596"></a><span class="co"># Source: easy-biased item pool (mean difficulty = -1)</span></span>
-<span id="cb1-597"><a href="#cb1-597"></a>beta_source <span class="op">=</span> np.random.normal(<span class="op">-</span><span class="dv">1</span>, <span class="fl">0.7</span>, n_source_items)</span>
-<span id="cb1-598"><a href="#cb1-598"></a><span class="co"># Target: broad item pool (mean difficulty = 0)</span></span>
-<span id="cb1-599"><a href="#cb1-599"></a>beta_target <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, n_target_items)</span>
-<span id="cb1-600"><a href="#cb1-600"></a></span>
-<span id="cb1-601"><a href="#cb1-601"></a><span class="co"># Compute true accuracy under each distribution</span></span>
-<span id="cb1-602"><a href="#cb1-602"></a>acc_source <span class="op">=</span> np.array([expit(th <span class="op">-</span> beta_source).mean() <span class="cf">for</span> th <span class="kw">in</span> theta])</span>
-<span id="cb1-603"><a href="#cb1-603"></a>acc_target <span class="op">=</span> np.array([expit(th <span class="op">-</span> beta_target).mean() <span class="cf">for</span> th <span class="kw">in</span> theta])</span>
-<span id="cb1-604"><a href="#cb1-604"></a></span>
-<span id="cb1-605"><a href="#cb1-605"></a><span class="co"># Importance-weighted estimate using source data</span></span>
-<span id="cb1-606"><a href="#cb1-606"></a><span class="co"># Weight each source item by p_target(beta) / p_source(beta)</span></span>
-<span id="cb1-607"><a href="#cb1-607"></a>weights <span class="op">=</span> norm.pdf(beta_source, <span class="dv">0</span>, <span class="fl">1.5</span>) <span class="op">/</span> norm.pdf(beta_source, <span class="op">-</span><span class="dv">1</span>, <span class="fl">0.7</span>)</span>
-<span id="cb1-608"><a href="#cb1-608"></a>weights <span class="op">=</span> weights <span class="op">/</span> weights.<span class="bu">sum</span>() <span class="op">*</span> <span class="bu">len</span>(weights)  <span class="co"># Normalize to sum to n</span></span>
-<span id="cb1-609"><a href="#cb1-609"></a></span>
-<span id="cb1-610"><a href="#cb1-610"></a><span class="co"># Compute IW-corrected accuracy for each model</span></span>
-<span id="cb1-611"><a href="#cb1-611"></a>acc_iw <span class="op">=</span> np.zeros(n_models)</span>
-<span id="cb1-612"><a href="#cb1-612"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_models):</span>
-<span id="cb1-613"><a href="#cb1-613"></a>    p_correct <span class="op">=</span> expit(theta[j] <span class="op">-</span> beta_source)</span>
-<span id="cb1-614"><a href="#cb1-614"></a>    acc_iw[j] <span class="op">=</span> (weights <span class="op">*</span> p_correct).mean()</span>
-<span id="cb1-615"><a href="#cb1-615"></a></span>
-<span id="cb1-616"><a href="#cb1-616"></a><span class="co"># --- Visualization ---</span></span>
-<span id="cb1-617"><a href="#cb1-617"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-618"><a href="#cb1-618"></a></span>
-<span id="cb1-619"><a href="#cb1-619"></a><span class="co"># Panel 1: Item distributions</span></span>
-<span id="cb1-620"><a href="#cb1-620"></a>beta_range <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">200</span>)</span>
-<span id="cb1-621"><a href="#cb1-621"></a>axes[<span class="dv">0</span>].plot(beta_range, norm.pdf(beta_range, <span class="op">-</span><span class="dv">1</span>, <span class="fl">0.7</span>), <span class="st">'#5B8DEE'</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>,</span>
-<span id="cb1-622"><a href="#cb1-622"></a>             label<span class="op">=</span><span class="st">'Source (benchmark)'</span>)</span>
-<span id="cb1-623"><a href="#cb1-623"></a>axes[<span class="dv">0</span>].plot(beta_range, norm.pdf(beta_range, <span class="dv">0</span>, <span class="fl">1.5</span>), <span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>,</span>
-<span id="cb1-624"><a href="#cb1-624"></a>             label<span class="op">=</span><span class="st">'Target (deployment)'</span>)</span>
-<span id="cb1-625"><a href="#cb1-625"></a>axes[<span class="dv">0</span>].fill_between(beta_range, norm.pdf(beta_range, <span class="op">-</span><span class="dv">1</span>, <span class="fl">0.7</span>), alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#5B8DEE'</span>)</span>
-<span id="cb1-626"><a href="#cb1-626"></a>axes[<span class="dv">0</span>].fill_between(beta_range, norm.pdf(beta_range, <span class="dv">0</span>, <span class="fl">1.5</span>), alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>)</span>
-<span id="cb1-627"><a href="#cb1-627"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="vs">r'Item difficulty </span><span class="kw">(</span><span class="dv">$\b</span><span class="vs">eta</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-628"><a href="#cb1-628"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Density'</span>)</span>
-<span id="cb1-629"><a href="#cb1-629"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Item Distributions: Source vs Target'</span>)</span>
-<span id="cb1-630"><a href="#cb1-630"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb1-631"><a href="#cb1-631"></a></span>
-<span id="cb1-632"><a href="#cb1-632"></a><span class="co"># Panel 2: Accuracy estimates</span></span>
-<span id="cb1-633"><a href="#cb1-633"></a><span class="co"># Sort by target accuracy for clearer visualization</span></span>
-<span id="cb1-634"><a href="#cb1-634"></a>sort_idx <span class="op">=</span> np.argsort(acc_target)</span>
-<span id="cb1-635"><a href="#cb1-635"></a>model_rank <span class="op">=</span> np.arange(n_models)</span>
-<span id="cb1-636"><a href="#cb1-636"></a></span>
-<span id="cb1-637"><a href="#cb1-637"></a>axes[<span class="dv">1</span>].scatter(model_rank, acc_source[sort_idx], color<span class="op">=</span><span class="st">'#5B8DEE'</span>, s<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span id="cb1-638"><a href="#cb1-638"></a>                label<span class="op">=</span><span class="ss">f'Naive (source): mean=</span><span class="sc">{</span>acc_source<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
-<span id="cb1-639"><a href="#cb1-639"></a>axes[<span class="dv">1</span>].scatter(model_rank, acc_iw[sort_idx], color<span class="op">=</span><span class="st">'#45BF7C'</span>, s<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span id="cb1-640"><a href="#cb1-640"></a>                label<span class="op">=</span><span class="ss">f'IW-corrected: mean=</span><span class="sc">{</span>acc_iw<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
-<span id="cb1-641"><a href="#cb1-641"></a>axes[<span class="dv">1</span>].scatter(model_rank, acc_target[sort_idx], color<span class="op">=</span><span class="st">'#E8637A'</span>, s<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span id="cb1-642"><a href="#cb1-642"></a>                label<span class="op">=</span><span class="ss">f'True target: mean=</span><span class="sc">{</span>acc_target<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
-<span id="cb1-643"><a href="#cb1-643"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Model rank (by true target accuracy)'</span>)</span>
-<span id="cb1-644"><a href="#cb1-644"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Estimated accuracy'</span>)</span>
-<span id="cb1-645"><a href="#cb1-645"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Covariate Shift Correction'</span>)</span>
-<span id="cb1-646"><a href="#cb1-646"></a>axes[<span class="dv">1</span>].legend(loc<span class="op">=</span><span class="st">'lower right'</span>)</span>
-<span id="cb1-647"><a href="#cb1-647"></a></span>
-<span id="cb1-648"><a href="#cb1-648"></a>plt.tight_layout()</span>
-<span id="cb1-649"><a href="#cb1-649"></a>plt.show()</span>
-<span id="cb1-650"><a href="#cb1-650"></a></span>
-<span id="cb1-651"><a href="#cb1-651"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Covariate Shift Correction:"</span>)</span>
-<span id="cb1-652"><a href="#cb1-652"></a><span class="bu">print</span>(<span class="ss">f"  Naive (source) mean accuracy: </span><span class="sc">{</span>acc_source<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-653"><a href="#cb1-653"></a><span class="bu">print</span>(<span class="ss">f"  IW-corrected mean accuracy:   </span><span class="sc">{</span>acc_iw<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-654"><a href="#cb1-654"></a><span class="bu">print</span>(<span class="ss">f"  True target mean accuracy:    </span><span class="sc">{</span>acc_target<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-655"><a href="#cb1-655"></a><span class="bu">print</span>(<span class="ss">f"  Naive overestimation:         </span><span class="sc">{</span>acc_source<span class="sc">.</span>mean() <span class="op">-</span> acc_target<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-656"><a href="#cb1-656"></a><span class="bu">print</span>(<span class="ss">f"  IW residual bias:             </span><span class="sc">{</span>acc_iw<span class="sc">.</span>mean() <span class="op">-</span> acc_target<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-657"><a href="#cb1-657"></a><span class="in">```</span></span>
-<span id="cb1-658"><a href="#cb1-658"></a></span>
-<span id="cb1-659"><a href="#cb1-659"></a>The left panel shows the source (benchmark) and target (deployment) item difficulty distributions. The benchmark oversamples easy items (blue, centered at $\beta = -1$), while deployment items span a broader range (red, centered at $\beta = 0$). The right panel shows the consequence: naive accuracy computed on benchmark items (blue) systematically overestimates deployment accuracy (red). Importance weighting (green) corrects the bias by upweighting hard items that are underrepresented in the benchmark, bringing the estimates close to the true deployment accuracy.</span>
-<span id="cb1-660"><a href="#cb1-660"></a></span>
-<span id="cb1-661"><a href="#cb1-661"></a></span>
-<span id="cb1-662"><a href="#cb1-662"></a><span class="fu">## Conformal Prediction Under Distribution Shift {#sec-conformal}</span></span>
-<span id="cb1-663"><a href="#cb1-663"></a></span>
-<span id="cb1-664"><a href="#cb1-664"></a>The off-policy estimators in @sec-off-policy correct *point estimates* of model performance. But practitioners also need *uncertainty quantification*: not just "the model's deployment accuracy is 0.78" but "the model's deployment accuracy is in $<span class="co">[</span><span class="ot">0.72, 0.84</span><span class="co">]</span>$ with 90% confidence." Conformal prediction provides this guarantee with minimal distributional assumptions.</span>
-<span id="cb1-665"><a href="#cb1-665"></a></span>
-<span id="cb1-666"><a href="#cb1-666"></a>::: {.callout-note title="Definition: Conformal Prediction"}</span>
-<span id="cb1-667"><a href="#cb1-667"></a>Given a calibration set $<span class="sc">\{</span>(X_i, Y_i)<span class="sc">\}</span>_{i=1}^n$ and a new input $X_{n+1}$, a conformal prediction set $C_\alpha(X_{n+1})$ satisfies:</span>
-<span id="cb1-668"><a href="#cb1-668"></a></span>
-<span id="cb1-669"><a href="#cb1-669"></a>$$</span>
-<span id="cb1-670"><a href="#cb1-670"></a>P(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha</span>
-<span id="cb1-671"><a href="#cb1-671"></a>$$</span>
-<span id="cb1-672"><a href="#cb1-672"></a></span>
-<span id="cb1-673"><a href="#cb1-673"></a>under the assumption that the calibration and test data are **exchangeable** (informally: drawn from the same distribution in no particular order). No parametric assumptions on the data distribution are required.</span>
-<span id="cb1-674"><a href="#cb1-674"></a>:::</span>
-<span id="cb1-675"><a href="#cb1-675"></a></span>
-<span id="cb1-676"><a href="#cb1-676"></a><span class="fu">### Split Conformal Prediction {#sec-split-conformal}</span></span>
-<span id="cb1-677"><a href="#cb1-677"></a></span>
-<span id="cb1-678"><a href="#cb1-678"></a>The split conformal algorithm <span class="co">[</span><span class="ot">@vovk2005algorithmic</span><span class="co">]</span> is the simplest conformal method:</span>
-<span id="cb1-679"><a href="#cb1-679"></a></span>
-<span id="cb1-680"><a href="#cb1-680"></a><span class="ss">1. </span>Fit a model $\hat{f}$ on a training set.</span>
-<span id="cb1-681"><a href="#cb1-681"></a><span class="ss">2. </span>On a held-out calibration set $<span class="sc">\{</span>(X_i, Y_i)\}_{i=1}^n$, compute nonconformity scores $s_i = |Y_i - \hat{f}(X_i)|$.</span>
-<span id="cb1-682"><a href="#cb1-682"></a><span class="ss">3. </span>Let $\hat{q}$ be the $\lceil (1-\alpha)(1 + 1/n) \rceil / n$ quantile of $<span class="sc">\{</span>s_1, \ldots, s_n<span class="sc">\}</span>$.</span>
-<span id="cb1-683"><a href="#cb1-683"></a><span class="ss">4. </span>For a new input $X_{n+1}$, predict $C_\alpha(X_{n+1}) = [\hat{f}(X_{n+1}) - \hat{q}, \hat{f}(X_{n+1}) + \hat{q}]$.</span>
-<span id="cb1-684"><a href="#cb1-684"></a></span>
-<span id="cb1-685"><a href="#cb1-685"></a>The coverage guarantee $P(Y_{n+1} \in C_\alpha) \geq 1 - \alpha$ holds for *any* model $\hat{f}$, *any* data distribution, and *any* sample size---as long as the calibration and test data are exchangeable.</span>
-<span id="cb1-686"><a href="#cb1-686"></a></span>
-<span id="cb1-687"><a href="#cb1-687"></a><span class="fu">### When Exchangeability Fails {#sec-exchangeability-failure}</span></span>
-<span id="cb1-688"><a href="#cb1-688"></a></span>
-<span id="cb1-689"><a href="#cb1-689"></a>Under distribution shift, exchangeability fails: the calibration data is drawn from $P^{(s)}$ while the test data comes from $P^{(t)}$. This causes the conformal prediction set to lose its coverage guarantee. Specifically, if the target distribution concentrates on regions where the model is less accurate (harder items), the calibration-based quantile $\hat{q}$ underestimates the nonconformity scores at test time, leading to **undercoverage**.</span>
-<span id="cb1-690"><a href="#cb1-690"></a></span>
-<span id="cb1-691"><a href="#cb1-691"></a><span class="fu">### Weighted Conformal Prediction {#sec-weighted-conformal}</span></span>
-<span id="cb1-692"><a href="#cb1-692"></a></span>
-<span id="cb1-693"><a href="#cb1-693"></a>@tibshirani2019conformal show that coverage can be restored under covariate shift by replacing the uniform quantile with an **importance-weighted quantile**. The key insight is the same as for importance weighting in @sec-importance-weighting: reweight the calibration scores to match the target distribution.</span>
-<span id="cb1-694"><a href="#cb1-694"></a></span>
-<span id="cb1-695"><a href="#cb1-695"></a>The algorithm modifies step 3: instead of the uniform quantile, compute the weighted quantile of $<span class="sc">\{</span>s_1, \ldots, s_n, +\infty<span class="sc">\}</span>$ with weights $<span class="sc">\{</span>w_1, \ldots, w_n, w_{n+1}<span class="sc">\}</span>$ where $w_i = P^{(t)}(X_i) / P^{(s)}(X_i)$ and $w_{n+1} = P^{(t)}(X_{n+1}) / P^{(s)}(X_{n+1})$. This yields:</span>
-<span id="cb1-696"><a href="#cb1-696"></a></span>
-<span id="cb1-697"><a href="#cb1-697"></a>$$</span>
-<span id="cb1-698"><a href="#cb1-698"></a>P^{(t)}(Y_{n+1} \in C_\alpha(X_{n+1})) \geq 1 - \alpha</span>
-<span id="cb1-699"><a href="#cb1-699"></a>$$</span>
-<span id="cb1-700"><a href="#cb1-700"></a></span>
-<span id="cb1-701"><a href="#cb1-701"></a>The coverage guarantee now holds under the *target* distribution, provided the importance weights are correct. @barber2023conformal extend this beyond covariate shift to more general forms of distribution shift.</span>
-<span id="cb1-702"><a href="#cb1-702"></a></span>
-<span id="cb1-703"><a href="#cb1-703"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-704"><a href="#cb1-704"></a><span class="co">#| label: conformal-prediction</span></span>
-<span id="cb1-705"><a href="#cb1-705"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-706"><a href="#cb1-706"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-707"><a href="#cb1-707"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-708"><a href="#cb1-708"></a><span class="im">from</span> scipy.special <span class="im">import</span> expit</span>
-<span id="cb1-709"><a href="#cb1-709"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
-<span id="cb1-710"><a href="#cb1-710"></a></span>
-<span id="cb1-711"><a href="#cb1-711"></a>np.random.seed(<span class="dv">789</span>)</span>
-<span id="cb1-712"><a href="#cb1-712"></a></span>
-<span id="cb1-713"><a href="#cb1-713"></a><span class="co"># --- Simulate: calibrate on easy items, test on harder items ---</span></span>
-<span id="cb1-714"><a href="#cb1-714"></a>n_cal <span class="op">=</span> <span class="dv">200</span>   <span class="co"># Calibration items (source)</span></span>
-<span id="cb1-715"><a href="#cb1-715"></a>n_test <span class="op">=</span> <span class="dv">200</span>  <span class="co"># Test items (target)</span></span>
-<span id="cb1-716"><a href="#cb1-716"></a>n_models <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb1-717"><a href="#cb1-717"></a></span>
-<span id="cb1-718"><a href="#cb1-718"></a><span class="co"># Source: easy items; Target: harder items</span></span>
-<span id="cb1-719"><a href="#cb1-719"></a>beta_cal <span class="op">=</span> np.random.normal(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.8</span>, n_cal)</span>
-<span id="cb1-720"><a href="#cb1-720"></a>beta_test <span class="op">=</span> np.random.normal(<span class="fl">1.0</span>, <span class="fl">1.0</span>, n_test)</span>
-<span id="cb1-721"><a href="#cb1-721"></a></span>
-<span id="cb1-722"><a href="#cb1-722"></a><span class="co"># Test at multiple nominal coverage levels</span></span>
-<span id="cb1-723"><a href="#cb1-723"></a>alphas <span class="op">=</span> np.arange(<span class="fl">0.05</span>, <span class="fl">0.55</span>, <span class="fl">0.05</span>)</span>
-<span id="cb1-724"><a href="#cb1-724"></a>coverage_naive <span class="op">=</span> np.zeros(<span class="bu">len</span>(alphas))</span>
-<span id="cb1-725"><a href="#cb1-725"></a>coverage_weighted <span class="op">=</span> np.zeros(<span class="bu">len</span>(alphas))</span>
-<span id="cb1-726"><a href="#cb1-726"></a></span>
-<span id="cb1-727"><a href="#cb1-727"></a><span class="cf">for</span> a_idx, alpha <span class="kw">in</span> <span class="bu">enumerate</span>(alphas):</span>
-<span id="cb1-728"><a href="#cb1-728"></a>    covers_naive <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-729"><a href="#cb1-729"></a>    covers_weighted <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-730"><a href="#cb1-730"></a>    n_total <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-731"><a href="#cb1-731"></a></span>
-<span id="cb1-732"><a href="#cb1-732"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_models):</span>
-<span id="cb1-733"><a href="#cb1-733"></a>        theta_j <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb1-734"><a href="#cb1-734"></a></span>
-<span id="cb1-735"><a href="#cb1-735"></a>        <span class="co"># True accuracy on calibration and test items</span></span>
-<span id="cb1-736"><a href="#cb1-736"></a>        p_cal <span class="op">=</span> expit(theta_j <span class="op">-</span> beta_cal)</span>
-<span id="cb1-737"><a href="#cb1-737"></a>        p_test <span class="op">=</span> expit(theta_j <span class="op">-</span> beta_test)</span>
-<span id="cb1-738"><a href="#cb1-738"></a></span>
-<span id="cb1-739"><a href="#cb1-739"></a>        <span class="co"># Generate binary responses</span></span>
-<span id="cb1-740"><a href="#cb1-740"></a>        y_cal <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, p_cal)</span>
-<span id="cb1-741"><a href="#cb1-741"></a>        y_test <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, p_test)</span>
-<span id="cb1-742"><a href="#cb1-742"></a></span>
-<span id="cb1-743"><a href="#cb1-743"></a>        <span class="co"># Model prediction: IRT probability</span></span>
-<span id="cb1-744"><a href="#cb1-744"></a>        r_hat_cal <span class="op">=</span> p_cal</span>
-<span id="cb1-745"><a href="#cb1-745"></a>        r_hat_test <span class="op">=</span> p_test</span>
-<span id="cb1-746"><a href="#cb1-746"></a></span>
-<span id="cb1-747"><a href="#cb1-747"></a>        <span class="co"># Nonconformity scores on calibration set</span></span>
-<span id="cb1-748"><a href="#cb1-748"></a>        scores_cal <span class="op">=</span> np.<span class="bu">abs</span>(y_cal <span class="op">-</span> r_hat_cal)</span>
-<span id="cb1-749"><a href="#cb1-749"></a></span>
-<span id="cb1-750"><a href="#cb1-750"></a>        <span class="co"># --- Naive conformal: uniform quantile ---</span></span>
-<span id="cb1-751"><a href="#cb1-751"></a>        q_level <span class="op">=</span> <span class="bu">int</span>(np.ceil((<span class="dv">1</span> <span class="op">-</span> alpha) <span class="op">*</span> (n_cal <span class="op">+</span> <span class="dv">1</span>))) <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb1-752"><a href="#cb1-752"></a>        q_level <span class="op">=</span> <span class="bu">min</span>(q_level, n_cal <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb1-753"><a href="#cb1-753"></a>        sorted_scores <span class="op">=</span> np.sort(scores_cal)</span>
-<span id="cb1-754"><a href="#cb1-754"></a>        q_naive <span class="op">=</span> sorted_scores[q_level]</span>
-<span id="cb1-755"><a href="#cb1-755"></a></span>
-<span id="cb1-756"><a href="#cb1-756"></a>        <span class="co"># --- Weighted conformal: importance-weighted quantile ---</span></span>
-<span id="cb1-757"><a href="#cb1-757"></a>        weights <span class="op">=</span> norm.pdf(beta_cal, <span class="fl">1.0</span>, <span class="fl">1.0</span>) <span class="op">/</span> norm.pdf(beta_cal, <span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
-<span id="cb1-758"><a href="#cb1-758"></a>        weights <span class="op">=</span> weights <span class="op">/</span> weights.<span class="bu">sum</span>()</span>
-<span id="cb1-759"><a href="#cb1-759"></a></span>
-<span id="cb1-760"><a href="#cb1-760"></a>        <span class="co"># Weighted quantile</span></span>
-<span id="cb1-761"><a href="#cb1-761"></a>        sorted_idx <span class="op">=</span> np.argsort(scores_cal)</span>
-<span id="cb1-762"><a href="#cb1-762"></a>        cum_weights <span class="op">=</span> np.cumsum(weights[sorted_idx])</span>
-<span id="cb1-763"><a href="#cb1-763"></a>        q_idx <span class="op">=</span> np.searchsorted(cum_weights, <span class="dv">1</span> <span class="op">-</span> alpha)</span>
-<span id="cb1-764"><a href="#cb1-764"></a>        q_idx <span class="op">=</span> <span class="bu">min</span>(q_idx, n_cal <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb1-765"><a href="#cb1-765"></a>        q_weighted <span class="op">=</span> scores_cal[sorted_idx[q_idx]]</span>
-<span id="cb1-766"><a href="#cb1-766"></a></span>
-<span id="cb1-767"><a href="#cb1-767"></a>        <span class="co"># Check coverage on test items</span></span>
-<span id="cb1-768"><a href="#cb1-768"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_test):</span>
-<span id="cb1-769"><a href="#cb1-769"></a>            score_test <span class="op">=</span> np.<span class="bu">abs</span>(y_test[i] <span class="op">-</span> r_hat_test[i])</span>
-<span id="cb1-770"><a href="#cb1-770"></a>            covers_naive <span class="op">+=</span> (score_test <span class="op">&lt;=</span> q_naive)</span>
-<span id="cb1-771"><a href="#cb1-771"></a>            covers_weighted <span class="op">+=</span> (score_test <span class="op">&lt;=</span> q_weighted)</span>
-<span id="cb1-772"><a href="#cb1-772"></a>            n_total <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-773"><a href="#cb1-773"></a></span>
-<span id="cb1-774"><a href="#cb1-774"></a>    coverage_naive[a_idx] <span class="op">=</span> covers_naive <span class="op">/</span> n_total</span>
-<span id="cb1-775"><a href="#cb1-775"></a>    coverage_weighted[a_idx] <span class="op">=</span> covers_weighted <span class="op">/</span> n_total</span>
-<span id="cb1-776"><a href="#cb1-776"></a></span>
-<span id="cb1-777"><a href="#cb1-777"></a><span class="co"># --- Visualization ---</span></span>
-<span id="cb1-778"><a href="#cb1-778"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-779"><a href="#cb1-779"></a></span>
-<span id="cb1-780"><a href="#cb1-780"></a><span class="co"># Panel 1: Coverage vs nominal level</span></span>
-<span id="cb1-781"><a href="#cb1-781"></a>nominal <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> alphas</span>
-<span id="cb1-782"><a href="#cb1-782"></a>axes[<span class="dv">0</span>].plot(nominal, nominal, <span class="st">'k--'</span>, linewidth<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span><span class="st">'Ideal (y = x)'</span>)</span>
-<span id="cb1-783"><a href="#cb1-783"></a>axes[<span class="dv">0</span>].plot(nominal, coverage_naive, <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, markersize<span class="op">=</span><span class="dv">6</span>,</span>
-<span id="cb1-784"><a href="#cb1-784"></a>             label<span class="op">=</span><span class="st">'Naive conformal'</span>)</span>
-<span id="cb1-785"><a href="#cb1-785"></a>axes[<span class="dv">0</span>].plot(nominal, coverage_weighted, <span class="st">'s-'</span>, color<span class="op">=</span><span class="st">'#45BF7C'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, markersize<span class="op">=</span><span class="dv">6</span>,</span>
-<span id="cb1-786"><a href="#cb1-786"></a>             label<span class="op">=</span><span class="st">'Weighted conformal'</span>)</span>
-<span id="cb1-787"><a href="#cb1-787"></a>axes[<span class="dv">0</span>].fill_between(nominal, nominal <span class="op">-</span> <span class="fl">0.03</span>, nominal <span class="op">+</span> <span class="fl">0.03</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, color<span class="op">=</span><span class="st">'gray'</span>,</span>
-<span id="cb1-788"><a href="#cb1-788"></a>                     label<span class="op">=</span><span class="st">'±3% tolerance'</span>)</span>
-<span id="cb1-789"><a href="#cb1-789"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Nominal coverage (1 - α)'</span>)</span>
-<span id="cb1-790"><a href="#cb1-790"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Empirical coverage'</span>)</span>
-<span id="cb1-791"><a href="#cb1-791"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Coverage Calibration Under Shift'</span>)</span>
-<span id="cb1-792"><a href="#cb1-792"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb1-793"><a href="#cb1-793"></a>axes[<span class="dv">0</span>].set_xlim(<span class="fl">0.45</span>, <span class="fl">1.0</span>)</span>
-<span id="cb1-794"><a href="#cb1-794"></a>axes[<span class="dv">0</span>].set_ylim(<span class="fl">0.45</span>, <span class="fl">1.05</span>)</span>
-<span id="cb1-795"><a href="#cb1-795"></a></span>
-<span id="cb1-796"><a href="#cb1-796"></a><span class="co"># Panel 2: Distribution comparison</span></span>
-<span id="cb1-797"><a href="#cb1-797"></a>beta_range <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">200</span>)</span>
-<span id="cb1-798"><a href="#cb1-798"></a>axes[<span class="dv">1</span>].plot(beta_range, norm.pdf(beta_range, <span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.8</span>), <span class="st">'#5B8DEE'</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>,</span>
-<span id="cb1-799"><a href="#cb1-799"></a>             label<span class="op">=</span><span class="st">'Calibration (easy)'</span>)</span>
-<span id="cb1-800"><a href="#cb1-800"></a>axes[<span class="dv">1</span>].plot(beta_range, norm.pdf(beta_range, <span class="fl">1.0</span>, <span class="fl">1.0</span>), <span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="fl">2.5</span>,</span>
-<span id="cb1-801"><a href="#cb1-801"></a>             label<span class="op">=</span><span class="st">'Test (hard)'</span>)</span>
-<span id="cb1-802"><a href="#cb1-802"></a>axes[<span class="dv">1</span>].fill_between(beta_range, norm.pdf(beta_range, <span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0.8</span>), alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#5B8DEE'</span>)</span>
-<span id="cb1-803"><a href="#cb1-803"></a>axes[<span class="dv">1</span>].fill_between(beta_range, norm.pdf(beta_range, <span class="fl">1.0</span>, <span class="fl">1.0</span>), alpha<span class="op">=</span><span class="fl">0.15</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>)</span>
-<span id="cb1-804"><a href="#cb1-804"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="vs">r'Item difficulty </span><span class="kw">(</span><span class="dv">$\b</span><span class="vs">eta</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-805"><a href="#cb1-805"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Density'</span>)</span>
-<span id="cb1-806"><a href="#cb1-806"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Calibration vs Test Item Distributions'</span>)</span>
-<span id="cb1-807"><a href="#cb1-807"></a>axes[<span class="dv">1</span>].legend()</span>
-<span id="cb1-808"><a href="#cb1-808"></a></span>
-<span id="cb1-809"><a href="#cb1-809"></a>plt.tight_layout()</span>
-<span id="cb1-810"><a href="#cb1-810"></a>plt.show()</span>
-<span id="cb1-811"><a href="#cb1-811"></a></span>
-<span id="cb1-812"><a href="#cb1-812"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Conformal Prediction Under Covariate Shift:"</span>)</span>
-<span id="cb1-813"><a href="#cb1-813"></a><span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span><span class="st">'Nominal'</span><span class="sc">:&gt;8}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Naive'</span><span class="sc">:&gt;8}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Weighted'</span><span class="sc">:&gt;8}</span><span class="ss"> </span><span class="sc">{</span><span class="st">'Gap (naive)'</span><span class="sc">:&gt;12}</span><span class="ss">"</span>)</span>
-<span id="cb1-814"><a href="#cb1-814"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(alphas)):</span>
-<span id="cb1-815"><a href="#cb1-815"></a>    nom <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> alphas[i]</span>
-<span id="cb1-816"><a href="#cb1-816"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>nom<span class="sc">:&gt;8.2f}</span><span class="ss"> </span><span class="sc">{</span>coverage_naive[i]<span class="sc">:&gt;8.3f}</span><span class="ss"> </span><span class="sc">{</span>coverage_weighted[i]<span class="sc">:&gt;8.3f}</span><span class="ss"> "</span></span>
-<span id="cb1-817"><a href="#cb1-817"></a>          <span class="ss">f"</span><span class="sc">{</span>coverage_naive[i] <span class="op">-</span> nom<span class="sc">:&gt;+12.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-818"><a href="#cb1-818"></a><span class="in">```</span></span>
-<span id="cb1-819"><a href="#cb1-819"></a></span>
-<span id="cb1-820"><a href="#cb1-820"></a>The left panel shows coverage calibration: the diagonal represents perfect calibration (empirical coverage = nominal coverage). Naive conformal prediction (red) falls below the diagonal---it promises 90% coverage but delivers less, because the calibration items (easy) are not representative of the test items (hard). Weighted conformal prediction (green) restores coverage by reweighting the calibration scores to match the test distribution. The right panel shows the source of the problem: the calibration distribution (blue) is shifted left (easier items) relative to the test distribution (red).</span>
-<span id="cb1-821"><a href="#cb1-821"></a></span>
-<span id="cb1-822"><a href="#cb1-822"></a></span>
-<span id="cb1-823"><a href="#cb1-823"></a><span class="fu">## Putting It All Together: A Causal Audit {#sec-causal-audit}</span></span>
-<span id="cb1-824"><a href="#cb1-824"></a></span>
-<span id="cb1-825"><a href="#cb1-825"></a>We close with a worked example that composes all tools from this chapter. Consider "CodeReason," a hypothetical benchmark claiming to measure coding reasoning ability in language models.</span>
-<span id="cb1-826"><a href="#cb1-826"></a></span>
-<span id="cb1-827"><a href="#cb1-827"></a>**Step 1: Draw the evaluation DAG** (@sec-evaluation-dag). We identify: Training Data $D$ (code repositories, documentation), Architecture $A$ (transformer variant), Latent Coding Ability $\theta$, Benchmark Items $\beta$ (coding problems), Prompt Template $F$ (instruction format), and Observed Score $Y$. We suspect two validity-threatening paths: (i) $D \to Y$ bypassing $\theta$ (some models trained on CodeReason's source repository), and (ii) $F \to Y$ (the benchmark uses a specific instruction format that favors certain models).</span>
-<span id="cb1-828"><a href="#cb1-828"></a></span>
-<span id="cb1-829"><a href="#cb1-829"></a>**Step 2: Check for distribution shift** (@sec-shift-taxonomy). The benchmark items are predominantly Python function-completion tasks at medium difficulty. The deployment context requires debugging, multi-file reasoning, and code review across Python, JavaScript, and Rust. This is covariate shift: the item distribution $P^{(s)}(\beta)$ is narrower than $P^{(t)}(\beta)$. We estimate density ratios using a domain classifier trained to distinguish benchmark items from deployment items.</span>
-<span id="cb1-830"><a href="#cb1-830"></a></span>
-<span id="cb1-831"><a href="#cb1-831"></a>**Step 3: Apply doubly robust estimation** (@sec-three-estimators). We combine two components: (a) An IRT model fitted on the benchmark data provides $\hat{r}(x, a)$---the direct method estimate of each model's accuracy on any item. (b) The density ratio weights from Step 2 provide the importance weights. The DR estimator corrects the IRT predictions using the importance-weighted residuals. The result: an accuracy estimate that accounts for both the item selection bias and any IRT misspecification.</span>
-<span id="cb1-832"><a href="#cb1-832"></a></span>
-<span id="cb1-833"><a href="#cb1-833"></a>**Step 4: Construct prediction intervals** (@sec-weighted-conformal). Using the importance weights from Step 2, we apply weighted conformal prediction to the DR-corrected estimates. The result: "Model X's deployment accuracy is in <span class="co">[</span><span class="ot">0.62, 0.71</span><span class="co">]</span> with 90% coverage." The interval is wider than it would be under no shift, reflecting the additional uncertainty from extrapolating to a different item distribution.</span>
-<span id="cb1-834"><a href="#cb1-834"></a></span>
-<span id="cb1-835"><a href="#cb1-835"></a>**Step 5: Diagnose contamination** (@sec-causal-contamination). We compare model performance on items created before vs. after the training data cutoff (chronological split). Models with suspected contamination show a 15-point accuracy gap between pre- and post-cutoff items. We run item-fit analysis (@sec-item-fit) and find that the pre-cutoff items have inflated outfit statistics for these models. Conclusion: the $D \to Y$ path is active for these models. We flag them and report both contamination-adjusted and unadjusted rankings.</span>
-<span id="cb1-836"><a href="#cb1-836"></a></span>
-<span id="cb1-837"><a href="#cb1-837"></a>This five-step causal audit integrates the tools from this chapter with the diagnostic methods from @sec-validity-diagnostics, providing a systematic approach to evaluating whether benchmark results are trustworthy enough to inform deployment decisions.</span>
-<span id="cb1-838"><a href="#cb1-838"></a></span>
-<span id="cb1-839"><a href="#cb1-839"></a></span>
-<span id="cb1-840"><a href="#cb1-840"></a><span class="fu">## Discussion Questions {#sec-causality-discussion}</span></span>
-<span id="cb1-841"><a href="#cb1-841"></a></span>
-<span id="cb1-842"><a href="#cb1-842"></a><span class="ss">1. </span>A benchmark uses Computerized Adaptive Testing (@sec-cat) to select items. A critic argues that the resulting accuracy is "biased because models only answered items matched to their ability level." Using the off-policy evaluation framework, explain whether this criticism is valid and how the estimate could be corrected if needed.</span>
-<span id="cb1-843"><a href="#cb1-843"></a></span>
-<span id="cb1-844"><a href="#cb1-844"></a><span class="ss">2. </span>Two benchmarks both claim to measure "reasoning." On Benchmark A, Model X outperforms Model Y. On Benchmark B, the ranking reverses. Draw a DAG that explains this reversal (hint: consider Simpson's paradox). What causal assumptions would make the Benchmark A ranking the correct one?</span>
-<span id="cb1-845"><a href="#cb1-845"></a></span>
-<span id="cb1-846"><a href="#cb1-846"></a><span class="ss">3. </span>Prediction-powered inference assumes that the model predictions $\hat{Y}$ are informative about the true labels $Y$. When might this assumption fail in AI evaluation? What are the consequences for the DR estimator's consistency, and how could the failure be detected?</span>
-<span id="cb1-847"><a href="#cb1-847"></a></span>
-<span id="cb1-848"><a href="#cb1-848"></a><span class="ss">4. </span>A company evaluates its model on an internal benchmark (source) and wants to predict performance on a customer-facing deployment (target). What information is needed to determine whether the benchmark results are transportable? Which assumptions are untestable from the source data alone?</span>
-<span id="cb1-849"><a href="#cb1-849"></a></span>
-<span id="cb1-850"><a href="#cb1-850"></a><span class="ss">5. </span>Conformal prediction guarantees *marginal* coverage: $P(Y \in C_\alpha) \geq 1 - \alpha$ on average over the test distribution. Why is this weaker than *conditional* coverage ($P(Y \in C_\alpha \mid X = x) \geq 1 - \alpha$ for each $x$), and when does the distinction matter for AI evaluation?</span>
-<span id="cb1-851"><a href="#cb1-851"></a></span>
-<span id="cb1-852"><a href="#cb1-852"></a></span>
-<span id="cb1-853"><a href="#cb1-853"></a><span class="fu">## Bibliographic Notes {#sec-causality-biblio}</span></span>
-<span id="cb1-854"><a href="#cb1-854"></a></span>
-<span id="cb1-855"><a href="#cb1-855"></a>The mathematical framework for causal reasoning used in this chapter is due to @pearl2009causality, who developed structural causal models, the do-calculus, and the graphical criteria for identifiability. An accessible introduction is @peters2017elements. The transportability theory---when causal conclusions can be transferred across settings---is developed by @bareinboim2016causal.</span>
-<span id="cb1-856"><a href="#cb1-856"></a></span>
-<span id="cb1-857"><a href="#cb1-857"></a>The taxonomy of distribution shift draws on a large literature. Covariate shift and importance weighting were formalized by @shimodaira2000improving. @sugiyama2012density provide a comprehensive treatment of density ratio estimation methods. @quinonero2009dataset survey the broader landscape of dataset shift in machine learning.</span>
-<span id="cb1-858"><a href="#cb1-858"></a></span>
-<span id="cb1-859"><a href="#cb1-859"></a>Doubly robust estimation originated in the biostatistics literature with @robins1994estimation, who introduced the augmented inverse probability weighted estimator. @dudik2011doubly adapted the DR framework to contextual bandits and off-policy evaluation, which is the formulation we use here. The connection between DR estimation and semiparametric efficiency theory is developed in the biostatistics literature; for machine learning applications, see the survey by Dudík, Erber, Langford, and Li (2014).</span>
-<span id="cb1-860"><a href="#cb1-860"></a></span>
-<span id="cb1-861"><a href="#cb1-861"></a>Prediction-Powered Inference was introduced by @angelopoulos2023prediction, who showed how to construct valid confidence intervals by combining a small labeled dataset with a large set of model predictions. The structural connection between PPI and doubly robust estimation is noted in their paper and further developed in follow-up work on PPI++.</span>
-<span id="cb1-862"><a href="#cb1-862"></a></span>
-<span id="cb1-863"><a href="#cb1-863"></a>Conformal prediction was introduced by @vovk2005algorithmic. @tibshirani2019conformal extended conformal methods to handle covariate shift via importance weighting, and @barber2023conformal further generalized the framework beyond exchangeability.</span>
-<span id="cb1-864"><a href="#cb1-864"></a></span>
-<span id="cb1-865"><a href="#cb1-865"></a>The connection between Borsboom's causal validity and structural causal models was developed in @sec-foundations. The evaluation DAG in this chapter makes that connection explicit, showing how each validity threat from @sec-validity-threats corresponds to a specific causal pathway. Data attribution methods---influence functions, TracIn, and TRAK---provide complementary tools for tracing the causal effect of training data on model predictions, but are beyond the scope of this chapter; see Koh and Liang (2017) for the foundational work.</span>
-<span id="cb1-866"><a href="#cb1-866"></a></span>
-<span id="cb1-867"><a href="#cb1-867"></a></span>
-<span id="cb1-868"><a href="#cb1-868"></a><span class="fu">## Exercises {#sec-causality-exercises}</span></span>
-<span id="cb1-869"><a href="#cb1-869"></a></span>
-<span id="cb1-870"><a href="#cb1-870"></a>**Theoretical**</span>
-<span id="cb1-871"><a href="#cb1-871"></a></span>
-<span id="cb1-872"><a href="#cb1-872"></a><span class="ss">1. </span>Show that under covariate shift ($P^{(s)}(Y \mid X) = P^{(t)}(Y \mid X)$, $P^{(s)}(X) \neq P^{(t)}(X)$), the importance-weighted estimator $\hat{\mu}_{\text{IW}} = \frac{1}{n}\sum_{i=1}^n w(x_i) Y_i$ with $w(x_i) = P^{(t)}(x_i)/P^{(s)}(x_i)$ is unbiased for $\mathbb{E}_{P^{(t)}}[Y]$. Under what conditions on the weight distribution does the variance of $\hat{\mu}_{\text{IW}}$ diverge?</span>
-<span id="cb1-873"><a href="#cb1-873"></a></span>
-<span id="cb1-874"><a href="#cb1-874"></a><span class="ss">2. </span>Prove the double robustness property: show that $\mathbb{E}<span class="co">[</span><span class="ot">\hat{V}_{\text{DR}}</span><span class="co">]</span> = V(\pi)$ (@eq-dr) if either (a) the reward model satisfies $\hat{r}(x, a) = \mathbb{E}<span class="co">[</span><span class="ot">r \mid x, a</span><span class="co">]</span>$ for all $(x, a)$, or (b) the propensity $\pi_0(a \mid x)$ is correctly specified. Where does the proof rely on the assumption that the logged data is collected under $\pi_0$?</span>
-<span id="cb1-875"><a href="#cb1-875"></a></span>
-<span id="cb1-876"><a href="#cb1-876"></a><span class="ss">3. </span>In a CAT procedure that selects the item maximizing Fisher information at the current ability estimate $\hat{\theta}$, derive the selection propensity $\pi_0(x_t \mid \hat{\theta}_t)$ for a Rasch model. Show that this propensity is maximized for items with $\beta_i \approx \hat{\theta}_t$ and decays for items far from the current estimate. What is the effective sample size $n_{\text{eff}}$ of the resulting IPW estimator as a function of the item pool's difficulty distribution?</span>
-<span id="cb1-877"><a href="#cb1-877"></a></span>
-<span id="cb1-878"><a href="#cb1-878"></a><span class="ss">4. </span>Using the evaluation DAG from @sec-evaluation-dag, show that benchmark contamination (a direct path $D \to Y$ bypassing $\theta$) is *not identifiable* from observational data alone without additional assumptions. What minimal intervention (e.g., a chronological split or a canary-based test) would identify the contamination effect? State the identifying assumptions precisely.</span>
-<span id="cb1-879"><a href="#cb1-879"></a></span>
-<span id="cb1-880"><a href="#cb1-880"></a>**Computational**</span>
-<span id="cb1-881"><a href="#cb1-881"></a></span>
-<span id="cb1-882"><a href="#cb1-882"></a><span class="ss">5. </span>Implement importance weighting for a benchmark with covariate shift. Simulate a Rasch model with $P^{(s)}(\beta) = \mathcal{N}(-1, 1)$ (easy-biased source) and $P^{(t)}(\beta) = \mathcal{N}(0, 1.5)$ (broader target). For 200 models, compare naive and IW-corrected accuracy estimates. Vary the degree of shift (by changing the source mean from $-2$ to $0$) and plot the naive bias as a function of shift magnitude.</span>
-<span id="cb1-883"><a href="#cb1-883"></a></span>
-<span id="cb1-884"><a href="#cb1-884"></a><span class="ss">6. </span>Simulate a full CAT procedure for 200 models on a 500-item Rasch pool. For each model, run a 30-item adaptive test using the maximum-information selection rule from @sec-cat. Compute naive accuracy, IPW-corrected accuracy, and DR-corrected accuracy. Introduce IRT misspecification (e.g., the true model is 2PL but the reward model assumes Rasch) and show that DR remains robust while DM degrades.</span>
-<span id="cb1-885"><a href="#cb1-885"></a></span>
-<span id="cb1-886"><a href="#cb1-886"></a><span class="ss">7. </span>Implement weighted conformal prediction for AI evaluation under covariate shift. Calibrate on items drawn from $\mathcal{N}(-0.5, 0.8)$ and test on items from $\mathcal{N}(1.0, 1.0)$. Plot empirical coverage vs. nominal level for both standard and weighted conformal across the range $\alpha \in <span class="co">[</span><span class="ot">0.05, 0.50</span><span class="co">]</span>$. How does the effective sample size of the weighted calibration set affect the coverage guarantee?</span>
-<span id="cb1-887"><a href="#cb1-887"></a></span>
-<span id="cb1-888"><a href="#cb1-888"></a>**Discussion**</span>
-<span id="cb1-889"><a href="#cb1-889"></a></span>
-<span id="cb1-890"><a href="#cb1-890"></a><span class="ss">8. </span>@angelopoulos2023prediction's PPI uses cheap model predictions to augment expensive human labels. In AI evaluation, the "expensive" labels are actual model runs and the "cheap" predictions are the PPE cold-start predictions from @sec-cold-start. Design a practical PPI pipeline for evaluating a new model on 10,000 items when only 500 actual evaluations can be afforded. What are the key design choices (which 500 items to evaluate? how to estimate the bias correction? how to construct confidence intervals)? How does the accuracy of the PPE predictions affect the width of the resulting intervals?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap9.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
+<script>
 // Auto-execute all pyodide cells after initialization
 document.addEventListener('DOMContentLoaded', function() {
   function waitForPyodide() {

@@ -89,20 +89,17 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../src/chap4.html" rel="next">
 <link href="../src/chap2.html" rel="prev">
+<link href="../resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/videojs/video.min.js"></script>
@@ -119,7 +116,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -537,176 +533,18 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -715,18 +553,57 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="../index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -741,7 +618,23 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span id="sec-foundations" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Models</span></span></h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -832,13 +725,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
@@ -849,9 +742,7 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>license.qmd</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -869,11 +760,10 @@ window.Quarto = {
   <li><a href="#sec-irt-bib" id="toc-sec-irt-bib" class="nav-link" data-scroll-target="#sec-irt-bib"><span class="header-section-number">3.8</span> Bibliographic Notes</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap3.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
 <script type="module" id="qpyodide-monaco-editor-init">
 
@@ -885,23 +775,7 @@ window.Quarto = {
   });
 </script>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-foundations" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Models</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
@@ -1481,8 +1355,6 @@ P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}
 <p>In the 2010s, these methods reached AI evaluation—the application of IRT to benchmark analysis <span class="citation" data-cites="polo2024tinybenchmarks">(<a href="#ref-polo2024tinybenchmarks" role="doc-biblioref">Polo et al. 2024</a>)</span>, multidimensional factor models for AI capabilities (this textbook), and the Chatbot Arena’s use of Elo ratings to rank language models <span class="citation" data-cites="chiang2024chatbotarena">(<a href="#ref-chiang2024chatbotarena" role="doc-biblioref">Chiang et al. 2024</a>)</span>.</p>
 
 
-<!-- -->
-
 </section>
 <section id="bibliography" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>
@@ -1551,21 +1423,103 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1634,57 +1588,6 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -2026,669 +1929,9 @@ Truong, Sang, Yuheng Tu, Rylan Schaeffer, and Sanmi Koyejo. 2025. <span>“Item 
         <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="an">format:</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">  html:</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">    include-after-body:</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">      text: |</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">        &lt;script&gt;</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">        // Auto-execute all pyodide cells after initialization</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">        document.addEventListener('DOMContentLoaded', function() {</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">          // Wait for pyodide to be fully ready (mainPyodide is set after loading)</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">          function waitForPyodide() {</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">            if (typeof globalThis.mainPyodide !== 'undefined' &amp;&amp; globalThis.mainPyodide) {</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="co">              // Pyodide is ready, execute all cells with autorun=true</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co">              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="co">                globalThis.qpyodideCellDetails.forEach((cell, index) =&gt; {</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="co">                  if (cell.options &amp;&amp; cell.options.autorun === 'true') {</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="co">                    setTimeout(() =&gt; {</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="co">                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="co">                      if (runButton &amp;&amp; !runButton.disabled) {</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="co">                        runButton.click();</span></span>
-<span id="cb5-20"><a href="#cb5-20"></a><span class="co">                      }</span></span>
-<span id="cb5-21"><a href="#cb5-21"></a><span class="co">                    }, index * 1000); // Stagger execution by 1 second each</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a><span class="co">                  }</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a><span class="co">                });</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="co">              }</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a><span class="co">            } else {</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a><span class="co">              setTimeout(waitForPyodide, 500);</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a><span class="co">            }</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a><span class="co">          }</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a><span class="co">          setTimeout(waitForPyodide, 2000); // Start checking after 2 seconds</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a><span class="co">        });</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a><span class="co">        &lt;/script&gt;</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a><span class="an">filters:</span></span>
-<span id="cb5-33"><a href="#cb5-33"></a><span class="co">  - pyodide</span></span>
-<span id="cb5-34"><a href="#cb5-34"></a><span class="an">pyodide:</span></span>
-<span id="cb5-35"><a href="#cb5-35"></a><span class="co">  packages:</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a><span class="co">    - numpy</span></span>
-<span id="cb5-37"><a href="#cb5-37"></a><span class="co">    - matplotlib</span></span>
-<span id="cb5-38"><a href="#cb5-38"></a><span class="co">---</span></span>
-<span id="cb5-39"><a href="#cb5-39"></a></span>
-<span id="cb5-40"><a href="#cb5-40"></a><span class="fu"># Models {#sec-foundations}</span></span>
-<span id="cb5-41"><a href="#cb5-41"></a></span>
-<span id="cb5-42"><a href="#cb5-42"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb5-43"><a href="#cb5-43"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb5-44"><a href="#cb5-44"></a></span>
-<span id="cb5-45"><a href="#cb5-45"></a><span class="ss">1. </span>**Distinguish** between Item Response Theory, factor models, paired comparison systems (Elo, Bradley-Terry), and network models (GGM, Ising).</span>
-<span id="cb5-46"><a href="#cb5-46"></a><span class="ss">2. </span>**Explain** measurement as a homomorphism (representational measurement theory) and additive conjoint measurement, and map their elements onto the Rasch model.</span>
-<span id="cb5-47"><a href="#cb5-47"></a><span class="ss">3. </span>**Explain** why the Rasch model holds a special status as "the measurement model" through the sufficiency of sum scores, specific objectivity, and test-free measurement.</span>
-<span id="cb5-48"><a href="#cb5-48"></a><span class="ss">4. </span>**Explain** why observable response probabilities make the conjoint cancellation axioms empirically testable in AI evaluation, and state the caveats (link freedom, multidimensionality, sampling error, and the separation of measurement from validity).</span>
-<span id="cb5-49"><a href="#cb5-49"></a><span class="ss">5. </span>**Derive** the sufficiency theorem for the Rasch model and explain its implications for AI benchmark evaluation.</span>
-<span id="cb5-50"><a href="#cb5-50"></a><span class="ss">6. </span>**Compare** the prescriptive (Rasch school) and descriptive (general IRT) approaches to measurement and articulate when each is appropriate.</span>
-<span id="cb5-51"><a href="#cb5-51"></a><span class="ss">7. </span>**Trace** the historical development from Thurstone (1927) through Rasch (1960) to modern network psychometrics.</span>
-<span id="cb5-52"><a href="#cb5-52"></a><span class="ss">8. </span>**Connect** classical measurement concepts (reliability, validity, dimensionality) to contemporary AI benchmark evaluation.</span>
-<span id="cb5-53"><a href="#cb5-53"></a><span class="ss">9. </span>**Apply** measurement theory to analyze whether AI benchmarks satisfy the requirements for scientific measurement.</span>
-<span id="cb5-54"><a href="#cb5-54"></a><span class="ss">10. </span>**Implement** basic IRT models in Python and visualize item characteristic curves.</span>
-<span id="cb5-55"><a href="#cb5-55"></a><span class="ss">11. </span>**Evaluate** the assumptions underlying AI leaderboards and identify potential violations of measurement principles.</span>
-<span id="cb5-56"><a href="#cb5-56"></a>:::</span>
-<span id="cb5-57"><a href="#cb5-57"></a></span>
-<span id="cb5-58"><a href="#cb5-58"></a>::: {.callout-important title="Scope of This Chapter"}</span>
-<span id="cb5-59"><a href="#cb5-59"></a>This chapter focuses on **model specification**: we introduce the probabilistic models used for measurement and explain what each one assumes. We do *not* cover how to estimate (learn) the parameters of these models---that is the subject of @sec-learning. Think of this chapter as defining the "what" (the models) and the next chapter as defining the "how" (the estimation).</span>
-<span id="cb5-60"><a href="#cb5-60"></a>:::</span>
-<span id="cb5-61"><a href="#cb5-61"></a></span>
-<span id="cb5-62"><a href="#cb5-62"></a>::: {.callout-tip title="Video Overview" collapse="false"}</span>
-<span id="cb5-63"><a href="#cb5-63"></a>A visual tour of the key concepts in this chapter — from response matrices and item characteristic curves to factor models and benchmark heterogeneity.</span>
-<span id="cb5-64"><a href="#cb5-64"></a></span>
-<span id="cb5-65"><a href="#cb5-65"></a>{{&lt; video ../animations/ch1/chapter1_narrated.mp4 &gt;}}</span>
-<span id="cb5-66"><a href="#cb5-66"></a>:::</span>
-<span id="cb5-67"><a href="#cb5-67"></a></span>
-<span id="cb5-68"><a href="#cb5-68"></a>::: {.callout-note title="Notation"}</span>
-<span id="cb5-69"><a href="#cb5-69"></a>This chapter introduces the core notation used throughout the book: $\theta_i$ (model ability), $\beta_j$ (item difficulty), $\boldsymbol{\beta}_j = (\beta_{j1}, \beta_{j2}, \beta_{j3})$ (the item-parameter vector collecting difficulty, discrimination, and guessing), $Y_{ij}$ (binary response), and $\sigma(\cdot)$ (logistic sigmoid). @sec-notation collects every symbol in one place---refer to it whenever a symbol is unfamiliar.</span>
-<span id="cb5-70"><a href="#cb5-70"></a>:::</span>
-<span id="cb5-71"><a href="#cb5-71"></a></span>
-<span id="cb5-72"><a href="#cb5-72"></a></span>
-<span id="cb5-73"><a href="#cb5-73"></a>@sec-validity drew the nomological network as a causal diagram: latent constructs $\theta$ that produce a system's responses $Y$, with the loading edges $\theta \to Y$ carrying the meaning we intend to measure. That chapter was conceptual---it said what a valid measurement *requires* (the construct exists and causally produces the responses) but left the edges as bare arrows, with no functional form and no way to recover $\theta$ from data. This chapter supplies the form. For the most part of this chapter, we will assume that we have already decided on a construct to be measured and a set of items to target that construct.</span>
-<span id="cb5-74"><a href="#cb5-74"></a></span>
-<span id="cb5-75"><a href="#cb5-75"></a>The goal is modest: assign each model a single number $\theta_i$ that represents its standing on one construct---an *ability*---on a *unidimensional* scale. The hard part is the word *represents*. Computing a model's accuracy already assigns it a number, but a number is not yet a measurement. A bathroom scale reading off body mass and a leaderboard reading off accuracy both produce numbers; only one is trusted to support arithmetic, comparison across instruments, and prediction. This section asks what separates the two---what it takes for "assign a number" to mean *measure*---and arrives at the model that, on one influential account, uniquely delivers it: the Rasch model. We build up in three steps: the general theory of when numbers measure (representational measurement theory, @sec-rmt); the specific structure that yields an interval scale for an attribute like ability, and the Rasch model that realizes it (additive conjoint measurement, @sec-acm); and the respect in which AI evaluation can *test* that structure rather than merely assume it (@sec-acm-ai).</span>
-<span id="cb5-76"><a href="#cb5-76"></a></span>
-<span id="cb5-77"><a href="#cb5-77"></a><span class="fu">## What Does It Mean to Measure? {#sec-rmt}</span></span>
-<span id="cb5-78"><a href="#cb5-78"></a></span>
-<span id="cb5-79"><a href="#cb5-79"></a>Representational measurement theory <span class="co">[</span><span class="ot">@krantz1971foundations</span><span class="co">]</span> makes precise what it means for numbers to measure. Its central idea: to measure is to construct a structure-preserving map---a *homomorphism*---from an **empirical relational structure** (the objects and the qualitative relations we can actually observe among them) into a **numerical relational structure** (the real numbers with their order and arithmetic).</span>
-<span id="cb5-80"><a href="#cb5-80"></a></span>
-<span id="cb5-81"><a href="#cb5-81"></a>Why should this be the *central* idea, rather than just "attach a number to each object"? Because the numbers we attach come with a great deal of built-in structure that we cannot help but use. As soon as a model has "ability 1.8" and another "ability 0.9", we are tempted to say the first is *twice* as able, or that the *gap* between them equals some other gap---statements that borrow the order, differences, and ratios of the real line. Those statements are only trustworthy if the objects genuinely stand in relations that mirror the numerical ones. The empirical relations come *first*: before any numbers, we can observe that this rod balances those two end to end, or that this model beats that one on item after item. A homomorphism is the promise that the numbers are a faithful stand-in for exactly those observations---order maps to order ($\ge$), physical combination maps to addition ($+$)---so that whatever we compute on the numbers can be read back as a true statement about the objects. Measurement, on this view, is not *imposing* a scale but *discovering* a numerical representation that the empirical structure already supports; the numbers are a model of reality the way a map is a model of terrain, trustworthy precisely because distances and directions on the map preserve those on the ground. Assigning numbers that do *not* preserve the structure (jersey numbers on athletes, area codes) is labeling, not measuring: arithmetic on them carries no information back to the world.</span>
-<span id="cb5-82"><a href="#cb5-82"></a></span>
-<span id="cb5-83"><a href="#cb5-83"></a>::: {.callout-note title="Definition: Measurement (representational)"}</span>
-<span id="cb5-84"><a href="#cb5-84"></a>An **empirical relational structure** $\mathcal{E} = \langle A, \succeq, \circ, \dots \rangle$ is a set of objects $A$ with observed relations---an order $\succeq$, perhaps a concatenation operation $\circ$. A **numerical relational structure** is $\mathcal{N} = \langle \mathbb{R}, \ge, +, \dots \rangle$. A **measurement** is a homomorphism $\phi: A \to \mathbb{R}$ preserving those relations:</span>
-<span id="cb5-85"><a href="#cb5-85"></a>$$</span>
-<span id="cb5-86"><a href="#cb5-86"></a>a \succeq b \iff \phi(a) \ge \phi(b), \qquad \phi(a \circ b) = \phi(a) + \phi(b).</span>
-<span id="cb5-87"><a href="#cb5-87"></a>$$</span>
-<span id="cb5-88"><a href="#cb5-88"></a>:::</span>
-<span id="cb5-89"><a href="#cb5-89"></a></span>
-<span id="cb5-90"><a href="#cb5-90"></a>Two theorems govern any such map.</span>
-<span id="cb5-91"><a href="#cb5-91"></a></span>
-<span id="cb5-92"><a href="#cb5-92"></a>A **representation theorem** has the form: *if* the empirical structure $\mathcal{E}$ satisfies a list of qualitative axioms, *then* a homomorphism $\phi$ into the reals exists (and the proof usually constructs one). The axioms are conditions stated entirely in terms of the observable relations---no numbers appear in them---and they are precisely the *empirical shadow* of the properties the number system already has. Real-number order is transitive and complete, so the empirical order $\succeq$ must be too: if $a \succeq b$ and $b \succeq c$ then $a \succeq c$. Real addition is associative and commutative, so if concatenation $\circ$ is to map to $+$, combining objects must be observably associative and commutative---$a \circ b$ must land at the same place on the scale as $b \circ a$. </span>
-<span id="cb5-93"><a href="#cb5-93"></a></span>
-<span id="cb5-94"><a href="#cb5-94"></a>How rich a scale $\mathcal{E}$ supports depends on how many axioms it satisfies. The recurring ones are:</span>
-<span id="cb5-95"><a href="#cb5-95"></a></span>
-<span id="cb5-96"><a href="#cb5-96"></a><span class="ss">- </span>**Weak order.** The relation $\succeq$ is *transitive* ($a \succeq b$ and $b \succeq c$ imply $a \succeq c$) and *complete* (every pair is comparable: $a \succeq b$ or $b \succeq a$). Informally: "rank everything, ties allowed."</span>
-<span id="cb5-97"><a href="#cb5-97"></a><span class="ss">- </span>**Concatenation** ($\circ$). A way to combine two objects into a third---rods laid end to end, masses heaped on one pan---required to be *associative* ($(a \circ b) \circ c \sim a \circ (b \circ c)$) and *commutative* ($a \circ b \sim b \circ a$), mirroring the same properties of $+$.</span>
-<span id="cb5-98"><a href="#cb5-98"></a><span class="ss">- </span>**Monotonicity.** Combining preserves order: $a \succeq b \iff a \circ c \succeq b \circ c$.</span>
-<span id="cb5-99"><a href="#cb5-99"></a><span class="ss">- </span>**Archimedean.** No object is infinitely larger than another: enough copies of any object eventually exceed any other.</span>
-<span id="cb5-100"><a href="#cb5-100"></a><span class="ss">- </span>**Density** (technical). A countable subset lies order-dense in $\succeq$; needed only to embed *infinite* object sets into $\mathbb{R}$, and automatic for finite benchmarks.</span>
-<span id="cb5-101"><a href="#cb5-101"></a></span>
-<span id="cb5-102"><a href="#cb5-102"></a>Which scale these buy:</span>
-<span id="cb5-103"><a href="#cb5-103"></a></span>
-<span id="cb5-104"><a href="#cb5-104"></a><span class="ss">- </span>An **ordinal** scale follows from a weak order (plus density) alone: $\phi$ preserves order and nothing more, $a \succeq b \iff \phi(a) \ge \phi(b)$.</span>
-<span id="cb5-105"><a href="#cb5-105"></a><span class="ss">- </span>A **ratio** scale follows from a weak order *together with* a concatenation operation satisfying associativity, commutativity, monotonicity, and the Archimedean condition; then $\phi$ also satisfies $\phi(a \circ b) = \phi(a) + \phi(b)$. The construction is essentially counting: fix a unit, lay down copies of it, and record how many balance the object---which is how length and mass are measured.</span>
-<span id="cb5-106"><a href="#cb5-106"></a><span class="ss">- </span>An **interval** scale is the awkward middle: it needs additive structure but has *no* concatenation operation to supply it. The next section shows how *two conjoint factors* can play the role concatenation plays here (additive conjoint measurement, @sec-acm).</span>
-<span id="cb5-107"><a href="#cb5-107"></a></span>
-<span id="cb5-108"><a href="#cb5-108"></a>A **uniqueness theorem** then states how unique the resulting $\phi$ is---the class of admissible transformations carrying one valid homomorphism to another---and this fixes the **scale type**:</span>
-<span id="cb5-109"><a href="#cb5-109"></a></span>
-<span id="cb5-110"><a href="#cb5-110"></a><span class="ss">- </span>**Ordinal:** any strictly increasing transformation is admissible; only the *order* of the numbers is meaningful.</span>
-<span id="cb5-111"><a href="#cb5-111"></a><span class="ss">- </span>**Interval:** admissible transformations are positive affine, $\phi \mapsto a\phi + b$ with $a&gt;0$; *differences* (and ratios of differences) are meaningful, but neither the zero nor the unit.</span>
-<span id="cb5-112"><a href="#cb5-112"></a><span class="ss">- </span>**Ratio:** admissible transformations are $\phi \mapsto a\phi$; *ratios* are meaningful and there is a true zero.</span>
-<span id="cb5-113"><a href="#cb5-113"></a></span>
-<span id="cb5-114"><a href="#cb5-114"></a>These types form a hierarchy of increasing structure, each licensing more arithmetic than the last <span class="co">[</span><span class="ot">@stevens1946theory</span><span class="co">]</span>. (Below them sits the **nominal** scale---mere labels, like benchmark names or task categories, where only equality is meaningful.) An **ordinal** scale records only rank: medians and percentiles are meaningful, but the spacing between values is not, so a model that ranks first is *better* than the runner-up without being better *by any stated amount*---a raw leaderboard position is ordinal. An **interval** scale adds meaningful distances while keeping an arbitrary zero: differences and averages are licensed but ratios are not, the textbook case being temperature in degrees Celsius (the gap from $10°$ to $20°$ equals the gap from $20°$ to $30°$, yet $20°$ is not "twice as hot" as $10°$); an IRT ability $\theta$ on the logit scale is interval in just this sense, its zero a convention. A **ratio** scale adds a true zero, so ratios carry content and "twice as much" means something: length, mass, reaction time, and a raw *count* of items answered correctly are all ratio. The practical warning is that the scale type is fixed by the empirical structure, not by how the numbers look. An accuracy of $0.86$ is a perfectly good ratio-scale *count* of correct answers; but read as a measure of *ability* it is at best interval, and without a fitted model only ordinal---the decimals invite ratio and difference comparisons the construct may not support.</span>
-<span id="cb5-115"><a href="#cb5-115"></a></span>
-<span id="cb5-116"><a href="#cb5-116"></a>This gives "a meaningful numerical value" a precise sense: a numerical statement is **meaningful** exactly when its truth is invariant under the admissible transformations of the scale <span class="co">[</span><span class="ot">@krantz1971foundations</span><span class="co">]</span>. "Model A scored twice model B" is meaningful on a ratio scale, not an interval one; "the gap from A to B exceeds the gap from C to D" is meaningful on an interval scale, not an ordinal one. Scoring assigns numbers; measurement assigns numbers *and* certifies which statements about them survive rescaling.</span>
-<span id="cb5-117"><a href="#cb5-117"></a></span>
-<span id="cb5-118"><a href="#cb5-118"></a>Where do our objects of interest fall on this spectrum? Physical *extensive* quantities---length, mass, duration---come with a concatenation operation (lay rods end to end, pile masses on a balance), and that operation is what earns them a *ratio* scale; physical measurement sits at the rich end. Ability has no such operation: there is no way to concatenate two models', or two people's, abilities into a third. The most an ability scale can aspire to is therefore an *interval* scale, reachable only by the indirect, two-factor route of additive conjoint measurement (@sec-acm). Here human and AI measurement part ways. For human test-takers the conjoint axioms can only be *assumed*, because a response probability is never directly observed---each person meets each item essentially once---so interval status is a modeling commitment, and absent that commitment the defensible reading of a test score is merely *ordinal*. For AI systems the same axioms are *testable*: a model's response probability can be estimated by repeated sampling (@sec-acm-ai), so interval measurement can be earned from data rather than presumed. A leaderboard that only reports who outranked whom sits at the ordinal floor for both.</span>
-<span id="cb5-119"><a href="#cb5-119"></a></span>
-<span id="cb5-120"><a href="#cb5-120"></a><span class="fu">## Additive Conjoint Measurement {#sec-acm}</span></span>
-<span id="cb5-121"><a href="#cb5-121"></a></span>
-<span id="cb5-122"><a href="#cb5-122"></a>Classical extensive measurement (length, mass) earns its scale from a physical concatenation operation: lay rods end to end and length adds. Latent attributes have no such operation---there is no way to physically concatenate two models' abilities. Additive conjoint measurement <span class="co">[</span><span class="ot">@luce1964simultaneous</span><span class="co">]</span> is the branch of representational theory that recovers an interval scale for an attribute jointly determined by two **conjoint factors** from the order of their combined effect. (We call $A$ and $X$ *conjoint factors* to keep them distinct from the unrelated *factor model* of @sec-factor-models.) Let the conjoint factors be $A$ (models) and $X$ (items), and suppose we can observe, for each pair $(a,x) \in A \times X$, an ordering $\succeq$ by how much of the attribute results (how likely a correct response). Additive conjoint measurement asks when this order on the *product set* admits an additive representation.</span>
-<span id="cb5-123"><a href="#cb5-123"></a></span>
-<span id="cb5-124"><a href="#cb5-124"></a>::: {.callout-note title="Definition: Cancellation axioms"}</span>
-<span id="cb5-125"><a href="#cb5-125"></a>The order $\succeq$ on $A \times X$ satisfies:</span>
-<span id="cb5-126"><a href="#cb5-126"></a></span>
-<span id="cb5-127"><a href="#cb5-127"></a><span class="ss">- </span>**Single cancellation (independence):** the order induced on $A$ by holding $x$ fixed does not depend on which $x$ is fixed, and symmetrically for $X$. So $(a_1, x) \succeq (a_2, x)$ for some $x$ implies $(a_1, x') \succeq (a_2, x')$ for every $x'$.</span>
-<span id="cb5-128"><a href="#cb5-128"></a><span class="ss">- </span>**Double cancellation (the Thomsen condition):** for all $a_1, a_2, a_3 \in A$ and $x_1, x_2, x_3 \in X$,</span>
-<span id="cb5-129"><a href="#cb5-129"></a>$$</span>
-<span id="cb5-130"><a href="#cb5-130"></a>(a_1, x_2) \succeq (a_2, x_1) \;\text{ and }\; (a_2, x_3) \succeq (a_3, x_2) \;\Longrightarrow\; (a_1, x_3) \succeq (a_3, x_1).</span>
-<span id="cb5-131"><a href="#cb5-131"></a>$$</span>
-<span id="cb5-132"><a href="#cb5-132"></a>:::</span>
-<span id="cb5-133"><a href="#cb5-133"></a></span>
-<span id="cb5-134"><a href="#cb5-134"></a>Single cancellation implies parameter separation. Fixing an item $x$ induces a ranking of models, $a \succeq_x a' :\Leftrightarrow (a,x) \succeq (a',x)$; single cancellation says this ranking is the *same for every* $x$, so there is one item-independent order on models (and, symmetrically, one model-independent order on items). The conjoint factors decouple ---one can speak of "the stronger model" without naming an item. Equivalently, in the additive form the item's contribution is the same constant for both models and cancels: $f(a_1) + g(x) \ge f(a_2) + g(x) \iff f(a_1) \ge f(a_2)$, free of $x$. A model$\times$item *interaction*---a model strong on mathematics but weak on coding, outranking a rival on some items and trailing it on others---violates single cancellation outright. Double cancellation then forces the *spacings* of the two conjoint factors to agree, upgrading two separate orderings into one shared additive scale (the content made visible on the $3 \times 3$ grid below).</span>
-<span id="cb5-135"><a href="#cb5-135"></a></span>
-<span id="cb5-136"><a href="#cb5-136"></a>::: {.callout-note title="Definition: Solvability and the Archimedean condition"}</span>
-<span id="cb5-137"><a href="#cb5-137"></a>Two further *structural* conditions make the conjoint factors rich enough to carry a real-valued scale:</span>
-<span id="cb5-138"><a href="#cb5-138"></a></span>
-<span id="cb5-139"><a href="#cb5-139"></a><span class="ss">- </span>**Restricted solvability:** the conjoint factors are finely graded---given a target cell, one can find a level of either factor that matches it, so intervals can always be bisected.</span>
-<span id="cb5-140"><a href="#cb5-140"></a><span class="ss">- </span>**Archimedean:** no level is infinitely larger than another---enough equal steps along one factor eventually overtake any difference.</span>
-<span id="cb5-141"><a href="#cb5-141"></a></span>
-<span id="cb5-142"><a href="#cb5-142"></a>Unlike the cancellation axioms, these are not separately testable on coarse data; they are idealizations that guarantee the construction terminates in $\mathbb{R}$.</span>
-<span id="cb5-143"><a href="#cb5-143"></a>:::</span>
-<span id="cb5-144"><a href="#cb5-144"></a></span>
-<span id="cb5-145"><a href="#cb5-145"></a>::: {.callout-note title="Theorem: Additive representation"}</span>
-<span id="cb5-146"><a href="#cb5-146"></a>If $\succeq$ on $A \times X$ satisfies the cancellation, solvability, and Archimedean axioms, then there exist real functions $f: A \to \mathbb{R}$ and $g: X \to \mathbb{R}$ with</span>
-<span id="cb5-147"><a href="#cb5-147"></a>$$</span>
-<span id="cb5-148"><a href="#cb5-148"></a>(a,x) \succeq (a',x') \iff f(a) + g(x) \ge f(a') + g(x').</span>
-<span id="cb5-149"><a href="#cb5-149"></a>$$</span>
-<span id="cb5-150"><a href="#cb5-150"></a>$f$ and $g$ are unique up to a common positive affine transformation ($f \mapsto \alpha f + \beta_1$, $g \mapsto \alpha g + \beta_2$ with the same $\alpha &gt; 0$). They are therefore **interval scales sharing a common unit.**</span>
-<span id="cb5-151"><a href="#cb5-151"></a>:::</span>
-<span id="cb5-152"><a href="#cb5-152"></a></span>
-<span id="cb5-153"><a href="#cb5-153"></a>::: {.callout-note title="Proof idea" collapse="true"}</span>
-<span id="cb5-154"><a href="#cb5-154"></a>Single cancellation lets each factor be ordered consistently on its own. Double cancellation is the binding constraint: it forces the *spacings* on $A$ and $X$ to be mutually consistent, so a unit defined on one factor transfers to the other. Restricted solvability supplies intermediate elements to bisect intervals; the Archimedean axiom guarantees the bisection terminates, pinning the scale to the reals. One builds a standard sequence of equally spaced elements and shows the additive representation is forced; common-unit interval uniqueness follows because only the shared unit and the two zeros are free. See @krantz1971foundations for the full construction.</span>
-<span id="cb5-155"><a href="#cb5-155"></a>:::</span>
-<span id="cb5-156"><a href="#cb5-156"></a></span>
-<span id="cb5-157"><a href="#cb5-157"></a>The content of double cancellation is easiest to see on a $3 \times 3$ grid: three models $a_1, a_2, a_3$ crossed with three items $x_1, x_2, x_3$. Each cell $(a_i, x_j)$ has an observed propensity (how likely model $i$ is to get item $j$ right), and *if* the structure is additive that propensity is ordered by $f(a_i) + g(x_j)$. Writing $f_i = f(a_i)$ and $g_j = g(x_j)$, the grid of additive values is:</span>
-<span id="cb5-158"><a href="#cb5-158"></a></span>
-<span id="cb5-159"><a href="#cb5-159"></a><span class="pp">|</span>       <span class="pp">|</span> $x_1$       <span class="pp">|</span> $x_2$       <span class="pp">|</span> $x_3$       <span class="pp">|</span></span>
-<span id="cb5-160"><a href="#cb5-160"></a><span class="pp">|:-----:|:-----------:|:-----------:|:-----------:|</span></span>
-<span id="cb5-161"><a href="#cb5-161"></a><span class="pp">|</span> $a_1$ <span class="pp">|</span> $f_1 + g_1$ <span class="pp">|</span> $f_1 + g_2$ <span class="pp">|</span> $f_1 + g_3$ <span class="pp">|</span></span>
-<span id="cb5-162"><a href="#cb5-162"></a><span class="pp">|</span> $a_2$ <span class="pp">|</span> $f_2 + g_1$ <span class="pp">|</span> $f_2 + g_2$ <span class="pp">|</span> $f_2 + g_3$ <span class="pp">|</span></span>
-<span id="cb5-163"><a href="#cb5-163"></a><span class="pp">|</span> $a_3$ <span class="pp">|</span> $f_3 + g_1$ <span class="pp">|</span> $f_3 + g_2$ <span class="pp">|</span> $f_3 + g_3$ <span class="pp">|</span></span>
-<span id="cb5-164"><a href="#cb5-164"></a></span>
-<span id="cb5-165"><a href="#cb5-165"></a>Now suppose we observe two comparisons across the off-diagonal cells: $(a_1, x_2) \succeq (a_2, x_1)$ and $(a_2, x_3) \succeq (a_3, x_2).$ Under the additive representation these read $f_1 + g_2 \ge f_2 + g_1$ and $f_2 + g_3 \ge f_3 + g_2$. Add the two inequalities and cancel the common terms $f_2$ and $g_2$ from both sides---the two cancellations that give the axiom its name---and what survives is $f_1 + g_3 \ge f_3 + g_1,$ or $(a_1, x_3) \succeq (a_3, x_1).$ So additivity forces the third comparison once the first two are seen: the two premises chain $a_1 \to a_2 \to a_3$ across the items, and the conclusion connects the endpoints. If a data set instead shows $(a_3, x_1) \succ (a_1, x_3)$, no functions $f, g$ whatsoever can reproduce it. The violation lives in the ordering of the cells, before any numbers are assigned---which is exactly what makes double cancellation an empirical claim rather than a modeling convenience.</span>
-<span id="cb5-166"><a href="#cb5-166"></a></span>
-<span id="cb5-167"><a href="#cb5-167"></a>Writing the additive structure inside a monotone link $\Phi$ that turns it into a probability gives</span>
-<span id="cb5-168"><a href="#cb5-168"></a>$$</span>
-<span id="cb5-169"><a href="#cb5-169"></a>P(Y_{ij} = 1) = \Phi(\theta_i - \beta_j).</span>
-<span id="cb5-170"><a href="#cb5-170"></a>$$</span>
-<span id="cb5-171"><a href="#cb5-171"></a>Taking $\Phi$ to be the logistic $\sigma(z) = 1/(1 + e^{-z})$ yields the Rasch model; taking the standard normal CDF yields the probit model. The additive structure makes the model a *measurement* model of $i$ (and $j$) -- the scale constructed is an interval scale. The monotone link re-expresses the same order as a probability.</span>
-<span id="cb5-172"><a href="#cb5-172"></a></span>
-<span id="cb5-173"><a href="#cb5-173"></a>In the Rasch model, parameter separation is also discussed as specific objectivity. The additive structure already made model comparisons item-free on the latent scale; the logistic link makes the cancellation in the observable odds,</span>
-<span id="cb5-174"><a href="#cb5-174"></a>$$</span>
-<span id="cb5-175"><a href="#cb5-175"></a>\frac{P(Y_{ij} = 1)/P(Y_{ij} = 0)}{P(Y_{kj} = 1)/P(Y_{kj} = 0)} = \exp(\theta_i - \theta_k),</span>
-<span id="cb5-176"><a href="#cb5-176"></a>$$</span>
-<span id="cb5-177"><a href="#cb5-177"></a>with the difficulty $\beta_j$ dropping out entirely. Operationally this is test-free comparison and subject-free calibration --- a model's ability can be estimated from any subset of calibrated items and an item's difficulty from any sample of models---which the sufficiency of @sec-rasch-measurement makes practical (items calibrate without knowing abilities, and conversely). It is what licenses comparing models across different set of items, building reusable item banks, adaptive testing (@sec-efficient), and equating benchmarks to a common scale---all contingent, as @sec-acm-ai stresses, on the Rasch model actually fitting the data.</span>
-<span id="cb5-178"><a href="#cb5-178"></a></span>
-<span id="cb5-179"><a href="#cb5-179"></a><span class="fu">## Sufficiency and Rasch Model {#sec-rasch-measurement}</span></span>
-<span id="cb5-180"><a href="#cb5-180"></a></span>
-<span id="cb5-181"><a href="#cb5-181"></a>In AI evaluation we almost always report a model's accuracy collapsing an entire response vector of a subject into a single number. When is that collapse harmless? Only if the detail we throw away--- which items were answered correctly, not merely how many---carries no further information about the model's ability. This is the sufficiency assumption, and reporting an average score is only justified if this assumption is valid. Here, we demonstrate that sufficiency assumption further specify the link function $\phi$ that is unspecified in ACM to be the logistic function $\sigma(\cdot)$. The resulting model is known as the Rasch model:</span>
-<span id="cb5-182"><a href="#cb5-182"></a></span>
-<span id="cb5-183"><a href="#cb5-183"></a>$$</span>
-<span id="cb5-184"><a href="#cb5-184"></a>P(Y_{ij} = 1 | \theta_i, \beta_j) = \sigma(\theta_i - \beta_j)</span>
-<span id="cb5-185"><a href="#cb5-185"></a>$$</span>
-<span id="cb5-186"><a href="#cb5-186"></a></span>
-<span id="cb5-187"><a href="#cb5-187"></a>Given the latent parameters $\theta_i$ and $\beta_j$, we assume that responses are conditionally independent. This is also referred to as local independence:</span>
-<span id="cb5-188"><a href="#cb5-188"></a></span>
-<span id="cb5-189"><a href="#cb5-189"></a>$$</span>
-<span id="cb5-190"><a href="#cb5-190"></a>P(Y_{i1}, \ldots, Y_{iM} \mid \theta_i, \beta) = \prod_{j=1}^M P(Y_{ij} \mid \theta_i, \beta_j).</span>
-<span id="cb5-191"><a href="#cb5-191"></a>$$</span>
-<span id="cb5-192"><a href="#cb5-192"></a></span>
-<span id="cb5-193"><a href="#cb5-193"></a>Local independence can be tested by residual correlations analysis between item pairs. Local independence can be violated in practice via shared context between items, where multiple items on the same reading passage, dataset split, or few-shot prompt template share information that $\theta_i$ does not model.</span>
-<span id="cb5-194"><a href="#cb5-194"></a></span>
-<span id="cb5-195"><a href="#cb5-195"></a>Below is the plate diagram of the Rasch model:</span>
-<span id="cb5-196"><a href="#cb5-196"></a></span>
-<span id="cb5-197"><a href="#cb5-197"></a>::: {.callout-tip title="Reading Plate Diagrams" collapse="false"}</span>
-<span id="cb5-198"><a href="#cb5-198"></a>Throughout this chapter we use **plate diagrams** to visualize probabilistic models, extending the graphical-model conventions of @sec-validity (open = latent, shaded = observed, arrows = dependence) with one new element---*plates* for replication. The full set of conventions:</span>
-<span id="cb5-199"><a href="#cb5-199"></a></span>
-<span id="cb5-200"><a href="#cb5-200"></a><span class="ss">- </span>**Shaded (gray) nodes** represent *observed* variables (e.g., responses $Y_{ij}$).</span>
-<span id="cb5-201"><a href="#cb5-201"></a><span class="ss">- </span>**Open (white) nodes** represent *latent* (unobserved) variables or parameters (e.g., ability $\theta_i$).</span>
-<span id="cb5-202"><a href="#cb5-202"></a><span class="ss">- </span>**Arrows** indicate probabilistic dependencies: an arrow from $A$ to $B$ means $B$'s distribution depends on $A$.</span>
-<span id="cb5-203"><a href="#cb5-203"></a><span class="ss">- </span>**Plates** (rectangles) indicate replication: a plate labeled "$i = 1, \ldots, N$" means the enclosed variables are repeated $N$ times, once per index $i$.</span>
-<span id="cb5-204"><a href="#cb5-204"></a></span>
-<span id="cb5-205"><a href="#cb5-205"></a>Nested plates represent crossed or hierarchical structure. For example, the response $Y_{ij}$ sits inside both the person plate ($i$) and the item plate ($j$), indicating one observation per person-item pair. For a comprehensive treatment of graphical models, see @koller2009pgm.</span>
-<span id="cb5-206"><a href="#cb5-206"></a>:::</span>
-<span id="cb5-207"><a href="#cb5-207"></a></span>
-<span id="cb5-208"><a href="#cb5-208"></a><span class="al">![Plate diagram for the Rasch model. Shaded nodes are observed; open nodes are latent. Plates indicate replication over persons ($i$) and items ($j$).](Figures/plate_rasch.png)</span>{#fig-rasch-plate width=41%}</span>
-<span id="cb5-209"><a href="#cb5-209"></a></span>
-<span id="cb5-210"><a href="#cb5-210"></a>Next, we show that ACM and sufficiency assumption implies the Rasch model.</span>
-<span id="cb5-211"><a href="#cb5-211"></a></span>
-<span id="cb5-212"><a href="#cb5-212"></a>::: {.callout-note title="Theorem: Additivity + sufficiency imply Rasch"}</span>
-<span id="cb5-213"><a href="#cb5-213"></a>Take an additive latent-trait model in which each response depends on ability and difficulty only through their difference,</span>
-<span id="cb5-214"><a href="#cb5-214"></a>$$</span>
-<span id="cb5-215"><a href="#cb5-215"></a>P(Y_{ij} = 1 \mid \theta_i, \beta_j) = \Phi(\theta_i - \beta_j),</span>
-<span id="cb5-216"><a href="#cb5-216"></a>$$</span>
-<span id="cb5-217"><a href="#cb5-217"></a>for some strictly increasing link $\Phi$---the additive conjoint structure of @sec-acm, which leaves $\Phi$ free. If the raw sum score $S_i = \sum_{j=1}^M Y_{ij}$ is a sufficient statistic for $\theta_i$, then $\Phi$ must be logistic, so the model is the **Rasch model**. The converse also holds, so among additive models sum-score sufficiency *characterizes* Rasch <span class="co">[</span><span class="ot">@andersen1973conditional; @fischer1995rasch</span><span class="co">]</span>. Additive structure alone does not deliver sufficiency---the logistic link, singled out here, is what does. (Allowing items to differ in discrimination---the 2PL model---would make a discrimination-weighted score sufficient instead of the raw count.)</span>
-<span id="cb5-218"><a href="#cb5-218"></a>:::</span>
-<span id="cb5-219"><a href="#cb5-219"></a></span>
-<span id="cb5-220"><a href="#cb5-220"></a>::: {.callout-note title="Proof" collapse="true"}</span>
-<span id="cb5-221"><a href="#cb5-221"></a>Assume local independence, so the joint probability of a pattern $Y_i$ is $\prod_j \Phi(\theta_i - \beta_j)^{Y_{ij}}\,(1 - \Phi(\theta_i - \beta_j))^{1 - Y_{ij}}$, with log-likelihood</span>
-<span id="cb5-222"><a href="#cb5-222"></a>$$</span>
-<span id="cb5-223"><a href="#cb5-223"></a>\sum_j Y_{ij}\,\operatorname{logit}\Phi(\theta_i - \beta_j) \;+\; \sum_j \log<span class="sc">\!</span>\big(1 - \Phi(\theta_i - \beta_j)\big), \qquad \operatorname{logit}(p) = \log\tfrac{p}{1-p}.</span>
-<span id="cb5-224"><a href="#cb5-224"></a>$$</span>
-<span id="cb5-225"><a href="#cb5-225"></a>The second sum depends on $\theta_i$ but not on *which* items were correct, so it enters only the normalizer. By the factorization theorem, $S_i = \sum_j Y_{ij}$ is sufficient for $\theta_i$ exactly when $\theta_i$ enters the first sum *only through* $S_i$---that is, when $\operatorname{logit}\Phi(\theta_i - \beta_j)$ splits as $c\,\theta_i + d_j$ with the *same* slope $c$ for every item. A function of the single argument $\theta_i - \beta_j$ has that form only if $\operatorname{logit}\Phi$ is linear, i.e. $\Phi(z) = 1/(1 + e^{-cz})$; absorbing $c$ into the scale gives the logistic link---the Rasch model.</span>
-<span id="cb5-226"><a href="#cb5-226"></a></span>
-<span id="cb5-227"><a href="#cb5-227"></a>Conversely, in the Rasch model</span>
-<span id="cb5-228"><a href="#cb5-228"></a>$$</span>
-<span id="cb5-229"><a href="#cb5-229"></a>P(Y_i \mid \theta_i, \boldsymbol{\beta}) = \frac{\exp<span class="sc">\!</span>\big(\theta_i S_i - \sum_j Y_{ij}\beta_j\big)}{\prod_j \big(1 + \exp(\theta_i - \beta_j)\big)}</span>
-<span id="cb5-230"><a href="#cb5-230"></a>$$</span>
-<span id="cb5-231"><a href="#cb5-231"></a>factors as $g(S_i, \theta_i)\,h(Y_i, \boldsymbol{\beta})$, so $S_i$ is sufficient; and the $\exp(\theta_i S_i)$ factor cancels in $P(Y_i \mid S_i, \theta_i) = P(Y_i \mid \theta_i) / P(S_i \mid \theta_i)$, leaving the conditional pattern distribution free of $\theta$.</span>
-<span id="cb5-232"><a href="#cb5-232"></a>:::</span>
-<span id="cb5-233"><a href="#cb5-233"></a></span>
-<span id="cb5-234"><a href="#cb5-234"></a>The implication is that, before trusting average benchmark scores, we should test whether the Rasch model fits the data.</span>
-<span id="cb5-235"><a href="#cb5-235"></a></span>
-<span id="cb5-236"><a href="#cb5-236"></a><span class="fu">## Reinterpreting the Second Conjoint Factor {#sec-paired-comparison}</span></span>
-<span id="cb5-237"><a href="#cb5-237"></a></span>
-<span id="cb5-238"><a href="#cb5-238"></a>In some evaluation settings, we observe *pairwise comparisons*: which of two items is preferred, which of two players wins. The Bradley-Terry model (1952) is the foundational model for paired comparisons. As we will see, it is not a new model at all but the Rasch structure of @sec-acm with its **second conjoint factor reinterpreted**---the second slot holds not an item (carrying a difficulty) but a competitor (carrying a strength), drawn from the same pool as the first:</span>
-<span id="cb5-239"><a href="#cb5-239"></a></span>
-<span id="cb5-240"><a href="#cb5-240"></a>$$</span>
-<span id="cb5-241"><a href="#cb5-241"></a>P(i \succ j) = \sigma(\theta_i - \theta_j)</span>
-<span id="cb5-242"><a href="#cb5-242"></a>$$</span>
-<span id="cb5-243"><a href="#cb5-243"></a></span>
-<span id="cb5-244"><a href="#cb5-244"></a>where $i \succ j$ reads "$i$ is preferred to (beats) $j$" and $\theta_i, \theta_j$ are the "strength" or "quality" of competitors $i$ and $j$, both drawn from the same pool. Mathematically this *is* the Rasch model; only the reading of the second conjoint factor changes---instead of a subject answering an item, we have two subjects competing against each other.</span>
-<span id="cb5-245"><a href="#cb5-245"></a></span>
-<span id="cb5-246"><a href="#cb5-246"></a><span class="al">![Plate diagram for the Bradley-Terry model, sharing the crossed-plate structure of the Rasch model (@fig-rasch-plate): the comparison outcome $Y_{ij}$ sits in the overlap of two competitor plates and depends on the strengths $\theta_i$ and $\theta_j$. Bradley-Terry is exactly Rasch with the item difficulty $\beta_j$ replaced by a second competitor strength $\theta_j$, both competitors drawn from the same pool of $N$.](Figures/plate_bt.png)</span>{#fig-bt-plate width=41%}</span>
-<span id="cb5-247"><a href="#cb5-247"></a></span>
-<span id="cb5-248"><a href="#cb5-248"></a>The shared form with Rasch is not a coincidence of notation---it means the Bradley-Terry strength inherits the *interval* scale that additive conjoint measurement earns for Rasch ability (@sec-acm). Because the win probability depends only on the *difference* $\theta_i - \theta_j$ passed through a monotone link, it carries exactly the additive conjoint structure of @sec-acm, now with the two conjoint factors being the two *roles* of a comparison---the competitor in the first slot and the competitor in the second---so that the log-odds $\theta_i - \theta_j$ splits additively into a first-role contribution $f(i) = \theta_i$ and a second-role contribution $g(j) = -\theta_j$. Single cancellation holds: the ranking of first-slot competitors induced by any fixed opponent is the same opponent-independent order, because it depends on $\theta_i$ alone. Double cancellation holds because the structure is additive by construction. By the representation theorem (@sec-acm; @krantz1971foundations), the strengths $\theta$ therefore form an interval scale. Because the two roles range over the *same* set of competitors, this is the special "difference measurement" case of conjoint measurement <span class="co">[</span><span class="ot">@krantz1971foundations</span><span class="co">]</span>, in which a single scale $\theta$ plays both conjoint factors at once.</span>
-<span id="cb5-249"><a href="#cb5-249"></a></span>
-<span id="cb5-250"><a href="#cb5-250"></a>The interval reading has teeth. *Differences* are meaningful---$\theta_i - \theta_j$ is precisely what fixes the win probability $\sigma(\theta_i - \theta_j)$---but there is no true zero, so *ratios* are not: a fixed rating gap means the same win probability wherever it sits on the scale, yet a competitor rated $1600$ is not "twice as strong" as one rated $800$. Only the origin is conventional (the logistic link pins the unit, exactly as in Rasch; Elo fixes the origin near $1500$). This is the paired-comparison counterpart of Rasch's specific objectivity: just as a model's Rasch ability can be estimated from any subset of items, a competitor's strength can be estimated from any schedule of opponents. And as with Rasch, AI evaluation can *test* this structure rather than assume it: repeated comparisons estimate each $P(i \succ j)$ directly, so additivity (double cancellation) can be checked on the array of win rates by the argument of @sec-acm-ai. When the check fails the diagnosis parallels the Rasch case: inconsistent *spacings* cost only the interval scale while leaving a consistent ranking, but *non-transitive* matchups---$A$ beats $B$, $B$ beats $C$, yet $C$ beats $A$, the paired-comparison signature of multidimensional or "rock--paper--scissors" capabilities---break even the ranking, signalling that no single strength number can order the field.</span>
-<span id="cb5-251"><a href="#cb5-251"></a></span>
-<span id="cb5-252"><a href="#cb5-252"></a>The Elo rating system, developed by Arpad Elo for chess ratings, is a Bradley-Terry model with online updates. After player $i$ with rating $R_i$ plays player $j$ with rating $R_j$, the ratings are updated: $R_i^{\text{new}} = R_i + K(y_i - E_i)$, where $Y_i \in <span class="sc">\{</span>0, 0.5, 1<span class="sc">\}</span>$ is the outcome (loss, draw, win), $E_i = \sigma((R_j - R_i)/400 \cdot \ln 10)$ is the expected outcome, and $K$ is a learning rate parameter. The Elo system is widely used in competitive games and has been adopted for AI evaluation in settings like the Chatbot Arena, where humans compare model outputs pairwise. The Chatbot Arena (LMSYS) uses Elo ratings to rank language models based on human preferences. When a user prefers model A's response over model B's, this is treated as a "win" for model A. The resulting ratings provide a preference-based complement to accuracy-based benchmarks.</span>
-<span id="cb5-253"><a href="#cb5-253"></a></span>
-<span id="cb5-254"><a href="#cb5-254"></a><span class="fu">## Testing for an Interval Scale {#sec-acm-ai}</span></span>
-<span id="cb5-255"><a href="#cb5-255"></a></span>
-<span id="cb5-256"><a href="#cb5-256"></a>In human testing, the response probability $p_{ij} = P(Y_{ij}=1)$ is unobservable. A person cannot be given the same item repeatedly under independent conditions---memory, learning, and fatigue destroy the independence---so only a single binary $Y_{ij}$ is ever seen, and $p_{ij}$ must be *inferred* through a model rather than measured. This is why the conjoint axioms of @sec-acm could only be assumed for human testing: the deterministic order on $A \times X$ that the axioms constrain was never directly observable. AI evaluation breaks this premise. A stateless model queried at sampling temperature $&gt;0$ can be given the same item $T$ times with genuinely independent responses, so $\hat{p}_{ij} = \tfrac{1}{T}\sum_t Y_{ijt}$ estimates $p_{ij}$ *itself*, and $T$ can be made large. The observable object is then not a single bit but a real-valued array $<span class="co">[</span><span class="ot">\hat{p}_{ij}</span><span class="co">]</span>$ over the model$\times$item grid---exactly the conjoint structure the cancellation axioms describe. The deterministic-versus-probabilistic gap of @sec-acm narrows to a testable question:</span>
-<span id="cb5-257"><a href="#cb5-257"></a>$$</span>
-<span id="cb5-258"><a href="#cb5-258"></a>\text{additive conjoint structure holds} \iff \exists\ \text{monotone } \Phi:\ \Phi^{-1}(p_{ij}) \text{ is additive } (\theta_i + \delta_j),</span>
-<span id="cb5-259"><a href="#cb5-259"></a>$$</span>
-<span id="cb5-260"><a href="#cb5-260"></a>equivalently, the array $<span class="co">[</span><span class="ot">p_{ij}</span><span class="co">]</span>$ satisfies double cancellation. The Rasch model is the special case in which the additive scale is the logit. So in AI evaluation we can, for the first time, *test* whether ability and difficulty realize additive conjoint measurement instead of assuming it---by checking double cancellation directly, or by finding the monotone transform that minimizes departure from additivity and asking whether the residual interaction is within sampling error.</span>
-<span id="cb5-261"><a href="#cb5-261"></a></span>
-<span id="cb5-262"><a href="#cb5-262"></a>That phrase---"find the monotone transform that minimizes departure from additivity"---is, concretely, an **isotonic regression**, and naming it that way makes the whole test transparent. The Rasch model bundles two assumptions: the additive index $\theta_i - \beta_j$ and the logistic *shape* $\sigma$. A bad Rasch fit cannot tell you which one broke. To test additivity *alone*, keep the index and let the shape go free.</span>
-<span id="cb5-263"><a href="#cb5-263"></a></span>
-<span id="cb5-264"><a href="#cb5-264"></a>::: {.callout-note title="Definition: Nonparametric additive model (ADISOP)"}</span>
-<span id="cb5-265"><a href="#cb5-265"></a>$$</span>
-<span id="cb5-266"><a href="#cb5-266"></a>P(Y_{ij}=1 \mid \theta_i, \beta_j) = F(\theta_i - \beta_j),</span>
-<span id="cb5-267"><a href="#cb5-267"></a>$$</span>
-<span id="cb5-268"><a href="#cb5-268"></a>where $\theta_i$ (ability) and $\beta_j$ (difficulty) lie on a common scale and $F$ is a *single, unknown, non-decreasing* function---the link---estimated from the data rather than assumed. Every item is the same curve $F$ shifted by $\beta_j$, so the item characteristic curves are **parallel**; only their shared shape is free. Equivalently, this is a monotone *single-index* model: the entire $\text{model}\times\text{item}$ grid is summarized by one scalar index $s_{ij} = \theta_i - \beta_j$, and the response probability depends on the grid *only* through $s_{ij}$, monotonically. It is Scheiblechner's ADISOP <span class="co">[</span><span class="ot">@scheiblechner1999additive</span><span class="co">]</span>; the order-restricted conjoint tests of @karabatsos2001rasch ask the same question.</span>
-<span id="cb5-269"><a href="#cb5-269"></a>:::</span>
-<span id="cb5-270"><a href="#cb5-270"></a></span>
-<span id="cb5-271"><a href="#cb5-271"></a>Estimating $F$ *is* an isotonic regression. Hold the parameters fixed, place every cell's observed $\hat{p}_{ij}$ on the axis given by its index $s_{ij} = \theta_i - \beta_j$, and fit the non-decreasing step function that best matches them---the pool-adjacent-violators solution. Then update $\theta, \beta$ to sharpen the fit and iterate. Because the *only* freedom beyond the additive index is the monotone shape, this can reproduce $[\hat{p}_{ij}]$ **if and only if** the response probability really does depend on the grid through $\theta_i - \beta_j$ alone---which is double cancellation. What the isotonic fit *cannot* absorb is any dependence on the grid *beyond* the one-dimensional index: a genuine $\text{model}\times\text{item}$ interaction. So the **residual of the isotonic regression is the additivity test**, and it forks the Rasch ambiguity cleanly:</span>
-<span id="cb5-272"><a href="#cb5-272"></a></span>
-<span id="cb5-273"><a href="#cb5-273"></a><span class="ss">- </span>**Small residual, but Rasch fit badly.** The data are additive; Rasch's misfit was the logistic *shape*, which the isotonic $F$ has now replaced. Additive conjoint measurement holds---the interval scale stands---you have merely *estimated* the link instead of assuming it, forgoing the sum-score sufficiency that was the logistic's private bonus (@sec-rasch-measurement).</span>
-<span id="cb5-274"><a href="#cb5-274"></a><span class="ss">- </span>**Large residual even after the best isotonic $F$.** No monotone link makes the data additive; the dependence on the grid is genuinely two-dimensional, and additive conjoint measurement is rejected (what that costs, and how to localize it, is the next question).</span>
-<span id="cb5-275"><a href="#cb5-275"></a></span>
-<span id="cb5-276"><a href="#cb5-276"></a>One discipline keeps this honest. The isotonic $F$ is flexible---it will fit *at least* as well as Rasch---so a smaller residual alone proves nothing. The sharp comparison is against the model that breaks additivity with the *fewest* extra knobs: the 2PL, which adds one slope $a_j$ per item. On the logit scale the 2PL index is $a_j \theta_i - b_j$, whose slope varies by item; that item-specific stretching is exactly the dependence a single index $\theta_i - \beta_j$ cannot carry, and it makes the parallel curves cross. So if the parallel single-index fit already suffices, additivity holds; if you genuinely need per-item slopes, the unit of $\theta$ is item-dependent and additivity fails.</span>
-<span id="cb5-277"><a href="#cb5-277"></a></span>
-<span id="cb5-278"><a href="#cb5-278"></a>The model sits on a ladder of decreasing commitment, each rung an isotonic constraint loosened: Rasch (additive index $+$ logistic link) $\subset$ the nonparametric additive model (additive index $+$ isotonic link, still interval) $\subset$ the doubly-monotone model (non-crossing curves, ordinal specific objectivity) $\subset$ the monotone model. Each step right gives up an assumption and weakens the scale, interval to ordinal. In practice these isotonic models are measurement-theory tools with limited software; probit is the cheap parametric stand-in that keeps the additive index while only swapping the link.</span>
-<span id="cb5-279"><a href="#cb5-279"></a></span>
-<span id="cb5-280"><a href="#cb5-280"></a>What does *failing* mean? Only that no monotone $\Phi$ makes $[\hat{p}_{ij}]$ additive: the items admit no common interval scale on which a single ability orders every model. A failed test withdraws exactly one claim---that this item set measures *one* latent quantity, on these models, at the interval level---and it is a verdict on the *grid* tested (these items crossed with these models), not on the instrument in the abstract: a different population of models, or a unidimensional sub-domain of items, may still pass. Nor does it cost everything. If models rank the same way on every item but the *spacings* fail to align, one keeps a consistent *ordinal* ranking---accuracy still orders models, in the stochastic-ordering sense---and forfeits only the interval scale; the ranking itself breaks down only when models *reorder* across items.</span>
-<span id="cb5-281"><a href="#cb5-281"></a></span>
-<span id="cb5-282"><a href="#cb5-282"></a>These two cases are distinguished by their cause:</span>
-<span id="cb5-283"><a href="#cb5-283"></a></span>
-<span id="cb5-284"><a href="#cb5-284"></a><span class="ss">1. </span>**Bad items.** Miskeyed, contaminated, or off-construct items create cancellation violations; removing them may restore additivity. This is the curation the diagnostics of @sec-rasch-measurement perform.</span>
-<span id="cb5-285"><a href="#cb5-285"></a><span class="ss">2. </span>**Genuine multidimensionality.** A model strong at mathematics but weak at coding produces systematic interactions that *no* monotone transform removes. Here the failure is substantive: ability is not one quantity on this item set, and the honest response is to restrict the claim to a unidimensional sub-domain or adopt a multidimensional model (@sec-factor-models).</span>
-<span id="cb5-286"><a href="#cb5-286"></a></span>
-<span id="cb5-287"><a href="#cb5-287"></a>Three caveats keep the test honest. First, the link is free: passing double cancellation gives additive conjoint measurement, of which Rasch (logit) and probit are two coordinate systems---not Rasch specifically. Second, one observes $\hat{p}_{ij}$ with $O(1/\sqrt{T})$ error, so the deterministic axioms must be tested in their order-restricted, probabilistic form <span class="co">[</span><span class="ot">@karabatsos2001rasch; @scheiblechner1995isotonic</span><span class="co">]</span>; the remedy---raise $T$---is available in AI but not in human testing. Third, one can almost always *force* additivity by deleting enough items, even from noise, so a "pass" counts only if the curation was principled and additivity survives beyond chance.</span>
-<span id="cb5-288"><a href="#cb5-288"></a></span>
-<span id="cb5-289"><a href="#cb5-289"></a>Finally, passing the test certifies *quantitative structure*, not *validity*. An array can be perfectly additive in an attribute that is not the construct we intended---the scraped-coding benchmark of @sec-validity has additive structure in *memorization*, not coding ability. Additive conjoint measurement answers "is this a quantity, and may I do interval arithmetic on it?"; it does not answer "is it the quantity I claim?" That second license is construct validity, and it must be earned separately.</span>
-<span id="cb5-290"><a href="#cb5-290"></a></span>
-<span id="cb5-291"><a href="#cb5-291"></a>The additive structure leaves a visible fingerprint. Take a real response matrix $Y$ (@sec-response-matrix): 50 models from the Open LLM Leaderboard, each scored on the same 100-item sample, with entry $1$ for a correct answer and $0$ otherwise. The raw matrix looks unstructured, but sorting its rows and columns by their totals exposes the conjoint order.</span>
-<span id="cb5-292"><a href="#cb5-292"></a></span>
-<span id="cb5-293"><a href="#cb5-293"></a>{{&lt; include _plt_setup.qmd &gt;}}</span>
-<span id="cb5-294"><a href="#cb5-294"></a></span>
-<span id="cb5-295"><a href="#cb5-295"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb5-296"><a href="#cb5-296"></a><span class="co">#| label: response-matrix-visualization</span></span>
-<span id="cb5-297"><a href="#cb5-297"></a><span class="co">#| autorun: true</span></span>
-<span id="cb5-298"><a href="#cb5-298"></a><span class="co">#| fig-cap: "A real response matrix: 50 models from the Open LLM Leaderboard scored on a 100-item sample. Rows are sorted by model accuracy, columns by item proportion-correct. The near-triangular gradient is the empirical signature of an additive ability--difficulty structure ordering both models and items."</span></span>
-<span id="cb5-299"><a href="#cb5-299"></a></span>
-<span id="cb5-300"><a href="#cb5-300"></a><span class="im">import</span> json</span>
-<span id="cb5-301"><a href="#cb5-301"></a><span class="im">from</span> pyodide.http <span class="im">import</span> open_url</span>
-<span id="cb5-302"><a href="#cb5-302"></a></span>
-<span id="cb5-303"><a href="#cb5-303"></a><span class="co"># Real 50-model x 100-item slice of the Open LLM Leaderboard (binary scored).</span></span>
-<span id="cb5-304"><a href="#cb5-304"></a><span class="co"># Loaded from a precomputed resource shipped with the book.</span></span>
-<span id="cb5-305"><a href="#cb5-305"></a>raw <span class="op">=</span> json.loads(open_url(<span class="st">"data/openllm_subset.json"</span>).read())</span>
-<span id="cb5-306"><a href="#cb5-306"></a>Y <span class="op">=</span> np.array(raw[<span class="st">"data"</span>], dtype<span class="op">=</span><span class="bu">float</span>)</span>
-<span id="cb5-307"><a href="#cb5-307"></a></span>
-<span id="cb5-308"><a href="#cb5-308"></a><span class="co"># Sort models (rows) and items (columns) by their totals</span></span>
-<span id="cb5-309"><a href="#cb5-309"></a>row_order <span class="op">=</span> np.argsort(Y.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>))[::<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb5-310"><a href="#cb5-310"></a>col_order <span class="op">=</span> np.argsort(Y.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>))[::<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb5-311"><a href="#cb5-311"></a>Y_sorted <span class="op">=</span> Y[row_order][:, col_order]</span>
-<span id="cb5-312"><a href="#cb5-312"></a></span>
-<span id="cb5-313"><a href="#cb5-313"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb5-314"><a href="#cb5-314"></a>ax.imshow(Y_sorted, aspect<span class="op">=</span><span class="st">'auto'</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>, interpolation<span class="op">=</span><span class="st">'nearest'</span>)</span>
-<span id="cb5-315"><a href="#cb5-315"></a>ax.set_xlabel(<span class="st">'Items (sorted by proportion correct)'</span>)</span>
-<span id="cb5-316"><a href="#cb5-316"></a>ax.set_ylabel(<span class="st">'Models (sorted by accuracy)'</span>)</span>
-<span id="cb5-317"><a href="#cb5-317"></a>ax.set_title(<span class="st">'Open LLM Leaderboard: sorted response matrix (50 × 100)'</span>)</span>
-<span id="cb5-318"><a href="#cb5-318"></a></span>
-<span id="cb5-319"><a href="#cb5-319"></a>plt.show()</span>
-<span id="cb5-320"><a href="#cb5-320"></a><span class="in">```</span></span>
-<span id="cb5-321"><a href="#cb5-321"></a></span>
-<span id="cb5-322"><a href="#cb5-322"></a>In the sorted matrix the correct answers concentrate toward one corner and thin out toward the opposite---a near-triangular gradient rather than a uniform scatter. This is the conjoint order made visible: models range from those that succeed on nearly every item to those that succeed only on the easiest, items range from those nearly every model solves to those almost none do, and a single additive $\theta_i - \beta_j$ orders the whole grid. The gradient need not appear---multidimensional or noisy data wash it out---which is precisely the point: additivity is a property the data can fail to have.</span>
-<span id="cb5-323"><a href="#cb5-323"></a></span>
-<span id="cb5-324"><a href="#cb5-324"></a>A caution about the word "realization." The Rasch model is the *probabilistic analogue* of additive conjoint measurement [@brogden1977rasch; @perline1979rasch], not a deduction from its axioms. The cancellation axioms describe a deterministic order on $A \times X$; the Rasch model specifies probabilities. Bridging the two---reading a deterministic conjoint structure off stochastic responses---is exactly the contested step [@michell2008pathological; @kyngdon2008rasch]. The additivity lives in the model's parameters, not, without further work, demonstrably in the world. The next two sections close this gap from both sides: the statistical characterization that makes the structure *internal* to the model (@sec-rasch-measurement), and the feature of AI evaluation that makes the conjoint axioms *empirically testable* (@sec-acm-ai).</span>
-<span id="cb5-325"><a href="#cb5-325"></a></span>
-<span id="cb5-326"><a href="#cb5-326"></a>::: {.callout-tip title="Application: Using Sufficiency to Find Benchmark Bugs"}</span>
-<span id="cb5-327"><a href="#cb5-327"></a>@truong2025bugs turn the sufficiency property into a practical diagnostic tool. Their argument: if the AI evaluation community reports mean scores as the primary metric, it is *implicitly assuming* that the sum score is a sufficient statistic for ability --- which, by the theorem above, implies the Rasch model is the data-generating process. Under the Rasch model, two testable consequences follow:</span>
-<span id="cb5-328"><a href="#cb5-328"></a></span>
-<span id="cb5-329"><a href="#cb5-329"></a><span class="ss">1. </span>**Positive tetrachoric correlations.** All inter-item tetrachoric correlations must be non-negative (Corollary of Chebyshev's inequality applied to increasing functions of the same latent variable $\theta$).</span>
-<span id="cb5-330"><a href="#cb5-330"></a><span class="ss">2. </span>**Positive item-total correlations.** Each item must correlate positively with the total score.</span>
-<span id="cb5-331"><a href="#cb5-331"></a></span>
-<span id="cb5-332"><a href="#cb5-332"></a>Items that violate these conditions --- negative tetrachoric correlations, negative item-total correlations, or low Mokken scalability coefficients --- are flagged as potentially invalid. Applying this to nine benchmarks including GSM8K and MMLU, @truong2025bugs achieve up to 84% precision at the top-50 flagged items: of the 50 most suspicious questions, up to 42 were confirmed invalid by human experts. Common errors include ambiguous wording, incorrect answer keys (e.g., treating exponential depreciation as linear), grading bugs (e.g., "\$7.00" $\neq$ "7"), and culturally-embedded assumptions.</span>
-<span id="cb5-333"><a href="#cb5-333"></a></span>
-<span id="cb5-334"><a href="#cb5-334"></a>This illustrates a broader principle: the mathematical properties of measurement models are not merely theoretical --- they yield *operational* diagnostics for evaluation quality. When data violate model predictions, either the model is wrong or the data are corrupted. Since the sufficiency assumption is already implicit in how the community uses benchmarks, violations are strong evidence of item-level problems.</span>
-<span id="cb5-335"><a href="#cb5-335"></a>:::</span>
-<span id="cb5-336"><a href="#cb5-336"></a></span>
-<span id="cb5-337"><a href="#cb5-337"></a></span>
-<span id="cb5-338"><a href="#cb5-338"></a>To see the diagnostic in action, plant eight defective items in a simulated Rasch benchmark---four with flipped answer keys, four answered at random---and rank every item by its **item--total correlation** (its correlation with the rest of the test). Sound items show the *positive manifold*; the defects fall to the bottom.</span>
-<span id="cb5-339"><a href="#cb5-339"></a></span>
-<span id="cb5-340"><a href="#cb5-340"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb5-341"><a href="#cb5-341"></a><span class="co">#| label: item-bug-diagnostic</span></span>
-<span id="cb5-342"><a href="#cb5-342"></a><span class="co">#| autorun: true</span></span>
-<span id="cb5-343"><a href="#cb5-343"></a><span class="co">#| fig-cap: "Item--total correlation for every item in a simulated benchmark with eight planted defects (red): flipped-key items correlate negatively, random items sit near zero, and sound items (blue) sit well above. Ranking by this correlation flags the defects---the @truong2025bugs diagnostic in miniature."</span></span>
-<span id="cb5-344"><a href="#cb5-344"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-345"><a href="#cb5-345"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb5-346"><a href="#cb5-346"></a></span>
-<span id="cb5-347"><a href="#cb5-347"></a><span class="kw">def</span> sigmoid(x):</span>
-<span id="cb5-348"><a href="#cb5-348"></a>    <span class="cf">return</span> np.where(x <span class="op">&gt;=</span> <span class="dv">0</span>, <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>x)), np.exp(x) <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(x)))</span>
-<span id="cb5-349"><a href="#cb5-349"></a></span>
-<span id="cb5-350"><a href="#cb5-350"></a>rng <span class="op">=</span> np.random.RandomState(<span class="dv">0</span>)</span>
-<span id="cb5-351"><a href="#cb5-351"></a>N, M, n_bad <span class="op">=</span> <span class="dv">200</span>, <span class="dv">60</span>, <span class="dv">8</span></span>
-<span id="cb5-352"><a href="#cb5-352"></a>theta <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
-<span id="cb5-353"><a href="#cb5-353"></a>beta  <span class="op">=</span> rng.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)</span>
-<span id="cb5-354"><a href="#cb5-354"></a>Y <span class="op">=</span> (rng.rand(N, M) <span class="op">&lt;</span> sigmoid(theta[:, <span class="va">None</span>] <span class="op">-</span> beta[<span class="va">None</span>, :])).astype(<span class="bu">float</span>)</span>
-<span id="cb5-355"><a href="#cb5-355"></a></span>
-<span id="cb5-356"><a href="#cb5-356"></a>bad <span class="op">=</span> rng.choice(M, n_bad, replace<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-357"><a href="#cb5-357"></a><span class="cf">for</span> idx, j <span class="kw">in</span> <span class="bu">enumerate</span>(bad):</span>
-<span id="cb5-358"><a href="#cb5-358"></a>    <span class="cf">if</span> idx <span class="op">&lt;</span> n_bad <span class="op">//</span> <span class="dv">2</span>:</span>
-<span id="cb5-359"><a href="#cb5-359"></a>        Y[:, j] <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> Y[:, j]                        <span class="co"># flipped answer key</span></span>
-<span id="cb5-360"><a href="#cb5-360"></a>    <span class="cf">else</span>:</span>
-<span id="cb5-361"><a href="#cb5-361"></a>        Y[:, j] <span class="op">=</span> (rng.rand(N) <span class="op">&lt;</span> <span class="fl">0.5</span>).astype(<span class="bu">float</span>)  <span class="co"># random responses (no signal)</span></span>
-<span id="cb5-362"><a href="#cb5-362"></a></span>
-<span id="cb5-363"><a href="#cb5-363"></a>total <span class="op">=</span> Y.<span class="bu">sum</span>(<span class="dv">1</span>)</span>
-<span id="cb5-364"><a href="#cb5-364"></a>itc <span class="op">=</span> np.array([np.corrcoef(Y[:, j], total <span class="op">-</span> Y[:, j])[<span class="dv">0</span>, <span class="dv">1</span>] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(M)])  <span class="co"># leave-one-out</span></span>
-<span id="cb5-365"><a href="#cb5-365"></a>is_bad <span class="op">=</span> np.zeros(M, <span class="bu">bool</span>)<span class="op">;</span> is_bad[bad] <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb5-366"><a href="#cb5-366"></a></span>
-<span id="cb5-367"><a href="#cb5-367"></a>order   <span class="op">=</span> np.argsort(itc)</span>
-<span id="cb5-368"><a href="#cb5-368"></a>flagged <span class="op">=</span> order[:n_bad]</span>
-<span id="cb5-369"><a href="#cb5-369"></a>precision <span class="op">=</span> np.mean(is_bad[flagged])</span>
-<span id="cb5-370"><a href="#cb5-370"></a></span>
-<span id="cb5-371"><a href="#cb5-371"></a>plt.figure(figsize<span class="op">=</span>(<span class="fl">3.6</span>, <span class="fl">2.2</span>))</span>
-<span id="cb5-372"><a href="#cb5-372"></a>plt.scatter(<span class="bu">range</span>(M), itc[order],</span>
-<span id="cb5-373"><a href="#cb5-373"></a>            c<span class="op">=</span>[<span class="st">'#d62728'</span> <span class="cf">if</span> is_bad[i] <span class="cf">else</span> <span class="st">'#1f77b4'</span> <span class="cf">for</span> i <span class="kw">in</span> order], s<span class="op">=</span><span class="dv">12</span>)</span>
-<span id="cb5-374"><a href="#cb5-374"></a>plt.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'black'</span>, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb5-375"><a href="#cb5-375"></a>plt.xlabel(<span class="st">'item (ranked by item--total correlation)'</span>)</span>
-<span id="cb5-376"><a href="#cb5-376"></a>plt.ylabel(<span class="st">'item--total correlation'</span>)</span>
-<span id="cb5-377"><a href="#cb5-377"></a>plt.title(<span class="st">'Broken items have low correlation'</span>)<span class="op">;</span> plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb5-378"><a href="#cb5-378"></a>plt.tight_layout()<span class="op">;</span> plt.show()</span>
-<span id="cb5-379"><a href="#cb5-379"></a><span class="bu">print</span>(<span class="ss">f"precision@</span><span class="sc">{</span>n_bad<span class="sc">}</span><span class="ss"> (flag the lowest-correlation items) = </span><span class="sc">{</span>precision<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb5-380"><a href="#cb5-380"></a><span class="in">```</span></span>
-<span id="cb5-381"><a href="#cb5-381"></a></span>
-<span id="cb5-382"><a href="#cb5-382"></a>The defective items fall to the bottom, and flagging the lowest-correlation items recovers all eight. In practice the flagged items should be *inspected* rather than deleted blindly, since a low correlation can also mark a genuinely multidimensional skill rather than an error.</span>
-<span id="cb5-383"><a href="#cb5-383"></a></span>
-<span id="cb5-384"><a href="#cb5-384"></a><span class="fu">## The $n$-Parameter Logistic Model {#sec-irt}</span></span>
-<span id="cb5-385"><a href="#cb5-385"></a>Sometimes, the data does not fit the Rasch model, even for the isotonic version. In that case, we cannot license an interval scale, but we can still construct a useful ordinal scale with a more statistically expressive class of models. The $n$-parameter logistic model is such a class of model. The $n$-parameter logistic model equips each item with a parameter vector $\boldsymbol{\beta}_j = [\beta_{j1}, \ldots, \beta_{jn}] \in \mathbb{R}^n$, letting items differ along more than one axis. Rasch is the case $n=1$; the cases $n=2$ and $n=3$ below add a discrimination and a guessing component, respectively. Because every variant still attaches a single parameter object to each item, the plate diagram is structurally identical to the Rasch model (@fig-rasch-plate)---the lone item node $\beta_j$ now standing for the full vector $\boldsymbol{\beta}_j$ rather than a scalar difficulty.</span>
-<span id="cb5-386"><a href="#cb5-386"></a></span>
-<span id="cb5-387"><a href="#cb5-387"></a>The two-parameter logistic model gives item $j$ a discrimination $\beta_{j2}$ alongside its difficulty $\beta_{j1}$:</span>
-<span id="cb5-388"><a href="#cb5-388"></a></span>
-<span id="cb5-389"><a href="#cb5-389"></a>$$</span>
-<span id="cb5-390"><a href="#cb5-390"></a>P(Y_{ij} = 1 | \theta_i, \boldsymbol{\beta}_j) = \sigma(\beta_{j2}(\theta_i - \beta_{j1}))</span>
-<span id="cb5-391"><a href="#cb5-391"></a>$$</span>
-<span id="cb5-392"><a href="#cb5-392"></a>Items with higher discrimination are better at distinguishing between persons of different abilities. Their ICCs are steeper, meaning small changes in ability produce large changes in response probability.</span>
-<span id="cb5-393"><a href="#cb5-393"></a></span>
-<span id="cb5-394"><a href="#cb5-394"></a>The per-item discrimination has a precise consequence for the *scale type* of the ability estimate. In the 2PL model, $\operatorname{logit} P(Y_{ij}=1) = \beta_{j2}(\theta_i - \beta_{j1})$, so the log-odds gap between two models on item $j$ is $\beta_{j2}(\theta_i - \theta_k)$. Its *sign* is the same on every item (discriminations are positive), so models keep a consistent ordering---single cancellation, the ordinal separation of @sec-acm, survives. But its *magnitude* is scaled by the item's discrimination $\beta_{j2}$: each item converts $\theta$-differences into log-odds at its own rate, so the *unit* of $\theta$ is item-dependent. Double cancellation fails, no additive representation exists, and $\theta$ is therefore **not a fundamental (additive conjoint) interval scale**. It is identified only up to a positive affine transformation---one fixes its origin and unit by convention, typically $\theta \sim \mathcal{N}(0,1)$---so it is *interval by parametric stipulation*, not because the data carry an item-independent unit. Rasch is exactly the case $\beta_{j2} \equiv 1$: one common exchange rate, an item-independent unit, a genuine interval scale. This sharpens both camps. The prescriptive claim becomes precise---only Rasch earns the interval scale from structure, while the 2PL borrows it from the assumed logistic--Gaussian form. So does the descriptive reply: an affine-identified $\theta$ that fits the data is interval enough for ranking and selection, and discarding items to force $\beta_{j2} \equiv 1$ throws away real information about which items discriminate.</span>
-<span id="cb5-395"><a href="#cb5-395"></a></span>
-<span id="cb5-396"><a href="#cb5-396"></a>For multiple-choice tests, even low-ability test-takers may answer correctly by guessing. The **three-parameter logistic model** adds a lower asymptote, a guessing parameter $\beta_{j3}$, so $\boldsymbol{\beta}_j = (\beta_{j1}, \beta_{j2}, \beta_{j3})$:</span>
-<span id="cb5-397"><a href="#cb5-397"></a></span>
-<span id="cb5-398"><a href="#cb5-398"></a>$$</span>
-<span id="cb5-399"><a href="#cb5-399"></a>P(Y_{ij} = 1 | \theta_i, \boldsymbol{\beta}_j) = \beta_{j3} + (1 - \beta_{j3}) \sigma(\beta_{j2}(\theta_i - \beta_{j1}))</span>
-<span id="cb5-400"><a href="#cb5-400"></a>$$</span>
-<span id="cb5-401"><a href="#cb5-401"></a></span>
-<span id="cb5-402"><a href="#cb5-402"></a>where $\beta_{j3} \in <span class="co">[</span><span class="ot">0, 1</span><span class="co">]</span>$ is the guessing (or pseudo-chance) parameter. For a 4-option multiple-choice item, we might expect $\beta_{j3} \approx 0.25$ if low-ability test-takers guess randomly.</span>
-<span id="cb5-403"><a href="#cb5-403"></a></span>
-<span id="cb5-404"><a href="#cb5-404"></a></span>
-<span id="cb5-405"><a href="#cb5-405"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb5-406"><a href="#cb5-406"></a><span class="co">#| label: icc-models</span></span>
-<span id="cb5-407"><a href="#cb5-407"></a><span class="co">#| autorun: true</span></span>
-<span id="cb5-408"><a href="#cb5-408"></a><span class="co">#| fig-cap: "Item characteristic curves (ICCs) across the logistic IRT models---each curve gives the probability of a correct response as a function of ability for a fixed item. Left: Rasch (1PL) at several difficulties, the same curve shifted in location. Middle: 2PL at a common difficulty but different discriminations, where a steeper slope distinguishes ability levels more sharply. Right: 1PL, 2PL, and 3PL compared, the 3PL adding a non-zero lower asymptote for guessing."</span></span>
-<span id="cb5-409"><a href="#cb5-409"></a></span>
-<span id="cb5-410"><a href="#cb5-410"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-411"><a href="#cb5-411"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb5-412"><a href="#cb5-412"></a></span>
-<span id="cb5-413"><a href="#cb5-413"></a><span class="kw">def</span> sigmoid(x):</span>
-<span id="cb5-414"><a href="#cb5-414"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>x))</span>
-<span id="cb5-415"><a href="#cb5-415"></a></span>
-<span id="cb5-416"><a href="#cb5-416"></a>theta <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">200</span>)</span>
-<span id="cb5-417"><a href="#cb5-417"></a></span>
-<span id="cb5-418"><a href="#cb5-418"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-419"><a href="#cb5-419"></a>legend_kw <span class="op">=</span> <span class="bu">dict</span>(loc<span class="op">=</span><span class="st">'upper left'</span>, fontsize<span class="op">=</span><span class="dv">6</span>, framealpha<span class="op">=</span><span class="fl">0.9</span>,</span>
-<span id="cb5-420"><a href="#cb5-420"></a>                 borderpad<span class="op">=</span><span class="fl">0.2</span>, labelspacing<span class="op">=</span><span class="fl">0.2</span>, handlelength<span class="op">=</span><span class="fl">1.2</span>, handletextpad<span class="op">=</span><span class="fl">0.4</span>)</span>
-<span id="cb5-421"><a href="#cb5-421"></a></span>
-<span id="cb5-422"><a href="#cb5-422"></a><span class="co"># Left panel: Rasch (1PL), varying difficulty</span></span>
-<span id="cb5-423"><a href="#cb5-423"></a><span class="cf">for</span> beta <span class="kw">in</span> [<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>]:</span>
-<span id="cb5-424"><a href="#cb5-424"></a>    axes[<span class="dv">0</span>].plot(theta, sigmoid(theta <span class="op">-</span> beta), label<span class="op">=</span><span class="ss">f'$</span><span class="ch">\\</span><span class="ss">beta = </span><span class="sc">{</span>beta<span class="sc">}</span><span class="ss">$'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb5-425"><a href="#cb5-425"></a>axes[<span class="dv">0</span>].axhline(y<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb5-426"><a href="#cb5-426"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Ability ($</span><span class="ch">\\</span><span class="st">theta$)'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb5-427"><a href="#cb5-427"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'$P(Y = 1)$'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb5-428"><a href="#cb5-428"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'1PL: effect of difficulty'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb5-429"><a href="#cb5-429"></a>axes[<span class="dv">0</span>].legend(title<span class="op">=</span><span class="st">'Difficulty'</span>, title_fontsize<span class="op">=</span><span class="dv">6</span>, <span class="op">**</span>legend_kw)</span>
-<span id="cb5-430"><a href="#cb5-430"></a>axes[<span class="dv">0</span>].tick_params(labelsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb5-431"><a href="#cb5-431"></a>axes[<span class="dv">0</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb5-432"><a href="#cb5-432"></a></span>
-<span id="cb5-433"><a href="#cb5-433"></a><span class="co"># Middle panel: 2PL, common difficulty, varying discrimination (y-axis shared)</span></span>
-<span id="cb5-434"><a href="#cb5-434"></a>beta <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb5-435"><a href="#cb5-435"></a><span class="cf">for</span> a <span class="kw">in</span> [<span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>, <span class="fl">2.0</span>]:</span>
-<span id="cb5-436"><a href="#cb5-436"></a>    axes[<span class="dv">1</span>].plot(theta, sigmoid(a <span class="op">*</span> (theta <span class="op">-</span> beta)), label<span class="op">=</span><span class="ss">f'$a = </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">$'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb5-437"><a href="#cb5-437"></a>axes[<span class="dv">1</span>].axhline(y<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb5-438"><a href="#cb5-438"></a>axes[<span class="dv">1</span>].axvline(x<span class="op">=</span><span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb5-439"><a href="#cb5-439"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Ability ($</span><span class="ch">\\</span><span class="st">theta$)'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb5-440"><a href="#cb5-440"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'2PL: effect of discrimination'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb5-441"><a href="#cb5-441"></a>axes[<span class="dv">1</span>].legend(title<span class="op">=</span><span class="st">'Discrimination'</span>, title_fontsize<span class="op">=</span><span class="dv">6</span>, <span class="op">**</span>legend_kw)</span>
-<span id="cb5-442"><a href="#cb5-442"></a>axes[<span class="dv">1</span>].tick_params(labelsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb5-443"><a href="#cb5-443"></a>axes[<span class="dv">1</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb5-444"><a href="#cb5-444"></a></span>
-<span id="cb5-445"><a href="#cb5-445"></a><span class="co"># Right panel: 1PL vs 2PL vs 3PL at a fixed difficulty (y-axis shared)</span></span>
-<span id="cb5-446"><a href="#cb5-446"></a>a, beta, c <span class="op">=</span> <span class="fl">1.5</span>, <span class="dv">0</span>, <span class="fl">0.25</span></span>
-<span id="cb5-447"><a href="#cb5-447"></a>axes[<span class="dv">2</span>].plot(theta, sigmoid(theta <span class="op">-</span> beta), label<span class="op">=</span><span class="st">'1PL (Rasch)'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb5-448"><a href="#cb5-448"></a>axes[<span class="dv">2</span>].plot(theta, sigmoid(a <span class="op">*</span> (theta <span class="op">-</span> beta)), label<span class="op">=</span><span class="st">'2PL'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb5-449"><a href="#cb5-449"></a>axes[<span class="dv">2</span>].plot(theta, c <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> c) <span class="op">*</span> sigmoid(a <span class="op">*</span> (theta <span class="op">-</span> beta)), label<span class="op">=</span><span class="st">'3PL'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb5-450"><a href="#cb5-450"></a>axes[<span class="dv">2</span>].axhline(y<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb5-451"><a href="#cb5-451"></a>axes[<span class="dv">2</span>].axhline(y<span class="op">=</span>c, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">':'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="ss">f'Guessing = </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb5-452"><a href="#cb5-452"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'Ability ($</span><span class="ch">\\</span><span class="st">theta$)'</span>, fontsize<span class="op">=</span><span class="dv">8</span>)</span>
-<span id="cb5-453"><a href="#cb5-453"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'1PL vs 2PL vs 3PL'</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb5-454"><a href="#cb5-454"></a>axes[<span class="dv">2</span>].legend(<span class="op">**</span>legend_kw)</span>
-<span id="cb5-455"><a href="#cb5-455"></a>axes[<span class="dv">2</span>].tick_params(labelsize<span class="op">=</span><span class="dv">7</span>)</span>
-<span id="cb5-456"><a href="#cb5-456"></a>axes[<span class="dv">2</span>].grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb5-457"><a href="#cb5-457"></a></span>
-<span id="cb5-458"><a href="#cb5-458"></a>plt.tight_layout()</span>
-<span id="cb5-459"><a href="#cb5-459"></a>plt.show()</span>
-<span id="cb5-460"><a href="#cb5-460"></a><span class="in">```</span></span>
-<span id="cb5-461"><a href="#cb5-461"></a></span>
-<span id="cb5-462"><a href="#cb5-462"></a><span class="fu">## Exercises {#sec-irt-exercises}</span></span>
-<span id="cb5-463"><a href="#cb5-463"></a></span>
-<span id="cb5-464"><a href="#cb5-464"></a>**Exercise 1.1** (*): Explain why the sum score is a sufficient statistic in the Rasch model but not in the 2PL model. What information is lost when we reduce responses to sum scores under 2PL?</span>
-<span id="cb5-465"><a href="#cb5-465"></a></span>
-<span id="cb5-466"><a href="#cb5-466"></a>**Exercise 1.2** (**): Prove that the Bradley-Terry model is equivalent to a Rasch model where each "person" is a comparison between two items.</span>
-<span id="cb5-467"><a href="#cb5-467"></a></span>
-<span id="cb5-468"><a href="#cb5-468"></a>*Hint:* Consider a "person" as an ordered pair $(i, j)$ representing a comparison, and an "item" as a single entity $k$ appearing in a comparison. Define appropriate ability and difficulty parameters.</span>
-<span id="cb5-469"><a href="#cb5-469"></a></span>
-<span id="cb5-470"><a href="#cb5-470"></a>**Exercise 1.3** (**): Show that in the Rasch model, the odds ratio for persons $i$ and $k$ responding correctly to item $j$ is:</span>
-<span id="cb5-471"><a href="#cb5-471"></a></span>
-<span id="cb5-472"><a href="#cb5-472"></a>$$</span>
-<span id="cb5-473"><a href="#cb5-473"></a>\frac{P(Y_{ij} = 1) / P(Y_{ij} = 0)}{P(Y_{kj} = 1) / P(Y_{kj} = 0)} = \exp(\theta_i - \theta_k)</span>
-<span id="cb5-474"><a href="#cb5-474"></a>$$</span>
-<span id="cb5-475"><a href="#cb5-475"></a></span>
-<span id="cb5-476"><a href="#cb5-476"></a>independent of the item difficulty $\beta_j$. Explain why this property is called "specific objectivity."</span>
-<span id="cb5-477"><a href="#cb5-477"></a></span>
-<span id="cb5-478"><a href="#cb5-478"></a>**Exercise 1.4** (***): The Ising model and the Rasch model make different assumptions about why responses correlate.</span>
-<span id="cb5-479"><a href="#cb5-479"></a></span>
-<span id="cb5-480"><a href="#cb5-480"></a>(a) Write down both models for binary data $Y \in <span class="sc">\{</span>0, 1<span class="sc">\}</span>^{N \times M}$.</span>
-<span id="cb5-481"><a href="#cb5-481"></a></span>
-<span id="cb5-482"><a href="#cb5-482"></a>(b) Describe the causal structure each model assumes.</span>
-<span id="cb5-483"><a href="#cb5-483"></a></span>
-<span id="cb5-484"><a href="#cb5-484"></a>(c) Under what conditions might each model be appropriate for AI evaluation?</span>
-<span id="cb5-485"><a href="#cb5-485"></a></span>
-<span id="cb5-486"><a href="#cb5-486"></a>(d) Propose an empirical test that could distinguish between them.</span>
-<span id="cb5-487"><a href="#cb5-487"></a></span>
-<span id="cb5-488"><a href="#cb5-488"></a>**Exercise 1.5** (**): Implement Rasch model estimation using conditional maximum likelihood.</span>
-<span id="cb5-489"><a href="#cb5-489"></a></span>
-<span id="cb5-490"><a href="#cb5-490"></a><span class="in">```python</span></span>
-<span id="cb5-491"><a href="#cb5-491"></a><span class="co"># Given: Response matrix Y (N models x M questions)</span></span>
-<span id="cb5-492"><a href="#cb5-492"></a><span class="co"># Task: Estimate item difficulties using conditional MLE</span></span>
-<span id="cb5-493"><a href="#cb5-493"></a><span class="co">#</span></span>
-<span id="cb5-494"><a href="#cb5-494"></a><span class="co"># Steps:</span></span>
-<span id="cb5-495"><a href="#cb5-495"></a><span class="co"># 1. Compute sum scores for each model</span></span>
-<span id="cb5-496"><a href="#cb5-496"></a><span class="co"># 2. For each item, compute the conditional likelihood given sum scores</span></span>
-<span id="cb5-497"><a href="#cb5-497"></a><span class="co"># 3. Optimize to find item difficulties</span></span>
-<span id="cb5-498"><a href="#cb5-498"></a><span class="co"># 4. Compare estimated difficulties to empirical item means (proportion correct)</span></span>
-<span id="cb5-499"><a href="#cb5-499"></a><span class="co">#</span></span>
-<span id="cb5-500"><a href="#cb5-500"></a><span class="co"># Use scipy.optimize.minimize for optimization</span></span>
-<span id="cb5-501"><a href="#cb5-501"></a></span>
-<span id="cb5-502"><a href="#cb5-502"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-503"><a href="#cb5-503"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
-<span id="cb5-504"><a href="#cb5-504"></a><span class="im">from</span> scipy.special <span class="im">import</span> logsumexp</span>
-<span id="cb5-505"><a href="#cb5-505"></a></span>
-<span id="cb5-506"><a href="#cb5-506"></a><span class="kw">def</span> estimate_rasch_conditional(Y):</span>
-<span id="cb5-507"><a href="#cb5-507"></a>    <span class="co">"""</span></span>
-<span id="cb5-508"><a href="#cb5-508"></a><span class="co">    Estimate Rasch model item difficulties using conditional MLE.</span></span>
-<span id="cb5-509"><a href="#cb5-509"></a></span>
-<span id="cb5-510"><a href="#cb5-510"></a><span class="co">    Parameters:</span></span>
-<span id="cb5-511"><a href="#cb5-511"></a><span class="co">    -----------</span></span>
-<span id="cb5-512"><a href="#cb5-512"></a><span class="co">    Y : np.ndarray, shape (N, M)</span></span>
-<span id="cb5-513"><a href="#cb5-513"></a><span class="co">        Binary response matrix</span></span>
-<span id="cb5-514"><a href="#cb5-514"></a></span>
-<span id="cb5-515"><a href="#cb5-515"></a><span class="co">    Returns:</span></span>
-<span id="cb5-516"><a href="#cb5-516"></a><span class="co">    --------</span></span>
-<span id="cb5-517"><a href="#cb5-517"></a><span class="co">    beta : np.ndarray, shape (M,)</span></span>
-<span id="cb5-518"><a href="#cb5-518"></a><span class="co">        Estimated item difficulties (identified by setting sum(beta) = 0)</span></span>
-<span id="cb5-519"><a href="#cb5-519"></a><span class="co">    """</span></span>
-<span id="cb5-520"><a href="#cb5-520"></a>    N, M <span class="op">=</span> Y.shape</span>
-<span id="cb5-521"><a href="#cb5-521"></a>    <span class="co"># CODE HERE</span></span>
-<span id="cb5-522"><a href="#cb5-522"></a>    <span class="cf">pass</span></span>
-<span id="cb5-523"><a href="#cb5-523"></a></span>
-<span id="cb5-524"><a href="#cb5-524"></a><span class="co"># Test on simulated data</span></span>
-<span id="cb5-525"><a href="#cb5-525"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb5-526"><a href="#cb5-526"></a>N, M <span class="op">=</span> <span class="dv">100</span>, <span class="dv">50</span></span>
-<span id="cb5-527"><a href="#cb5-527"></a>theta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, N)</span>
-<span id="cb5-528"><a href="#cb5-528"></a>beta_true <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, M)</span>
-<span id="cb5-529"><a href="#cb5-529"></a>prob <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(theta_true[:, <span class="va">None</span>] <span class="op">-</span> beta_true[<span class="va">None</span>, :])))</span>
-<span id="cb5-530"><a href="#cb5-530"></a>Y <span class="op">=</span> (np.random.random((N, M)) <span class="op">&lt;</span> prob).astype(<span class="bu">int</span>)</span>
-<span id="cb5-531"><a href="#cb5-531"></a></span>
-<span id="cb5-532"><a href="#cb5-532"></a>beta_hat <span class="op">=</span> estimate_rasch_conditional(Y)</span>
-<span id="cb5-533"><a href="#cb5-533"></a><span class="co"># Compare to true values (after centering)</span></span>
-<span id="cb5-534"><a href="#cb5-534"></a><span class="in">```</span></span>
-<span id="cb5-535"><a href="#cb5-535"></a></span>
-<span id="cb5-536"><a href="#cb5-536"></a>**Exercise 1.6** (**): Given pairwise preference data, estimate Bradley-Terry parameters.</span>
-<span id="cb5-537"><a href="#cb5-537"></a></span>
-<span id="cb5-538"><a href="#cb5-538"></a><span class="in">```python</span></span>
-<span id="cb5-539"><a href="#cb5-539"></a><span class="co"># Given: Comparison data as list of (winner, loser) pairs</span></span>
-<span id="cb5-540"><a href="#cb5-540"></a><span class="co"># Task: Estimate strength parameters via maximum likelihood</span></span>
-<span id="cb5-541"><a href="#cb5-541"></a><span class="co">#</span></span>
-<span id="cb5-542"><a href="#cb5-542"></a><span class="co"># The likelihood for comparison (i beats j) is:</span></span>
-<span id="cb5-543"><a href="#cb5-543"></a><span class="co"># P(i &gt; j) = exp(theta_i) / (exp(theta_i) + exp(theta_j))</span></span>
-<span id="cb5-544"><a href="#cb5-544"></a><span class="co">#           = sigmoid(theta_i - theta_j)</span></span>
-<span id="cb5-545"><a href="#cb5-545"></a></span>
-<span id="cb5-546"><a href="#cb5-546"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-547"><a href="#cb5-547"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
-<span id="cb5-548"><a href="#cb5-548"></a></span>
-<span id="cb5-549"><a href="#cb5-549"></a><span class="kw">def</span> estimate_bradley_terry(comparisons, n_items):</span>
-<span id="cb5-550"><a href="#cb5-550"></a>    <span class="co">"""</span></span>
-<span id="cb5-551"><a href="#cb5-551"></a><span class="co">    Estimate Bradley-Terry model parameters.</span></span>
-<span id="cb5-552"><a href="#cb5-552"></a></span>
-<span id="cb5-553"><a href="#cb5-553"></a><span class="co">    Parameters:</span></span>
-<span id="cb5-554"><a href="#cb5-554"></a><span class="co">    -----------</span></span>
-<span id="cb5-555"><a href="#cb5-555"></a><span class="co">    comparisons : list of (int, int)</span></span>
-<span id="cb5-556"><a href="#cb5-556"></a><span class="co">        List of (winner, loser) pairs</span></span>
-<span id="cb5-557"><a href="#cb5-557"></a><span class="co">    n_items : int</span></span>
-<span id="cb5-558"><a href="#cb5-558"></a><span class="co">        Number of items</span></span>
-<span id="cb5-559"><a href="#cb5-559"></a></span>
-<span id="cb5-560"><a href="#cb5-560"></a><span class="co">    Returns:</span></span>
-<span id="cb5-561"><a href="#cb5-561"></a><span class="co">    --------</span></span>
-<span id="cb5-562"><a href="#cb5-562"></a><span class="co">    theta : np.ndarray, shape (n_items,)</span></span>
-<span id="cb5-563"><a href="#cb5-563"></a><span class="co">        Estimated strength parameters (identified by setting theta[0] = 0)</span></span>
-<span id="cb5-564"><a href="#cb5-564"></a><span class="co">    """</span></span>
-<span id="cb5-565"><a href="#cb5-565"></a>    <span class="co"># CODE HERE</span></span>
-<span id="cb5-566"><a href="#cb5-566"></a>    <span class="cf">pass</span></span>
-<span id="cb5-567"><a href="#cb5-567"></a></span>
-<span id="cb5-568"><a href="#cb5-568"></a><span class="co"># Test: Simulate comparisons and recover parameters</span></span>
-<span id="cb5-569"><a href="#cb5-569"></a><span class="in">```</span></span>
-<span id="cb5-570"><a href="#cb5-570"></a></span>
-<span id="cb5-571"><a href="#cb5-571"></a>**Exercise 1.7** (***): Test whether benchmark data fit the Rasch model using Andersen's likelihood ratio test.</span>
-<span id="cb5-572"><a href="#cb5-572"></a></span>
-<span id="cb5-573"><a href="#cb5-573"></a><span class="in">```python</span></span>
-<span id="cb5-574"><a href="#cb5-574"></a><span class="co"># Andersen's LR test:</span></span>
-<span id="cb5-575"><a href="#cb5-575"></a><span class="co"># 1. Split persons into groups based on sum score (e.g., high vs low scorers)</span></span>
-<span id="cb5-576"><a href="#cb5-576"></a><span class="co"># 2. Estimate item difficulties separately for each group</span></span>
-<span id="cb5-577"><a href="#cb5-577"></a><span class="co"># 3. If Rasch holds, these estimates should be equal</span></span>
-<span id="cb5-578"><a href="#cb5-578"></a><span class="co"># 4. Test statistic: 2 * (sum of group log-likelihoods - pooled log-likelihood)</span></span>
-<span id="cb5-579"><a href="#cb5-579"></a><span class="co"># 5. Under H0, this is chi-squared with df = (n_groups - 1) * (n_items - 1)</span></span>
-<span id="cb5-580"><a href="#cb5-580"></a></span>
-<span id="cb5-581"><a href="#cb5-581"></a><span class="kw">def</span> andersen_lr_test(Y, n_groups<span class="op">=</span><span class="dv">2</span>):</span>
-<span id="cb5-582"><a href="#cb5-582"></a>    <span class="co">"""</span></span>
-<span id="cb5-583"><a href="#cb5-583"></a><span class="co">    Perform Andersen's LR test for Rasch model fit.</span></span>
-<span id="cb5-584"><a href="#cb5-584"></a></span>
-<span id="cb5-585"><a href="#cb5-585"></a><span class="co">    Parameters:</span></span>
-<span id="cb5-586"><a href="#cb5-586"></a><span class="co">    -----------</span></span>
-<span id="cb5-587"><a href="#cb5-587"></a><span class="co">    Y : np.ndarray, shape (N, M)</span></span>
-<span id="cb5-588"><a href="#cb5-588"></a><span class="co">        Binary response matrix</span></span>
-<span id="cb5-589"><a href="#cb5-589"></a><span class="co">    n_groups : int</span></span>
-<span id="cb5-590"><a href="#cb5-590"></a><span class="co">        Number of groups to split persons into</span></span>
-<span id="cb5-591"><a href="#cb5-591"></a></span>
-<span id="cb5-592"><a href="#cb5-592"></a><span class="co">    Returns:</span></span>
-<span id="cb5-593"><a href="#cb5-593"></a><span class="co">    --------</span></span>
-<span id="cb5-594"><a href="#cb5-594"></a><span class="co">    statistic : float</span></span>
-<span id="cb5-595"><a href="#cb5-595"></a><span class="co">        LR test statistic</span></span>
-<span id="cb5-596"><a href="#cb5-596"></a><span class="co">    p_value : float</span></span>
-<span id="cb5-597"><a href="#cb5-597"></a><span class="co">        p-value from chi-squared distribution</span></span>
-<span id="cb5-598"><a href="#cb5-598"></a><span class="co">    """</span></span>
-<span id="cb5-599"><a href="#cb5-599"></a>    <span class="co"># CODE HERE</span></span>
-<span id="cb5-600"><a href="#cb5-600"></a>    <span class="cf">pass</span></span>
-<span id="cb5-601"><a href="#cb5-601"></a><span class="in">```</span></span>
-<span id="cb5-602"><a href="#cb5-602"></a></span>
-<span id="cb5-603"><a href="#cb5-603"></a>**Exercise 1.8** (***): Implement the benchmark item-bug diagnostic of @truong2025bugs.</span>
-<span id="cb5-604"><a href="#cb5-604"></a></span>
-<span id="cb5-605"><a href="#cb5-605"></a><span class="in">```python</span></span>
-<span id="cb5-606"><a href="#cb5-606"></a><span class="co"># Simulate a Rasch benchmark with planted defective items, then rank items by</span></span>
-<span id="cb5-607"><a href="#cb5-607"></a><span class="co"># three scalability diagnostics and measure how well each recovers the defects.</span></span>
-<span id="cb5-608"><a href="#cb5-608"></a><span class="co">#</span></span>
-<span id="cb5-609"><a href="#cb5-609"></a><span class="co"># Steps:</span></span>
-<span id="cb5-610"><a href="#cb5-610"></a><span class="co"># 1. Simulate Y (N = 80 models x M = 200 items) from a Rasch model.</span></span>
-<span id="cb5-611"><a href="#cb5-611"></a><span class="co"># 2. Plant 20 buggy items: 10 with flipped keys, 10 answered at random.</span></span>
-<span id="cb5-612"><a href="#cb5-612"></a><span class="co"># 3. Rank items by (a) item-total correlation, (b) average tetrachoric</span></span>
-<span id="cb5-613"><a href="#cb5-613"></a><span class="co">#    correlation, and (c) Mokken H_j (@eq-mokken-h).</span></span>
-<span id="cb5-614"><a href="#cb5-614"></a><span class="co"># 4. Report precision@20 and recall@20 for each ranking.</span></span>
-<span id="cb5-615"><a href="#cb5-615"></a><span class="co"># 5. Repeat as the model pool grows from N = 10 to N = 100 and plot how</span></span>
-<span id="cb5-616"><a href="#cb5-616"></a><span class="co">#    detection quality scales with the number of test-takers.</span></span>
-<span id="cb5-617"><a href="#cb5-617"></a></span>
-<span id="cb5-618"><a href="#cb5-618"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb5-619"><a href="#cb5-619"></a></span>
-<span id="cb5-620"><a href="#cb5-620"></a><span class="kw">def</span> detect_buggy_items(N, M, n_bad, seed<span class="op">=</span><span class="dv">0</span>):</span>
-<span id="cb5-621"><a href="#cb5-621"></a>    <span class="co">"""Return precision@n_bad and recall@n_bad for each of the three diagnostics."""</span></span>
-<span id="cb5-622"><a href="#cb5-622"></a>    <span class="co"># CODE HERE</span></span>
-<span id="cb5-623"><a href="#cb5-623"></a>    <span class="cf">pass</span></span>
-<span id="cb5-624"><a href="#cb5-624"></a><span class="in">```</span></span>
-<span id="cb5-625"><a href="#cb5-625"></a></span>
-<span id="cb5-626"><a href="#cb5-626"></a>**Discussion 1.1:** The Rasch model's sufficiency property justifies using sum scores as measurements. But most AI benchmarks use items with varying discriminations, which violates the Rasch assumption. Does this mean that current benchmark rankings are fundamentally flawed, or can they still be useful approximations? Under what conditions would adopting Rasch-based measurement change the ranking of frontier models?</span>
-<span id="cb5-627"><a href="#cb5-627"></a></span>
-<span id="cb5-628"><a href="#cb5-628"></a>**Discussion 1.2:** The Rasch school argues that items not fitting the Rasch model should be discarded because they do not measure the same construct. What are the implications of this view for AI benchmark design? Should we design benchmarks to fit Rasch, or should we use more flexible models that accommodate heterogeneous items?</span>
-<span id="cb5-629"><a href="#cb5-629"></a></span>
-<span id="cb5-630"><a href="#cb5-630"></a>**Discussion 1.3:** Network psychometrics views symptoms as causally connected rather than caused by a latent factor. Could AI capabilities be "network-like" rather than "factor-like"? What evidence would distinguish these views? How would it change how we interpret benchmark scores?</span>
-<span id="cb5-631"><a href="#cb5-631"></a></span>
-<span id="cb5-632"><a href="#cb5-632"></a>**Discussion 1.4:** @truong2025irsl show that IRT ability $\theta$ scales linearly with $\log(\text{FLOP})$ during pre-training, and that this relationship enables cross-benchmark transfer of ability estimates. What does this imply about the nature of the latent construct $\theta$? Is it a stable property of the model, or an artifact of the IRT parameterization? Under what conditions would cross-benchmark transfer of $\theta$ fail?</span>
-<span id="cb5-633"><a href="#cb5-633"></a></span>
-<span id="cb5-634"><a href="#cb5-634"></a></span>
-<span id="cb5-635"><a href="#cb5-635"></a><span class="fu">## Bibliographic Notes {#sec-irt-bib}</span></span>
-<span id="cb5-636"><a href="#cb5-636"></a></span>
-<span id="cb5-637"><a href="#cb5-637"></a>The probabilistic models we use today emerged from over a century of work across psychology, education, economics, and statistics. Understanding this history illuminates why certain models dominate and what problems they were designed to solve.</span>
-<span id="cb5-638"><a href="#cb5-638"></a></span>
-<span id="cb5-639"><a href="#cb5-639"></a>The story begins with L.L. Thurstone at the University of Chicago. In 1927, Thurstone proposed a model for how people make pairwise comparisons: the Law of Comparative Judgment <span class="co">[</span><span class="ot">@thurstone</span><span class="co">]</span>. Thurstone's insight was that subjective quantities (preferences, attitudes, perceived stimuli) could be placed on a numerical scale by analyzing patterns of pairwise comparisons. If we ask many people whether stimulus A is greater than stimulus B, and record the proportion who say yes, we can infer the underlying scale values. Acording to Thurstone's model, each stimulus $i$ has a true scale value $\theta_i$. When comparing stimuli $i$ and $j$, each is perceived with Gaussian noise: $\tilde{\theta}_i \sim \mathcal{N}(\theta_i, \sigma^2), \quad \tilde{\theta}_j \sim \mathcal{N}(\theta_j, \sigma^2)$. The probability that $i$ is judged greater than $j$ is:</span>
-<span id="cb5-640"><a href="#cb5-640"></a></span>
-<span id="cb5-641"><a href="#cb5-641"></a>$$</span>
-<span id="cb5-642"><a href="#cb5-642"></a>P(i \succ j) = \Phi\left(\frac{\theta_i - \theta_j}{\sqrt{2}\sigma}\right)</span>
-<span id="cb5-643"><a href="#cb5-643"></a>$$</span>
-<span id="cb5-644"><a href="#cb5-644"></a></span>
-<span id="cb5-645"><a href="#cb5-645"></a>where $\Phi$ is the standard normal CDF. Thurstone's method showed that subjective quantities could be measured scientifically. The same mathematics now underlies how we rank AI systems from human preferences.</span>
-<span id="cb5-646"><a href="#cb5-646"></a></span>
-<span id="cb5-647"><a href="#cb5-647"></a>In 1952, Ralph Bradley and Milton Terry developed a model for ranking from paired comparisons in the context of incomplete block designs <span class="co">[</span><span class="ot">@bradley-terry-model</span><span class="co">]</span>. Their model:</span>
-<span id="cb5-648"><a href="#cb5-648"></a></span>
-<span id="cb5-649"><a href="#cb5-649"></a>$$</span>
-<span id="cb5-650"><a href="#cb5-650"></a>P(i \succ j) = \frac{\pi_i}{\pi_i + \pi_j}</span>
-<span id="cb5-651"><a href="#cb5-651"></a>$$</span>
-<span id="cb5-652"><a href="#cb5-652"></a></span>
-<span id="cb5-653"><a href="#cb5-653"></a>where $\pi_i &gt; 0$ are "worth" parameters. With $\theta_i = \log \pi_i$, this becomes the familiar logistic form. In 1959, R. Duncan Luce provided an axiomatic foundation through Choice Axiom: the ratio of choice probabilities for two alternatives should be independent of what other alternatives are available. This axiom leads directly to the Bradley-Terry/logistic model.</span>
-<span id="cb5-654"><a href="#cb5-654"></a></span>
-<span id="cb5-655"><a href="#cb5-655"></a>In 1960, Danish mathematician Georg Rasch published "Probabilistic Models for Some Intelligence and Attainment Tests," which introduced what we now call the Rasch model <span class="co">[</span><span class="ot">@rasch1960probabilistic</span><span class="co">]</span>. Rasch's contribution was the philosophical framework of specific objectivity: the requirement that person and item parameters must be separable. Rasch's work was introduced to the United States by Benjamin Wright at the University of Chicago, who heard Rasch lecture in 1960. Wright became the leading advocate for Rasch measurement in the English-speaking world, founding the MESA (Measurement, Evaluation, Statistical Analysis) program and the journal Rasch Measurement Transactions.</span>
-<span id="cb5-656"><a href="#cb5-656"></a></span>
-<span id="cb5-657"><a href="#cb5-657"></a>The view of measurement as a homomorphism from an empirical relational structure onto the numbers is *representational measurement theory*, given its canonical treatment in Krantz, Luce, Suppes, and Tversky's Foundations of Measurement [@krantz1971foundations]; @stevens1946theory provides the older scale-typology (nominal/ordinal/interval/ratio) that it refines. Additive conjoint measurement originates with Luce and Tukey's "Simultaneous Conjoint Measurement" [@luce1964simultaneous], which showed that the cancellation axioms on an ordered two-factor structure suffice to construct interval scales without a prior unit. That the Rasch model realizes this structure was argued by @brogden1977rasch and @perline1979rasch. The inference is contested: @michell2008pathological and @kyngdon2008rasch dispute whether reading a *deterministic* conjoint order off *stochastic* responses is licensed, a debate the chapter treats as open. The order-restricted, probabilistic formulations that make the axioms empirically testable---rather than assumed---are developed in @karabatsos2001rasch and @scheiblechner1995isotonic; these are the tools behind this chapter's claim that AI evaluation, by resampling at temperature $&gt;0$, can *test* additive conjoint structure where human testing could only posit it.</span>
-<span id="cb5-658"><a href="#cb5-658"></a></span>
-<span id="cb5-659"><a href="#cb5-659"></a>In the 2010s, these methods reached AI evaluation---the application of IRT to benchmark analysis <span class="co">[</span><span class="ot">@polo2024tinybenchmarks</span><span class="co">]</span>, multidimensional factor models for AI capabilities (this textbook), and the Chatbot Arena's use of Elo ratings to rank language models <span class="co">[</span><span class="ot">@chiang2024chatbotarena</span><span class="co">]</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap3.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
+<script>
 // Auto-execute all pyodide cells after initialization
 document.addEventListener('DOMContentLoaded', function() {
   // Wait for pyodide to be fully ready (mainPyodide is set after loading)

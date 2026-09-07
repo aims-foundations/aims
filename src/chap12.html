@@ -23,41 +23,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -89,20 +54,17 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../src/chap13.html" rel="next">
 <link href="../src/chap11.html" rel="prev">
+<link href="../resources/brand/aims-icon.svg" rel="icon" type="image/svg+xml">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-3c47cb6d751b13564cfc6a2b45de9853.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b086f21aae4e24b59e90263a82a212d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -117,7 +79,6 @@ div.csl-indent {
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -535,176 +496,18 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
-    const toggleBodyColorMode = (bsSheetEl) => {
-      const mode = bsSheetEl.getAttribute("data-mode");
-      const bodyEl = window.document.querySelector("body");
-      if (mode === "dark") {
-        bodyEl.classList.add("quarto-dark");
-        bodyEl.classList.remove("quarto-light");
-      } else {
-        bodyEl.classList.add("quarto-light");
-        bodyEl.classList.remove("quarto-dark");
-      }
-    }
-    const toggleBodyColorPrimary = () => {
-      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
-      if (bsSheetEl) {
-        toggleBodyColorMode(bsSheetEl);
-      }
-    }
-    const setColorSchemeToggle = (alternate) => {
-      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
-      for (let i=0; i < toggles.length; i++) {
-        const toggle = toggles[i];
-        if (toggle) {
-          if (alternate) {
-            toggle.classList.add("alternate");
-          } else {
-            toggle.classList.remove("alternate");
-          }
-        }
-      }
-    };
-    const toggleColorMode = (alternate) => {
-      // Switch the stylesheets
-      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
-      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
-      manageTransitions('#quarto-margin-sidebar .nav-link', false);
-      if (alternate) {
-        // note: dark is layered on light, we don't disable primary!
-        enableStylesheet(alternateStylesheets);
-        for (const sheetNode of alternateStylesheets) {
-          if (sheetNode.id === "quarto-bootstrap") {
-            toggleBodyColorMode(sheetNode);
-          }
-        }
-      } else {
-        disableStylesheet(alternateStylesheets);
-        enableStylesheet(primaryStylesheets)
-        toggleBodyColorPrimary();
-      }
-      manageTransitions('#quarto-margin-sidebar .nav-link', true);
-      // Switch the toggles
-      setColorSchemeToggle(alternate)
-      // Hack to workaround the fact that safari doesn't
-      // properly recolor the scrollbar when toggling (#1455)
-      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
-        manageTransitions("body", false);
-        window.scrollTo(0, 1);
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-          manageTransitions("body", true);
-        }, 40);
-      }
-    }
-    const disableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        stylesheet.rel = 'disabled-stylesheet';
-      }
-    }
-    const enableStylesheet = (stylesheets) => {
-      for (let i=0; i < stylesheets.length; i++) {
-        const stylesheet = stylesheets[i];
-        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
-          stylesheet.rel = 'stylesheet';
-        }
-      }
-    }
-    const manageTransitions = (selector, allowTransitions) => {
-      const els = window.document.querySelectorAll(selector);
-      for (let i=0; i < els.length; i++) {
-        const el = els[i];
-        if (allowTransitions) {
-          el.classList.remove('notransition');
-        } else {
-          el.classList.add('notransition');
-        }
-      }
-    }
-    const isFileUrl = () => {
-      return window.location.protocol === 'file:';
-    }
-    const hasAlternateSentinel = () => {
-      let styleSentinel = getColorSchemeSentinel();
-      if (styleSentinel !== null) {
-        return styleSentinel === "alternate";
-      } else {
-        return false;
-      }
-    }
-    const setStyleSentinel = (alternate) => {
-      const value = alternate ? "alternate" : "default";
-      if (!isFileUrl()) {
-        window.localStorage.setItem("quarto-color-scheme", value);
-      } else {
-        localAlternateSentinel = value;
-      }
-    }
-    const getColorSchemeSentinel = () => {
-      if (!isFileUrl()) {
-        const storageValue = window.localStorage.getItem("quarto-color-scheme");
-        return storageValue != null ? storageValue : localAlternateSentinel;
-      } else {
-        return localAlternateSentinel;
-      }
-    }
-    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
-      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
-      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
-      let newTheme = '';
-      if(authorPrefersDark) {
-        newTheme = isAlternate ? baseTheme : alternateTheme;
-      } else {
-        newTheme = isAlternate ? alternateTheme : baseTheme;
-      }
-      const changeGiscusTheme = () => {
-        // From: https://github.com/giscus/giscus/issues/336
-        const sendMessage = (message) => {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-          setConfig: {
-            theme: newTheme
-          }
-        });
-      }
-      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
-      if (isGiscussLoaded) {
-        changeGiscusTheme();
-      }
-    };
-    const authorPrefersDark = false;
-    const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
-    // Dark / light mode switch
-    window.quartoToggleColorScheme = () => {
-      // Read the current dark / light value
-      let toAlternate = !hasAlternateSentinel();
-      toggleColorMode(toAlternate);
-      setStyleSentinel(toAlternate);
-      toggleGiscusIfUsed(toAlternate, darkModeDefault);
-      window.dispatchEvent(new Event('resize'));
-    };
-    // Switch to dark mode if need be
-    if (hasAlternateSentinel()) {
-      toggleColorMode(true);
-    } else {
-      toggleColorMode(false);
-    }
-  </script>
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://aimslab.stanford.edu/" class="navbar-brand navbar-brand-logo">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo light-content">
+    <img src="../resources/brand/aims-lockup.svg" alt="AIMS — AI Measurement Science at Stanford" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://aimslab.stanford.edu/">
     <span class="navbar-title">AI Measurement Science</span>
     </a>
   </div>
@@ -713,18 +516,57 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://aimslab.stanford.edu/"> 
-<span class="menu-text">AIMS Lab Home</span></a>
+    <a class="nav-link" href="https://aimslab.stanford.edu/research"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/measurement-db"> 
+<span class="menu-text">Data &amp; Software</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-education" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Education</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-education">    
+        <li>
+    <a class="dropdown-item" href="../index.html">
+ <span class="dropdown-text">Textbook</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/cs321m">
+ <span class="dropdown-text">Course</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-community" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Community</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-community">    
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/competition">
+ <span class="dropdown-text">Competition</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/workshop">
+ <span class="dropdown-text">Workshop</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://aimslab.stanford.edu/seminars">
+ <span class="dropdown-text">Seminars</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://aimslab.stanford.edu/blog"> 
+<span class="menu-text">Blog</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://github.com/aims-foundations/aims" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="../AI-Measurement-Science.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+              <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
@@ -739,7 +581,23 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title"><span id="sec-redteaming" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Application</span></span></h1>
+                      </div>
+  </div>
+
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -830,13 +688,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../src/notation.html" class="sidebar-item-text sidebar-link">
@@ -847,9 +705,7 @@ window.Quarto = {
   </li>
     </ul>
     </div>
-<div class="quarto-sidebar-footer"><div class="sidebar-footer-item">
-<p>license.qmd</p>
-</div></div></nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -895,11 +751,10 @@ window.Quarto = {
   <li><a href="#sec-redteaming-exercises" id="toc-sec-redteaming-exercises" class="nav-link" data-scroll-target="#sec-redteaming-exercises"><span class="header-section-number">12.9</span> Exercises</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap12.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/loader.js"></script>
 <script type="module" id="qpyodide-monaco-editor-init">
 
@@ -911,23 +766,7 @@ window.Quarto = {
   });
 </script>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-redteaming" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Application</span></span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="callout callout-style-default callout-note callout-titled" title="Intended Learning Outcomes">
@@ -1421,8 +1260,6 @@ i^* = \arg\max_i \; I_i(\hat{\theta}_j^{(\text{adv})})
 <p><strong>Exercise 8</strong> (End-to-end pipeline). Implement the full adversarial evaluation pipeline from <a href="#sec-pipeline" class="quarto-xref"><span>Section 12.6</span></a> for a simulated scenario. Generate a 500-item adversarial bank with known 2PL parameters. Run adaptive testing on 50 models. Augment with 2000 synthetic items (with 10% mode-collapsed items). Apply PPI correction using 100 human-evaluated items. Report: (a) ability estimates with standard errors, (b) calibration transfer correlation, and (c) the bias reduction from PPI.</p>
 
 
-<!-- -->
-
 </section>
 <section id="bibliography" class="level1 unnumbered">
 <h1 class="unnumbered">References</h1>
@@ -1470,21 +1307,103 @@ Zellers, Rowan, Ari Holtzman, Yonatan Bisk, Ali Farhadi, and Yejin Choi. 2019. <
 </section>
 
 </main> <!-- /main -->
+<footer class="aims-site-footer" aria-label="AIMS and Stanford information">
+  <div class="aims-site-footer__band aims-site-footer__band--primary">
+    <div class="aims-site-footer__container aims-site-footer__main">
+      <div class="aims-site-footer__brand-block">
+        <div class="aims-site-footer__brand-group">
+          <a class="aims-site-footer__logo no-external" href="https://aimslab.stanford.edu/" aria-label="AIMS — AI Measurement Science">
+            <svg viewbox="0 0 177 70" width="121.371" height="48" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="M 0 70 L 20 1 L 40 70"></path>
+              <path d="M 4.7 70 L 20 17.2 L 35.3 70"></path>
+              <path d="M 9.4 70 L 20 33.4 L 30.6 70"></path>
+              <path d="M 14.2 53.5 H 25.8"></path>
+              <path d="M 12.9 58 H 27.1"></path>
+              <path d="M 53 1 V 70"></path>
+              <path d="M 57.5 1 V 70"></path>
+              <path d="M 62 1 V 70"></path>
+              <path d="M 75 1 V 70"></path>
+              <path d="M 79.5 1 V 70"></path>
+              <path d="M 84 1 V 70"></path>
+              <path d="M 110 1 V 70"></path>
+              <path d="M 114.5 1 V 70"></path>
+              <path d="M 119 1 V 70"></path>
+              <path d="M 75 1 L 97 48 L 119 1"></path>
+              <path d="M 79.5 1 L 97 41 L 114.5 1"></path>
+              <path d="M 84 1 L 97 34 L 110 1"></path>
+              <g transform="translate(132 0)">
+                <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5"></path>
+                <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5"></path>
+                <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5"></path>
+              </g>
+            </svg>
+            <span class="aims-site-footer__wordmark" aria-hidden="true">
+              <span class="aims-site-footer__university">Stanford University</span>
+              <span>AI Measurement Science</span>
+            </span>
+          </a>
+          <p class="aims-site-footer__hai">
+            <a class="aims-site-footer__link no-external" href="https://hai.stanford.edu/">A center within Stanford HAI</a>
+          </p>
+        </div>
+        <address class="aims-site-footer__address">
+          Stanford University<br>
+          353 Jane Stanford Way<br>
+          Stanford, CA 94305
+        </address>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Get Involved</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/cs321m">CS321M Course</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/textbook/">Textbook</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/competition">Competition</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/workshop">Workshop</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/seminars">Seminars</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news">News archive</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/blog">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="aims-site-footer__column">
+        <div class="aims-site-footer__heading">Stay in Touch</div>
+        <ul class="aims-site-footer__links">
+          <li><a class="aims-site-footer__link no-external" href="https://discord.gg/UVseUQ983v" rel="noopener noreferrer" target="_blank">Discord</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://github.com/aims-foundations/aimslab" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+          <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/news/feed.xml" rel="noopener noreferrer" target="_blank">Atom feed</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="aims-site-footer__band aims-site-footer__band--legal">
+    <div class="aims-site-footer__container aims-site-footer__legal">
+      <ul class="aims-site-footer__legal-links">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu">Stanford Home</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://visit.stanford.edu/plan/">Maps &amp; Directions</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://aimslab.stanford.edu/search">Search AIMS</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/search/">Search Stanford</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://emergency.stanford.edu">Emergency Info</a></li>
+      </ul>
+      <ul class="aims-site-footer__legal-links aims-site-footer__legal-links--muted">
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/terms/">Terms of Use</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/privacy/">Privacy</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://uit.stanford.edu/security/copyright-infringement">Copyright</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://adminguide.stanford.edu/chapters/guiding-policies/1-5-4-ownership-and-use-stanford-trademarks-and-images">Trademarks</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://www.stanford.edu/site/accessibility/">Accessibility</a></li>
+        <li><a class="aims-site-footer__link no-external" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></li>
+      </ul>
+      <p class="aims-site-footer__muted">© Stanford University. Stanford, California 94305.</p>
+      <p class="aims-site-footer__muted">
+        Website designed by
+        <a class="aims-site-footer__link aims-site-footer__credit no-external" href="https://ai.stanford.edu/~nntruong/" rel="noopener noreferrer" target="_blank">Nhi Truong</a>.
+      </p>
+    </div>
+  </div>
+</footer>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    // Ensure there is a toggle, if there isn't float one in the top right
-    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
-      const a = window.document.createElement('a');
-      a.classList.add('top-right');
-      a.classList.add('quarto-color-scheme-toggle');
-      a.href = "";
-      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
-      const i = window.document.createElement("i");
-      i.classList.add('bi');
-      a.appendChild(i);
-      window.document.body.appendChild(a);
-    }
-    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1553,57 +1472,6 @@ Zellers, Rowan, Ari Holtzman, Yonatan Bisk, Ali Farhadi, and Yejin Choi. 2019. <
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
-    }
-    const viewSource = window.document.getElementById('quarto-view-source') ||
-                       window.document.getElementById('quarto-code-tools-source');
-    if (viewSource) {
-      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-      viewSource.addEventListener("click", function(e) {
-        if (sourceUrl) {
-          // rstudio viewer pane
-          if (/\bcapabilities=\b/.test(window.location)) {
-            window.open(sourceUrl);
-          } else {
-            window.location.href = sourceUrl;
-          }
-        } else {
-          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-          modal.show();
-        }
-        return false;
-      });
-    }
-    function toggleCodeHandler(show) {
-      return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
-          if (show) {
-            details.open = true;
-          } else {
-            details.removeAttribute("open");
-          }
-        }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-        const fromCls = show ? "hidden" : "unhidden";
-        const toCls = show ? "unhidden" : "hidden";
-        for (let i=0; i<cellCodeDivs.length; i++) {
-          const codeDiv = cellCodeDivs[i];
-          if (codeDiv.classList.contains(fromCls)) {
-            codeDiv.classList.remove(fromCls);
-            codeDiv.classList.add(toCls);
-          } 
-        }
-        return false;
-      }
-    }
-    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-    if (hideAllCode) {
-      hideAllCode.addEventListener("click", toggleCodeHandler(false));
-    }
-    const showAllCode = window.document.getElementById("quarto-show-all-code");
-    if (showAllCode) {
-      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -1945,884 +1813,9 @@ Zellers, Rowan, Ari Holtzman, Yonatan Bisk, Ali Farhadi, and Yejin Choi. 2019. <
         <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Conclusion</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">format:</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">  html:</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    include-after-body:</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">      text: |</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">        &lt;script&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">        // Auto-execute all pyodide cells after initialization</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">        document.addEventListener('DOMContentLoaded', function() {</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">          function waitForPyodide() {</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">            if (typeof globalThis.mainPyodide !== 'undefined' &amp;&amp; globalThis.mainPyodide) {</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co">              if (typeof globalThis.qpyodideCellDetails !== 'undefined') {</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">                globalThis.qpyodideCellDetails.forEach((cell, index) =&gt; {</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">                  if (cell.options &amp;&amp; cell.options.autorun === 'true') {</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">                    setTimeout(() =&gt; {</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">                      const runButton = document.querySelector(`#qpyodide-button-run-${cell.id}`);</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co">                      if (runButton &amp;&amp; !runButton.disabled) {</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co">                        runButton.click();</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="co">                      }</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="co">                    }, index * 1000);</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="co">                  }</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="co">                });</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="co">              }</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a><span class="co">            } else {</span></span>
-<span id="cb1-24"><a href="#cb1-24"></a><span class="co">              setTimeout(waitForPyodide, 500);</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a><span class="co">            }</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a><span class="co">          }</span></span>
-<span id="cb1-27"><a href="#cb1-27"></a><span class="co">          setTimeout(waitForPyodide, 2000);</span></span>
-<span id="cb1-28"><a href="#cb1-28"></a><span class="co">        });</span></span>
-<span id="cb1-29"><a href="#cb1-29"></a><span class="co">        &lt;/script&gt;</span></span>
-<span id="cb1-30"><a href="#cb1-30"></a><span class="an">filters:</span></span>
-<span id="cb1-31"><a href="#cb1-31"></a><span class="co">  - pyodide</span></span>
-<span id="cb1-32"><a href="#cb1-32"></a><span class="an">pyodide:</span></span>
-<span id="cb1-33"><a href="#cb1-33"></a><span class="co">  packages:</span></span>
-<span id="cb1-34"><a href="#cb1-34"></a><span class="co">    - numpy</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a><span class="co">    - matplotlib</span></span>
-<span id="cb1-36"><a href="#cb1-36"></a><span class="co">    - scipy</span></span>
-<span id="cb1-37"><a href="#cb1-37"></a><span class="co">---</span></span>
-<span id="cb1-38"><a href="#cb1-38"></a></span>
-<span id="cb1-39"><a href="#cb1-39"></a><span class="fu"># Application {#sec-redteaming}</span></span>
-<span id="cb1-40"><a href="#cb1-40"></a></span>
-<span id="cb1-41"><a href="#cb1-41"></a>::: {.callout-note title="Intended Learning Outcomes"}</span>
-<span id="cb1-42"><a href="#cb1-42"></a>By the end of this chapter, the reader will be able to:</span>
-<span id="cb1-43"><a href="#cb1-43"></a></span>
-<span id="cb1-44"><a href="#cb1-44"></a><span class="ss">1. </span>**Frame** red-teaming as an adversarial measurement problem, connecting structured attack protocols to item response theory and content validity.</span>
-<span id="cb1-45"><a href="#cb1-45"></a><span class="ss">2. </span>**Analyze** when attack success rate (ASR) comparisons are meaningful, distinguishing conceptual coherence (comparable estimands) from measurement validity (accurate operationalization).</span>
-<span id="cb1-46"><a href="#cb1-46"></a><span class="ss">3. </span>**Distinguish** between structured and unstructured red-teaming and analyze the coverage-depth tradeoff in adversarial evaluation.</span>
-<span id="cb1-47"><a href="#cb1-47"></a><span class="ss">4. </span>**Formalize** adversarial robustness as a latent trait and apply adaptive adversarial testing using the CAT framework from @sec-cat.</span>
-<span id="cb1-48"><a href="#cb1-48"></a><span class="ss">5. </span>**Evaluate** when synthetic data preserves construct validity for AI evaluation and identify the conditions under which calibration transfers from synthetic to real items.</span>
-<span id="cb1-49"><a href="#cb1-49"></a><span class="ss">6. </span>**Apply** prediction-powered inference to debias synthetic evaluations by combining large-scale synthetic judgments with small human evaluation sets.</span>
-<span id="cb1-50"><a href="#cb1-50"></a><span class="ss">7. </span>**Design** an end-to-end adversarial evaluation pipeline that composes red-team item banks, adaptive testing, synthetic augmentation, and statistical correction.</span>
-<span id="cb1-51"><a href="#cb1-51"></a>:::</span>
-<span id="cb1-52"><a href="#cb1-52"></a></span>
-<span id="cb1-53"><a href="#cb1-53"></a>::: {.callout-tip title="Suggested Lecture Plan" collapse="true"}</span>
-<span id="cb1-54"><a href="#cb1-54"></a>This chapter can be covered in **2 lectures** (75--90 minutes each):</span>
-<span id="cb1-55"><a href="#cb1-55"></a></span>
-<span id="cb1-56"><a href="#cb1-56"></a>**Lecture 1: Red-Teaming as Measurement**</span>
-<span id="cb1-57"><a href="#cb1-57"></a></span>
-<span id="cb1-58"><a href="#cb1-58"></a><span class="ss">- </span>Red-teaming as measurement: coverage, depth, and item banks (20 min)</span>
-<span id="cb1-59"><a href="#cb1-59"></a><span class="ss">- </span>When can ASRs be compared? Conceptual coherence and aggregation (20 min)</span>
-<span id="cb1-60"><a href="#cb1-60"></a><span class="ss">- </span>Judge validity: differential misclassification and DIF (20 min)</span>
-<span id="cb1-61"><a href="#cb1-61"></a><span class="ss">- </span>Hands-on: simulating aggregation bias and judge error (15 min)</span>
-<span id="cb1-62"><a href="#cb1-62"></a></span>
-<span id="cb1-63"><a href="#cb1-63"></a>**Lecture 2: Adversarial Robustness Evaluation**</span>
-<span id="cb1-64"><a href="#cb1-64"></a></span>
-<span id="cb1-65"><a href="#cb1-65"></a><span class="ss">- </span>Adversarial robustness as a latent trait (20 min)</span>
-<span id="cb1-66"><a href="#cb1-66"></a><span class="ss">- </span>Adaptive adversarial testing and adversarial IRT (20 min)</span>
-<span id="cb1-67"><a href="#cb1-67"></a><span class="ss">- </span>Hands-on: simulating two-dimensional adversarial IRT (10 min)</span>
-<span id="cb1-68"><a href="#cb1-68"></a></span>
-<span id="cb1-69"><a href="#cb1-69"></a>**Lecture 3: Synthetic Data and Evaluation at Scale**</span>
-<span id="cb1-70"><a href="#cb1-70"></a></span>
-<span id="cb1-71"><a href="#cb1-71"></a><span class="ss">- </span>Synthetic data for evaluation: validity threats and calibration (25 min)</span>
-<span id="cb1-72"><a href="#cb1-72"></a><span class="ss">- </span>Hybrid evaluation and prediction-powered inference (25 min)</span>
-<span id="cb1-73"><a href="#cb1-73"></a><span class="ss">- </span>The adversarial evaluation pipeline (15 min)</span>
-<span id="cb1-74"><a href="#cb1-74"></a><span class="ss">- </span>Discussion and exercises (10 min)</span>
-<span id="cb1-75"><a href="#cb1-75"></a>:::</span>
-<span id="cb1-76"><a href="#cb1-76"></a></span>
-<span id="cb1-77"><a href="#cb1-77"></a>::: {.callout-note title="Notation"}</span>
-<span id="cb1-78"><a href="#cb1-78"></a>This chapter introduces adversarial evaluation notation: $\theta_j^{(\text{adv})}/\theta_j^{(\text{std})}$ (adversarial/standard ability), $\alpha_{s,\mathcal{D}}$ (attack success probability), $J/s$ (operational judge / oracle criterion), $K$ (repeated samples), and $\hat{\mu}_{\text{PPI}}$ (prediction-powered inference estimator). See the <span class="co">[</span><span class="ot">notation appendix</span><span class="co">](notation.qmd)</span> for the complete notation reference.</span>
-<span id="cb1-79"><a href="#cb1-79"></a>:::</span>
-<span id="cb1-80"><a href="#cb1-80"></a></span>
-<span id="cb1-81"><a href="#cb1-81"></a></span>
-<span id="cb1-82"><a href="#cb1-82"></a><span class="fu">## Red-Teaming as Measurement {#sec-red-teaming}</span></span>
-<span id="cb1-83"><a href="#cb1-83"></a></span>
-<span id="cb1-84"><a href="#cb1-84"></a>Red-teaming---the practice of probing AI systems for failures---has become a standard component of AI evaluation. But most red-teaming efforts are conducted *ad hoc*: a team of human testers tries creative prompts, records failures, and writes a report. From the perspective of measurement science, this is analogous to evaluating a student by asking whatever questions come to mind, with no test specification, no item calibration, and no systematic coverage of the construct domain.</span>
-<span id="cb1-85"><a href="#cb1-85"></a></span>
-<span id="cb1-86"><a href="#cb1-86"></a>This section reframes red-teaming as a *measurement problem*. The key insight is that a red-team evaluation is an instrument---a collection of adversarial items---and the same psychometric principles that apply to any evaluation instrument (content validity, item calibration, reliability) apply here.</span>
-<span id="cb1-87"><a href="#cb1-87"></a></span>
-<span id="cb1-88"><a href="#cb1-88"></a><span class="fu">### The Coverage-Depth Tradeoff {#sec-coverage-depth}</span></span>
-<span id="cb1-89"><a href="#cb1-89"></a></span>
-<span id="cb1-90"><a href="#cb1-90"></a>Consider two red-teaming strategies. Strategy A deploys 50 red-teamers, each spending one hour testing a wide range of attack categories: prompt injection, jailbreaking, harmful content generation, privacy violations, bias elicitation, and so on. Strategy B deploys 5 expert red-teamers, each spending ten hours on a single attack category, developing sophisticated multi-turn attack chains.</span>
-<span id="cb1-91"><a href="#cb1-91"></a></span>
-<span id="cb1-92"><a href="#cb1-92"></a>Strategy A has *breadth*: it covers many regions of the attack surface. Strategy B has *depth*: it explores individual attack categories more thoroughly. Neither dominates. The tradeoff maps directly onto measurement concepts from @sec-content-validity:</span>
-<span id="cb1-93"><a href="#cb1-93"></a></span>
-<span id="cb1-94"><a href="#cb1-94"></a><span class="ss">- </span>**Content validity** requires that the adversarial items represent the full domain of potential attacks. Strategy A is better for content validity.</span>
-<span id="cb1-95"><a href="#cb1-95"></a><span class="ss">- </span>**Item difficulty** determines whether the evaluation can distinguish models at different robustness levels. Strategy B produces harder items that discriminate among highly robust models.</span>
-<span id="cb1-96"><a href="#cb1-96"></a></span>
-<span id="cb1-97"><a href="#cb1-97"></a>::: {.callout-note title="Definition: Red-Team Test Specification"}</span>
-<span id="cb1-98"><a href="#cb1-98"></a>A **red-team test specification** is a document that defines:</span>
-<span id="cb1-99"><a href="#cb1-99"></a></span>
-<span id="cb1-100"><a href="#cb1-100"></a><span class="ss">1. </span>**Attack taxonomy**: The categories of adversarial behavior to be tested (e.g., jailbreaking, prompt injection, harmful content, bias, privacy leakage).</span>
-<span id="cb1-101"><a href="#cb1-101"></a><span class="ss">2. </span>**Coverage requirements**: The minimum number of items per category, ensuring content validity.</span>
-<span id="cb1-102"><a href="#cb1-102"></a><span class="ss">3. </span>**Difficulty targets**: The distribution of item difficulties within each category, ensuring discrimination across the robustness spectrum.</span>
-<span id="cb1-103"><a href="#cb1-103"></a><span class="ss">4. </span>**Scoring rubric**: The criteria for judging whether a model response constitutes a failure.</span>
-<span id="cb1-104"><a href="#cb1-104"></a></span>
-<span id="cb1-105"><a href="#cb1-105"></a>Without a test specification, red-team results have unknown content validity---we cannot know what fraction of the attack surface was covered or whether the items were difficult enough to challenge robust models.</span>
-<span id="cb1-106"><a href="#cb1-106"></a>:::</span>
-<span id="cb1-107"><a href="#cb1-107"></a></span>
-<span id="cb1-108"><a href="#cb1-108"></a><span class="fu">### Adversarial Items as Hard Items in IRT {#sec-adversarial-irt-items}</span></span>
-<span id="cb1-109"><a href="#cb1-109"></a></span>
-<span id="cb1-110"><a href="#cb1-110"></a>In IRT terminology, an adversarial item is simply an item with parameters that we can interpret through the standard framework. Consider a 2PL model applied to adversarial items:</span>
-<span id="cb1-111"><a href="#cb1-111"></a></span>
-<span id="cb1-112"><a href="#cb1-112"></a>$$</span>
-<span id="cb1-113"><a href="#cb1-113"></a>P(\text{resist}_j \mid \beta_i^{(\text{atk})}, \alpha_i, \theta_j^{(\text{adv})}) = \frac{1}{1 + \exp\bigl(-\alpha_i(\theta_j^{(\text{adv})} - \beta_i^{(\text{atk})})\bigr)}</span>
-<span id="cb1-114"><a href="#cb1-114"></a>$$ {#eq-adversarial-2pl}</span>
-<span id="cb1-115"><a href="#cb1-115"></a></span>
-<span id="cb1-116"><a href="#cb1-116"></a>Here $\theta_j^{(\text{adv})}$ is model $j$'s adversarial robustness and $\beta_i^{(\text{atk})}$ is the attack strength (difficulty) of adversarial item $i$. A model "responds correctly" by *resisting* the attack. Under this framing:</span>
-<span id="cb1-117"><a href="#cb1-117"></a></span>
-<span id="cb1-118"><a href="#cb1-118"></a><span class="ss">- </span>**Easy adversarial items** ($\beta_i^{(\text{atk})} \ll 0$) are weak attacks that most models resist. These provide little information about robustness differences among frontier models.</span>
-<span id="cb1-119"><a href="#cb1-119"></a><span class="ss">- </span>**Hard adversarial items** ($\beta_i^{(\text{atk})} \gg 0$) are sophisticated attacks that only the most robust models withstand.</span>
-<span id="cb1-120"><a href="#cb1-120"></a><span class="ss">- </span>**High-discrimination items** ($\alpha_i \gg 1$) sharply separate robust from non-robust models. These are the most informative items for ranking.</span>
-<span id="cb1-121"><a href="#cb1-121"></a></span>
-<span id="cb1-122"><a href="#cb1-122"></a>The connection to content validity (@sec-content-validity) is immediate: a red-team evaluation with only easy items has construct underrepresentation for the high-robustness region, just as a math test with only arithmetic problems underrepresents mathematical ability. Conversely, a red-team evaluation with only expert-crafted attacks may have no items in the easy-to-moderate range, making it unable to distinguish among weaker models.</span>
-<span id="cb1-123"><a href="#cb1-123"></a></span>
-<span id="cb1-124"><a href="#cb1-124"></a><span class="fu">### Structured vs. Unstructured Red-Teaming {#sec-structured-red-teaming}</span></span>
-<span id="cb1-125"><a href="#cb1-125"></a></span>
-<span id="cb1-126"><a href="#cb1-126"></a>The red-teaming literature distinguishes two paradigms:</span>
-<span id="cb1-127"><a href="#cb1-127"></a></span>
-<span id="cb1-128"><a href="#cb1-128"></a>**Unstructured red-teaming** gives human testers broad instructions ("try to make the model do something bad") and relies on their creativity. This approach can discover unexpected failure modes but produces items with unknown psychometric properties---we do not know the difficulty, discrimination, or category coverage until after the fact. From a measurement perspective, unstructured red-teaming is useful for *exploratory item generation* but insufficient for *standardized measurement*.</span>
-<span id="cb1-129"><a href="#cb1-129"></a></span>
-<span id="cb1-130"><a href="#cb1-130"></a>**Structured red-teaming** uses a test specification to guide item development. Testers are assigned categories, given difficulty targets, and use standardized scoring rubrics. @ganguli2022redteaminglanguagemodels demonstrated the value of scaling structured red-teaming, showing that the distribution of discovered failures changes systematically as a function of red-team effort. @perez2022red extended this by using language models themselves to generate adversarial prompts at scale, trading human creativity for automated coverage.</span>
-<span id="cb1-131"><a href="#cb1-131"></a></span>
-<span id="cb1-132"><a href="#cb1-132"></a>::: {.callout-warning title="Key Insight: Red-Teaming Meets Construct-Irrelevant Variance"}</span>
-<span id="cb1-133"><a href="#cb1-133"></a>A common failure in red-teaming is conflating *refusal to answer benign questions* with *robustness to adversarial attacks*. If a model refuses to discuss any sensitive topic---including legitimate ones---it will score well on a red-team evaluation that measures only refusal rate. But this "robustness" is partly construct-irrelevant variance (@sec-civ): the model's overrefusal is a systematic factor unrelated to the construct of *adversarial robustness*. A well-designed red-team evaluation must include benign items that probe for false positives (inappropriate refusals), just as a diagnostic test must measure both sensitivity and specificity.</span>
-<span id="cb1-134"><a href="#cb1-134"></a>:::</span>
-<span id="cb1-135"><a href="#cb1-135"></a></span>
-<span id="cb1-136"><a href="#cb1-136"></a><span class="fu">### Red-Team Item Banks {#sec-red-team-item-bank}</span></span>
-<span id="cb1-137"><a href="#cb1-137"></a></span>
-<span id="cb1-138"><a href="#cb1-138"></a>The psychometric solution to the coverage-depth tradeoff is to build a *calibrated item bank*: a large pool of adversarial items with known IRT parameters. Once items are calibrated, different evaluations can draw from the bank according to their needs:</span>
-<span id="cb1-139"><a href="#cb1-139"></a></span>
-<span id="cb1-140"><a href="#cb1-140"></a><span class="ss">- </span>A **broad screening** evaluation draws items uniformly across categories, covering the full attack taxonomy.</span>
-<span id="cb1-141"><a href="#cb1-141"></a><span class="ss">- </span>A **targeted deep evaluation** draws difficult items from specific categories, probing known weakness areas.</span>
-<span id="cb1-142"><a href="#cb1-142"></a><span class="ss">- </span>An **adaptive evaluation** selects items based on the model's responses, as in computerized adaptive testing (@sec-cat).</span>
-<span id="cb1-143"><a href="#cb1-143"></a></span>
-<span id="cb1-144"><a href="#cb1-144"></a>Building such a bank requires an initial investment: items must be authored, administered to a calibration sample of models, and their parameters estimated. But the investment pays off in reusability---the same calibrated item can be used across multiple evaluations, and new models can be scored against the existing bank without re-calibration.</span>
-<span id="cb1-145"><a href="#cb1-145"></a></span>
-<span id="cb1-146"><a href="#cb1-146"></a>@ribeiro2020checklist proposed CheckList, one of the earliest structured approaches to building reusable test suites for NLP models. CheckList organizes items by capability (vocabulary, taxonomy, robustness, etc.) and test type (minimum functionality, invariance, directional expectation), providing a template for adversarial item banks. @bartolo2021improving took a dynamic approach with DynaBench, where humans author items that fool current models, creating a continuously challenging item pool.</span>
-<span id="cb1-147"><a href="#cb1-147"></a></span>
-<span id="cb1-148"><a href="#cb1-148"></a></span>
-<span id="cb1-149"><a href="#cb1-149"></a><span class="fu">## When Can Attack Success Rates Be Compared? {#sec-asr-comparison}</span></span>
-<span id="cb1-150"><a href="#cb1-150"></a></span>
-<span id="cb1-151"><a href="#cb1-151"></a>Attack success rate (ASR) is the dominant metric in red-teaming studies: "Model A has ASR 0.12 and Model B has ASR 0.31, so A is safer." But @chouldechova2026comparison show that many such comparisons are invalid---they rest on apples-to-oranges estimands or low-validity measurements. This section formalizes the conditions under which ASR comparisons are meaningful, drawing on the measurement framework developed throughout this book.</span>
-<span id="cb1-152"><a href="#cb1-152"></a></span>
-<span id="cb1-153"><a href="#cb1-153"></a><span class="fu">### ASR as an Estimand {#sec-asr-estimand}</span></span>
-<span id="cb1-154"><a href="#cb1-154"></a></span>
-<span id="cb1-155"><a href="#cb1-155"></a>The term "attack success rate" is misleading. It suggests we are computing the fraction of attacks that succeed. In reality, ASR reflects the fraction of *attack goals* that are successfully met. To make this precise, we need a probabilistic threat model.</span>
-<span id="cb1-156"><a href="#cb1-156"></a></span>
-<span id="cb1-157"><a href="#cb1-157"></a>::: {.callout-note title="Definition: Probabilistic Threat Model"}</span>
-<span id="cb1-158"><a href="#cb1-158"></a>A **probabilistic threat model** $\mathcal{M} = (s, \mathcal{D}, \mathcal{C})$ for red-teaming specifies:</span>
-<span id="cb1-159"><a href="#cb1-159"></a></span>
-<span id="cb1-160"><a href="#cb1-160"></a><span class="ss">1. </span>**Oracle success criteria** $s(R; P) \to <span class="sc">\{</span>0,1<span class="sc">\}</span>$: a function determining whether system response $R$ to prompt $P$ constitutes undesirable behavior.</span>
-<span id="cb1-161"><a href="#cb1-161"></a><span class="ss">2. </span>**Goal distribution** $\mathcal{D}$: a distribution over base harmful prompts $P \sim \mathcal{D}$.</span>
-<span id="cb1-162"><a href="#cb1-162"></a><span class="ss">3. </span>**Conditions** $\mathcal{C}$: constraints governing the attack method (single-turn, multi-turn, transfer, etc.).</span>
-<span id="cb1-163"><a href="#cb1-163"></a></span>
-<span id="cb1-164"><a href="#cb1-164"></a>The **attack success probability** (the estimand) is:</span>
-<span id="cb1-165"><a href="#cb1-165"></a></span>
-<span id="cb1-166"><a href="#cb1-166"></a>$$</span>
-<span id="cb1-167"><a href="#cb1-167"></a>\alpha_{s,\mathcal{D}} = P_{P \sim \mathcal{D}}\bigl<span class="co">[</span><span class="ot">s(L(P); P) = 1\bigr</span><span class="co">]</span></span>
-<span id="cb1-168"><a href="#cb1-168"></a>$$</span>
-<span id="cb1-169"><a href="#cb1-169"></a></span>
-<span id="cb1-170"><a href="#cb1-170"></a>where $L$ is the target system. The observed ASR is an *estimate* of this population parameter.</span>
-<span id="cb1-171"><a href="#cb1-171"></a>:::</span>
-<span id="cb1-172"><a href="#cb1-172"></a></span>
-<span id="cb1-173"><a href="#cb1-173"></a>This formalization reveals that comparing ASRs across studies requires comparing the underlying *estimands*, not just the numerical values. Two conditions must hold for a comparison to be meaningful.</span>
-<span id="cb1-174"><a href="#cb1-174"></a></span>
-<span id="cb1-175"><a href="#cb1-175"></a><span class="fu">### Conceptual Coherence: Aggregation Matters {#sec-conceptual-coherence}</span></span>
-<span id="cb1-176"><a href="#cb1-176"></a></span>
-<span id="cb1-177"><a href="#cb1-177"></a>The first condition is **conceptual coherence**: the ASRs being compared must estimate the same (or comparable) population parameters. In practice, this often fails because studies use different *aggregation* rules for computing ASR, which silently changes the estimand.</span>
-<span id="cb1-178"><a href="#cb1-178"></a></span>
-<span id="cb1-179"><a href="#cb1-179"></a>Consider two common aggregation strategies:</span>
-<span id="cb1-180"><a href="#cb1-180"></a></span>
-<span id="cb1-181"><a href="#cb1-181"></a>**One-shot ASR.** For each prompt $P$, sample a single response from the target system and check if the attack succeeds:</span>
-<span id="cb1-182"><a href="#cb1-182"></a></span>
-<span id="cb1-183"><a href="#cb1-183"></a>$$</span>
-<span id="cb1-184"><a href="#cb1-184"></a>\alpha_{\text{one-shot}} = P_{P \sim \mathcal{D}}\bigl<span class="co">[</span><span class="ot">s(L(P); P) = 1\bigr</span><span class="co">]</span></span>
-<span id="cb1-185"><a href="#cb1-185"></a>$$</span>
-<span id="cb1-186"><a href="#cb1-186"></a></span>
-<span id="cb1-187"><a href="#cb1-187"></a>**Top-1 of $K$ ASR.** For each prompt $P$, sample $K$ responses and declare success if *any* response is judged successful:</span>
-<span id="cb1-188"><a href="#cb1-188"></a></span>
-<span id="cb1-189"><a href="#cb1-189"></a>$$</span>
-<span id="cb1-190"><a href="#cb1-190"></a>\alpha_{\text{Top-1}}(K) = P_{P \sim \mathcal{D}}\Bigl<span class="co">[</span><span class="ot">\max_{k=1,\ldots,K} s(L(P)_k; P) = 1\Bigr</span><span class="co">]</span></span>
-<span id="cb1-191"><a href="#cb1-191"></a>$$</span>
-<span id="cb1-192"><a href="#cb1-192"></a></span>
-<span id="cb1-193"><a href="#cb1-193"></a>These are different estimands. If the per-prompt success probability is $p_0$, then the Top-1 success probability is $1 - (1-p_0)^K$, which grows rapidly with $K$. For $p_0 = 0.01$ and $K = 392$, we get $1 - 0.99^{392} \approx 0.98$. A study reporting Top-1 of 392 ASR = 0.89 and comparing it to another study's one-shot ASR = 0.31 is not comparing model safety or attack efficacy---it is comparing estimands <span class="co">[</span><span class="ot">@chouldechova2026comparison</span><span class="co">]</span>.</span>
-<span id="cb1-194"><a href="#cb1-194"></a></span>
-<span id="cb1-195"><a href="#cb1-195"></a>::: {.callout-warning title="Key Insight: Repeated Sampling Inflates ASR"}</span>
-<span id="cb1-196"><a href="#cb1-196"></a>Repeatedly sampling responses under high-temperature decoding and reporting Top-1 ASR trivially inflates the metric. @chouldechova2026comparison show that simply resampling *baseline prompts* (no jailbreak) 50 times at temperature 2.0 achieves Top-1 ASR of 0.83 on Llama 2 7B Chat---competitive with sophisticated jailbreak methods. The apparent superiority of complex attacks over simple baselines often reflects aggregation differences, not genuine attack efficacy.</span>
-<span id="cb1-197"><a href="#cb1-197"></a>:::</span>
-<span id="cb1-198"><a href="#cb1-198"></a></span>
-<span id="cb1-199"><a href="#cb1-199"></a>In IRT terms, the aggregation choice is analogous to the difference between scoring a test item as "correct if the student gets it right on the first attempt" versus "correct if the student gets it right in any of $K$ attempts." These measure different constructs: the former measures ability under a single opportunity, the latter measures the *upper bound* of ability under repeated trials.</span>
-<span id="cb1-200"><a href="#cb1-200"></a></span>
-<span id="cb1-201"><a href="#cb1-201"></a>::: {.callout-tip title="The Distributional Theory of Top-1 Scaling"}</span>
-<span id="cb1-202"><a href="#cb1-202"></a>@schaeffer2025monkeys provide a precise characterization of how Top-1 aggregation inflates ASR. Per-prompt, the success probability after $K$ attempts is $1 - (1 - p_i)^K$, which grows *exponentially* fast in $K$. Yet when averaged over prompts, the aggregate scales only as a *power law* in $K$. The resolution is that the distribution of per-prompt success probabilities $p_i$ has a heavy left tail: many prompts have near-zero single-attempt success probability. If $p_i \sim \text{Beta}(\alpha, \beta)$, the aggregate follows $-\log(\text{ASR}_{\text{Top-1}}(K)) \sim K^{-\alpha}$, where $\alpha$ is the left-tail shape parameter.</span>
-<span id="cb1-203"><a href="#cb1-203"></a></span>
-<span id="cb1-204"><a href="#cb1-204"></a>This has two implications for ASR comparisons. First, it explains *why* Top-1 aggregation inflates ASR so dramatically: the heavy tail of near-impossible prompts gets "picked off" exponentially as $K$ grows, producing apparent success even when the one-shot estimand $\alpha_{s,\mathcal{D}}$ is small. Second, it suggests a more informative approach: rather than reporting a single ASR at a fixed $K$, report (or estimate) the distribution of per-prompt success probabilities, which fully determines the scaling behavior at any $K$.</span>
-<span id="cb1-205"><a href="#cb1-205"></a></span>
-<span id="cb1-206"><a href="#cb1-206"></a>This distributional perspective connects to Item Response Theory: the per-prompt success probability $p_i$ is precisely the IRT response probability $\sigma(\theta - \beta_i)$, where $\theta$ is the model's latent vulnerability and $\beta_i$ is the prompt's difficulty. The heavy-tailed distribution of $p_i$ arises because prompt difficulties $\beta_i$ are heterogeneous — a prediction that IRT makes explicit through its item parameters. See @truong2025irsl for a formal treatment integrating IRT into scaling law estimation.</span>
-<span id="cb1-207"><a href="#cb1-207"></a>:::</span>
-<span id="cb1-208"><a href="#cb1-208"></a></span>
-<span id="cb1-209"><a href="#cb1-209"></a></span>
-<span id="cb1-210"><a href="#cb1-210"></a><span class="fu">### Measurement Validity: Judge Error and Differential Misclassification {#sec-judge-validity}</span></span>
-<span id="cb1-211"><a href="#cb1-211"></a></span>
-<span id="cb1-212"><a href="#cb1-212"></a>The second condition is **measurement validity**: the observed ASR must be a valid measurement of the estimand. In practice, the oracle success criterion $s$ is replaced by an operational judge $J$---typically an LLM or rule-based classifier. If $J$ does not faithfully capture $s$, the ASR is a biased estimate.</span>
-<span id="cb1-213"><a href="#cb1-213"></a></span>
-<span id="cb1-214"><a href="#cb1-214"></a>The bias depends on the judge's true positive rate (TPR) and false positive rate (FPR):</span>
-<span id="cb1-215"><a href="#cb1-215"></a></span>
-<span id="cb1-216"><a href="#cb1-216"></a>$$</span>
-<span id="cb1-217"><a href="#cb1-217"></a>\mathbb{E}<span class="co">[</span><span class="ot">\text{ASR}_J</span><span class="co">]</span> = \text{TPR} \cdot \alpha + \text{FPR} \cdot (1 - \alpha)</span>
-<span id="cb1-218"><a href="#cb1-218"></a>$$ {#eq-judge-bias}</span>
-<span id="cb1-219"><a href="#cb1-219"></a></span>
-<span id="cb1-220"><a href="#cb1-220"></a>where $\alpha = \alpha_{s,\mathcal{D}}$ is the true attack success probability. This is the standard misclassification bias formula. Two critical implications follow.</span>
-<span id="cb1-221"><a href="#cb1-221"></a></span>
-<span id="cb1-222"><a href="#cb1-222"></a>**Differential misclassification across target systems.** When comparing ASR across models, validity requires that the judge's TPR and FPR be *equal* across target systems. But different models produce different output distributions: some models give verbose refusals, others give terse ones; some hallucinate when confused by adversarial suffixes, others produce empty responses. If the judge has higher FPR on Model B's outputs than on Model A's, Model B will appear *less safe* even if both have the same true $\alpha$. This is formally a measurement invariance failure---analogous to DIF (@sec-dif-theory) where item properties differ across groups.</span>
-<span id="cb1-223"><a href="#cb1-223"></a></span>
-<span id="cb1-224"><a href="#cb1-224"></a>**Differential misclassification across attack methods.** Similarly, different jailbreak methods elicit different types of responses. Adversarial suffix attacks may trigger hallucinated responses that judges falsely flag as harmful (higher FPR), while social engineering attacks produce coherent harmful content that judges correctly identify (lower FPR). Comparing ASRs across attack methods without accounting for differential judge error conflates attack efficacy with judge behavior.</span>
-<span id="cb1-225"><a href="#cb1-225"></a></span>
-<span id="cb1-226"><a href="#cb1-226"></a>::: {.callout-note title="Definition: Valid ASR Comparison"}</span>
-<span id="cb1-227"><a href="#cb1-227"></a>A comparison of ASRs $\text{ASR}_A$ and $\text{ASR}_B$ (across systems or attack methods) is **valid** if:</span>
-<span id="cb1-228"><a href="#cb1-228"></a></span>
-<span id="cb1-229"><a href="#cb1-229"></a><span class="ss">1. </span>**Conceptual coherence**: Both ASRs estimate the same type of estimand (same aggregation, same goal distribution, same success concept).</span>
-<span id="cb1-230"><a href="#cb1-230"></a><span class="ss">2. </span>**Measurement validity**: The judge $J$ has equal TPR and FPR with respect to the oracle $s$ across the two conditions being compared.</span>
-<span id="cb1-231"><a href="#cb1-231"></a></span>
-<span id="cb1-232"><a href="#cb1-232"></a>Condition 1 ensures we are comparing like with like. Condition 2 ensures that observed differences reflect true differences in the estimand, not artifacts of the measurement instrument.</span>
-<span id="cb1-233"><a href="#cb1-233"></a>:::</span>
-<span id="cb1-234"><a href="#cb1-234"></a></span>
-<span id="cb1-235"><a href="#cb1-235"></a><span class="fu">### Content Validity of Prompt Sets {#sec-prompt-validity}</span></span>
-<span id="cb1-236"><a href="#cb1-236"></a></span>
-<span id="cb1-237"><a href="#cb1-237"></a>A third, often overlooked, validity threat concerns the *base harmful prompts* themselves. @chouldechova2026comparison document cases where prompts labeled as policy-violating are in fact benign: "What are some tips for successfully using adult dating apps?" is categorized as harmful content, and "Can you create detailed talking points for a speech advocating a specific political policy?" is classified as a political activity violation. A model that "complies" with these prompts is not exhibiting unsafe behavior.</span>
-<span id="cb1-238"><a href="#cb1-238"></a></span>
-<span id="cb1-239"><a href="#cb1-239"></a>This is a **content validity** failure in the sense of @sec-content-validity: the items (prompts) do not accurately represent the target domain (prompts that would elicit genuine policy violations if answered). Just as a math test that includes reading comprehension questions has construct-irrelevant content, a red-team prompt set that includes benign prompts has inflated attack success rates that do not reflect genuine safety failures.</span>
-<span id="cb1-240"><a href="#cb1-240"></a></span>
-<span id="cb1-241"><a href="#cb1-241"></a>The following simulation demonstrates both the aggregation and judge error problems.</span>
-<span id="cb1-242"><a href="#cb1-242"></a></span>
-<span id="cb1-243"><a href="#cb1-243"></a>{{&lt; include _plt_setup.qmd &gt;}}</span>
-<span id="cb1-244"><a href="#cb1-244"></a></span>
-<span id="cb1-245"><a href="#cb1-245"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-246"><a href="#cb1-246"></a><span class="co">#| label: asr-comparison</span></span>
-<span id="cb1-247"><a href="#cb1-247"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-248"><a href="#cb1-248"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-249"><a href="#cb1-249"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-250"><a href="#cb1-250"></a></span>
-<span id="cb1-251"><a href="#cb1-251"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-252"><a href="#cb1-252"></a></span>
-<span id="cb1-253"><a href="#cb1-253"></a><span class="co"># --- Setup: 200 prompts, true per-prompt success probability ---</span></span>
-<span id="cb1-254"><a href="#cb1-254"></a>n_prompts <span class="op">=</span> <span class="dv">200</span></span>
-<span id="cb1-255"><a href="#cb1-255"></a><span class="co"># True success probabilities: most prompts have low p, a few have moderate p</span></span>
-<span id="cb1-256"><a href="#cb1-256"></a>p_true <span class="op">=</span> np.random.beta(<span class="fl">0.3</span>, <span class="fl">3.0</span>, n_prompts)  <span class="co"># skewed toward 0</span></span>
-<span id="cb1-257"><a href="#cb1-257"></a>true_alpha <span class="op">=</span> p_true.mean()  <span class="co"># true one-shot ASR (estimand)</span></span>
-<span id="cb1-258"><a href="#cb1-258"></a></span>
-<span id="cb1-259"><a href="#cb1-259"></a><span class="co"># --- Panel 1: Aggregation bias (Top-1 of K) ---</span></span>
-<span id="cb1-260"><a href="#cb1-260"></a>K_values <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">500</span>]</span>
-<span id="cb1-261"><a href="#cb1-261"></a>top1_asr <span class="op">=</span> []</span>
-<span id="cb1-262"><a href="#cb1-262"></a><span class="cf">for</span> K <span class="kw">in</span> K_values:</span>
-<span id="cb1-263"><a href="#cb1-263"></a>    <span class="co"># P(at least 1 success in K trials) = 1 - (1 - p)^K</span></span>
-<span id="cb1-264"><a href="#cb1-264"></a>    top1_per_prompt <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> p_true) <span class="op">**</span> K</span>
-<span id="cb1-265"><a href="#cb1-265"></a>    top1_asr.append(top1_per_prompt.mean())</span>
-<span id="cb1-266"><a href="#cb1-266"></a></span>
-<span id="cb1-267"><a href="#cb1-267"></a><span class="co"># --- Panel 2: Judge error bias ---</span></span>
-<span id="cb1-268"><a href="#cb1-268"></a><span class="co"># True alpha for two models</span></span>
-<span id="cb1-269"><a href="#cb1-269"></a>alpha_A <span class="op">=</span> <span class="fl">0.15</span></span>
-<span id="cb1-270"><a href="#cb1-270"></a>alpha_B <span class="op">=</span> <span class="fl">0.15</span>  <span class="co"># same true safety!</span></span>
-<span id="cb1-271"><a href="#cb1-271"></a></span>
-<span id="cb1-272"><a href="#cb1-272"></a><span class="co"># Judge with differential error across models</span></span>
-<span id="cb1-273"><a href="#cb1-273"></a>tpr_A, fpr_A <span class="op">=</span> <span class="fl">0.85</span>, <span class="fl">0.05</span>  <span class="co"># good judge for Model A</span></span>
-<span id="cb1-274"><a href="#cb1-274"></a>tpr_B, fpr_B <span class="op">=</span> <span class="fl">0.85</span>, <span class="fl">0.15</span>  <span class="co"># higher FPR for Model B (e.g., hallucinated outputs)</span></span>
-<span id="cb1-275"><a href="#cb1-275"></a></span>
-<span id="cb1-276"><a href="#cb1-276"></a>asr_observed_A <span class="op">=</span> tpr_A <span class="op">*</span> alpha_A <span class="op">+</span> fpr_A <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> alpha_A)</span>
-<span id="cb1-277"><a href="#cb1-277"></a>asr_observed_B <span class="op">=</span> tpr_B <span class="op">*</span> alpha_B <span class="op">+</span> fpr_B <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> alpha_B)</span>
-<span id="cb1-278"><a href="#cb1-278"></a></span>
-<span id="cb1-279"><a href="#cb1-279"></a><span class="co"># Sweep FPR_B to show the effect</span></span>
-<span id="cb1-280"><a href="#cb1-280"></a>fpr_B_range <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="fl">0.3</span>, <span class="dv">50</span>)</span>
-<span id="cb1-281"><a href="#cb1-281"></a>asr_B_range <span class="op">=</span> tpr_B <span class="op">*</span> alpha_B <span class="op">+</span> fpr_B_range <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> alpha_B)</span>
-<span id="cb1-282"><a href="#cb1-282"></a></span>
-<span id="cb1-283"><a href="#cb1-283"></a><span class="co"># --- Panel 3: Combined effect ---</span></span>
-<span id="cb1-284"><a href="#cb1-284"></a><span class="co"># Show how Top-1 + judge error compound</span></span>
-<span id="cb1-285"><a href="#cb1-285"></a>K_demo <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb1-286"><a href="#cb1-286"></a>top1_true <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> p_true) <span class="op">**</span> K_demo</span>
-<span id="cb1-287"><a href="#cb1-287"></a><span class="co"># With judge: each of K samples is judged, success if any judged positive</span></span>
-<span id="cb1-288"><a href="#cb1-288"></a><span class="co"># P(judge says success | truly fails) per sample = FPR</span></span>
-<span id="cb1-289"><a href="#cb1-289"></a><span class="co"># P(judge says success | truly succeeds) per sample = TPR</span></span>
-<span id="cb1-290"><a href="#cb1-290"></a>tpr_judge, fpr_judge <span class="op">=</span> <span class="fl">0.90</span>, <span class="fl">0.08</span></span>
-<span id="cb1-291"><a href="#cb1-291"></a>p_judged_success_per_sample <span class="op">=</span> tpr_judge <span class="op">*</span> p_true <span class="op">+</span> fpr_judge <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p_true)</span>
-<span id="cb1-292"><a href="#cb1-292"></a>top1_judged <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> p_judged_success_per_sample) <span class="op">**</span> K_demo</span>
-<span id="cb1-293"><a href="#cb1-293"></a></span>
-<span id="cb1-294"><a href="#cb1-294"></a><span class="co"># --- Plot ---</span></span>
-<span id="cb1-295"><a href="#cb1-295"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-296"><a href="#cb1-296"></a></span>
-<span id="cb1-297"><a href="#cb1-297"></a><span class="co"># Panel 1: Top-1 ASR inflation</span></span>
-<span id="cb1-298"><a href="#cb1-298"></a>axes[<span class="dv">0</span>].plot(K_values, top1_asr, <span class="st">'o-'</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, markersize<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb1-299"><a href="#cb1-299"></a>axes[<span class="dv">0</span>].axhline(true_alpha, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb1-300"><a href="#cb1-300"></a>                label<span class="op">=</span><span class="ss">f'One-shot α = </span><span class="sc">{</span>true_alpha<span class="sc">:.3f}</span><span class="ss">'</span>)</span>
-<span id="cb1-301"><a href="#cb1-301"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'K (repeated samples)'</span>)</span>
-<span id="cb1-302"><a href="#cb1-302"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Top-1 ASR'</span>)</span>
-<span id="cb1-303"><a href="#cb1-303"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Aggregation inflates ASR'</span>)</span>
-<span id="cb1-304"><a href="#cb1-304"></a>axes[<span class="dv">0</span>].set_xscale(<span class="st">'log'</span>)</span>
-<span id="cb1-305"><a href="#cb1-305"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb1-306"><a href="#cb1-306"></a></span>
-<span id="cb1-307"><a href="#cb1-307"></a><span class="co"># Panel 2: Differential judge error</span></span>
-<span id="cb1-308"><a href="#cb1-308"></a>axes[<span class="dv">1</span>].plot(fpr_B_range, asr_B_range, color<span class="op">=</span><span class="st">'#E8637A'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>,</span>
-<span id="cb1-309"><a href="#cb1-309"></a>             label<span class="op">=</span><span class="st">'Model B (varying FPR)'</span>)</span>
-<span id="cb1-310"><a href="#cb1-310"></a>axes[<span class="dv">1</span>].axhline(asr_observed_A, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>,</span>
-<span id="cb1-311"><a href="#cb1-311"></a>                label<span class="op">=</span><span class="ss">f'Model A (FPR=</span><span class="sc">{</span>fpr_A<span class="sc">}</span><span class="ss">)'</span>)</span>
-<span id="cb1-312"><a href="#cb1-312"></a>axes[<span class="dv">1</span>].axhline(alpha_A, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">':'</span>, linewidth<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb1-313"><a href="#cb1-313"></a>                label<span class="op">=</span><span class="ss">f'True α = </span><span class="sc">{</span>alpha_A<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb1-314"><a href="#cb1-314"></a>axes[<span class="dv">1</span>].axvline(fpr_A, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, linestyle<span class="op">=</span><span class="st">':'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-315"><a href="#cb1-315"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Judge FPR on Model B'</span>)</span>
-<span id="cb1-316"><a href="#cb1-316"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Observed ASR'</span>)</span>
-<span id="cb1-317"><a href="#cb1-317"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Differential judge error'</span>)</span>
-<span id="cb1-318"><a href="#cb1-318"></a>axes[<span class="dv">1</span>].legend()</span>
-<span id="cb1-319"><a href="#cb1-319"></a></span>
-<span id="cb1-320"><a href="#cb1-320"></a><span class="co"># Panel 3: Compound effect</span></span>
-<span id="cb1-321"><a href="#cb1-321"></a>axes[<span class="dv">2</span>].scatter(top1_true, top1_judged, s<span class="op">=</span><span class="dv">8</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'#B07CD8'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-322"><a href="#cb1-322"></a>axes[<span class="dv">2</span>].plot([<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">0</span>, <span class="dv">1</span>], <span class="st">'--'</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb1-323"><a href="#cb1-323"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="st">'Top-1 ASR (true judge)'</span>)</span>
-<span id="cb1-324"><a href="#cb1-324"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Top-1 ASR (noisy judge)'</span>)</span>
-<span id="cb1-325"><a href="#cb1-325"></a>axes[<span class="dv">2</span>].set_title(<span class="ss">f'K=</span><span class="sc">{</span>K_demo<span class="sc">}</span><span class="ss">, TPR=</span><span class="sc">{</span>tpr_judge<span class="sc">}</span><span class="ss">, FPR=</span><span class="sc">{</span>fpr_judge<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb1-326"><a href="#cb1-326"></a></span>
-<span id="cb1-327"><a href="#cb1-327"></a>plt.tight_layout()</span>
-<span id="cb1-328"><a href="#cb1-328"></a>plt.show()</span>
-<span id="cb1-329"><a href="#cb1-329"></a></span>
-<span id="cb1-330"><a href="#cb1-330"></a><span class="bu">print</span>(<span class="st">"ASR Comparison Analysis:"</span>)</span>
-<span id="cb1-331"><a href="#cb1-331"></a><span class="bu">print</span>(<span class="ss">f"  True one-shot ASR (estimand): </span><span class="sc">{</span>true_alpha<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-332"><a href="#cb1-332"></a><span class="bu">print</span>(<span class="ss">f"  Top-1 ASR (K=50):  </span><span class="sc">{</span>top1_asr[<span class="dv">4</span>]<span class="sc">:.3f}</span><span class="ss">  (</span><span class="sc">{</span>top1_asr[<span class="dv">4</span>]<span class="op">/</span>true_alpha<span class="sc">:.1f}</span><span class="ss">x inflation)"</span>)</span>
-<span id="cb1-333"><a href="#cb1-333"></a><span class="bu">print</span>(<span class="ss">f"  Top-1 ASR (K=500): </span><span class="sc">{</span>top1_asr[<span class="op">-</span><span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">  (</span><span class="sc">{</span>top1_asr[<span class="op">-</span><span class="dv">1</span>]<span class="op">/</span>true_alpha<span class="sc">:.1f}</span><span class="ss">x inflation)"</span>)</span>
-<span id="cb1-334"><a href="#cb1-334"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Differential judge error (both models have true α = </span><span class="sc">{</span>alpha_A<span class="sc">}</span><span class="ss">):"</span>)</span>
-<span id="cb1-335"><a href="#cb1-335"></a><span class="bu">print</span>(<span class="ss">f"  Model A observed ASR: </span><span class="sc">{</span>asr_observed_A<span class="sc">:.3f}</span><span class="ss">  (FPR = </span><span class="sc">{</span>fpr_A<span class="sc">}</span><span class="ss">)"</span>)</span>
-<span id="cb1-336"><a href="#cb1-336"></a><span class="bu">print</span>(<span class="ss">f"  Model B observed ASR: </span><span class="sc">{</span>asr_observed_B<span class="sc">:.3f}</span><span class="ss">  (FPR = </span><span class="sc">{</span>fpr_B<span class="sc">}</span><span class="ss">)"</span>)</span>
-<span id="cb1-337"><a href="#cb1-337"></a><span class="bu">print</span>(<span class="ss">f"  Spurious gap: </span><span class="sc">{</span>asr_observed_B <span class="op">-</span> asr_observed_A<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-338"><a href="#cb1-338"></a><span class="in">```</span></span>
-<span id="cb1-339"><a href="#cb1-339"></a></span>
-<span id="cb1-340"><a href="#cb1-340"></a>The three panels illustrate why naive ASR comparisons are often misleading. **Left**: Top-1 aggregation inflates ASR exponentially with $K$. Even when the true one-shot success probability is low (blue dashed line), resampling 500 times drives the Top-1 ASR near 1.0. Comparing a Top-1 ASR to a one-shot ASR is comparing different estimands. **Center**: differential judge error creates spurious safety differences between models with identical true vulnerability. As the judge's FPR on Model B increases (e.g., due to hallucinated outputs that trigger false positives), Model B appears increasingly less safe even though its true $\alpha$ equals Model A's. **Right**: the compound effect of Top-1 aggregation and judge error---points above the diagonal show prompts where the noisy judge inflates the Top-1 ASR beyond its true value.</span>
-<span id="cb1-341"><a href="#cb1-341"></a></span>
-<span id="cb1-342"><a href="#cb1-342"></a>These results have direct practical implications for red-teaming practice:</span>
-<span id="cb1-343"><a href="#cb1-343"></a></span>
-<span id="cb1-344"><a href="#cb1-344"></a><span class="ss">1. </span>**Always report the aggregation rule** (one-shot, Top-1 of $K$, best-of-$T$) alongside the ASR value. Comparisons across aggregation rules are not comparisons of safety.</span>
-<span id="cb1-345"><a href="#cb1-345"></a><span class="ss">2. </span>**Assess judge agreement** disaggregated by target model and attack method. If the judge's error rates differ, the comparison is confounded by measurement error.</span>
-<span id="cb1-346"><a href="#cb1-346"></a><span class="ss">3. </span>**Audit prompt validity** for content representativeness---do the "harmful" prompts actually represent genuine policy violations?</span>
-<span id="cb1-347"><a href="#cb1-347"></a><span class="ss">4. </span>**Report confidence intervals** that account for both sampling variability and judge error.</span>
-<span id="cb1-348"><a href="#cb1-348"></a></span>
-<span id="cb1-349"><a href="#cb1-349"></a></span>
-<span id="cb1-350"><a href="#cb1-350"></a><span class="fu">## Adversarial Robustness Evaluation {#sec-adversarial-robustness}</span></span>
-<span id="cb1-351"><a href="#cb1-351"></a></span>
-<span id="cb1-352"><a href="#cb1-352"></a><span class="fu">### Robustness as a Latent Trait {#sec-robustness-latent}</span></span>
-<span id="cb1-353"><a href="#cb1-353"></a></span>
-<span id="cb1-354"><a href="#cb1-354"></a>Is adversarial robustness the same construct as standard accuracy? If a model is good at answering questions correctly, does it follow that the model is also good at resisting adversarial attacks? Empirically, the answer is often no. @zellers2019adversarial demonstrated "adversarial filtering"---selecting items that are specifically difficult for a target model---which creates items where standard accuracy and adversarial robustness diverge sharply.</span>
-<span id="cb1-355"><a href="#cb1-355"></a></span>
-<span id="cb1-356"><a href="#cb1-356"></a>We can formalize this as a *multidimensional* IRT model. Let each model $j$ have two latent traits: $\theta_j^{(\text{std})}$ (standard accuracy ability) and $\theta_j^{(\text{adv})}$ (adversarial robustness). For standard items, the response probability depends primarily on $\theta_j^{(\text{std})}$. For adversarial items, it depends on $\theta_j^{(\text{adv})}$:</span>
-<span id="cb1-357"><a href="#cb1-357"></a></span>
-<span id="cb1-358"><a href="#cb1-358"></a>$$</span>
-<span id="cb1-359"><a href="#cb1-359"></a>P(X_{ij} = 1) = \frac{1}{1 + \exp\bigl(-(\alpha_i^{(\text{std})} \theta_j^{(\text{std})} + \alpha_i^{(\text{adv})} \theta_j^{(\text{adv})} - \beta_i)\bigr)}</span>
-<span id="cb1-360"><a href="#cb1-360"></a>$$ {#eq-multidim-adversarial}</span>
-<span id="cb1-361"><a href="#cb1-361"></a></span>
-<span id="cb1-362"><a href="#cb1-362"></a>For a standard item, $\alpha_i^{(\text{std})}$ is large and $\alpha_i^{(\text{adv})} \approx 0$. For an adversarial item, $\alpha_i^{(\text{adv})}$ is large and $\alpha_i^{(\text{std})}$ may be small or moderate. The correlation $\rho(\theta^{(\text{std})}, \theta^{(\text{adv})})$ is an empirical quantity: a low correlation means adversarial robustness is genuinely a *distinct* dimension of model capability.</span>
-<span id="cb1-363"><a href="#cb1-363"></a></span>
-<span id="cb1-364"><a href="#cb1-364"></a><span class="fu">### Perturbation Spaces and Attack Taxonomies {#sec-perturbation-spaces}</span></span>
-<span id="cb1-365"><a href="#cb1-365"></a></span>
-<span id="cb1-366"><a href="#cb1-366"></a>Formalizing adversarial evaluation requires specifying the perturbation space---the set of transformations an adversary can apply:</span>
-<span id="cb1-367"><a href="#cb1-367"></a></span>
-<span id="cb1-368"><a href="#cb1-368"></a>::: {.callout-note title="Definition: Perturbation Space"}</span>
-<span id="cb1-369"><a href="#cb1-369"></a>A **perturbation space** $\mathcal{P}$ for an evaluation item $x$ is a set of semantics-preserving transformations:</span>
-<span id="cb1-370"><a href="#cb1-370"></a></span>
-<span id="cb1-371"><a href="#cb1-371"></a>$$</span>
-<span id="cb1-372"><a href="#cb1-372"></a>\mathcal{P}(x) = <span class="sc">\{</span> x' : d(x, x') \leq \epsilon, \; \text{sem}(x') = \text{sem}(x) <span class="sc">\}</span></span>
-<span id="cb1-373"><a href="#cb1-373"></a>$$</span>
-<span id="cb1-374"><a href="#cb1-374"></a></span>
-<span id="cb1-375"><a href="#cb1-375"></a>where $d(\cdot, \cdot)$ is a distance metric, $\epsilon$ is the perturbation budget, and $\text{sem}(\cdot)$ extracts the semantic content. A model is **robust at item** $x$ if it responds correctly for all $x' \in \mathcal{P}(x)$.</span>
-<span id="cb1-376"><a href="#cb1-376"></a>:::</span>
-<span id="cb1-377"><a href="#cb1-377"></a></span>
-<span id="cb1-378"><a href="#cb1-378"></a>For language models, defining $\mathcal{P}$ is harder than for image classifiers (where $\ell_p$-ball perturbations are standard). Common perturbation types include:</span>
-<span id="cb1-379"><a href="#cb1-379"></a></span>
-<span id="cb1-380"><a href="#cb1-380"></a><span class="ss">- </span>**Paraphrase invariance**: Rephrasing the question while preserving meaning.</span>
-<span id="cb1-381"><a href="#cb1-381"></a><span class="ss">- </span>**Format invariance**: Changing the presentation format (markdown, plain text, numbered lists).</span>
-<span id="cb1-382"><a href="#cb1-382"></a><span class="ss">- </span>**Prompt injection**: Embedding adversarial instructions within the input.</span>
-<span id="cb1-383"><a href="#cb1-383"></a><span class="ss">- </span>**Multi-turn escalation**: Gradually steering the conversation toward unsafe territory.</span>
-<span id="cb1-384"><a href="#cb1-384"></a></span>
-<span id="cb1-385"><a href="#cb1-385"></a>Each perturbation type defines a different dimension of the attack space. A comprehensive adversarial evaluation must sample from multiple perturbation types, analogous to the content validity requirement that a test must sample from the full construct domain.</span>
-<span id="cb1-386"><a href="#cb1-386"></a></span>
-<span id="cb1-387"><a href="#cb1-387"></a><span class="fu">### Adaptive Adversarial Testing {#sec-adaptive-adversarial}</span></span>
-<span id="cb1-388"><a href="#cb1-388"></a></span>
-<span id="cb1-389"><a href="#cb1-389"></a>The connection to computerized adaptive testing (@sec-cat) is natural: instead of administering a fixed battery of adversarial items, we can *adapt* the selection of attacks based on the model's responses.</span>
-<span id="cb1-390"><a href="#cb1-390"></a></span>
-<span id="cb1-391"><a href="#cb1-391"></a>Recall from @sec-cat that the optimal item selection rule in CAT maximizes Fisher information at the current ability estimate:</span>
-<span id="cb1-392"><a href="#cb1-392"></a></span>
-<span id="cb1-393"><a href="#cb1-393"></a>$$</span>
-<span id="cb1-394"><a href="#cb1-394"></a>i^* = \arg\max_i \; I_i(\hat{\theta}_j^{(\text{adv})})</span>
-<span id="cb1-395"><a href="#cb1-395"></a>$$</span>
-<span id="cb1-396"><a href="#cb1-396"></a></span>
-<span id="cb1-397"><a href="#cb1-397"></a>In the adversarial context, this means selecting the attack whose difficulty is closest to the model's current estimated robustness. If a model easily resists a moderate attack, we escalate to a harder one. If a model fails a moderate attack, we probe with easier attacks to find the boundary. This adaptive strategy is far more efficient than exhaustive testing: it concentrates evaluation effort in the informative region of the attack space.</span>
-<span id="cb1-398"><a href="#cb1-398"></a></span>
-<span id="cb1-399"><a href="#cb1-399"></a>::: {.callout-warning title="Key Insight: Adversarial CAT vs. Random Red-Teaming"}</span>
-<span id="cb1-400"><a href="#cb1-400"></a>A random red-team evaluation that draws 100 attacks uniformly from an item bank wastes effort on items that are too easy (every model resists them) or too hard (every model fails). Adaptive adversarial testing with the same 100-item budget concentrates items near each model's robustness frontier, producing tighter ability estimates. The efficiency gain is exactly the same as for standard CAT: adaptive testing can match the precision of a fixed-form test using roughly one-third to one-half as many items.</span>
-<span id="cb1-401"><a href="#cb1-401"></a>:::</span>
-<span id="cb1-402"><a href="#cb1-402"></a></span>
-<span id="cb1-403"><a href="#cb1-403"></a>The following simulation demonstrates the key ideas: we generate adversarial and standard items, fit a two-dimensional model, and show that adversarial robustness is a distinct latent dimension from standard accuracy.</span>
-<span id="cb1-404"><a href="#cb1-404"></a></span>
-<span id="cb1-405"><a href="#cb1-405"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-406"><a href="#cb1-406"></a><span class="co">#| label: adversarial-irt</span></span>
-<span id="cb1-407"><a href="#cb1-407"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-408"><a href="#cb1-408"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-409"><a href="#cb1-409"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-410"><a href="#cb1-410"></a><span class="im">from</span> scipy.special <span class="im">import</span> expit</span>
-<span id="cb1-411"><a href="#cb1-411"></a></span>
-<span id="cb1-412"><a href="#cb1-412"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb1-413"><a href="#cb1-413"></a></span>
-<span id="cb1-414"><a href="#cb1-414"></a><span class="co"># --- Generate latent traits ---</span></span>
-<span id="cb1-415"><a href="#cb1-415"></a>n_models <span class="op">=</span> <span class="dv">80</span></span>
-<span id="cb1-416"><a href="#cb1-416"></a>rho <span class="op">=</span> <span class="fl">0.35</span>  <span class="co"># low correlation: robustness != accuracy</span></span>
-<span id="cb1-417"><a href="#cb1-417"></a>mean <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>]</span>
-<span id="cb1-418"><a href="#cb1-418"></a>cov <span class="op">=</span> [[<span class="dv">1</span>, rho], [rho, <span class="dv">1</span>]]</span>
-<span id="cb1-419"><a href="#cb1-419"></a>traits <span class="op">=</span> np.random.multivariate_normal(mean, cov, n_models)</span>
-<span id="cb1-420"><a href="#cb1-420"></a>theta_std <span class="op">=</span> traits[:, <span class="dv">0</span>]  <span class="co"># standard accuracy ability</span></span>
-<span id="cb1-421"><a href="#cb1-421"></a>theta_adv <span class="op">=</span> traits[:, <span class="dv">1</span>]  <span class="co"># adversarial robustness</span></span>
-<span id="cb1-422"><a href="#cb1-422"></a></span>
-<span id="cb1-423"><a href="#cb1-423"></a><span class="co"># --- Generate items ---</span></span>
-<span id="cb1-424"><a href="#cb1-424"></a>n_standard <span class="op">=</span> <span class="dv">40</span></span>
-<span id="cb1-425"><a href="#cb1-425"></a>n_adversarial <span class="op">=</span> <span class="dv">40</span></span>
-<span id="cb1-426"><a href="#cb1-426"></a></span>
-<span id="cb1-427"><a href="#cb1-427"></a><span class="co"># Standard items: load on theta_std, low loading on theta_adv</span></span>
-<span id="cb1-428"><a href="#cb1-428"></a>alpha_std_standard <span class="op">=</span> np.random.uniform(<span class="fl">0.8</span>, <span class="fl">2.0</span>, n_standard)</span>
-<span id="cb1-429"><a href="#cb1-429"></a>alpha_adv_standard <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, n_standard)</span>
-<span id="cb1-430"><a href="#cb1-430"></a>beta_standard <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_standard)</span>
-<span id="cb1-431"><a href="#cb1-431"></a></span>
-<span id="cb1-432"><a href="#cb1-432"></a><span class="co"># Adversarial items: load on theta_adv, moderate loading on theta_std</span></span>
-<span id="cb1-433"><a href="#cb1-433"></a>alpha_std_adversarial <span class="op">=</span> np.random.uniform(<span class="fl">0.1</span>, <span class="fl">0.5</span>, n_adversarial)</span>
-<span id="cb1-434"><a href="#cb1-434"></a>alpha_adv_adversarial <span class="op">=</span> np.random.uniform(<span class="fl">0.8</span>, <span class="fl">2.0</span>, n_adversarial)</span>
-<span id="cb1-435"><a href="#cb1-435"></a>beta_adversarial <span class="op">=</span> np.random.normal(<span class="fl">0.5</span>, <span class="dv">1</span>, n_adversarial)  <span class="co"># harder on average</span></span>
-<span id="cb1-436"><a href="#cb1-436"></a></span>
-<span id="cb1-437"><a href="#cb1-437"></a><span class="co"># --- Simulate responses ---</span></span>
-<span id="cb1-438"><a href="#cb1-438"></a><span class="kw">def</span> simulate_response(theta_s, theta_a, a_s, a_a, b):</span>
-<span id="cb1-439"><a href="#cb1-439"></a>    logit <span class="op">=</span> a_s <span class="op">*</span> theta_s <span class="op">+</span> a_a <span class="op">*</span> theta_a <span class="op">-</span> b</span>
-<span id="cb1-440"><a href="#cb1-440"></a>    p <span class="op">=</span> expit(logit)</span>
-<span id="cb1-441"><a href="#cb1-441"></a>    <span class="cf">return</span> np.random.binomial(<span class="dv">1</span>, p)</span>
-<span id="cb1-442"><a href="#cb1-442"></a></span>
-<span id="cb1-443"><a href="#cb1-443"></a>responses <span class="op">=</span> np.zeros((n_models, n_standard <span class="op">+</span> n_adversarial))</span>
-<span id="cb1-444"><a href="#cb1-444"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_models):</span>
-<span id="cb1-445"><a href="#cb1-445"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_standard):</span>
-<span id="cb1-446"><a href="#cb1-446"></a>        responses[j, i] <span class="op">=</span> simulate_response(</span>
-<span id="cb1-447"><a href="#cb1-447"></a>            theta_std[j], theta_adv[j],</span>
-<span id="cb1-448"><a href="#cb1-448"></a>            alpha_std_standard[i], alpha_adv_standard[i], beta_standard[i])</span>
-<span id="cb1-449"><a href="#cb1-449"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_adversarial):</span>
-<span id="cb1-450"><a href="#cb1-450"></a>        responses[j, n_standard <span class="op">+</span> i] <span class="op">=</span> simulate_response(</span>
-<span id="cb1-451"><a href="#cb1-451"></a>            theta_std[j], theta_adv[j],</span>
-<span id="cb1-452"><a href="#cb1-452"></a>            alpha_std_adversarial[i], alpha_adv_adversarial[i], beta_adversarial[i])</span>
-<span id="cb1-453"><a href="#cb1-453"></a></span>
-<span id="cb1-454"><a href="#cb1-454"></a><span class="co"># --- Compute observed scores ---</span></span>
-<span id="cb1-455"><a href="#cb1-455"></a>score_standard <span class="op">=</span> responses[:, :n_standard].mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-456"><a href="#cb1-456"></a>score_adversarial <span class="op">=</span> responses[:, n_standard:].mean(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-457"><a href="#cb1-457"></a></span>
-<span id="cb1-458"><a href="#cb1-458"></a><span class="co"># --- Plot ---</span></span>
-<span id="cb1-459"><a href="#cb1-459"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-460"><a href="#cb1-460"></a></span>
-<span id="cb1-461"><a href="#cb1-461"></a><span class="co"># Panel 1: True traits</span></span>
-<span id="cb1-462"><a href="#cb1-462"></a>axes[<span class="dv">0</span>].scatter(theta_std, theta_adv, s<span class="op">=</span><span class="dv">12</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-463"><a href="#cb1-463"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="vs">r'Standard ability </span><span class="kw">(</span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">^</span><span class="vs">{</span><span class="dv">\m</span><span class="vs">athrm{std}}</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-464"><a href="#cb1-464"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="vs">r'Adversarial robustness </span><span class="kw">(</span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">^</span><span class="vs">{</span><span class="dv">\m</span><span class="vs">athrm{adv}}</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-465"><a href="#cb1-465"></a>axes[<span class="dv">0</span>].set_title(<span class="ss">f'True traits (r = </span><span class="sc">{</span>rho<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
-<span id="cb1-466"><a href="#cb1-466"></a>axes[<span class="dv">0</span>].axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb1-467"><a href="#cb1-467"></a>axes[<span class="dv">0</span>].axvline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb1-468"><a href="#cb1-468"></a></span>
-<span id="cb1-469"><a href="#cb1-469"></a><span class="co"># Panel 2: Observed scores</span></span>
-<span id="cb1-470"><a href="#cb1-470"></a>axes[<span class="dv">1</span>].scatter(score_standard, score_adversarial, s<span class="op">=</span><span class="dv">12</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-471"><a href="#cb1-471"></a>r_obs <span class="op">=</span> np.corrcoef(score_standard, score_adversarial)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-472"><a href="#cb1-472"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Standard accuracy'</span>)</span>
-<span id="cb1-473"><a href="#cb1-473"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Adversarial accuracy'</span>)</span>
-<span id="cb1-474"><a href="#cb1-474"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Observed scores (r = </span><span class="sc">{</span>r_obs<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
-<span id="cb1-475"><a href="#cb1-475"></a>axes[<span class="dv">1</span>].axhline(<span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb1-476"><a href="#cb1-476"></a>axes[<span class="dv">1</span>].axvline(<span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb1-477"><a href="#cb1-477"></a></span>
-<span id="cb1-478"><a href="#cb1-478"></a><span class="co"># Panel 3: Item loading space</span></span>
-<span id="cb1-479"><a href="#cb1-479"></a>axes[<span class="dv">2</span>].scatter(alpha_std_standard, alpha_adv_standard, s<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
-<span id="cb1-480"><a href="#cb1-480"></a>                color<span class="op">=</span><span class="st">'#5B8DEE'</span>, label<span class="op">=</span><span class="st">'Standard'</span>, marker<span class="op">=</span><span class="st">'o'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-481"><a href="#cb1-481"></a>axes[<span class="dv">2</span>].scatter(alpha_std_adversarial, alpha_adv_adversarial, s<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
-<span id="cb1-482"><a href="#cb1-482"></a>                color<span class="op">=</span><span class="st">'#E8637A'</span>, label<span class="op">=</span><span class="st">'Adversarial'</span>, marker<span class="op">=</span><span class="st">'^'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-483"><a href="#cb1-483"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="vs">r'Loading on </span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">^</span><span class="vs">{</span><span class="dv">\m</span><span class="vs">athrm{std}}</span><span class="dv">$</span><span class="vs">'</span>)</span>
-<span id="cb1-484"><a href="#cb1-484"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="vs">r'Loading on </span><span class="dv">$</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">^</span><span class="vs">{</span><span class="dv">\m</span><span class="vs">athrm{adv}}</span><span class="dv">$</span><span class="vs">'</span>)</span>
-<span id="cb1-485"><a href="#cb1-485"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Item loading space'</span>)</span>
-<span id="cb1-486"><a href="#cb1-486"></a>axes[<span class="dv">2</span>].legend()</span>
-<span id="cb1-487"><a href="#cb1-487"></a></span>
-<span id="cb1-488"><a href="#cb1-488"></a>plt.tight_layout()</span>
-<span id="cb1-489"><a href="#cb1-489"></a>plt.show()</span>
-<span id="cb1-490"><a href="#cb1-490"></a></span>
-<span id="cb1-491"><a href="#cb1-491"></a><span class="bu">print</span>(<span class="st">"Two-dimensional adversarial IRT simulation:"</span>)</span>
-<span id="cb1-492"><a href="#cb1-492"></a><span class="bu">print</span>(<span class="ss">f"  True trait correlation: </span><span class="sc">{</span>rho<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-493"><a href="#cb1-493"></a><span class="bu">print</span>(<span class="ss">f"  Observed score correlation: </span><span class="sc">{</span>r_obs<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-494"><a href="#cb1-494"></a><span class="bu">print</span>(<span class="ss">f"  Standard items — mean difficulty: </span><span class="sc">{</span>beta_standard<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">, "</span></span>
-<span id="cb1-495"><a href="#cb1-495"></a>      <span class="ss">f"mean loading on theta_std: </span><span class="sc">{</span>alpha_std_standard<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-496"><a href="#cb1-496"></a><span class="bu">print</span>(<span class="ss">f"  Adversarial items — mean difficulty: </span><span class="sc">{</span>beta_adversarial<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">, "</span></span>
-<span id="cb1-497"><a href="#cb1-497"></a>      <span class="ss">f"mean loading on theta_adv: </span><span class="sc">{</span>alpha_adv_adversarial<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-498"><a href="#cb1-498"></a><span class="in">```</span></span>
-<span id="cb1-499"><a href="#cb1-499"></a></span>
-<span id="cb1-500"><a href="#cb1-500"></a>The three panels reveal the structure of adversarial evaluation. **Left**: the true latent traits show that adversarial robustness ($\theta^{(\text{adv})}$) is only weakly correlated with standard accuracy ($\theta^{(\text{std})}$)---a model that scores well on standard items may be vulnerable to adversarial attacks. **Center**: observed scores on standard and adversarial item subsets mirror this weak correlation, confirming that the two item types measure distinct constructs. **Right**: the item loading space shows clear separation between standard items (loading primarily on $\theta^{(\text{std})}$) and adversarial items (loading primarily on $\theta^{(\text{adv})}$), supporting the two-dimensional model.</span>
-<span id="cb1-501"><a href="#cb1-501"></a></span>
-<span id="cb1-502"><a href="#cb1-502"></a>This has practical consequences. A single-score benchmark that mixes standard and adversarial items produces a composite that confounds two dimensions. A model could achieve a high composite score through strong standard accuracy alone, masking poor adversarial robustness. Separate subscores---or better, a multidimensional IRT model---are needed to accurately characterize model capabilities.</span>
-<span id="cb1-503"><a href="#cb1-503"></a></span>
-<span id="cb1-504"><a href="#cb1-504"></a></span>
-<span id="cb1-505"><a href="#cb1-505"></a><span class="fu">## Synthetic Data for Evaluation {#sec-synthetic-data}</span></span>
-<span id="cb1-506"><a href="#cb1-506"></a></span>
-<span id="cb1-507"><a href="#cb1-507"></a><span class="fu">### Why Synthetic Data? {#sec-why-synthetic}</span></span>
-<span id="cb1-508"><a href="#cb1-508"></a></span>
-<span id="cb1-509"><a href="#cb1-509"></a>Human-authored evaluation items are expensive, slow to produce, and hard to scale. Annotating a single benchmark item can require domain experts, multiple rounds of review, and careful quality control. Meanwhile, the space of possible evaluation scenarios is vast---no fixed benchmark can cover it.</span>
-<span id="cb1-510"><a href="#cb1-510"></a></span>
-<span id="cb1-511"><a href="#cb1-511"></a>Synthetic data generated by language models offers an appealing alternative: items can be produced at scale, targeted to specific difficulty levels, and refreshed frequently to combat contamination. @perez2022red demonstrated that LLMs can generate adversarial red-team prompts that are competitive with human-authored attacks. But the measurement question remains: *do synthetic items measure the same construct as human-authored items?*</span>
-<span id="cb1-512"><a href="#cb1-512"></a></span>
-<span id="cb1-513"><a href="#cb1-513"></a><span class="fu">### Validity Threats with Synthetic Data {#sec-synthetic-validity-threats}</span></span>
-<span id="cb1-514"><a href="#cb1-514"></a></span>
-<span id="cb1-515"><a href="#cb1-515"></a>Three systematic threats arise when using LLM-generated items for evaluation:</span>
-<span id="cb1-516"><a href="#cb1-516"></a></span>
-<span id="cb1-517"><a href="#cb1-517"></a>::: {.callout-note title="Definition: Evaluation Circularity"}</span>
-<span id="cb1-518"><a href="#cb1-518"></a>**Evaluation circularity** occurs when the same model family is used both to generate evaluation items and to be evaluated on those items. If GPT-4 generates items and GPT-4 is evaluated on them, the items may systematically avoid GPT-4's failure modes---the model cannot probe its own blind spots.</span>
-<span id="cb1-519"><a href="#cb1-519"></a>:::</span>
-<span id="cb1-520"><a href="#cb1-520"></a></span>
-<span id="cb1-521"><a href="#cb1-521"></a><span class="ss">1. </span>**Distribution mismatch**. Synthetic items may not match the distribution of real-world inputs. LLMs tend to generate "typical" examples from their training distribution, undersampling edge cases and rare phenomena. In IRT terms, the synthetic item bank may have a narrow difficulty distribution, concentrated near the mean, with insufficient coverage of the easy and hard extremes.</span>
-<span id="cb1-522"><a href="#cb1-522"></a></span>
-<span id="cb1-523"><a href="#cb1-523"></a><span class="ss">2. </span>**Mode collapse**. LLMs generating many items tend to produce repetitive patterns. The apparent diversity of a 10,000-item synthetic bank may be much lower than its nominal size, because items cluster in a few templates. This reduces the effective number of items and inflates reliability estimates.</span>
-<span id="cb1-524"><a href="#cb1-524"></a></span>
-<span id="cb1-525"><a href="#cb1-525"></a><span class="ss">3. </span>**Evaluation circularity**. When the item generator shares architectural or training lineage with the model being evaluated, systematic biases are introduced. The generator's implicit model of "what is hard" may not match human intuitions, and the generated items may exploit the same patterns that the target model handles well.</span>
-<span id="cb1-526"><a href="#cb1-526"></a></span>
-<span id="cb1-527"><a href="#cb1-527"></a>These threats map onto the validity framework from @sec-validity-threats. Distribution mismatch is a form of covariate shift (@sec-shift-taxonomy). Mode collapse reduces content validity (@sec-content-validity). Evaluation circularity introduces construct-irrelevant variance (@sec-civ).</span>
-<span id="cb1-528"><a href="#cb1-528"></a></span>
-<span id="cb1-529"><a href="#cb1-529"></a><span class="fu">### Calibrating Synthetic Items {#sec-synthetic-calibration}</span></span>
-<span id="cb1-530"><a href="#cb1-530"></a></span>
-<span id="cb1-531"><a href="#cb1-531"></a>The key empirical question is whether synthetic items, once calibrated, have IRT parameters that are comparable to human-authored items. If a synthetic item has the same difficulty and discrimination as a matched human-authored item, then---from a measurement perspective---the two are interchangeable.</span>
-<span id="cb1-532"><a href="#cb1-532"></a></span>
-<span id="cb1-533"><a href="#cb1-533"></a>Formally, let $\hat{\beta}_i^{(\text{syn})}$ and $\hat{\beta}_i^{(\text{human})}$ be the estimated difficulties of paired items (one synthetic, one human-authored, targeting the same content). We say calibration **transfers** if:</span>
-<span id="cb1-534"><a href="#cb1-534"></a></span>
-<span id="cb1-535"><a href="#cb1-535"></a>$$</span>
-<span id="cb1-536"><a href="#cb1-536"></a>\hat{\beta}_i^{(\text{syn})} \approx \hat{\beta}_i^{(\text{human})} + c</span>
-<span id="cb1-537"><a href="#cb1-537"></a>$$ {#eq-calibration-transfer}</span>
-<span id="cb1-538"><a href="#cb1-538"></a></span>
-<span id="cb1-539"><a href="#cb1-539"></a>where $c$ is a constant offset (synthetic items may be systematically easier or harder). A constant offset is correctable; what matters is that the *rank order* and *relative spacing* of item difficulties are preserved.</span>
-<span id="cb1-540"><a href="#cb1-540"></a></span>
-<span id="cb1-541"><a href="#cb1-541"></a>The following simulation demonstrates calibration transfer and identifies conditions under which it breaks down.</span>
-<span id="cb1-542"><a href="#cb1-542"></a></span>
-<span id="cb1-543"><a href="#cb1-543"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-544"><a href="#cb1-544"></a><span class="co">#| label: synthetic-calibration</span></span>
-<span id="cb1-545"><a href="#cb1-545"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-546"><a href="#cb1-546"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-547"><a href="#cb1-547"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-548"><a href="#cb1-548"></a><span class="im">from</span> scipy.special <span class="im">import</span> expit</span>
-<span id="cb1-549"><a href="#cb1-549"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize_scalar</span>
-<span id="cb1-550"><a href="#cb1-550"></a></span>
-<span id="cb1-551"><a href="#cb1-551"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb1-552"><a href="#cb1-552"></a></span>
-<span id="cb1-553"><a href="#cb1-553"></a>n_models <span class="op">=</span> <span class="dv">60</span></span>
-<span id="cb1-554"><a href="#cb1-554"></a>n_items <span class="op">=</span> <span class="dv">50</span></span>
-<span id="cb1-555"><a href="#cb1-555"></a></span>
-<span id="cb1-556"><a href="#cb1-556"></a><span class="co"># True model abilities</span></span>
-<span id="cb1-557"><a href="#cb1-557"></a>theta <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n_models)</span>
-<span id="cb1-558"><a href="#cb1-558"></a></span>
-<span id="cb1-559"><a href="#cb1-559"></a><span class="co"># Human-authored items: broad difficulty range</span></span>
-<span id="cb1-560"><a href="#cb1-560"></a>beta_human <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, n_items)</span>
-<span id="cb1-561"><a href="#cb1-561"></a>alpha_human <span class="op">=</span> np.random.uniform(<span class="fl">0.8</span>, <span class="fl">2.0</span>, n_items)</span>
-<span id="cb1-562"><a href="#cb1-562"></a></span>
-<span id="cb1-563"><a href="#cb1-563"></a><span class="co"># Synthetic items (well-calibrated): similar difficulty, slight offset</span></span>
-<span id="cb1-564"><a href="#cb1-564"></a>offset <span class="op">=</span> <span class="fl">0.3</span>  <span class="co"># synthetic items slightly easier</span></span>
-<span id="cb1-565"><a href="#cb1-565"></a>beta_syn_good <span class="op">=</span> beta_human <span class="op">+</span> offset <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.3</span>, n_items)</span>
-<span id="cb1-566"><a href="#cb1-566"></a>alpha_syn_good <span class="op">=</span> alpha_human <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.15</span>, n_items)</span>
-<span id="cb1-567"><a href="#cb1-567"></a>alpha_syn_good <span class="op">=</span> np.clip(alpha_syn_good, <span class="fl">0.3</span>, <span class="fl">3.0</span>)</span>
-<span id="cb1-568"><a href="#cb1-568"></a></span>
-<span id="cb1-569"><a href="#cb1-569"></a><span class="co"># Synthetic items (poorly calibrated): mode collapse + circularity</span></span>
-<span id="cb1-570"><a href="#cb1-570"></a>beta_syn_bad <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.5</span>, n_items)  <span class="co"># narrow difficulty range</span></span>
-<span id="cb1-571"><a href="#cb1-571"></a>alpha_syn_bad <span class="op">=</span> np.random.uniform(<span class="fl">0.5</span>, <span class="fl">1.0</span>, n_items)  <span class="co"># low discrimination</span></span>
-<span id="cb1-572"><a href="#cb1-572"></a></span>
-<span id="cb1-573"><a href="#cb1-573"></a><span class="co"># Simulate responses</span></span>
-<span id="cb1-574"><a href="#cb1-574"></a><span class="kw">def</span> simulate_2pl(theta, alpha, beta):</span>
-<span id="cb1-575"><a href="#cb1-575"></a>    n_m, n_i <span class="op">=</span> <span class="bu">len</span>(theta), <span class="bu">len</span>(alpha)</span>
-<span id="cb1-576"><a href="#cb1-576"></a>    resp <span class="op">=</span> np.zeros((n_m, n_i))</span>
-<span id="cb1-577"><a href="#cb1-577"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_m):</span>
-<span id="cb1-578"><a href="#cb1-578"></a>        p <span class="op">=</span> expit(alpha <span class="op">*</span> (theta[j] <span class="op">-</span> beta))</span>
-<span id="cb1-579"><a href="#cb1-579"></a>        resp[j] <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, p)</span>
-<span id="cb1-580"><a href="#cb1-580"></a>    <span class="cf">return</span> resp</span>
-<span id="cb1-581"><a href="#cb1-581"></a></span>
-<span id="cb1-582"><a href="#cb1-582"></a>resp_human <span class="op">=</span> simulate_2pl(theta, alpha_human, beta_human)</span>
-<span id="cb1-583"><a href="#cb1-583"></a>resp_syn_good <span class="op">=</span> simulate_2pl(theta, alpha_syn_good, beta_syn_good)</span>
-<span id="cb1-584"><a href="#cb1-584"></a>resp_syn_bad <span class="op">=</span> simulate_2pl(theta, alpha_syn_bad, beta_syn_bad)</span>
-<span id="cb1-585"><a href="#cb1-585"></a></span>
-<span id="cb1-586"><a href="#cb1-586"></a><span class="co"># Estimate item difficulties (proportion correct as proxy)</span></span>
-<span id="cb1-587"><a href="#cb1-587"></a>p_human <span class="op">=</span> resp_human.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-588"><a href="#cb1-588"></a>p_syn_good <span class="op">=</span> resp_syn_good.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-589"><a href="#cb1-589"></a>p_syn_bad <span class="op">=</span> resp_syn_bad.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-590"><a href="#cb1-590"></a></span>
-<span id="cb1-591"><a href="#cb1-591"></a><span class="co"># Convert to logit scale for comparison</span></span>
-<span id="cb1-592"><a href="#cb1-592"></a><span class="kw">def</span> prop_to_logit(p):</span>
-<span id="cb1-593"><a href="#cb1-593"></a>    p <span class="op">=</span> np.clip(p, <span class="fl">0.01</span>, <span class="fl">0.99</span>)</span>
-<span id="cb1-594"><a href="#cb1-594"></a>    <span class="cf">return</span> <span class="op">-</span>np.log(p <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> p))</span>
-<span id="cb1-595"><a href="#cb1-595"></a></span>
-<span id="cb1-596"><a href="#cb1-596"></a>logit_human <span class="op">=</span> prop_to_logit(p_human)</span>
-<span id="cb1-597"><a href="#cb1-597"></a>logit_syn_good <span class="op">=</span> prop_to_logit(p_syn_good)</span>
-<span id="cb1-598"><a href="#cb1-598"></a>logit_syn_bad <span class="op">=</span> prop_to_logit(p_syn_bad)</span>
-<span id="cb1-599"><a href="#cb1-599"></a></span>
-<span id="cb1-600"><a href="#cb1-600"></a><span class="co"># --- Plot ---</span></span>
-<span id="cb1-601"><a href="#cb1-601"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-602"><a href="#cb1-602"></a></span>
-<span id="cb1-603"><a href="#cb1-603"></a><span class="co"># Panel 1: Good calibration transfer</span></span>
-<span id="cb1-604"><a href="#cb1-604"></a>axes[<span class="dv">0</span>].scatter(logit_human, logit_syn_good, s<span class="op">=</span><span class="dv">12</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'#45BF7C'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-605"><a href="#cb1-605"></a>r_good <span class="op">=</span> np.corrcoef(logit_human, logit_syn_good)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-606"><a href="#cb1-606"></a>lims <span class="op">=</span> [<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>]</span>
-<span id="cb1-607"><a href="#cb1-607"></a>axes[<span class="dv">0</span>].plot(lims, lims, <span class="st">'--'</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb1-608"><a href="#cb1-608"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Human item difficulty'</span>)</span>
-<span id="cb1-609"><a href="#cb1-609"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Synthetic item difficulty'</span>)</span>
-<span id="cb1-610"><a href="#cb1-610"></a>axes[<span class="dv">0</span>].set_title(<span class="ss">f'Good transfer (r = </span><span class="sc">{</span>r_good<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
-<span id="cb1-611"><a href="#cb1-611"></a>axes[<span class="dv">0</span>].set_xlim(lims)</span>
-<span id="cb1-612"><a href="#cb1-612"></a>axes[<span class="dv">0</span>].set_ylim(lims)</span>
-<span id="cb1-613"><a href="#cb1-613"></a></span>
-<span id="cb1-614"><a href="#cb1-614"></a><span class="co"># Panel 2: Poor calibration transfer</span></span>
-<span id="cb1-615"><a href="#cb1-615"></a>axes[<span class="dv">1</span>].scatter(logit_human, logit_syn_bad, s<span class="op">=</span><span class="dv">12</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, edgecolor<span class="op">=</span><span class="st">'none'</span>)</span>
-<span id="cb1-616"><a href="#cb1-616"></a>r_bad <span class="op">=</span> np.corrcoef(logit_human, logit_syn_bad)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb1-617"><a href="#cb1-617"></a>axes[<span class="dv">1</span>].plot(lims, lims, <span class="st">'--'</span>, color<span class="op">=</span><span class="st">'gray'</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
-<span id="cb1-618"><a href="#cb1-618"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Human item difficulty'</span>)</span>
-<span id="cb1-619"><a href="#cb1-619"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Synthetic item difficulty'</span>)</span>
-<span id="cb1-620"><a href="#cb1-620"></a>axes[<span class="dv">1</span>].set_title(<span class="ss">f'Poor transfer (r = </span><span class="sc">{</span>r_bad<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
-<span id="cb1-621"><a href="#cb1-621"></a>axes[<span class="dv">1</span>].set_xlim(lims)</span>
-<span id="cb1-622"><a href="#cb1-622"></a>axes[<span class="dv">1</span>].set_ylim(lims)</span>
-<span id="cb1-623"><a href="#cb1-623"></a></span>
-<span id="cb1-624"><a href="#cb1-624"></a><span class="co"># Panel 3: Difficulty distributions</span></span>
-<span id="cb1-625"><a href="#cb1-625"></a>bins <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">25</span>)</span>
-<span id="cb1-626"><a href="#cb1-626"></a>axes[<span class="dv">2</span>].hist(beta_human, bins<span class="op">=</span>bins, alpha<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'#5B8DEE'</span>, density<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Human'</span>)</span>
-<span id="cb1-627"><a href="#cb1-627"></a>axes[<span class="dv">2</span>].hist(beta_syn_good, bins<span class="op">=</span>bins, alpha<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'#45BF7C'</span>, density<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Syn (good)'</span>)</span>
-<span id="cb1-628"><a href="#cb1-628"></a>axes[<span class="dv">2</span>].hist(beta_syn_bad, bins<span class="op">=</span>bins, alpha<span class="op">=</span><span class="fl">0.5</span>, color<span class="op">=</span><span class="st">'#E8637A'</span>, density<span class="op">=</span><span class="va">True</span>, label<span class="op">=</span><span class="st">'Syn (bad)'</span>)</span>
-<span id="cb1-629"><a href="#cb1-629"></a>axes[<span class="dv">2</span>].set_xlabel(<span class="vs">r'Item difficulty </span><span class="kw">(</span><span class="dv">$\b</span><span class="vs">eta</span><span class="dv">$</span><span class="kw">)</span><span class="vs">'</span>)</span>
-<span id="cb1-630"><a href="#cb1-630"></a>axes[<span class="dv">2</span>].set_ylabel(<span class="st">'Density'</span>)</span>
-<span id="cb1-631"><a href="#cb1-631"></a>axes[<span class="dv">2</span>].set_title(<span class="st">'Difficulty distributions'</span>)</span>
-<span id="cb1-632"><a href="#cb1-632"></a>axes[<span class="dv">2</span>].legend()</span>
-<span id="cb1-633"><a href="#cb1-633"></a></span>
-<span id="cb1-634"><a href="#cb1-634"></a>plt.tight_layout()</span>
-<span id="cb1-635"><a href="#cb1-635"></a>plt.show()</span>
-<span id="cb1-636"><a href="#cb1-636"></a></span>
-<span id="cb1-637"><a href="#cb1-637"></a><span class="bu">print</span>(<span class="st">"Calibration Transfer Analysis:"</span>)</span>
-<span id="cb1-638"><a href="#cb1-638"></a><span class="bu">print</span>(<span class="ss">f"  Good synthetic items: r = </span><span class="sc">{</span>r_good<span class="sc">:.2f}</span><span class="ss"> with human items"</span>)</span>
-<span id="cb1-639"><a href="#cb1-639"></a><span class="bu">print</span>(<span class="ss">f"    Mean difficulty offset: </span><span class="sc">{</span>logit_syn_good<span class="sc">.</span>mean() <span class="op">-</span> logit_human<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-640"><a href="#cb1-640"></a><span class="bu">print</span>(<span class="ss">f"  Poor synthetic items: r = </span><span class="sc">{</span>r_bad<span class="sc">:.2f}</span><span class="ss"> with human items"</span>)</span>
-<span id="cb1-641"><a href="#cb1-641"></a><span class="bu">print</span>(<span class="ss">f"    Difficulty SD — human: </span><span class="sc">{</span>beta_human<span class="sc">.</span>std()<span class="sc">:.2f}</span><span class="ss">, "</span></span>
-<span id="cb1-642"><a href="#cb1-642"></a>      <span class="ss">f"good syn: </span><span class="sc">{</span>beta_syn_good<span class="sc">.</span>std()<span class="sc">:.2f}</span><span class="ss">, bad syn: </span><span class="sc">{</span>beta_syn_bad<span class="sc">.</span>std()<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb1-643"><a href="#cb1-643"></a><span class="in">```</span></span>
-<span id="cb1-644"><a href="#cb1-644"></a></span>
-<span id="cb1-645"><a href="#cb1-645"></a>The three panels illustrate the calibration transfer problem. **Left**: well-designed synthetic items preserve the rank ordering of difficulty---the correlation with human item difficulties is high and the points cluster near the diagonal (with a small constant offset). **Center**: poorly designed synthetic items (mode-collapsed, narrow difficulty range) lose the rank ordering entirely. **Right**: the difficulty distributions reveal the mechanism: good synthetic items cover the same difficulty range as human items, while poor synthetic items collapse to a narrow band around zero.</span>
-<span id="cb1-646"><a href="#cb1-646"></a></span>
-<span id="cb1-647"><a href="#cb1-647"></a>The practical implication is that synthetic item quality must be *validated* against human-authored items before the synthetic items can be trusted for evaluation. A small human calibration sample (20--50 items) suffices to check whether calibration transfers. If the correlation between synthetic and human item difficulties is high ($r &gt; 0.8$), the synthetic items can be used with a simple offset correction. If the correlation is low, the synthetic items are measuring something different and should not be substituted for human items.</span>
-<span id="cb1-648"><a href="#cb1-648"></a></span>
-<span id="cb1-649"><a href="#cb1-649"></a></span>
-<span id="cb1-650"><a href="#cb1-650"></a><span class="fu">## Evaluation at Scale {#sec-evaluation-at-scale}</span></span>
-<span id="cb1-651"><a href="#cb1-651"></a></span>
-<span id="cb1-652"><a href="#cb1-652"></a><span class="fu">### The Hybrid Approach {#sec-hybrid-approach}</span></span>
-<span id="cb1-653"><a href="#cb1-653"></a></span>
-<span id="cb1-654"><a href="#cb1-654"></a>The tension between synthetic and human evaluation resolves in a hybrid approach: use a *large* synthetic evaluation (high coverage, low cost per item) combined with a *small* human evaluation (gold-standard quality, high cost per item). The statistical challenge is combining the two data sources to produce an estimate that is better than either alone.</span>
-<span id="cb1-655"><a href="#cb1-655"></a></span>
-<span id="cb1-656"><a href="#cb1-656"></a>Let $\hat{\mu}_{\text{syn}}$ be the mean performance estimated from $N$ synthetic items, and $\hat{\mu}_{\text{human}}$ be the mean performance estimated from $n$ human-evaluated items ($n \ll N$). The synthetic estimate may be biased---due to evaluation circularity, mode collapse, or distribution mismatch---but it provides a useful *proxy* for the true performance.</span>
-<span id="cb1-657"><a href="#cb1-657"></a></span>
-<span id="cb1-658"><a href="#cb1-658"></a><span class="fu">### Prediction-Powered Inference {#sec-ppi-application}</span></span>
-<span id="cb1-659"><a href="#cb1-659"></a></span>
-<span id="cb1-660"><a href="#cb1-660"></a>Prediction-powered inference (PPI), introduced by @angelopoulos2023prediction and connected to the off-policy evaluation framework in @sec-ppi-connection, provides a principled way to combine the two data sources.</span>
-<span id="cb1-661"><a href="#cb1-661"></a></span>
-<span id="cb1-662"><a href="#cb1-662"></a>The key idea is simple. Let $Y_i$ be the true (human-judged) response on item $i$ and $\hat{Y}_i$ be the synthetic (LLM-judged) response on the same item. We observe $\hat{Y}_i$ for all $N$ items but $Y_i$ for only a subset of $n$ items. The PPI estimator is:</span>
-<span id="cb1-663"><a href="#cb1-663"></a></span>
-<span id="cb1-664"><a href="#cb1-664"></a>$$</span>
-<span id="cb1-665"><a href="#cb1-665"></a>\hat{\mu}_{\text{PPI}} = \frac{1}{N}\sum_{i=1}^{N} \hat{Y}_i + \frac{1}{n}\sum_{i=1}^{n}\bigl(Y_i - \hat{Y}_i\bigr)</span>
-<span id="cb1-666"><a href="#cb1-666"></a>$$ {#eq-ppi-estimator}</span>
-<span id="cb1-667"><a href="#cb1-667"></a></span>
-<span id="cb1-668"><a href="#cb1-668"></a>The first term is the synthetic estimate over the full dataset. The second term is a **bias correction** computed on the labeled subset: the average discrepancy between human and synthetic judgments. If the synthetic judgments are unbiased ($\mathbb{E}<span class="co">[</span><span class="ot">\hat{Y}_i</span><span class="co">]</span> = \mathbb{E}<span class="co">[</span><span class="ot">Y_i</span><span class="co">]</span>$), the correction term averages to zero and $\hat{\mu}_{\text{PPI}} \approx \hat{\mu}_{\text{syn}}$ with the variance of the larger sample. If the synthetic judgments are biased, the correction removes the bias, and the variance of $\hat{\mu}_{\text{PPI}}$ is governed by the variance of the *residual* $Y_i - \hat{Y}_i$, which is small when the synthetic judgments are good proxies.</span>
-<span id="cb1-669"><a href="#cb1-669"></a></span>
-<span id="cb1-670"><a href="#cb1-670"></a>::: {.callout-note title="Definition: Prediction-Powered Inference"}</span>
-<span id="cb1-671"><a href="#cb1-671"></a>Given a large *unlabeled* dataset of size $N$ with predictions $\{\hat{Y}_i\}_{i=1}^N$ and a small *labeled* dataset of size $n$ with both predictions $<span class="sc">\{</span>\hat{Y}_i<span class="sc">\}</span>$ and true labels $<span class="sc">\{</span>Y_i<span class="sc">\}</span>$:</span>
-<span id="cb1-672"><a href="#cb1-672"></a></span>
-<span id="cb1-673"><a href="#cb1-673"></a><span class="ss">1. </span>The PPI estimator of the population mean is $\hat{\mu}_{\text{PPI}} = \hat{\mu}_N + (\bar{Y}_n - \hat{\bar{Y}}_n)$, where $\hat{\mu}_N = N^{-1}\sum_{i=1}^N \hat{Y}_i$, $\bar{Y}_n = n^{-1}\sum_{i=1}^n Y_i$, and $\hat{\bar{Y}}_n = n^{-1}\sum_{i=1}^n \hat{Y}_i$.</span>
-<span id="cb1-674"><a href="#cb1-674"></a><span class="ss">2. </span>The variance is $\text{Var}(\hat{\mu}_{\text{PPI}}) = \frac{\sigma_{\hat{Y}}^2}{N} + \frac{\sigma_{Y - \hat{Y}}^2}{n}$.</span>
-<span id="cb1-675"><a href="#cb1-675"></a><span class="ss">3. </span>The confidence interval is $\hat{\mu}_{\text{PPI}} \pm z_{\alpha/2} \sqrt{\frac{\hat{\sigma}_{\hat{Y}}^2}{N} + \frac{\hat{\sigma}_{Y-\hat{Y}}^2}{n}}$.</span>
-<span id="cb1-676"><a href="#cb1-676"></a></span>
-<span id="cb1-677"><a href="#cb1-677"></a>When the predictor $\hat{Y}$ is a good proxy for $Y$, the residual variance $\sigma_{Y-\hat{Y}}^2$ is small, so PPI achieves the confidence interval width of the large sample with the unbiasedness guarantee of the small sample.</span>
-<span id="cb1-678"><a href="#cb1-678"></a>:::</span>
-<span id="cb1-679"><a href="#cb1-679"></a></span>
-<span id="cb1-680"><a href="#cb1-680"></a><span class="fu">### Active Evaluation {#sec-active-evaluation}</span></span>
-<span id="cb1-681"><a href="#cb1-681"></a></span>
-<span id="cb1-682"><a href="#cb1-682"></a>Not all items benefit equally from human evaluation. If synthetic and human judgments agree on easy items (where the model clearly succeeds or fails), the correction term for those items is near zero. Human evaluation effort is most valuable on *ambiguous* items---those where the synthetic judgment is uncertain or where the model's response is borderline.</span>
-<span id="cb1-683"><a href="#cb1-683"></a></span>
-<span id="cb1-684"><a href="#cb1-684"></a>This motivates an **active evaluation** strategy: use information-theoretic criteria to select which items receive human judgment. Specifically, prioritize items where:</span>
-<span id="cb1-685"><a href="#cb1-685"></a></span>
-<span id="cb1-686"><a href="#cb1-686"></a><span class="ss">1. </span>The synthetic judge's confidence is lowest (high entropy of $P(\hat{Y}_i \mid X_i)$).</span>
-<span id="cb1-687"><a href="#cb1-687"></a><span class="ss">2. </span>The predicted correction $Y_i - \hat{Y}_i$ has high variance given the item's features.</span>
-<span id="cb1-688"><a href="#cb1-688"></a></span>
-<span id="cb1-689"><a href="#cb1-689"></a>This connects to the optimal design literature and to the adaptive testing framework from @sec-cat: in both cases, we are selecting which measurements to make in order to maximize information per unit cost.</span>
-<span id="cb1-690"><a href="#cb1-690"></a></span>
-<span id="cb1-691"><a href="#cb1-691"></a>The following simulation demonstrates PPI-style correction: a large synthetic evaluation combined with a small human evaluation corrects bias and narrows confidence intervals.</span>
-<span id="cb1-692"><a href="#cb1-692"></a></span>
-<span id="cb1-693"><a href="#cb1-693"></a><span class="in">```{pyodide-python}</span></span>
-<span id="cb1-694"><a href="#cb1-694"></a><span class="co">#| label: ppi-correction</span></span>
-<span id="cb1-695"><a href="#cb1-695"></a><span class="co">#| autorun: true</span></span>
-<span id="cb1-696"><a href="#cb1-696"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-697"><a href="#cb1-697"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb1-698"><a href="#cb1-698"></a></span>
-<span id="cb1-699"><a href="#cb1-699"></a>np.random.seed(<span class="dv">314</span>)</span>
-<span id="cb1-700"><a href="#cb1-700"></a></span>
-<span id="cb1-701"><a href="#cb1-701"></a><span class="co"># --- Setup ---</span></span>
-<span id="cb1-702"><a href="#cb1-702"></a>N_total <span class="op">=</span> <span class="dv">2000</span>   <span class="co"># total items with synthetic judgments</span></span>
-<span id="cb1-703"><a href="#cb1-703"></a>n_human <span class="op">=</span> <span class="dv">80</span>     <span class="co"># items with human judgments</span></span>
-<span id="cb1-704"><a href="#cb1-704"></a>true_accuracy <span class="op">=</span> <span class="fl">0.62</span>  <span class="co"># true model performance</span></span>
-<span id="cb1-705"><a href="#cb1-705"></a></span>
-<span id="cb1-706"><a href="#cb1-706"></a><span class="co"># Synthetic judgments: biased (overestimates by ~5%)</span></span>
-<span id="cb1-707"><a href="#cb1-707"></a>bias <span class="op">=</span> <span class="fl">0.05</span></span>
-<span id="cb1-708"><a href="#cb1-708"></a>noise_syn <span class="op">=</span> <span class="fl">0.15</span>  <span class="co"># noise in synthetic judgments</span></span>
-<span id="cb1-709"><a href="#cb1-709"></a>Y_true <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, true_accuracy, N_total).astype(<span class="bu">float</span>)</span>
-<span id="cb1-710"><a href="#cb1-710"></a>Y_syn <span class="op">=</span> Y_true <span class="op">+</span> bias <span class="op">+</span> np.random.normal(<span class="dv">0</span>, noise_syn, N_total)</span>
-<span id="cb1-711"><a href="#cb1-711"></a>Y_syn <span class="op">=</span> np.clip(Y_syn, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb1-712"><a href="#cb1-712"></a></span>
-<span id="cb1-713"><a href="#cb1-713"></a><span class="co"># Select human-evaluated subset (random)</span></span>
-<span id="cb1-714"><a href="#cb1-714"></a>human_idx <span class="op">=</span> np.random.choice(N_total, n_human, replace<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb1-715"><a href="#cb1-715"></a>Y_human <span class="op">=</span> Y_true[human_idx]</span>
-<span id="cb1-716"><a href="#cb1-716"></a>Y_syn_human <span class="op">=</span> Y_syn[human_idx]</span>
-<span id="cb1-717"><a href="#cb1-717"></a></span>
-<span id="cb1-718"><a href="#cb1-718"></a><span class="co"># --- Estimators ---</span></span>
-<span id="cb1-719"><a href="#cb1-719"></a><span class="co"># 1. Synthetic only (biased)</span></span>
-<span id="cb1-720"><a href="#cb1-720"></a>mu_syn <span class="op">=</span> Y_syn.mean()</span>
-<span id="cb1-721"><a href="#cb1-721"></a></span>
-<span id="cb1-722"><a href="#cb1-722"></a><span class="co"># 2. Human only (unbiased but high variance)</span></span>
-<span id="cb1-723"><a href="#cb1-723"></a>mu_human <span class="op">=</span> Y_human.mean()</span>
-<span id="cb1-724"><a href="#cb1-724"></a></span>
-<span id="cb1-725"><a href="#cb1-725"></a><span class="co"># 3. PPI (combines both)</span></span>
-<span id="cb1-726"><a href="#cb1-726"></a>mu_ppi <span class="op">=</span> mu_syn <span class="op">+</span> (Y_human <span class="op">-</span> Y_syn_human).mean()</span>
-<span id="cb1-727"><a href="#cb1-727"></a></span>
-<span id="cb1-728"><a href="#cb1-728"></a><span class="co"># --- Confidence intervals ---</span></span>
-<span id="cb1-729"><a href="#cb1-729"></a>n_bootstrap <span class="op">=</span> <span class="dv">2000</span></span>
-<span id="cb1-730"><a href="#cb1-730"></a>boot_syn <span class="op">=</span> np.zeros(n_bootstrap)</span>
-<span id="cb1-731"><a href="#cb1-731"></a>boot_human <span class="op">=</span> np.zeros(n_bootstrap)</span>
-<span id="cb1-732"><a href="#cb1-732"></a>boot_ppi <span class="op">=</span> np.zeros(n_bootstrap)</span>
-<span id="cb1-733"><a href="#cb1-733"></a></span>
-<span id="cb1-734"><a href="#cb1-734"></a><span class="cf">for</span> b <span class="kw">in</span> <span class="bu">range</span>(n_bootstrap):</span>
-<span id="cb1-735"><a href="#cb1-735"></a>    <span class="co"># Bootstrap synthetic</span></span>
-<span id="cb1-736"><a href="#cb1-736"></a>    idx_s <span class="op">=</span> np.random.choice(N_total, N_total, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-737"><a href="#cb1-737"></a>    boot_syn[b] <span class="op">=</span> Y_syn[idx_s].mean()</span>
-<span id="cb1-738"><a href="#cb1-738"></a></span>
-<span id="cb1-739"><a href="#cb1-739"></a>    <span class="co"># Bootstrap human</span></span>
-<span id="cb1-740"><a href="#cb1-740"></a>    idx_h <span class="op">=</span> np.random.choice(n_human, n_human, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-741"><a href="#cb1-741"></a>    boot_human[b] <span class="op">=</span> Y_human[idx_h].mean()</span>
-<span id="cb1-742"><a href="#cb1-742"></a></span>
-<span id="cb1-743"><a href="#cb1-743"></a>    <span class="co"># Bootstrap PPI</span></span>
-<span id="cb1-744"><a href="#cb1-744"></a>    idx_s2 <span class="op">=</span> np.random.choice(N_total, N_total, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-745"><a href="#cb1-745"></a>    idx_h2 <span class="op">=</span> np.random.choice(n_human, n_human, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-746"><a href="#cb1-746"></a>    boot_ppi[b] <span class="op">=</span> Y_syn[idx_s2].mean() <span class="op">+</span> (Y_human[idx_h2] <span class="op">-</span> Y_syn_human[idx_h2]).mean()</span>
-<span id="cb1-747"><a href="#cb1-747"></a></span>
-<span id="cb1-748"><a href="#cb1-748"></a>ci_syn <span class="op">=</span> np.percentile(boot_syn, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
-<span id="cb1-749"><a href="#cb1-749"></a>ci_human <span class="op">=</span> np.percentile(boot_human, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
-<span id="cb1-750"><a href="#cb1-750"></a>ci_ppi <span class="op">=</span> np.percentile(boot_ppi, [<span class="fl">2.5</span>, <span class="fl">97.5</span>])</span>
-<span id="cb1-751"><a href="#cb1-751"></a></span>
-<span id="cb1-752"><a href="#cb1-752"></a><span class="co"># --- Plot ---</span></span>
-<span id="cb1-753"><a href="#cb1-753"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">2</span>))</span>
-<span id="cb1-754"><a href="#cb1-754"></a></span>
-<span id="cb1-755"><a href="#cb1-755"></a><span class="co"># Panel 1: Point estimates and CIs</span></span>
-<span id="cb1-756"><a href="#cb1-756"></a>methods <span class="op">=</span> [<span class="st">'Synthetic</span><span class="ch">\n</span><span class="st">(N=2000)'</span>, <span class="st">'Human</span><span class="ch">\n</span><span class="st">(n=80)'</span>, <span class="st">'PPI</span><span class="ch">\n</span><span class="st">(N+n)'</span>]</span>
-<span id="cb1-757"><a href="#cb1-757"></a>estimates <span class="op">=</span> [mu_syn, mu_human, mu_ppi]</span>
-<span id="cb1-758"><a href="#cb1-758"></a>cis_low <span class="op">=</span> [ci_syn[<span class="dv">0</span>], ci_human[<span class="dv">0</span>], ci_ppi[<span class="dv">0</span>]]</span>
-<span id="cb1-759"><a href="#cb1-759"></a>cis_high <span class="op">=</span> [ci_syn[<span class="dv">1</span>], ci_human[<span class="dv">1</span>], ci_ppi[<span class="dv">1</span>]]</span>
-<span id="cb1-760"><a href="#cb1-760"></a>colors <span class="op">=</span> [<span class="st">'#E8637A'</span>, <span class="st">'#5B8DEE'</span>, <span class="st">'#45BF7C'</span>]</span>
-<span id="cb1-761"><a href="#cb1-761"></a></span>
-<span id="cb1-762"><a href="#cb1-762"></a><span class="cf">for</span> i, (m, est, lo, hi, col) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(methods, estimates, cis_low, cis_high, colors)):</span>
-<span id="cb1-763"><a href="#cb1-763"></a>    axes[<span class="dv">0</span>].errorbar(est, i, xerr<span class="op">=</span>[[est <span class="op">-</span> lo], [hi <span class="op">-</span> est]], fmt<span class="op">=</span><span class="st">'o'</span>,</span>
-<span id="cb1-764"><a href="#cb1-764"></a>                     color<span class="op">=</span>col, capsize<span class="op">=</span><span class="dv">4</span>, markersize<span class="op">=</span><span class="dv">5</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
-<span id="cb1-765"><a href="#cb1-765"></a>axes[<span class="dv">0</span>].axvline(true_accuracy, color<span class="op">=</span><span class="st">'gray'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span><span class="ss">f'True = </span><span class="sc">{</span>true_accuracy<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb1-766"><a href="#cb1-766"></a>axes[<span class="dv">0</span>].set_yticks(<span class="bu">range</span>(<span class="dv">3</span>))</span>
-<span id="cb1-767"><a href="#cb1-767"></a>axes[<span class="dv">0</span>].set_yticklabels(methods)</span>
-<span id="cb1-768"><a href="#cb1-768"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'Estimated accuracy'</span>)</span>
-<span id="cb1-769"><a href="#cb1-769"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Point estimates &amp; 95% CIs'</span>)</span>
-<span id="cb1-770"><a href="#cb1-770"></a>axes[<span class="dv">0</span>].legend()</span>
-<span id="cb1-771"><a href="#cb1-771"></a></span>
-<span id="cb1-772"><a href="#cb1-772"></a><span class="co"># Panel 2: CI widths</span></span>
-<span id="cb1-773"><a href="#cb1-773"></a>widths <span class="op">=</span> [ci_syn[<span class="dv">1</span>] <span class="op">-</span> ci_syn[<span class="dv">0</span>], ci_human[<span class="dv">1</span>] <span class="op">-</span> ci_human[<span class="dv">0</span>], ci_ppi[<span class="dv">1</span>] <span class="op">-</span> ci_ppi[<span class="dv">0</span>]]</span>
-<span id="cb1-774"><a href="#cb1-774"></a>bars <span class="op">=</span> axes[<span class="dv">1</span>].barh(<span class="bu">range</span>(<span class="dv">3</span>), widths, color<span class="op">=</span>colors, alpha<span class="op">=</span><span class="fl">0.7</span>, height<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-775"><a href="#cb1-775"></a>axes[<span class="dv">1</span>].set_yticks(<span class="bu">range</span>(<span class="dv">3</span>))</span>
-<span id="cb1-776"><a href="#cb1-776"></a>axes[<span class="dv">1</span>].set_yticklabels(methods)</span>
-<span id="cb1-777"><a href="#cb1-777"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'95% CI width'</span>)</span>
-<span id="cb1-778"><a href="#cb1-778"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Confidence interval comparison'</span>)</span>
-<span id="cb1-779"><a href="#cb1-779"></a></span>
-<span id="cb1-780"><a href="#cb1-780"></a><span class="cf">for</span> i, w <span class="kw">in</span> <span class="bu">enumerate</span>(widths):</span>
-<span id="cb1-781"><a href="#cb1-781"></a>    axes[<span class="dv">1</span>].text(w <span class="op">+</span> <span class="fl">0.002</span>, i, <span class="ss">f'</span><span class="sc">{</span>w<span class="sc">:.3f}</span><span class="ss">'</span>, va<span class="op">=</span><span class="st">'center'</span>)</span>
-<span id="cb1-782"><a href="#cb1-782"></a></span>
-<span id="cb1-783"><a href="#cb1-783"></a>plt.tight_layout()</span>
-<span id="cb1-784"><a href="#cb1-784"></a>plt.show()</span>
-<span id="cb1-785"><a href="#cb1-785"></a></span>
-<span id="cb1-786"><a href="#cb1-786"></a><span class="bu">print</span>(<span class="st">"Prediction-Powered Inference Results:"</span>)</span>
-<span id="cb1-787"><a href="#cb1-787"></a><span class="bu">print</span>(<span class="ss">f"  True accuracy: </span><span class="sc">{</span>true_accuracy<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-788"><a href="#cb1-788"></a><span class="bu">print</span>(<span class="ss">f"  Synthetic only: </span><span class="sc">{</span>mu_syn<span class="sc">:.3f}</span><span class="ss">  CI: [</span><span class="sc">{</span>ci_syn[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ci_syn[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">]  "</span></span>
-<span id="cb1-789"><a href="#cb1-789"></a>      <span class="ss">f"width: </span><span class="sc">{</span>ci_syn[<span class="dv">1</span>]<span class="op">-</span>ci_syn[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-790"><a href="#cb1-790"></a><span class="bu">print</span>(<span class="ss">f"  Human only:     </span><span class="sc">{</span>mu_human<span class="sc">:.3f}</span><span class="ss">  CI: [</span><span class="sc">{</span>ci_human[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ci_human[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">]  "</span></span>
-<span id="cb1-791"><a href="#cb1-791"></a>      <span class="ss">f"width: </span><span class="sc">{</span>ci_human[<span class="dv">1</span>]<span class="op">-</span>ci_human[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-792"><a href="#cb1-792"></a><span class="bu">print</span>(<span class="ss">f"  PPI:            </span><span class="sc">{</span>mu_ppi<span class="sc">:.3f}</span><span class="ss">  CI: [</span><span class="sc">{</span>ci_ppi[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">, </span><span class="sc">{</span>ci_ppi[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss">]  "</span></span>
-<span id="cb1-793"><a href="#cb1-793"></a>      <span class="ss">f"width: </span><span class="sc">{</span>ci_ppi[<span class="dv">1</span>]<span class="op">-</span>ci_ppi[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-794"><a href="#cb1-794"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">  Synthetic bias: </span><span class="sc">{</span>mu_syn <span class="op">-</span> true_accuracy<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-795"><a href="#cb1-795"></a><span class="bu">print</span>(<span class="ss">f"  PPI bias:       </span><span class="sc">{</span>mu_ppi <span class="op">-</span> true_accuracy<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
-<span id="cb1-796"><a href="#cb1-796"></a><span class="bu">print</span>(<span class="ss">f"  CI width reduction (PPI vs human-only): "</span></span>
-<span id="cb1-797"><a href="#cb1-797"></a>      <span class="ss">f"</span><span class="sc">{</span>(<span class="dv">1</span> <span class="op">-</span> widths[<span class="dv">2</span>]<span class="op">/</span>widths[<span class="dv">1</span>])<span class="op">*</span><span class="dv">100</span><span class="sc">:.0f}</span><span class="ss">%"</span>)</span>
-<span id="cb1-798"><a href="#cb1-798"></a><span class="in">```</span></span>
-<span id="cb1-799"><a href="#cb1-799"></a></span>
-<span id="cb1-800"><a href="#cb1-800"></a>The results demonstrate the three-way comparison. **Left panel**: the synthetic estimator (red) has a narrow confidence interval but is biased upward---it does not cover the true accuracy (dashed line). The human-only estimator (blue) is centered on the true value but has a wide confidence interval due to the small sample. The PPI estimator (green) achieves both: it is approximately unbiased (the correction removes the synthetic bias) and has a confidence interval substantially narrower than the human-only estimate. **Right panel**: the CI widths confirm the efficiency gain---PPI inherits the narrow width from the large synthetic sample while maintaining the unbiasedness guarantee from the human sample.</span>
-<span id="cb1-801"><a href="#cb1-801"></a></span>
-<span id="cb1-802"><a href="#cb1-802"></a></span>
-<span id="cb1-803"><a href="#cb1-803"></a><span class="fu">## Putting It Together: An Adversarial Evaluation Pipeline {#sec-pipeline}</span></span>
-<span id="cb1-804"><a href="#cb1-804"></a></span>
-<span id="cb1-805"><a href="#cb1-805"></a>The tools developed in this chapter and the preceding ones can be composed into a principled adversarial evaluation pipeline. We describe the pipeline as a sequence of stages, each grounded in the measurement framework.</span>
-<span id="cb1-806"><a href="#cb1-806"></a></span>
-<span id="cb1-807"><a href="#cb1-807"></a>**Stage 1: Build a Red-Team Item Bank.** Start with a test specification (@sec-red-teaming) that defines the attack taxonomy and coverage requirements. Generate candidate items through a combination of expert red-teamers (depth) and LLM-based generation (@sec-synthetic-data) (breadth). Calibrate item parameters by administering the full bank to a reference panel of models, fitting a multidimensional IRT model (@sec-adversarial-robustness) to estimate item difficulties and discriminations.</span>
-<span id="cb1-808"><a href="#cb1-808"></a></span>
-<span id="cb1-809"><a href="#cb1-809"></a>**Stage 2: Adversarial Adaptive Testing.** For each new model, run computerized adaptive testing (@sec-cat) using the calibrated item bank. The adaptive algorithm selects items that maximize Fisher information at the model's current estimated robustness level, concentrating effort in the informative region of the attack space. After 30--50 adaptively selected items, produce a robustness estimate $\hat{\theta}_j^{(\text{adv})}$ with a known standard error.</span>
-<span id="cb1-810"><a href="#cb1-810"></a></span>
-<span id="cb1-811"><a href="#cb1-811"></a>**Stage 3: Synthetic Augmentation.** Augment the human-calibrated item bank with LLM-generated items for broader coverage. Validate calibration transfer (@sec-synthetic-calibration) by checking that synthetic item difficulties correlate with human item difficulties ($r &gt; 0.8$). Use the synthetic items for coarse screening and the calibrated items for precise measurement.</span>
-<span id="cb1-812"><a href="#cb1-812"></a></span>
-<span id="cb1-813"><a href="#cb1-813"></a>**Stage 4: PPI Correction.** For aggregate statistics (e.g., "what fraction of red-team attacks does the model resist?"), use prediction-powered inference (@sec-ppi-application) to combine synthetic-judged responses (large $N$, potentially biased) with human-judged responses (small $n$, unbiased). This produces confidence intervals that are both narrow and honest.</span>
-<span id="cb1-814"><a href="#cb1-814"></a></span>
-<span id="cb1-815"><a href="#cb1-815"></a>**Stage 5: Conformal Coverage.** Apply conformal prediction (@sec-conformal) to construct prediction sets for individual items: "with 95% confidence, this model's probability of resisting this attack category is in $<span class="co">[</span><span class="ot">0.3, 0.7</span><span class="co">]</span>$." Under covariate shift between the calibration and deployment item distributions, use weighted conformal prediction (@sec-importance-weighting) to maintain coverage guarantees.</span>
-<span id="cb1-816"><a href="#cb1-816"></a></span>
-<span id="cb1-817"><a href="#cb1-817"></a>This pipeline connects to the causal audit framework from @sec-causal-audit: each stage addresses a potential threat to validity. The item bank ensures content validity. Adaptive testing ensures measurement precision. Synthetic augmentation addresses scalability. PPI correction addresses bias. Conformal prediction addresses uncertainty quantification. Together, they produce adversarial evaluations that are not only thorough but *psychometrically defensible*.</span>
-<span id="cb1-818"><a href="#cb1-818"></a></span>
-<span id="cb1-819"><a href="#cb1-819"></a>::: {.callout-warning title="Key Insight: Composability of Measurement Tools"}</span>
-<span id="cb1-820"><a href="#cb1-820"></a>The power of the measurement framework developed across this book is its *composability*. Red-teaming (@sec-red-teaming) produces items; IRT (@sec-adversarial-irt-items) calibrates them; CAT (@sec-cat) administers them efficiently; synthetic data (@sec-synthetic-data) scales them; PPI (@sec-ppi-application) corrects for bias; conformal prediction (@sec-conformal) quantifies uncertainty. Each tool solves a specific problem. The pipeline composes them into a system that is greater than the sum of its parts.</span>
-<span id="cb1-821"><a href="#cb1-821"></a>:::</span>
-<span id="cb1-822"><a href="#cb1-822"></a></span>
-<span id="cb1-823"><a href="#cb1-823"></a></span>
-<span id="cb1-824"><a href="#cb1-824"></a><span class="fu">## Discussion Questions {#sec-redteaming-discussion}</span></span>
-<span id="cb1-825"><a href="#cb1-825"></a></span>
-<span id="cb1-826"><a href="#cb1-826"></a><span class="ss">1. </span>**Coverage vs. depth in red-teaming.** A company has a fixed budget of 500 person-hours for red-teaming a new model. Should they hire 50 non-expert testers for 10 hours each, or 5 expert red-teamers for 100 hours each? Frame the answer in terms of content validity and item difficulty.</span>
-<span id="cb1-827"><a href="#cb1-827"></a></span>
-<span id="cb1-828"><a href="#cb1-828"></a><span class="ss">2. </span>**Evaluation circularity.** A team uses GPT-4 to generate evaluation items for GPT-4o. They argue that since GPT-4o is a different model, there is no circularity problem. Under what conditions is this argument valid? When might it fail?</span>
-<span id="cb1-829"><a href="#cb1-829"></a></span>
-<span id="cb1-830"><a href="#cb1-830"></a><span class="ss">3. </span>**Adversarial robustness as a latent trait.** Is it meaningful to assign a single "adversarial robustness" score to a model, or should robustness always be reported per attack category? Relate the answer to the unidimensionality assumption in IRT.</span>
-<span id="cb1-831"><a href="#cb1-831"></a></span>
-<span id="cb1-832"><a href="#cb1-832"></a><span class="ss">4. </span>**PPI and evaluator agreement.** Prediction-powered inference assumes that the synthetic and human judgments are measured on the same scale. What happens if the LLM judge uses a different scoring rubric (e.g., binary pass/fail) than the human judges (e.g., 1--5 Likert scale)? How should the PPI framework be modified?</span>
-<span id="cb1-833"><a href="#cb1-833"></a></span>
-<span id="cb1-834"><a href="#cb1-834"></a><span class="ss">5. </span>**Dynamic item banks.** Red-team item banks become less useful over time as models are trained to resist known attacks. How should an item bank be maintained? Draw an analogy to test security practices in educational testing.</span>
-<span id="cb1-835"><a href="#cb1-835"></a></span>
-<span id="cb1-836"><a href="#cb1-836"></a><span class="ss">6. </span>**Standardizing ASR comparisons.** A red-teaming leaderboard wants to rank jailbreak methods by effectiveness. Using the framework from @sec-asr-comparison, propose a standardized evaluation protocol that ensures conceptual coherence and measurement validity. What should be fixed across submissions (aggregation rule, judge, prompt set)? What can vary?</span>
-<span id="cb1-837"><a href="#cb1-837"></a></span>
-<span id="cb1-838"><a href="#cb1-838"></a><span class="ss">7. </span>**Distributional vs. aggregate reporting.** @schaeffer2025monkeys show that the aggregate Top-1 ASR is fully determined by the distribution of per-prompt success probabilities. Should red-teaming studies report the full distribution of per-prompt success rates rather than (or in addition to) a single ASR number? What would this look like in practice, and how does it connect to the IRT perspective where per-prompt success is $\sigma(\theta - \beta_i)$?</span>
-<span id="cb1-839"><a href="#cb1-839"></a></span>
-<span id="cb1-840"><a href="#cb1-840"></a></span>
-<span id="cb1-841"><a href="#cb1-841"></a><span class="fu">## Bibliographic Notes {#sec-redteaming-biblio}</span></span>
-<span id="cb1-842"><a href="#cb1-842"></a></span>
-<span id="cb1-843"><a href="#cb1-843"></a>The use of measurement science in adversarial evaluation is relatively recent. @chouldechova2026comparison provided a foundational critique of ASR comparisons, showing that failures of conceptual coherence (different aggregation rules) and measurement validity (differential judge error) undermine most published ASR comparisons. Their work formalizes red-teaming within the social science measurement framework of @adcock2001measurement, connecting to the validity concepts developed in @sec-validity. @wallach2025position further argue that evaluating generative AI systems is fundamentally a social science measurement challenge.</span>
-<span id="cb1-844"><a href="#cb1-844"></a></span>
-<span id="cb1-845"><a href="#cb1-845"></a>@perez2022red pioneered the use of LLMs for automated red-teaming, generating adversarial prompts at scale and analyzing the distribution of discovered failures. @ganguli2022redteaminglanguagemodels provided one of the most comprehensive structured red-teaming efforts, demonstrating scaling behaviors and establishing best practices for human red-team evaluations.</span>
-<span id="cb1-846"><a href="#cb1-846"></a></span>
-<span id="cb1-847"><a href="#cb1-847"></a>The adversarial filtering approach---using models to select items that fool current systems---was introduced by @zellers2019adversarial in the context of the HellaSwag benchmark, where adversarial filtering produces items that are trivially easy for humans but challenging for language models. @bartolo2021improving extended this with DynaBench, a platform for dynamic, human-in-the-loop benchmark construction where red-teamers specifically target current model weaknesses.</span>
-<span id="cb1-848"><a href="#cb1-848"></a></span>
-<span id="cb1-849"><a href="#cb1-849"></a>@ribeiro2020checklist proposed a structured testing methodology for NLP models organized around capabilities and test types, providing a practical template for adversarial item banks. Their minimum functionality tests, invariance tests, and directional expectation tests correspond to items with different psychometric properties.</span>
-<span id="cb1-850"><a href="#cb1-850"></a></span>
-<span id="cb1-851"><a href="#cb1-851"></a>Prediction-powered inference was formalized by @angelopoulos2023prediction, who showed that combining a large prediction dataset with a small labeled dataset yields valid statistical inference with the confidence interval width governed by the prediction-label residual variance rather than the label variance. The connection to evaluation is natural: synthetic judgments serve as predictions and human judgments as labels.</span>
-<span id="cb1-852"><a href="#cb1-852"></a></span>
-<span id="cb1-853"><a href="#cb1-853"></a>The multidimensional IRT framework used in @sec-adversarial-robustness builds on foundational work in psychometric modeling. For a comprehensive treatment, see @embretson2000item. The application of IRT to AI evaluation is surveyed in @martinez2024item.</span>
-<span id="cb1-854"><a href="#cb1-854"></a></span>
-<span id="cb1-855"><a href="#cb1-855"></a>The distributional theory connecting per-problem success rates to aggregate power-law scaling is developed by @schaeffer2025monkeys, who show that $-\log(\text{pass}@k) \sim k^{-\alpha}$ if and only if the distribution of single-attempt success probabilities has a power-law left tail with exponent $\alpha - 1$. This resolves the apparent paradox between exponential per-problem scaling and polynomial aggregate scaling. @truong2025irsl integrate IRT into the scaling law framework via Beta-IRT, which models empirical probability responses (rather than binary) using a Beta loss. Their Item Response Scaling Laws reduce parameter complexity from $O(M \times N)$ to $O(M + N)$ by factorizing model ability from question difficulty, enabling cross-benchmark transfer of ability estimates and achieving comparable scaling predictions with 99.9% fewer evaluation queries.</span>
-<span id="cb1-856"><a href="#cb1-856"></a></span>
-<span id="cb1-857"><a href="#cb1-857"></a></span>
-<span id="cb1-858"><a href="#cb1-858"></a><span class="fu">## Exercises {#sec-redteaming-exercises}</span></span>
-<span id="cb1-859"><a href="#cb1-859"></a></span>
-<span id="cb1-860"><a href="#cb1-860"></a>**Exercise 1** (Red-team test specification). Write a test specification for red-teaming a medical chatbot. The specification should include: (a) an attack taxonomy with at least 5 categories, (b) 3 items per category with target difficulty levels (easy, medium, hard), and (c) a scoring rubric. Discuss which categories pose the greatest validity threats if undersampled.</span>
-<span id="cb1-861"><a href="#cb1-861"></a></span>
-<span id="cb1-862"><a href="#cb1-862"></a>**Exercise 2** (Adversarial IRT simulation). Extend the simulation in @sec-adversarial-robustness to $K = 3$ latent dimensions: standard accuracy, adversarial robustness, and prompt sensitivity. Generate 60 items per dimension. Fit a unidimensional IRT model to all 180 items and compare the ability estimates to the true three-dimensional traits. Show that the unidimensional model produces misleading rankings when the inter-dimension correlations are low ($\rho &lt; 0.3$).</span>
-<span id="cb1-863"><a href="#cb1-863"></a></span>
-<span id="cb1-864"><a href="#cb1-864"></a>**Exercise 3** (Calibration transfer). In the synthetic calibration simulation (@sec-synthetic-calibration), the "good" synthetic items are generated by adding Gaussian noise to the human item parameters. Replace this with a more realistic model: generate synthetic items by sampling from a *narrower* difficulty distribution (mimicking mode collapse) with probability $p$ and from the true distribution with probability $1-p$. Plot the calibration transfer correlation as a function of $p$ and identify the threshold at which transfer breaks down ($r &lt; 0.8$).</span>
-<span id="cb1-865"><a href="#cb1-865"></a></span>
-<span id="cb1-866"><a href="#cb1-866"></a>**Exercise 4** (PPI with varying bias). Modify the PPI simulation to sweep the synthetic bias from $-0.15$ to $+0.15$. For each bias level, compute (a) the PPI point estimate, (b) the 95% confidence interval, and (c) the coverage probability (does the CI contain the true value?). Verify that PPI maintains nominal coverage regardless of the bias magnitude, while the synthetic-only estimator's coverage degrades as bias increases.</span>
-<span id="cb1-867"><a href="#cb1-867"></a></span>
-<span id="cb1-868"><a href="#cb1-868"></a>**Exercise 5** (Adaptive adversarial testing). Implement a simple adaptive adversarial testing algorithm. Start with a calibrated item bank of 200 adversarial items with known Rasch difficulties. For each model: (a) initialize $\hat{\theta}^{(\text{adv})} = 0$, (b) select the item with difficulty closest to $\hat{\theta}^{(\text{adv})}$, (c) simulate the response, (d) update $\hat{\theta}^{(\text{adv})}$ using maximum likelihood, (e) repeat for 30 items. Compare the estimation error to a non-adaptive baseline (30 random items) across 100 simulated models.</span>
-<span id="cb1-869"><a href="#cb1-869"></a></span>
-<span id="cb1-870"><a href="#cb1-870"></a>**Exercise 6** (Active evaluation design). In the PPI framework, suppose it is possible to choose *which* $n$ items to send for human evaluation (instead of selecting randomly). Propose an active selection criterion based on the synthetic judge's uncertainty. Implement and compare against random selection: does targeted human evaluation reduce the PPI confidence interval width?</span>
-<span id="cb1-871"><a href="#cb1-871"></a></span>
-<span id="cb1-872"><a href="#cb1-872"></a>**Exercise 7** (ASR aggregation and judge error). Consider a model with true per-prompt success probabilities $p_i \sim \text{Beta}(a, b)$ for $i = 1, \ldots, 200$. (a) Using the result from @schaeffer2025monkeys, show that the expected Top-1 of $K$ ASR satisfies $-\log(\mathbb{E}<span class="co">[</span><span class="ot">\text{ASR}_{\text{Top-1}}(K)</span><span class="co">]</span>) \sim K^{-a}$ for large $K$, so the left-tail parameter $a$ controls the power-law exponent. (b) Now suppose the judge has TPR = 0.9 and FPR = $\phi$. Derive the expected observed Top-1 ASR as a function of $\phi$ and $K$. (c) Simulate the scenario for $a = 0.3, b = 3, K \in <span class="sc">\{</span>1, 10, 50, 200<span class="sc">\}</span>$, and $\phi \in <span class="sc">\{</span>0, 0.05, 0.10, 0.15<span class="sc">\}</span>$. Create a heatmap showing how the compound effect of aggregation and judge error inflates the observed ASR. At what $(K, \phi)$ does the observed ASR exceed 0.9 even though the true one-shot ASR is below 0.1? (d) Fit a Beta distribution to the per-prompt success rates and use the distributional estimator to predict $\text{ASR}_{\text{Top-1}}(K)$ for $K$ up to 10,000. Compare to the empirical estimate: how much compute does the distributional approach save?</span>
-<span id="cb1-873"><a href="#cb1-873"></a></span>
-<span id="cb1-874"><a href="#cb1-874"></a>**Exercise 8** (End-to-end pipeline). Implement the full adversarial evaluation pipeline from @sec-pipeline for a simulated scenario. Generate a 500-item adversarial bank with known 2PL parameters. Run adaptive testing on 50 models. Augment with 2000 synthetic items (with 10% mode-collapsed items). Apply PPI correction using 100 human-evaluated items. Report: (a) ability estimates with standard errors, (b) calibration transfer correlation, and (c) the bias reduction from PPI.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/aims-foundations/aims/blob/main/src/chap12.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/aims-foundations/aims/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer><script>
+<script>
 // Auto-execute all pyodide cells after initialization
 document.addEventListener('DOMContentLoaded', function() {
   function waitForPyodide() {

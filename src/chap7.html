@@ -99,7 +99,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b9e8b45e8afff40b86f91a6e3a0b8672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d33d9a8250934420342a505e3fe2d0e6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -884,7 +884,7 @@ Figure&nbsp;7.1: Plate diagram for the logistic factor model. The latent factor 
 <section id="sec-logistic-fm" class="level3" data-number="7.2.1">
 <h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-logistic-fm"><span class="header-section-number">7.2.1</span> Fitting the Factor Model</h3>
 <p>We estimate the parameters <span class="math inline">\((U, V, Z)\)</span> by minimizing the binary cross-entropy between the predicted probabilities and the observed responses—the same maximum-likelihood objective developed for the Rasch model in <a href="chap4.html" class="quarto-xref"><span>Chapter 4</span></a>, now over matrix-valued parameters. A compact implementation:</p>
-<div id="fdc9b5d7" class="cell" data-execution_count="1">
+<div id="9376e6cb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">from</span> torch.optim <span class="im">import</span> LBFGS</span>
@@ -920,7 +920,7 @@ Figure&nbsp;7.1: Plate diagram for the logistic factor model. The latent factor 
 </div>
 </div>
 <p>We train by minimizing binary cross-entropy loss with L-BFGS:</p>
-<div id="d691afda" class="cell" data-execution_count="2">
+<div id="3db76cb8" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Training setup</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>N, M <span class="op">=</span> Y.shape</span>
 <span id="cb2-3"><a href="#cb2-3"></a>K <span class="op">=</span> <span class="dv">2</span>  <span class="co"># Number of latent dimensions</span></span>
@@ -1088,7 +1088,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 </section>
 <section id="implementation-of-masking-functions" class="level3" data-number="7.5.2">
 <h3 data-number="7.5.2" class="anchored" data-anchor-id="implementation-of-masking-functions"><span class="header-section-number">7.5.2</span> Implementation of Masking Functions</h3>
-<div id="57e2c9bc" class="cell" data-execution_count="3">
+<div id="3af3fdaf" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> torch</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="kw">def</span> random_mask(data_idtor, pct<span class="op">=</span><span class="fl">0.8</span>):</span>
@@ -1138,7 +1138,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 <li><strong>Stage 2:</strong> Freeze <span class="math inline">\((V, Z)\)</span> and estimate ability parameters <span class="math inline">\(U\)</span> for held-out models using their limited exposed responses</li>
 </ol>
 <p>This ensures item parameters are learned without information from test models.</p>
-<div id="cdeb4b81" class="cell" data-execution_count="4">
+<div id="fce89e65" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Stage 1: Train on known models</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>test_row <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>).values  <span class="co"># Identify held-out models</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>model_stage1 <span class="op">=</span> train_model(Y[<span class="op">~</span>test_row, :], mask<span class="op">=</span>train_idtor[<span class="op">~</span>test_row, :])</span>
@@ -1159,7 +1159,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 <li><strong>Stage 1:</strong> Train on known items to learn model parameters <span class="math inline">\(U\)</span></li>
 <li><strong>Stage 2:</strong> Freeze <span class="math inline">\(U\)</span> and estimate item parameters <span class="math inline">\((V, Z)\)</span> for held-out items</li>
 </ol>
-<div id="584257d3" class="cell" data-execution_count="5">
+<div id="8ecec57e" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Stage 1: Train on known items</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>test_col <span class="op">=</span> test_idtor.<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">0</span>).values  <span class="co"># Identify held-out items</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>model_stage1 <span class="op">=</span> train_model(Y[:, <span class="op">~</span>test_col], mask<span class="op">=</span>train_idtor[:, <span class="op">~</span>test_col])</span>
@@ -1194,7 +1194,7 @@ S_{jk} = \text{Cor}(Y^*_{ij}, U_{ik}) = \frac{(V_j^\top \Sigma)_k}{\sqrt{\Sigma_
 <section id="evaluation-across-masking-schemes" class="level3" data-number="7.5.4">
 <h3 data-number="7.5.4" class="anchored" data-anchor-id="evaluation-across-masking-schemes"><span class="header-section-number">7.5.4</span> Evaluation Across Masking Schemes</h3>
 <p>For each masking scheme, we compute AUC on the held-out entries:</p>
-<div id="72876df6" class="cell" data-execution_count="6">
+<div id="cd1df626" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> torchmetrics <span class="im">import</span> AUROC</span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a>masking_schemes <span class="op">=</span> {</span>

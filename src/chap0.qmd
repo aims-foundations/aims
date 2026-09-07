@@ -1,0 +1,133 @@
+# What This Book Is {#sec-what-this-book-is}
+
+## A decision rests on a number
+
+An arena reports that one model is preferred to another 62% of the time. A red-team exercise reports a 3% attack success rate. A language model grading another language model reports 4.1 out of 5. A deployment log reports that clinicians accepted 71% of suggestions. A benchmark reports 87% on clinical reasoning items, and a regulator asks whether the system can be authorized inside a hospital workflow.
+
+Each of these is an instrument producing a quantity used as evidence. Each is asked to license a claim. For each, there should be a chain running from the quantity to the claim: this was observed over this frame, with this uncertainty, under these conditions, and supports this decision. Constructing that chain is measurement science, and this book is about constructing it for AI.
+
+A word on vocabulary, because the field uses it inconsistently and one distinction here is important. @sec-foundations distinguishes *scoring* from *measuring*: assigning numbers is scoring, and it becomes measurement only when the numerical structure is earned. This chapter follows that usage. An **instrument** produces a quantity; **measurement** is an achievement rather than an activity, and one this book spends chapters establishing conditions for; **evaluation** is the broader process of using instruments and measurements to support interpretations and decisions; a **claim** is what an evaluation is used to license.
+
+The problem is usually not that the statistics are wrong. Very often the statistics are fine. Response models fit, standard errors compute, variance decompositions decompose. The difficulty sits upstream of estimation, in what the number is a measurement *of*, and it is invisible to the diagnostics that would catch an estimation error.
+
+## The instruments
+
+Naming the instruments at the outset matters, because the machinery in this book applies across them and "benchmark" is only the most familiar case.
+
+- **Static benchmarks.** Fixed item pools with programmatic scoring. The best-understood case, and the one classical test theory transfers to most directly (@sec-foundations, @sec-reliability).
+- **Preference and arena data.** Pairwise comparisons from users or annotators, modelled with Bradley-Terry and its relatives (@sec-foundations).
+- **Model-as-judge protocols.** One system scoring another's free-form output: a rater facet with unusual properties, treated in depth in @sec-reliability.
+- **Adversarial and red-team exercises.** Attack success rates as estimands, where the item pool is produced by an adversary rather than sampled (@sec-redteaming).
+- **Deployment telemetry.** Logs, acceptance rates, and downstream outcomes, where the observed sample is selected by the deployment process rather than drawn.
+- **Human-subject studies.** Randomized and quasi-experimental designs measuring what changed when people used the system. Expensive, closest to a criterion, and not developed in this edition.
+- **Incident reports.** Post-hoc, selection-biased, and the closest thing to ground-truth harm at scale. The instrument other safety-critical fields rely on most and AI evaluation neglects most. Also not developed here.
+
+The last three are frontier instruments for this book. Whether instruments agree, and what to conclude when they do not, is the triangulation problem: the frontier this book points at rather than settles.
+
+## What the parent disciplines supply
+
+Two fields have long traditions of building measurement chains. In their canonical settings, each practitioner is handed something that AI evaluation is not.
+
+Canonical **psychometric** settings supply respondents drawn from a specified target population, items related to a domain characterized independently of any particular sample, and an attribute embedded in a network of theoretical relations. The population supplies a norming convention and a location anchor. The domain supports the generalization claim. The network supplies the standard against which construct validity is argued.
+
+Canonical **metrological** settings supply a measurand definable independently of the measuring process, a realized reference that fixes the unit, and traceability through a chain of comparisons with uncertainty accumulated at each link. Traceability is what licenses a measurement made in one laboratory to be compared with one made in another.
+
+Neither field gets these for free in all its applications; both have extensive literatures on what to do when the assumptions fail. What is distinctive about AI is that it concentrates several cases those literatures normally handle separately, and makes them interact; and that the corresponding payments are typically left implicit or unpaid.
+
+## Anchoring
+
+Call an **anchor** anything that rules out interpretations the response data cannot rule out by themselves.
+
+A negative test comes with the definition. *More of the same data is not an anchor.* More observations under the same identifying assumptions cannot resolve an ambiguity the design itself leaves unresolved. They cannot establish a criterion relation nobody studied, and they cannot supply a frame nobody declared. This matters here for an economic reason: repeating a fixed evaluation is very cheap, and earning external validity for it is not. The affordable move does not touch the binding problem.
+
+Anchors do at least three different jobs, and the book keeps them apart.
+
+**Identification.** A measurement model's likelihood is often invariant under a group of transformations. The Rasch model is invariant to a common shift in $\theta_i$ and $\beta_j$; a factor model is invariant to rotation and rescaling; Bradley-Terry is invariant to a common shift in log-strengths. Under such invariance the data determine parameters only up to the group. Fixing the mean of a reference population, or constraining a loading matrix, removes that freedom.
+
+**Comparability.** Common items shared across forms link scales that were separately identified. Metrological traceability makes two instruments commensurable through a calibration hierarchy. Neither is a coordinate convention; both are empirical and institutional work.
+
+**External licensing.** Criterion evidence rules out interpretations that fail to predict the outcome the number is meant to inform. A scale can be perfectly identified, perfectly comparable, and predict nothing.
+
+These are different operations and the book does not claim they are secretly one. They share a negative structure: each removes possibilities the response data leave open. Where the anchor comes from is what varies. Examples include norming populations and common-item links in psychometrics and equating, realized references in metrology, interventions that break symmetries passive data cannot, and external criteria for predictive claims. None of these fields has only one such strategy; the point is that each has some, and that AI evaluation frequently has none in place.
+
+## Five properties of AI as a measurement object
+
+**The sampling frame has to be constructed.** For many AI benchmarks the item set effectively defines the domain rather than being assembled against one specified independently of it. The same holds across instruments: an arena's prompts are whatever its users typed; a red-team exercise covers whatever attacks someone thought of; deployment telemetry records whatever sessions the system was routed. The sharpest case is self-gated telemetry: when the evaluated system decides which cases it takes, outcomes are observed only where it admitted them, so the data that would revalidate it has already been selected by it.
+
+**The respondent changes.** Respondents are a few dozen lineage-related artifacts from a handful of labs, arriving over calendar time, often descendants of one another, and they move under fixed product names. The population assumptions required to pool and generalize across respondents are unusually hard to defend for a small, lineage-related, rapidly changing set of them.
+
+**We can rewrite the respondent.** Training data can be ablated, objectives swapped, fine-tuning added and removed, and the system retrained. The response function is a design choice rather than a fixed property of the respondent. This is an advantage, developed in @sec-causality.
+
+**The respondent is optimized against the instrument.** Consequential signals attract optimization. Benchmarks enter loss functions; preference scores shape post-training; refusal metrics shape refusal behavior; a leaderboard's sampling and disclosure policy is part of the instrument rather than administrative detail. Validity becomes endogenous to use (@sec-ecosystem, @sec-design).
+
+**Instrument independence has to be earned.** A held-out item pool with a deterministic grader can be independent of the respondent; the point is that independence can no longer be assumed, because instrument and respondent can become coupled through shared technical infrastructure. Contamination couples an instrument to training. Model-as-judge can couple evaluator and evaluated through shared model families. Self-evaluation is the strongest case, since an evaluator can recognize and favour its own generations, and where that coupling holds, agreement between judge and judged is not *independent* corroboration. Systematic judge effects of this kind can coexist with high reliability, because the bias is not noise (@sec-reliability).
+
+These are five properties from three sources. The observation frame is constructed rather than inherited, which gives the first. The respondent is manufactured and mutable, which gives the second as a cost and the third as a gift. Measurement is endogenous to the same technical ecosystem that builds and selects the respondents: its outputs feed optimization, and its instruments can themselves be models. That gives the fourth and the fifth.
+
+## How anchors fail
+
+Anchors fail in two ways, and the distinction belongs to anchors rather than to the five properties.
+
+Some are **never established**. A frame that was never declared did not decay; it was never fixed. A criterion relation nobody studied did not lapse.
+
+Others **cease to hold**. An instrument clean at validation is contaminated later. A validated comparison is voided by a new checkpoint. A measure optimized against drifts from what it tracked.
+
+The same property can produce either failure depending on sequence. Ingestion of an instrument into pretraining before validation is a never-established failure; ingestion afterward is a ceases-to-hold failure.
+
+It is tempting to conclude that AI makes anchoring a recurring cost rather than a one-time cost. That conclusion is false. Classical measurement already pays maintenance, on schedules, with institutions built for it: norms are renormed, references recalibrated at intervals set by stability and use, and test security is a century-old literature on instruments degraded by being used. Recurrence is not the novelty.
+
+The ordering is. Scheduled maintenance works only when checking outruns expiry; that is what makes a recalibration interval a coherent object. In AI the ordering can reverse. A validation study can be obsolete before it is published, and a new checkpoint can void a comparison before the study establishing it has finished. **The instrument can expire faster than we can check it.** Treating that as a measurement problem rather than a governance footnote is why @sec-ecosystem and @sec-design sit inside this book rather than beside it.
+
+## Validity as the audit of the chain
+
+Validity, in the argument-based tradition running from Cronbach and Meehl through Kane [-@kane2013validating], is the case that a specific interpretation and use of a score is warranted. Kane's interpretation/use argument decomposes that case into inferences: scoring, generalization, extrapolation, and implication, each requiring its own warrant and each defeasible on its own terms.
+
+Where anchors are prepaid, much of that case can be made implicitly. Where they are not, it must be made explicitly and its debt itemized. The **declaration object** $\Gamma$ is that itemization: what claim, over what frame, for what reference class of respondents, on what scale, supporting what decision, using which instrument. The validity argument is the payment plan, and the three-layer profile (admissibility gates, observational quantities, causal identification) is what a fully audited link looks like.
+
+Kane gives the structure of the inferential audit. What AI changes is what can discharge some of its warrants: the target frame may itself have to be declared rather than inherited, the criterion may have to be constructed rather than found, and the evidence can decay after the argument was made. Those are the places where this book adds machinery to the framework rather than applying it. And quantification relocates judgment rather than eliminating it: the declaration moves judgment from post-hoc interpretation to pre-registered commitment, which is a real gain and not the same as removal.
+
+@sec-validity also treats Borsboom's causal-realist condition, that an attribute exists and variation in it produces variation in scores. Under the present framing that is not a general definition of measurement but the strongest available anchoring strategy, available when a construct and its network are there to pay. Much of this book concerns cases where they are not. @sec-reliability is the clearest: a generalizability coefficient requires a declared universe of replications and no construct at all.
+
+## Compass and certificate
+
+Many common pre-deployment evaluation instruments are **compasses**: directional, ordinal, formative, adequate for telling a lab whether this week's run improved on last week's, or a team whether a tool feels worth keeping. A **certificate** is a claim licensed to support a consequential decision. It must declare the reference class and shift class over which it holds and survive testing inside that scope, pay its construct dues rather than assume them, survive the system being optimized against it, and terminate in a criterion in the units of the decision.
+
+The distinction is a difference in the length of the chain. Compass-read-as-certificate is the memorable special case rather than the general one; the general form is that the chain supporting the number is shorter than the chain supporting the claim, and it occurs between certificates too, when a score licensed for one consequential decision migrates to a stronger one.
+
+## How to read this book
+
+Each chapter contributes a different part of the claim chain, and makes visible what remains unpaid. Not every chapter supplies an anchor; some establish what would have to be true for one to hold, and some show why a hoped-for anchor does not.
+
+@sec-validity sets the standard: what a claim requires, and how the evidence for it is organized.
+
+@sec-data-landscape surveys the instruments and the response matrix the rest of the book operates on.
+
+@sec-foundations asks what justifies treating an evaluation outcome as a number at all: representational measurement theory, additive conjoint structure, and specific objectivity. This is the chapter that says when numerical structure is earned rather than assumed.
+
+@sec-learning is the estimation chapter: maximum likelihood, EM, Bayesian inference, regularization, model selection.
+
+@sec-reliability quantifies generalizability over a declared universe of replications, without requiring a construct. It is also where the model-as-judge instrument is treated as the rater facet it is, including systematic biases that survive high reliability.
+
+@sec-efficient makes the rest affordable. It inherits its status from whatever question it makes cheaper.
+
+@sec-discovery asks what the item pool's internal structure can and cannot settle. Its most important result is negative: latent-variable and network structures can be observationally close, so internal structure alone underdetermines the interpretation.
+
+@sec-predictability currently develops amortized prediction of parameters for unseen items and respondents from features. The role this framing asks of it is broader: prediction of expensive measurements from cheap ones, and an account of what linking or surrogacy claim that warrants.
+
+@sec-causality develops the causal machinery: structural models, shift and transportability, interventional and counterfactual diagnostics, and robust estimation. Its distinctive contribution is that intervention on the respondent's manufacturing history is unusually direct and repeatable here, which makes construct claims experimentally challengeable rather than only arguable.
+
+@sec-ecosystem and @sec-design treat measurement under optimization pressure and its decay over time.
+
+@sec-redteaming applies the framework to adversarial evaluation: attack success rate as an estimand, robustness as a latent trait, synthetic data, and combining human with automated judgment.
+
+@sec-conclusion revisits the chain and the outstanding debt.
+
+## What is new here
+
+The case for a distinct field is not that psychometricians and metrologists lack the necessary pieces. They plainly do not. Psychometrics has a century of work on item exposure, teaching to the test, practice effects, and test security. Metrology handles dynamic quantities, time-dependent calibration, and drift.
+
+The case is that under AI's joint properties **the repairs cannot be made independently**. If optimization changes the response-generating process, prior construct evidence may expire. If the construct interpretation changes, the previous criterion link may no longer apply. If the frame or observation process changes, comparability must be re-established, which changes what counts as evidence for the construct. Intervention can map which directions are movable but cannot certify which are safe, since movability is defined against an intervention class and invariance against an environment class, and neither implies the other. Each repair alters conditions another repair depends on.
+
+Alongside that, one genuine asset. Because the respondent is manufactured, validity threats that are otherwise only inferable become directly measurable. Controlled pretraining studies have set contamination as an experimental variable and estimated its effect rather than detecting it through signatures; incorporating those results is part of what @sec-causality is asked to do here. That is the AI-native move in its strongest form, and it generalizes: ablate a hypothesized substrate, retrain, and test whether the factor structure moves as predicted. Its principal payoff is falsification rather than identification, since ablation is rarely surgical. And it is currently available at research scale but not on the proprietary frontier systems whose measurements carry the most consequence, which is an access problem rather than a methodological one.
+
+So the thesis, plainly. AI destabilizes the assumptions under which conventional measurement closes the gap between a fitted number and a licensed claim, and it does so on a clock where decay can outrun the studies meant to detect it. The rest of this book is the machinery for closing that gap anyway, one link at a time, with an honest account of which links we can currently afford.

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 70" role="img" aria-labelledby="title desc">
+  <title id="title">AIMS — AI Measurement Science</title>
+  <desc id="desc">AIMS mark with Stanford University and AI Measurement Science wordmark.</desc>
+  <g fill="none" stroke="#0d0f0f" stroke-width="2.4">
+    <path d="M 0 70 L 20 1 L 40 70" />
+    <path d="M 4.7 70 L 20 17.2 L 35.3 70" />
+    <path d="M 9.4 70 L 20 33.4 L 30.6 70" />
+    <path d="M 14.2 53.5 H 25.8" />
+    <path d="M 12.9 58 H 27.1" />
+
+    <path d="M 53 1 V 70" />
+    <path d="M 57.5 1 V 70" />
+    <path d="M 62 1 V 70" />
+
+    <path d="M 75 1 V 70" />
+    <path d="M 79.5 1 V 70" />
+    <path d="M 84 1 V 70" />
+    <path d="M 110 1 V 70" />
+    <path d="M 114.5 1 V 70" />
+    <path d="M 119 1 V 70" />
+    <path d="M 75 1 L 97 48 L 119 1" />
+    <path d="M 79.5 1 L 97 41 L 114.5 1" />
+    <path d="M 84 1 L 97 34 L 110 1" />
+
+    <g transform="translate(132 0)">
+      <path d="M 38.5 17 A 16 16 0 1 0 22.5 33 A 13.5 13.5 0 1 1 9 46.5" />
+      <path d="M 34 17 A 11.5 11.5 0 1 0 22.5 28.5 A 18 18 0 1 1 4.5 46.5" />
+      <path d="M 29.5 17 A 7 7 0 1 0 22.5 24 A 22.5 22.5 0 1 1 0 46.5" />
+    </g>
+  </g>
+  <g fill="#0d0f0f" font-family="Arial, Helvetica, sans-serif">
+    <text x="196" y="28" font-size="24" font-weight="700">Stanford University</text>
+    <text x="196" y="55" font-size="24">AI Measurement Science</text>
+  </g>
+</svg>

@@ -57,17 +57,17 @@ done
 # between renders by syncing to a temporary location
 
 if [[ "$BUILD_PDF" == "1" ]]; then
-  # Build PDF first so the deploy-profile HTML render can include the download.
+  # Build PDF first so the deployed artifact stays synchronized with the HTML.
   echo "Building PDF..."
   quarto render --to pdf
 else
   echo "Skipping PDF build (AIMS_BUILD_PDF=$BUILD_PDF)."
   if [[ ! -f "_book/AI-Measurement-Science.pdf" ]]; then
-    echo "Warning: no existing PDF found in _book/; deploy-profile HTML will omit the PDF download link." >&2
+    echo "Warning: no existing PDF found in _book/; confirm the public PDF is already deployed before syncing HTML." >&2
   fi
 fi
 
-# Build HTML (this adds HTML to _book/ without clearing PDF)
+# Build HTML without clearing a PDF already present in _book/.
 echo "Building HTML..."
 quarto render --to html --profile deploy --no-clean
 

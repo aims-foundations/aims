@@ -1,2 +1,4 @@
+# Deployment uses the base HTML shell. The preface links directly to the
+# published PDF, so the global navigation does not need a download tool.
 book:
-  downloads: [pdf]
+  downloads: []

@@ -39,6 +39,8 @@ images/management/analysis_pipeline.pptx
 images/management/analysis_pipeline.pdf
 *.xls
 *.html
+!resources/html/
+!resources/html/*.html
 *.docx
 /_site/
 *_files/

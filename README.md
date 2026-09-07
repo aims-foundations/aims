@@ -96,7 +96,7 @@ For the fastest edit loop, stay on `quarto preview` or `quarto render --to html`
 quarto render --to html
 ```
 
-This local HTML build omits the PDF download button on purpose, so the output is self-consistent even when you have not rendered the PDF.
+The preface includes GitHub and PDF actions beneath the author metadata. The PDF action points to the currently published copy, so it remains functional during an HTML-only local preview.
 
 ### Build PDF
 
@@ -138,9 +138,7 @@ git push origin main
 
 The GitHub Actions workflow will automatically build and publish to GitHub Pages. The Stanford proxy serves that published book at `https://aimslab.stanford.edu/textbook/`.
 
-Regular pushes to `main` now publish the HTML site and reuse the most recently published PDF from `gh-pages` when one exists. This keeps the PDF download available without rebuilding the PDF on every content edit.
-
-When you want to refresh the published PDF, run the `Render and Publish` workflow manually from GitHub Actions with `rebuild_pdf=true`.
+Regular pushes to `main` rebuild and publish both the HTML site and PDF so they stay synchronized. A manual `Render and Publish` run can set `rebuild_pdf=false` to reuse the most recently published PDF from `gh-pages`.
 
 ## Server Deployment (Stanford)
 
@@ -187,7 +185,7 @@ For faster HTML-only iteration on the server, skip the PDF step:
 AIMS_BUILD_PDF=0 ./deploy.sh
 ```
 
-That preserves the current default behavior while giving you a faster path when you do not need to refresh the PDF. If `_book/AI-Measurement-Science.pdf` is missing, the deploy-profile HTML build will omit the PDF download link.
+That preserves the current default behavior while giving you a faster path when you do not need to refresh the PDF. The preface link still targets the public PDF, so make sure the deployed PDF already exists before using the HTML-only path.
 
 Alternatively, run the steps manually:
 
@@ -207,7 +205,7 @@ quarto render --to html --profile deploy --no-clean
 rsync -av --delete _book/ /afs/cs/group/aimslab/www/textbook/
 ```
 
-**Note:** Render PDF first and HTML second with `--profile deploy --no-clean`; otherwise the HTML build will not include the PDF download link, and omitting `--no-clean` will clear `_book/`.
+**Note:** Render PDF first and HTML second with `--profile deploy --no-clean`; `--no-clean` preserves the PDF artifact in `_book/` while Quarto adds the HTML site.
 
 ## Chapter Videos (Animations)
 

@@ -1,3 +1,15 @@
+---
+aims-title-actions:
+  - label: View on GitHub
+    href: https://github.com/aims-foundations/aims
+    icon: github
+    kind: secondary
+  - label: Download PDF
+    href: https://aimslab.stanford.edu/textbook/AI-Measurement-Science.pdf
+    icon: file-pdf
+    kind: primary
+---
+
 # Preface {.unnumbered #sec-intro}
 
 Decisions about AI systems—whether to deploy one, which to prefer, how to govern its use—rest on measurements of quantities such as reasoning, planning, and safety. The quality of those measurements is therefore a precondition for sound decisions, yet it is rarely examined. New benchmarks appear faster than their measurement properties can be characterized; leaderboards report scores without specifying the scale on which they are defined; and a system's average accuracy is largely uninformative about why it succeeds or where it fails. The field has accumulated a large number of evaluation results, but comparatively little theory governing how those results should be produced and interpreted.

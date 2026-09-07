@@ -4,10 +4,12 @@ project:
   preview:
     port: 4200
 
-site-url: https://aimslab.stanford.edu/textbook
+site-url: https://aimslab.stanford.edu/textbook/
 
 resources:
   - "*.pdf"
+  - "resources/brand/*"
+  - "resources/fonts/*.txt"
   - "src/data/*.json"
   - "animations/**/*_narrated.mp4"
   
@@ -34,14 +36,16 @@ filters:
 format:
   html:
     toc-expand: 2
-    theme:
-      light: [flatly, resources/scss/global.scss]
-      dark: [darkly, resources/scss/global.scss]
+    title-block-banner: true
+    theme: [flatly, resources/scss/global.scss]
+    template-partials:
+      - resources/html/title-block.html
+      - resources/html/title-metadata.html
     published-title: "Updated"
     code-fold: false
     code-overflow: scroll
     code-line-numbers: true
-    code-tools: true
+    code-tools: false
     code-copy: True
     mathjax: 
       macros:
@@ -66,7 +70,7 @@ format:
         };
         </script>
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+    include-after-body: resources/html/aims-footer.html
 
   pdf:
     documentclass: scrreprt
@@ -118,22 +122,56 @@ execute:
 
 book:
   title: "AI Measurement Science"
+  favicon: resources/brand/aims-icon.svg
+  search:
+    location: navbar
+    type: overlay
   author:
     - name: Sang T. Truong
+      url: https://ai.stanford.edu/~sttruong/
       orcid: 0000-0002-7551-4378
     - name: Sanmi Koyejo
+      url: https://cs.stanford.edu/~sanmi/
       orcid: 0000-0001-9039-3220
     
   date: last-modified
-  repo-url: https://github.com/aims-foundations/aims
-  repo-actions: [source, issue]
   navbar:
-    left:
-      - text: "AIMS Lab Home"
-        href: https://aimslab.stanford.edu/
+    logo: resources/brand/aims-lockup.svg
+    logo-alt: "AIMS — AI Measurement Science at Stanford"
+    logo-href: https://aimslab.stanford.edu/
+    background: "#ffffff"
+    foreground: "#0d0f0f"
+    collapse-below: lg
+    toggle-position: right
+    tools-collapse: true
+    right:
+      - text: "Research"
+        href: https://aimslab.stanford.edu/research
+      - text: "Data & Software"
+        href: https://aimslab.stanford.edu/measurement-db
+      - text: "Education"
+        menu:
+          - text: "Textbook"
+            href: index.qmd
+          - text: "Course"
+            href: https://aimslab.stanford.edu/cs321m
+      - text: "Community"
+        menu:
+          - text: "Competition"
+            href: https://aimslab.stanford.edu/competition
+          - text: "Workshop"
+            href: https://aimslab.stanford.edu/workshop
+          - text: "Seminars"
+            href: https://aimslab.stanford.edu/seminars
+      - text: "Blog"
+        href: https://aimslab.stanford.edu/blog
   sidebar:
+    title: "Textbook"
+    logo: false
+    logo-href: index.qmd
     style: "docked"
-    footer: license.qmd
+    border: true
+    collapse-level: 1
   # google-analytics:
   # cookie-consent: true
   chapters:
